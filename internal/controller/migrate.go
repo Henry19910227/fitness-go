@@ -11,13 +11,10 @@ type Migrate struct {
 	migService service.Migrate
 }
 
-func NewMigrate(baseGroup *gin.RouterGroup,
-	migService service.Migrate,
-	middleware gin.HandlerFunc) {
+func NewMigrate(baseGroup *gin.RouterGroup, migService service.Migrate) {
 
 	migrate := &Migrate{migService: migService}
 	migrateGroup := baseGroup.Group("/migrate")
-	migrateGroup.Use(middleware)
 	migrateGroup.PUT("/up", migrate.UpToLatest)
 	migrateGroup.PUT("/up/:step", migrate.UpStep)
 	migrateGroup.PUT("/down", migrate.DownToOldest)
