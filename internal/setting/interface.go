@@ -1,5 +1,7 @@
 package setting
 
+import "time"
+
 type Mysql interface {
 	GetUserName() string
 	GetPassword() string
@@ -16,4 +18,10 @@ type Swagger interface {
 	GetProtocol() string
 	GetHost() string
 	GetBasePath() string
+}
+
+type JWT interface {
+	GetTokenSecret() string
+	GetIssuer() string
+	GetExpire() time.Duration
 }
