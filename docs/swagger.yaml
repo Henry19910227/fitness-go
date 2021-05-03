@@ -1,0 +1,204 @@
+definitions:
+  model.ErrorResult:
+    properties:
+      code:
+        description: 錯誤碼
+        example: 9000
+        type: integer
+      data:
+        description: 回傳資料
+        type: object
+      msg:
+        description: 錯誤訊息
+        example: system error!
+        type: string
+    type: object
+  model.SuccessResult:
+    properties:
+      code:
+        description: 狀態碼
+        example: 0
+        type: integer
+      data:
+        description: 回傳資料
+        type: object
+      msg:
+        description: 成功訊息
+        example: success!
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /migrate/down:
+    put:
+      consumes:
+      - application/json
+      description: 回滾 Schema 至初始版本
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - icebaby_admin_token: []
+      summary: 回滾 Schema 至初始版本
+      tags:
+      - Migrate
+  /migrate/down/{step}:
+    put:
+      consumes:
+      - application/json
+      description: 將 Schema 回滾N個版本
+      parameters:
+      - description: 版本跨度
+        in: path
+        name: step
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - icebaby_admin_token: []
+      summary: 將 Schema 回滾N個版本
+      tags:
+      - Migrate
+  /migrate/force/{version}:
+    put:
+      consumes:
+      - application/json
+      description: Schema 升級時遇到錯誤時的操作模式
+      parameters:
+      - description: 版本號
+        in: path
+        name: version
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - icebaby_admin_token: []
+      summary: 修正 Schema 版本並解除錯誤狀態
+      tags:
+      - Migrate
+  /migrate/up:
+    put:
+      consumes:
+      - application/json
+      description: 將 Schema 升至最新版本
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - icebaby_admin_token: []
+      summary: 將 Schema 升至最新版本
+      tags:
+      - Migrate
+  /migrate/up/{step}:
+    put:
+      consumes:
+      - application/json
+      description: 將 Schema 升級N個版本
+      parameters:
+      - description: 版本跨度
+        in: path
+        name: step
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - icebaby_admin_token: []
+      summary: 將 Schema 升級N個版本
+      tags:
+      - Migrate
+  /migrate/version:
+    get:
+      consumes:
+      - application/json
+      description: 獲取當前 Schema 版本
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - icebaby_admin_token: []
+      summary: 獲取當前 Schema 版本
+      tags:
+      - Migrate
+  /migrate/version/{version}:
+    put:
+      consumes:
+      - application/json
+      description: 升級至指定 Schema 版本
+      parameters:
+      - description: 版本號
+        in: path
+        name: version
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - icebaby_admin_token: []
+      summary: 升級至指定 Schema 版本
+      tags:
+      - Migrate
+swagger: "2.0"

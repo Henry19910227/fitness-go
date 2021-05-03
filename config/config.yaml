@@ -1,53 +1,62 @@
 Server:
-  RunMode: debug
-  HttpPort: 9090
-  ReadTimeout: 60
-  WriteTimeout: 60
+    RunMode: debug
+    HttpPort: 9090
+    ReadTimeout: 60
+    WriteTimeout: 60
 App:
-  UploadSavePath: ./volumes/storage
-  UploadImageAllowExt:
-    - .jpg
-    - .png
-    - .jpeg
-    - .JPG
-    - .PNG
-    - .JPEG
-  UploadImageMaxSize: 5 #MB
-  Debug:
-    Version: 1.0.0
-  Release:
-    Version: 1.0.0
+    UploadSavePath: ./volumes/storage
+    UploadImageAllowExt:
+      - .jpg
+      - .png
+      - .jpeg
+      - .JPG
+      - .PNG
+      - .JPEG
+    UploadImageMaxSize: 5 #MB
+    Debug:
+      Version: 1.0.0
+    Release:
+      Version: 1.0.0
 Log:
-  FileName: fitness
-  FileExt: log
-  Debug:
-    Path: ./volumes/log
-    MaxAge: 60 # Minute
-    RotationTime: 1 # Minute
-  Release:
-    Path: ./volumes/log
-    MaxAge: 7 # Day
-    RotationTime: 1 # Day
+    FileName: fitness
+    FileExt: log
+    Debug:
+      Path: ./volumes/log
+      MaxAge: 60 # Minute
+      RotationTime: 1 # Minute
+    Release:
+      Path: ./volumes/log
+      MaxAge: 7 # Day
+      RotationTime: 1 # Day
 Database:
-  DBType: mysql
-  Debug:
-    Host: 127.0.0.1:8889
-    DBName: fitness
-    UserName: henry
-    Password: aaaa8027
-  Release:
-    Host: fitness-mysql-primary:3306 # k8s svc dns + k8s internal port
-    DBName: fitness
-    UserName: henry
-    Password: aaaa8027
+    DBType: mysql
+    Debug:
+      Host: 127.0.0.1:8889
+      DBName: fitness
+      UserName: henry
+      Password: aaaa8027
+    Release:
+      Host: fitness-mysql-primary:3306 # k8s svc dns + k8s internal port
+      DBName: fitness
+      UserName: henry
+      Password: aaaa8027
 Redis:
-  Debug:
-    Host: 127.0.0.1:6379
-    Password: ""
-  Release:
-    Host: fitness-redis-master:6379
-    Password: aaaa8027
+    Debug:
+      Host: 127.0.0.1:6379
+      Password: ""
+    Release:
+      Host: fitness-redis-master:6379
+      Password: aaaa8027
 JWT:
-  Secret: mi
-  Issuer: fitness
-  Expire: 120 # Minute
+    Secret: mi
+    Issuer: fitness
+    Expire: 120 # Minute
+Swagger:
+    Debug:
+      Protocol: http
+      Host: 127.0.0.1:9090
+      BasePath: /api/v1
+    Release:
+      Protocol: https
+      Host: www.icebaby.tk
+      BasePath: /api/v1

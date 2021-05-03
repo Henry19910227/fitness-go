@@ -10,3 +10,10 @@ type Mysql interface {
 type Migrate interface {
 	DirPathSource() string
 }
+
+type Swagger interface {
+	GetVersion() string
+	GetProtocol() string
+	GetHost() string
+	GetBasePath() string
+}

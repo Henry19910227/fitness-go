@@ -26,6 +26,7 @@ var (
 
 var (
 	migrateService  service.Migrate
+	swagService     service.Swagger
 )
 
 func init() {
@@ -43,6 +44,7 @@ func main() {
 	router.Use(gin.Logger()) //加入路由Logger
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService)
+	controller.NewSwaggerController(router, swagService)
 	router.Run(":"+viperTool.GetString("Server.HttpPort"))
 }
 
@@ -86,9 +88,14 @@ func setupMigrateTool()  {
 /** Service */
 func setupService() {
 	setupMigrateService()
+	setupSwagService()
 }
 
 func setupMigrateService()  {
 	migrateService = service.NewMigrate(migrateTool, errcode.NewCommon())
+}
+
+func setupSwagService()  {
+	swagService = service.NewSwagger(setting.NewSwagger(viperTool))
 }
 

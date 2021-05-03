@@ -1,6 +1,9 @@
 package service
 
-import "github.com/Henry19910227/fitness-go/errcode"
+import (
+	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/gin-gonic/gin"
+)
 
 type Migrate interface {
 	Version() (uint, bool, errcode.Error)
@@ -10,4 +13,8 @@ type Migrate interface {
 	DownStep(step int) errcode.Error
 	Force(version int) (uint, bool, errcode.Error)
 	Migrate(version uint) (uint, bool, errcode.Error)
+}
+
+type Swagger interface {
+	WrapHandler() gin.HandlerFunc
 }
