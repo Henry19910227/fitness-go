@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/model/admindata"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,4 +18,10 @@ type Migrate interface {
 
 type Swagger interface {
 	WrapHandler() gin.HandlerFunc
+}
+
+type Login interface {
+	Logout(c *gin.Context, token string) errcode.Error
+	LoginForAdmin(c *gin.Context, email string, password string) (*admindata.Admin, string, errcode.Error)
+	LogoutForAdmin(c *gin.Context, token string) errcode.Error
 }

@@ -34,3 +34,12 @@ type Redis interface {
 type User interface {
 	GetOnlineExpire() time.Duration
 }
+
+type Logger interface {
+	GetLogFilePath() string
+	GetLogFileName() string
+	GetLogFileExt() string
+	GetLogMaxAge() time.Duration
+	GetLogRotationTime() time.Duration
+	GetRunMode() string
+}

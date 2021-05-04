@@ -3,11 +3,16 @@ package tool
 import (
 	"database/sql"
 	"github.com/go-redis/redis/v8"
+	"gorm.io/gorm"
 	"time"
 )
 
 type Mysql interface {
 	DB() *sql.DB
+}
+
+type Gorm interface {
+	DB() *gorm.DB
 }
 
 type Migrate interface {
@@ -43,4 +48,14 @@ type Redis interface {
 	PipXLen(pip redis.Pipeliner, key string) *redis.IntCmd
 
 	PipExec(pip redis.Pipeliner) error
+}
+
+type Logger interface {
+	Trace(fields map[string]interface{}, msg string)
+	Debug(fields map[string]interface{}, msg string)
+	Info(fields map[string]interface{}, msg string)
+	Warn(fields map[string]interface{}, msg string)
+	Error(fields map[string]interface{}, msg string)
+	Fatal(fields map[string]interface{}, msg string)
+	Panic(fields map[string]interface{}, msg string)
 }
