@@ -1,6 +1,21 @@
 package handler
 
-import "time"
+import (
+	"github.com/gin-gonic/gin"
+	"time"
+)
+
+type LogLevel int
+
+const (
+	Trace LogLevel = iota
+	Debug
+	Info
+	Warn
+	Error
+	Fatal
+	Panic
+)
 
 type SSO interface {
 	GenerateUserToken(uid int64) (string, error)
@@ -19,4 +34,8 @@ type SSO interface {
 	SetOfflineStatus(token string) error
 	SetOfflineStatusWithUID(uid int64, role int) error
 	GetOnlineDateTime(uid int64) (*time.Time, error)
+}
+
+type Logger interface {
+	Set(c *gin.Context, level LogLevel, tag string, code int, msg string)
 }

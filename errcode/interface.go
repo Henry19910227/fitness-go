@@ -11,6 +11,11 @@ var (
 	dataAlreadyExists = NewError(9003, errors.New("資料已存在"))
 	InvalidThirdParty = NewError(9004, errors.New("無效的第三方驗證"))
 	InvalidToken      = NewError(9005, errors.New("無效的token"))
+
+	// Login
+	LoginFailure     = NewError(1100, errors.New("登入失敗, 帳號或密碼錯誤"))
+	LoginRoleFailure = NewError(1101, errors.New("登入身份錯誤"))
+	LoginStatusFailure = NewError(1102, errors.New("帳號無法使用"))
 )
 
 type Error interface {
@@ -32,4 +37,14 @@ type Common interface {
 	InvalidThirdParty() Error
 	// InvalidToken 9005 - 無效的token
 	InvalidToken() Error
+}
+
+type Login interface {
+	Common
+	// LoginFailure 1100 - 登入失敗, 帳號或密碼錯誤
+	LoginFailure() Error
+	// NewError(1101, errors.New("登入身份錯誤"))
+	LoginRoleFailure() Error
+	//NewError(1102, errors.New("帳號無法使用"))
+	LoginStatusFailure() Error
 }
