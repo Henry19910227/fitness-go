@@ -18,7 +18,7 @@ func NewJWT(setting setting.JWT) JWT {
 }
 
 func (t *jwtTool) GenerateUserToken(uid int64) (string, error) {
-	claims := jwt.MapClaims{"uid": strconv.Itoa(int(uid)), "role": ""}
+	claims := jwt.MapClaims{"uid": strconv.Itoa(int(uid)), "role": "1"}
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(t.setting.GetTokenSecret()))
 	return token, err
 }
@@ -49,7 +49,7 @@ func (t *jwtTool) GetIDByToken(tokenString string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	uidStr, ok := claims["sub"].(string)
+	uidStr, ok := claims["uid"].(string)
 	if !ok {
 		return 0, errors.New("assertion error")
 	}

@@ -25,3 +25,12 @@ type JWT interface {
 	GetIssuer() string
 	GetExpire() time.Duration
 }
+
+type Redis interface {
+	GetHost() string
+	GetPwd() string
+}
+
+type User interface {
+	GetOnlineExpire() time.Duration
+}

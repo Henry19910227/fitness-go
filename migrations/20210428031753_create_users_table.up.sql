@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
      `auth_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
      `account` VARCHAR(50) UNIQUE NOT NULL DEFAULT '',
      `password` VARCHAR(16) NOT NULL DEFAULT '',
+     `device_token` VARCHAR(50) UNIQUE NOT NULL DEFAULT '',
      `user_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
      `user_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
      `create_at` DATETIME NOT NULL DEFAULT NOW(),
