@@ -1,5 +1,5 @@
 definitions:
-  admindata.Admin:
+  dto.Admin:
     properties:
       email:
         description: 信箱
@@ -103,7 +103,7 @@ paths:
             - $ref: '#/definitions/model.SuccessLoginResult'
             - properties:
                 data:
-                  $ref: '#/definitions/admindata.Admin'
+                  $ref: '#/definitions/dto.Admin'
               type: object
         "400":
           description: 登入失敗

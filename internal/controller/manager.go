@@ -36,7 +36,7 @@ func NewManagerController(
 // @Accept json
 // @Produce json
 // @Param json_body body validator.AdminLoginBody true "輸入參數"
-// @Success 200 {object} model.SuccessLoginResult{data=admindata.Admin} "登入成功"
+// @Success 200 {object} model.SuccessLoginResult{data=dto.Admin} "登入成功"
 // @Failure 400 {object} model.ErrorResult "登入失敗"
 // @Router /manager/login [POST]
 func (m *Manager) Login(c *gin.Context) {

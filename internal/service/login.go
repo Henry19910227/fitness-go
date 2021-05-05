@@ -3,8 +3,8 @@ package service
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
-	"github.com/Henry19910227/fitness-go/internal/model/admindata"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
@@ -32,7 +32,7 @@ func NewLogin(adminRepo repository.Admin,
 		loginErr: loginErr}
 }
 
-func (l *login) LoginForAdmin(c *gin.Context, email string, password string) (*admindata.Admin, string, errcode.Error) {
+func (l *login) LoginForAdmin(c *gin.Context, email string, password string) (*dto.Admin, string, errcode.Error) {
 	uid, err := l.adminRepo.GetAdminID(email, password)
 	if err != nil {
 		//查無此人
@@ -43,7 +43,7 @@ func (l *login) LoginForAdmin(c *gin.Context, email string, password string) (*a
 		l.logger.Set(c, handler.Error, "AdminRepo", l.loginErr.SystemError().Code(), err.Error())
 		return nil, "", l.loginErr.SystemError()
 	}
-	var admin admindata.Admin
+	var admin dto.Admin
 	if err := l.adminRepo.GetAdmin(uid, &admin); err != nil {
 		l.logger.Set(c, handler.Error, "AdminRepo", l.loginErr.SystemError().Code(), err.Error())
 		return nil, "", l.loginErr.SystemError()

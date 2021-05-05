@@ -40,7 +40,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admindata.Admin"
+                                            "$ref": "#/definitions/dto.Admin"
                                         }
                                     }
                                 }
@@ -366,7 +366,7 @@
         }
     },
     "definitions": {
-        "admindata.Admin": {
+        "dto.Admin": {
             "type": "object",
             "properties": {
                 "email": {

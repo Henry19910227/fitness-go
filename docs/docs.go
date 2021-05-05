@@ -60,7 +60,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admindata.Admin"
+                                            "$ref": "#/definitions/dto.Admin"
                                         }
                                     }
                                 }
@@ -386,7 +386,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "admindata.Admin": {
+        "dto.Admin": {
             "type": "object",
             "properties": {
                 "email": {
