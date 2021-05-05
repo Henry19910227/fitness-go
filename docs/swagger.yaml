@@ -80,6 +80,8 @@ definitions:
     type: object
 info:
   contact: {}
+  description: 健身平台 api
+  title: fitness api
 paths:
   /manager/login:
     post:
@@ -304,4 +306,17 @@ paths:
       summary: 升級至指定 Schema 版本
       tags:
       - Migrate
+securityDefinitions:
+  icebaby_admin_token:
+    in: header
+    name: Token
+    type: apiKey
+  icebaby_trainer_token:
+    in: header
+    name: Token
+    type: apiKey
+  icebaby_user_token:
+    in: header
+    name: Token
+    type: apiKey
 swagger: "2.0"

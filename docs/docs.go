@@ -492,6 +492,23 @@ var doc = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "icebaby_admin_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        },
+        "icebaby_trainer_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        },
+        "icebaby_user_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        }
     }
 }`
 
@@ -510,8 +527,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "",
-	Description: "",
+	Title:       "fitness api",
+	Description: "健身平台 api",
 }
 
 type s struct{}

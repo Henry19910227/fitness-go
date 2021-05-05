@@ -63,6 +63,21 @@ func init() {
 	adminLV2Middleware = middleware.AdminLV2JWT(ssoHandler, errcode.NewCommon())
 }
 
+// @title fitness api
+// @description 健身平台 api
+
+// @securityDefinitions.apikey icebaby_user_token
+// @in header
+// @name Token
+
+// @securityDefinitions.apikey icebaby_trainer_token
+// @in header
+// @name Token
+
+// @securityDefinitions.apikey icebaby_admin_token
+// @in header
+// @name Token
+
 
 func main() {
 	router := gin.New()

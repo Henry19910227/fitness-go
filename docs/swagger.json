@@ -1,6 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
+        "description": "健身平台 api",
+        "title": "fitness api",
         "contact": {}
     },
     "paths": {
@@ -471,6 +473,23 @@
                     "example": "12345678"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "icebaby_admin_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        },
+        "icebaby_trainer_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        },
+        "icebaby_user_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
         }
     }
 }
