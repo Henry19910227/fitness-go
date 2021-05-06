@@ -48,3 +48,19 @@ type Login interface {
 	//NewError(1102, errors.New("帳號無法使用"))
 	LoginStatusFailure() Error
 }
+
+type Register interface {
+	Common
+	//// NewError(1400, errors.New("註冊失敗"))
+	//RegisterFailure() Error
+	//// NewError(1401, errors.New("手機驗證碼發送失敗"))
+	//SendOTPFailure() Error
+	//// NewError(1402, errors.New("無效的手機驗證碼"))
+	//MobileInvalid() Error
+	//// NewError(1405, errors.New("該暱稱已被使用"))
+	//NicknameDuplicate() Error
+	//// NewError(1406, errors.New("該信箱已被使用"))
+	//EmailDuplicate() Error
+	//// NewError(1407, errors.New("該帳號已被使用"))
+	//AccountDuplicate() Error
+}

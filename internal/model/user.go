@@ -2,7 +2,7 @@ package model
 
 type User struct {
 	ID               int64   `gorm:"column:id"`                  // 帳戶id
-	AccountType      int64   `gorm:"column:account_type"`        // 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
+	AccountType      int     `gorm:"column:account_type"`        // 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
 	Account          string  `gorm:"column:account"`             // 帳號
 	Password         string  `gorm:"column:password"`            // 密碼
 	DeviceToken      string  `gorm:"column:device_token"`        // 推播token

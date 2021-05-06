@@ -25,3 +25,7 @@ type Login interface {
 	LoginForAdmin(c *gin.Context, email string, password string) (*dto.Admin, string, errcode.Error)
 	LogoutForAdmin(c *gin.Context, token string) errcode.Error
 }
+
+type Register interface {
+	EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) errcode.Error
+}

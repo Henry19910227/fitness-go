@@ -1,4 +1,4 @@
-package dto
+package registerdto
 
 type User struct {
 

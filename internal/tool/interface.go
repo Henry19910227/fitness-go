@@ -59,3 +59,8 @@ type Logger interface {
 	Fatal(fields map[string]interface{}, msg string)
 	Panic(fields map[string]interface{}, msg string)
 }
+
+type OTP interface {
+	Generate(secret string) (string, error)
+	Validate(code string, secret string) bool
+}
