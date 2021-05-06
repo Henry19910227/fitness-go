@@ -1,0 +1,21 @@
+package repository
+
+import (
+	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/handler"
+	"github.com/Henry19910227/fitness-go/internal/tool"
+)
+
+type user struct {
+	sso handler.SSO
+	mysql tool.Mysql
+	gorm  tool.Gorm
+}
+
+func NewUser(sso handler.SSO, mysqlTool tool.Mysql, gormTool  tool.Gorm) User {
+	return &user{sso: sso, mysql: mysqlTool, gorm: gormTool}
+}
+
+func (u *user) CreateUser(param dto.CreateUser) (int64, error) {
+	panic("implement me")
+}
