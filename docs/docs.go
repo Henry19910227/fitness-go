@@ -24,6 +24,92 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/manager/login": {
+            "post": {
+                "description": "管理員登入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "管理員登入",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.AdminLoginBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登入成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessLoginResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Admin"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "登入失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/manager/logout": {
+            "post": {
+                "security": [
+                    {
+                        "icebaby_admin_token": []
+                    }
+                ],
+                "description": "管理員登出",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "管理員登出",
+                "responses": {
+                    "200": {
+                        "description": "登出成功",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "登出失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/migrate/down": {
             "put": {
                 "security": [
@@ -300,6 +386,31 @@ var doc = `{
         }
     },
     "definitions": {
+        "dto.Admin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "lv": {
+                    "description": "身份 (1:一般管理員)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        },
         "model.ErrorResult": {
             "type": "object",
             "properties": {
@@ -316,6 +427,30 @@ var doc = `{
                     "description": "錯誤訊息",
                     "type": "string",
                     "example": "system error!"
+                }
+            }
+        },
+        "model.SuccessLoginResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 0
+                },
+                "data": {
+                    "description": "回傳資料",
+                    "type": "object"
+                },
+                "msg": {
+                    "description": "成功訊息",
+                    "type": "string",
+                    "example": "success!"
+                },
+                "token": {
+                    "description": "Token",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTQ0MDc3NjMsInN1YiI6IjEwMDEzIn0.Z5UeEC8ArCVYej9kI1paXD2f5FMFiTfeLpU6e_CZZw0"
                 }
             }
         },
@@ -337,6 +472,42 @@ var doc = `{
                     "example": "success!"
                 }
             }
+        },
+        "validator.AdminLoginBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "password": {
+                    "description": "密碼 (8~16字元)",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "icebaby_admin_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        },
+        "icebaby_trainer_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        },
+        "icebaby_user_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
         }
     }
 }`
@@ -356,8 +527,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "",
-	Description: "",
+	Title:       "fitness api",
+	Description: "健身平台 api",
 }
 
 type s struct{}
