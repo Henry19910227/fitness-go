@@ -27,5 +27,6 @@ type Login interface {
 }
 
 type Register interface {
-	EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) errcode.Error
+	SendEmailOTP(c *gin.Context, email string) (string, errcode.Error)
+	EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) (int64, errcode.Error)
 }

@@ -16,6 +16,15 @@ var (
 	LoginFailure     = NewError(1100, errors.New("登入失敗, 帳號或密碼錯誤"))
 	LoginRoleFailure = NewError(1101, errors.New("登入身份錯誤"))
 	LoginStatusFailure = NewError(1102, errors.New("帳號無法使用"))
+
+
+	// Register
+	RegisterFailure    = NewError(1400, errors.New("註冊失敗"))
+	SendOTPFailure     = NewError(1401, errors.New("信箱驗證碼發送失敗"))
+	OTPInvalid         = NewError(1402, errors.New("無效的信箱驗證碼"))
+	NicknameDuplicate  = NewError(1405, errors.New("該暱稱已被使用"))
+	EmailDuplicate     = NewError(1406, errors.New("該信箱已被使用"))
+	AccountDuplicate   = NewError(1407, errors.New("該帳號已被使用"))
 )
 
 type Error interface {
@@ -38,6 +47,39 @@ type Common interface {
 	// InvalidToken 9005 - 無效的token
 	InvalidToken() Error
 }
+
+
+type Handler interface {
+	/** 公共 */
+	Custom(code int, err error) Error
+	// SystemError 9000 - 系統發生錯誤
+	SystemError() Error
+	// UpdateError 9001 - 更新失敗
+	UpdateError() Error
+	// DataNotFound 9002 - 查無資料
+	DataNotFound() Error
+	// DataAlreadyExists 9003 - 資料已存在
+	DataAlreadyExists() Error
+	// InvalidThirdParty 9004 - 無效的第三方驗證
+	InvalidThirdParty() Error
+	// InvalidToken 9005 - 無效的token
+	InvalidToken() Error
+
+	/** 註冊 */
+	// NewError(1400, errors.New("註冊失敗"))
+	RegisterFailure() Error
+	// NewError(1401, errors.New("手機驗證碼發送失敗"))
+	SendOTPFailure() Error
+	// NewError(1402, errors.New("無效的手機驗證碼"))
+	OTPInvalid() Error
+	// NewError(1405, errors.New("該暱稱已被使用"))
+	NicknameDuplicate() Error
+	// NewError(1406, errors.New("該信箱已被使用"))
+	EmailDuplicate() Error
+	// NewError(1407, errors.New("該帳號已被使用"))
+	AccountDuplicate() Error
+}
+
 
 type Login interface {
 	Common

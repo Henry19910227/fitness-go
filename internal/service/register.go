@@ -16,7 +16,7 @@ type register struct {
 	jwtTool   tool.JWT
 	otpTool   tool.OTP
 	viperTool *viper.Viper
-	regErr    errcode.Register
+	errHandler errcode.Handler
 }
 
 func NewRegister(
@@ -25,7 +25,7 @@ func NewRegister(
 	jwtTool    tool.JWT,
 	otpTool    tool.OTP,
 	viperTool  *viper.Viper,
-	regErr     errcode.Register) Register {
+	errHandler  errcode.Handler) Register {
 
 	return &register{
 		userRepo: userRepo,
@@ -33,9 +33,39 @@ func NewRegister(
 		jwtTool: jwtTool,
 		otpTool: otpTool,
 		viperTool: viperTool,
-		regErr: regErr}
+		errHandler: errHandler}
 }
 
-func (r *register) EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) errcode.Error {
-	panic("implement me")
+func (r *register) SendEmailOTP(c *gin.Context, email string) (string, errcode.Error) {
+	//產生otp碼
+	otp, err := r.otpTool.Generate(email)
+	if err != nil {
+		r.logger.Set(c, handler.Error, "otp tool", r.errHandler.SendOTPFailure().Code(), err.Error())
+		return "", r.errHandler.SendOTPFailure()
+	}
+	//如果是debug模式就不發送簡訊，並回傳otp
+	if r.viperTool.GetString("Server.RunMode") == "debug" {
+		return otp, nil
+	}
+	//暫時只回傳otp不寄信
+	return otp, nil
+}
+
+func (r *register) EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) (int64, errcode.Error) {
+	//驗證手機OTP
+	if !r.otpTool.Validate(otp, email) {
+		return 0, r.errHandler.OTPInvalid()
+	}
+	//創建用戶
+	uid, err := r.userRepo.CreateUser(1, email, nickname, password)
+	if err != nil {
+		//有重複的欄位資料
+		if r.MysqlDuplicateEntry(err) {
+			return 0, r.errHandler.DataAlreadyExists()
+		}
+		//不明原因錯誤
+		r.logger.Set(c, handler.Error, "UserRepo", r.errHandler.SystemError().Code(), err.Error())
+		return 0, r.errHandler.SystemError()
+	}
+	return uid, nil
 }
