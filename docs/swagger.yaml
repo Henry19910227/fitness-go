@@ -64,6 +64,20 @@ definitions:
         example: success!
         type: string
     type: object
+  registerdto.OTP:
+    properties:
+      otp_code:
+        description: 信箱驗證碼
+        example: "254235"
+        type: string
+    type: object
+  registerdto.RegisterResult:
+    properties:
+      user_id:
+        description: 用戶ID
+        example: 10001
+        type: integer
+    type: object
   validator.AdminLoginBody:
     properties:
       email:
@@ -76,6 +90,38 @@ definitions:
         type: string
     required:
     - email
+    - password
+    type: object
+  validator.EmailBody:
+    properties:
+      email:
+        example: test@gmail.com
+        type: string
+    required:
+    - email
+    type: object
+  validator.RegisterForEmailBody:
+    properties:
+      email:
+        description: 信箱
+        example: test@gmail.com
+        type: string
+      email_otp:
+        description: 信箱驗證碼
+        example: "531476"
+        type: string
+      nickname:
+        description: 暱稱 (1~16字元)
+        example: henry
+        type: string
+      password:
+        description: 密碼 (8~16字元)
+        example: "12345678"
+        type: string
+    required:
+    - email
+    - email_otp
+    - nickname
     - password
     type: object
 info:
@@ -306,6 +352,68 @@ paths:
       summary: 升級至指定 Schema 版本
       tags:
       - Migrate
+  /register/email:
+    post:
+      consumes:
+      - application/json
+      description: 使用信箱註冊
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.RegisterForEmailBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 註冊成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/registerdto.RegisterResult'
+              type: object
+        "400":
+          description: 註冊失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 使用信箱註冊
+      tags:
+      - Register
+  /register/email_otp:
+    post:
+      consumes:
+      - application/json
+      description: 發送 Email OTP
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: Parameter
+        required: true
+        schema:
+          $ref: '#/definitions/validator.EmailBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 驗證郵件已寄出
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/registerdto.OTP'
+              type: object
+        "400":
+          description: 發送失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 發送 Email OTP
+      tags:
+      - Register
 securityDefinitions:
   icebaby_admin_token:
     in: header

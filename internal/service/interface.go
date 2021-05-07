@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,6 +28,6 @@ type Login interface {
 }
 
 type Register interface {
-	SendEmailOTP(c *gin.Context, email string) (string, errcode.Error)
-	EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) (int64, errcode.Error)
+	SendEmailOTP(c *gin.Context, email string) (*registerdto.OTP, errcode.Error)
+	EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) (*registerdto.RegisterResult, errcode.Error)
 }

@@ -13,11 +13,11 @@ type User struct {
 	Email            string  `gorm:"column:email"`               // 信箱
 	Nickname         string  `gorm:"column:nickname"`            // 暱稱
 	Sex              string  `gorm:"column:sex"`                 // 性別
-	Birthday         string  `gorm:"column:birthday"`            // 生日
+	Birthday         *string `gorm:"column:birthday"`            // 生日
 	Height           int     `gorm:"column:height"`              // 身高
 	Weight           int     `gorm:"column:weight"`              // 體重
-	Experience       int     `gorm:"column:experience"`          // 經驗 (1:初學/2:中級/3:中高/4:專業)
-	Target           int     `gorm:"column:target"`              // 目標 (1:減重/2:維持健康/3:增肌)
+	Experience       int     `gorm:"column:experience"`          // 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
+	Target           int     `gorm:"column:target"`              // 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
 }
 
 func (User) TableName() string {
