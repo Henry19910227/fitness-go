@@ -32,3 +32,15 @@ func (u *user) CreateUser(accountType int, account string, nickname string, pass
 	}
 	return user.ID, nil
 }
+
+func (u *user) FindUserIDByNickname(nickname string) (int64, error) {
+	var uid int64
+	if err := u.gorm.DB().
+		Table("users").
+		Select("users.id").
+		Where("users.nickname = ?", nickname).
+		Take(&uid).Error; err != nil {
+			return 0, err
+	}
+	return uid, nil
+}

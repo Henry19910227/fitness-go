@@ -11,3 +11,7 @@ type RegisterForEmailBody struct {
 	Nickname  string `json:"nickname" binding:"required,min=1,max=16" example:"henry"`            // 暱稱 (1~16字元)
 	EmailOTP  string `json:"email_otp" binding:"required,max=16" example:"531476"`               // 信箱驗證碼
 }
+
+type ValidateNicknameDupBody struct {
+	Nickname string `json:"nickname" binding:"required,min=1,max=16" example:"henry"` // 暱稱 (1~16字元)
+}

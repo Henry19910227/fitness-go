@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
@@ -8,6 +9,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"gorm.io/gorm"
 )
 
 type register struct {
@@ -69,4 +71,19 @@ func (r *register) EmailRegister(c *gin.Context, otp string, email string, nickn
 		return nil, r.errHandler.SystemError()
 	}
 	return &registerdto.Register{UserID: uid}, nil
+}
+
+func (r *register) ValidateNicknameDup(c *gin.Context, nickname string) errcode.Error {
+	_, err := r.userRepo.FindUserIDByNickname(nickname)
+	//該帳號已存在
+	if err == nil {
+		return r.errHandler.NicknameDuplicate()
+	}
+	//該帳號可使用
+	if errors.Is(err, gorm.ErrRecordNotFound){
+		return nil
+	}
+	//不明原因錯誤
+	r.logger.Set(c, handler.Error, "UserRepo", r.errHandler.SystemError().Code(), err.Error())
+	return r.errHandler.SystemError()
 }

@@ -30,4 +30,5 @@ type Login interface {
 type Register interface {
 	SendEmailOTP(c *gin.Context, email string) (*registerdto.OTP, errcode.Error)
 	EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) (*registerdto.Register, errcode.Error)
+	ValidateNicknameDup(c *gin.Context, nickname string) errcode.Error
 }

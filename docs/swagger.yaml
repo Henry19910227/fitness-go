@@ -71,7 +71,7 @@ definitions:
         example: "254235"
         type: string
     type: object
-  registerdto.RegisterResult:
+  registerdto.Register:
     properties:
       user_id:
         description: 用戶ID
@@ -123,6 +123,15 @@ definitions:
     - email_otp
     - nickname
     - password
+    type: object
+  validator.ValidateNicknameDupBody:
+    properties:
+      nickname:
+        description: 暱稱 (1~16字元)
+        example: henry
+        type: string
+    required:
+    - nickname
     type: object
 info:
   contact: {}
@@ -374,7 +383,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/registerdto.RegisterResult'
+                  $ref: '#/definitions/registerdto.Register'
               type: object
         "400":
           description: 註冊失敗
@@ -383,7 +392,7 @@ paths:
       summary: 使用信箱註冊
       tags:
       - Register
-  /register/email_otp:
+  /register/email/otp:
     post:
       consumes:
       - application/json
@@ -412,6 +421,32 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       summary: 發送 Email OTP
+      tags:
+      - Register
+  /register/nickname/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證暱稱是否重複
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.ValidateNicknameDupBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 此暱稱可使用
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 該資料已存在
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 驗證暱稱是否重複
       tags:
       - Register
 securityDefinitions:

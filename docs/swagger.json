@@ -402,7 +402,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/registerdto.RegisterResult"
+                                            "$ref": "#/definitions/registerdto.Register"
                                         }
                                     }
                                 }
@@ -418,7 +418,7 @@
                 }
             }
         },
-        "/register/email_otp": {
+        "/register/email/otp": {
             "post": {
                 "description": "發送 Email OTP",
                 "consumes": [
@@ -463,6 +463,46 @@
                     },
                     "400": {
                         "description": "發送失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/nickname/validate": {
+            "post": {
+                "description": "驗證暱稱是否重複",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "驗證暱稱是否重複",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.ValidateNicknameDupBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "此暱稱可使用",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "該資料已存在",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -569,7 +609,7 @@
                 }
             }
         },
-        "registerdto.RegisterResult": {
+        "registerdto.Register": {
             "type": "object",
             "properties": {
                 "user_id": {
@@ -638,6 +678,19 @@
                     "description": "密碼 (8~16字元)",
                     "type": "string",
                     "example": "12345678"
+                }
+            }
+        },
+        "validator.ValidateNicknameDupBody": {
+            "type": "object",
+            "required": [
+                "nickname"
+            ],
+            "properties": {
+                "nickname": {
+                    "description": "暱稱 (1~16字元)",
+                    "type": "string",
+                    "example": "henry"
                 }
             }
         }
