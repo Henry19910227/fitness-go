@@ -34,6 +34,10 @@ func (u *user) CreateUser(accountType int, account string, nickname string, pass
 	return user.ID, nil
 }
 
+func (u *user) FindUserByEmailAndPassword(email string, password string) (*model.User, error) {
+	panic("implement me")
+}
+
 func (u *user) FindUserIDByNickname(nickname string) (int64, error) {
 	var uid int64
 	if err := u.gorm.DB().

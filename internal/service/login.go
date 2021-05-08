@@ -32,6 +32,10 @@ func NewLogin(adminRepo repository.Admin,
 		loginErr: loginErr}
 }
 
+func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) errcode.Error {
+	panic("implement me")
+}
+
 func (l *login) LoginForAdmin(c *gin.Context, email string, password string) (*dto.Admin, string, errcode.Error) {
 	uid, err := l.adminRepo.GetAdminID(email, password)
 	if err != nil {
