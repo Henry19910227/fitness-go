@@ -52,7 +52,7 @@ func (r *register) SendEmailOTP(c *gin.Context, email string) (*registerdto.OTP,
 	return &registerdto.OTP{Code: otp}, nil
 }
 
-func (r *register) EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) (*registerdto.RegisterResult, errcode.Error) {
+func (r *register) EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) (*registerdto.Register, errcode.Error) {
 	//驗證OTP
 	if !r.otpTool.Validate(otp, email) {
 		return nil, r.errHandler.OTPInvalid()
@@ -68,5 +68,5 @@ func (r *register) EmailRegister(c *gin.Context, otp string, email string, nickn
 		r.logger.Set(c, handler.Error, "UserRepo", r.errHandler.SystemError().Code(), err.Error())
 		return nil, r.errHandler.SystemError()
 	}
-	return &registerdto.RegisterResult{UserID: uid}, nil
+	return &registerdto.Register{UserID: uid}, nil
 }
