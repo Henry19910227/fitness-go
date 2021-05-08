@@ -26,6 +26,7 @@ func (u *user) CreateUser(accountType int, account string, nickname string, pass
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		Nickname: nickname,
+		Birthday: "0000-01-01 00:00:00",
 	}
 	if err := u.gorm.DB().Create(&user).Error; err != nil {
 		return 0, err
