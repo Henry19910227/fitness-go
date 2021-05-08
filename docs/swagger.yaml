@@ -124,6 +124,15 @@ definitions:
     - nickname
     - password
     type: object
+  validator.ValidateEmailDupBody:
+    properties:
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+    required:
+    - email
+    type: object
   validator.ValidateNicknameDupBody:
     properties:
       nickname:
@@ -423,11 +432,37 @@ paths:
       summary: 發送 Email OTP
       tags:
       - Register
+  /register/email/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證信箱是否可使用
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.ValidateEmailDupBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 此暱稱可使用
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 該資料已存在
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 驗證信箱是否可使用
+      tags:
+      - Register
   /register/nickname/validate:
     post:
       consumes:
       - application/json
-      description: 驗證暱稱是否重複
+      description: 驗證暱稱是否可使用
       parameters:
       - description: 輸入參數
         in: body
@@ -446,7 +481,7 @@ paths:
           description: 該資料已存在
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 驗證暱稱是否重複
+      summary: 驗證暱稱是否可使用
       tags:
       - Register
 securityDefinitions:

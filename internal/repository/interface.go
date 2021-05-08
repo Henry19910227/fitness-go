@@ -8,4 +8,5 @@ type Admin interface {
 type User interface {
 	CreateUser(accountType int, account string, nickname string, password string) (int64, error)
 	FindUserIDByNickname(nickname string) (int64, error)
+	FindUserIDByEmail(email string) (int64, error)
 }

@@ -488,9 +488,9 @@ var doc = `{
                 }
             }
         },
-        "/register/nickname/validate": {
+        "/register/email/validate": {
             "post": {
-                "description": "驗證暱稱是否重複",
+                "description": "驗證信箱是否可使用",
                 "consumes": [
                     "application/json"
                 ],
@@ -500,7 +500,47 @@ var doc = `{
                 "tags": [
                     "Register"
                 ],
-                "summary": "驗證暱稱是否重複",
+                "summary": "驗證信箱是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.ValidateEmailDupBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "此暱稱可使用",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "該資料已存在",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/nickname/validate": {
+            "post": {
+                "description": "驗證暱稱是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "驗證暱稱是否可使用",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -696,6 +736,19 @@ var doc = `{
                     "description": "密碼 (8~16字元)",
                     "type": "string",
                     "example": "12345678"
+                }
+            }
+        },
+        "validator.ValidateEmailDupBody": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
                 }
             }
         },

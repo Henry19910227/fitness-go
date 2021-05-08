@@ -44,3 +44,15 @@ func (u *user) FindUserIDByNickname(nickname string) (int64, error) {
 	}
 	return uid, nil
 }
+
+func (u *user) FindUserIDByEmail(email string) (int64, error) {
+	var uid int64
+	if err := u.gorm.DB().
+		Table("users").
+		Select("users.id").
+		Where("users.account = ? OR users.email = ?", email, email).
+		Take(&uid).Error; err != nil {
+		return 0, err
+	}
+	return uid, nil
+}

@@ -87,3 +87,18 @@ func (r *register) ValidateNicknameDup(c *gin.Context, nickname string) errcode.
 	r.logger.Set(c, handler.Error, "UserRepo", r.errHandler.SystemError().Code(), err.Error())
 	return r.errHandler.SystemError()
 }
+
+func (r *register) ValidateEmailDup(c *gin.Context, email string) errcode.Error {
+	_, err := r.userRepo.FindUserIDByEmail(email)
+	//該信箱已存在
+	if err == nil {
+		return r.errHandler.EmailDuplicate()
+	}
+	//該信箱可使用
+	if errors.Is(err, gorm.ErrRecordNotFound){
+		return nil
+	}
+	//不明原因錯誤
+	r.logger.Set(c, handler.Error, "UserRepo", r.errHandler.SystemError().Code(), err.Error())
+	return r.errHandler.SystemError()
+}

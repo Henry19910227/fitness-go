@@ -15,3 +15,7 @@ type RegisterForEmailBody struct {
 type ValidateNicknameDupBody struct {
 	Nickname string `json:"nickname" binding:"required,min=1,max=16" example:"henry"` // 暱稱 (1~16字元)
 }
+
+type ValidateEmailDupBody struct {
+	Email string `json:"email" binding:"required,email" example:"henry@gmail.com"` // 信箱
+}
