@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/gin-gonic/gin"
@@ -24,9 +23,9 @@ type Swagger interface {
 
 type Login interface {
 	UserLoginByEmail(c *gin.Context, email string, password string) (*logindto.User, string, errcode.Error)
+	AdminLoginByEmail(c *gin.Context, email string, password string) (*logindto.Admin, string, errcode.Error)
 	Logout(c *gin.Context, token string) errcode.Error
-	LoginForAdmin(c *gin.Context, email string, password string) (*dto.Admin, string, errcode.Error)
-	LogoutForAdmin(c *gin.Context, token string) errcode.Error
+	AdminLogoutByToken(c *gin.Context, token string) errcode.Error
 }
 
 type Register interface {

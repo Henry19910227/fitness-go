@@ -24,6 +24,58 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/login/admin/email": {
+            "post": {
+                "description": "管理者使用信箱登入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "管理者使用信箱登入",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.LoginByEmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登入成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessLoginResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/logindto.Admin"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "登入失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/login/user/email": {
             "post": {
                 "description": "用戶使用信箱登入",
@@ -44,7 +96,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/validator.UserLoginByEmailBody"
+                            "$ref": "#/definitions/validator.LoginByEmailBody"
                         }
                     }
                 ],
@@ -76,63 +128,11 @@ var doc = `{
                 }
             }
         },
-        "/manager/login": {
-            "post": {
-                "description": "管理員登入",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Manager"
-                ],
-                "summary": "管理員登入",
-                "parameters": [
-                    {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.AdminLoginBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "登入成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessLoginResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.Admin"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "登入失敗",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
-        "/manager/logout": {
+        "/logout/admin": {
             "post": {
                 "security": [
                     {
-                        "icebaby_admin_token": []
+                        "fitness_admin_token": []
                     }
                 ],
                 "description": "管理員登出",
@@ -143,7 +143,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Manager"
+                    "Login"
                 ],
                 "summary": "管理員登出",
                 "responses": {
@@ -166,7 +166,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "icebaby_admin_token": []
+                        "fitness_admin_token": []
                     }
                 ],
                 "description": "回滾 Schema 至初始版本",
@@ -200,7 +200,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "icebaby_admin_token": []
+                        "fitness_admin_token": []
                     }
                 ],
                 "description": "將 Schema 回滾N個版本",
@@ -243,7 +243,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "icebaby_admin_token": []
+                        "fitness_admin_token": []
                     }
                 ],
                 "description": "Schema 升級時遇到錯誤時的操作模式",
@@ -286,7 +286,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "icebaby_admin_token": []
+                        "fitness_admin_token": []
                     }
                 ],
                 "description": "將 Schema 升至最新版本",
@@ -320,7 +320,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "icebaby_admin_token": []
+                        "fitness_admin_token": []
                     }
                 ],
                 "description": "將 Schema 升級N個版本",
@@ -363,7 +363,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "icebaby_admin_token": []
+                        "fitness_admin_token": []
                     }
                 ],
                 "description": "獲取當前 Schema 版本",
@@ -397,7 +397,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "icebaby_admin_token": []
+                        "fitness_admin_token": []
                     }
                 ],
                 "description": "升級至指定 Schema 版本",
@@ -622,7 +622,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "dto.Admin": {
+        "logindto.Admin": {
             "type": "object",
             "properties": {
                 "email": {
@@ -814,25 +814,6 @@ var doc = `{
                 }
             }
         },
-        "validator.AdminLoginBody": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "password": {
-                    "description": "密碼 (8~16字元)",
-                    "type": "string",
-                    "example": "12345678"
-                }
-            }
-        },
         "validator.EmailBody": {
             "type": "object",
             "required": [
@@ -842,6 +823,25 @@ var doc = `{
                 "email": {
                     "type": "string",
                     "example": "test@gmail.com"
+                }
+            }
+        },
+        "validator.LoginByEmailBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "password": {
+                    "description": "密碼 (8~16字元)",
+                    "type": "string",
+                    "example": "12345678"
                 }
             }
         },
@@ -868,25 +868,6 @@ var doc = `{
                     "description": "暱稱 (1~16字元)",
                     "type": "string",
                     "example": "henry"
-                },
-                "password": {
-                    "description": "密碼 (8~16字元)",
-                    "type": "string",
-                    "example": "12345678"
-                }
-            }
-        },
-        "validator.UserLoginByEmailBody": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "test@gmail.com"
                 },
                 "password": {
                     "description": "密碼 (8~16字元)",
@@ -923,17 +904,17 @@ var doc = `{
         }
     },
     "securityDefinitions": {
-        "icebaby_admin_token": {
+        "fitness_admin_token": {
             "type": "apiKey",
             "name": "Token",
             "in": "header"
         },
-        "icebaby_trainer_token": {
+        "fitness_trainer_token": {
             "type": "apiKey",
             "name": "Token",
             "in": "header"
         },
-        "icebaby_user_token": {
+        "fitness_user_token": {
             "type": "apiKey",
             "name": "Token",
             "in": "header"

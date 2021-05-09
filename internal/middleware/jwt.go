@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func UserJWT(ssoHandler handler.SSO, e errcode.Common) gin.HandlerFunc {
+func UserJWT(ssoHandler handler.SSO, e errcode.Handler) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Token")
 		//驗證token不得為空
@@ -27,7 +27,7 @@ func UserJWT(ssoHandler handler.SSO, e errcode.Common) gin.HandlerFunc {
 	}
 }
 
-func TrainerJWT(ssoHandler handler.SSO, e errcode.Common) gin.HandlerFunc {
+func TrainerJWT(ssoHandler handler.SSO, e errcode.Handler) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Token")
 		//驗證token不得為空
@@ -47,7 +47,7 @@ func TrainerJWT(ssoHandler handler.SSO, e errcode.Common) gin.HandlerFunc {
 	}
 }
 
-func AdminLV1JWT(ssoHandler handler.SSO, e errcode.Common) gin.HandlerFunc {
+func AdminLV1JWT(ssoHandler handler.SSO, e errcode.Handler) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Token")
 		if token == "" {
@@ -63,7 +63,7 @@ func AdminLV1JWT(ssoHandler handler.SSO, e errcode.Common) gin.HandlerFunc {
 	}
 }
 
-func AdminLV2JWT(ssoHandler handler.SSO, e errcode.Common) gin.HandlerFunc {
+func AdminLV2JWT(ssoHandler handler.SSO, e errcode.Handler) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Token")
 		if token == "" {
