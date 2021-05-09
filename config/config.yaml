@@ -51,6 +51,11 @@ JWT:
     Secret: mi
     Issuer: fitness
     Expire: 120 # Minute
+User:
+    Debug:
+      OnlineExpire: 30 # Minute
+    Release:
+      OnlineExpire: 60 # Minute
 Swagger:
     Debug:
       Protocol: http

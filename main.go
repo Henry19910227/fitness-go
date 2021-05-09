@@ -29,6 +29,7 @@ var (
 	redisTool   tool.Redis
 	jwtTool     tool.JWT
 	logTool     tool.Logger
+	otpTool     tool.OTP
 )
 
 var (
@@ -40,6 +41,7 @@ var (
 	migrateService  service.Migrate
 	swagService     service.Swagger
 	loginService    service.Login
+	regService      service.Register
 )
 
 var (
@@ -85,6 +87,8 @@ func main() {
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
 	controller.NewManagerController(baseGroup, loginService, adminLV2Middleware)
+	controller.NewRegister(baseGroup, regService)
+	controller.NewLogin(baseGroup, loginService)
 	controller.NewSwaggerController(router, swagService)
 
 	router.Run(":"+viperTool.GetString("Server.HttpPort"))
@@ -99,6 +103,7 @@ func setupTool() {
 	setupGormTool()
 	jwtTool = tool.NewJWT(setting.NewJWT(viperTool))
 	redisTool = tool.NewRedis(setting.NewRedis(viperTool))
+	otpTool = tool.NewOTP()
 }
 
 func setupLogTool() {
@@ -160,15 +165,22 @@ func setupService() {
 	setupMigrateService()
 	setupSwagService()
 	setupLoginService()
+	setupRegService()
 }
 
 func setupLoginService() {
 	adminRepo := repository.NewAdmin(gormTool)
-	loginService = service.NewLogin(adminRepo, ssoHandler, logHandler, jwtTool, errcode.NewLoginError())
+	userRepo := repository.NewUser(gormTool)
+	loginService = service.NewLogin(adminRepo, userRepo, ssoHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupMigrateService()  {
 	migrateService = service.NewMigrate(migrateTool, errcode.NewCommon())
+}
+
+func setupRegService()  {
+	userRepo := repository.NewUser(gormTool)
+	regService = service.NewRegister(userRepo, logHandler, jwtTool, otpTool, viperTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

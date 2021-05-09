@@ -24,6 +24,58 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/login/user/email": {
+            "post": {
+                "description": "用戶使用信箱登入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "用戶使用信箱登入",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UserLoginByEmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登入成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessLoginResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/logindto.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "登入失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/manager/login": {
             "post": {
                 "description": "管理員登入",
@@ -383,6 +435,190 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/register/email": {
+            "post": {
+                "description": "使用信箱註冊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "使用信箱註冊",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.RegisterForEmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "註冊成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/registerdto.Register"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "註冊失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/email/otp": {
+            "post": {
+                "description": "發送 Email OTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "發送 Email OTP",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "Parameter",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.EmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "驗證郵件已寄出",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/registerdto.OTP"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "發送失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/email/validate": {
+            "post": {
+                "description": "驗證信箱是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "驗證信箱是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.ValidateEmailDupBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "此暱稱可使用",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "該資料已存在",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/nickname/validate": {
+            "post": {
+                "description": "驗證暱稱是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "驗證暱稱是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.ValidateNicknameDupBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "此暱稱可使用",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "該資料已存在",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -408,6 +644,91 @@ var doc = `{
                     "description": "暱稱",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "logindto.User": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帳號",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "account_type": {
+                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "device_token": {
+                    "description": "推播 Token",
+                    "type": "string",
+                    "example": "f144b48d9695..."
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_type": {
+                    "description": "用戶狀態 (1:一般用戶/2:訂閱用戶)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 72.5
                 }
             }
         },
@@ -473,6 +794,26 @@ var doc = `{
                 }
             }
         },
+        "registerdto.OTP": {
+            "type": "object",
+            "properties": {
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "254235"
+                }
+            }
+        },
+        "registerdto.Register": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "description": "用戶ID",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
         "validator.AdminLoginBody": {
             "type": "object",
             "required": [
@@ -489,6 +830,94 @@ var doc = `{
                     "description": "密碼 (8~16字元)",
                     "type": "string",
                     "example": "12345678"
+                }
+            }
+        },
+        "validator.EmailBody": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "test@gmail.com"
+                }
+            }
+        },
+        "validator.RegisterForEmailBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "email_otp",
+                "nickname",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "email_otp": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
+                },
+                "nickname": {
+                    "description": "暱稱 (1~16字元)",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "password": {
+                    "description": "密碼 (8~16字元)",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "validator.UserLoginByEmailBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "password": {
+                    "description": "密碼 (8~16字元)",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "validator.ValidateEmailDupBody": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                }
+            }
+        },
+        "validator.ValidateNicknameDupBody": {
+            "type": "object",
+            "required": [
+                "nickname"
+            ],
+            "properties": {
+                "nickname": {
+                    "description": "暱稱 (1~16字元)",
+                    "type": "string",
+                    "example": "henry"
                 }
             }
         }
