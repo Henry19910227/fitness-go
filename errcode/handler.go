@@ -60,3 +60,15 @@ func (handler handler) EmailDuplicate() Error {
 func (handler handler) AccountDuplicate() Error {
 	return AccountDuplicate
 }
+
+func (handler handler) LoginFailure() Error {
+	return LoginFailure
+}
+
+func (handler handler) LoginRoleFailure() Error {
+	return LoginRoleFailure
+}
+
+func (handler handler) LoginStatusFailure() Error {
+	return LoginStatusFailure
+}

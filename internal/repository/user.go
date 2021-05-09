@@ -12,8 +12,8 @@ type user struct {
 	gorm  tool.Gorm
 }
 
-func NewUser(sso handler.SSO, gormTool  tool.Gorm) User {
-	return &user{sso: sso, gorm: gormTool}
+func NewUser(gormTool  tool.Gorm) User {
+	return &user{gorm: gormTool}
 }
 
 func (u *user) CreateUser(accountType int, account string, nickname string, password string) (int64, error) {
@@ -34,8 +34,14 @@ func (u *user) CreateUser(accountType int, account string, nickname string, pass
 	return user.ID, nil
 }
 
-func (u *user) FindUserByEmailAndPassword(email string, password string) (*model.User, error) {
-	panic("implement me")
+func (u *user) FindUserByAccountAndPassword(account string, password string, entity interface{}) error {
+	if err := u.gorm.DB().
+		Model(&model.User{}).
+		Where("account = ? AND password = ?", account, password).
+		Take(entity).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (u *user) FindUserIDByNickname(nickname string) (int64, error) {

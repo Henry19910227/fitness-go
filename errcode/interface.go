@@ -78,6 +78,14 @@ type Handler interface {
 	EmailDuplicate() Error
 	// NewError(1407, errors.New("該帳號已被使用"))
 	AccountDuplicate() Error
+
+	/** 登入 */
+	// LoginFailure 1100 - 登入失敗, 帳號或密碼錯誤
+	LoginFailure() Error
+	// NewError(1101, errors.New("登入身份錯誤"))
+	LoginRoleFailure() Error
+	//NewError(1102, errors.New("帳號無法使用"))
+	LoginStatusFailure() Error
 }
 
 

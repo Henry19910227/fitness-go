@@ -88,8 +88,8 @@ func main() {
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
 	controller.NewManagerController(baseGroup, loginService, adminLV2Middleware)
 	controller.NewRegister(baseGroup, regService)
+	controller.NewLogin(baseGroup, loginService)
 	controller.NewSwaggerController(router, swagService)
-
 
 	router.Run(":"+viperTool.GetString("Server.HttpPort"))
 }
@@ -170,7 +170,8 @@ func setupService() {
 
 func setupLoginService() {
 	adminRepo := repository.NewAdmin(gormTool)
-	loginService = service.NewLogin(adminRepo, ssoHandler, logHandler, jwtTool, errcode.NewLoginError())
+	userRepo := repository.NewUser(gormTool)
+	loginService = service.NewLogin(adminRepo, userRepo, ssoHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupMigrateService()  {
@@ -178,7 +179,7 @@ func setupMigrateService()  {
 }
 
 func setupRegService()  {
-	userRepo := repository.NewUser(ssoHandler, gormTool)
+	userRepo := repository.NewUser(gormTool)
 	regService = service.NewRegister(userRepo, logHandler, jwtTool, otpTool, viperTool, errcode.NewHandler())
 }
 
