@@ -49,6 +49,9 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 		l.logger.Set(c, handler.Error, "UserRepo", l.errHandler.SystemError().Code(), err.Error())
 		return nil, "", l.errHandler.SystemError()
 	}
+	if user.Birthday == "0000-01-01" {
+		user.Birthday = ""
+	}
 	//生成 user token
 	token, err := l.ssoHandler.GenerateUserToken(user.ID)
 	if err != nil {
