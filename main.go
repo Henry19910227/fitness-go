@@ -86,10 +86,11 @@ func main() {
 	router.Use(gin.Logger()) //加入路由Logger
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
-	controller.NewManagerController(baseGroup)
+	controller.NewManager(baseGroup)
 	controller.NewRegister(baseGroup, regService)
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
-	controller.NewSwaggerController(router, swagService)
+	controller.NewSwagger(router, swagService)
+	controller.NewHealthy(router)
 
 	router.Run(":"+viperTool.GetString("Server.HttpPort"))
 }

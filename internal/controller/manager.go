@@ -8,5 +8,5 @@ type Manager struct {
 	Base
 }
 
-func NewManagerController(baseGroup *gin.RouterGroup) {
+func NewManager(baseGroup *gin.RouterGroup) {
 }
