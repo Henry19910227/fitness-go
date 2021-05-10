@@ -14,9 +14,9 @@ App:
       - .JPEG
     UploadImageMaxSize: 5 #MB
     Debug:
-      Version: 1.0.1
+      Version: 1.0.2
     Release:
-      Version: 1.0.1
+      Version: 1.0.2
 Log:
     FileName: fitness
     FileExt: log
