@@ -59,24 +59,24 @@ func init() {
 	setupTool()
 	setupHandler()
 	setupService()
-	userMiddleware = middleware.UserJWT(ssoHandler, errcode.NewCommon())
-	trainerMiddleware = middleware.TrainerJWT(ssoHandler, errcode.NewCommon())
-	adminLV1Middleware = middleware.AdminLV1JWT(ssoHandler, errcode.NewCommon())
-	adminLV2Middleware = middleware.AdminLV2JWT(ssoHandler, errcode.NewCommon())
+	userMiddleware = middleware.UserJWT(ssoHandler, errcode.NewHandler())
+	trainerMiddleware = middleware.TrainerJWT(ssoHandler, errcode.NewHandler())
+	adminLV1Middleware = middleware.AdminLV1JWT(ssoHandler, errcode.NewHandler())
+	adminLV2Middleware = middleware.AdminLV2JWT(ssoHandler, errcode.NewHandler())
 }
 
 // @title fitness api
 // @description 健身平台 api
 
-// @securityDefinitions.apikey icebaby_user_token
+// @securityDefinitions.apikey fitness_user_token
 // @in header
 // @name Token
 
-// @securityDefinitions.apikey icebaby_trainer_token
+// @securityDefinitions.apikey fitness_trainer_token
 // @in header
 // @name Token
 
-// @securityDefinitions.apikey icebaby_admin_token
+// @securityDefinitions.apikey fitness_admin_token
 // @in header
 // @name Token
 
@@ -84,12 +84,14 @@ func init() {
 func main() {
 	router := gin.New()
 	router.Use(gin.Logger()) //加入路由Logger
+	router.Use(gin.CustomRecovery(middleware.Recover(logHandler)))
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
-	controller.NewManagerController(baseGroup, loginService, adminLV2Middleware)
+	controller.NewManager(baseGroup)
 	controller.NewRegister(baseGroup, regService)
-	controller.NewLogin(baseGroup, loginService)
-	controller.NewSwaggerController(router, swagService)
+	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
+	controller.NewSwagger(router, swagService)
+	controller.NewHealthy(router)
 
 	router.Run(":"+viperTool.GetString("Server.HttpPort"))
 }
@@ -175,7 +177,7 @@ func setupLoginService() {
 }
 
 func setupMigrateService()  {
-	migrateService = service.NewMigrate(migrateTool, errcode.NewCommon())
+	migrateService = service.NewMigrate(migrateTool, errcode.NewHandler())
 }
 
 func setupRegService()  {

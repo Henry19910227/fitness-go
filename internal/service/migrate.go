@@ -7,10 +7,10 @@ import (
 
 type migrate struct {
 	migTool tool.Migrate
-	migErr  errcode.Common
+	migErr  errcode.Handler
 }
 
-func NewMigrate(migrateTool tool.Migrate, migErr  errcode.Common) Migrate {
+func NewMigrate(migrateTool tool.Migrate, migErr  errcode.Handler) Migrate {
 	return &migrate{migTool: migrateTool, migErr: migErr}
 }
 
