@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"log"
+	"os"
 	"path"
 	"runtime"
 )
@@ -52,6 +53,7 @@ var (
 )
 
 func init() {
+	os.Setenv("TZ", "Asia/Taipei")
 	_, filename, _, ok := runtime.Caller(0)
 	if ok {
 		rootPath = path.Dir(filename)
