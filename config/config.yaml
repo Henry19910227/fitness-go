@@ -14,9 +14,9 @@ App:
       - .JPEG
     UploadImageMaxSize: 5 #MB
     Debug:
-      Version: 1.0.0
+      Version: 1.0.1
     Release:
-      Version: 1.0.0
+      Version: 1.0.1
 Log:
     FileName: fitness
     FileExt: log
@@ -63,5 +63,5 @@ Swagger:
       BasePath: /api/v1
     Release:
       Protocol: https
-      Host: www.fitness.tk
+      Host: www.fitness-app.tk
       BasePath: /api/v1
