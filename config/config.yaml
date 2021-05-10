@@ -63,5 +63,5 @@ Swagger:
       BasePath: /api/v1
     Release:
       Protocol: https
-      Host: www.icebaby.tk
+      Host: www.fitness.tk
       BasePath: /api/v1

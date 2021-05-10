@@ -84,6 +84,7 @@ func init() {
 func main() {
 	router := gin.New()
 	router.Use(gin.Logger()) //加入路由Logger
+	router.Use(gin.CustomRecovery(middleware.Recover(logHandler)))
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
 	controller.NewManager(baseGroup)
