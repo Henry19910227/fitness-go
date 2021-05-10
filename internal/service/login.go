@@ -86,7 +86,7 @@ func (l *login) AdminLoginByEmail(c *gin.Context, email string, password string)
 		l.logger.Set(c, handler.Error, "SSOHandler", l.errHandler.SystemError().Code(), e.Error())
 		return nil, "", l.errHandler.SystemError()
 	}
-	l.logger.Set(c, handler.Debug, "Admin Login", 0, "Admin Login Success!")
+	l.logger.Set(c, handler.Error, "Admin Login", 0, "Admin Login Success!")
 	return &admin, token, nil
 }
 
