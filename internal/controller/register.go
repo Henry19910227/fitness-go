@@ -59,7 +59,15 @@ func (r *Register) RegisterForEmail(c *gin.Context)  {
 		r.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, err := r.regService.EmailRegister(c, body.EmailOTP, body.Email, body.Nickname, body.Password)
+	//檢查Email是否重複
+	if err := r.regService.ValidateEmailDup(c, body.Email); err != nil {
+		r.JSONErrorResponse(c, err)
+	}
+	//檢查暱稱是否重複
+	if err := r.regService.ValidateNicknameDup(c, body.Email); err != nil {
+		r.JSONErrorResponse(c, err)
+	}
+	result, err := r.regService.EmailRegister(c, body.OTPCode, body.Email, body.Nickname, body.Password)
 	if err != nil {
 		r.JSONErrorResponse(c, err)
 		return
