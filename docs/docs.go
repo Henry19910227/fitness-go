@@ -849,8 +849,8 @@ var doc = `{
             "type": "object",
             "required": [
                 "email",
-                "email_otp",
                 "nickname",
+                "otp_code",
                 "password"
             ],
             "properties": {
@@ -859,15 +859,15 @@ var doc = `{
                     "type": "string",
                     "example": "test@gmail.com"
                 },
-                "email_otp": {
-                    "description": "信箱驗證碼",
-                    "type": "string",
-                    "example": "531476"
-                },
                 "nickname": {
                     "description": "暱稱 (1~16字元)",
                     "type": "string",
                     "example": "henry"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
                 },
                 "password": {
                     "description": "密碼 (8~16字元)",
