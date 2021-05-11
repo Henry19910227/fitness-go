@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
@@ -32,6 +33,10 @@ func (u *user) CreateUser(accountType int, account string, nickname string, pass
 		return 0, err
 	}
 	return user.ID, nil
+}
+
+func (u *user) UpdateUserByUid(uid int64, param *userdto.Update) {
+	panic("implement me")
 }
 
 func (u *user) FindUserByAccountAndPassword(account string, password string, entity interface{}) error {
