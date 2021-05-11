@@ -90,7 +90,7 @@ func (l *login) AdminLoginByEmail(c *gin.Context, email string, password string)
 	return &admin, token, nil
 }
 
-func (l *login) Logout(c *gin.Context, token string) errcode.Error {
+func (l *login) UserLogoutByToken(c *gin.Context, token string) errcode.Error {
 	if err := l.ssoHandler.SetOfflineStatus(token); err != nil {
 		l.logger.Set(c, handler.Error, "SSOHandler", l.errHandler.SystemError().Code(), err.Error())
 		return l.errHandler.SystemError()

@@ -23,6 +23,12 @@ func (t *jwtTool) GenerateUserToken(uid int64) (string, error) {
 	return token, err
 }
 
+func (t *jwtTool) GenerateTrainerToken(uid int64) (string, error) {
+	claims := jwt.MapClaims{"uid": strconv.Itoa(int(uid)), "role": "2"}
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(t.setting.GetTokenSecret()))
+	return token, err
+}
+
 func (t *jwtTool) GenerateAdminToken(uid int64, lv int) (string, error) {
 	claims := jwt.MapClaims{"uid": strconv.Itoa(int(uid)), "lv": strconv.Itoa(lv)}
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(t.setting.GetTokenSecret()))

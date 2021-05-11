@@ -173,13 +173,13 @@ definitions:
         description: 信箱
         example: test@gmail.com
         type: string
-      email_otp:
-        description: 信箱驗證碼
-        example: "531476"
-        type: string
       nickname:
         description: 暱稱 (1~16字元)
         example: henry
+        type: string
+      otp_code:
+        description: 信箱驗證碼
+        example: "531476"
         type: string
       password:
         description: 密碼 (8~16字元)
@@ -187,8 +187,8 @@ definitions:
         type: string
     required:
     - email
-    - email_otp
     - nickname
+    - otp_code
     - password
     type: object
   validator.ValidateEmailDupBody:
@@ -295,6 +295,27 @@ paths:
       security:
       - fitness_admin_token: []
       summary: 管理員登出
+      tags:
+      - Login
+  /logout/user:
+    post:
+      consumes:
+      - application/json
+      description: 用戶登出
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登出成功
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 登出失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 用戶登出
       tags:
       - Login
   /migrate/down:

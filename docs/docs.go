@@ -162,6 +162,40 @@ var doc = `{
                 }
             }
         },
+        "/logout/user": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "用戶登出",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "用戶登出",
+                "responses": {
+                    "200": {
+                        "description": "登出成功",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "登出失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/migrate/down": {
             "put": {
                 "security": [
@@ -849,8 +883,8 @@ var doc = `{
             "type": "object",
             "required": [
                 "email",
-                "email_otp",
                 "nickname",
+                "otp_code",
                 "password"
             ],
             "properties": {
@@ -859,15 +893,15 @@ var doc = `{
                     "type": "string",
                     "example": "test@gmail.com"
                 },
-                "email_otp": {
-                    "description": "信箱驗證碼",
-                    "type": "string",
-                    "example": "531476"
-                },
                 "nickname": {
                     "description": "暱稱 (1~16字元)",
                     "type": "string",
                     "example": "henry"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
                 },
                 "password": {
                     "description": "密碼 (8~16字元)",
