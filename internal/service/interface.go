@@ -24,7 +24,7 @@ type Swagger interface {
 type Login interface {
 	UserLoginByEmail(c *gin.Context, email string, password string) (*logindto.User, string, errcode.Error)
 	AdminLoginByEmail(c *gin.Context, email string, password string) (*logindto.Admin, string, errcode.Error)
-	Logout(c *gin.Context, token string) errcode.Error
+	UserLogoutByToken(c *gin.Context, token string) errcode.Error
 	AdminLogoutByToken(c *gin.Context, token string) errcode.Error
 }
 

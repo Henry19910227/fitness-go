@@ -18,6 +18,11 @@ func NewLogin(baseGroup *gin.RouterGroup, loginService service.Login, userMiddle
 	baseGroup.POST("/login/user/email", login.UserLoginByEmail)
 	baseGroup.POST("/login/admin/email", login.AdminLoginByEmail)
 
+	//驗證 user token
+	UserGroup := baseGroup.Group("/logout/user")
+	UserGroup.Use(userMiddle)
+	UserGroup.POST("", login.UserLogout)
+
 	//驗證 admin token
 	adminLogoutGroup := baseGroup.Group("/logout/admin")
 	adminLogoutGroup.Use(adminMiddle)
@@ -89,6 +94,29 @@ func (l *Login) AdminLogout(c *gin.Context) {
 		return
 	}
 	if err := l.loginService.AdminLogoutByToken(c, header.Token); err != nil {
+		l.JSONErrorResponse(c, err)
+		return
+	}
+	l.JSONSuccessResponse(c, nil, "登出成功")
+}
+
+// UserLogout 用戶登出
+// @Summary 用戶登出
+// @Description 用戶登出
+// @Tags Login
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Success 200 {object} model.SuccessResult "登出成功"
+// @Failure 400 {object} model.ErrorResult "登出失敗"
+// @Router /logout/user [POST]
+func (l *Login) UserLogout(c *gin.Context) {
+	var header validator.TokenHeader
+	if err := c.ShouldBindHeader(&header); err != nil {
+		l.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := l.loginService.UserLogoutByToken(c, header.Token); err != nil {
 		l.JSONErrorResponse(c, err)
 		return
 	}

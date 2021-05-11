@@ -10,11 +10,11 @@ import (
 
 var (
 	UserTokenPrefix    = "fitness.user.token"
-	TrainerTokenPrefix    = "fitness.user.token"
+	TrainerTokenPrefix    = "fitness.trainer.token"
 	AdminTokenPrefix   = "fitness.admin.token"
 
 	UserOnlinePrefix   = "fitness.user.online"
-	TrainerOnlinePrefix   = "fitness.trainer.token"
+	TrainerOnlinePrefix   = "fitness.trainer.online"
 )
 
 type sso struct {
@@ -40,7 +40,7 @@ func (s *sso) GenerateUserToken(uid int64) (string, error) {
 }
 
 func (s *sso) GenerateTrainerToken(uid int64) (string, error) {
-	token, err := s.jwtTool.GenerateUserToken(uid)
+	token, err := s.jwtTool.GenerateTrainerToken(uid)
 	if err != nil {
 		return "", err
 	}

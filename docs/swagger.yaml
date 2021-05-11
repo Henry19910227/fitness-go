@@ -297,6 +297,27 @@ paths:
       summary: 管理員登出
       tags:
       - Login
+  /logout/user:
+    post:
+      consumes:
+      - application/json
+      description: 用戶登出
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登出成功
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 登出失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 用戶登出
+      tags:
+      - Login
   /migrate/down:
     put:
       consumes:
