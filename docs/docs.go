@@ -1063,40 +1063,30 @@ var doc = `{
                     "type": "string",
                     "example": "1991-02-27"
                 },
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
                 "experience": {
                     "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
-                    "type": "string",
-                    "example": "2"
+                    "type": "integer",
+                    "example": 2
                 },
                 "height": {
                     "description": "身高 (最大230)",
-                    "type": "string",
-                    "example": "176.5"
-                },
-                "nickname": {
-                    "description": "暱稱 (1~16字元)",
-                    "type": "string",
-                    "example": "henry"
+                    "type": "number",
+                    "example": 176.5
                 },
                 "sex": {
-                    "description": "性別 (f:女/m:男)",
+                    "description": "Email       *string ` + "`" + `json:\"email\" binding:\"omitempty,email\" example:\"henry@gmail.com\"` + "`" + `             // 信箱\nNickname    *string ` + "`" + `json:\"nickname\" binding:\"omitempty,min=1,max=16\" example:\"henry\"` + "`" + `             // 暱稱 (1~16字元)",
                     "type": "string",
                     "example": "m"
                 },
                 "target": {
                     "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
-                    "type": "string",
-                    "example": "3"
+                    "type": "integer",
+                    "example": 3
                 },
                 "weight": {
                     "description": "體重 (最大230)",
-                    "type": "string",
-                    "example": "70.5"
+                    "type": "number",
+                    "example": 70.5
                 }
             }
         },

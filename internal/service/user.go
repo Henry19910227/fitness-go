@@ -35,8 +35,8 @@ func (u *user) UpdateUserByToken(c *gin.Context, token string, param *userdto.Up
 func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
 	//更新user
 	if err := u.userRepo.UpdateUserByUID(uid, &model.UpdateUserParam{
-		Email: param.Email,
-		Nickname: param.Nickname,
+		//Email: param.Email,
+		//Nickname: param.Nickname,
 		Sex: param.Sex,
 		Birthday: param.Birthday,
 		Height: param.Height,
