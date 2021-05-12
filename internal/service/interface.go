@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
+	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/gin-gonic/gin"
 )
 
@@ -33,4 +34,8 @@ type Register interface {
 	EmailRegister(c *gin.Context, otp string, email string, nickname string, password string) (*registerdto.Register, errcode.Error)
 	ValidateNicknameDup(c *gin.Context, nickname string) errcode.Error
 	ValidateEmailDup(c *gin.Context, email string) errcode.Error
+}
+
+type User interface {
+	UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
 }
