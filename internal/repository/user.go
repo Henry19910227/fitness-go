@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"

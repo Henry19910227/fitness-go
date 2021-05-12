@@ -24,6 +24,14 @@ func NewUser(userRepo repository.User, logger handler.Logger, jwtTool tool.JWT, 
 	return &user{userRepo: userRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
+func (u *user) UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
+	uid, err := u.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, u.errHandler.InvalidToken()
+	}
+	return u.UpdateUserByUID(c, uid, param)
+}
+
 func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
 	//更新user
 	if err := u.userRepo.UpdateUserByUID(uid, &model.UpdateUserParam{
