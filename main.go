@@ -43,6 +43,7 @@ var (
 	swagService     service.Swagger
 	loginService    service.Login
 	regService      service.Register
+	userService     service.User
 )
 
 var (
@@ -92,6 +93,7 @@ func main() {
 	controller.NewManager(baseGroup)
 	controller.NewRegister(baseGroup, regService)
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
+	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -170,6 +172,7 @@ func setupService() {
 	setupSwagService()
 	setupLoginService()
 	setupRegService()
+	setupUserService()
 }
 
 func setupLoginService() {
@@ -185,6 +188,11 @@ func setupMigrateService()  {
 func setupRegService()  {
 	userRepo := repository.NewUser(gormTool)
 	regService = service.NewRegister(userRepo, logHandler, jwtTool, otpTool, viperTool, errcode.NewHandler())
+}
+
+func setupUserService()  {
+	userRepo := repository.NewUser(gormTool)
+	userService = service.NewUser(userRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

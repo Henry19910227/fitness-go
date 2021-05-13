@@ -23,3 +23,21 @@ type User struct {
 func (User) TableName() string {
 	return "users"
 }
+
+type UpdateUserParam struct {
+	AccountType *int    `gorm:"column:account_type"`
+	Account     *string `gorm:"column:account"`
+	Password    *string `gorm:"column:password"`
+	DeviceToken *string `gorm:"column:device_token"`
+	UserStatus  *int    `gorm:"column:user_status"`
+	UserType    *int    `gorm:"column:user_type"`
+	UpdateAt    *string `gorm:"column:update_at"`
+	Email       *string `gorm:"column:email"`
+	Nickname    *string `gorm:"column:nickname"`
+	Sex         *string `gorm:"column:sex"`
+	Birthday    *string `gorm:"column:birthday"`
+	Height      *float64 `gorm:"column:height"`
+	Weight      *float64 `gorm:"column:weight"`
+	Experience  *int     `gorm:"column:experience"`
+	Target      *int     `gorm:"column:target"`
+}

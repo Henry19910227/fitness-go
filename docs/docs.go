@@ -653,6 +653,63 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/user/my/info": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "更新個人資料",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "更新個人資料",
+                "parameters": [
+                    {
+                        "description": "更新欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateMyUserInfoBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/userdto.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -766,6 +823,9 @@ var doc = `{
                 }
             }
         },
+        "model.Data": {
+            "type": "object"
+        },
         "model.ErrorResult": {
             "type": "object",
             "properties": {
@@ -776,7 +836,7 @@ var doc = `{
                 },
                 "data": {
                     "description": "回傳資料",
-                    "type": "object"
+                    "$ref": "#/definitions/model.Data"
                 },
                 "msg": {
                     "description": "錯誤訊息",
@@ -795,7 +855,7 @@ var doc = `{
                 },
                 "data": {
                     "description": "回傳資料",
-                    "type": "object"
+                    "$ref": "#/definitions/model.Data"
                 },
                 "msg": {
                     "description": "成功訊息",
@@ -819,7 +879,7 @@ var doc = `{
                 },
                 "data": {
                     "description": "回傳資料",
-                    "type": "object"
+                    "$ref": "#/definitions/model.Data"
                 },
                 "msg": {
                     "description": "成功訊息",
@@ -845,6 +905,91 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "userdto.User": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帳號",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "account_type": {
+                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "device_token": {
+                    "description": "推播 Token",
+                    "type": "string",
+                    "example": "f144b48d9695..."
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_type": {
+                    "description": "用戶狀態 (1:一般用戶/2:訂閱用戶)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 72.5
                 }
             }
         },
@@ -907,6 +1052,41 @@ var doc = `{
                     "description": "密碼 (8~16字元)",
                     "type": "string",
                     "example": "12345678"
+                }
+            }
+        },
+        "validator.UpdateMyUserInfoBody": {
+            "type": "object",
+            "properties": {
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "height": {
+                    "description": "身高 (最大230)",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "sex": {
+                    "description": "Email       *string ` + "`" + `json:\"email\" binding:\"omitempty,email\" example:\"henry@gmail.com\"` + "`" + `             // 信箱\nNickname    *string ` + "`" + `json:\"nickname\" binding:\"omitempty,min=1,max=16\" example:\"henry\"` + "`" + `             // 暱稱 (1~16字元)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "weight": {
+                    "description": "體重 (最大230)",
+                    "type": "number",
+                    "example": 70.5
                 }
             }
         },
