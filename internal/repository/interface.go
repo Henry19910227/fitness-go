@@ -17,3 +17,7 @@ type User interface {
 	FindUserIDByNickname(nickname string) (int64, error)
 	FindUserIDByEmail(email string) (int64, error)
 }
+
+type Trainer interface {
+	CreateTrainer(name string, nickname string, phone string, email string) (int64, error)
+}
