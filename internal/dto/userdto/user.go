@@ -11,6 +11,13 @@ type UpdateUserParam struct {
 	Target      *int     `gorm:"column:target"`
 }
 
+type CreateTrainerParam struct {
+	Name string `gorm:"column:name"`
+	Nickname string `gorm:"column:nickname"`
+	phone string `gorm:"column:phone"`
+	email string `gorm:"column:email"`
+}
+
 type User struct {
 	ID               int64   `json:"id" gorm:"column:id" example:"10001"`                                 // 帳戶id
 	AccountType      int     `json:"account_type" gorm:"column:account_type" example:"1"`                 // 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
