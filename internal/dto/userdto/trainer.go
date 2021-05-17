@@ -8,5 +8,5 @@ type CreateTrainerParam struct {
 }
 
 type CreateTrainerResult struct {
-	TrainerID int64
+	TrainerID int64 `json:"trainer_id" example:"1"`
 }

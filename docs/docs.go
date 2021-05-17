@@ -710,6 +710,63 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/user/my/trainer": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "創建我的教練身份",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "創建我的教練身份",
+                "parameters": [
+                    {
+                        "description": "更新欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateTrainerBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/userdto.CreateTrainerParam"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -908,6 +965,23 @@ var doc = `{
                 }
             }
         },
+        "userdto.CreateTrainerParam": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
         "userdto.User": {
             "type": "object",
             "properties": {
@@ -990,6 +1064,37 @@ var doc = `{
                     "description": "體重",
                     "type": "number",
                     "example": 72.5
+                }
+            }
+        },
+        "validator.CreateTrainerBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "nickname",
+                "phone"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱 (最大230)",
+                    "type": "string",
+                    "example": "jason@gmail.com"
+                },
+                "name": {
+                    "description": "本名 (1~16字元)",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "nickname": {
+                    "description": "暱稱 (1~16字元)",
+                    "type": "string",
+                    "example": "jason"
+                },
+                "phone": {
+                    "description": "聯絡電話",
+                    "type": "string",
+                    "example": "0978820789"
                 }
             }
         },

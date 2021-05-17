@@ -192,7 +192,8 @@ func setupRegService()  {
 
 func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
-	userService = service.NewUser(userRepo, logHandler, jwtTool, errcode.NewHandler())
+	trainerRepo := repository.NewTrainer(gormTool)
+	userService = service.NewUser(userRepo, trainerRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

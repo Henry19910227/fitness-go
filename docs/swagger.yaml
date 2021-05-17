@@ -147,6 +147,17 @@ definitions:
         example: 10001
         type: integer
     type: object
+  userdto.CreateTrainerParam:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      phone:
+        type: string
+    type: object
   userdto.User:
     properties:
       account:
@@ -213,6 +224,30 @@ definitions:
         description: 體重
         example: 72.5
         type: number
+    type: object
+  validator.CreateTrainerBody:
+    properties:
+      email:
+        description: 信箱 (最大230)
+        example: jason@gmail.com
+        type: string
+      name:
+        description: 本名 (1~16字元)
+        example: 王小明
+        type: string
+      nickname:
+        description: 暱稱 (1~16字元)
+        example: jason
+        type: string
+      phone:
+        description: 聯絡電話
+        example: "0978820789"
+        type: string
+    required:
+    - email
+    - name
+    - nickname
+    - phone
     type: object
   validator.EmailBody:
     properties:
@@ -732,6 +767,39 @@ paths:
       security:
       - fitness_user_token: []
       summary: 更新個人資料
+      tags:
+      - User
+  /user/my/trainer:
+    post:
+      consumes:
+      - application/json
+      description: 創建我的教練身份
+      parameters:
+      - description: 更新欄位
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateTrainerBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/userdto.CreateTrainerParam'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建我的教練身份
       tags:
       - User
 securityDefinitions:

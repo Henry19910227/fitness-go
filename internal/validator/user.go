@@ -10,3 +10,10 @@ type UpdateMyUserInfoBody struct {
 	Experience  *int     `json:"experience" binding:"omitempty,max=4" example:"2"`                      // 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
 	Target      *int     `json:"target" binding:"omitempty,max=3" example:"3"`                          // 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
 }
+
+type CreateTrainerBody struct {
+	Name     string `json:"name" binding:"required,min=1,max=16" example:"王小明"`                // 本名 (1~16字元)
+	Nickname string `json:"nickname" binding:"required,min=1,max=16" example:"jason"`            // 暱稱 (1~16字元)
+	Phone    string `json:"phone" binding:"required" example:"0978820789"`                       // 聯絡電話
+	Email    string `json:"email" binding:"required,email" example:"jason@gmail.com"`            // 信箱 (最大230)
+}

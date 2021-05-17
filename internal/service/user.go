@@ -63,14 +63,23 @@ func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateU
 }
 
 func (u *user) CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error) {
-	_, err := u.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
+	trainerID, err := u.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
 		Name: param.Name,
 		Nickname: param.Nickname,
 		Phone: param.Phone,
 		Email: param.Email,
 	})
 	if err != nil {
-		return nil, err
+		u.logger.Set(c, handler.Error, "Trainer Repo", u.errHandler.SystemError().Code(), err.Error())
+		return nil, u.errHandler.SystemError()
 	}
-	return nil, nil
+	return &userdto.CreateTrainerResult{TrainerID: trainerID}, nil
+}
+
+func (u *user) CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error) {
+	uid, err := u.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, u.errHandler.InvalidToken()
+	}
+	return u.CreateTrainer(c, uid, param)
 }
