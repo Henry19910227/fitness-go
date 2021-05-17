@@ -20,4 +20,5 @@ type User interface {
 
 type Trainer interface {
 	CreateTrainer(uid int64, param *model.CreateTrainerParam) (int64, error)
+	FindTrainerIDByUID(uid int64) (int64, error)
 }

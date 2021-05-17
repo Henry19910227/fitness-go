@@ -31,3 +31,15 @@ func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) (int
 	}
 	return trainer.ID, nil
 }
+
+func (t *trainer) FindTrainerIDByUID(uid int64) (int64, error) {
+	var trainerID int64
+	if err := t.gorm.DB().
+		Table("trainers").
+		Select("id").
+		Where("trainers.user_id = ?", uid).
+		Take(&trainerID).Error; err != nil {
+		return 0, err
+	}
+	return trainerID, nil
+}

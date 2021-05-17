@@ -63,6 +63,18 @@ func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateU
 }
 
 func (u *user) CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error) {
+	//查詢是否已存在資料
+	_, err := u.trainerRepo.FindTrainerIDByUID(uid)
+	//教練身份已存在
+	if err == nil {
+		return nil, u.errHandler.DataAlreadyExists()
+	}
+	//不明原因錯誤
+	if !errors.Is(err, gorm.ErrRecordNotFound){
+		u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
+		return nil, u.errHandler.SystemError()
+	}
+	//創建教練身份
 	trainerID, err := u.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
 		Name: param.Name,
 		Nickname: param.Nickname,

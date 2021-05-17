@@ -95,3 +95,7 @@ func (u *user) CreateTrainer(c *gin.Context)  {
 	}
 	u.JSONSuccessResponse(c, result, "create success!")
 }
+
+func (u *user) SwitchToTrainerMode(c *gin.Context) {
+
+}
