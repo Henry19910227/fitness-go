@@ -95,3 +95,7 @@ func (u *user) CreateTrainerByToken(c *gin.Context, token string, param *userdto
 	}
 	return u.CreateTrainer(c, uid, param)
 }
+
+func (u *user) SwitchTrainerMode(c *gin.Context, uid int64) errcode.Error {
+	panic("implement me")
+}
