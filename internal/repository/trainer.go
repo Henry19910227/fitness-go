@@ -13,12 +13,13 @@ func NewTrainer(gormTool  tool.Gorm) Trainer {
 	return &trainer{gorm: gormTool}
 }
 
-func (t *trainer) CreateTrainer(name string, nickname string, phone string, email string) (int64, error) {
+func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) (int64, error) {
 	trainer := model.Trainer{
-		Name: name,
-		Nickname: nickname,
-		Phone: phone,
-		Email: email,
+		Name: param.Name,
+		Nickname: param.Nickname,
+		Phone: param.Phone,
+		Email: param.Email,
+		UserID: uid,
 	}
 	if err := t.gorm.DB().Create(&trainer).Error; err != nil {
 		return 0, err

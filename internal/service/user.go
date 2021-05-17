@@ -15,13 +15,14 @@ import (
 type user struct {
 	Base
 	userRepo  repository.User
+	trainerRepo repository.Trainer
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewUser(userRepo repository.User, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) User {
-	return &user{userRepo: userRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewUser(userRepo repository.User, trainerRepo repository.Trainer, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) User {
+	return &user{userRepo: userRepo, trainerRepo: trainerRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (u *user) UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
@@ -59,4 +60,17 @@ func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateU
 		return nil, u.errHandler.SystemError()
 	}
 	return &user, nil
+}
+
+func (u *user) CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error) {
+	_, err := u.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
+		Name: param.Name,
+		Nickname: param.Nickname,
+		Phone: param.Phone,
+		Email: param.Email,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
 }

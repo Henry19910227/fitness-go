@@ -19,5 +19,5 @@ type User interface {
 }
 
 type Trainer interface {
-	CreateTrainer(name string, nickname string, phone string, email string) (int64, error)
+	CreateTrainer(uid int64, param *model.CreateTrainerParam) (int64, error)
 }

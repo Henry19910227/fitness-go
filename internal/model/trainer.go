@@ -18,3 +18,10 @@ type Trainer struct {
 func (Trainer) TableName() string {
 	return "trainer"
 }
+
+type CreateTrainerParam struct {
+	Name string `gorm:"column:name"`
+	Nickname string `gorm:"column:nickname"`
+	Phone string `gorm:"column:phone"`
+	Email string `gorm:"column:email"`
+}
