@@ -147,17 +147,6 @@ definitions:
         example: 10001
         type: integer
     type: object
-  userdto.CreateTrainerParam:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      nickname:
-        type: string
-      phone:
-        type: string
-    type: object
   userdto.TrainerResult:
     properties:
       token:
@@ -345,7 +334,7 @@ definitions:
     - otp_code
     - password
     type: object
-  validator.UpdateMyUserInfoBody:
+  validator.UpdateUserInfoBody:
     properties:
       birthday:
         description: 生日
@@ -797,7 +786,7 @@ paths:
         name: json_body
         required: true
         schema:
-          $ref: '#/definitions/validator.UpdateMyUserInfoBody'
+          $ref: '#/definitions/validator.UpdateUserInfoBody'
       produces:
       - application/json
       responses:
@@ -850,7 +839,7 @@ paths:
       - application/json
       description: 創建我的教練身份
       parameters:
-      - description: 更新欄位
+      - description: 輸入欄位
         in: body
         name: json_body
         required: true
@@ -862,12 +851,7 @@ paths:
         "200":
           description: 成功!
           schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/userdto.CreateTrainerParam'
-              type: object
+            $ref: '#/definitions/model.SuccessResult'
         "400":
           description: 失敗!
           schema:

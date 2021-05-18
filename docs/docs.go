@@ -679,7 +679,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/validator.UpdateMyUserInfoBody"
+                            "$ref": "#/definitions/validator.UpdateUserInfoBody"
                         }
                     }
                 ],
@@ -775,7 +775,7 @@ var doc = `{
                 "summary": "創建我的教練身份",
                 "parameters": [
                     {
-                        "description": "更新欄位",
+                        "description": "輸入欄位",
                         "name": "json_body",
                         "in": "body",
                         "required": true,
@@ -788,19 +788,7 @@ var doc = `{
                     "200": {
                         "description": "成功!",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/userdto.CreateTrainerParam"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/model.SuccessResult"
                         }
                     },
                     "400": {
@@ -1006,23 +994,6 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
-                }
-            }
-        },
-        "userdto.CreateTrainerParam": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
                 }
             }
         },
@@ -1269,7 +1240,7 @@ var doc = `{
                 }
             }
         },
-        "validator.UpdateMyUserInfoBody": {
+        "validator.UpdateUserInfoBody": {
             "type": "object",
             "properties": {
                 "birthday": {

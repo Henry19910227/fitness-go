@@ -1,6 +1,6 @@
 package validator
 
-type UpdateMyUserInfoBody struct {
+type UpdateUserInfoBody struct {
 	//Email       *string `json:"email" binding:"omitempty,email" example:"henry@gmail.com"`             // 信箱
 	//Nickname    *string `json:"nickname" binding:"omitempty,min=1,max=16" example:"henry"`             // 暱稱 (1~16字元)
 	Sex         *string `json:"sex" binding:"omitempty,oneof=m f" example:"m"`                         // 性別 (f:女/m:男)
