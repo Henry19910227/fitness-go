@@ -56,11 +56,6 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 		l.logger.Set(c, handler.Error, "SsoHandler", l.errHandler.SystemError().Code(), err.Error())
 		return nil, "", l.errHandler.SystemError()
 	}
-	//設置上線狀態
-	if err := l.ssoHandler.RenewOnlineStatus(token); err != nil {
-		l.logger.Set(c, handler.Error, "SsoHandler", l.errHandler.SystemError().Code(), err.Error())
-		return nil, "", l.errHandler.SystemError()
-	}
 	return &user, token, nil
 }
 
@@ -91,10 +86,6 @@ func (l *login) AdminLoginByEmail(c *gin.Context, email string, password string)
 }
 
 func (l *login) UserLogoutByToken(c *gin.Context, token string) errcode.Error {
-	if err := l.ssoHandler.SetOfflineStatus(token); err != nil {
-		l.logger.Set(c, handler.Error, "SSOHandler", l.errHandler.SystemError().Code(), err.Error())
-		return l.errHandler.SystemError()
-	}
 	if err := l.ssoHandler.ResignUserToken(token); err != nil {
 		l.logger.Set(c, handler.Error, "SSOHandler", l.errHandler.SystemError().Code(), err.Error())
 		return l.errHandler.SystemError()

@@ -22,8 +22,6 @@ func UserJWT(ssoHandler handler.SSO, e errcode.Handler) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		//更新在線狀態
-		ssoHandler.RenewOnlineStatus(token)
 	}
 }
 
@@ -42,8 +40,6 @@ func TrainerJWT(ssoHandler handler.SSO, e errcode.Handler) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		//更新在線狀態
-		ssoHandler.RenewOnlineStatus(token)
 	}
 }
 
