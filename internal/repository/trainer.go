@@ -14,32 +14,41 @@ func NewTrainer(gormTool  tool.Gorm) Trainer {
 	return &trainer{gorm: gormTool}
 }
 
-func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) (int64, error) {
+func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) error {
 	trainer := model.Trainer{
+		UserID: uid,
 		Name: param.Name,
 		Nickname: param.Nickname,
 		Phone: param.Phone,
 		Email: param.Email,
-		UserID: uid,
 		TrainerStatus: 1,
-		Birthday: "0000-01-01 00:00:00",
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := t.gorm.DB().Create(&trainer).Error; err != nil {
-		return 0, err
+		return err
 	}
-	return trainer.ID, nil
+	return nil
 }
 
-func (t *trainer) FindTrainerIDByUID(uid int64) (int64, error) {
-	var trainerID int64
+func (t *trainer) FindTrainerByUID(uid int64, entity interface{}) error {
+	if err := t.gorm.DB().
+		Model(&model.Trainer{}).
+		Where("user_id = ?", uid).
+		Take(entity).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *trainer) FindTrainerIDByUID(uid int64) (string, error) {
+	var name string
 	if err := t.gorm.DB().
 		Table("trainers").
-		Select("id").
+		Select("name").
 		Where("trainers.user_id = ?", uid).
-		Take(&trainerID).Error; err != nil {
-		return 0, err
+		Take(&name).Error; err != nil {
+		return "", err
 	}
-	return trainerID, nil
+	return name, nil
 }

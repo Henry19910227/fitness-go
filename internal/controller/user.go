@@ -17,8 +17,9 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 
 	userGroup := baseGroup.Group("/user")
 	userGroup.Use(userMiddleware)
-	userGroup.PATCH("/my/info", user.UpdateMyUserInfo)
-	userGroup.POST("/my/trainer", user.CreateTrainer)
+	userGroup.PATCH("/info", user.UpdateMyUserInfo)
+	userGroup.POST("/role/trainer", user.CreateTrainer)
+	userGroup.GET("/role/trainer", user.GetTrainerInfo)
 }
 
 // UpdateMyUserInfo 更新個人資訊
@@ -31,7 +32,7 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 // @Param json_body body validator.UpdateMyUserInfoBody true "更新欄位"
 // @Success 200 {object} model.SuccessResult{data=userdto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /user/my/info [PATCH]
+// @Router /user/info [PATCH]
 func (u *user) UpdateMyUserInfo(c *gin.Context)  {
 	var header validator.TokenHeader
 	var body validator.UpdateMyUserInfoBody
@@ -71,7 +72,7 @@ func (u *user) UpdateMyUserInfo(c *gin.Context)  {
 // @Param json_body body validator.CreateTrainerBody true "更新欄位"
 // @Success 200 {object} model.SuccessResult{data=userdto.CreateTrainerParam} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /user/my/trainer [POST]
+// @Router /user/role/trainer [POST]
 func (u *user) CreateTrainer(c *gin.Context)  {
 	var header validator.TokenHeader
 	var body validator.CreateTrainerBody
@@ -96,6 +97,26 @@ func (u *user) CreateTrainer(c *gin.Context)  {
 	u.JSONSuccessResponse(c, result, "create success!")
 }
 
-func (u *user) SwitchToTrainerMode(c *gin.Context) {
-
+// GetTrainerInfo 取得我的教練身份資訊
+// @Summary 取得我的教練身份資訊
+// @Description 取得我的教練身份資訊
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Success 200 {object} model.SuccessResult{data=userdto.TrainerResult} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /user/role/trainer [GET]
+func (u *user) GetTrainerInfo(c *gin.Context) {
+	var header validator.TokenHeader
+	if err := c.ShouldBindHeader(&header); err != nil {
+		u.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, err := u.userService.GetTrainerInfoByToken(c, header.Token)
+	if err != nil {
+		u.JSONErrorResponse(c, err)
+		return
+	}
+	u.JSONSuccessResponse(c, result, "success!")
 }

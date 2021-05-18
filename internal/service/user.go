@@ -17,12 +17,20 @@ type user struct {
 	userRepo  repository.User
 	trainerRepo repository.Trainer
 	logger    handler.Logger
+	sso       handler.SSO
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewUser(userRepo repository.User, trainerRepo repository.Trainer, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) User {
-	return &user{userRepo: userRepo, trainerRepo: trainerRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewUser(userRepo repository.User, trainerRepo repository.Trainer,
+	logger handler.Logger, sso handler.SSO,
+	jwtTool tool.JWT, errHandler errcode.Handler) User {
+	return &user{userRepo: userRepo,
+		trainerRepo: trainerRepo,
+		logger: logger,
+		sso: sso,
+		jwtTool: jwtTool,
+		errHandler: errHandler}
 }
 
 func (u *user) UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
@@ -64,7 +72,7 @@ func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateU
 
 func (u *user) CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error) {
 	//查詢是否已存在資料
-	_, err := u.trainerRepo.FindTrainerIDByUID(uid)
+	err := u.trainerRepo.FindTrainerByUID(uid, nil)
 	//教練身份已存在
 	if err == nil {
 		return nil, u.errHandler.DataAlreadyExists()
@@ -75,7 +83,7 @@ func (u *user) CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTra
 		return nil, u.errHandler.SystemError()
 	}
 	//創建教練身份
-	trainerID, err := u.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
+	err = u.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
 		Name: param.Name,
 		Nickname: param.Nickname,
 		Phone: param.Phone,
@@ -85,7 +93,7 @@ func (u *user) CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTra
 		u.logger.Set(c, handler.Error, "Trainer Repo", u.errHandler.SystemError().Code(), err.Error())
 		return nil, u.errHandler.SystemError()
 	}
-	return &userdto.CreateTrainerResult{TrainerID: trainerID}, nil
+	return &userdto.CreateTrainerResult{UserID: uid}, nil
 }
 
 func (u *user) CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error) {
@@ -96,6 +104,32 @@ func (u *user) CreateTrainerByToken(c *gin.Context, token string, param *userdto
 	return u.CreateTrainer(c, uid, param)
 }
 
-func (u *user) SwitchTrainerMode(c *gin.Context, uid int64) errcode.Error {
-	panic("implement me")
+func (u *user) GetTrainerInfo(c *gin.Context, uid int64) (*userdto.TrainerResult, errcode.Error) {
+	//獲取trainer資訊
+	var result userdto.TrainerResult
+	if err := u.trainerRepo.FindTrainerByUID(uid, &result.Trainer); err != nil {
+		//查無此資料
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, u.errHandler.DataNotFound()
+		}
+		//不明原因錯誤
+		u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
+		return nil, u.errHandler.SystemError()
+	}
+	//產生 token
+	token, err := u.sso.GenerateTrainerToken(uid)
+	if err != nil {
+		u.logger.Set(c, handler.Error, "sso", u.errHandler.SystemError().Code(), err.Error())
+		return nil, u.errHandler.SystemError()
+	}
+	result.Token = token
+	return &result, nil
+}
+
+func (u *user) GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.TrainerResult, errcode.Error) {
+	uid, err := u.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, u.errHandler.InvalidToken()
+	}
+	return u.GetTrainerInfo(c, uid)
 }

@@ -654,7 +654,7 @@ var doc = `{
                 }
             }
         },
-        "/user/my/info": {
+        "/user/info": {
             "patch": {
                 "security": [
                     {
@@ -711,7 +711,51 @@ var doc = `{
                 }
             }
         },
-        "/user/my/trainer": {
+        "/user/role/trainer": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "取得我的教練身份資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "取得我的教練身份資訊",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/userdto.TrainerResult"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -979,6 +1023,71 @@ var doc = `{
                 },
                 "phone": {
                     "type": "string"
+                }
+            }
+        },
+        "userdto.TrainerResult": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTQ0MDc3NjMsInN1YiI6IjEwMDEzIn0.Z5UeEC8ArCVYej9kI1paXD2f5FMFiTfeLpU6e_CZZw0"
+                },
+                "trainer": {
+                    "description": "教練資訊",
+                    "type": "object",
+                    "properties": {
+                        "address": {
+                            "description": "住址",
+                            "type": "string",
+                            "example": "台北市信義區信義路五段五號"
+                        },
+                        "create_at": {
+                            "description": "創建日期",
+                            "type": "string",
+                            "example": "2021-05-10 10:00:00"
+                        },
+                        "email": {
+                            "description": "信箱",
+                            "type": "string",
+                            "example": "henry@gmail.com"
+                        },
+                        "intro": {
+                            "description": "個人介紹",
+                            "type": "string",
+                            "example": "健身比賽冠軍"
+                        },
+                        "name": {
+                            "description": "教練本名",
+                            "type": "string",
+                            "example": "王小明"
+                        },
+                        "nickname": {
+                            "description": "教練暱稱",
+                            "type": "string",
+                            "example": "Henry"
+                        },
+                        "phone": {
+                            "description": "電話",
+                            "type": "string",
+                            "example": "0978820789"
+                        },
+                        "trainer_status": {
+                            "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "update_at": {
+                            "description": "修改日期",
+                            "type": "string",
+                            "example": "2021-05-10 10:00:00"
+                        },
+                        "user_id": {
+                            "description": "用戶id",
+                            "type": "integer",
+                            "example": 1001
+                        }
+                    }
                 }
             }
         },
