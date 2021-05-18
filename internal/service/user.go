@@ -42,10 +42,22 @@ func (u *user) UpdateUserByToken(c *gin.Context, token string, param *userdto.Up
 }
 
 func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
+	//檢查暱稱是否重複
+	if param.Nickname != nil {
+		_, err := u.userRepo.FindUserIDByNickname(*param.Nickname)
+		//該暱稱已存在
+		if err == nil {
+			return nil, u.errHandler.NicknameDuplicate()
+		}
+		//不明原因錯誤
+		if !errors.Is(err, gorm.ErrRecordNotFound){
+			u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
+			return nil, u.errHandler.SystemError()
+		}
+	}
 	//更新user
 	if err := u.userRepo.UpdateUserByUID(uid, &model.UpdateUserParam{
-		//Email: param.Email,
-		//Nickname: param.Nickname,
+		Nickname: param.Nickname,
 		Sex: param.Sex,
 		Birthday: param.Birthday,
 		Height: param.Height,

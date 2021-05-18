@@ -46,8 +46,7 @@ func (u *user) UpdateUserInfo(c *gin.Context)  {
 	}
 	//更新個人資訊
 	user, err := u.userService.UpdateUserByToken(c, header.Token, &userdto.UpdateUserParam{
-		//Email: body.Email,
-		//Nickname: body.Nickname,
+		Nickname: body.Nickname,
 		Sex: body.Sex,
 		Birthday: body.Birthday,
 		Height: body.Height,

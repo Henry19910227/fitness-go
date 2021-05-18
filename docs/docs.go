@@ -1258,8 +1258,13 @@ var doc = `{
                     "type": "number",
                     "example": 176.5
                 },
+                "nickname": {
+                    "description": "Email       *string ` + "`" + `json:\"email\" binding:\"omitempty,email\" example:\"henry@gmail.com\"` + "`" + `             // 信箱",
+                    "type": "string",
+                    "example": "henry"
+                },
                 "sex": {
-                    "description": "Email       *string ` + "`" + `json:\"email\" binding:\"omitempty,email\" example:\"henry@gmail.com\"` + "`" + `             // 信箱\nNickname    *string ` + "`" + `json:\"nickname\" binding:\"omitempty,min=1,max=16\" example:\"henry\"` + "`" + `             // 暱稱 (1~16字元)",
+                    "description": "性別 (f:女/m:男)",
                     "type": "string",
                     "example": "m"
                 },

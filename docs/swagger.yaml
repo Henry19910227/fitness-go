@@ -348,10 +348,12 @@ definitions:
         description: 身高 (最大230)
         example: 176.5
         type: number
+      nickname:
+        description: Email       *string `json:"email" binding:"omitempty,email" example:"henry@gmail.com"`             // 信箱
+        example: henry
+        type: string
       sex:
-        description: |-
-          Email       *string `json:"email" binding:"omitempty,email" example:"henry@gmail.com"`             // 信箱
-          Nickname    *string `json:"nickname" binding:"omitempty,min=1,max=16" example:"henry"`             // 暱稱 (1~16字元)
+        description: 性別 (f:女/m:男)
         example: m
         type: string
       target:
