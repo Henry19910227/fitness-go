@@ -56,6 +56,10 @@ definitions:
         description: 帳戶id
         example: 10001
         type: integer
+      is_trainer:
+        description: 是否擁有教練身份(0:否/1:是)
+        example: 1
+        type: integer
       nickname:
         description: 暱稱
         example: Henry

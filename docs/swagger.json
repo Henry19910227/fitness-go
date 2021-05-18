@@ -857,6 +857,11 @@
                     "type": "integer",
                     "example": 10001
                 },
+                "is_trainer": {
+                    "description": "是否擁有教練身份(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
