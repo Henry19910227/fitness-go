@@ -1,8 +1,7 @@
 package userdto
 
 type UpdateUserParam struct {
-	//Email       *string `gorm:"column:email"`
-	//Nickname    *string `gorm:"column:nickname"`
+	Nickname    *string `gorm:"column:nickname"`
 	Sex         *string `gorm:"column:sex"`
 	Birthday    *string `gorm:"column:birthday"`
 	Height      *float64 `gorm:"column:height"`

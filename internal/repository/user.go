@@ -17,6 +17,8 @@ func NewUser(gormTool  tool.Gorm) User {
 }
 
 func (u *user) CreateUser(accountType int, account string, nickname string, password string) (int64, error) {
+	var email string
+	if accountType == 1 { email = account }
 	user := model.User{
 		AccountType: accountType,
 		Account: account,
@@ -26,6 +28,7 @@ func (u *user) CreateUser(accountType int, account string, nickname string, pass
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		Nickname: nickname,
+		Email: email,
 		Birthday: "0000-01-01 00:00:00",
 	}
 	if err := u.gorm.DB().Create(&user).Error; err != nil {

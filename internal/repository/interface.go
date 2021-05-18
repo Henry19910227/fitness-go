@@ -17,3 +17,9 @@ type User interface {
 	FindUserIDByNickname(nickname string) (int64, error)
 	FindUserIDByEmail(email string) (int64, error)
 }
+
+type Trainer interface {
+	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
+	FindTrainerByUID(uid int64, entity interface{}) error
+	FindTrainerIDByUID(uid int64) (string, error)
+}

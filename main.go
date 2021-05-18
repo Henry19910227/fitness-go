@@ -178,7 +178,8 @@ func setupService() {
 func setupLoginService() {
 	adminRepo := repository.NewAdmin(gormTool)
 	userRepo := repository.NewUser(gormTool)
-	loginService = service.NewLogin(adminRepo, userRepo, ssoHandler, logHandler, jwtTool, errcode.NewHandler())
+	trainerRepo := repository.NewTrainer(gormTool)
+	loginService = service.NewLogin(adminRepo, userRepo, trainerRepo, ssoHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupMigrateService()  {
@@ -192,7 +193,8 @@ func setupRegService()  {
 
 func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
-	userService = service.NewUser(userRepo, logHandler, jwtTool, errcode.NewHandler())
+	trainerRepo := repository.NewTrainer(gormTool)
+	userService = service.NewUser(userRepo, trainerRepo, logHandler, ssoHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

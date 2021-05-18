@@ -15,6 +15,7 @@ type login struct {
 	Base
 	adminRepo repository.Admin
 	userRepo  repository.User
+	trainerRepo repository.Trainer
 	ssoHandler handler.SSO
 	jwtTool   tool.JWT
 	logger handler.Logger
@@ -23,12 +24,14 @@ type login struct {
 
 func NewLogin(adminRepo repository.Admin,
 	userRepo  repository.User,
+	trainerRepo repository.Trainer,
 	ssoHandler handler.SSO,
 	logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Login {
 	return &login{adminRepo: adminRepo,
 		userRepo: userRepo,
+		trainerRepo: trainerRepo,
 		ssoHandler: ssoHandler,
 		logger: logger,
 		jwtTool: jwtTool,
@@ -50,14 +53,20 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 	if user.Birthday == "0000-01-01" {
 		user.Birthday = ""
 	}
+	//檢查是否創建過教練身份
+	err := l.trainerRepo.FindTrainerByUID(user.ID, nil)
+	if err != nil {
+		//不明原因錯誤
+		if !errors.Is(err, gorm.ErrRecordNotFound){
+			l.logger.Set(c, handler.Error, "UserRepo", l.errHandler.SystemError().Code(), err.Error())
+			return nil, "", l.errHandler.SystemError()
+		}
+	} else { //教練身份存在
+		user.IsTrainer = 1
+	}
 	//生成 user token
 	token, err := l.ssoHandler.GenerateUserToken(user.ID)
 	if err != nil {
-		l.logger.Set(c, handler.Error, "SsoHandler", l.errHandler.SystemError().Code(), err.Error())
-		return nil, "", l.errHandler.SystemError()
-	}
-	//設置上線狀態
-	if err := l.ssoHandler.RenewOnlineStatus(token); err != nil {
 		l.logger.Set(c, handler.Error, "SsoHandler", l.errHandler.SystemError().Code(), err.Error())
 		return nil, "", l.errHandler.SystemError()
 	}
@@ -91,10 +100,6 @@ func (l *login) AdminLoginByEmail(c *gin.Context, email string, password string)
 }
 
 func (l *login) UserLogoutByToken(c *gin.Context, token string) errcode.Error {
-	if err := l.ssoHandler.SetOfflineStatus(token); err != nil {
-		l.logger.Set(c, handler.Error, "SSOHandler", l.errHandler.SystemError().Code(), err.Error())
-		return l.errHandler.SystemError()
-	}
 	if err := l.ssoHandler.ResignUserToken(token); err != nil {
 		l.logger.Set(c, handler.Error, "SSOHandler", l.errHandler.SystemError().Code(), err.Error())
 		return l.errHandler.SystemError()
