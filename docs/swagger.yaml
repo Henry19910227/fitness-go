@@ -239,6 +239,10 @@ definitions:
         description: 帳戶id
         example: 10001
         type: integer
+      is_trainer:
+        description: 是否擁有教練身份(0:否/1:是)
+        example: 1
+        type: integer
       nickname:
         description: 暱稱
         example: Henry
@@ -782,10 +786,35 @@ paths:
       tags:
       - Register
   /user/info:
+    get:
+      consumes:
+      - application/json
+      description: 獲取個人資訊
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/userdto.User'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 獲取個人資訊
+      tags:
+      - User
     patch:
       consumes:
       - application/json
-      description: 更新個人資料
+      description: 更新個人資訊
       parameters:
       - description: 更新欄位
         in: body
@@ -811,7 +840,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_user_token: []
-      summary: 更新個人資料
+      summary: 更新個人資訊
       tags:
       - User
   /user/role/trainer:

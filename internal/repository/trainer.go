@@ -40,15 +40,3 @@ func (t *trainer) FindTrainerByUID(uid int64, entity interface{}) error {
 	}
 	return nil
 }
-
-func (t *trainer) FindTrainerIDByUID(uid int64) (string, error) {
-	var name string
-	if err := t.gorm.DB().
-		Table("trainers").
-		Select("name").
-		Where("trainers.user_id = ?", uid).
-		Take(&name).Error; err != nil {
-		return "", err
-	}
-	return name, nil
-}

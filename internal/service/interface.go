@@ -39,6 +39,8 @@ type Register interface {
 type User interface {
 	UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
 	UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
+	GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.Error)
+	GetUserByToken(c *gin.Context, token string) (*userdto.User, errcode.Error)
 	CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
 	CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
 	GetTrainerInfo(c *gin.Context, uid int64) (*userdto.TrainerResult, errcode.Error)

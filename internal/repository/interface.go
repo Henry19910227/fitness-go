@@ -21,5 +21,4 @@ type User interface {
 type Trainer interface {
 	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
 	FindTrainerByUID(uid int64, entity interface{}) error
-	FindTrainerIDByUID(uid int64) (string, error)
 }

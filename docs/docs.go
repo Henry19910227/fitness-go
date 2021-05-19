@@ -655,13 +655,13 @@ var doc = `{
             }
         },
         "/user/info": {
-            "patch": {
+            "get": {
                 "security": [
                     {
                         "fitness_user_token": []
                     }
                 ],
-                "description": "更新個人資料",
+                "description": "獲取個人資訊",
                 "consumes": [
                     "application/json"
                 ],
@@ -671,7 +671,51 @@ var doc = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "更新個人資料",
+                "summary": "獲取個人資訊",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/userdto.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "更新個人資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "更新個人資訊",
                 "parameters": [
                     {
                         "description": "更新欄位",
@@ -1114,6 +1158,11 @@ var doc = `{
                     "description": "帳戶id",
                     "type": "integer",
                     "example": 10001
+                },
+                "is_trainer": {
+                    "description": "是否擁有教練身份(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
                 },
                 "nickname": {
                     "description": "暱稱",

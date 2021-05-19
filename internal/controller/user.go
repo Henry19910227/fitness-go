@@ -18,13 +18,14 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 	userGroup := baseGroup.Group("/user")
 	userGroup.Use(userMiddleware)
 	userGroup.PATCH("/info", user.UpdateUserInfo)
+	userGroup.GET("/info", user.GetUserInfo)
 	userGroup.POST("/role/trainer", user.CreateTrainer)
 	userGroup.GET("/role/trainer", user.GetTrainerInfo)
 }
 
 // UpdateUserInfo 更新個人資訊
-// @Summary 更新個人資料
-// @Description 更新個人資料
+// @Summary 更新個人資訊
+// @Description 更新個人資訊
 // @Tags User
 // @Accept json
 // @Produce json
@@ -59,6 +60,30 @@ func (u *user) UpdateUserInfo(c *gin.Context)  {
 		return
 	}
 	u.JSONSuccessResponse(c, user, "update success!")
+}
+
+// GetUserInfo 獲取個人資訊
+// @Summary 獲取個人資訊
+// @Description 獲取個人資訊
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Success 200 {object} model.SuccessResult{data=userdto.User} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /user/info [GET]
+func (u *user) GetUserInfo(c *gin.Context) {
+	var header validator.TokenHeader
+	if err := c.ShouldBindHeader(&header); err != nil {
+		u.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	user, err := u.userService.GetUserByToken(c, header.Token)
+	if err != nil {
+		u.JSONErrorResponse(c, err)
+		return
+	}
+	u.JSONSuccessResponse(c, user, "success!")
 }
 
 // CreateTrainer 創建我的教練身份
