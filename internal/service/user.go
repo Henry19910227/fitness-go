@@ -43,19 +43,6 @@ func (u *user) UpdateUserByToken(c *gin.Context, token string, param *userdto.Up
 }
 
 func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
-	//檢查暱稱是否重複
-	if param.Nickname != nil {
-		_, err := u.userRepo.FindUserIDByNickname(*param.Nickname)
-		//該暱稱已存在
-		if err == nil {
-			return nil, u.errHandler.NicknameDuplicate()
-		}
-		//不明原因錯誤
-		if !errors.Is(err, gorm.ErrRecordNotFound){
-			u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
-			return nil, u.errHandler.SystemError()
-		}
-	}
 	//更新user
 	if err := u.userRepo.UpdateUserByUID(uid, &model.UpdateUserParam{
 		Nickname: param.Nickname,
@@ -66,6 +53,14 @@ func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateU
 		Experience: param.Experience,
 		Target: param.Target,
 	}); err != nil {
+		//資料已存在
+		if u.MysqlDuplicateEntry(err) {
+			if strings.Contains(err.Error(), "nickname") {
+				return nil, u.errHandler.Custom(9004, errors.New("重複的暱稱"))
+			}
+			return nil, u.errHandler.DataAlreadyExists()
+		}
+		//不明原因錯誤
 		u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
 		return nil, u.errHandler.SystemError()
 	}
