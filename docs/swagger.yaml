@@ -146,7 +146,7 @@ definitions:
     type: object
   registerdto.Register:
     properties:
-      user_id:
+      id:
         description: 用戶ID
         example: 10001
         type: integer

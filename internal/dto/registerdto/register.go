@@ -5,5 +5,5 @@ type OTP struct {
 }
 
 type Register struct {
-	UserID int64 `json:"user_id" example:"10001"` // 用戶ID
+	UserID int64 `json:"id" example:"10001"` // 用戶ID
 }

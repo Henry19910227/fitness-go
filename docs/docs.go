@@ -1039,7 +1039,7 @@ var doc = `{
         "registerdto.Register": {
             "type": "object",
             "properties": {
-                "user_id": {
+                "id": {
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
