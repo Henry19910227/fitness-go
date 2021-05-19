@@ -7,12 +7,12 @@ type User struct {
 	Password         string  `gorm:"column:password"`            // 密碼
 	DeviceToken      string  `gorm:"column:device_token"`        // 推播token
 	UserStatus       int     `gorm:"column:user_status"`         // 用戶狀態 (1:正常/2:違規/3:刪除)
-	UserType         int     `gorm:"column:user_type"`           // 用戶狀態 (1:一般用戶/2:訂閱用戶)
+	UserType         int     `gorm:"column:user_type"`           // 用戶類型 (1:一般用戶/2:訂閱用戶)
 	CreateAt         string  `gorm:"column:create_at"`           // 創建日期
 	UpdateAt         string  `gorm:"column:update_at"`           // 修改日期
 	Email            string  `gorm:"column:email"`               // 信箱
 	Nickname         string  `gorm:"column:nickname"`            // 暱稱
-	Sex              string  `gorm:"column:sex"`                 // 性別
+	Sex              string  `gorm:"column:sex"`                 // 性別 (m:男/f:女)
 	Birthday         string  `gorm:"column:birthday"`            // 生日
 	Height           int     `gorm:"column:height"`              // 身高
 	Weight           int     `gorm:"column:weight"`              // 體重

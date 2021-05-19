@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
+	"strings"
 )
 
 type register struct {
@@ -64,6 +65,12 @@ func (r *register) EmailRegister(c *gin.Context, otp string, email string, nickn
 	if err != nil {
 		//有重複的欄位資料
 		if r.MysqlDuplicateEntry(err) {
+			if strings.Contains(err.Error(), "account") {
+				return nil, r.errHandler.Custom(9004,errors.New("重複的帳戶名稱"))
+			}
+			if strings.Contains(err.Error(), "nickname") {
+				return nil, r.errHandler.Custom(9004,errors.New("重複的用戶暱稱"))
+			}
 			return nil, r.errHandler.DataAlreadyExists()
 		}
 		//不明原因錯誤
