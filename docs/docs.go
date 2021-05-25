@@ -1211,22 +1211,22 @@ var doc = `{
             ],
             "properties": {
                 "email": {
-                    "description": "信箱 (最大230)",
+                    "description": "信箱 (最大255字元)",
                     "type": "string",
                     "example": "jason@gmail.com"
                 },
                 "name": {
-                    "description": "本名 (1~16字元)",
+                    "description": "本名 (1~20字元)",
                     "type": "string",
                     "example": "王小明"
                 },
                 "nickname": {
-                    "description": "暱稱 (1~16字元)",
+                    "description": "教練名稱 (1~20字元)",
                     "type": "string",
                     "example": "jason"
                 },
                 "phone": {
-                    "description": "聯絡電話",
+                    "description": "手機",
                     "type": "string",
                     "example": "0978820789"
                 }
@@ -1257,7 +1257,7 @@ var doc = `{
                     "example": "test@gmail.com"
                 },
                 "password": {
-                    "description": "密碼 (8~16字元)",
+                    "description": "密碼 (6~18字元)",
                     "type": "string",
                     "example": "12345678"
                 }
@@ -1273,12 +1273,12 @@ var doc = `{
             ],
             "properties": {
                 "email": {
-                    "description": "信箱",
+                    "description": "信箱 (最大255字元)",
                     "type": "string",
                     "example": "test@gmail.com"
                 },
                 "nickname": {
-                    "description": "暱稱 (1~16字元)",
+                    "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
                 },
@@ -1288,7 +1288,7 @@ var doc = `{
                     "example": "531476"
                 },
                 "password": {
-                    "description": "密碼 (8~16字元)",
+                    "description": "密碼 (6~18字元)",
                     "type": "string",
                     "example": "12345678"
                 }
@@ -1308,12 +1308,12 @@ var doc = `{
                     "example": 2
                 },
                 "height": {
-                    "description": "身高 (最大230)",
+                    "description": "身高 (最大999)",
                     "type": "number",
                     "example": 176.5
                 },
                 "nickname": {
-                    "description": "Email       *string ` + "`" + `json:\"email\" binding:\"omitempty,email\" example:\"henry@gmail.com\"` + "`" + `             // 信箱",
+                    "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
                 },
@@ -1328,7 +1328,7 @@ var doc = `{
                     "example": 3
                 },
                 "weight": {
-                    "description": "體重 (最大230)",
+                    "description": "體重 (最大999)",
                     "type": "number",
                     "example": 70.5
                 }
@@ -1354,7 +1354,7 @@ var doc = `{
             ],
             "properties": {
                 "nickname": {
-                    "description": "暱稱 (1~16字元)",
+                    "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
                 }

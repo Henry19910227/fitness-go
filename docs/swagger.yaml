@@ -275,19 +275,19 @@ definitions:
   validator.CreateTrainerBody:
     properties:
       email:
-        description: 信箱 (最大230)
+        description: 信箱 (最大255字元)
         example: jason@gmail.com
         type: string
       name:
-        description: 本名 (1~16字元)
+        description: 本名 (1~20字元)
         example: 王小明
         type: string
       nickname:
-        description: 暱稱 (1~16字元)
+        description: 教練名稱 (1~20字元)
         example: jason
         type: string
       phone:
-        description: 聯絡電話
+        description: 手機
         example: "0978820789"
         type: string
     required:
@@ -311,7 +311,7 @@ definitions:
         example: test@gmail.com
         type: string
       password:
-        description: 密碼 (8~16字元)
+        description: 密碼 (6~18字元)
         example: "12345678"
         type: string
     required:
@@ -321,11 +321,11 @@ definitions:
   validator.RegisterForEmailBody:
     properties:
       email:
-        description: 信箱
+        description: 信箱 (最大255字元)
         example: test@gmail.com
         type: string
       nickname:
-        description: 暱稱 (1~16字元)
+        description: 暱稱 (1~20字元)
         example: henry
         type: string
       otp_code:
@@ -333,7 +333,7 @@ definitions:
         example: "531476"
         type: string
       password:
-        description: 密碼 (8~16字元)
+        description: 密碼 (6~18字元)
         example: "12345678"
         type: string
     required:
@@ -353,11 +353,11 @@ definitions:
         example: 2
         type: integer
       height:
-        description: 身高 (最大230)
+        description: 身高 (最大999)
         example: 176.5
         type: number
       nickname:
-        description: Email       *string `json:"email" binding:"omitempty,email" example:"henry@gmail.com"`             // 信箱
+        description: 暱稱 (1~20字元)
         example: henry
         type: string
       sex:
@@ -369,7 +369,7 @@ definitions:
         example: 3
         type: integer
       weight:
-        description: 體重 (最大230)
+        description: 體重 (最大999)
         example: 70.5
         type: number
     type: object
@@ -385,7 +385,7 @@ definitions:
   validator.ValidateNicknameDupBody:
     properties:
       nickname:
-        description: 暱稱 (1~16字元)
+        description: 暱稱 (1~20字元)
         example: henry
         type: string
     required:
