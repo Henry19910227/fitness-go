@@ -6,6 +6,63 @@
         "contact": {}
     },
     "paths": {
+        "/course": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_trainer_token": []
+                    }
+                ],
+                "description": "創建課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "創建課表",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateCourseBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "創建成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/coursedto.CreateResult"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "創建失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/login/admin/email": {
             "post": {
                 "description": "管理者使用信箱登入",
@@ -828,6 +885,16 @@
         }
     },
     "definitions": {
+        "coursedto.CreateResult": {
+            "type": "object",
+            "properties": {
+                "course_id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "logindto.Admin": {
             "type": "object",
             "properties": {
@@ -1180,6 +1247,42 @@
                     "description": "體重",
                     "type": "number",
                     "example": 72.5
+                }
+            }
+        },
+        "validator.CreateCourseBody": {
+            "type": "object",
+            "required": [
+                "category",
+                "course_id",
+                "level",
+                "schedule_type"
+            ],
+            "properties": {
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "category_other": {
+                    "description": "課表其他類別名稱(最大20字元)",
+                    "type": "string",
+                    "example": "其他訓練"
+                },
+                "course_id": {
+                    "description": "課表名稱(1~20字元)",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

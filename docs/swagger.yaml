@@ -1,4 +1,11 @@
 definitions:
+  coursedto.CreateResult:
+    properties:
+      course_id:
+        description: 課表 id
+        example: 1
+        type: integer
+    type: object
   logindto.Admin:
     properties:
       email:
@@ -272,6 +279,34 @@ definitions:
         example: 72.5
         type: number
     type: object
+  validator.CreateCourseBody:
+    properties:
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 1
+        type: integer
+      category_other:
+        description: 課表其他類別名稱(最大20字元)
+        example: 其他訓練
+        type: string
+      course_id:
+        description: 課表名稱(1~20字元)
+        example: Henry課表
+        type: string
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 1
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 1
+        type: integer
+    required:
+    - category
+    - course_id
+    - level
+    - schedule_type
+    type: object
   validator.CreateTrainerBody:
     properties:
       email:
@@ -396,6 +431,39 @@ info:
   description: 健身平台 api
   title: fitness api
 paths:
+  /course:
+    post:
+      consumes:
+      - application/json
+      description: 創建課表
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateCourseBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 創建成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.CreateResult'
+              type: object
+        "400":
+          description: 創建失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_trainer_token: []
+      summary: 創建課表
+      tags:
+      - Course
   /login/admin/email:
     post:
       consumes:

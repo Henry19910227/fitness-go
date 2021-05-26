@@ -44,6 +44,7 @@ var (
 	loginService    service.Login
 	regService      service.Register
 	userService     service.User
+	courseService   service.Course
 )
 
 var (
@@ -94,6 +95,7 @@ func main() {
 	controller.NewRegister(baseGroup, regService)
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
+	controller.NewCourse(baseGroup, courseService, trainerMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -173,6 +175,7 @@ func setupService() {
 	setupLoginService()
 	setupRegService()
 	setupUserService()
+	setupCourseService()
 }
 
 func setupLoginService() {
@@ -195,6 +198,11 @@ func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
 	userService = service.NewUser(userRepo, trainerRepo, logHandler, ssoHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupCourseService()  {
+	courseRepo := repository.NewCourse(gormTool)
+	courseService = service.NewCourse(courseRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

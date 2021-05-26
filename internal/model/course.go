@@ -27,3 +27,11 @@ type Course struct {
 func (Course) TableName() string {
 	return "courses"
 }
+
+type CreateCourseParam struct {
+	Name string `gorm:"column:name"`
+	Level int `gorm:"column:level"`
+	Category int `gorm:"column:category"`
+	CategoryOther string `gorm:"column:category_other"`
+	ScheduleType int `gorm:"column:schedule_type"`
+}

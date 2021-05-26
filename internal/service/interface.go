@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
@@ -45,4 +46,9 @@ type User interface {
 	CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
 	GetTrainerInfo(c *gin.Context, uid int64) (*userdto.TrainerResult, errcode.Error)
 	GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.TrainerResult, errcode.Error)
+}
+
+type Course interface {
+	CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
+	CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
 }
