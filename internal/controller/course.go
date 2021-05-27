@@ -80,7 +80,7 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	cc.courseService.UpdateCourse(c, uri.CourseID, &coursedto.UpdateCourseParam{
+	course, err := cc.courseService.UpdateCourse(c, uri.CourseID, &coursedto.UpdateCourseParam{
 		Category: body.Category,
 		ScheduleType: body.ScheduleType,
 		SaleType: body.SaleType,
@@ -96,5 +96,9 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 		BodyTarget: body.BodyTarget,
 		Notice: body.Notice,
 	})
-	cc.JSONSuccessResponse(c, nil, "更新成功!")
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, course, "更新成功!")
 }
