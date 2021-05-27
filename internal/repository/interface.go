@@ -25,4 +25,5 @@ type Trainer interface {
 
 type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
+	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 }

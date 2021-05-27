@@ -51,4 +51,5 @@ type User interface {
 type Course interface {
 	CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
 	CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
+	UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) errcode.Error
 }

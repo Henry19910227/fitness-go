@@ -377,6 +377,8 @@ definitions:
     - otp_code
     - password
     type: object
+  validator.UpdateCourseBody:
+    type: object
   validator.UpdateUserInfoBody:
     properties:
       birthday:
@@ -462,6 +464,39 @@ paths:
       security:
       - fitness_trainer_token: []
       summary: 創建課表
+      tags:
+      - Course
+  /course/{course_id}:
+    patch:
+      consumes:
+      - application/json
+      description: 更新課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateCourseBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_trainer_token: []
+      summary: 更新課表
       tags:
       - Course
   /login/admin/email:

@@ -44,3 +44,28 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.Creat
 	}
 	return &coursedto.CreateResult{ID: courseID}, nil
 }
+
+func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) errcode.Error {
+	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
+		CourseStatus: param.CourseStatus,
+		Category: param.Category,
+		ScheduleType: param.ScheduleType,
+		SaleType: param.SaleType,
+		Price: param.Price,
+		Name: param.Name,
+		Image: param.Image,
+		Intro: param.Intro,
+		Food: param.Food,
+		Level: param.Level,
+		Suit: param.Suit,
+		Equipment: param.Equipment,
+		Place: param.Place,
+		TrainTarget: param.TrainTarget,
+		BodyTarget: param.BodyTarget,
+		Notice: param.Notice,
+	}); err != nil {
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return cs.errHandler.SystemError()
+	}
+	return nil
+}

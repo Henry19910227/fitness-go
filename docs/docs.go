@@ -81,6 +81,58 @@ var doc = `{
                 }
             }
         },
+        "/course/{course_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_trainer_token": []
+                    }
+                ],
+                "description": "更新課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "更新課表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateCourseBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/login/admin/email": {
             "post": {
                 "description": "管理者使用信箱登入",
@@ -1396,6 +1448,9 @@ var doc = `{
                     "example": "12345678"
                 }
             }
+        },
+        "validator.UpdateCourseBody": {
+            "type": "object"
         },
         "validator.UpdateUserInfoBody": {
             "type": "object",

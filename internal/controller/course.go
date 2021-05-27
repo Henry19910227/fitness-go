@@ -19,6 +19,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, trainer
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(trainerMiddle)
 	courseGroup.POST("", course.CreateCourse)
+	courseGroup.PATCH("/:course_id", course.UpdateCourse)
 }
 
 // CreateCourse 創建課表
@@ -55,4 +56,25 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, result, "創建成功!")
+}
+
+// UpdateCourse 更新課表
+// @Summary 更新課表
+// @Description 更新課表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_trainer_token
+// @Param course_id path int64 true "課表id"
+// @Param json_body body validator.UpdateCourseBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult "更新成功!"
+// @Failure 400 {object} model.ErrorResult "更新失敗"
+// @Router /course/{course_id} [PATCH]
+func (cc *Course) UpdateCourse(c *gin.Context) {
+	var body validator.UpdateCourseBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	cc.JSONSuccessResponse(c, nil, "更新成功!")
 }
