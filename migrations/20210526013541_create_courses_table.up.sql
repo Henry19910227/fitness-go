@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS courses (
    `user_id` INT(11) UNSIGNED NOT NULL COMMENT '用戶 id',
    `course_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)',
    `category` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)',
-   `category_other` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '課表其他類別名稱',
    `schedule_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排課類別(1:單一訓練/2:多項計畫)',
    `sale_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '銷售類型(1:免費課表/2:訂閱課表/3:付費課表)',
    `price` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '售價',
