@@ -48,7 +48,6 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 		Name: body.Name,
 		Level: body.Level,
 		Category: body.Category,
-		CategoryOther: body.CategoryOther,
 		ScheduleType: body.ScheduleType,
 	})
 	if err != nil {
@@ -71,10 +70,31 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /course/{course_id} [PATCH]
 func (cc *Course) UpdateCourse(c *gin.Context) {
+	var uri validator.CourseIDUri
 	var body validator.UpdateCourseBody
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	cc.courseService.UpdateCourse(c, uri.CourseID, &coursedto.UpdateCourseParam{
+		Category: body.Category,
+		ScheduleType: body.ScheduleType,
+		SaleType: body.SaleType,
+		Price: body.Price,
+		Name: body.Name,
+		Intro: body.Intro,
+		Food: body.Food,
+		Level: body.Level,
+		Suit: body.Suit,
+		Equipment: body.Equipment,
+		Place: body.Place,
+		TrainTarget: body.TrainTarget,
+		BodyTarget: body.BodyTarget,
+		Notice: body.Notice,
+	})
 	cc.JSONSuccessResponse(c, nil, "更新成功!")
 }

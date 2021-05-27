@@ -20,7 +20,6 @@ func (c *course) CreateCourse(uid int64, param *model.CreateCourseParam) (int64,
 		Name: param.Name,
 		Level: param.Level,
 		Category: param.Category,
-		CategoryOther: param.CategoryOther,
 		ScheduleType: param.ScheduleType,
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
@@ -61,6 +60,16 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 		Select("", selects...).
 		Updates(param).Error; err != nil {
 			return err
+	}
+	return nil
+}
+
+func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
+	if err := c.gorm.DB().
+		Model(&model.Course{}).
+		Where("id = ?", courseID).
+		Take(entity).Error; err != nil {
+		return err
 	}
 	return nil
 }

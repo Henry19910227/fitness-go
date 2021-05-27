@@ -8,6 +8,10 @@ type UserIDUri struct {
 	UserID *int64 `uri:"user_id" binding:"required" example:"10001"`
 }
 
+type CourseIDUri struct {
+	CourseID int64 `uri:"course_id" binding:"required" example:"1"`
+}
+
 type PagingQuery struct {
 	Page *int `form:"page" binding:"omitempty,min=1" example:"1"`
 	Size *int `form:"size" binding:"omitempty,min=1" example:"5"`
