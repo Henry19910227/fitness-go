@@ -1457,15 +1457,60 @@ var doc = `{
                     "type": "string",
                     "example": "1,2,6"
                 },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 3
+                },
                 "equipment": {
                     "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
                     "type": "string",
                     "example": "1,2,5"
                 },
+                "food": {
+                    "description": "飲食建議(0~400字元)",
+                    "type": "string",
+                    "example": "多吃雞胸"
+                },
+                "intro": {
+                    "description": "課表介紹(0~400字元)",
+                    "type": "string",
+                    "example": "佛系的健身課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "name": {
+                    "description": "課表名稱(1~20字元)",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "notice": {
+                    "description": "注意事項(0~400字元)",
+                    "type": "string",
+                    "example": "不要受傷"
+                },
                 "place": {
                     "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
                     "type": "string",
                     "example": "1,2,3"
+                },
+                "price": {
+                    "description": "售價",
+                    "type": "integer",
+                    "example": 330
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
                 },
                 "suit": {
                     "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
