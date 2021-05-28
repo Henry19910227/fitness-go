@@ -11,6 +11,7 @@ var (
 	dataAlreadyExists = NewError(9003, errors.New("資料已存在"))
 	InvalidThirdParty = NewError(9004, errors.New("無效的第三方驗證"))
 	InvalidToken      = NewError(9005, errors.New("無效的token"))
+	PermissionDenied  = NewError(9006, errors.New("權限不足,存取遭拒"))
 
 	// Login
 	LoginFailure     = NewError(1100, errors.New("登入失敗, 帳號或密碼錯誤"))
@@ -47,6 +48,8 @@ type Handler interface {
 	InvalidThirdParty() Error
 	// InvalidToken 9005 - 無效的token
 	InvalidToken() Error
+	// NewError(9006, errors.New("權限不足,存取遭拒"))
+	PermissionDenied() Error
 
 	/** 註冊 */
 	// NewError(1400, errors.New("註冊失敗"))

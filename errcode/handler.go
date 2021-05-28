@@ -36,6 +36,10 @@ func (handler *handler) InvalidToken() Error {
 	return InvalidToken
 }
 
+func (handler handler) PermissionDenied() Error {
+	return PermissionDenied
+}
+
 /** 註冊 */
 func (handler handler) RegisterFailure() Error {
 	return RegisterFailure

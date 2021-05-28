@@ -596,6 +596,37 @@ paths:
       tags:
       - Course
   /course/{course_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.Course'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 獲取課表
+      tags:
+      - Course
     patch:
       consumes:
       - application/json
