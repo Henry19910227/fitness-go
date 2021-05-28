@@ -32,7 +32,7 @@ type Redis interface {
 }
 
 type User interface {
-	GetOnlineExpire() time.Duration
+
 }
 
 type Logger interface {

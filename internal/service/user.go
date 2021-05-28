@@ -145,10 +145,10 @@ func (u *user) CreateTrainerByToken(c *gin.Context, token string, param *userdto
 	return u.CreateTrainer(c, uid, param)
 }
 
-func (u *user) GetTrainerInfo(c *gin.Context, uid int64) (*userdto.TrainerResult, errcode.Error) {
+func (u *user) GetTrainerInfo(c *gin.Context, uid int64) (*userdto.Trainer, errcode.Error) {
 	//獲取trainer資訊
-	var result userdto.TrainerResult
-	if err := u.trainerRepo.FindTrainerByUID(uid, &result.Trainer); err != nil {
+	var result userdto.Trainer
+	if err := u.trainerRepo.FindTrainerByUID(uid, &result); err != nil {
 		//查無此資料
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, u.errHandler.DataNotFound()
@@ -157,17 +157,10 @@ func (u *user) GetTrainerInfo(c *gin.Context, uid int64) (*userdto.TrainerResult
 		u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
 		return nil, u.errHandler.SystemError()
 	}
-	//產生 token
-	token, err := u.sso.GenerateTrainerToken(uid)
-	if err != nil {
-		u.logger.Set(c, handler.Error, "sso", u.errHandler.SystemError().Code(), err.Error())
-		return nil, u.errHandler.SystemError()
-	}
-	result.Token = token
 	return &result, nil
 }
 
-func (u *user) GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.TrainerResult, errcode.Error) {
+func (u *user) GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.Trainer, errcode.Error) {
 	uid, err := u.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, u.errHandler.InvalidToken()

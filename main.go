@@ -44,6 +44,7 @@ var (
 	loginService    service.Login
 	regService      service.Register
 	userService     service.User
+	courseService   service.Course
 )
 
 var (
@@ -63,7 +64,6 @@ func init() {
 	setupHandler()
 	setupService()
 	userMiddleware = middleware.UserJWT(ssoHandler, errcode.NewHandler())
-	trainerMiddleware = middleware.TrainerJWT(ssoHandler, errcode.NewHandler())
 	adminLV1Middleware = middleware.AdminLV1JWT(ssoHandler, errcode.NewHandler())
 	adminLV2Middleware = middleware.AdminLV2JWT(ssoHandler, errcode.NewHandler())
 }
@@ -72,10 +72,6 @@ func init() {
 // @description 健身平台 api
 
 // @securityDefinitions.apikey fitness_user_token
-// @in header
-// @name Token
-
-// @securityDefinitions.apikey fitness_trainer_token
 // @in header
 // @name Token
 
@@ -94,6 +90,7 @@ func main() {
 	controller.NewRegister(baseGroup, regService)
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
+	controller.NewCourse(baseGroup, courseService, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -173,6 +170,7 @@ func setupService() {
 	setupLoginService()
 	setupRegService()
 	setupUserService()
+	setupCourseService()
 }
 
 func setupLoginService() {
@@ -195,6 +193,11 @@ func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
 	userService = service.NewUser(userRepo, trainerRepo, logHandler, ssoHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupCourseService()  {
+	courseRepo := repository.NewCourse(gormTool)
+	courseService = service.NewCourse(courseRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

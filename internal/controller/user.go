@@ -128,7 +128,7 @@ func (u *user) CreateTrainer(c *gin.Context)  {
 // @Accept json
 // @Produce json
 // @Security fitness_user_token
-// @Success 200 {object} model.SuccessResult{data=userdto.TrainerResult} "成功!"
+// @Success 200 {object} model.SuccessResult{data=userdto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /user/role/trainer [GET]
 func (u *user) GetTrainerInfo(c *gin.Context) {
