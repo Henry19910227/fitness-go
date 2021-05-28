@@ -241,55 +241,48 @@ definitions:
         example: 10001
         type: integer
     type: object
-  userdto.TrainerResult:
+  userdto.Trainer:
     properties:
-      token:
-        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTQ0MDc3NjMsInN1YiI6IjEwMDEzIn0.Z5UeEC8ArCVYej9kI1paXD2f5FMFiTfeLpU6e_CZZw0
+      address:
+        description: 住址
+        example: 台北市信義區信義路五段五號
         type: string
-      trainer:
-        description: 教練資訊
-        properties:
-          address:
-            description: 住址
-            example: 台北市信義區信義路五段五號
-            type: string
-          create_at:
-            description: 創建日期
-            example: "2021-05-10 10:00:00"
-            type: string
-          email:
-            description: 信箱
-            example: henry@gmail.com
-            type: string
-          intro:
-            description: 個人介紹
-            example: 健身比賽冠軍
-            type: string
-          name:
-            description: 教練本名
-            example: 王小明
-            type: string
-          nickname:
-            description: 教練暱稱
-            example: Henry
-            type: string
-          phone:
-            description: 電話
-            example: "0978820789"
-            type: string
-          trainer_status:
-            description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
-            example: 1
-            type: integer
-          update_at:
-            description: 修改日期
-            example: "2021-05-10 10:00:00"
-            type: string
-          user_id:
-            description: 用戶id
-            example: 1001
-            type: integer
-        type: object
+      create_at:
+        description: 創建日期
+        example: "2021-05-10 10:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      intro:
+        description: 個人介紹
+        example: 健身比賽冠軍
+        type: string
+      name:
+        description: 教練本名
+        example: 王小明
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      phone:
+        description: 電話
+        example: "0978820789"
+        type: string
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-05-10 10:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 1001
+        type: integer
     type: object
   userdto.User:
     properties:
@@ -598,7 +591,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_trainer_token: []
+      - fitness_user_token: []
       summary: 創建課表
       tags:
       - Course
@@ -636,7 +629,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_trainer_token: []
+      - fitness_user_token: []
       summary: 更新課表
       tags:
       - Course
@@ -1102,7 +1095,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/userdto.TrainerResult'
+                  $ref: '#/definitions/userdto.Trainer'
               type: object
         "400":
           description: 失敗!
@@ -1142,10 +1135,6 @@ paths:
       - User
 securityDefinitions:
   fitness_admin_token:
-    in: header
-    name: Token
-    type: apiKey
-  fitness_trainer_token:
     in: header
     name: Token
     type: apiKey

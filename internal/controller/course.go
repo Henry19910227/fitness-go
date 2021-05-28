@@ -12,12 +12,12 @@ type Course struct {
 	courseService service.Course
 }
 
-func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, trainerMiddle gin.HandlerFunc) {
+func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, userMiddleware gin.HandlerFunc) {
 
 	course := &Course{courseService: courseService}
 
 	courseGroup := baseGroup.Group("/course")
-	courseGroup.Use(trainerMiddle)
+	courseGroup.Use(userMiddleware)
 	courseGroup.POST("", course.CreateCourse)
 	courseGroup.PATCH("/:course_id", course.UpdateCourse)
 }
@@ -28,7 +28,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, trainer
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_trainer_token
+// @Security fitness_user_token
 // @Param json_body body validator.CreateCourseBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=coursedto.CreateResult} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
@@ -63,7 +63,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_trainer_token
+// @Security fitness_user_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.UpdateCourseBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=coursedto.Course} "更新成功!"
