@@ -66,7 +66,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // @Security fitness_trainer_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.UpdateCourseBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult "更新成功!"
+// @Success 200 {object} model.SuccessResult{data=coursedto.Course} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /course/{course_id} [PATCH]
 func (cc *Course) UpdateCourse(c *gin.Context) {
