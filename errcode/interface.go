@@ -23,8 +23,8 @@ var (
 	RegisterFailure    = NewError(1400, errors.New("註冊失敗"))
 	SendOTPFailure     = NewError(1401, errors.New("信箱驗證碼發送失敗"))
 	OTPInvalid         = NewError(1402, errors.New("無效的信箱驗證碼"))
-	NicknameDuplicate  = NewError(1405, errors.New("該暱稱已被使用"))
-	EmailDuplicate     = NewError(1406, errors.New("該信箱已被使用"))
+	NicknameDuplicate  = NewError(1405, errors.New("此名稱已有人使用，請試試其他名稱"))
+	EmailDuplicate     = NewError(1406, errors.New("此郵件已有註冊紀錄，請返回登入"))
 	AccountDuplicate   = NewError(1407, errors.New("該帳號已被使用"))
 )
 
