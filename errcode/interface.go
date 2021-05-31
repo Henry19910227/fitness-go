@@ -12,6 +12,8 @@ var (
 	InvalidThirdParty = NewError(9004, errors.New("無效的第三方驗證"))
 	InvalidToken      = NewError(9005, errors.New("無效的token"))
 	PermissionDenied  = NewError(9006, errors.New("權限不足,存取遭拒"))
+	FileTypeError     = NewError(9007, errors.New("上傳檔案類型不符合規範"))
+	FileSizeError     = NewError(9008, errors.New("上傳檔案大小超過限制"))
 
 	// Login
 	LoginFailure     = NewError(1100, errors.New("登入失敗, 帳號或密碼錯誤"))
@@ -50,6 +52,10 @@ type Handler interface {
 	InvalidToken() Error
 	// NewError(9006, errors.New("權限不足,存取遭拒"))
 	PermissionDenied() Error
+    // NewError(9007, errors.New("上傳檔案類型不符合規範"))
+	FileTypeError() Error
+    // NewError(9008, errors.New("上傳檔案大小超過限制"))
+	FileSizeError() Error
 
 	/** 註冊 */
 	// NewError(1400, errors.New("註冊失敗"))

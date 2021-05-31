@@ -40,6 +40,14 @@ func (handler handler) PermissionDenied() Error {
 	return PermissionDenied
 }
 
+func (handler handler) FileTypeError() Error {
+	return FileTypeError
+}
+
+func (handler handler) FileSizeError() Error {
+	return FileSizeError
+}
+
 /** 註冊 */
 func (handler handler) RegisterFailure() Error {
 	return RegisterFailure

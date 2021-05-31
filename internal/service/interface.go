@@ -54,4 +54,5 @@ type Course interface {
 	UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error)
 	GetCourseByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.Course, errcode.Error)
 	GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error)
+	UploadCourseImageByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseImageParam) (*coursedto.CourseImage, errcode.Error)
 }

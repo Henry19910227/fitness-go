@@ -1,7 +1,13 @@
 package coursedto
 
+import "mime/multipart"
+
 type CreateResult struct {
 	ID int64 `json:"course_id" example:"1"` //課表 id
+}
+
+type CourseImage struct {
+	Image string `json:"course_image" example:"dkf2se51fsdds.png"` // 課表封面照片
 }
 
 type CreateCourseParam struct {
@@ -28,6 +34,11 @@ type UpdateCourseParam struct {
 	BodyTarget *string `gorm:"column:body_target"`            // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
 	Notice *string `gorm:"column:notice"`                     // 注意事項
 	UpdateAt *string `gorm:"column:update_at"`                // 更新時間
+}
+
+type UploadCourseImageParam struct {
+	ImageNamed string
+	File multipart.File
 }
 
 type Course struct {

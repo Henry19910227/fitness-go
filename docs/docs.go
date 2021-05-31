@@ -198,6 +198,68 @@ var doc = `{
                 }
             }
         },
+        "/course/{course_id}/image": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "上傳課表封面照",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "上傳課表封面照",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/coursedto.CourseImage"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/login/admin/email": {
             "post": {
                 "description": "管理者使用信箱登入",
@@ -1122,6 +1184,16 @@ var doc = `{
                     "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "coursedto.CourseImage": {
+            "type": "object",
+            "properties": {
+                "course_image": {
+                    "description": "課表封面照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
                 }
             }
         },

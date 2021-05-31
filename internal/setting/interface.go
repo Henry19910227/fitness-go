@@ -43,3 +43,14 @@ type Logger interface {
 	GetLogRotationTime() time.Duration
 	GetRunMode() string
 }
+
+type Uploader interface {
+	GetUploadSavePath() string
+	GetUploadImageAllowExts() []string
+	GetUploadImageMaxSize() int
+}
+
+type UploadLimit interface {
+	ImageAllowExts() []string
+	ImageMaxSize() int
+}

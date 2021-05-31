@@ -10,18 +10,20 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"strings"
 )
 
 type course struct {
 	Base
 	courseRepo repository.Course
+	uploader  handler.Uploader
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewCourse(courseRepo repository.Course, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Course {
-	return &course{courseRepo: courseRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewCourse(courseRepo repository.Course, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Course {
+	return &course{courseRepo: courseRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error) {
@@ -102,3 +104,19 @@ func (cs *course) GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Cour
 	}
 	return &course, nil
 }
+
+func (cs *course) UploadCourseImageByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseImageParam) (*coursedto.CourseImage, errcode.Error) {
+	newImageNamed, err := cs.uploader.UploadCourseImage(param.File, param.ImageNamed, courseID)
+	if err != nil {
+		if strings.Contains(err.Error(), "9007") {
+			return nil, cs.errHandler.FileTypeError()
+		}
+		if strings.Contains(err.Error(), "9008") {
+			return nil, cs.errHandler.FileSizeError()
+		}
+		cs.logger.Set(c, handler.Error, "Uploader Handler", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	return &coursedto.CourseImage{Image: newImageNamed}, nil
+}
+

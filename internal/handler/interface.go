@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"io"
 )
 
 type LogLevel int
@@ -30,4 +31,8 @@ type SSO interface {
 
 type Logger interface {
 	Set(c *gin.Context, level LogLevel, tag string, code int, msg string)
+}
+
+type Uploader interface {
+	UploadCourseImage(file io.Reader, imageNamed string, courseID int64) (string, error)
 }

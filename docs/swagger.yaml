@@ -82,6 +82,13 @@ definitions:
         example: 10001
         type: integer
     type: object
+  coursedto.CourseImage:
+    properties:
+      course_image:
+        description: 課表封面照片
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
   coursedto.CreateResult:
     properties:
       course_id:
@@ -662,6 +669,43 @@ paths:
       security:
       - fitness_user_token: []
       summary: 更新課表
+      tags:
+      - Course
+  /course/{course_id}/image:
+    put:
+      consumes:
+      - multipart/form-data
+      description: 上傳課表封面照
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 課表封面照
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.CourseImage'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳課表封面照
       tags:
       - Course
   /login/admin/email:
