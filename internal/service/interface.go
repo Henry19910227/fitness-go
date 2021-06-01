@@ -43,10 +43,6 @@ type User interface {
 	UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
 	GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.Error)
 	GetUserByToken(c *gin.Context, token string) (*userdto.User, errcode.Error)
-	CreateTrainer(c *gin.Context, uid int64, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
-	CreateTrainerByToken(c *gin.Context, token string, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
-	GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer, errcode.Error)
-	GetTrainerInfoByToken(c *gin.Context, token string) (*trainerdto.Trainer, errcode.Error)
 }
 
 type Trainer interface {
