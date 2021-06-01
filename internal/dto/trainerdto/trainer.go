@@ -24,3 +24,7 @@ type CreateTrainerParam struct {
 type CreateTrainerResult struct {
 	UserID int64 `json:"user_id" example:"10001"`
 }
+
+type Avatar struct {
+	Avatar string `json:"avatar" example:"dkf2se51fsdds.png"` // 教練大頭照
+}

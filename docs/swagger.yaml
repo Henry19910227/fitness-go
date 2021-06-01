@@ -248,6 +248,13 @@ definitions:
         example: 10001
         type: integer
     type: object
+  trainerdto.Avatar:
+    properties:
+      avatar:
+        description: 教練大頭照
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
   trainerdto.Trainer:
     properties:
       address:
@@ -1127,6 +1134,38 @@ paths:
       security:
       - fitness_user_token: []
       summary: 創建我的教練身份
+      tags:
+      - Trainer
+  /trainer/avatar:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/trainer/avatar/{圖片名}'
+      parameters:
+      - description: 教練大頭照
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/trainerdto.Avatar'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳教練大頭照
       tags:
       - Trainer
   /trainer/info:

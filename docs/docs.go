@@ -935,6 +935,61 @@ var doc = `{
                 }
             }
         },
+        "/trainer/avatar": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/trainer/avatar/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "上傳教練大頭照",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "教練大頭照",
+                        "name": "avatar",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/trainerdto.Avatar"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/trainer/info": {
             "get": {
                 "security": [
@@ -1406,6 +1461,16 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "trainerdto.Avatar": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
                 }
             }
         },

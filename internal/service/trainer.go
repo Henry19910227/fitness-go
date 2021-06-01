@@ -10,19 +10,21 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"mime/multipart"
 	"strings"
 )
 
 type trainer struct {
 	Base
 	trainerRepo repository.Trainer
+	uploader  handler.Uploader
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewTrainer(trainerRepo repository.Trainer, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
-	return &trainer{trainerRepo: trainerRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewTrainer(trainerRepo repository.Trainer, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
+	return &trainer{trainerRepo: trainerRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 
@@ -86,6 +88,37 @@ func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*trainerd
 		return nil, t.errHandler.InvalidToken()
 	}
 	return t.GetTrainerInfo(c, uid)
+}
+
+func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error) {
+	//上傳照片
+	newImageNamed, err := t.uploader.UploadTrainerAvatar(imageFile, imageNamed, uid)
+	if err != nil {
+		if strings.Contains(err.Error(), "9007") {
+			return nil, t.errHandler.FileTypeError()
+		}
+		if strings.Contains(err.Error(), "9008") {
+			return nil, t.errHandler.FileSizeError()
+		}
+		t.logger.Set(c, handler.Error, "Uploader Handler", t.errHandler.SystemError().Code(), err.Error())
+		return nil, t.errHandler.SystemError()
+	}
+	//修改教練資訊
+	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
+		Avatar: &newImageNamed,
+	}); err != nil {
+		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
+		return nil, t.errHandler.SystemError()
+	}
+	return &trainerdto.Avatar{Avatar: newImageNamed}, nil
+}
+
+func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error) {
+	uid, err := t.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, t.errHandler.InvalidToken()
+	}
+	return t.UploadTrainerAvatarByUID(c, uid, imageNamed, imageFile)
 }
 
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {

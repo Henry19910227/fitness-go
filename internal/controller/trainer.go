@@ -78,3 +78,33 @@ func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 	}
 	t.JSONSuccessResponse(c, result, "success!")
 }
+
+// UploadTrainerAvatar 上傳教練大頭照
+// @Summary 上傳教練大頭照
+// @Description 查看教練大頭照 : https://www.fitness-app.tk/api/v1/trainer/avatar/{圖片名}
+// @Tags Trainer
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param avatar formData file true "教練大頭照"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=trainerdto.Avatar} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /trainer/avatar [POST]
+func (t *Trainer) UploadTrainerAvatar(c *gin.Context) {
+	var header validator.TokenHeader
+	if err := c.ShouldBindHeader(&header); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("avatar")
+	if err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := t.trainerService.UploadTrainerAvatarByToken(c, header.Token, fileHeader.Filename, file)
+	if e != nil {
+		t.JSONErrorResponse(c, e)
+		return
+	}
+	t.JSONSuccessResponse(c, result, "success upload")
+}
