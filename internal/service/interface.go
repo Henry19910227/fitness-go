@@ -48,6 +48,13 @@ type User interface {
 	GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.Trainer, errcode.Error)
 }
 
+type Trainer interface {
+	CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
+	CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
+	GetTrainerInfo(c *gin.Context, uid int64) (*userdto.Trainer, errcode.Error)
+	GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.Trainer, errcode.Error)
+}
+
 type Course interface {
 	CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
 	CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
