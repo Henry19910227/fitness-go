@@ -248,11 +248,15 @@ definitions:
         example: 10001
         type: integer
     type: object
-  userdto.Trainer:
+  trainerdto.Trainer:
     properties:
       address:
         description: 住址
         example: 台北市信義區信義路五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: ld3ae0faf5we.png
         type: string
       create_at:
         description: 創建日期
@@ -1097,6 +1101,60 @@ paths:
       summary: 驗證暱稱是否可使用
       tags:
       - Register
+  /trainer:
+    post:
+      consumes:
+      - application/json
+      description: 創建我的教練身份
+      parameters:
+      - description: 輸入欄位
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateTrainerBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建我的教練身份
+      tags:
+      - Trainer
+  /trainer/info:
+    get:
+      consumes:
+      - application/json
+      description: 取得我的教練身份資訊
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/trainerdto.Trainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 取得我的教練身份資訊
+      tags:
+      - Trainer
   /user/info:
     get:
       consumes:
@@ -1170,7 +1228,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/userdto.Trainer'
+                  $ref: '#/definitions/trainerdto.Trainer'
               type: object
         "400":
           description: 失敗!

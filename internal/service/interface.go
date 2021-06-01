@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
+	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/gin-gonic/gin"
 )
@@ -42,17 +43,17 @@ type User interface {
 	UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
 	GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.Error)
 	GetUserByToken(c *gin.Context, token string) (*userdto.User, errcode.Error)
-	CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
-	CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
-	GetTrainerInfo(c *gin.Context, uid int64) (*userdto.Trainer, errcode.Error)
-	GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.Trainer, errcode.Error)
+	CreateTrainer(c *gin.Context, uid int64, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
+	CreateTrainerByToken(c *gin.Context, token string, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
+	GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer, errcode.Error)
+	GetTrainerInfoByToken(c *gin.Context, token string) (*trainerdto.Trainer, errcode.Error)
 }
 
 type Trainer interface {
-	CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
-	CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
-	GetTrainerInfo(c *gin.Context, uid int64) (*userdto.Trainer, errcode.Error)
-	GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.Trainer, errcode.Error)
+	CreateTrainer(c *gin.Context, uid int64, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
+	CreateTrainerByToken(c *gin.Context, token string, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
+	GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer, errcode.Error)
+	GetTrainerInfoByToken(c *gin.Context, token string) (*trainerdto.Trainer, errcode.Error)
 }
 
 type Course interface {

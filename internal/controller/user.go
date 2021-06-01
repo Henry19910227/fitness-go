@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -108,7 +109,7 @@ func (u *user) CreateTrainer(c *gin.Context)  {
 		u.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result , err := u.userService.CreateTrainerByToken(c, header.Token, &userdto.CreateTrainerParam{
+	result , err := u.userService.CreateTrainerByToken(c, header.Token, &trainerdto.CreateTrainerParam{
 		Name: body.Name,
 		Nickname: body.Nickname,
 		Phone: body.Phone,
@@ -128,7 +129,7 @@ func (u *user) CreateTrainer(c *gin.Context)  {
 // @Accept json
 // @Produce json
 // @Security fitness_user_token
-// @Success 200 {object} model.SuccessResult{data=userdto.Trainer} "成功!"
+// @Success 200 {object} model.SuccessResult{data=trainerdto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /user/role/trainer [GET]
 func (u *user) GetTrainerInfo(c *gin.Context) {

@@ -872,6 +872,97 @@
                 }
             }
         },
+        "/trainer": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "創建我的教練身份",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "創建我的教練身份",
+                "parameters": [
+                    {
+                        "description": "輸入欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateTrainerBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer/info": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "取得我的教練身份資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "取得我的教練身份資訊",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/trainerdto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/user/info": {
             "get": {
                 "security": [
@@ -1003,7 +1094,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/userdto.Trainer"
+                                            "$ref": "#/definitions/trainerdto.Trainer"
                                         }
                                     }
                                 }
@@ -1389,13 +1480,18 @@
                 }
             }
         },
-        "userdto.Trainer": {
+        "trainerdto.Trainer": {
             "type": "object",
             "properties": {
                 "address": {
                     "description": "住址",
                     "type": "string",
                     "example": "台北市信義區信義路五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
                 },
                 "create_at": {
                     "description": "創建日期",

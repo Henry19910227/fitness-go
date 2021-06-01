@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
@@ -106,7 +107,7 @@ func (u *user) GetUserByToken(c *gin.Context, token string) (*userdto.User, errc
 	return u.GetUserByUID(c, uid)
 }
 
-func (u *user) CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error) {
+func (u *user) CreateTrainer(c *gin.Context, uid int64, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error) {
 	//檢查教練身份是否存在
 	isExists, e := u.trainerIsExists(c, uid)
 	if e != nil {
@@ -134,10 +135,10 @@ func (u *user) CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTra
 		u.logger.Set(c, handler.Error, "Trainer Repo", u.errHandler.SystemError().Code(), err.Error())
 		return nil, u.errHandler.SystemError()
 	}
-	return &userdto.CreateTrainerResult{UserID: uid}, nil
+	return &trainerdto.CreateTrainerResult{UserID: uid}, nil
 }
 
-func (u *user) CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error) {
+func (u *user) CreateTrainerByToken(c *gin.Context, token string, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error) {
 	uid, err := u.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, u.errHandler.InvalidToken()
@@ -145,9 +146,9 @@ func (u *user) CreateTrainerByToken(c *gin.Context, token string, param *userdto
 	return u.CreateTrainer(c, uid, param)
 }
 
-func (u *user) GetTrainerInfo(c *gin.Context, uid int64) (*userdto.Trainer, errcode.Error) {
+func (u *user) GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer, errcode.Error) {
 	//獲取trainer資訊
-	var result userdto.Trainer
+	var result trainerdto.Trainer
 	if err := u.trainerRepo.FindTrainerByUID(uid, &result); err != nil {
 		//查無此資料
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -160,7 +161,7 @@ func (u *user) GetTrainerInfo(c *gin.Context, uid int64) (*userdto.Trainer, errc
 	return &result, nil
 }
 
-func (u *user) GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.Trainer, errcode.Error) {
+func (u *user) GetTrainerInfoByToken(c *gin.Context, token string) (*trainerdto.Trainer, errcode.Error) {
 	uid, err := u.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, u.errHandler.InvalidToken()
