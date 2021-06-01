@@ -205,7 +205,7 @@ var doc = `{
                         "fitness_user_token": []
                     }
                 ],
-                "description": "上傳課表封面照",
+                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/course/cover/{圖片名}",
                 "consumes": [
                     "multipart/form-data"
                 ],

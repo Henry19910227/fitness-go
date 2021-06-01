@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Course struct {
@@ -16,6 +17,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, userMid
 
 	course := &Course{courseService: courseService}
 
+	baseGroup.StaticFS("/course/cover", http.Dir("./volumes/storage/course/cover"))
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
 	courseGroup.POST("", course.CreateCourse)
@@ -137,7 +139,7 @@ func (cc *Course) GetCourse(c *gin.Context) {
 
 // UploadCourseCover 上傳課表封面照
 // @Summary 上傳課表封面照
-// @Description 上傳課表封面照
+// @Description 查看封面照 : https://www.fitness-app.tk/api/v1/course/cover/{圖片名}
 // @Tags Course
 // @Security fitness_user_token
 // @Accept mpfd

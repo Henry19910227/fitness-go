@@ -10,7 +10,6 @@ import (
 	"io"
 	"io/ioutil"
 	"path"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -35,9 +34,8 @@ func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string, courseID
 	if !u.checkImageMaxSize(file) {
 		return "", errors.New("9008-上傳檔案大小超過限制")
 	}
-	filePath := "/course/"+strconv.Itoa(int(courseID))+"/cover"
 	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.uploadTool.UploadFile(file, newImageNamed, filePath); err != nil {
+	if err := u.uploadTool.UploadFile(file, newImageNamed, "/course/cover"); err != nil {
 		return "", err
 	}
 	return newImageNamed, nil

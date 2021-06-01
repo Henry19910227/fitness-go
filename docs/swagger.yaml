@@ -675,7 +675,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 上傳課表封面照
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/course/cover/{圖片名}'
       parameters:
       - description: 課表id
         in: path
