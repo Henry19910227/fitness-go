@@ -105,9 +105,9 @@ func (cs *course) GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Cour
 	return &course, nil
 }
 
-func (cs *course) UploadCourseImageByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseImageParam) (*coursedto.CourseImage, errcode.Error) {
+func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error) {
 	//上傳照片
-	newImageNamed, err := cs.uploader.UploadCourseImage(param.File, param.ImageNamed, courseID)
+	newImageNamed, err := cs.uploader.UploadCourseCover(param.File, param.CoverNamed, courseID)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
 			return nil, cs.errHandler.FileTypeError()
@@ -120,11 +120,11 @@ func (cs *course) UploadCourseImageByID(c *gin.Context, courseID int64, param *c
 	}
 	//修改課表資訊
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
-		Image: &newImageNamed,
+		Cover: &newImageNamed,
 	}); err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
-	return &coursedto.CourseImage{Image: newImageNamed}, nil
+	return &coursedto.CourseCover{Cover: newImageNamed}, nil
 }
 

@@ -82,7 +82,7 @@ definitions:
         example: 10001
         type: integer
     type: object
-  coursedto.CourseImage:
+  coursedto.CourseCover:
     properties:
       course_image:
         description: 課表封面照片
@@ -671,8 +671,8 @@ paths:
       summary: 更新課表
       tags:
       - Course
-  /course/{course_id}/image:
-    put:
+  /course/{course_id}/cover:
+    post:
       consumes:
       - multipart/form-data
       description: 上傳課表封面照
@@ -684,7 +684,7 @@ paths:
         type: integer
       - description: 課表封面照
         in: formData
-        name: image
+        name: cover
         required: true
         type: file
       produces:
@@ -697,7 +697,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CourseImage'
+                  $ref: '#/definitions/coursedto.CourseCover'
               type: object
         "400":
           description: 失敗!

@@ -28,14 +28,14 @@ func NewUploader(uploadTool tool.Uploader, uploadLimit setting.UploadLimit) Uplo
 	return &uploader{uploadTool: uploadTool, uploadLimit: uploadLimit}
 }
 
-func (u *uploader) UploadCourseImage(file io.Reader, imageNamed string, courseID int64) (string, error) {
+func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string, courseID int64) (string, error) {
 	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
 		return "", errors.New("9007-上傳檔案不符合規範")
 	}
 	if !u.checkImageMaxSize(file) {
 		return "", errors.New("9008-上傳檔案大小超過限制")
 	}
-	filePath := "/course/"+strconv.Itoa(int(courseID))+"/image"
+	filePath := "/course/"+strconv.Itoa(int(courseID))+"/cover"
 	newImageNamed := generateFileName(path.Ext(imageNamed))
 	if err := u.uploadTool.UploadFile(file, newImageNamed, filePath); err != nil {
 		return "", err

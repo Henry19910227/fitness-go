@@ -21,7 +21,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, userMid
 	courseGroup.POST("", course.CreateCourse)
 	courseGroup.PATCH("/:course_id", course.UpdateCourse)
 	courseGroup.GET("/:course_id", course.GetCourse)
-	courseGroup.PUT("/:course_id/image", course.UploadCourseImage)
+	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
 }
 
 // CreateCourse 創建課表
@@ -135,19 +135,19 @@ func (cc *Course) GetCourse(c *gin.Context) {
 	cc.JSONSuccessResponse(c, course, "獲取成功")
 }
 
-// UploadCourseImage 上傳課表封面照
+// UploadCourseCover 上傳課表封面照
 // @Summary 上傳課表封面照
 // @Description 上傳課表封面照
 // @Tags Course
 // @Security fitness_user_token
 // @Accept mpfd
 // @Param course_id path int64 true "課表id"
-// @Param image formData file true "課表封面照"
+// @Param cover formData file true "課表封面照"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=coursedto.CourseImage} "成功!"
+// @Success 200 {object} model.SuccessResult{data=coursedto.CourseCover} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /course/{course_id}/image [PUT]
-func (cc *Course) UploadCourseImage(c *gin.Context) {
+// @Router /course/{course_id}/cover [POST]
+func (cc *Course) UploadCourseCover(c *gin.Context) {
 	var header validator.TokenHeader
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindHeader(&header); err != nil {
@@ -158,14 +158,14 @@ func (cc *Course) UploadCourseImage(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	file, fileHeader, err := c.Request.FormFile("image")
+	file, fileHeader, err := c.Request.FormFile("cover")
 	if err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, e := cc.courseService.UploadCourseImageByID(c, uri.CourseID, &coursedto.UploadCourseImageParam{
-		File: file,
-		ImageNamed: fileHeader.Filename,
+	result, e := cc.courseService.UploadCourseCoverByID(c, uri.CourseID, &coursedto.UploadCourseCoverParam{
+		File:       file,
+		CoverNamed: fileHeader.Filename,
 	})
 	if e != nil {
 		cc.JSONErrorResponse(c, e)

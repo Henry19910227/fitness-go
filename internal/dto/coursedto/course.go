@@ -6,8 +6,8 @@ type CreateResult struct {
 	ID int64 `json:"course_id" example:"1"` //課表 id
 }
 
-type CourseImage struct {
-	Image string `json:"course_image" example:"dkf2se51fsdds.png"` // 課表封面照片
+type CourseCover struct {
+	Cover string `json:"course_image" example:"dkf2se51fsdds.png"` // 課表封面照片
 }
 
 type CreateCourseParam struct {
@@ -36,9 +36,9 @@ type UpdateCourseParam struct {
 	UpdateAt *string `gorm:"column:update_at"`                // 更新時間
 }
 
-type UploadCourseImageParam struct {
-	ImageNamed string
-	File multipart.File
+type UploadCourseCoverParam struct {
+	CoverNamed string
+	File       multipart.File
 }
 
 type Course struct {

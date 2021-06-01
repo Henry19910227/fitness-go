@@ -34,5 +34,5 @@ type Logger interface {
 }
 
 type Uploader interface {
-	UploadCourseImage(file io.Reader, imageNamed string, courseID int64) (string, error)
+	UploadCourseCover(file io.Reader, imageNamed string, courseID int64) (string, error)
 }

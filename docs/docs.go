@@ -198,8 +198,8 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/image": {
-            "put": {
+        "/course/{course_id}/cover": {
+            "post": {
                 "security": [
                     {
                         "fitness_user_token": []
@@ -227,7 +227,7 @@ var doc = `{
                     {
                         "type": "file",
                         "description": "課表封面照",
-                        "name": "image",
+                        "name": "cover",
                         "in": "formData",
                         "required": true
                     }
@@ -244,7 +244,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseImage"
+                                            "$ref": "#/definitions/coursedto.CourseCover"
                                         }
                                     }
                                 }
@@ -1187,7 +1187,7 @@ var doc = `{
                 }
             }
         },
-        "coursedto.CourseImage": {
+        "coursedto.CourseCover": {
             "type": "object",
             "properties": {
                 "course_image": {
