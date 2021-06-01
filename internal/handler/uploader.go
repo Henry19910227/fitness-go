@@ -15,6 +15,10 @@ import (
 	"time"
 )
 
+type Size interface {
+	Size() int64
+}
+
 type uploader struct {
 	uploadTool tool.Uploader
 	uploadLimit setting.UploadLimit
@@ -28,13 +32,12 @@ func (u *uploader) UploadCourseImage(file io.Reader, imageNamed string, courseID
 	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
 		return "", errors.New("9007-上傳檔案不符合規範")
 	}
-	data, isRegular := u.checkUploadImageMaxSize(file)
-	if !isRegular {
+	if !u.checkImageMaxSize(file) {
 		return "", errors.New("9008-上傳檔案大小超過限制")
 	}
 	filePath := "/course/"+strconv.Itoa(int(courseID))+"/image"
 	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.uploadTool.UploadFile(data, newImageNamed, filePath); err != nil {
+	if err := u.uploadTool.UploadFile(file, newImageNamed, filePath); err != nil {
 		return "", err
 	}
 	return newImageNamed, nil
@@ -50,6 +53,15 @@ func (u *uploader) checkUploadImageAllowExt(ext string) bool {
 	return false
 }
 
+func (u *uploader) checkImageMaxSize(file io.Reader) bool {
+	if sizeValue, ok := file.(Size); ok {
+		 size := int(sizeValue.Size())
+		 return size < u.uploadLimit.ImageMaxSize() * 1024 * 1024
+	}
+	return false
+}
+
+// 舊的上傳判斷法
 func (u *uploader) checkUploadImageMaxSize(file io.Reader) (io.Reader, bool) {
 	content, _ := ioutil.ReadAll(file)
 	//因ReadAll讀取完後第二次會讀取不到，必須使用NopCloser將資料寫回
