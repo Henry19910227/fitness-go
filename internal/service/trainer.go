@@ -105,7 +105,7 @@ func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed
 		return nil, t.errHandler.SystemError()
 	}
 	//查詢教練資訊
-	var trainer trainerdto.Trainer
+	var trainer struct{ Avatar string `gorm:"column:avatar"`}
 	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
 		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
 		return nil, t.errHandler.SystemError()
