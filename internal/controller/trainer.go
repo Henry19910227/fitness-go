@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Trainer struct {
@@ -13,11 +14,13 @@ type Trainer struct {
 }
 
 func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, userMiddleware gin.HandlerFunc)  {
+	baseGroup.StaticFS("/resource/trainer/avatar", http.Dir("./volumes/storage/trainer/avatar"))
 	trainer := &Trainer{trainerService: trainerService}
 	trainerGroup := baseGroup.Group("/trainer")
 	trainerGroup.Use(userMiddleware)
 	trainerGroup.POST("", trainer.CreateTrainer)
 	trainerGroup.GET("/info", trainer.GetTrainerInfo)
+	trainerGroup.POST("/avatar", trainer.UploadMyTrainerAvatar)
 }
 
 // CreateTrainer 創建我的教練身份
@@ -79,9 +82,9 @@ func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 	t.JSONSuccessResponse(c, result, "success!")
 }
 
-// UploadTrainerAvatar 上傳教練大頭照
-// @Summary 上傳教練大頭照
-// @Description 查看教練大頭照 : https://www.fitness-app.tk/api/v1/trainer/avatar/{圖片名}
+// UploadMyTrainerAvatar 上傳我的教練大頭照
+// @Summary 上傳我的教練大頭照
+// @Description 查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
 // @Tags Trainer
 // @Security fitness_user_token
 // @Accept mpfd
@@ -90,7 +93,7 @@ func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 // @Success 200 {object} model.SuccessResult{data=trainerdto.Avatar} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /trainer/avatar [POST]
-func (t *Trainer) UploadTrainerAvatar(c *gin.Context) {
+func (t *Trainer) UploadMyTrainerAvatar(c *gin.Context) {
 	var header validator.TokenHeader
 	if err := c.ShouldBindHeader(&header); err != nil {
 		t.JSONValidatorErrorResponse(c, err.Error())

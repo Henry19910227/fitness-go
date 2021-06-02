@@ -205,7 +205,7 @@ var doc = `{
                         "fitness_user_token": []
                     }
                 ],
-                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/course/cover/{圖片名}",
+                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -942,7 +942,7 @@ var doc = `{
                         "fitness_user_token": []
                     }
                 ],
-                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/trainer/avatar/{圖片名}",
+                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -952,7 +952,7 @@ var doc = `{
                 "tags": [
                     "Trainer"
                 ],
-                "summary": "上傳教練大頭照",
+                "summary": "上傳我的教練大頭照",
                 "parameters": [
                     {
                         "type": "file",
