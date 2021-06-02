@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
      `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '修改日期',
      `email` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '信箱',
      `nickname` VARCHAR(20) NOT NULL UNIQUE DEFAULT '' COMMENT '暱稱',
+     `avatar` VARCHAR(50) NOT NULL  DEFAULT '' COMMENT '用戶大頭貼',
      `sex` CHAR(1) NOT NULL DEFAULT '' COMMENT '性別 (m:男/f:女)',
      `birthday` DATE NOT NULL DEFAULT '0000-01-01' COMMENT '生日',
      `height` FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '身高',

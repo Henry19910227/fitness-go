@@ -12,6 +12,7 @@ type User struct {
 	UpdateAt         string  `gorm:"column:update_at"`           // 修改日期
 	Email            string  `gorm:"column:email"`               // 信箱
 	Nickname         string  `gorm:"column:nickname"`            // 暱稱
+	Avatar           string  `gorm:"column:avatar"`              // 用戶大頭貼
 	Sex              string  `gorm:"column:sex"`                 // 性別 (m:男/f:女)
 	Birthday         string  `gorm:"column:birthday"`            // 生日
 	Height           int     `gorm:"column:height"`              // 身高
@@ -34,6 +35,7 @@ type UpdateUserParam struct {
 	UpdateAt    *string `gorm:"column:update_at"`
 	Email       *string `gorm:"column:email"`
 	Nickname    *string `gorm:"column:nickname"`
+	Avatar      *string `gorm:"column:avatar"`
 	Sex         *string `gorm:"column:sex"`
 	Birthday    *string `gorm:"column:birthday"`
 	Height      *float64 `gorm:"column:height"`
