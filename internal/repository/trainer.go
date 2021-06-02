@@ -40,3 +40,29 @@ func (t *trainer) FindTrainerByUID(uid int64, entity interface{}) error {
 	}
 	return nil
 }
+
+func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error {
+	var selects []interface{}
+	if param.Name != nil { selects = append(selects, "name") }
+	if param.Nickname != nil { selects = append(selects, "nickname") }
+	if param.Avatar != nil { selects = append(selects, "avatar") }
+	if param.TrainerStatus != nil { selects = append(selects, "trainer_status") }
+	if param.Email != nil { selects = append(selects, "email") }
+	if param.Phone != nil { selects = append(selects, "phone") }
+	if param.Address != nil { selects = append(selects, "address") }
+	if param.Intro != nil { selects = append(selects, "intro") }
+	//插入更新時間
+	if param != nil {
+		selects = append(selects, "update_at")
+		var updateAt = time.Now().Format("2006-01-02 15:04:05")
+		param.UpdateAt = &updateAt
+	}
+	if err := t.gorm.DB().
+		Table("trainers").
+		Where("user_id = ?", uid).
+		Select("", selects...).
+		Updates(param).Error; err != nil {
+		return err
+	}
+	return nil
+}

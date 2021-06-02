@@ -82,6 +82,13 @@ definitions:
         example: 10001
         type: integer
     type: object
+  coursedto.CourseCover:
+    properties:
+      course_image:
+        description: 課表封面照片
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
   coursedto.CreateResult:
     properties:
       course_id:
@@ -241,11 +248,22 @@ definitions:
         example: 10001
         type: integer
     type: object
-  userdto.Trainer:
+  trainerdto.Avatar:
+    properties:
+      avatar:
+        description: 教練大頭照
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
+  trainerdto.Trainer:
     properties:
       address:
         description: 住址
         example: 台北市信義區信義路五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: ld3ae0faf5we.png
         type: string
       create_at:
         description: 創建日期
@@ -664,6 +682,43 @@ paths:
       summary: 更新課表
       tags:
       - Course
+  /course/{course_id}/cover:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}'
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 課表封面照
+        in: formData
+        name: cover
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.CourseCover'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳課表封面照
+      tags:
+      - Course
   /login/admin/email:
     post:
       consumes:
@@ -1053,6 +1108,92 @@ paths:
       summary: 驗證暱稱是否可使用
       tags:
       - Register
+  /trainer:
+    post:
+      consumes:
+      - application/json
+      description: 創建我的教練身份
+      parameters:
+      - description: 輸入欄位
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateTrainerBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建我的教練身份
+      tags:
+      - Trainer
+  /trainer/avatar:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}'
+      parameters:
+      - description: 教練大頭照
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/trainerdto.Avatar'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳我的教練大頭照
+      tags:
+      - Trainer
+  /trainer/info:
+    get:
+      consumes:
+      - application/json
+      description: 取得我的教練身份資訊
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/trainerdto.Trainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 取得我的教練身份資訊
+      tags:
+      - Trainer
   /user/info:
     get:
       consumes:
@@ -1109,59 +1250,6 @@ paths:
       security:
       - fitness_user_token: []
       summary: 更新個人資訊
-      tags:
-      - User
-  /user/role/trainer:
-    get:
-      consumes:
-      - application/json
-      description: 取得我的教練身份資訊
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/userdto.Trainer'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_user_token: []
-      summary: 取得我的教練身份資訊
-      tags:
-      - User
-    post:
-      consumes:
-      - application/json
-      description: 創建我的教練身份
-      parameters:
-      - description: 輸入欄位
-        in: body
-        name: json_body
-        required: true
-        schema:
-          $ref: '#/definitions/validator.CreateTrainerBody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            $ref: '#/definitions/model.SuccessResult'
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_user_token: []
-      summary: 創建我的教練身份
       tags:
       - User
 securityDefinitions:

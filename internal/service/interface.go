@@ -5,8 +5,10 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
+	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/gin-gonic/gin"
+	"mime/multipart"
 )
 
 type Migrate interface {
@@ -42,10 +44,15 @@ type User interface {
 	UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
 	GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.Error)
 	GetUserByToken(c *gin.Context, token string) (*userdto.User, errcode.Error)
-	CreateTrainer(c *gin.Context, uid int64, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
-	CreateTrainerByToken(c *gin.Context, token string, param *userdto.CreateTrainerParam) (*userdto.CreateTrainerResult, errcode.Error)
-	GetTrainerInfo(c *gin.Context, uid int64) (*userdto.Trainer, errcode.Error)
-	GetTrainerInfoByToken(c *gin.Context, token string) (*userdto.Trainer, errcode.Error)
+}
+
+type Trainer interface {
+	CreateTrainer(c *gin.Context, uid int64, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
+	CreateTrainerByToken(c *gin.Context, token string, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
+	GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer, errcode.Error)
+	GetTrainerInfoByToken(c *gin.Context, token string) (*trainerdto.Trainer, errcode.Error)
+	UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error)
+	UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error)
 }
 
 type Course interface {
@@ -54,4 +61,5 @@ type Course interface {
 	UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error)
 	GetCourseByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.Course, errcode.Error)
 	GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error)
+	UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error)
 }

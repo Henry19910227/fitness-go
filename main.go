@@ -31,11 +31,14 @@ var (
 	jwtTool     tool.JWT
 	logTool     tool.Logger
 	otpTool     tool.OTP
+	resTool     tool.Resource
 )
 
 var (
 	logHandler  handler.Logger
 	ssoHandler  handler.SSO
+	uploadHandler handler.Uploader
+	resHandler handler.Resource
 )
 
 var (
@@ -44,6 +47,7 @@ var (
 	loginService    service.Login
 	regService      service.Register
 	userService     service.User
+	trainerService  service.Trainer
 	courseService   service.Course
 )
 
@@ -90,6 +94,7 @@ func main() {
 	controller.NewRegister(baseGroup, regService)
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
+	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
 	controller.NewCourse(baseGroup, courseService, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
@@ -107,6 +112,7 @@ func setupTool() {
 	jwtTool = tool.NewJWT(setting.NewJWT(viperTool))
 	redisTool = tool.NewRedis(setting.NewRedis(viperTool))
 	otpTool = tool.NewOTP()
+	resTool = tool.NewFile(setting.NewUploader(viperTool))
 }
 
 func setupLogTool() {
@@ -161,6 +167,8 @@ func setupMigrateTool()  {
 func setupHandler() {
 	logHandler = handler.NewLogger(logTool, jwtTool)
 	ssoHandler = handler.NewSSO(jwtTool, redisTool, setting.NewUser(viperTool))
+	uploadHandler = handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
+	resHandler = handler.NewResource(resTool)
 }
 
 /** Service */
@@ -170,6 +178,7 @@ func setupService() {
 	setupLoginService()
 	setupRegService()
 	setupUserService()
+	setupTrainerService()
 	setupCourseService()
 }
 
@@ -192,12 +201,17 @@ func setupRegService()  {
 func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
-	userService = service.NewUser(userRepo, trainerRepo, logHandler, ssoHandler, jwtTool, errcode.NewHandler())
+	userService = service.NewUser(userRepo, trainerRepo, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupTrainerService()  {
+	trainerRepo := repository.NewTrainer(gormTool)
+	trainerService = service.NewTrainer(trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupCourseService()  {
 	courseRepo := repository.NewCourse(gormTool)
-	courseService = service.NewCourse(courseRepo, logHandler, jwtTool, errcode.NewHandler())
+	courseService = service.NewCourse(courseRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

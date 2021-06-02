@@ -10,18 +10,24 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"strings"
 )
 
 type course struct {
 	Base
 	courseRepo repository.Course
+	uploader  handler.Uploader
+	resHandler handler.Resource
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewCourse(courseRepo repository.Course, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Course {
-	return &course{courseRepo: courseRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewCourse(courseRepo repository.Course,
+	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
+	jwtTool tool.JWT,
+	errHandler errcode.Handler) Course {
+	return &course{courseRepo: courseRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error) {
@@ -102,3 +108,39 @@ func (cs *course) GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Cour
 	}
 	return &course, nil
 }
+
+func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error) {
+	//上傳照片
+	newImageNamed, err := cs.uploader.UploadCourseCover(param.File, param.CoverNamed)
+	if err != nil {
+		if strings.Contains(err.Error(), "9007") {
+			return nil, cs.errHandler.FileTypeError()
+		}
+		if strings.Contains(err.Error(), "9008") {
+			return nil, cs.errHandler.FileSizeError()
+		}
+		cs.logger.Set(c, handler.Error, "Resource Handler", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	//查詢課表封面
+	var course struct{ Cover string `gorm:"column:cover"`}
+	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
+		cs.logger.Set(c, handler.Error, "Course Repo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	//修改課表資訊
+	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
+		Cover: &newImageNamed,
+	}); err != nil {
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	//刪除舊照片
+	if len(course.Cover) > 0 {
+		if err := cs.resHandler.DeleteTrainerAvatar(course.Cover); err != nil {
+			cs.logger.Set(c, handler.Error, "TrainerRepo", cs.errHandler.SystemError().Code(), err.Error())
+		}
+	}
+	return &coursedto.CourseCover{Cover: newImageNamed}, nil
+}
+

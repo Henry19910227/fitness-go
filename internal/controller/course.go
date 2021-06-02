@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Course struct {
@@ -16,11 +17,13 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, userMid
 
 	course := &Course{courseService: courseService}
 
+	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
 	courseGroup.POST("", course.CreateCourse)
 	courseGroup.PATCH("/:course_id", course.UpdateCourse)
 	courseGroup.GET("/:course_id", course.GetCourse)
+	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
 }
 
 // CreateCourse 創建課表
@@ -132,4 +135,43 @@ func (cc *Course) GetCourse(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, course, "獲取成功")
+}
+
+// UploadCourseCover 上傳課表封面照
+// @Summary 上傳課表封面照
+// @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}
+// @Tags Course
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param course_id path int64 true "課表id"
+// @Param cover formData file true "課表封面照"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=coursedto.CourseCover} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /course/{course_id}/cover [POST]
+func (cc *Course) UploadCourseCover(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("cover")
+	if err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := cc.courseService.UploadCourseCoverByID(c, uri.CourseID, &coursedto.UploadCourseCoverParam{
+		File:       file,
+		CoverNamed: fileHeader.Filename,
+	})
+	if e != nil {
+		cc.JSONErrorResponse(c, e)
+		return
+	}
+	cc.JSONSuccessResponse(c, result, "success upload")
 }

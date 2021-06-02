@@ -180,6 +180,68 @@
                 }
             }
         },
+        "/course/{course_id}/cover": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "上傳課表封面照",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "cover",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/coursedto.CourseCover"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/login/admin/email": {
             "post": {
                 "description": "管理者使用信箱登入",
@@ -810,6 +872,152 @@
                 }
             }
         },
+        "/trainer": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "創建我的教練身份",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "創建我的教練身份",
+                "parameters": [
+                    {
+                        "description": "輸入欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateTrainerBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer/avatar": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "上傳我的教練大頭照",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "教練大頭照",
+                        "name": "avatar",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/trainerdto.Avatar"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer/info": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "取得我的教練身份資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "取得我的教練身份資訊",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/trainerdto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/user/info": {
             "get": {
                 "security": [
@@ -900,95 +1108,6 @@
                                     }
                                 }
                             ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/role/trainer": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_user_token": []
-                    }
-                ],
-                "description": "取得我的教練身份資訊",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "取得我的教練身份資訊",
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/userdto.Trainer"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "fitness_user_token": []
-                    }
-                ],
-                "description": "創建我的教練身份",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "創建我的教練身份",
-                "parameters": [
-                    {
-                        "description": "輸入欄位",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.CreateTrainerBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/model.SuccessResult"
                         }
                     },
                     "400": {
@@ -1104,6 +1223,16 @@
                     "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "coursedto.CourseCover": {
+            "type": "object",
+            "properties": {
+                "course_image": {
+                    "description": "課表封面照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
                 }
             }
         },
@@ -1317,13 +1446,28 @@
                 }
             }
         },
-        "userdto.Trainer": {
+        "trainerdto.Avatar": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "trainerdto.Trainer": {
             "type": "object",
             "properties": {
                 "address": {
                     "description": "住址",
                     "type": "string",
                     "example": "台北市信義區信義路五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
                 },
                 "create_at": {
                     "description": "創建日期",

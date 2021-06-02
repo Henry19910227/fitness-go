@@ -4,7 +4,15 @@ Server:
     ReadTimeout: 60
     WriteTimeout: 60
 App:
-    UploadSavePath: ./volumes/storage
+    Debug:
+      Version: 1.0.8
+    Release:
+      Version: 1.0.8
+Resource:
+    RootPath: ./volumes/storage
+Upload:
+    UploadRootPath: ./volumes/storage
+    UploadImageMaxSize: 5 #MB
     UploadImageAllowExt:
       - .jpg
       - .png
@@ -12,11 +20,6 @@ App:
       - .JPG
       - .PNG
       - .JPEG
-    UploadImageMaxSize: 5 #MB
-    Debug:
-      Version: 1.0.8
-    Release:
-      Version: 1.0.8
 Log:
     FileName: fitness
     FileExt: log

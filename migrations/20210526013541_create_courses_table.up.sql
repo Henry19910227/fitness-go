@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS courses (
    `sale_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '銷售類型(1:免費課表/2:訂閱課表/3:付費課表)',
    `price` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '售價',
    `name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '課表名稱',
-   `image` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '課表封面',
+   `cover` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '課表封面',
    `intro` VARCHAR(400) NOT NULL DEFAULT '' COMMENT '課表介紹',
    `food` VARCHAR(400) NOT NULL DEFAULT '' COMMENT '飲食建議',
    `level` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '強度(1:初級/2:中級/3:中高級/4:高級)',

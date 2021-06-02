@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
+	"io"
 	"time"
 )
 
@@ -64,4 +65,9 @@ type Logger interface {
 type OTP interface {
 	Generate(secret string) (string, error)
 	Validate(code string, secret string) bool
+}
+
+type Resource interface {
+	SaveFile(file io.Reader, filename string, filepath string) error
+	RemoveFile(filepath string, fileNamed string) error
 }
