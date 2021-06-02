@@ -1,0 +1,1264 @@
+definitions:
+  coursedto.Course:
+    properties:
+      body_target:
+        description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
+        example: 4,5
+        type: string
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      create_at:
+        description: 創建時間
+        example: "2021-05-28 11:00:00"
+        type: string
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
+      food:
+        description: 飲食建議
+        example: 佛系飲食
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      image:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      intro:
+        description: 課表介紹
+        example: 佛系課表
+        type: string
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      notice:
+        description: 注意事項
+        example: 小心不要受傷
+        type: string
+      place:
+        description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
+        example: 1,2
+        type: string
+      price:
+        description: 售價
+        example: 330
+        type: integer
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 2
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      suit:
+        description: 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)
+        example: 2,5,7
+        type: string
+      train_target:
+        description: 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
+        example: 2,3,4
+        type: string
+      update_at:
+        description: 更新時間
+        example: "2021-05-29 11:00:00"
+        type: string
+      user_id:
+        description: 用戶 id
+        example: 10001
+        type: integer
+    type: object
+  coursedto.CourseCover:
+    properties:
+      course_image:
+        description: 課表封面照片
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
+  coursedto.CreateResult:
+    properties:
+      course_id:
+        description: 課表 id
+        example: 1
+        type: integer
+    type: object
+  logindto.Admin:
+    properties:
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      id:
+        description: 帳戶id
+        example: 1
+        type: integer
+      lv:
+        description: 身份 (1:一般管理員)
+        example: 1
+        type: integer
+      nickname:
+        description: 暱稱
+        example: henry
+        type: string
+    type: object
+  logindto.User:
+    properties:
+      account:
+        description: 帳號
+        example: henry@gmail.com
+        type: string
+      account_type:
+        description: 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
+        example: 1
+        type: integer
+      birthday:
+        description: 生日
+        example: "1991-02-27"
+        type: string
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      device_token:
+        description: 推播 Token
+        example: f144b48d9695...
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
+        example: 2
+        type: integer
+      height:
+        description: 身高
+        example: 176.5
+        type: number
+      id:
+        description: 帳戶id
+        example: 10001
+        type: integer
+      is_trainer:
+        description: 是否擁有教練身份(0:否/1:是)
+        example: 1
+        type: integer
+      nickname:
+        description: 暱稱
+        example: Henry
+        type: string
+      sex:
+        description: 性別 (m:男/f:女)
+        example: m
+        type: string
+      target:
+        description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
+        example: 3
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      user_status:
+        description: 用戶狀態 (1:正常/2:違規/3:刪除)
+        example: 1
+        type: integer
+      user_type:
+        description: 用戶狀態 (1:一般用戶/2:訂閱用戶)
+        example: 1
+        type: integer
+      weight:
+        description: 體重
+        example: 72.5
+        type: number
+    type: object
+  model.Data:
+    type: object
+  model.ErrorResult:
+    properties:
+      code:
+        description: 錯誤碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/model.Data'
+        description: 回傳資料
+      msg:
+        description: 錯誤訊息
+        example: system error!
+        type: string
+    type: object
+  model.SuccessLoginResult:
+    properties:
+      code:
+        description: 狀態碼
+        example: 0
+        type: integer
+      data:
+        $ref: '#/definitions/model.Data'
+        description: 回傳資料
+      msg:
+        description: 成功訊息
+        example: success!
+        type: string
+      token:
+        description: Token
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTQ0MDc3NjMsInN1YiI6IjEwMDEzIn0.Z5UeEC8ArCVYej9kI1paXD2f5FMFiTfeLpU6e_CZZw0
+        type: string
+    type: object
+  model.SuccessResult:
+    properties:
+      code:
+        description: 狀態碼
+        example: 0
+        type: integer
+      data:
+        $ref: '#/definitions/model.Data'
+        description: 回傳資料
+      msg:
+        description: 成功訊息
+        example: success!
+        type: string
+    type: object
+  registerdto.OTP:
+    properties:
+      otp_code:
+        description: 信箱驗證碼
+        example: "254235"
+        type: string
+    type: object
+  registerdto.Register:
+    properties:
+      id:
+        description: 用戶ID
+        example: 10001
+        type: integer
+    type: object
+  trainerdto.Avatar:
+    properties:
+      avatar:
+        description: 教練大頭照
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
+  trainerdto.Trainer:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區信義路五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: ld3ae0faf5we.png
+        type: string
+      create_at:
+        description: 創建日期
+        example: "2021-05-10 10:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      intro:
+        description: 個人介紹
+        example: 健身比賽冠軍
+        type: string
+      name:
+        description: 教練本名
+        example: 王小明
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      phone:
+        description: 電話
+        example: "0978820789"
+        type: string
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-05-10 10:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 1001
+        type: integer
+    type: object
+  userdto.User:
+    properties:
+      account:
+        description: 帳號
+        example: henry@gmail.com
+        type: string
+      account_type:
+        description: 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
+        example: 1
+        type: integer
+      birthday:
+        description: 生日
+        example: "1991-02-27"
+        type: string
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      device_token:
+        description: 推播 Token
+        example: f144b48d9695...
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
+        example: 2
+        type: integer
+      height:
+        description: 身高
+        example: 176.5
+        type: number
+      id:
+        description: 帳戶id
+        example: 10001
+        type: integer
+      is_trainer:
+        description: 是否擁有教練身份(0:否/1:是)
+        example: 1
+        type: integer
+      nickname:
+        description: 暱稱
+        example: Henry
+        type: string
+      sex:
+        description: 性別 (m:男/f:女)
+        example: m
+        type: string
+      target:
+        description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
+        example: 3
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      user_status:
+        description: 用戶狀態 (1:正常/2:違規/3:刪除)
+        example: 1
+        type: integer
+      user_type:
+        description: 用戶狀態 (1:一般用戶/2:訂閱用戶)
+        example: 1
+        type: integer
+      weight:
+        description: 體重
+        example: 72.5
+        type: number
+    type: object
+  validator.CreateCourseBody:
+    properties:
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 1
+        type: integer
+      course_id:
+        description: 課表名稱(1~20字元)
+        example: Henry課表
+        type: string
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 1
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 1
+        type: integer
+    required:
+    - category
+    - course_id
+    - level
+    - schedule_type
+    type: object
+  validator.CreateTrainerBody:
+    properties:
+      email:
+        description: 信箱 (最大255字元)
+        example: jason@gmail.com
+        type: string
+      name:
+        description: 本名 (1~20字元)
+        example: 王小明
+        type: string
+      nickname:
+        description: 教練名稱 (1~20字元)
+        example: jason
+        type: string
+      phone:
+        description: 手機
+        example: "0978820789"
+        type: string
+    required:
+    - email
+    - name
+    - nickname
+    - phone
+    type: object
+  validator.EmailBody:
+    properties:
+      email:
+        example: test@gmail.com
+        type: string
+    required:
+    - email
+    type: object
+  validator.LoginByEmailBody:
+    properties:
+      email:
+        description: 信箱
+        example: test@gmail.com
+        type: string
+      password:
+        description: 密碼 (6~18字元)
+        example: "12345678"
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  validator.RegisterForEmailBody:
+    properties:
+      email:
+        description: 信箱 (最大255字元)
+        example: test@gmail.com
+        type: string
+      nickname:
+        description: 暱稱 (1~20字元)
+        example: henry
+        type: string
+      otp_code:
+        description: 信箱驗證碼
+        example: "531476"
+        type: string
+      password:
+        description: 密碼 (6~18字元)
+        example: "12345678"
+        type: string
+    required:
+    - email
+    - nickname
+    - otp_code
+    - password
+    type: object
+  validator.UpdateCourseBody:
+    properties:
+      body_target:
+        description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
+        example: 1,2,6
+        type: string
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1,2,5
+        type: string
+      food:
+        description: 飲食建議(0~400字元)
+        example: 多吃雞胸
+        type: string
+      intro:
+        description: 課表介紹(0~400字元)
+        example: 佛系的健身課表
+        type: string
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱(1~20字元)
+        example: Henry課表
+        type: string
+      notice:
+        description: 注意事項(0~400字元)
+        example: 不要受傷
+        type: string
+      place:
+        description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
+        example: 1,2,3
+        type: string
+      price:
+        description: 售價
+        example: 330
+        type: integer
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 2
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      suit:
+        description: 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)
+        example: 2,5,7
+        type: string
+      train_target:
+        description: 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
+        example: 1,2,4
+        type: string
+    type: object
+  validator.UpdateUserInfoBody:
+    properties:
+      birthday:
+        description: 生日
+        example: "1991-02-27"
+        type: string
+      experience:
+        description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
+        example: 2
+        type: integer
+      height:
+        description: 身高 (最大999)
+        example: 176.5
+        type: number
+      nickname:
+        description: 暱稱 (1~20字元)
+        example: henry
+        type: string
+      sex:
+        description: 性別 (f:女/m:男)
+        example: m
+        type: string
+      target:
+        description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
+        example: 3
+        type: integer
+      weight:
+        description: 體重 (最大999)
+        example: 70.5
+        type: number
+    type: object
+  validator.ValidateEmailDupBody:
+    properties:
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+    required:
+    - email
+    type: object
+  validator.ValidateNicknameDupBody:
+    properties:
+      nickname:
+        description: 暱稱 (1~20字元)
+        example: henry
+        type: string
+    required:
+    - nickname
+    type: object
+info:
+  contact: {}
+  description: 健身平台 api
+  title: fitness api
+paths:
+  /course:
+    post:
+      consumes:
+      - application/json
+      description: 創建課表
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateCourseBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 創建成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.CreateResult'
+              type: object
+        "400":
+          description: 創建失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建課表
+      tags:
+      - Course
+  /course/{course_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.Course'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 獲取課表
+      tags:
+      - Course
+    patch:
+      consumes:
+      - application/json
+      description: 更新課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateCourseBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.Course'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 更新課表
+      tags:
+      - Course
+  /course/{course_id}/cover:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}'
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 課表封面照
+        in: formData
+        name: cover
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.CourseCover'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳課表封面照
+      tags:
+      - Course
+  /login/admin/email:
+    post:
+      consumes:
+      - application/json
+      description: 管理者使用信箱登入
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.LoginByEmailBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登入成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessLoginResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/logindto.Admin'
+              type: object
+        "400":
+          description: 登入失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 管理者使用信箱登入
+      tags:
+      - Login
+  /login/user/email:
+    post:
+      consumes:
+      - application/json
+      description: 用戶使用信箱登入
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.LoginByEmailBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登入成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessLoginResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/logindto.User'
+              type: object
+        "400":
+          description: 登入失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 用戶使用信箱登入
+      tags:
+      - Login
+  /logout/admin:
+    post:
+      consumes:
+      - application/json
+      description: 管理員登出
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登出成功
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 登出失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_admin_token: []
+      summary: 管理員登出
+      tags:
+      - Login
+  /logout/user:
+    post:
+      consumes:
+      - application/json
+      description: 用戶登出
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登出成功
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 登出失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 用戶登出
+      tags:
+      - Login
+  /migrate/down:
+    put:
+      consumes:
+      - application/json
+      description: 回滾 Schema 至初始版本
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_admin_token: []
+      summary: 回滾 Schema 至初始版本
+      tags:
+      - Migrate
+  /migrate/down/{step}:
+    put:
+      consumes:
+      - application/json
+      description: 將 Schema 回滾N個版本
+      parameters:
+      - description: 版本跨度
+        in: path
+        name: step
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_admin_token: []
+      summary: 將 Schema 回滾N個版本
+      tags:
+      - Migrate
+  /migrate/force/{version}:
+    put:
+      consumes:
+      - application/json
+      description: Schema 升級時遇到錯誤時的操作模式
+      parameters:
+      - description: 版本號
+        in: path
+        name: version
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_admin_token: []
+      summary: 修正 Schema 版本並解除錯誤狀態
+      tags:
+      - Migrate
+  /migrate/up:
+    put:
+      consumes:
+      - application/json
+      description: 將 Schema 升至最新版本
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_admin_token: []
+      summary: 將 Schema 升至最新版本
+      tags:
+      - Migrate
+  /migrate/up/{step}:
+    put:
+      consumes:
+      - application/json
+      description: 將 Schema 升級N個版本
+      parameters:
+      - description: 版本跨度
+        in: path
+        name: step
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_admin_token: []
+      summary: 將 Schema 升級N個版本
+      tags:
+      - Migrate
+  /migrate/version:
+    get:
+      consumes:
+      - application/json
+      description: 獲取當前 Schema 版本
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_admin_token: []
+      summary: 獲取當前 Schema 版本
+      tags:
+      - Migrate
+  /migrate/version/{version}:
+    put:
+      consumes:
+      - application/json
+      description: 升級至指定 Schema 版本
+      parameters:
+      - description: 版本號
+        in: path
+        name: version
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_admin_token: []
+      summary: 升級至指定 Schema 版本
+      tags:
+      - Migrate
+  /register/email:
+    post:
+      consumes:
+      - application/json
+      description: 使用信箱註冊
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.RegisterForEmailBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 註冊成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/registerdto.Register'
+              type: object
+        "400":
+          description: 註冊失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 使用信箱註冊
+      tags:
+      - Register
+  /register/email/otp:
+    post:
+      consumes:
+      - application/json
+      description: 發送 Email OTP
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: Parameter
+        required: true
+        schema:
+          $ref: '#/definitions/validator.EmailBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 驗證郵件已寄出
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/registerdto.OTP'
+              type: object
+        "400":
+          description: 發送失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 發送 Email OTP
+      tags:
+      - Register
+  /register/email/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證信箱是否可使用
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.ValidateEmailDupBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 此暱稱可使用
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 該資料已存在
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 驗證信箱是否可使用
+      tags:
+      - Register
+  /register/nickname/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證暱稱是否可使用
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.ValidateNicknameDupBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 此暱稱可使用
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 該資料已存在
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 驗證暱稱是否可使用
+      tags:
+      - Register
+  /trainer:
+    post:
+      consumes:
+      - application/json
+      description: 創建我的教練身份
+      parameters:
+      - description: 輸入欄位
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateTrainerBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建我的教練身份
+      tags:
+      - Trainer
+  /trainer/avatar:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}'
+      parameters:
+      - description: 教練大頭照
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/trainerdto.Avatar'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳我的教練大頭照
+      tags:
+      - Trainer
+  /trainer/info:
+    get:
+      consumes:
+      - application/json
+      description: 取得我的教練身份資訊
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/trainerdto.Trainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 取得我的教練身份資訊
+      tags:
+      - Trainer
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: 獲取個人資訊
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/userdto.User'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 獲取個人資訊
+      tags:
+      - User
+    patch:
+      consumes:
+      - application/json
+      description: 更新個人資訊
+      parameters:
+      - description: 更新欄位
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateUserInfoBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/userdto.User'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 更新個人資訊
+      tags:
+      - User
+securityDefinitions:
+  fitness_admin_token:
+    in: header
+    name: Token
+    type: apiKey
+  fitness_user_token:
+    in: header
+    name: Token
+    type: apiKey
+swagger: "2.0"

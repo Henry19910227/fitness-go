@@ -1,0 +1,1887 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "健身平台 api",
+        "title": "fitness api",
+        "contact": {}
+    },
+    "paths": {
+        "/course": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "創建課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "創建課表",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateCourseBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "創建成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/coursedto.CreateResult"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "創建失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/{course_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "獲取課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "獲取課表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/coursedto.Course"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "更新課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "更新課表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateCourseBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/coursedto.Course"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/{course_id}/cover": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "上傳課表封面照",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "cover",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/coursedto.CourseCover"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/login/admin/email": {
+            "post": {
+                "description": "管理者使用信箱登入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "管理者使用信箱登入",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.LoginByEmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登入成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessLoginResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/logindto.Admin"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "登入失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/login/user/email": {
+            "post": {
+                "description": "用戶使用信箱登入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "用戶使用信箱登入",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.LoginByEmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登入成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessLoginResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/logindto.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "登入失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout/admin": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_admin_token": []
+                    }
+                ],
+                "description": "管理員登出",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "管理員登出",
+                "responses": {
+                    "200": {
+                        "description": "登出成功",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "登出失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout/user": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "用戶登出",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "用戶登出",
+                "responses": {
+                    "200": {
+                        "description": "登出成功",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "登出失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/migrate/down": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_admin_token": []
+                    }
+                ],
+                "description": "回滾 Schema 至初始版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Migrate"
+                ],
+                "summary": "回滾 Schema 至初始版本",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/migrate/down/{step}": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_admin_token": []
+                    }
+                ],
+                "description": "將 Schema 回滾N個版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Migrate"
+                ],
+                "summary": "將 Schema 回滾N個版本",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "版本跨度",
+                        "name": "step",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/migrate/force/{version}": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_admin_token": []
+                    }
+                ],
+                "description": "Schema 升級時遇到錯誤時的操作模式",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Migrate"
+                ],
+                "summary": "修正 Schema 版本並解除錯誤狀態",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "版本號",
+                        "name": "version",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/migrate/up": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_admin_token": []
+                    }
+                ],
+                "description": "將 Schema 升至最新版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Migrate"
+                ],
+                "summary": "將 Schema 升至最新版本",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/migrate/up/{step}": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_admin_token": []
+                    }
+                ],
+                "description": "將 Schema 升級N個版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Migrate"
+                ],
+                "summary": "將 Schema 升級N個版本",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "版本跨度",
+                        "name": "step",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/migrate/version": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_admin_token": []
+                    }
+                ],
+                "description": "獲取當前 Schema 版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Migrate"
+                ],
+                "summary": "獲取當前 Schema 版本",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/migrate/version/{version}": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_admin_token": []
+                    }
+                ],
+                "description": "升級至指定 Schema 版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Migrate"
+                ],
+                "summary": "升級至指定 Schema 版本",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "版本號",
+                        "name": "version",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/email": {
+            "post": {
+                "description": "使用信箱註冊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "使用信箱註冊",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.RegisterForEmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "註冊成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/registerdto.Register"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "註冊失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/email/otp": {
+            "post": {
+                "description": "發送 Email OTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "發送 Email OTP",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "Parameter",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.EmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "驗證郵件已寄出",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/registerdto.OTP"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "發送失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/email/validate": {
+            "post": {
+                "description": "驗證信箱是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "驗證信箱是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.ValidateEmailDupBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "此暱稱可使用",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "該資料已存在",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/register/nickname/validate": {
+            "post": {
+                "description": "驗證暱稱是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Register"
+                ],
+                "summary": "驗證暱稱是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.ValidateNicknameDupBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "此暱稱可使用",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "該資料已存在",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "創建我的教練身份",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "創建我的教練身份",
+                "parameters": [
+                    {
+                        "description": "輸入欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateTrainerBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer/avatar": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "上傳我的教練大頭照",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "教練大頭照",
+                        "name": "avatar",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/trainerdto.Avatar"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer/info": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "取得我的教練身份資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "取得我的教練身份資訊",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/trainerdto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/info": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "獲取個人資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "獲取個人資訊",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/userdto.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "更新個人資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "更新個人資訊",
+                "parameters": [
+                    {
+                        "description": "更新欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateUserInfoBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/userdto.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "coursedto.Course": {
+            "type": "object",
+            "properties": {
+                "body_target": {
+                    "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)",
+                    "type": "string",
+                    "example": "4,5"
+                },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2021-05-28 11:00:00"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
+                },
+                "food": {
+                    "description": "飲食建議",
+                    "type": "string",
+                    "example": "佛系飲食"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "image": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
+                "intro": {
+                    "description": "課表介紹",
+                    "type": "string",
+                    "example": "佛系課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "notice": {
+                    "description": "注意事項",
+                    "type": "string",
+                    "example": "小心不要受傷"
+                },
+                "place": {
+                    "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
+                    "type": "string",
+                    "example": "1,2"
+                },
+                "price": {
+                    "description": "售價",
+                    "type": "integer",
+                    "example": 330
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "suit": {
+                    "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
+                    "type": "string",
+                    "example": "2,5,7"
+                },
+                "train_target": {
+                    "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
+                    "type": "string",
+                    "example": "2,3,4"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2021-05-29 11:00:00"
+                },
+                "user_id": {
+                    "description": "用戶 id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
+        "coursedto.CourseCover": {
+            "type": "object",
+            "properties": {
+                "course_image": {
+                    "description": "課表封面照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "coursedto.CreateResult": {
+            "type": "object",
+            "properties": {
+                "course_id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "logindto.Admin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "lv": {
+                    "description": "身份 (1:一般管理員)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        },
+        "logindto.User": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帳號",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "account_type": {
+                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "device_token": {
+                    "description": "推播 Token",
+                    "type": "string",
+                    "example": "f144b48d9695..."
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "is_trainer": {
+                    "description": "是否擁有教練身份(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_type": {
+                    "description": "用戶狀態 (1:一般用戶/2:訂閱用戶)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 72.5
+                }
+            }
+        },
+        "model.Data": {
+            "type": "object"
+        },
+        "model.ErrorResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "錯誤碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "description": "回傳資料",
+                    "$ref": "#/definitions/model.Data"
+                },
+                "msg": {
+                    "description": "錯誤訊息",
+                    "type": "string",
+                    "example": "system error!"
+                }
+            }
+        },
+        "model.SuccessLoginResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 0
+                },
+                "data": {
+                    "description": "回傳資料",
+                    "$ref": "#/definitions/model.Data"
+                },
+                "msg": {
+                    "description": "成功訊息",
+                    "type": "string",
+                    "example": "success!"
+                },
+                "token": {
+                    "description": "Token",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTQ0MDc3NjMsInN1YiI6IjEwMDEzIn0.Z5UeEC8ArCVYej9kI1paXD2f5FMFiTfeLpU6e_CZZw0"
+                }
+            }
+        },
+        "model.SuccessResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 0
+                },
+                "data": {
+                    "description": "回傳資料",
+                    "$ref": "#/definitions/model.Data"
+                },
+                "msg": {
+                    "description": "成功訊息",
+                    "type": "string",
+                    "example": "success!"
+                }
+            }
+        },
+        "registerdto.OTP": {
+            "type": "object",
+            "properties": {
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "254235"
+                }
+            }
+        },
+        "registerdto.Register": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "用戶ID",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
+        "trainerdto.Avatar": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "trainerdto.Trainer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區信義路五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "intro": {
+                    "description": "個人介紹",
+                    "type": "string",
+                    "example": "健身比賽冠軍"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0978820789"
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 1001
+                }
+            }
+        },
+        "userdto.User": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帳號",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "account_type": {
+                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "device_token": {
+                    "description": "推播 Token",
+                    "type": "string",
+                    "example": "f144b48d9695..."
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "is_trainer": {
+                    "description": "是否擁有教練身份(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_type": {
+                    "description": "用戶狀態 (1:一般用戶/2:訂閱用戶)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 72.5
+                }
+            }
+        },
+        "validator.CreateCourseBody": {
+            "type": "object",
+            "required": [
+                "category",
+                "course_id",
+                "level",
+                "schedule_type"
+            ],
+            "properties": {
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "course_id": {
+                    "description": "課表名稱(1~20字元)",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "validator.CreateTrainerBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "nickname",
+                "phone"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱 (最大255字元)",
+                    "type": "string",
+                    "example": "jason@gmail.com"
+                },
+                "name": {
+                    "description": "本名 (1~20字元)",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "nickname": {
+                    "description": "教練名稱 (1~20字元)",
+                    "type": "string",
+                    "example": "jason"
+                },
+                "phone": {
+                    "description": "手機",
+                    "type": "string",
+                    "example": "0978820789"
+                }
+            }
+        },
+        "validator.EmailBody": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "test@gmail.com"
+                }
+            }
+        },
+        "validator.LoginByEmailBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "password": {
+                    "description": "密碼 (6~18字元)",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "validator.RegisterForEmailBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "nickname",
+                "otp_code",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱 (最大255字元)",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "nickname": {
+                    "description": "暱稱 (1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
+                },
+                "password": {
+                    "description": "密碼 (6~18字元)",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "validator.UpdateCourseBody": {
+            "type": "object",
+            "properties": {
+                "body_target": {
+                    "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)",
+                    "type": "string",
+                    "example": "1,2,6"
+                },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "1,2,5"
+                },
+                "food": {
+                    "description": "飲食建議(0~400字元)",
+                    "type": "string",
+                    "example": "多吃雞胸"
+                },
+                "intro": {
+                    "description": "課表介紹(0~400字元)",
+                    "type": "string",
+                    "example": "佛系的健身課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "name": {
+                    "description": "課表名稱(1~20字元)",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "notice": {
+                    "description": "注意事項(0~400字元)",
+                    "type": "string",
+                    "example": "不要受傷"
+                },
+                "place": {
+                    "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
+                    "type": "string",
+                    "example": "1,2,3"
+                },
+                "price": {
+                    "description": "售價",
+                    "type": "integer",
+                    "example": 330
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "suit": {
+                    "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
+                    "type": "string",
+                    "example": "2,5,7"
+                },
+                "train_target": {
+                    "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
+                    "type": "string",
+                    "example": "1,2,4"
+                }
+            }
+        },
+        "validator.UpdateUserInfoBody": {
+            "type": "object",
+            "properties": {
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "height": {
+                    "description": "身高 (最大999)",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "nickname": {
+                    "description": "暱稱 (1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "sex": {
+                    "description": "性別 (f:女/m:男)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "weight": {
+                    "description": "體重 (最大999)",
+                    "type": "number",
+                    "example": 70.5
+                }
+            }
+        },
+        "validator.ValidateEmailDupBody": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                }
+            }
+        },
+        "validator.ValidateNicknameDupBody": {
+            "type": "object",
+            "required": [
+                "nickname"
+            ],
+            "properties": {
+                "nickname": {
+                    "description": "暱稱 (1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "fitness_admin_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        },
+        "fitness_user_token": {
+            "type": "apiKey",
+            "name": "Token",
+            "in": "header"
+        }
+    }
+}

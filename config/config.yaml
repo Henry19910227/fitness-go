@@ -1,0 +1,65 @@
+Server:
+    RunMode: debug
+    HttpPort: 9090
+    ReadTimeout: 60
+    WriteTimeout: 60
+App:
+    Debug:
+      Version: 1.0.8
+    Release:
+      Version: 1.0.8
+Resource:
+    RootPath: ./volumes/storage
+Upload:
+    UploadRootPath: ./volumes/storage
+    UploadImageMaxSize: 5 #MB
+    UploadImageAllowExt:
+      - .jpg
+      - .png
+      - .jpeg
+      - .JPG
+      - .PNG
+      - .JPEG
+Log:
+    FileName: fitness
+    FileExt: log
+    Debug:
+      Path: ./volumes/log
+      MaxAge: 60 # Minute
+      RotationTime: 1 # Minute
+    Release:
+      Path: ./volumes/log
+      MaxAge: 7 # Day
+      RotationTime: 1 # Day
+Database:
+    DBType: mysql
+    Debug:
+      Host: 127.0.0.1:8889
+      DBName: fitness
+      UserName: henry
+      Password: aaaa8027
+    Release:
+      Host: fitness-mysql-primary:3306 # k8s svc dns + k8s internal port
+      DBName: fitness
+      UserName: henry
+      Password: aaaa8027
+Redis:
+    Debug:
+      Host: 127.0.0.1:6379
+      Password: ""
+    Release:
+      Host: fitness-redis-master:6379
+      Password: aaaa8027
+JWT:
+    Secret: mi
+    Issuer: fitness
+    Expire: 120 # Minute
+Swagger:
+    Debug:
+      Protocol: http
+      Host: 127.0.0.1:9090
+      BasePath: /api/v1
+    Release:
+      Protocol: https
+      Host: www.fitness-app.tk
+      BasePath: /api/v1
