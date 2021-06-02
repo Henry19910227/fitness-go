@@ -18,13 +18,14 @@ type trainer struct {
 	Base
 	trainerRepo repository.Trainer
 	uploader  handler.Uploader
+	resHandler handler.Resource
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewTrainer(trainerRepo repository.Trainer, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
-	return &trainer{trainerRepo: trainerRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewTrainer(trainerRepo repository.Trainer, uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
+	return &trainer{trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 
@@ -92,7 +93,7 @@ func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*trainerd
 
 func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error) {
 	//上傳照片
-	newImageNamed, err := t.uploader.UploadTrainerAvatar(imageFile, imageNamed, uid)
+	newImageNamed, err := t.uploader.UploadTrainerAvatar(imageFile, imageNamed)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
 			return nil, t.errHandler.FileTypeError()
@@ -100,7 +101,13 @@ func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed
 		if strings.Contains(err.Error(), "9008") {
 			return nil, t.errHandler.FileSizeError()
 		}
-		t.logger.Set(c, handler.Error, "Uploader Handler", t.errHandler.SystemError().Code(), err.Error())
+		t.logger.Set(c, handler.Error, "Resource Handler", t.errHandler.SystemError().Code(), err.Error())
+		return nil, t.errHandler.SystemError()
+	}
+	//查詢教練資訊
+	var trainer trainerdto.Trainer
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
 		return nil, t.errHandler.SystemError()
 	}
 	//修改教練資訊
@@ -109,6 +116,12 @@ func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed
 	}); err != nil {
 		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
 		return nil, t.errHandler.SystemError()
+	}
+	//刪除舊照片
+	if len(trainer.Avatar) > 0 {
+		if err := t.resHandler.DeleteTrainerAvatar(trainer.Avatar); err != nil {
+			t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
+		}
 	}
 	return &trainerdto.Avatar{Avatar: newImageNamed}, nil
 }

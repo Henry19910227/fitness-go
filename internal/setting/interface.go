@@ -44,13 +44,11 @@ type Logger interface {
 	GetRunMode() string
 }
 
-type Uploader interface {
-	GetUploadSavePath() string
-	GetUploadImageAllowExts() []string
-	GetUploadImageMaxSize() int
+type Resource interface {
+	RootPath() string
 }
 
-type UploadLimit interface {
+type Upload interface {
 	ImageAllowExts() []string
 	ImageMaxSize() int
 }

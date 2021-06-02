@@ -19,15 +19,15 @@ type Size interface {
 }
 
 type uploader struct {
-	uploadTool tool.Uploader
-	uploadLimit setting.UploadLimit
+	resTool       tool.Resource
+	uploadSetting setting.Upload
 }
 
-func NewUploader(uploadTool tool.Uploader, uploadLimit setting.UploadLimit) Uploader {
-	return &uploader{uploadTool: uploadTool, uploadLimit: uploadLimit}
+func NewUploader(resTool tool.Resource, uploadSetting setting.Upload) Uploader {
+	return &uploader{resTool: resTool, uploadSetting: uploadSetting}
 }
 
-func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string, courseID int64) (string, error) {
+func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string) (string, error) {
 	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
 		return "", errors.New("9007-上傳檔案不符合規範")
 	}
@@ -35,13 +35,13 @@ func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string, courseID
 		return "", errors.New("9008-上傳檔案大小超過限制")
 	}
 	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.uploadTool.UploadFile(file, newImageNamed, "/course/cover"); err != nil {
+	if err := u.resTool.SaveFile(file, newImageNamed, "/course/cover"); err != nil {
 		return "", err
 	}
 	return newImageNamed, nil
 }
 
-func (u *uploader) UploadTrainerAvatar(file io.Reader, imageNamed string, uid int64) (string, error) {
+func (u *uploader) UploadTrainerAvatar(file io.Reader, imageNamed string) (string, error) {
 	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
 		return "", errors.New("9007-上傳檔案不符合規範")
 	}
@@ -49,7 +49,7 @@ func (u *uploader) UploadTrainerAvatar(file io.Reader, imageNamed string, uid in
 		return "", errors.New("9008-上傳檔案大小超過限制")
 	}
 	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.uploadTool.UploadFile(file, newImageNamed, "/trainer/avatar"); err != nil {
+	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/avatar"); err != nil {
 		return "", err
 	}
 	return newImageNamed, nil
@@ -57,7 +57,7 @@ func (u *uploader) UploadTrainerAvatar(file io.Reader, imageNamed string, uid in
 
 func (u *uploader) checkUploadImageAllowExt(ext string) bool {
 	ext = strings.ToUpper(ext)
-	for _, v := range u.uploadLimit.ImageAllowExts() {
+	for _, v := range u.uploadSetting.ImageAllowExts() {
 		if ext == strings.ToUpper(v) {
 			return true
 		}
@@ -68,7 +68,7 @@ func (u *uploader) checkUploadImageAllowExt(ext string) bool {
 func (u *uploader) checkImageMaxSize(file io.Reader) bool {
 	if sizeValue, ok := file.(Size); ok {
 		 size := int(sizeValue.Size())
-		 return size < u.uploadLimit.ImageMaxSize() * 1024 * 1024
+		 return size < u.uploadSetting.ImageMaxSize() * 1024 * 1024
 	}
 	return false
 }
@@ -78,7 +78,7 @@ func (u *uploader) checkUploadImageMaxSize(file io.Reader) (io.Reader, bool) {
 	content, _ := ioutil.ReadAll(file)
 	//因ReadAll讀取完後第二次會讀取不到，必須使用NopCloser將資料寫回
 	data := ioutil.NopCloser(bytes.NewBuffer(content))
-	return data, len(content) <= u.uploadLimit.ImageMaxSize() * 1024 * 1024
+	return data, len(content) <= u.uploadSetting.ImageMaxSize() * 1024 * 1024
 }
 
 func generateFileName(ext string) string {

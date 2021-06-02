@@ -31,13 +31,14 @@ var (
 	jwtTool     tool.JWT
 	logTool     tool.Logger
 	otpTool     tool.OTP
-	uploadTool  tool.Uploader
+	resTool     tool.Resource
 )
 
 var (
 	logHandler  handler.Logger
 	ssoHandler  handler.SSO
 	uploadHandler handler.Uploader
+	resHandler handler.Resource
 )
 
 var (
@@ -111,7 +112,7 @@ func setupTool() {
 	jwtTool = tool.NewJWT(setting.NewJWT(viperTool))
 	redisTool = tool.NewRedis(setting.NewRedis(viperTool))
 	otpTool = tool.NewOTP()
-	uploadTool = tool.NewUploader(setting.NewUploader(viperTool))
+	resTool = tool.NewFile(setting.NewUploader(viperTool))
 }
 
 func setupLogTool() {
@@ -166,7 +167,8 @@ func setupMigrateTool()  {
 func setupHandler() {
 	logHandler = handler.NewLogger(logTool, jwtTool)
 	ssoHandler = handler.NewSSO(jwtTool, redisTool, setting.NewUser(viperTool))
-	uploadHandler = handler.NewUploader(uploadTool, setting.NewUploadLimit(viperTool))
+	uploadHandler = handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
+	resHandler = handler.NewResource(resTool)
 }
 
 /** Service */
@@ -204,7 +206,7 @@ func setupUserService()  {
 
 func setupTrainerService()  {
 	trainerRepo := repository.NewTrainer(gormTool)
-	trainerService = service.NewTrainer(trainerRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
+	trainerService = service.NewTrainer(trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupCourseService()  {

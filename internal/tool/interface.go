@@ -67,9 +67,7 @@ type OTP interface {
 	Validate(code string, secret string) bool
 }
 
-type Uploader interface {
-	UploadFile(file io.Reader, filename string, filepath string) error
-	RemoveFile(fileNamed string, filepath string) error
-	CheckUploadImageAllowExt(ext string) bool
-	CheckUploadImageMaxSize(file io.Reader) bool
+type Resource interface {
+	SaveFile(file io.Reader, filename string, filepath string) error
+	RemoveFile(filepath string, fileNamed string) error
 }

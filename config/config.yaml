@@ -8,6 +8,8 @@ App:
       Version: 1.0.8
     Release:
       Version: 1.0.8
+Resource:
+    RootPath: ./volumes/storage
 Upload:
     UploadRootPath: ./volumes/storage
     UploadImageMaxSize: 5 #MB
