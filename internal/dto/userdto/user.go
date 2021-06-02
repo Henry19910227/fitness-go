@@ -30,3 +30,7 @@ type User struct {
 	UpdateAt         string  `json:"update_at" gorm:"column:update_at" example:"2021-06-01 12:00:00"`     // 修改日期
 	IsTrainer        int     `json:"is_trainer" gorm:"-" example:"1"`                                     // 是否擁有教練身份(0:否/1:是)
 }
+
+type Avatar struct {
+	Avatar string `json:"avatar" example:"dkf2se51fsdds.png"` // 用戶大頭照
+}

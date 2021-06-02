@@ -36,9 +36,11 @@ type Logger interface {
 type Uploader interface {
 	UploadCourseCover(file io.Reader, imageNamed string) (string, error)
 	UploadTrainerAvatar(file io.Reader, imageNamed string) (string, error)
+	UploadUserAvatar(file io.Reader, imageNamed string) (string, error)
 }
 
 type Resource interface {
 	DeleteCourseCover(imageNamed string) error
 	DeleteTrainerAvatar(imageNamed string) error
+	DeleteUserAvatar(imageNamed string) error
 }

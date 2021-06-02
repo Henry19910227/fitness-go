@@ -44,6 +44,8 @@ type User interface {
 	UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
 	GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.Error)
 	GetUserByToken(c *gin.Context, token string) (*userdto.User, errcode.Error)
+	UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*userdto.Avatar, errcode.Error)
+	UploadUserAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*userdto.Avatar, errcode.Error)
 }
 
 type Trainer interface {
