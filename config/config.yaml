@@ -5,13 +5,12 @@ Server:
     WriteTimeout: 60
 App:
     Debug:
-      Version: 1.0.8
+      Version: 1.0.9
     Release:
-      Version: 1.0.8
+      Version: 1.0.9
 Resource:
     RootPath: ./volumes/storage
 Upload:
-    UploadRootPath: ./volumes/storage
     UploadImageMaxSize: 5 #MB
     UploadImageAllowExt:
       - .jpg

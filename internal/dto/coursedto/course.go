@@ -50,7 +50,7 @@ type Course struct {
 	SaleType int `json:"sale_type" gorm:"column:sale_type" example:"2"`                       // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Price int64 `json:"price" gorm:"column:price" example:"330"`                              // 售價
 	Name string `json:"name" gorm:"column:name" example:"Henry課表"`                           // 課表名稱
-	Image string `json:"image" gorm:"column:image" example:"d2w3e15d3awe.jpg"`                // 課表封面
+	Cover string `json:"cover" gorm:"column:cover" example:"d2w3e15d3awe.jpg"`                // 課表封面
 	Intro string `json:"intro" gorm:"column:intro" example:"佛系課表"`                          // 課表介紹
 	Food string `json:"food" gorm:"column:food" example:"佛系飲食"`                             // 飲食建議
 	Level int `json:"level" gorm:"column:level" example:"3"`                                  // 強度(1:初級/2:中級/3:中高級/4:高級)

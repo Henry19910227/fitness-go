@@ -13,6 +13,10 @@ definitions:
         description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
         example: 1
         type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
       create_at:
         description: 創建時間
         example: "2021-05-28 11:00:00"
@@ -29,10 +33,6 @@ definitions:
         description: 課表 id
         example: 2
         type: integer
-      image:
-        description: 課表封面
-        example: d2w3e15d3awe.jpg
-        type: string
       intro:
         description: 課表介紹
         example: 佛系課表

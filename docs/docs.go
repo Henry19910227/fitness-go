@@ -1212,6 +1212,11 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
@@ -1231,11 +1236,6 @@ var doc = `{
                     "description": "課表 id",
                     "type": "integer",
                     "example": 2
-                },
-                "image": {
-                    "description": "課表封面",
-                    "type": "string",
-                    "example": "d2w3e15d3awe.jpg"
                 },
                 "intro": {
                     "description": "課表介紹",
