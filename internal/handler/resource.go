@@ -17,3 +17,7 @@ func (r *resource) DeleteCourseCover(imageNamed string) error {
 func (r *resource) DeleteTrainerAvatar(imageNamed string) error {
 	return r.resTool.RemoveFile("/trainer/avatar", imageNamed)
 }
+
+func (r *resource) DeleteUserAvatar(imageNamed string) error {
+	return r.resTool.RemoveFile("/user/avatar", imageNamed)
+}

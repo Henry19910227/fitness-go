@@ -19,6 +19,7 @@ type User struct {
 	UserType         int     `json:"user_type" gorm:"column:user_type" example:"1"`                       // 用戶狀態 (1:一般用戶/2:訂閱用戶)
 	Email            string  `json:"email" gorm:"column:email" example:"henry@gmail.com"`                 // 信箱
 	Nickname         string  `json:"nickname" gorm:"column:nickname" example:"Henry"`                     // 暱稱
+	Avatar           string  `json:"avatar" gorm:"column:avatar" example:"d2fe5w321a.png"`                // 用戶大頭貼
 	Sex              string  `json:"sex" gorm:"column:sex" example:"m"`                                   // 性別 (m:男/f:女)
 	Birthday         string  `json:"birthday" gorm:"column:birthday" example:"1991-02-27"`                // 生日
 	Height           float64 `json:"height" gorm:"column:height" example:"176.5"`                         // 身高
@@ -28,4 +29,8 @@ type User struct {
 	CreateAt         string  `json:"create_at" gorm:"column:create_at" example:"2021-06-01 12:00:00"`     // 創建日期
 	UpdateAt         string  `json:"update_at" gorm:"column:update_at" example:"2021-06-01 12:00:00"`     // 修改日期
 	IsTrainer        int     `json:"is_trainer" gorm:"-" example:"1"`                                     // 是否擁有教練身份(0:否/1:是)
+}
+
+type Avatar struct {
+	Avatar string `json:"avatar" example:"dkf2se51fsdds.png"` // 用戶大頭照
 }

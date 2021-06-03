@@ -1036,6 +1036,61 @@ var doc = `{
                 }
             }
         },
+        "/user/avatar": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "查看我的大頭照 : https://www.fitness-app.tk/api/v1/resource/user/avatar/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "上傳我的大頭照",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "用戶大頭照",
+                        "name": "avatar",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/userdto.Avatar"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/user/info": {
             "get": {
                 "security": [
@@ -1302,6 +1357,11 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
+                "avatar": {
+                    "description": "用戶大頭貼",
+                    "type": "string",
+                    "example": "d2fe5w321a.png"
+                },
                 "birthday": {
                     "description": "生日",
                     "type": "string",
@@ -1534,6 +1594,16 @@ var doc = `{
                 }
             }
         },
+        "userdto.Avatar": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "用戶大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
         "userdto.User": {
             "type": "object",
             "properties": {
@@ -1546,6 +1616,11 @@ var doc = `{
                     "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
                     "type": "integer",
                     "example": 1
+                },
+                "avatar": {
+                    "description": "用戶大頭貼",
+                    "type": "string",
+                    "example": "d2fe5w321a.png"
                 },
                 "birthday": {
                     "description": "生日",

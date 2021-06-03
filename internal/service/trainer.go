@@ -120,7 +120,7 @@ func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed
 	//刪除舊照片
 	if len(trainer.Avatar) > 0 {
 		if err := t.resHandler.DeleteTrainerAvatar(trainer.Avatar); err != nil {
-			t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
+			t.logger.Set(c, handler.Error, "ResHandler", t.errHandler.SystemError().Code(), err.Error())
 		}
 	}
 	return &trainerdto.Avatar{Avatar: newImageNamed}, nil

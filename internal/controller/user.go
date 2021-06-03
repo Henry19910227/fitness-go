@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type user struct {
@@ -13,12 +14,13 @@ type user struct {
 }
 
 func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddleware gin.HandlerFunc) {
+	baseGroup.StaticFS("/resource/user/avatar", http.Dir("./volumes/storage/user/avatar"))
 	user := &user{userService: userService}
-
 	userGroup := baseGroup.Group("/user")
 	userGroup.Use(userMiddleware)
 	userGroup.PATCH("/info", user.UpdateUserInfo)
 	userGroup.GET("/info", user.GetUserInfo)
+	userGroup.POST("/avatar", user.UploadMyUserAvatar)
 }
 
 // UpdateUserInfo 更新個人資訊
@@ -82,4 +84,34 @@ func (u *user) GetUserInfo(c *gin.Context) {
 		return
 	}
 	u.JSONSuccessResponse(c, user, "success!")
+}
+
+// UploadMyUserAvatar 上傳我的大頭照
+// @Summary 上傳我的大頭照
+// @Description 查看我的大頭照 : https://www.fitness-app.tk/api/v1/resource/user/avatar/{圖片名}
+// @Tags User
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param avatar formData file true "用戶大頭照"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=userdto.Avatar} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /user/avatar [POST]
+func (u *user) UploadMyUserAvatar(c *gin.Context) {
+	var header validator.TokenHeader
+	if err := c.ShouldBindHeader(&header); err != nil {
+		u.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("avatar")
+	if err != nil {
+		u.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := u.userService.UploadUserAvatarByToken(c, header.Token, fileHeader.Filename, file)
+	if e != nil {
+		u.JSONErrorResponse(c, e)
+		return
+	}
+	u.JSONSuccessResponse(c, result, "success upload")
 }

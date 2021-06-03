@@ -47,6 +47,7 @@ func (u *user) UpdateUserByUID(uid int64, param *model.UpdateUserParam) error {
 	if param.UserType != nil { selects = append(selects, "user_type") }
 	if param.Email != nil { selects = append(selects, "email") }
 	if param.Nickname != nil { selects = append(selects, "nickname") }
+	if param.Avatar != nil { selects = append(selects, "avatar") }
 	if param.Sex != nil { selects = append(selects, "sex") }
 	if param.Birthday != nil { selects = append(selects, "birthday") }
 	if param.Height != nil { selects = append(selects, "height") }
