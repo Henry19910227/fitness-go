@@ -84,7 +84,7 @@ definitions:
     type: object
   coursedto.CourseCover:
     properties:
-      course_image:
+      cover:
         description: 課表封面照片
         example: dkf2se51fsdds.png
         type: string

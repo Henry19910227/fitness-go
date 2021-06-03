@@ -1302,7 +1302,7 @@ var doc = `{
         "coursedto.CourseCover": {
             "type": "object",
             "properties": {
-                "course_image": {
+                "cover": {
                     "description": "課表封面照片",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"

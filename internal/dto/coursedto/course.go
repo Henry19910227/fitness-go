@@ -7,7 +7,7 @@ type CreateResult struct {
 }
 
 type CourseCover struct {
-	Cover string `json:"course_image" example:"dkf2se51fsdds.png"` // 課表封面照片
+	Cover string `json:"cover" example:"dkf2se51fsdds.png"` // 課表封面照片
 }
 
 type CreateCourseParam struct {
