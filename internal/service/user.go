@@ -137,7 +137,7 @@ func (u *user) UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed strin
 	}
 	//刪除舊照片
 	if len(user.Avatar) > 0 {
-		if err := u.resHandler.DeleteTrainerAvatar(user.Avatar); err != nil {
+		if err := u.resHandler.DeleteUserAvatar(user.Avatar); err != nil {
 			u.logger.Set(c, handler.Error, "ResHandler", u.errHandler.SystemError().Code(), err.Error())
 		}
 	}

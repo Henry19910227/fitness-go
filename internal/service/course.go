@@ -137,8 +137,8 @@ func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *c
 	}
 	//刪除舊照片
 	if len(course.Cover) > 0 {
-		if err := cs.resHandler.DeleteTrainerAvatar(course.Cover); err != nil {
-			cs.logger.Set(c, handler.Error, "TrainerRepo", cs.errHandler.SystemError().Code(), err.Error())
+		if err := cs.resHandler.DeleteCourseCover(course.Cover); err != nil {
+			cs.logger.Set(c, handler.Error, "ResHandler", cs.errHandler.SystemError().Code(), err.Error())
 		}
 	}
 	return &coursedto.CourseCover{Cover: newImageNamed}, nil
