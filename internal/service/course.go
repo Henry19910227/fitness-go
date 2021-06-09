@@ -80,6 +80,23 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.
 	return &course, nil
 }
 
+func (cs *course) GetCoursesByToken(c *gin.Context, token string) ([]*coursedto.Course, errcode.Error) {
+	uid, err := cs.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, cs.errHandler.InvalidToken()
+	}
+	return cs.GetCoursesByUID(c, uid)
+}
+
+func (cs *course) GetCoursesByUID(c *gin.Context, uid int64) ([]*coursedto.Course, errcode.Error) {
+	courses := make([]*coursedto.Course, 0)
+	if err := cs.courseRepo.FindCourses(uid, &courses); err != nil {
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	return courses, nil
+}
+
 func (cs *course) GetCourseByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.Course, errcode.Error) {
 	uid, err := cs.jwtTool.GetIDByToken(token)
 	if err != nil {

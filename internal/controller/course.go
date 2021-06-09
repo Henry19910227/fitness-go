@@ -22,6 +22,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, userMid
 	courseGroup.Use(userMiddleware)
 	courseGroup.POST("", course.CreateCourse)
 	courseGroup.PATCH("/:course_id", course.UpdateCourse)
+	courseGroup.GET("/list", course.GetCourseList)
 	courseGroup.GET("/:course_id", course.GetCourse)
 	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
 }
@@ -107,9 +108,33 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 	cc.JSONSuccessResponse(c, course, "更新成功!")
 }
 
-// GetCourse 獲取課表
-// @Summary 獲取課表
-// @Description 獲取課表
+// GetCourseList 獲取我的課表列表
+// @Summary 獲取我的課表列表
+// @Description 獲取我的課表列表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Success 200 {object} model.SuccessResult{data=[]coursedto.Course} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course/list [GET]
+func (cc *Course) GetCourseList(c *gin.Context) {
+	var header validator.TokenHeader
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	courses, err := cc.courseService.GetCoursesByToken(c, header.Token)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, courses, "success")
+}
+
+// GetCourse 以id獲取課表
+// @Summary 以id獲取課表
+// @Description 以id獲取課表
 // @Tags Course
 // @Accept json
 // @Produce json
