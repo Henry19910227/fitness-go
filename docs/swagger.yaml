@@ -394,22 +394,22 @@ definitions:
         description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
         example: 1
         type: integer
-      course_id:
-        description: 課表名稱(1~20字元)
-        example: Henry課表
-        type: string
       level:
         description: 強度(1:初級/2:中級/3:中高級/4:高級)
         example: 1
         type: integer
+      name:
+        description: 課表名稱(1~20字元)
+        example: Henry課表
+        type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
         example: 1
         type: integer
     required:
     - category
-    - course_id
     - level
+    - name
     - schedule_type
     type: object
   validator.CreateTrainerBody:
@@ -632,7 +632,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 獲取課表
+      description: 以id獲取課表
       parameters:
       - description: 課表id
         in: path
@@ -657,7 +657,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_user_token: []
-      summary: 獲取課表
+      summary: 以id獲取課表
       tags:
       - Course
     patch:
@@ -732,6 +732,34 @@ paths:
       security:
       - fitness_user_token: []
       summary: 上傳課表封面照
+      tags:
+      - Course
+  /course/list:
+    get:
+      consumes:
+      - application/json
+      description: 獲取我的課表列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/coursedto.Course'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 獲取我的課表列表
       tags:
       - Course
   /login/admin/email:

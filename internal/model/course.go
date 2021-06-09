@@ -9,7 +9,7 @@ type Course struct {
 	SaleType int `gorm:"column:sale_type"`                   // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Price int64 `gorm:"column:price"`                        // 售價
 	Name string `gorm:"column:name"`                         // 課表名稱
-	Image string `gorm:"column:image"`                       // 課表封面
+	Cover string `gorm:"column:cover"`                       // 課表封面
 	Intro string `gorm:"column:intro"`                       // 課表介紹
 	Food string `gorm:"column:food"`                         // 飲食建議
 	Level int `gorm:"column:level"`                          // 強度(1:初級/2:中級/3:中高級/4:高級)

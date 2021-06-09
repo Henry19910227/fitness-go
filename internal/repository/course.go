@@ -64,6 +64,16 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 	return nil
 }
 
+func (c *course) FindCourses(uid int64, entity interface{}) error {
+	if err := c.gorm.DB().
+		Model(entity).
+		Where("user_id = ?", uid).
+		Find(entity).Error; err != nil {
+			return err
+	}
+	return nil
+}
+
 func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
 	if err := c.gorm.DB().
 		Model(&model.Course{}).

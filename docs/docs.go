@@ -81,14 +81,14 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}": {
+        "/course/list": {
             "get": {
                 "security": [
                     {
                         "fitness_user_token": []
                     }
                 ],
-                "description": "獲取課表",
+                "description": "獲取我的課表列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -98,7 +98,56 @@ var doc = `{
                 "tags": [
                     "Course"
                 ],
-                "summary": "獲取課表",
+                "summary": "獲取我的課表列表",
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/coursedto.Course"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/{course_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "以id獲取課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "以id獲取課表",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1703,8 +1752,8 @@ var doc = `{
             "type": "object",
             "required": [
                 "category",
-                "course_id",
                 "level",
+                "name",
                 "schedule_type"
             ],
             "properties": {
@@ -1713,15 +1762,15 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
-                "course_id": {
-                    "description": "課表名稱(1~20字元)",
-                    "type": "string",
-                    "example": "Henry課表"
-                },
                 "level": {
                     "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
                     "type": "integer",
                     "example": 1
+                },
+                "name": {
+                    "description": "課表名稱(1~20字元)",
+                    "type": "string",
+                    "example": "Henry課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
