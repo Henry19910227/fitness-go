@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
+	"github.com/Henry19910227/fitness-go/internal/dto/plandto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
@@ -66,4 +67,9 @@ type Course interface {
 	GetCourseByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.Course, errcode.Error)
 	GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error)
+}
+
+type Plan interface {
+	CreatePlanByToken(c *gin.Context, token string, courseID int64, name string) (*plandto.PlanID, errcode.Error)
+	CreatePlan(c *gin.Context, courseID int64, name string) (*plandto.PlanID, errcode.Error)
 }

@@ -238,6 +238,13 @@ definitions:
         example: success!
         type: string
     type: object
+  plandto.PlanID:
+    properties:
+      plan_id:
+        description: 計畫id
+        example: 1
+        type: integer
+    type: object
   registerdto.OTP:
     properties:
       otp_code:
@@ -411,6 +418,14 @@ definitions:
     - level
     - name
     - schedule_type
+    type: object
+  validator.CreatePlanBody:
+    properties:
+      name:
+        example: 第一週增肌計畫
+        type: string
+    required:
+    - name
     type: object
   validator.CreateTrainerBody:
     properties:
@@ -732,6 +747,44 @@ paths:
       security:
       - fitness_user_token: []
       summary: 上傳課表封面照
+      tags:
+      - Course
+  /course/{course_id}/plan:
+    post:
+      consumes:
+      - application/json
+      description: 創建計畫
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreatePlanBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 創建成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/plandto.PlanID'
+              type: object
+        "400":
+          description: 創建失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建計畫
       tags:
       - Course
   /course/list:

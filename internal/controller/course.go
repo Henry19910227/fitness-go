@@ -11,11 +11,12 @@ import (
 type Course struct {
 	Base
 	courseService service.Course
+	planService service.Plan
 }
 
-func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, userMiddleware gin.HandlerFunc) {
+func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, userMiddleware gin.HandlerFunc) {
 
-	course := &Course{courseService: courseService}
+	course := &Course{courseService: courseService, planService: planService}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 	courseGroup := baseGroup.Group("/course")
@@ -25,6 +26,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, userMid
 	courseGroup.GET("/list", course.GetCourseList)
 	courseGroup.GET("/:course_id", course.GetCourse)
 	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
+	courseGroup.POST("/:course_id/plan", course.CreatePlan)
 }
 
 // CreateCourse 創建課表
@@ -199,4 +201,40 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, result, "success upload")
+}
+
+// CreatePlan 創建計畫
+// @Summary 創建計畫
+// @Description 創建計畫
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param course_id path int64 true "課表id"
+// @Param json_body body validator.CreatePlanBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult{data=plandto.PlanID} "創建成功!"
+// @Failure 400 {object} model.ErrorResult "創建失敗"
+// @Router /course/{course_id}/plan [POST]
+func (cc *Course) CreatePlan(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.CourseIDUri
+	var body validator.CreatePlanBody
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, err := cc.planService.CreatePlanByToken(c, header.Token, uri.CourseID, body.Name)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, result, "success create plan!")
 }

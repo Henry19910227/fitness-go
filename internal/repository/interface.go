@@ -29,4 +29,10 @@ type Course interface {
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 	FindCourses(uid int64, entity interface{}) error
 	FindCourseByID(courseID int64, entity interface{}) error
+	CheckCourseExistByIDAndUID(courseID int64, uid int64) (bool, error)
+}
+
+type Plan interface {
+	CreatePlan(courseID int64, name string) (int64, error)
+	CheckPlanExistByUID(uid int64, planID int64) (bool, error)
 }

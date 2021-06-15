@@ -84,3 +84,15 @@ func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
 	}
 	return nil
 }
+
+func (c *course) CheckCourseExistByIDAndUID(courseID int64, uid int64) (bool, error) {
+	var result int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("1").
+		Where("id = ? AND user_id = ?", courseID, uid).
+		Find(&result).Error; err != nil {
+			return false, err
+	}
+	return result > 0, nil
+}

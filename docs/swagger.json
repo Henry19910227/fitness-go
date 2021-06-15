@@ -291,6 +291,70 @@
                 }
             }
         },
+        "/course/{course_id}/plan": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "創建計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "創建計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreatePlanBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "創建成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/plandto.PlanID"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "創建失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/login/admin/email": {
             "post": {
                 "description": "管理者使用信箱登入",
@@ -1535,6 +1599,16 @@
                 }
             }
         },
+        "plandto.PlanID": {
+            "type": "object",
+            "properties": {
+                "plan_id": {
+                    "description": "計畫id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "registerdto.OTP": {
             "type": "object",
             "properties": {
@@ -1758,6 +1832,18 @@
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "validator.CreatePlanBody": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "第一週增肌計畫"
                 }
             }
         },
