@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS courses (
    `train_target` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)',
    `body_target` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)',
    `notice` VARCHAR(400) NOT NULL DEFAULT '' COMMENT '注意事項',
+   `plan_count` INT(11) NOT NULL DEFAULT '0' COMMENT '計畫總數',
+   `workout_count` INT(11) NOT NULL DEFAULT '0' COMMENT '訓練總數',
    `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
    `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
    CONSTRAINT fk_courses_user_id_to_users_id FOREIGN KEY (user_id) REFERENCES users(id)
