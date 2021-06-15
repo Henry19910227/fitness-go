@@ -21,6 +21,7 @@ func (c *course) CreateCourse(uid int64, param *model.CreateCourseParam) (int64,
 		Level: param.Level,
 		Category: param.Category,
 		ScheduleType: param.ScheduleType,
+		CourseStatus: 1,
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
