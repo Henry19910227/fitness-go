@@ -571,6 +571,14 @@ definitions:
         example: 1,2,4
         type: string
     type: object
+  validator.UpdatePlanBody:
+    properties:
+      name:
+        example: 第一週增肌計畫
+        type: string
+    required:
+    - name
+    type: object
   validator.UpdateUserInfoBody:
     properties:
       birthday:
@@ -1169,6 +1177,43 @@ paths:
       security:
       - fitness_user_token: []
       summary: 刪除計畫
+      tags:
+      - Plan
+    patch:
+      consumes:
+      - application/json
+      description: 修改計畫
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdatePlanBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/plandto.Plan'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 修改計畫
       tags:
       - Plan
   /register/email:

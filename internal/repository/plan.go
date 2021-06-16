@@ -70,6 +70,19 @@ func (p *plan) FindPlansByCourseID(courseID int64) ([]*model.Plan, error) {
 	return plans, nil
 }
 
+func (p *plan) UpdatePlanByID(planID int64, name string) error {
+	if err := p.gorm.DB().
+		Table("plans").
+		Where("id = ?", planID).
+		Updates(map[string]interface{}{
+			"name": name,
+			"update_at": time.Now().Format("2006-01-02 15:04:05"),
+		}).Error; err != nil {
+			return err
+	}
+	return nil
+}
+
 func (p *plan) DeletePlanByID(planID int64) error {
 	if err := p.gorm.DB().Transaction(func(tx *gorm.DB) error {
 		//查詢關聯課表id

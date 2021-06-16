@@ -930,6 +930,68 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "修改計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Plan"
+                ],
+                "summary": "修改計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdatePlanBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/plandto.Plan"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
             }
         },
         "/register/email": {
@@ -2163,6 +2225,18 @@ var doc = `{
                     "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
                     "type": "string",
                     "example": "1,2,4"
+                }
+            }
+        },
+        "validator.UpdatePlanBody": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "第一週增肌計畫"
                 }
             }
         },

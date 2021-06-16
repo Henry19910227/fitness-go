@@ -50,6 +50,34 @@ func (p *plan) CreatePlan(c *gin.Context, courseID int64, name string) (*plandto
 	return &plan, nil
 }
 
+func (p *plan) UpdatePlanByToken(c *gin.Context, token string, planID int64, name string) (*plandto.Plan, errcode.Error) {
+	uid, err := p.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, p.errHandler.InvalidToken()
+	}
+	isExist, err := p.planRepo.CheckPlanExistByUID(uid, planID)
+	if err != nil {
+		return nil, p.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, p.errHandler.PermissionDenied()
+	}
+	return p.UpdatePlan(c, planID, name)
+}
+
+func (p *plan) UpdatePlan(c *gin.Context, planID int64, name string) (*plandto.Plan, errcode.Error) {
+	if err := p.planRepo.UpdatePlanByID(planID, name); err != nil {
+		p.logger.Set(c, handler.Error, "PlanRepo", p.errHandler.SystemError().Code(), err.Error())
+		return nil, p.errHandler.SystemError()
+	}
+	var plan plandto.Plan
+	if err := p.planRepo.FindPlanByID(planID, &plan); err != nil {
+		p.logger.Set(c, handler.Error, "PlanRepo", p.errHandler.SystemError().Code(), err.Error())
+		return nil, p.errHandler.SystemError()
+	}
+	return &plan, nil
+}
+
 func (p *plan) GetPlansByCourseID(c *gin.Context, courseID int64) ([]*plandto.Plan, errcode.Error) {
 	datas, err := p.planRepo.FindPlansByCourseID(courseID)
 	if err != nil {
