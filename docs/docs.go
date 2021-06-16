@@ -357,7 +357,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/plandto.PlanID"
+                                            "$ref": "#/definitions/plandto.Plan"
                                         }
                                     }
                                 }
@@ -1692,16 +1692,6 @@ var doc = `{
                     "description": "包含訓練數量",
                     "type": "integer",
                     "example": 10
-                }
-            }
-        },
-        "plandto.PlanID": {
-            "type": "object",
-            "properties": {
-                "plan_id": {
-                    "description": "計畫id",
-                    "type": "integer",
-                    "example": 1
                 }
             }
         },

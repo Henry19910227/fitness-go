@@ -213,7 +213,7 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 // @Security fitness_user_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.CreatePlanBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=plandto.PlanID} "創建成功!"
+// @Success 200 {object} model.SuccessResult{data=plandto.Plan} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course/{course_id}/plan [POST]
 func (cc *Course) CreatePlan(c *gin.Context) {
@@ -232,12 +232,12 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, err := cc.planService.CreatePlanByToken(c, header.Token, uri.CourseID, body.Name)
+	plan, err := cc.planService.CreatePlanByToken(c, header.Token, uri.CourseID, body.Name)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
-	cc.JSONSuccessResponse(c, result, "success create plan!")
+	cc.JSONSuccessResponse(c, plan, "success create plan!")
 }
 
 // GetPlans 取得課表內的計畫列表

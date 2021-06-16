@@ -253,13 +253,6 @@ definitions:
         example: 10
         type: integer
     type: object
-  plandto.PlanID:
-    properties:
-      plan_id:
-        description: 計畫id
-        example: 1
-        type: integer
-    type: object
   registerdto.OTP:
     properties:
       otp_code:
@@ -791,7 +784,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/plandto.PlanID'
+                  $ref: '#/definitions/plandto.Plan'
               type: object
         "400":
           description: 創建失敗

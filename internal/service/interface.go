@@ -70,7 +70,7 @@ type Course interface {
 }
 
 type Plan interface {
-	CreatePlanByToken(c *gin.Context, token string, courseID int64, name string) (*plandto.PlanID, errcode.Error)
-	CreatePlan(c *gin.Context, courseID int64, name string) (*plandto.PlanID, errcode.Error)
+	CreatePlanByToken(c *gin.Context, token string, courseID int64, name string) (*plandto.Plan, errcode.Error)
+	CreatePlan(c *gin.Context, courseID int64, name string) (*plandto.Plan, errcode.Error)
 	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*plandto.Plan, errcode.Error)
 }
