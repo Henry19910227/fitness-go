@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS plans (
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
     CONSTRAINT fk_plan_course_id_to_courses_id FOREIGN KEY (course_id) REFERENCES courses(id)
-)
+) ENGINE=InnoDB CHARSET=utf8mb4;
