@@ -34,5 +34,6 @@ type Course interface {
 
 type Plan interface {
 	CreatePlan(courseID int64, name string) (int64, error)
+	FindPlansByCourseID(courseID int64) ([]*model.Plan, error)
 	CheckPlanExistByUID(uid int64, planID int64) (bool, error)
 }

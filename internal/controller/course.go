@@ -27,6 +27,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planSer
 	courseGroup.GET("/:course_id", course.GetCourse)
 	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
 	courseGroup.POST("/:course_id/plan", course.CreatePlan)
+	courseGroup.GET("/:course_id/plans", course.GetPlans)
 }
 
 // CreateCourse 創建課表
@@ -237,4 +238,29 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, result, "success create plan!")
+}
+
+// GetPlans 取得課表內的計畫列表
+// @Summary  取得課表內的計畫列表
+// @Description  取得課表內的計畫列表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=[]plandto.Plan} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course/{course_id}/plans [GET]
+func (cc *Course) GetPlans(c *gin.Context) {
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	plans, err := cc.planService.GetPlansByCourseID(c, uri.CourseID)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, plans, "success!")
 }

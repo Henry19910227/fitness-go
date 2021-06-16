@@ -44,3 +44,21 @@ func (p *plan) CreatePlan(c *gin.Context, courseID int64, name string) (*plandto
 	}
 	return &plandto.PlanID{ID: planID}, nil
 }
+
+func (p *plan) GetPlansByCourseID(c *gin.Context, courseID int64) ([]*plandto.Plan, errcode.Error) {
+	datas, err := p.planRepo.FindPlansByCourseID(courseID)
+	if err != nil {
+		p.logger.Set(c, handler.Error, "PlanRepo", p.errHandler.SystemError().Code(), err.Error())
+		return nil, p.errHandler.SystemError()
+	}
+	plans := make([]*plandto.Plan, 0)
+	for _, data := range datas {
+		plan := plandto.Plan{
+			ID: data.ID,
+			Name: data.Name,
+			WorkoutCount: data.WorkoutCount,
+		}
+		plans = append(plans, &plan)
+	}
+	return plans, nil
+}

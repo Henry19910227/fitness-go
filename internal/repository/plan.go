@@ -48,6 +48,18 @@ func (p *plan) CreatePlan(courseID int64, name string) (int64, error) {
 	return plan.ID, nil
 }
 
+func (p *plan) FindPlansByCourseID(courseID int64) ([]*model.Plan, error) {
+	plans := make([]*model.Plan, 0)
+	if err := p.gorm.DB().
+		Table("plans").
+		Select("*").
+		Where("course_id = ?", courseID).
+		Find(&plans).Error; err != nil {
+		return nil, err
+	}
+	return plans, nil
+}
+
 func (p *plan) CheckPlanExistByUID(uid int64, planID int64) (bool, error) {
 	panic("implement me")
 }

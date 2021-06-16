@@ -238,6 +238,21 @@ definitions:
         example: success!
         type: string
     type: object
+  plandto.Plan:
+    properties:
+      id:
+        description: 計畫id
+        example: 1
+        type: integer
+      name:
+        description: 計畫名稱
+        example: 第一週增肌計畫
+        type: string
+      workout_count:
+        description: 包含訓練數量
+        example: 10
+        type: integer
+    type: object
   plandto.PlanID:
     properties:
       plan_id:
@@ -785,6 +800,40 @@ paths:
       security:
       - fitness_user_token: []
       summary: 創建計畫
+      tags:
+      - Course
+  /course/{course_id}/plans:
+    get:
+      consumes:
+      - application/json
+      description: 取得課表內的計畫列表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/plandto.Plan'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 取得課表內的計畫列表
       tags:
       - Course
   /course/list:
