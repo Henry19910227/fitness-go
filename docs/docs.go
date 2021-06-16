@@ -877,6 +877,61 @@ var doc = `{
                 }
             }
         },
+        "/plan/{plan_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "刪除計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Plan"
+                ],
+                "summary": "刪除計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/plandto.PlanID"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/register/email": {
             "post": {
                 "description": "使用信箱註冊",
@@ -1692,6 +1747,16 @@ var doc = `{
                     "description": "包含訓練數量",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "plandto.PlanID": {
+            "type": "object",
+            "properties": {
+                "plan_id": {
+                    "description": "計畫id",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

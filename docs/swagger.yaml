@@ -253,6 +253,13 @@ definitions:
         example: 10
         type: integer
     type: object
+  plandto.PlanID:
+    properties:
+      plan_id:
+        description: 計畫id
+        example: 1
+        type: integer
+    type: object
   registerdto.OTP:
     properties:
       otp_code:
@@ -1132,6 +1139,38 @@ paths:
       summary: 升級至指定 Schema 版本
       tags:
       - Migrate
+  /plan/{plan_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除計畫
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/plandto.PlanID'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除計畫
+      tags:
+      - Plan
   /register/email:
     post:
       consumes:

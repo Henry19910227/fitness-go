@@ -67,3 +67,26 @@ func (p *plan) GetPlansByCourseID(c *gin.Context, courseID int64) ([]*plandto.Pl
 	}
 	return plans, nil
 }
+
+func (p *plan) DeletePlanByToken(c *gin.Context, token string, planID int64) (*plandto.PlanID, errcode.Error) {
+	uid, err := p.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, p.errHandler.InvalidToken()
+	}
+	isExist, err := p.planRepo.CheckPlanExistByUID(uid, planID)
+	if err != nil {
+		return nil, p.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, p.errHandler.PermissionDenied()
+	}
+	return p.DeletePlan(c, planID)
+}
+
+func (p *plan) DeletePlan(c *gin.Context, planID int64) (*plandto.PlanID, errcode.Error) {
+	if err := p.planRepo.DeletePlanByID(planID); err != nil {
+		p.logger.Set(c, handler.Error, "PlanRepo", p.errHandler.SystemError().Code(), err.Error())
+		return nil, p.errHandler.SystemError()
+	}
+	return &plandto.PlanID{ID: planID}, nil
+}
