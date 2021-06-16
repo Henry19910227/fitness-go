@@ -19,6 +19,8 @@ type Course struct {
 	TrainTarget string `gorm:"column:train_target"`          // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
 	BodyTarget string `gorm:"column:body_target"`            // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
 	Notice string `gorm:"column:notice"`                     // 注意事項
+	PlanCount int `gorm:"column:plan_count"`                 // 計畫總數
+	WorkoutCount int `gorm:"column:workout_count"`           // 訓練總數
 	CreateAt string `gorm:"column:create_at"`                // 創建時間
 	UpdateAt string `gorm:"column:update_at"`                // 更新時間
 }

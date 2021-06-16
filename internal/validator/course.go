@@ -61,6 +61,10 @@ type UpdateCourseBody struct {
 	Notice *string `json:"notice" binding:"omitempty,max=400" example:"不要受傷"` // 注意事項(0~400字元)
 }
 
+type CreatePlanBody struct {
+	Name string `json:"name" binding:"required,min=1,max=20" example:"第一週增肌計畫"`
+}
+
 func validateCourseFieldByRange(fl validator.FieldLevel, min int, max int) bool  {
 	str, ok := fl.Field().Interface().(string)
 	if !ok {

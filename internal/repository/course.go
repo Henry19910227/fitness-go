@@ -21,6 +21,7 @@ func (c *course) CreateCourse(uid int64, param *model.CreateCourseParam) (int64,
 		Level: param.Level,
 		Category: param.Category,
 		ScheduleType: param.ScheduleType,
+		CourseStatus: 1,
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
@@ -82,4 +83,16 @@ func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
 		return err
 	}
 	return nil
+}
+
+func (c *course) CheckCourseExistByIDAndUID(courseID int64, uid int64) (bool, error) {
+	var result int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("1").
+		Where("id = ? AND user_id = ?", courseID, uid).
+		Find(&result).Error; err != nil {
+			return false, err
+	}
+	return result > 0, nil
 }

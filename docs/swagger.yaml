@@ -238,6 +238,28 @@ definitions:
         example: success!
         type: string
     type: object
+  plandto.Plan:
+    properties:
+      id:
+        description: 計畫id
+        example: 1
+        type: integer
+      name:
+        description: 計畫名稱
+        example: 第一週增肌計畫
+        type: string
+      workout_count:
+        description: 包含訓練數量
+        example: 10
+        type: integer
+    type: object
+  plandto.PlanID:
+    properties:
+      plan_id:
+        description: 計畫id
+        example: 1
+        type: integer
+    type: object
   registerdto.OTP:
     properties:
       otp_code:
@@ -412,6 +434,14 @@ definitions:
     - name
     - schedule_type
     type: object
+  validator.CreatePlanBody:
+    properties:
+      name:
+        example: 第一週增肌計畫
+        type: string
+    required:
+    - name
+    type: object
   validator.CreateTrainerBody:
     properties:
       email:
@@ -540,6 +570,14 @@ definitions:
         description: 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
         example: 1,2,4
         type: string
+    type: object
+  validator.UpdatePlanBody:
+    properties:
+      name:
+        example: 第一週增肌計畫
+        type: string
+    required:
+    - name
     type: object
   validator.UpdateUserInfoBody:
     properties:
@@ -732,6 +770,78 @@ paths:
       security:
       - fitness_user_token: []
       summary: 上傳課表封面照
+      tags:
+      - Course
+  /course/{course_id}/plan:
+    post:
+      consumes:
+      - application/json
+      description: 創建計畫
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreatePlanBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 創建成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/plandto.Plan'
+              type: object
+        "400":
+          description: 創建失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建計畫
+      tags:
+      - Course
+  /course/{course_id}/plans:
+    get:
+      consumes:
+      - application/json
+      description: 取得課表內的計畫列表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/plandto.Plan'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 取得課表內的計畫列表
       tags:
       - Course
   /course/list:
@@ -1037,6 +1147,75 @@ paths:
       summary: 升級至指定 Schema 版本
       tags:
       - Migrate
+  /plan/{plan_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除計畫
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/plandto.PlanID'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除計畫
+      tags:
+      - Plan
+    patch:
+      consumes:
+      - application/json
+      description: 修改計畫
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdatePlanBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/plandto.Plan'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 修改計畫
+      tags:
+      - Plan
   /register/email:
     post:
       consumes:
