@@ -40,3 +40,7 @@ type Plan interface {
 	DeletePlanByID(planID int64) error
 	CheckPlanExistByUID(uid int64, planID int64) (bool, error)
 }
+
+type Workout interface {
+	CreateWorkout(planID int64, name string) (int64, error)
+}
