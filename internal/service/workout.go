@@ -44,3 +44,24 @@ func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*wor
 	}
 	return &workoutdto.WorkoutID{ID: workoutID}, nil
 }
+
+func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutdto.Workout, errcode.Error) {
+	datas, err := w.workoutRepo.FindWorkoutsByPlanID(planID)
+	if err != nil {
+		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
+		return nil, w.errHandler.SystemError()
+	}
+	workouts := make([]*workoutdto.Workout, 0)
+	for _, data := range datas {
+		workout := workoutdto.Workout{
+			ID: data.ID,
+			Name: data.Name,
+			Equipment: data.Equipment,
+			StartAudio: data.StartAudio,
+			EndAudio: data.EndAudio,
+			WorkoutSetCount: data.WorkoutSetCount,
+		}
+		workouts = append(workouts, &workout)
+	}
+	return workouts, nil
+}
