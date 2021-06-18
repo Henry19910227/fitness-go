@@ -64,6 +64,18 @@ func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
 	return workout.ID, nil
 }
 
+func (w *workout) FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error) {
+	workouts := make([]*model.Workout, 0)
+	if err := w.gorm.DB().
+		Table("workouts").
+		Select("*").
+		Where("plan_id = ?", planID).
+		Find(&workouts).Error; err != nil {
+		return nil, err
+	}
+	return workouts, nil
+}
+
 func (w *workout) CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error) {
 	var result int
 	if err := w.gorm.DB().

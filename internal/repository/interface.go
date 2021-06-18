@@ -43,5 +43,6 @@ type Plan interface {
 
 type Workout interface {
 	CreateWorkout(planID int64, name string) (int64, error)
+	FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error)
 	CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error)
 }
