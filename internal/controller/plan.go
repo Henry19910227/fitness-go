@@ -19,6 +19,7 @@ func NewPlan(baseGroup *gin.RouterGroup, planService service.Plan, workoutServic
 	planGroup.PATCH("/:plan_id", plan.UpdatePlan)
 	planGroup.DELETE("/:plan_id", plan.DeletePlan)
 	planGroup.POST("/:plan_id/workout", plan.CreateWorkout)
+	planGroup.GET("/:plan_id/workouts", plan.GetWorkouts)
 }
 
 // UpdatePlan 修改計畫
@@ -121,4 +122,29 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 		return
 	}
 	p.JSONSuccessResponse(c, data, "create success!")
+}
+
+// GetWorkouts 取得計畫內的訓練列表
+// @Summary  取得計畫內的訓練列表
+// @Description  取得計畫內的訓練列表
+// @Tags Plan
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param plan_id path int64 true "計畫id"
+// @Success 200 {object} model.SuccessResult{data=[]workoutdto.Workout} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /plan/{plan_id}/workouts [GET]
+func (p *Plan) GetWorkouts(c *gin.Context) {
+	var uri validator.PlanIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	workouts, err := p.workoutService.GetWorkoutsByPlanID(c, uri.PlanID)
+	if err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, workouts, "get success!")
 }
