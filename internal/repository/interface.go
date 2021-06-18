@@ -43,4 +43,5 @@ type Plan interface {
 
 type Workout interface {
 	CreateWorkout(planID int64, name string) (int64, error)
+	CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error)
 }

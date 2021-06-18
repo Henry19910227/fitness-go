@@ -63,3 +63,19 @@ func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
 	}
 	return workout.ID, nil
 }
+
+func (w *workout) CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error) {
+	var result int
+	if err := w.gorm.DB().
+		Table("workouts").
+		Select("1").
+		Joins("INNER JOIN plans ON workouts.plan_id = plans.id ").
+		Joins("INNER JOIN courses ON plans.course_id = courses.id ").
+		Joins("INNER JOIN users ON courses.user_id = users.id ").
+		Where("workouts.id = ? AND users.id = ?", workoutID, uid).
+		Find(&result).Error; err != nil {
+		return false, err
+	}
+	return result > 0, nil
+}
+
