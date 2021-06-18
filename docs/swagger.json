@@ -976,6 +976,70 @@
                 }
             }
         },
+        "/plan/{plan_id}/workout": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "創建訓練",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Plan"
+                ],
+                "summary": "創建訓練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateWorkoutBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "創建成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.WorkoutID"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "創建失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/register/email": {
             "post": {
                 "description": "使用信箱註冊",
@@ -2073,6 +2137,18 @@
                 }
             }
         },
+        "validator.CreateWorkoutBody": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "胸肌訓練"
+                }
+            }
+        },
         "validator.EmailBody": {
             "type": "object",
             "required": [
@@ -2285,6 +2361,15 @@
                     "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "workoutdto.WorkoutID": {
+            "type": "object",
+            "properties": {
+                "workout_id": {
+                    "description": "訓練 id",
+                    "type": "integer"
                 }
             }
         }

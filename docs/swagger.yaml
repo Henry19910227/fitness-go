@@ -466,6 +466,14 @@ definitions:
     - nickname
     - phone
     type: object
+  validator.CreateWorkoutBody:
+    properties:
+      name:
+        example: 胸肌訓練
+        type: string
+    required:
+    - name
+    type: object
   validator.EmailBody:
     properties:
       email:
@@ -627,6 +635,12 @@ definitions:
         type: string
     required:
     - nickname
+    type: object
+  workoutdto.WorkoutID:
+    properties:
+      workout_id:
+        description: 訓練 id
+        type: integer
     type: object
 info:
   contact: {}
@@ -1214,6 +1228,44 @@ paths:
       security:
       - fitness_user_token: []
       summary: 修改計畫
+      tags:
+      - Plan
+  /plan/{plan_id}/workout:
+    post:
+      consumes:
+      - application/json
+      description: 創建訓練
+      parameters:
+      - description: 課表id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateWorkoutBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 創建成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutID'
+              type: object
+        "400":
+          description: 創建失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建訓練
       tags:
       - Plan
   /register/email:
