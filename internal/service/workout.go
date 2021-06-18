@@ -11,13 +11,29 @@ import (
 
 type workout struct {
 	workoutRepo repository.Workout
+	planRepo repository.Plan
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewWorkout(workoutRepo repository.Workout, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
-	return &workout{workoutRepo: workoutRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewWorkout(workoutRepo repository.Workout, planRepo repository.Plan, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
+	return &workout{workoutRepo: workoutRepo, planRepo: planRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+}
+
+func (w *workout) CreateWorkoutByToken(c *gin.Context, token string, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error) {
+	uid, err := w.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, w.errHandler.InvalidToken()
+	}
+	isExist, err := w.planRepo.CheckPlanExistByUID(uid, planID)
+	if err != nil {
+		return nil, w.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, w.errHandler.PermissionDenied()
+	}
+	return w.CreateWorkout(c, planID, name)
 }
 
 func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error) {
