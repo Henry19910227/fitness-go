@@ -12,3 +12,8 @@ type Workout struct {
 type WorkoutID struct {
 	ID int64  `json:"workout_id" example:"1"`  // 訓練 id
 }
+
+type UpdateWorkoutParam struct {
+	Name *string `json:"name" example:"第一天胸肌訓練"` // 訓練名稱
+	Equipment *string `json:"equipment" example:"2,3,7"` // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+}
