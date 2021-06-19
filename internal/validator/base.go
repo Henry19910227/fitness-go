@@ -60,6 +60,10 @@ func validateCourseFieldByRange(fl validator.FieldLevel, min int, max int, maxCo
 		return false
 	}
 	results := strings.Split(str, ",")
+	//檢查是否只傳了空白字串，如果是空白字串就直接返回
+	if len(results) == 1 && results[0] == "" {
+		return true
+	}
 	//檢查個數是否超過上限
 	if len(results) > maxCount {
 		return false
