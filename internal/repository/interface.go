@@ -46,5 +46,6 @@ type Workout interface {
 	FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error)
 	FindWorkoutByID(workoutID int64, entity interface{}) error
 	UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error
+	DeleteWorkoutByID(workoutID int64) error
 	CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error)
 }

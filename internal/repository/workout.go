@@ -107,6 +107,54 @@ func (w *workout) UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutP
 	return nil
 }
 
+func (w *workout) DeleteWorkoutByID(workoutID int64) error {
+	if err := w.gorm.DB().Transaction(func(tx *gorm.DB) error {
+		//查詢plan id & course id
+		var courseID int64
+		var planID int64
+		if err := tx.
+			Table("workouts").
+			Select("plans.id, plans.course_id").
+			Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
+			Where("workouts.id = ?", workoutID).
+			Row().
+			Scan(&planID, &courseID); err != nil {
+				return err
+		}
+		//刪除訓練
+		if err := tx.
+			Where("id = ?", workoutID).
+			Delete(&model.Workout{}).Error; err != nil {
+			return err
+		}
+		//查詢關聯計畫的訓練數量
+		var workoutCount int
+		if err := tx.
+			Raw("SELECT COUNT(*) FROM workouts WHERE plan_id = ? FOR UPDATE", planID).
+			Scan(&workoutCount).Error; err != nil {
+			return err
+		}
+		//更新計畫擁有的訓練數量
+		if err := tx.
+			Table("plans").
+			Where("id = ?", planID).
+			Update("workout_count", workoutCount).Error; err != nil {
+			return err
+		}
+		//更新課表擁有的訓練數量
+		if err := tx.
+			Table("courses").
+			Where("id = ?", courseID).
+			Update("workout_count", workoutCount).Error; err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (w *workout) CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error) {
 	var result int
 	if err := w.gorm.DB().
