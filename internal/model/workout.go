@@ -16,3 +16,10 @@ func (Workout) TableName() string {
 	return "workouts"
 }
 
+type UpdateWorkoutParam struct {
+	Name *string `gorm:"column:name"` // 訓練名稱
+	Equipment *string `gorm:"column:equipment"` // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+	UpdateAt *string `gorm:"column:update_at"` // 更新時間
+	StartAudio *string `gorm:"column:start_audio"` // 前導語音
+	EndAudio *string `gorm:"column:end_audio"` // 結束語音
+}

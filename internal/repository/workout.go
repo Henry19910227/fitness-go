@@ -86,6 +86,27 @@ func (w *workout) FindWorkoutByID(workoutID int64, entity interface{}) error {
 	return nil
 }
 
+func (w *workout) UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error {
+	var selects []interface{}
+	if param.Name != nil { selects = append(selects, "name") }
+	if param.Equipment != nil { selects = append(selects, "equipment") }
+	if param.StartAudio != nil { selects = append(selects, "start_audio") }
+	if param.EndAudio != nil { selects = append(selects, "end_audio") }
+	if param == nil || len(selects) == 0 { return nil }
+	//插入更新時間
+	selects = append(selects, "update_at")
+	var updateAt = time.Now().Format("2006-01-02 15:04:05")
+	param.UpdateAt = &updateAt
+	if err := w.gorm.DB().
+		Table("workouts").
+		Where("id = ?", workoutID).
+		Select("", selects...).
+		Updates(param).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (w *workout) CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error) {
 	var result int
 	if err := w.gorm.DB().

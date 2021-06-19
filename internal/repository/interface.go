@@ -45,5 +45,6 @@ type Workout interface {
 	CreateWorkout(planID int64, name string) (int64, error)
 	FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error)
 	FindWorkoutByID(workoutID int64, entity interface{}) error
+	UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error
 	CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error)
 }
