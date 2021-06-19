@@ -97,3 +97,26 @@ func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *workoutd
 	}
 	return &workout, nil
 }
+
+func (w *workout) DeleteWorkoutByToken(c *gin.Context, token string, workoutID int64) (*workoutdto.WorkoutID, errcode.Error) {
+	uid, err := w.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, w.errHandler.InvalidToken()
+	}
+	isExist, err := w.workoutRepo.CheckWorkoutExistByUID(uid, workoutID)
+	if err != nil {
+		return nil, w.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, w.errHandler.PermissionDenied()
+	}
+	return w.DeleteWorkout(c, workoutID)
+}
+
+func (w *workout) DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error) {
+	if err := w.workoutRepo.DeleteWorkoutByID(workoutID); err != nil {
+		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
+		return nil, w.errHandler.SystemError()
+	}
+	return &workoutdto.WorkoutID{ID: workoutID}, nil
+}

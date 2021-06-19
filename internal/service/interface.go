@@ -86,4 +86,6 @@ type Workout interface {
 	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutdto.Workout, errcode.Error)
 	UpdateWorkoutByToken(c *gin.Context, token string, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error)
 	UpdateWorkout(c *gin.Context, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error)
+	DeleteWorkoutByToken(c *gin.Context, token string, workoutID int64) (*workoutdto.WorkoutID, errcode.Error)
+	DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error)
 }
