@@ -618,6 +618,16 @@ definitions:
         example: 70.5
         type: number
     type: object
+  validator.UpdateWorkoutBody:
+    properties:
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      name:
+        example: 胸肌訓練
+        type: string
+    type: object
   validator.ValidateEmailDupBody:
     properties:
       email:
@@ -1620,6 +1630,44 @@ paths:
       summary: 更新個人資訊
       tags:
       - User
+  /workout/{workout_id}:
+    patch:
+      consumes:
+      - application/json
+      description: 修改訓練
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateWorkoutBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.Workout'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 修改訓練
+      tags:
+      - Workout
 securityDefinitions:
   fitness_admin_token:
     in: header
