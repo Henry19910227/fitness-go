@@ -8,23 +8,23 @@ import (
 )
 
 var Suit validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 10)
+	return validateCourseFieldByRange(fl, 1, 10, 3)
 }
 
 var Equipment validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 9)
+	return validateCourseFieldByRange(fl, 1, 9, 3)
 }
 
 var Place validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 5)
+	return validateCourseFieldByRange(fl, 1, 5, 3)
 }
 
 var TrainTarget validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 5)
+	return validateCourseFieldByRange(fl, 1, 5, 3)
 }
 
 var BodyTarget validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 7)
+	return validateCourseFieldByRange(fl, 1, 7, 3)
 }
 
 type TokenHeader struct {
@@ -54,12 +54,16 @@ func init() {
 	}
 }
 
-func validateCourseFieldByRange(fl validator.FieldLevel, min int, max int) bool  {
+func validateCourseFieldByRange(fl validator.FieldLevel, min int, max int, maxCount int) bool {
 	str, ok := fl.Field().Interface().(string)
 	if !ok {
 		return false
 	}
 	results := strings.Split(str, ",")
+	//檢查個數是否超過上限
+	if len(results) > maxCount {
+		return false
+	}
 	var tmp = 0
 	for _, item := range results {
 		//將string轉換為int
