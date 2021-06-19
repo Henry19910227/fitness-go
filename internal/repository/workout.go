@@ -76,6 +76,16 @@ func (w *workout) FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error) {
 	return workouts, nil
 }
 
+func (w *workout) FindWorkoutByID(workoutID int64, entity interface{}) error {
+	if err := w.gorm.DB().
+		Model(&model.Workout{}).
+		Where("id = ?", workoutID).
+		Take(entity).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (w *workout) CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error) {
 	var result int
 	if err := w.gorm.DB().
