@@ -1631,6 +1631,37 @@ paths:
       tags:
       - User
   /workout/{workout_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除訓練
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutID'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除訓練
+      tags:
+      - Workout
     patch:
       consumes:
       - application/json
