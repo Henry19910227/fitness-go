@@ -69,7 +69,14 @@ func validateCourseFieldByRange(fl validator.FieldLevel, min int, max int, maxCo
 		return false
 	}
 	var tmp = 0
+	dupMap := make(map[string]string)
 	for _, item := range results {
+		//檢查是否重複，沒重複就把新值加入map備查
+		_, ok := dupMap[item]
+		if ok {
+			return false
+		}
+		dupMap[item] = item
 		//將string轉換為int
 		value, err := strconv.Atoi(item)
 		if err != nil {
