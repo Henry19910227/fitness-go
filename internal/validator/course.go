@@ -1,42 +1,5 @@
 package validator
 
-import (
-	"github.com/gin-gonic/gin/binding"
-	"github.com/go-playground/validator/v10"
-	"strconv"
-	"strings"
-)
-
-var Suit validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 10)
-}
-
-var Equipment validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 9)
-}
-
-var Place validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 5)
-}
-
-var TrainTarget validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 5)
-}
-
-var BodyTarget validator.Func = func(fl validator.FieldLevel) bool {
-	return validateCourseFieldByRange(fl, 1, 7)
-}
-
-func init() {
-	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		_ = v.RegisterValidation("suit", Suit)
-		_ = v.RegisterValidation("equipment", Equipment)
-		_ = v.RegisterValidation("place", Place)
-		_ = v.RegisterValidation("train_target", TrainTarget)
-		_ = v.RegisterValidation("body_target", BodyTarget)
-	}
-}
-
 type CreateCourseBody struct {
 	Name string `json:"name" binding:"required,min=1,max=20" example:"Henry課表"`        // 課表名稱(1~20字元)
 	Level int   `json:"level" binding:"required,oneof=1 2 3 4" example:"1"`           // 強度(1:初級/2:中級/3:中高級/4:高級)
@@ -63,30 +26,4 @@ type UpdateCourseBody struct {
 
 type CreatePlanBody struct {
 	Name string `json:"name" binding:"required,min=1,max=20" example:"第一週增肌計畫"`
-}
-
-func validateCourseFieldByRange(fl validator.FieldLevel, min int, max int) bool  {
-	str, ok := fl.Field().Interface().(string)
-	if !ok {
-		return false
-	}
-	results := strings.Split(str, ",")
-	var tmp = 0
-	for _, item := range results {
-		//將string轉換為int
-		value, err := strconv.Atoi(item)
-		if err != nil {
-			return false
-		}
-		//檢查選項是否在範圍內
-		if value < min || value > max {
-			return false
-		}
-		//檢查選項是否由小到大排列 (必須 > tmp)
-		if value < tmp {
-			return false
-		}
-		tmp = value
-	}
-	return true
 }
