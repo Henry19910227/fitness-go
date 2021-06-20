@@ -217,7 +217,8 @@ func setupTrainerService()  {
 
 func setupCourseService()  {
 	courseRepo := repository.NewCourse(gormTool)
-	courseService = service.NewCourse(courseRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
+	trainerRepo := repository.NewTrainer(gormTool)
+	courseService = service.NewCourse(courseRepo, trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupPlanService()  {
