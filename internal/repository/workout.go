@@ -134,6 +134,16 @@ func (w *workout) DeleteWorkoutByID(workoutID int64) error {
 			Scan(&workoutCount).Error; err != nil {
 			return err
 		}
+		//查詢關聯課表的目前總訓練數量
+		var courseWorkoutCount int
+		if err := tx.
+			Raw("SELECT COUNT(*) FROM courses " +
+				"INNER JOIN plans ON courses.id = plans.course_id " +
+				"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+				"WHERE courses.id = ? FOR UPDATE", courseID).
+			Scan(&courseWorkoutCount).Error; err != nil {
+			return err
+		}
 		//更新計畫擁有的訓練數量
 		if err := tx.
 			Table("plans").
@@ -145,7 +155,7 @@ func (w *workout) DeleteWorkoutByID(workoutID int64) error {
 		if err := tx.
 			Table("courses").
 			Where("id = ?", courseID).
-			Update("workout_count", workoutCount).Error; err != nil {
+			Update("workout_count", courseWorkoutCount).Error; err != nil {
 			return err
 		}
 		return nil
