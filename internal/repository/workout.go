@@ -23,24 +23,6 @@ func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := w.gorm.DB().Transaction(func(tx *gorm.DB) error {
-		//創建訓練
-		if err := tx.Create(&workout).Error; err != nil {
-			return err
-		}
-		//查詢關聯課表的計畫數量
-		var workoutCount int
-		if err := tx.
-			Raw("SELECT COUNT(*) FROM workouts WHERE plan_id = ? FOR UPDATE", planID).
-			Scan(&workoutCount).Error; err != nil {
-			return err
-		}
-		//更新計畫擁有的訓練數量
-		if err := tx.
-			Table("plans").
-			Where("id = ?", planID).
-			Update("workout_count", workoutCount).Error; err != nil {
-			return err
-		}
 		//取得關聯課表id
 		var courseID int64
 		if err := tx.
@@ -50,11 +32,39 @@ func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
 			Take(&courseID).Error; err != nil {
 			return err
 		}
+		//創建訓練
+		if err := tx.Create(&workout).Error; err != nil {
+			return err
+		}
+		//查詢關聯計畫當前包含的訓練總量
+		var workoutCount int
+		if err := tx.
+			Raw("SELECT COUNT(*) FROM workouts WHERE plan_id = ? FOR UPDATE", planID).
+			Scan(&workoutCount).Error; err != nil {
+			return err
+		}
+		//查詢關聯課表當前包含的訓練總量
+		var courseWorkoutCount int
+		if err := tx.
+			Raw("SELECT COUNT(*) FROM plans " +
+				"INNER JOIN courses ON courses.id = plans.course_id " +
+				"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+				"WHERE courses.id = ? FOR UPDATE", courseID).
+			Scan(&courseWorkoutCount).Error; err != nil {
+			return err
+		}
+		//更新計畫擁有的訓練數量
+		if err := tx.
+			Table("plans").
+			Where("id = ?", planID).
+			Update("workout_count", workoutCount).Error; err != nil {
+			return err
+		}
 		//更新課表擁有的訓練數量
 		if err := tx.
 			Table("courses").
 			Where("id = ?", courseID).
-			Update("workout_count", workoutCount).Error; err != nil {
+			Update("workout_count", courseWorkoutCount).Error; err != nil {
 			return err
 		}
 		return nil
