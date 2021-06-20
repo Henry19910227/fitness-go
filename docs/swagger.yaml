@@ -1282,7 +1282,7 @@ paths:
       - application/json
       description: 創建訓練
       parameters:
-      - description: 課表id
+      - description: 計畫id
         in: path
         name: plan_id
         required: true

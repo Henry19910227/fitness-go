@@ -95,7 +95,7 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 // @Accept json
 // @Produce json
 // @Security fitness_user_token
-// @Param plan_id path int64 true "課表id"
+// @Param plan_id path int64 true "計畫id"
 // @Param json_body body validator.CreateWorkoutBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutID} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"

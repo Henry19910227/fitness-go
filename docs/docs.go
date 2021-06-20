@@ -1015,7 +1015,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "課表id",
+                        "description": "計畫id",
                         "name": "plan_id",
                         "in": "path",
                         "required": true
