@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
+	"github.com/Henry19910227/fitness-go/internal/dto/workoutdto"
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
 )
@@ -77,4 +78,14 @@ type Plan interface {
 	DeletePlanByToken(c *gin.Context, token string, planID int64) (*plandto.PlanID, errcode.Error)
 	DeletePlan(c *gin.Context, planID int64) (*plandto.PlanID, errcode.Error)
 	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*plandto.Plan, errcode.Error)
+}
+
+type Workout interface {
+	CreateWorkoutByToken(c *gin.Context, token string, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error)
+	CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error)
+	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutdto.Workout, errcode.Error)
+	UpdateWorkoutByToken(c *gin.Context, token string, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error)
+	UpdateWorkout(c *gin.Context, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error)
+	DeleteWorkoutByToken(c *gin.Context, token string, workoutID int64) (*workoutdto.WorkoutID, errcode.Error)
+	DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error)
 }

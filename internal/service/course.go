@@ -16,6 +16,7 @@ import (
 type course struct {
 	Base
 	courseRepo repository.Course
+	trainerRepo repository.Trainer
 	uploader  handler.Uploader
 	resHandler handler.Resource
 	logger    handler.Logger
@@ -24,16 +25,24 @@ type course struct {
 }
 
 func NewCourse(courseRepo repository.Course,
+	trainerRepo repository.Trainer,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
-	return &course{courseRepo: courseRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error) {
 	uid, err := cs.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
+	}
+	var trainer struct{TrainerStatus int `gorm:"column:trainer_status"`}
+	if err := cs.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil{
+		return nil, cs.errHandler.PermissionDenied()
+	}
+	if trainer.TrainerStatus == 3 {
+		return nil, cs.errHandler.PermissionDenied()
 	}
 	return cs.CreateCourse(c, uid, param)
 }

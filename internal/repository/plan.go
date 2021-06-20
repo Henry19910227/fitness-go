@@ -94,10 +94,26 @@ func (p *plan) DeletePlanByID(planID int64) error {
 			Take(&courseID).Error; err != nil {
 				return err
 		}
+		//刪除計畫底下的訓練
+		if err := tx.
+			Where("plan_id = ?", planID).
+			Delete(&model.Workout{}).Error; err != nil {
+			return err
+		}
 		//刪除計畫
 		if err := tx.
 			Where("id = ?", planID).
 			Delete(&model.Plan{}).Error; err != nil {
+			return err
+		}
+		//查詢關聯課表的訓練數量
+		var workoutCount int
+		if err := tx.
+			Raw("SELECT COUNT(*) FROM courses " +
+				"INNER JOIN plans ON courses.id = plans.course_id " +
+				"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+				"WHERE course_id = ? FOR UPDATE", courseID).
+			Scan(&workoutCount).Error; err != nil {
 			return err
 		}
 		//查詢關聯課表的計畫數量
@@ -107,11 +123,14 @@ func (p *plan) DeletePlanByID(planID int64) error {
 			Scan(&planCount).Error; err != nil {
 			return err
 		}
-		//更新課表擁有的計畫數量
+		//更新課表擁有的計畫與訓練數量
 		if err := tx.
 			Table("courses").
 			Where("id = ?", courseID).
-			Update("plan_count", planCount).Error; err != nil {
+			Updates(map[string]interface{}{
+				"plan_count": planCount,
+				"workout_count": workoutCount,
+			}).Error; err != nil {
 			return err
 		}
 		return nil

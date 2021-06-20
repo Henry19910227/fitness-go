@@ -50,6 +50,7 @@ var (
 	trainerService  service.Trainer
 	courseService   service.Course
 	planService     service.Plan
+	workoutService  service.Workout
 )
 
 var (
@@ -97,7 +98,8 @@ func main() {
 	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
 	controller.NewCourse(baseGroup, courseService, planService, userMiddleware)
-	controller.NewPlan(baseGroup, planService, userMiddleware)
+	controller.NewPlan(baseGroup, planService, workoutService, userMiddleware)
+	controller.NewWorkout(baseGroup, workoutService, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -183,6 +185,7 @@ func setupService() {
 	setupTrainerService()
 	setupCourseService()
 	setupPlanService()
+	setupWorkoutService()
 }
 
 func setupLoginService() {
@@ -214,13 +217,20 @@ func setupTrainerService()  {
 
 func setupCourseService()  {
 	courseRepo := repository.NewCourse(gormTool)
-	courseService = service.NewCourse(courseRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
+	trainerRepo := repository.NewTrainer(gormTool)
+	courseService = service.NewCourse(courseRepo, trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupPlanService()  {
 	planRepo := repository.NewPlan(gormTool)
 	courseRepo := repository.NewCourse(gormTool)
 	planService = service.NewPlan(planRepo, courseRepo, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupWorkoutService()  {
+	workoutRepo := repository.NewWorkout(gormTool)
+	planRepo := repository.NewPlan(gormTool)
+	workoutService = service.NewWorkout(workoutRepo, planRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

@@ -53,6 +53,10 @@ definitions:
         description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
         example: 1,2
         type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
       price:
         description: 售價
         example: 330
@@ -80,6 +84,10 @@ definitions:
       user_id:
         description: 用戶 id
         example: 10001
+        type: integer
+      workout_count:
+        description: 訓練總數
+        example: 10
         type: integer
     type: object
   coursedto.CourseCover:
@@ -466,6 +474,14 @@ definitions:
     - nickname
     - phone
     type: object
+  validator.CreateWorkoutBody:
+    properties:
+      name:
+        example: 胸肌訓練
+        type: string
+    required:
+    - name
+    type: object
   validator.EmailBody:
     properties:
       email:
@@ -610,6 +626,16 @@ definitions:
         example: 70.5
         type: number
     type: object
+  validator.UpdateWorkoutBody:
+    properties:
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      name:
+        example: 胸肌訓練
+        type: string
+    type: object
   validator.ValidateEmailDupBody:
     properties:
       email:
@@ -627,6 +653,40 @@ definitions:
         type: string
     required:
     - nickname
+    type: object
+  workoutdto.Workout:
+    properties:
+      end_audio:
+        description: 結束語音
+        example: d2e15qwe42dw.mp3
+        type: string
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      id:
+        description: 訓練 id
+        example: 1
+        type: integer
+      name:
+        description: 訓練名稱
+        example: 第一天胸肌訓練
+        type: string
+      start_audio:
+        description: 前導語音
+        example: e6d2131w5q.mp3
+        type: string
+      workout_set_count:
+        description: 動作組數
+        example: 1
+        type: integer
+    type: object
+  workoutdto.WorkoutID:
+    properties:
+      workout_id:
+        description: 訓練 id
+        example: 1
+        type: integer
     type: object
 info:
   contact: {}
@@ -1216,6 +1276,78 @@ paths:
       summary: 修改計畫
       tags:
       - Plan
+  /plan/{plan_id}/workout:
+    post:
+      consumes:
+      - application/json
+      description: 創建訓練
+      parameters:
+      - description: 課表id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateWorkoutBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 創建成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutID'
+              type: object
+        "400":
+          description: 創建失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建訓練
+      tags:
+      - Plan
+  /plan/{plan_id}/workouts:
+    get:
+      consumes:
+      - application/json
+      description: 取得計畫內的訓練列表
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/workoutdto.Workout'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 取得計畫內的訓練列表
+      tags:
+      - Plan
   /register/email:
     post:
       consumes:
@@ -1506,6 +1638,75 @@ paths:
       summary: 更新個人資訊
       tags:
       - User
+  /workout/{workout_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除訓練
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutID'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除訓練
+      tags:
+      - Workout
+    patch:
+      consumes:
+      - application/json
+      description: 修改訓練
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateWorkoutBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.Workout'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 修改訓練
+      tags:
+      - Workout
 securityDefinitions:
   fitness_admin_token:
     in: header
