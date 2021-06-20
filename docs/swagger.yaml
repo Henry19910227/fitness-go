@@ -53,6 +53,10 @@ definitions:
         description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
         example: 1,2
         type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
       price:
         description: 售價
         example: 330
@@ -80,6 +84,10 @@ definitions:
       user_id:
         description: 用戶 id
         example: 10001
+        type: integer
+      workout_count:
+        description: 訓練總數
+        example: 10
         type: integer
     type: object
   coursedto.CourseCover:

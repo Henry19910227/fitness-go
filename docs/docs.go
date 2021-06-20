@@ -1789,6 +1789,11 @@ var doc = `{
                     "type": "string",
                     "example": "1,2"
                 },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 2
+                },
                 "price": {
                     "description": "售價",
                     "type": "integer",
@@ -1823,6 +1828,11 @@ var doc = `{
                     "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
