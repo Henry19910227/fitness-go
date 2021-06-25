@@ -159,3 +159,39 @@ func (w *workout) UploadWorkoutStartAudioByID(c *gin.Context, workoutID int64, a
 	}
 	return &workoutdto.Audio{Named: newAudioNamed}, nil
 }
+
+func (w *workout) UploadWorkoutEndAudioByToken(c *gin.Context, token string, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
+	uid, err := w.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, w.errHandler.InvalidToken()
+	}
+	isExist, err := w.workoutRepo.CheckWorkoutExistByUID(uid, workoutID)
+	if err != nil {
+		return nil, w.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, w.errHandler.PermissionDenied()
+	}
+	return w.UploadWorkoutEndAudioByID(c, workoutID, audioNamed, file)
+}
+
+func (w *workout) UploadWorkoutEndAudioByID(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
+	newAudioNamed, err := w.uploader.UploadWorkoutAudio(file, audioNamed)
+	if err != nil {
+		if strings.Contains(err.Error(), "9007") {
+			return nil, w.errHandler.FileTypeError()
+		}
+		if strings.Contains(err.Error(), "9008") {
+			return nil, w.errHandler.FileSizeError()
+		}
+		w.logger.Set(c, handler.Error, "Resource Handler", w.errHandler.SystemError().Code(), err.Error())
+		return nil, w.errHandler.SystemError()
+	}
+	if err := w.workoutRepo.UpdateWorkoutByID(workoutID, &model.UpdateWorkoutParam{
+		EndAudio: &newAudioNamed,
+	}); err != nil {
+		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
+		return nil, w.errHandler.SystemError()
+	}
+	return &workoutdto.Audio{Named: newAudioNamed}, nil
+}

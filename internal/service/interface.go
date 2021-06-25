@@ -90,4 +90,6 @@ type Workout interface {
 	DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error)
 	UploadWorkoutStartAudioByToken(c *gin.Context, token string, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
 	UploadWorkoutStartAudioByID(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
+	UploadWorkoutEndAudioByToken(c *gin.Context, token string, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
+	UploadWorkoutEndAudioByID(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
 }
