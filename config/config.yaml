@@ -12,6 +12,7 @@ Resource:
     RootPath: ./volumes/storage
 Upload:
     UploadImageMaxSize: 5 #MB
+    UploadAudioMaxSize: 10 #MB
     UploadImageAllowExt:
       - .jpg
       - .png
@@ -19,6 +20,8 @@ Upload:
       - .JPG
       - .PNG
       - .JPEG
+    UploadAudioAllowExt:
+      - .mp3
 Log:
     FileName: fitness
     FileExt: log
