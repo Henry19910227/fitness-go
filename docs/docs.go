@@ -1718,6 +1718,68 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/workout/{workout_id}/start_audio": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "上傳訓練前導語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "前導語音",
+                        "name": "start_audio",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.Audio"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -2578,6 +2640,16 @@ var doc = `{
                     "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "workoutdto.Audio": {
+            "type": "object",
+            "properties": {
+                "audio": {
+                    "description": "語音檔案名",
+                    "type": "string",
+                    "example": "e6d2131w5q.mp3"
                 }
             }
         },

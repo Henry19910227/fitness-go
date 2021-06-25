@@ -654,6 +654,13 @@ definitions:
     required:
     - nickname
     type: object
+  workoutdto.Audio:
+    properties:
+      audio:
+        description: 語音檔案名
+        example: e6d2131w5q.mp3
+        type: string
+    type: object
   workoutdto.Workout:
     properties:
       end_audio:
@@ -1705,6 +1712,43 @@ paths:
       security:
       - fitness_user_token: []
       summary: 修改訓練
+      tags:
+      - Workout
+  /workout/{workout_id}/start_audio:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}'
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 前導語音
+        in: formData
+        name: start_audio
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.Audio'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳訓練前導語音
       tags:
       - Workout
 securityDefinitions:
