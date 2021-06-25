@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type workout struct {
@@ -13,11 +14,13 @@ type workout struct {
 }
 
 func NewWorkout(baseGroup *gin.RouterGroup, workoutService service.Workout, userMiddleware gin.HandlerFunc) {
+	baseGroup.StaticFS("/resource/workout/audio", http.Dir("./volumes/storage/workout/audio"))
 	workout := workout{workoutService: workoutService}
 	planGroup := baseGroup.Group("/workout")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:workout_id", workout.UpdateWorkout)
 	planGroup.DELETE("/:workout_id", workout.DeleteWorkout)
+	planGroup.POST("/:workout_id/start_audio", workout.UploadWorkoutStartAudio)
 }
 
 // UpdateWorkout 修改訓練
@@ -90,4 +93,38 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 	w.JSONSuccessResponse(c, data, "delete success!")
 }
 
-
+// UploadWorkoutStartAudio 上傳訓練前導語音
+// @Summary 上傳訓練前導語音
+// @Description 下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
+// @Tags Workout
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param workout_id path int64 true "訓練id"
+// @Param start_audio formData file true "前導語音"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /workout/{workout_id}/start_audio [POST]
+func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("start_audio")
+	if err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := w.workoutService.UploadWorkoutStartAudioByToken(c, header.Token, uri.WorkoutID, fileHeader.Filename, file)
+	if e != nil {
+		w.JSONErrorResponse(c, e)
+		return
+	}
+	w.JSONSuccessResponse(c, result, "upload success")
+}

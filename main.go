@@ -230,7 +230,7 @@ func setupPlanService()  {
 func setupWorkoutService()  {
 	workoutRepo := repository.NewWorkout(gormTool)
 	planRepo := repository.NewPlan(gormTool)
-	workoutService = service.NewWorkout(workoutRepo, planRepo, logHandler, jwtTool, errcode.NewHandler())
+	workoutService = service.NewWorkout(workoutRepo, planRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {
