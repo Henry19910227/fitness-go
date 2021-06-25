@@ -21,6 +21,7 @@ func NewWorkout(baseGroup *gin.RouterGroup, workoutService service.Workout, user
 	planGroup.PATCH("/:workout_id", workout.UpdateWorkout)
 	planGroup.DELETE("/:workout_id", workout.DeleteWorkout)
 	planGroup.POST("/:workout_id/start_audio", workout.UploadWorkoutStartAudio)
+	planGroup.POST("/:workout_id/end_audio", workout.UploadWorkoutEndAudio)
 }
 
 // UpdateWorkout 修改訓練
@@ -122,6 +123,42 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 		return
 	}
 	result, e := w.workoutService.UploadWorkoutStartAudioByToken(c, header.Token, uri.WorkoutID, fileHeader.Filename, file)
+	if e != nil {
+		w.JSONErrorResponse(c, e)
+		return
+	}
+	w.JSONSuccessResponse(c, result, "upload success")
+}
+
+// UploadWorkoutEndAudio 上傳訓練結束語音
+// @Summary 上上傳訓練結束語音
+// @Description 上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
+// @Tags Workout
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param workout_id path int64 true "訓練id"
+// @Param end_audio formData file true "結束語音"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /workout/{workout_id}/end_audio [POST]
+func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("end_audio")
+	if err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := w.workoutService.UploadWorkoutEndAudioByToken(c, header.Token, uri.WorkoutID, fileHeader.Filename, file)
 	if e != nil {
 		w.JSONErrorResponse(c, e)
 		return
