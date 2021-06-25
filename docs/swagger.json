@@ -1701,6 +1701,68 @@
                 }
             }
         },
+        "/workout/{workout_id}/end_audio": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "上上傳訓練結束語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "結束語音",
+                        "name": "end_audio",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.Audio"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/workout/{workout_id}/start_audio": {
             "post": {
                 "security": [

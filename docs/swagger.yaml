@@ -1714,6 +1714,43 @@ paths:
       summary: 修改訓練
       tags:
       - Workout
+  /workout/{workout_id}/end_audio:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}'
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 結束語音
+        in: formData
+        name: end_audio
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.Audio'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上上傳訓練結束語音
+      tags:
+      - Workout
   /workout/{workout_id}/start_audio:
     post:
       consumes:
