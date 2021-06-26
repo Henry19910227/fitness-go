@@ -1,5 +1,9 @@
 package validator
 
+type ActionIDUri struct {
+	ActionID int64 `uri:"action_id" binding:"required" example:"1"`
+}
+
 type CreateActionBody struct {
 	Name string `json:"name" binding:"required,min=1,max=20" example:"槓鈴臥推"` //動作名稱(1~20字元)
 	Type int `json:"type" binding:"required,oneof=1 2 3 4 5" example:"1"` //紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)

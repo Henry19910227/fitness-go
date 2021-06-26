@@ -101,6 +101,7 @@ func main() {
 	controller.NewCourse(baseGroup, courseService, planService, actionService, userMiddleware)
 	controller.NewPlan(baseGroup, planService, workoutService, userMiddleware)
 	controller.NewWorkout(baseGroup, workoutService, userMiddleware)
+	controller.NewAction(baseGroup, actionService, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
