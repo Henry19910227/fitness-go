@@ -49,3 +49,8 @@ type Workout interface {
 	DeleteWorkoutByID(workoutID int64) error
 	CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error)
 }
+
+type Action interface {
+	CreateAction(courseID int64, param *model.CreateActionParam) (int64, error)
+	FindActionByID(actionID int64, entity interface{}) error
+}
