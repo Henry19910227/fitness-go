@@ -98,6 +98,8 @@ type Workout interface {
 type Action interface {
 	CreateActionByToken(c *gin.Context, token string, courseID int64, param *actiondto.CreateActionParam) (*actiondto.Action, errcode.Error)
 	CreateAction(c *gin.Context, courseID int64, param *actiondto.CreateActionParam) (*actiondto.Action, errcode.Error)
+	UpdateActionByToken(c *gin.Context, token string, actionID int64, param *actiondto.UpdateActionParam) (*actiondto.Action, errcode.Error)
+	UpdateAction(c *gin.Context, actionID int64, param *actiondto.UpdateActionParam) (*actiondto.Action, errcode.Error)
 	DeleteActionByToken(c *gin.Context, token string, actionID int64) (*actiondto.ActionID, errcode.Error)
 	DeleteAction(c *gin.Context, actionID int64) (*actiondto.ActionID, errcode.Error)
 }
