@@ -72,3 +72,17 @@ func (a *action) DeleteActionByID(actionID int64) error {
 	}
 	return nil
 }
+
+func (a *action) CheckActionExistByUID(uid int64, actionID int64) (bool, error) {
+	var result int
+	if err := a.gorm.DB().
+		Table("actions").
+		Select("1").
+		Joins("INNER JOIN courses ON actions.course_id = courses.id ").
+		Joins("INNER JOIN users ON courses.user_id = users.id ").
+		Where("actions.id = ? AND users.id = ?", actionID, uid).
+		Find(&result).Error; err != nil {
+		return false, err
+	}
+	return result > 0, nil
+}
