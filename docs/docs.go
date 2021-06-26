@@ -24,6 +24,61 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/action/{action_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "刪除動作",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "刪除動作",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/actiondto.ActionID"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "刪除失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course": {
             "post": {
                 "security": [
@@ -2018,6 +2073,16 @@ var doc = `{
                     "description": "動作影片",
                     "type": "string",
                     "example": "11d547we1d4f8e.mp4"
+                }
+            }
+        },
+        "actiondto.ActionID": {
+            "type": "object",
+            "properties": {
+                "action_id": {
+                    "description": "動作id",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
