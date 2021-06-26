@@ -1060,7 +1060,7 @@ paths:
       - application/json
       description: 獲取我的課表列表
       parameters:
-      - description: 課表狀態
+      - description: 課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
         in: query
         name: status
         type: integer
