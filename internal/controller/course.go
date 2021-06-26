@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
 	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -12,11 +13,12 @@ type Course struct {
 	Base
 	courseService service.Course
 	planService service.Plan
+	actionService service.Action
 }
 
-func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, userMiddleware gin.HandlerFunc) {
+func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, actionService service.Action, userMiddleware gin.HandlerFunc) {
 
-	course := &Course{courseService: courseService, planService: planService}
+	course := &Course{courseService: courseService, planService: planService, actionService: actionService}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 	courseGroup := baseGroup.Group("/course")
@@ -28,6 +30,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planSer
 	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
 	courseGroup.POST("/:course_id/plan", course.CreatePlan)
 	courseGroup.GET("/:course_id/plans", course.GetPlans)
+	courseGroup.POST("/:course_id/action", course.CreateAction)
 }
 
 // CreateCourse 創建課表
@@ -263,4 +266,47 @@ func (cc *Course) GetPlans(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, plans, "success!")
+}
+
+// CreateAction 創建動作
+// @Summary 創建動作
+// @Description 創建動作
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param course_id path int64 true "課表id"
+// @Param json_body body validator.CreateActionBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult{data=actiondto.Action} "創建成功!"
+// @Failure 400 {object} model.ErrorResult "創建失敗"
+// @Router /course/{course_id}/action [POST]
+func (cc *Course) CreateAction(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.CourseIDUri
+	var body validator.CreateActionBody
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	action, err := cc.actionService.CreateActionByToken(c, header.Token, uri.CourseID, &actiondto.CreateActionParam{
+		Name: body.Name,
+		Type: body.Type,
+		Category: body.Category,
+		Body: body.Body,
+		Equipment: body.Equipment,
+		Intro: body.Intro,
+	})
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, action, "success create!")
 }

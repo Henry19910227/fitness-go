@@ -51,6 +51,7 @@ var (
 	courseService   service.Course
 	planService     service.Plan
 	workoutService  service.Workout
+	actionService   service.Action
 )
 
 var (
@@ -97,7 +98,7 @@ func main() {
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
-	controller.NewCourse(baseGroup, courseService, planService, userMiddleware)
+	controller.NewCourse(baseGroup, courseService, planService, actionService, userMiddleware)
 	controller.NewPlan(baseGroup, planService, workoutService, userMiddleware)
 	controller.NewWorkout(baseGroup, workoutService, userMiddleware)
 	controller.NewSwagger(router, swagService)
@@ -185,6 +186,7 @@ func setupService() {
 	setupTrainerService()
 	setupCourseService()
 	setupPlanService()
+	setupActionService()
 	setupWorkoutService()
 }
 
@@ -231,6 +233,12 @@ func setupWorkoutService()  {
 	workoutRepo := repository.NewWorkout(gormTool)
 	planRepo := repository.NewPlan(gormTool)
 	workoutService = service.NewWorkout(workoutRepo, planRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupActionService()  {
+	actionRepo := repository.NewAction(gormTool)
+	courseRepo := repository.NewCourse(gormTool)
+	actionService = service.NewAction(actionRepo, courseRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {
