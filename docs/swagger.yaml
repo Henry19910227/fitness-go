@@ -1,4 +1,47 @@
 definitions:
+  actiondto.Action:
+    properties:
+      body:
+        description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        example: 8
+        type: integer
+      category:
+        description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        example: 1
+        type: integer
+      cover:
+        description: 封面
+        example: 32as1d5f13e4.png
+        type: string
+      equipment:
+        description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        example: 1
+        type: integer
+      id:
+        description: 動作id
+        example: 1
+        type: integer
+      intro:
+        description: 動作介紹
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        type: string
+      name:
+        description: 動作名稱
+        example: 槓鈴臥推
+        type: string
+      source:
+        description: 動作來源(1:系統動作/2:教練自創動作)
+        example: 2
+        type: integer
+      type:
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
+        type: integer
+      video:
+        description: 動作影片
+        example: 11d547we1d4f8e.mp4
+        type: string
+    type: object
   coursedto.Course:
     properties:
       body_target:
@@ -418,6 +461,40 @@ definitions:
         example: 72.5
         type: number
     type: object
+  validator.CreateActionBody:
+    properties:
+      body:
+        description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        example: 8
+        type: integer
+      category:
+        description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        example: 1
+        type: integer
+      equipment:
+        description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        example: 1
+        type: integer
+      intro:
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        type: string
+      name:
+        description: 動作名稱(1~20字元)
+        example: 槓鈴臥推
+        type: string
+      type:
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
+        type: integer
+    required:
+    - body
+    - category
+    - equipment
+    - intro
+    - name
+    - type
+    type: object
   validator.CreateCourseBody:
     properties:
       category:
@@ -800,6 +877,44 @@ paths:
       security:
       - fitness_user_token: []
       summary: 更新課表
+      tags:
+      - Course
+  /course/{course_id}/action:
+    post:
+      consumes:
+      - application/json
+      description: 創建動作
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateActionBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 創建成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/actiondto.Action'
+              type: object
+        "400":
+          description: 創建失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建動作
       tags:
       - Course
   /course/{course_id}/cover:
