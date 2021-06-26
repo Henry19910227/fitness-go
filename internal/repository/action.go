@@ -45,6 +45,30 @@ func (a *action) FindActionByID(actionID int64, entity interface{}) error {
 	return nil
 }
 
+func (a *action) UpdateActionByID(actionID int64, param *model.UpdateActionParam) error {
+	var selects []interface{}
+	if param.Name != nil { selects = append(selects, "name") }
+	if param.Category != nil { selects = append(selects, "category") }
+	if param.Body != nil { selects = append(selects, "body") }
+	if param.Equipment != nil { selects = append(selects, "equipment") }
+	if param.Intro != nil { selects = append(selects, "intro") }
+	if param.Cover != nil { selects = append(selects, "cover") }
+	if param.Video != nil { selects = append(selects, "video") }
+	if param == nil || len(selects) == 0 { return nil }
+	//插入更新時間
+	selects = append(selects, "update_at")
+	var updateAt = time.Now().Format("2006-01-02 15:04:05")
+	param.UpdateAt = &updateAt
+	if err := a.gorm.DB().
+		Table("actions").
+		Where("id = ?", actionID).
+		Select("", selects...).
+		Updates(param).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (a *action) DeleteActionByID(actionID int64) error {
 	if err := a.gorm.DB().Transaction(func(tx *gorm.DB) error {
 		//獲取與動作關聯的課表狀態
