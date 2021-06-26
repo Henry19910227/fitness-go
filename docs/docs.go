@@ -77,6 +77,68 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "修改動作",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "修改動作",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateActionBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/actiondto.Action"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
             }
         },
         "/course": {
@@ -2819,6 +2881,36 @@ var doc = `{
                     "description": "密碼 (6~18字元)",
                     "type": "string",
                     "example": "12345678"
+                }
+            }
+        },
+        "validator.UpdateActionBody": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                    "type": "integer",
+                    "example": 8
+                },
+                "category": {
+                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "equipment": {
+                    "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "intro": {
+                    "description": "動作介紹(1~400字元)",
+                    "type": "string",
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                },
+                "name": {
+                    "description": "動作名稱(1~20字元)",
+                    "type": "string",
+                    "example": "槓鈴臥推"
                 }
             }
         },
