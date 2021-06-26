@@ -21,3 +21,7 @@ type CreateActionParam struct {
 	Equipment int `json:"equipment" example:"1"` //器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
 	Intro string `json:"intro" example:"槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"` //動作介紹
 }
+
+type ActionID struct {
+	ID int64 `json:"action_id" example:"1"` //動作id
+}

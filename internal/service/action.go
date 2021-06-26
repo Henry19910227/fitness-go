@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 type action struct {
@@ -63,4 +64,31 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *actiondto.C
 		return nil, a.errHandler.SystemError()
 	}
 	return &action, nil
+}
+
+func (a *action) DeleteActionByToken(c *gin.Context, token string, actionID int64) (*actiondto.ActionID, errcode.Error) {
+	uid, err := a.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, a.errHandler.InvalidToken()
+	}
+	isExist, err := a.actionRepo.CheckActionExistByUID(uid, actionID)
+	if err != nil {
+		return nil, a.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, a.errHandler.PermissionDenied()
+	}
+	return a.DeleteAction(c, actionID)
+}
+
+func (a *action) DeleteAction(c *gin.Context, actionID int64) (*actiondto.ActionID, errcode.Error) {
+	if err := a.actionRepo.DeleteActionByID(actionID); err != nil {
+		if strings.Contains(err.Error(), "9006") {
+			a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.PermissionDenied().Code(), err.Error())
+			return nil, a.errHandler.PermissionDenied()
+		}
+		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
+		return nil, a.errHandler.SystemError()
+	}
+	return &actiondto.ActionID{ID: actionID}, nil
 }
