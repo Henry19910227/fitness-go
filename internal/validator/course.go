@@ -27,3 +27,7 @@ type UpdateCourseBody struct {
 type CreatePlanBody struct {
 	Name string `json:"name" binding:"required,min=1,max=20" example:"第一週增肌計畫"`
 }
+
+type CourseStatusQuery struct {
+	Status *int `form:"status" binding:"omitempty,oneof=1 2 3 4 5" example:"1"` //課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+}

@@ -21,6 +21,10 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planSer
 	course := &Course{courseService: courseService, planService: planService, actionService: actionService}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
+	coursesGroup := baseGroup.Group("/courses")
+	coursesGroup.Use(userMiddleware)
+	coursesGroup.GET("", course.GetCourses)
+
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
 	courseGroup.POST("", course.CreateCourse)
@@ -130,7 +134,37 @@ func (cc *Course) GetCourseList(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, err := cc.courseService.GetCoursesByToken(c, header.Token)
+	courses, err := cc.courseService.GetCoursesByToken(c, header.Token, nil)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, courses, "success")
+}
+
+// GetCourses 獲取我創建的課表
+// @Summary 獲取我的課表列表
+// @Description 獲取我的課表列表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param status query int false "課表狀態"
+// @Success 200 {object} model.SuccessResult{data=[]coursedto.Course} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /courses [GET]
+func (cc *Course) GetCourses(c *gin.Context) {
+	var header validator.TokenHeader
+	var query validator.CourseStatusQuery
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindQuery(&query); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	courses, err := cc.courseService.GetCoursesByToken(c, header.Token, query.Status)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
