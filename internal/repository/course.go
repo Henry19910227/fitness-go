@@ -65,10 +65,20 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 	return nil
 }
 
-func (c *course) FindCourses(uid int64, entity interface{}) error {
+func (c *course) FindCourses(uid int64, entity interface{}, status *int) error {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 user_id 篩選條件
+	query += "AND user_id = ? "
+	params = append(params, uid)
+	//加入 status 篩選條件
+	if status != nil {
+		query += "AND course_status = ? "
+		params = append(params, *status)
+	}
 	if err := c.gorm.DB().
 		Model(entity).
-		Where("user_id = ?", uid).
+		Where(query, params...).
 		Find(entity).Error; err != nil {
 			return err
 	}
