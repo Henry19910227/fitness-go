@@ -1016,6 +1016,60 @@ paths:
       summary: 創建動作
       tags:
       - Course
+  /course/{course_id}/actions:
+    get:
+      consumes:
+      - application/json
+      description: 搜尋動作列表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 課表名稱
+        in: query
+        name: name
+        type: string
+      - description: 動作來源(1:平台動作/2:教練動作)
+        in: query
+        name: source
+        type: string
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: query
+        name: category
+        type: string
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: query
+        name: body
+        type: string
+      - description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        in: query
+        name: equipment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查詢成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/actiondto.Action'
+                  type: array
+              type: object
+        "400":
+          description: 查詢失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 搜尋動作列表
+      tags:
+      - Course
   /course/{course_id}/cover:
     post:
       consumes:
