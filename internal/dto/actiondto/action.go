@@ -30,6 +30,14 @@ type UpdateActionParam struct {
 	Intro *string `gorm:"column:intro"` //動作介紹
 }
 
+type FindActionsParam struct {
+	Name *string //課表名稱
+	Source *string //動作來源(1:平台動作/2:教練動作)
+	Category *string //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+	Body *string //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+	Equipment *string //器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+}
+
 type ActionID struct {
 	ID int64 `json:"action_id" example:"1"` //動作id
 }
