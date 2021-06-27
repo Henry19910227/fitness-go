@@ -41,6 +41,20 @@ func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string) (string,
 	return newImageNamed, nil
 }
 
+func (u *uploader) UploadActionCover(file io.Reader, imageNamed string) (string, error) {
+	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	if !u.checkImageMaxSize(file) {
+		return "", errors.New("9008-上傳檔案大小超過限制")
+	}
+	newImageNamed := generateFileName(path.Ext(imageNamed))
+	if err := u.resTool.SaveFile(file, newImageNamed, "/action/cover"); err != nil {
+		return "", err
+	}
+	return newImageNamed, nil
+}
+
 func (u *uploader) UploadTrainerAvatar(file io.Reader, imageNamed string) (string, error) {
 	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
 		return "", errors.New("9007-上傳檔案不符合規範")

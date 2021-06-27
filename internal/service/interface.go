@@ -104,4 +104,6 @@ type Action interface {
 	SearchActions(c *gin.Context, courseID int64, param *actiondto.FindActionsParam) ([]*actiondto.Action, errcode.Error)
 	DeleteActionByToken(c *gin.Context, token string, actionID int64) (*actiondto.ActionID, errcode.Error)
 	DeleteAction(c *gin.Context, actionID int64) (*actiondto.ActionID, errcode.Error)
+	UploadActionCoverByToken(c *gin.Context, token string, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error)
+	UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error)
 }

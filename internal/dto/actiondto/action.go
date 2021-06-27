@@ -41,3 +41,7 @@ type FindActionsParam struct {
 type ActionID struct {
 	ID int64 `json:"action_id" example:"1"` //動作id
 }
+
+type ActionCover struct {
+	Cover string `json:"cover" example:"kd3kf54ew5.png"` //封面圖片
+}

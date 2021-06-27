@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
+	"mime/multipart"
 	"strconv"
 	"strings"
 )
@@ -205,4 +206,42 @@ func (a *action) DeleteAction(c *gin.Context, actionID int64) (*actiondto.Action
 		return nil, a.errHandler.SystemError()
 	}
 	return &actiondto.ActionID{ID: actionID}, nil
+}
+
+func (a *action) UploadActionCoverByToken(c *gin.Context, token string, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error) {
+	uid, err := a.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, a.errHandler.InvalidToken()
+	}
+	isExist, err := a.actionRepo.CheckActionExistByUID(uid, actionID)
+	if err != nil {
+		return nil, a.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, a.errHandler.PermissionDenied()
+	}
+	return a.UploadActionCover(c, actionID, coverNamed, file)
+}
+
+func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error) {
+	//上傳照片
+	newImageNamed, err := a.uploader.UploadActionCover(file, coverNamed)
+	if err != nil {
+		if strings.Contains(err.Error(), "9007") {
+			return nil, a.errHandler.FileTypeError()
+		}
+		if strings.Contains(err.Error(), "9008") {
+			return nil, a.errHandler.FileSizeError()
+		}
+		a.logger.Set(c, handler.Error, "Resource Handler", a.errHandler.SystemError().Code(), err.Error())
+		return nil, a.errHandler.SystemError()
+	}
+	//修改動作欄位
+	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
+		Cover: &newImageNamed,
+	}); err != nil {
+		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
+		return nil, a.errHandler.SystemError()
+	}
+	return &actiondto.ActionCover{Cover: newImageNamed}, nil
 }
