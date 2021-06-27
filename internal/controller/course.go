@@ -35,6 +35,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planSer
 	courseGroup.POST("/:course_id/plan", course.CreatePlan)
 	courseGroup.GET("/:course_id/plans", course.GetPlans)
 	courseGroup.POST("/:course_id/action", course.CreateAction)
+	courseGroup.GET("/:course_id/actions", course.SearchActions)
 }
 
 // CreateCourse 創建課表
@@ -343,4 +344,50 @@ func (cc *Course) CreateAction(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, action, "success create!")
+}
+
+// SearchActions 搜尋動作列表
+// @Summary 搜尋動作列表
+// @Description 搜尋動作列表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param course_id path int64 true "課表id"
+// @Param name query string false "課表名稱"
+// @Param source query string false "動作來源(1:平台動作/2:教練動作)"
+// @Param category query string false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"
+// @Param body query string false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"
+// @Param equipment query string false "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)"
+// @Success 200 {object} model.SuccessResult{data=[]actiondto.Action} "查詢成功!"
+// @Failure 400 {object} model.ErrorResult "查詢失敗"
+// @Router /course/{course_id}/actions [GET]
+func (cc *Course) SearchActions(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.CourseIDUri
+	var query validator.SearchActionsQuery
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindQuery(&query); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	actions, err := cc.actionService.SearchActionsByToken(c, header.Token, uri.CourseID, &actiondto.FindActionsParam{
+		Name: query.Name,
+		Source: query.Source,
+		Category: query.Category,
+		Body: query.Body,
+		Equipment: query.Equipment,
+	})
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, actions, "success!")
 }
