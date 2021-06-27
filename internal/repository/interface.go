@@ -53,6 +53,7 @@ type Workout interface {
 type Action interface {
 	CreateAction(courseID int64, param *model.CreateActionParam) (int64, error)
 	FindActionByID(actionID int64, entity interface{}) error
+	FindActionsByParam(courseID int64, param *model.FindActionsParam, entity interface{}) error
 	UpdateActionByID(actionID int64, param *model.UpdateActionParam) error
 	DeleteActionByID(actionID int64) error
 	CheckActionExistByUID(uid int64, actionID int64) (bool, error)

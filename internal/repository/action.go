@@ -69,6 +69,46 @@ func (a *action) UpdateActionByID(actionID int64, param *model.UpdateActionParam
 	return nil
 }
 
+func (a *action) FindActionsByParam(courseID int64, param *model.FindActionsParam, entity interface{}) error {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 course_id 篩選條件
+	query += "AND (course_id = ? OR course_id IS NULL) "
+	params = append(params, courseID)
+	//加入 source 篩選條件
+	if len(*param.SourceOpt) > 0 {
+		query += "AND source IN ? "
+		params = append(params, *param.SourceOpt)
+	}
+	//加入 body 篩選條件
+	if len(*param.BodyOpt) > 0 {
+		query += "AND body IN ? "
+		params = append(params, *param.BodyOpt)
+	}
+	//加入 category 篩選條件
+	if len(*param.CategoryOpt) > 0 {
+		query += "AND category IN ? "
+		params = append(params, *param.CategoryOpt)
+	}
+	//加入 equipment 篩選條件
+	if len(*param.EquipmentOpt) > 0 {
+		query += "AND equipment IN ? "
+		params = append(params, *param.EquipmentOpt)
+	}
+	//加入 name 篩選條件
+	if param.Name != nil {
+		query += "AND name LIKE ? "
+		params = append(params, "%" + *param.Name + "%")
+	}
+	if err := a.gorm.DB().
+		Model(&model.Action{}).
+		Where(query, params...).
+		Find(entity).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (a *action) DeleteActionByID(actionID int64) error {
 	if err := a.gorm.DB().Transaction(func(tx *gorm.DB) error {
 		//獲取與動作關聯的課表狀態
