@@ -102,6 +102,17 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *actiondto.U
 }
 
 func (a *action) SearchActionsByToken(c *gin.Context, token string, courseID int64, param *actiondto.FindActionsParam) ([]*actiondto.Action, errcode.Error) {
+	uid, err := a.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, a.errHandler.InvalidToken()
+	}
+	isExist, err := a.courseRepo.CheckCourseExistByIDAndUID(courseID, uid)
+	if err != nil {
+		return nil, a.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, a.errHandler.PermissionDenied()
+	}
 	return a.SearchActions(c, courseID, param)
 }
 
