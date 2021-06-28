@@ -15,12 +15,14 @@ type Action struct {
 
 func NewAction(baseGroup *gin.RouterGroup, actionService service.Action, userMiddleware gin.HandlerFunc)  {
 	baseGroup.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
+	baseGroup.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
 	action := &Action{actionService: actionService}
 	actionGroup := baseGroup.Group("/action")
 	actionGroup.Use(userMiddleware)
 	actionGroup.PATCH("/:action_id", action.UpdateAction)
 	actionGroup.DELETE("/:action_id", action.DeleteAction)
 	actionGroup.POST("/:action_id/cover", action.UploadActionCover)
+	actionGroup.POST("/:action_id/video", action.UploadActionVideo)
 }
 
 // UpdateAction 修改動作
@@ -124,6 +126,42 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 		return
 	}
 	result, e := a.actionService.UploadActionCoverByToken(c, header.Token, uri.ActionID, fileHeader.Filename, file)
+	if e != nil {
+		a.JSONErrorResponse(c, e)
+		return
+	}
+	a.JSONSuccessResponse(c, result, "success upload")
+}
+
+// UploadActionVideo 上傳動作影片
+// @Summary 上傳動作影片
+// @Description 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}
+// @Tags Action
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param action_id path int64 true "動作id"
+// @Param video formData file true "影片檔"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=actiondto.ActionVideo} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /action/{action_id}/video [POST]
+func (a *Action) UploadActionVideo(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.ActionIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("video")
+	if err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := a.actionService.UploadActionVideoByToken(c, header.Token, uri.ActionID, fileHeader.Filename, file)
 	if e != nil {
 		a.JSONErrorResponse(c, e)
 		return
