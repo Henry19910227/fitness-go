@@ -107,11 +107,11 @@ func (w *workout) DeleteWorkoutByToken(c *gin.Context, token string, workoutID i
 	if err != nil {
 		return nil, w.errHandler.InvalidToken()
 	}
-	isExist, err := w.workoutRepo.CheckWorkoutExistByUID(uid, workoutID)
+	ownerID, err := w.workoutRepo.FindWorkoutOwnerByID(workoutID)
 	if err != nil {
 		return nil, w.errHandler.SystemError()
 	}
-	if !isExist {
+	if ownerID != uid {
 		return nil, w.errHandler.PermissionDenied()
 	}
 	return w.DeleteWorkout(c, workoutID)
