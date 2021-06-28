@@ -175,6 +175,20 @@ func (w *workout) DeleteWorkoutByID(workoutID int64) error {
 	return nil
 }
 
+func (w *workout) FindWorkoutOwnerByID(workoutID int64) (int64, error) {
+	var userID int64
+	if err := w.gorm.DB().
+		Table("workouts").
+		Select("courses.user_id").
+		Joins("INNER JOIN plans ON workouts.plan_id = plans.id ").
+		Joins("INNER JOIN courses ON plans.course_id = courses.id ").
+		Where("workouts.id = ?", workoutID).
+		Take(&userID).Error; err != nil {
+		return 0, err
+	}
+	return userID, nil
+}
+
 func (w *workout) CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error) {
 	var result int
 	if err := w.gorm.DB().
