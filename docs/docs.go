@@ -203,6 +203,68 @@ var doc = `{
                 }
             }
         },
+        "/action/{action_id}/video": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "上傳動作影片",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "影片檔",
+                        "name": "video",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/actiondto.ActionVideo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course": {
             "post": {
                 "security": [
@@ -2295,6 +2357,16 @@ var doc = `{
                     "description": "動作id",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "actiondto.ActionVideo": {
+            "type": "object",
+            "properties": {
+                "video": {
+                    "description": "動作影片",
+                    "type": "string",
+                    "example": "f5e23q5e45fe32.mp4"
                 }
             }
         },

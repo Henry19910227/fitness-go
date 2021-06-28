@@ -49,6 +49,13 @@ definitions:
         example: 1
         type: integer
     type: object
+  actiondto.ActionVideo:
+    properties:
+      video:
+        description: 動作影片
+        example: f5e23q5e45fe32.mp4
+        type: string
+    type: object
   coursedto.Course:
     properties:
       body_target:
@@ -911,6 +918,43 @@ paths:
       security:
       - fitness_user_token: []
       summary: 上傳動作封面照
+      tags:
+      - Action
+  /action/{action_id}/video:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 影片檔
+        in: formData
+        name: video
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/actiondto.ActionVideo'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳動作影片
       tags:
       - Action
   /course:
