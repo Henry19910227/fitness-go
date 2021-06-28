@@ -15,14 +15,15 @@ import (
 type workout struct {
 	workoutRepo repository.Workout
 	planRepo repository.Plan
+	courseRepo repository.Course
 	uploader handler.Uploader
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewWorkout(workoutRepo repository.Workout, planRepo repository.Plan, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
-	return &workout{workoutRepo: workoutRepo, planRepo: planRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewWorkout(workoutRepo repository.Workout, planRepo repository.Plan, courseRepo repository.Course, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
+	return &workout{workoutRepo: workoutRepo, planRepo: planRepo, courseRepo: courseRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (w *workout) CreateWorkoutByToken(c *gin.Context, token string, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error) {
@@ -117,6 +118,14 @@ func (w *workout) DeleteWorkoutByToken(c *gin.Context, token string, workoutID i
 }
 
 func (w *workout) DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error) {
+	status, err := w.courseRepo.FindCourseStatusByWorkoutID(workoutID)
+	if err != nil {
+		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
+		return nil, w.errHandler.SystemError()
+	}
+	if !(status == 1 || status == 4) {
+		return nil, w.errHandler.PermissionDenied()
+	}
 	if err := w.workoutRepo.DeleteWorkoutByID(workoutID); err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
