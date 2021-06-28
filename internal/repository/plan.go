@@ -94,12 +94,6 @@ func (p *plan) DeletePlanByID(planID int64) error {
 			Take(&courseID).Error; err != nil {
 				return err
 		}
-		//刪除計畫底下的訓練
-		if err := tx.
-			Where("plan_id = ?", planID).
-			Delete(&model.Workout{}).Error; err != nil {
-			return err
-		}
 		//刪除計畫
 		if err := tx.
 			Where("id = ?", planID).
