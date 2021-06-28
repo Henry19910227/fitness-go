@@ -97,6 +97,20 @@ func (u *uploader) UploadWorkoutAudio(file io.Reader, audioNamed string) (string
 	return newAudioNamed, nil
 }
 
+func (u *uploader) UploadActionVideo(file io.Reader, videoNamed string) (string, error) {
+	if !u.checkUploadVideoAllowExt(path.Ext(videoNamed)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	if !u.checkVideoMaxSize(file) {
+		return "", errors.New("9008-上傳檔案大小超過限制")
+	}
+	newVideoNamed := generateFileName(path.Ext(videoNamed))
+	if err := u.resTool.SaveFile(file, newVideoNamed, "/action/video"); err != nil {
+		return "", err
+	}
+	return newVideoNamed, nil
+}
+
 func (u *uploader) checkUploadImageAllowExt(ext string) bool {
 	ext = strings.ToUpper(ext)
 	for _, v := range u.uploadSetting.ImageAllowExts() {
@@ -117,6 +131,16 @@ func (u *uploader) checkUploadAudioAllowExt(ext string) bool {
 	return false
 }
 
+func (u *uploader) checkUploadVideoAllowExt(ext string) bool {
+	ext = strings.ToUpper(ext)
+	for _, v := range u.uploadSetting.VideoAllowExts() {
+		if ext == strings.ToUpper(v) {
+			return true
+		}
+	}
+	return false
+}
+
 func (u *uploader) checkImageMaxSize(file io.Reader) bool {
 	if sizeValue, ok := file.(Size); ok {
 		 size := int(sizeValue.Size())
@@ -129,6 +153,14 @@ func (u *uploader) checkAudioMaxSize(file io.Reader) bool {
 	if sizeValue, ok := file.(Size); ok {
 		size := int(sizeValue.Size())
 		return size < u.uploadSetting.AudioMaxSize() * 1024 * 1024
+	}
+	return false
+}
+
+func (u *uploader) checkVideoMaxSize(file io.Reader) bool {
+	if sizeValue, ok := file.(Size); ok {
+		size := int(sizeValue.Size())
+		return size < u.uploadSetting.VideoMaxSize() * 1024 * 1024
 	}
 	return false
 }
