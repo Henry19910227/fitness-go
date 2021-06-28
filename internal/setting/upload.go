@@ -25,3 +25,11 @@ func (u *upload) AudioAllowExts() []string {
 func (u *upload) AudioMaxSize() int {
 	return u.vp.GetInt("Upload.UploadAudioMaxSize")
 }
+
+func (u *upload) VideoAllowExts() []string {
+	return u.vp.GetStringSlice("Upload.UploadVideoAllowExt")
+}
+
+func (u *upload) VideoMaxSize() int {
+	return u.vp.GetInt("Upload.UploadVideoMaxSize")
+}
