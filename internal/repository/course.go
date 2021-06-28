@@ -95,6 +95,19 @@ func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
 	return nil
 }
 
+func (c *course) FindCourseStatusByPlanID(planID int64) (int, error) {
+	var status int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("course_status").
+		Joins("INNER JOIN plans ON courses.id = plans.course_id").
+		Where("plans.id = ?", planID).
+		Take(&status).Error; err != nil {
+		return 0, err
+	}
+	return status, nil
+}
+
 func (c *course) DeleteCourseByID(courseID int64) error {
 	if err := c.gorm.DB().
 		Where("id = ?", courseID).
