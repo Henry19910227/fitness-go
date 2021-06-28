@@ -45,3 +45,7 @@ type ActionID struct {
 type ActionCover struct {
 	Cover string `json:"cover" example:"kd3kf54ew5.png"` //封面圖片
 }
+
+type ActionVideo struct {
+	Video string `json:"video" example:"f5e23q5e45fe32.mp4"` //動作影片
+}

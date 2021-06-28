@@ -245,3 +245,41 @@ func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed st
 	}
 	return &actiondto.ActionCover{Cover: newImageNamed}, nil
 }
+
+func (a *action) UploadActionVideoByToken(c *gin.Context, token string, actionID int64, videoNamed string, file multipart.File) (*actiondto.ActionVideo, errcode.Error) {
+	uid, err := a.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, a.errHandler.InvalidToken()
+	}
+	isExist, err := a.actionRepo.CheckActionExistByUID(uid, actionID)
+	if err != nil {
+		return nil, a.errHandler.SystemError()
+	}
+	if !isExist {
+		return nil, a.errHandler.PermissionDenied()
+	}
+	return a.UploadActionVideo(c, actionID, videoNamed, file)
+}
+
+func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*actiondto.ActionVideo, errcode.Error) {
+	//上傳影片
+	newVideoNamed, err := a.uploader.UploadActionVideo(file, videoNamed)
+	if err != nil {
+		if strings.Contains(err.Error(), "9007") {
+			return nil, a.errHandler.FileTypeError()
+		}
+		if strings.Contains(err.Error(), "9008") {
+			return nil, a.errHandler.FileSizeError()
+		}
+		a.logger.Set(c, handler.Error, "Resource Handler", a.errHandler.SystemError().Code(), err.Error())
+		return nil, a.errHandler.SystemError()
+	}
+	//修改動作欄位
+	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
+		Video: &newVideoNamed,
+	}); err != nil {
+		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
+		return nil, a.errHandler.SystemError()
+	}
+	return &actiondto.ActionVideo{Video: newVideoNamed}, nil
+}
