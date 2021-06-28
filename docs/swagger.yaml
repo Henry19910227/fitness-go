@@ -161,6 +161,13 @@ definitions:
         example: dkf2se51fsdds.png
         type: string
     type: object
+  coursedto.CourseID:
+    properties:
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+    type: object
   coursedto.CreateResult:
     properties:
       course_id:
@@ -998,6 +1005,37 @@ paths:
       tags:
       - Course
   /course/{course_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.CourseID'
+              type: object
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除課表
+      tags:
+      - Course
     get:
       consumes:
       - application/json
