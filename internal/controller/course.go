@@ -31,6 +31,7 @@ func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planSer
 	courseGroup.PATCH("/:course_id", course.UpdateCourse)
 	courseGroup.GET("/list", course.GetCourseList)
 	courseGroup.GET("/:course_id", course.GetCourse)
+	courseGroup.DELETE("/:course_id", course.DeleteCourse)
 	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
 	courseGroup.POST("/:course_id/plan", course.CreatePlan)
 	courseGroup.GET("/:course_id/plans", course.GetPlans)
@@ -240,6 +241,36 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, result, "success upload")
+}
+
+// DeleteCourse 刪除課表
+// @Summary 刪除課表
+// @Description 刪除課表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=coursedto.CourseID} "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /course/{course_id} [DELETE]
+func (cc *Course) DeleteCourse(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, err := cc.courseService.DeleteCourseByToken(c, header.Token, uri.CourseID)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, result, "delete success!")
 }
 
 // CreatePlan 創建計畫
