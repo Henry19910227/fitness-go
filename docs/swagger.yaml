@@ -42,6 +42,13 @@ definitions:
         example: 11d547we1d4f8e.mp4
         type: string
     type: object
+  actiondto.ActionCover:
+    properties:
+      cover:
+        description: 封面圖片
+        example: kd3kf54ew5.png
+        type: string
+    type: object
   actiondto.ActionID:
     properties:
       action_id:
@@ -909,7 +916,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CourseCover'
+                  $ref: '#/definitions/actiondto.ActionCover'
               type: object
         "400":
           description: 失敗!
@@ -2130,7 +2137,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_user_token: []
-      summary: 上上傳訓練結束語音
+      summary: 上傳訓練結束語音
       tags:
       - Workout
   /workout/{workout_id}/start_audio:

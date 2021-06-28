@@ -187,7 +187,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseCover"
+                                            "$ref": "#/definitions/actiondto.ActionCover"
                                         }
                                     }
                                 }
@@ -2186,7 +2186,7 @@ var doc = `{
                 "tags": [
                     "Workout"
                 ],
-                "summary": "上上傳訓練結束語音",
+                "summary": "上傳訓練結束語音",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2347,6 +2347,16 @@ var doc = `{
                     "description": "動作影片",
                     "type": "string",
                     "example": "11d547we1d4f8e.mp4"
+                }
+            }
+        },
+        "actiondto.ActionCover": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "封面圖片",
+                    "type": "string",
+                    "example": "kd3kf54ew5.png"
                 }
             }
         },

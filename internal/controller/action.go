@@ -106,7 +106,7 @@ func (a *Action) DeleteAction(c *gin.Context) {
 // @Param action_id path int64 true "動作id"
 // @Param cover formData file true "封面照"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=coursedto.CourseCover} "成功!"
+// @Success 200 {object} model.SuccessResult{data=actiondto.ActionCover} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /action/{action_id}/cover [POST]
 func (a *Action) UploadActionCover(c *gin.Context) {

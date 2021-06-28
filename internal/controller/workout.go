@@ -131,7 +131,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 }
 
 // UploadWorkoutEndAudio 上傳訓練結束語音
-// @Summary 上上傳訓練結束語音
+// @Summary 上傳訓練結束語音
 // @Description 上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
 // @Tags Workout
 // @Security fitness_user_token
