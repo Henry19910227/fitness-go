@@ -108,6 +108,20 @@ func (c *course) FindCourseStatusByPlanID(planID int64) (int, error) {
 	return status, nil
 }
 
+func (c *course) FindCourseStatusByWorkoutID(workoutID int64) (int, error) {
+	var status int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("course_status").
+		Joins("INNER JOIN plans ON courses.id = plans.course_id").
+		Joins("INNER JOIN workouts ON plans.id = workouts.plan_id").
+		Where("workouts.id = ?", workoutID).
+		Take(&status).Error; err != nil {
+		return 0, err
+	}
+	return status, nil
+}
+
 func (c *course) DeleteCourseByID(courseID int64) error {
 	if err := c.gorm.DB().
 		Where("id = ?", courseID).
