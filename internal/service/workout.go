@@ -138,11 +138,11 @@ func (w *workout) UploadWorkoutStartAudioByToken(c *gin.Context, token string, w
 	if err != nil {
 		return nil, w.errHandler.InvalidToken()
 	}
-	isExist, err := w.workoutRepo.CheckWorkoutExistByUID(uid, workoutID)
+	ownerID, err := w.workoutRepo.FindWorkoutOwnerByID(workoutID)
 	if err != nil {
 		return nil, w.errHandler.SystemError()
 	}
-	if !isExist {
+	if ownerID != uid {
 		return nil, w.errHandler.PermissionDenied()
 	}
 	return w.UploadWorkoutStartAudioByID(c, workoutID, audioNamed, file)
