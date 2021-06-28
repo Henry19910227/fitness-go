@@ -95,6 +95,15 @@ func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
 	return nil
 }
 
+func (c *course) DeleteCourseByID(courseID int64) error {
+	if err := c.gorm.DB().
+		Where("id = ?", courseID).
+		Delete(&model.Course{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *course) CheckCourseExistByIDAndUID(courseID int64, uid int64) (bool, error) {
 	var result int
 	if err := c.gorm.DB().
