@@ -112,6 +112,16 @@ func (p *plan) DeletePlanByToken(c *gin.Context, token string, planID int64) (*p
 }
 
 func (p *plan) DeletePlan(c *gin.Context, planID int64) (*plandto.PlanID, errcode.Error) {
+	//以planID查詢課表狀態
+	status, err := p.courseRepo.FindCourseStatusByPlanID(planID)
+	if err != nil {
+		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
+		return nil, p.errHandler.SystemError()
+	}
+	//課表狀態必須是"準備中"或"被退審"，才允許刪除
+	if !(status == 1 || status == 4) {
+		return nil, p.errHandler.PermissionDenied()
+	}
 	if err := p.planRepo.DeletePlanByID(planID); err != nil {
 		p.logger.Set(c, handler.Error, "PlanRepo", p.errHandler.SystemError().Code(), err.Error())
 		return nil, p.errHandler.SystemError()
