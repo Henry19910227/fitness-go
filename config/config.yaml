@@ -13,6 +13,7 @@ Resource:
 Upload:
     UploadImageMaxSize: 5 #MB
     UploadAudioMaxSize: 10 #MB
+    UploadVideoMaxSize: 30 #MB
     UploadImageAllowExt:
       - .jpg
       - .png
@@ -22,6 +23,8 @@ Upload:
       - .JPEG
     UploadAudioAllowExt:
       - .mp3
+    UploadVideoAllowExt:
+      - .mp4
 Log:
     FileName: fitness
     FileExt: log
