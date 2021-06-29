@@ -109,6 +109,34 @@ func (p *plan) DeletePlan(c *gin.Context, planID int64) (*plandto.PlanID, errcod
 	return &plandto.PlanID{ID: planID}, nil
 }
 
+func (p *plan) checkCourseOwnerByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
+	uid, err := p.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return p.errHandler.InvalidToken()
+	}
+	ownerID, err := p.courseRepo.FindCourseOwnerByID(courseID)
+	if err != nil {
+		p.logger.Set(c, handler.Error, "Plan", p.errHandler.SystemError().Code(), err.Error())
+		return p.errHandler.SystemError()
+	}
+	if ownerID != uid {
+		return p.errHandler.PermissionDenied()
+	}
+	return nil
+}
+
+func (p *plan) checkCourseEditableByCourseID(c *gin.Context, courseID int64) errcode.Error {
+	status, err := p.courseRepo.FindCourseStatusByID(courseID)
+	if err != nil {
+		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
+		return p.errHandler.SystemError()
+	}
+	if !(status == 1 || status == 4) {
+		return p.errHandler.PermissionDenied()
+	}
+	return nil
+}
+
 func (p *plan) checkPlanOwnerByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
