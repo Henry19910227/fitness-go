@@ -29,6 +29,8 @@ type Course interface {
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 	FindCourses(uid int64, entity interface{}, status *int) error
 	FindCourseByID(courseID int64, entity interface{}) error
+	FindCourseOwnerByID(courseID int64) (int64, error)
+	FindCourseStatusByID(courseID int64) (int, error)
 	FindCourseStatusByPlanID(planID int64) (int, error)
 	FindCourseStatusByWorkoutID(workoutID int64) (int, error)
 	DeleteCourseByID(courseID int64) error

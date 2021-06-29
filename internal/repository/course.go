@@ -95,6 +95,30 @@ func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
 	return nil
 }
 
+func (c *course) FindCourseOwnerByID(courseID int64) (int64, error) {
+	var userID int64
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("user_id").
+		Where("id = ?", courseID).
+		Take(&userID).Error; err != nil {
+		return 0, err
+	}
+	return userID, nil
+}
+
+func (c *course) FindCourseStatusByID(courseID int64) (int, error) {
+	var status int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("course_status").
+		Where("id = ?", courseID).
+		Take(&status).Error; err != nil {
+		return 0, err
+	}
+	return status, nil
+}
+
 func (c *course) FindCourseStatusByPlanID(planID int64) (int, error) {
 	var status int
 	if err := c.gorm.DB().
