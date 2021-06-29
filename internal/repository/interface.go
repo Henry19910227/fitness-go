@@ -41,6 +41,7 @@ type Plan interface {
 	FindPlansByCourseID(courseID int64) ([]*model.Plan, error)
 	UpdatePlanByID(planID int64, name string) error
 	DeletePlanByID(planID int64) error
+	FindPlanOwnerByID(planID int64) (int64, error)
 	CheckPlanExistByUID(uid int64, planID int64) (bool, error)
 }
 

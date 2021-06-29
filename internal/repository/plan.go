@@ -134,6 +134,19 @@ func (p *plan) DeletePlanByID(planID int64) error {
 	return nil
 }
 
+func (p *plan) FindPlanOwnerByID(planID int64) (int64, error) {
+	var userID int64
+	if err := p.gorm.DB().
+		Table("plans").
+		Select("courses.user_id").
+		Joins("INNER JOIN courses ON plans.course_id = courses.id").
+		Where("plans.id = ?", planID).
+		Take(&userID).Error; err != nil {
+		return 0, err
+	}
+	return userID, nil
+}
+
 func (p *plan) CheckPlanExistByUID(uid int64, planID int64) (bool, error) {
 	var result int
 	if err := p.gorm.DB().
