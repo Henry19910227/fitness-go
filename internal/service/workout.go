@@ -27,21 +27,16 @@ func NewWorkout(workoutRepo repository.Workout, planRepo repository.Plan, course
 }
 
 func (w *workout) CreateWorkoutByToken(c *gin.Context, token string, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error) {
-	uid, err := w.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, w.errHandler.InvalidToken()
-	}
-	isExist, err := w.planRepo.CheckPlanExistByUID(uid, planID)
-	if err != nil {
-		return nil, w.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, w.errHandler.PermissionDenied()
+	if err := w.checkPlanOwnerByPlanID(c, token, planID); err != nil {
+		return nil, err
 	}
 	return w.CreateWorkout(c, planID, name)
 }
 
 func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error) {
+	if err := w.checkPlanEditableByPlanID(c, planID); err != nil {
+		return nil, err
+	}
 	workoutID, err := w.workoutRepo.CreateWorkout(planID, name)
 	if err != nil {
 		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
@@ -175,6 +170,34 @@ func (w *workout) UploadWorkoutEndAudioByID(c *gin.Context, workoutID int64, aud
 		return nil, w.errHandler.SystemError()
 	}
 	return &workoutdto.Audio{Named: newAudioNamed}, nil
+}
+
+func (w *workout) checkPlanOwnerByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
+	uid, err := w.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return w.errHandler.InvalidToken()
+	}
+	ownerID, err := w.planRepo.FindPlanOwnerByID(planID)
+	if err != nil {
+		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
+		return w.errHandler.SystemError()
+	}
+	if ownerID != uid {
+		return w.errHandler.PermissionDenied()
+	}
+	return nil
+}
+
+func (w *workout) checkPlanEditableByPlanID(c *gin.Context, planID int64) errcode.Error {
+	status, err := w.courseRepo.FindCourseStatusByPlanID(planID)
+	if err != nil {
+		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
+		return w.errHandler.SystemError()
+	}
+	if !(status == 1 || status == 4) {
+		return w.errHandler.PermissionDenied()
+	}
+	return nil
 }
 
 func (w *workout) checkWorkoutOwnerByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
