@@ -11,11 +11,12 @@ import (
 type workout struct {
 	Base
 	workoutService service.Workout
+	permissions service.Permissions
 }
 
-func NewWorkout(baseGroup *gin.RouterGroup, workoutService service.Workout, userMiddleware gin.HandlerFunc) {
+func NewWorkout(baseGroup *gin.RouterGroup, workoutService service.Workout, permissions service.Permissions, userMiddleware gin.HandlerFunc) {
 	baseGroup.StaticFS("/resource/workout/audio", http.Dir("./volumes/storage/workout/audio"))
-	workout := workout{workoutService: workoutService}
+	workout := workout{workoutService: workoutService, permissions: permissions}
 	planGroup := baseGroup.Group("/workout")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:workout_id", workout.UpdateWorkout)
@@ -53,7 +54,15 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-    workout, err := w.workoutService.UpdateWorkoutByToken(c, header.Token, uri.WorkoutID, &workoutdto.UpdateWorkoutParam{
+	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+    workout, err := w.workoutService.UpdateWorkout(c, uri.WorkoutID, &workoutdto.UpdateWorkoutParam{
 		Name: body.Name,
 		Equipment: body.Equipment,
 	})
@@ -86,7 +95,15 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	data, err := w.workoutService.DeleteWorkoutByToken(c, header.Token, uri.WorkoutID)
+	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	data, err := w.workoutService.DeleteWorkout(c, uri.WorkoutID)
 	if err != nil {
 		w.JSONErrorResponse(c, err)
 		return
@@ -117,12 +134,20 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
 	file, fileHeader, err := c.Request.FormFile("start_audio")
 	if err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, e := w.workoutService.UploadWorkoutStartAudioByToken(c, header.Token, uri.WorkoutID, fileHeader.Filename, file)
+	result, e := w.workoutService.UploadWorkoutStartAudio(c, uri.WorkoutID, fileHeader.Filename, file)
 	if e != nil {
 		w.JSONErrorResponse(c, e)
 		return
@@ -153,12 +178,20 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
 	file, fileHeader, err := c.Request.FormFile("end_audio")
 	if err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, e := w.workoutService.UploadWorkoutEndAudioByToken(c, header.Token, uri.WorkoutID, fileHeader.Filename, file)
+	result, e := w.workoutService.UploadWorkoutEndAudio(c, uri.WorkoutID, fileHeader.Filename, file)
 	if e != nil {
 		w.JSONErrorResponse(c, e)
 		return

@@ -10,10 +10,11 @@ type Plan struct {
 	Base
 	planService service.Plan
 	workoutService service.Workout
+	permissions service.Permissions
 }
 
-func NewPlan(baseGroup *gin.RouterGroup, planService service.Plan, workoutService service.Workout, userMiddleware gin.HandlerFunc)  {
-	plan := Plan{planService: planService, workoutService: workoutService}
+func NewPlan(baseGroup *gin.RouterGroup, planService service.Plan, workoutService service.Workout, permissions service.Permissions, userMiddleware gin.HandlerFunc)  {
+	plan := Plan{planService: planService, workoutService: workoutService, permissions: permissions}
 	planGroup := baseGroup.Group("/plan")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:plan_id", plan.UpdatePlan)
@@ -50,7 +51,15 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	planData, err := p.planService.UpdatePlanByToken(c, header.Token, uri.PlanID, body.Name)
+	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	planData, err := p.planService.UpdatePlan(c, uri.PlanID, body.Name)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return
@@ -80,7 +89,15 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	data, err := p.planService.DeletePlanByToken(c, header.Token, uri.PlanID)
+	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	data, err := p.planService.DeletePlan(c, uri.PlanID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return
@@ -116,7 +133,15 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	data, err := p.workoutService.CreateWorkoutByToken(c, header.Token, uri.PlanID, body.Name)
+	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	data, err := p.workoutService.CreateWorkout(c, uri.PlanID, body.Name)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return

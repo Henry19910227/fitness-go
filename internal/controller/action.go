@@ -11,12 +11,13 @@ import (
 type Action struct {
 	Base
 	actionService service.Action
+	permissions service.Permissions
 }
 
-func NewAction(baseGroup *gin.RouterGroup, actionService service.Action, userMiddleware gin.HandlerFunc)  {
+func NewAction(baseGroup *gin.RouterGroup, actionService service.Action, permissions service.Permissions, userMiddleware gin.HandlerFunc)  {
 	baseGroup.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
 	baseGroup.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
-	action := &Action{actionService: actionService}
+	action := &Action{actionService: actionService, permissions: permissions}
 	actionGroup := baseGroup.Group("/action")
 	actionGroup.Use(userMiddleware)
 	actionGroup.PATCH("/:action_id", action.UpdateAction)
@@ -53,7 +54,15 @@ func (a *Action) UpdateAction(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	action, err := a.actionService.UpdateActionByToken(c, header.Token, uri.ActionID, &actiondto.UpdateActionParam{
+	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	action, err := a.actionService.UpdateAction(c, uri.ActionID, &actiondto.UpdateActionParam{
 		Name: body.Name,
 		Category: body.Category,
 		Body: body.Body,
@@ -89,7 +98,15 @@ func (a *Action) DeleteAction(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, err := a.actionService.DeleteActionByToken(c, header.Token, uri.ActionID)
+	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	result, err := a.actionService.DeleteAction(c, uri.ActionID)
 	if err != nil {
 		a.JSONErrorResponse(c, err)
 		return
@@ -120,12 +137,20 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
 	file, fileHeader, err := c.Request.FormFile("cover")
 	if err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, e := a.actionService.UploadActionCoverByToken(c, header.Token, uri.ActionID, fileHeader.Filename, file)
+	result, e := a.actionService.UploadActionCover(c, uri.ActionID, fileHeader.Filename, file)
 	if e != nil {
 		a.JSONErrorResponse(c, e)
 		return
@@ -156,12 +181,20 @@ func (a *Action) UploadActionVideo(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
 	file, fileHeader, err := c.Request.FormFile("video")
 	if err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, e := a.actionService.UploadActionVideoByToken(c, header.Token, uri.ActionID, fileHeader.Filename, file)
+	result, e := a.actionService.UploadActionVideo(c, uri.ActionID, fileHeader.Filename, file)
 	if e != nil {
 		a.JSONErrorResponse(c, e)
 		return

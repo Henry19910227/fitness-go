@@ -14,11 +14,12 @@ type Course struct {
 	courseService service.Course
 	planService service.Plan
 	actionService service.Action
+	permissions service.Permissions
 }
 
-func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, actionService service.Action, userMiddleware gin.HandlerFunc) {
+func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, actionService service.Action, permissions service.Permissions, userMiddleware gin.HandlerFunc) {
 
-	course := &Course{courseService: courseService, planService: planService, actionService: actionService}
+	course := &Course{courseService: courseService, planService: planService, actionService: actionService, permissions: permissions}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 	coursesGroup := baseGroup.Group("/courses")
@@ -59,6 +60,10 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := cc.permissions.CheckTrainerValidByUID(c, header.Token); err != nil {
+		cc.JSONErrorResponse(c, err)
 		return
 	}
 	result, err := cc.courseService.CreateCourseByToken(c, header.Token, &coursedto.CreateCourseParam{
@@ -227,6 +232,14 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	if err := cc.permissions.CheckCourseOwnerByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.permissions.CheckCourseEditableByCourseID(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
 	file, fileHeader, err := c.Request.FormFile("cover")
 	if err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
@@ -265,7 +278,15 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, err := cc.courseService.DeleteCourseByToken(c, header.Token, uri.CourseID)
+	if err := cc.permissions.CheckCourseOwnerByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.permissions.CheckCourseEditableByCourseID(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	result, err := cc.courseService.DeleteCourse(c, uri.CourseID)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
@@ -301,7 +322,15 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	plan, err := cc.planService.CreatePlanByToken(c, header.Token, uri.CourseID, body.Name)
+	if err := cc.permissions.CheckCourseOwnerByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.permissions.CheckCourseEditableByCourseID(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	plan, err := cc.planService.CreatePlan(c, uri.CourseID, body.Name)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
@@ -362,7 +391,15 @@ func (cc *Course) CreateAction(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	action, err := cc.actionService.CreateActionByToken(c, header.Token, uri.CourseID, &actiondto.CreateActionParam{
+	if err := cc.permissions.CheckCourseOwnerByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.permissions.CheckCourseEditableByCourseID(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	action, err := cc.actionService.CreateAction(c, uri.CourseID, &actiondto.CreateActionParam{
 		Name: body.Name,
 		Type: body.Type,
 		Category: body.Category,
@@ -409,7 +446,7 @@ func (cc *Course) SearchActions(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	actions, err := cc.actionService.SearchActionsByToken(c, header.Token, uri.CourseID, &actiondto.FindActionsParam{
+	actions, err := cc.actionService.SearchActions(c, uri.CourseID, &actiondto.FindActionsParam{
 		Name: query.Name,
 		Source: query.Source,
 		Category: query.Category,
