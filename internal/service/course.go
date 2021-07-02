@@ -37,13 +37,6 @@ func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *cours
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
 	}
-	var trainer struct{TrainerStatus int `gorm:"column:trainer_status"`}
-	if err := cs.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil{
-		return nil, cs.errHandler.PermissionDenied()
-	}
-	if trainer.TrainerStatus == 3 {
-		return nil, cs.errHandler.PermissionDenied()
-	}
 	return cs.CreateCourse(c, uid, param)
 }
 
@@ -89,31 +82,7 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.
 	return &course, nil
 }
 
-func (cs *course) DeleteCourseByToken(c *gin.Context, token string, courseID int64) (*coursedto.CourseID, errcode.Error) {
-	uid, err := cs.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, cs.errHandler.InvalidToken()
-	}
-	//查詢課表擁有者並驗證是否可被刪除
-	course := struct { UserID int64 `gorm:"column:user_id"` }{}
-	cs.courseRepo.FindCourseByID(courseID, &course)
-	if course.UserID != uid {
-		return nil, cs.errHandler.PermissionDenied()
-	}
-	return cs.DeleteCourse(c, courseID)
-}
-
 func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*coursedto.CourseID, errcode.Error) {
-	//查詢課表狀態
-	course := struct { CourseStatus int `gorm:"column:course_status"`}{}
-	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	//課表狀態必須是"準備中"或"被退審"，才允許刪除
-	if !(course.CourseStatus == 1 || course.CourseStatus == 4) {
-		return nil, cs.errHandler.PermissionDenied()
-	}
 	if err := cs.courseRepo.DeleteCourseByID(courseID); err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
