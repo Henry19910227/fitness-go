@@ -14,29 +14,17 @@ import (
 
 type workout struct {
 	workoutRepo repository.Workout
-	planRepo repository.Plan
-	courseRepo repository.Course
 	uploader handler.Uploader
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewWorkout(workoutRepo repository.Workout, planRepo repository.Plan, courseRepo repository.Course, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
-	return &workout{workoutRepo: workoutRepo, planRepo: planRepo, courseRepo: courseRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
-}
-
-func (w *workout) CreateWorkoutByToken(c *gin.Context, token string, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error) {
-	if err := w.checkPlanOwnerByPlanID(c, token, planID); err != nil {
-		return nil, err
-	}
-	return w.CreateWorkout(c, planID, name)
+func NewWorkout(workoutRepo repository.Workout, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
+	return &workout{workoutRepo: workoutRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error) {
-	if err := w.checkPlanEditableByPlanID(c, planID); err != nil {
-		return nil, err
-	}
 	workoutID, err := w.workoutRepo.CreateWorkout(planID, name)
 	if err != nil {
 		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
@@ -66,17 +54,7 @@ func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutd
 	return workouts, nil
 }
 
-func (w *workout) UpdateWorkoutByToken(c *gin.Context, token string, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error) {
-	if err := w.checkWorkoutOwnerByWorkoutID(c, token, workoutID); err != nil {
-		return nil, err
-	}
-	return w.UpdateWorkout(c, workoutID, param)
-}
-
 func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error) {
-	if err := w.checkWorkoutEditableByWorkoutID(c, workoutID); err != nil {
-		return nil, err
-	}
 	if err := w.workoutRepo.UpdateWorkoutByID(workoutID, &model.UpdateWorkoutParam{
 		Name: param.Name,
 		Equipment: param.Equipment,
@@ -92,17 +70,7 @@ func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *workoutd
 	return &workout, nil
 }
 
-func (w *workout) DeleteWorkoutByToken(c *gin.Context, token string, workoutID int64) (*workoutdto.WorkoutID, errcode.Error) {
-	if err := w.checkWorkoutOwnerByWorkoutID(c, token, workoutID); err != nil {
-		return nil, err
-	}
-	return w.DeleteWorkout(c, workoutID)
-}
-
 func (w *workout) DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error) {
-	if err := w.checkWorkoutEditableByWorkoutID(c, workoutID); err != nil {
-		return nil, err
-	}
 	if err := w.workoutRepo.DeleteWorkoutByID(workoutID); err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
@@ -110,17 +78,7 @@ func (w *workout) DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.Wo
 	return &workoutdto.WorkoutID{ID: workoutID}, nil
 }
 
-func (w *workout) UploadWorkoutStartAudioByToken(c *gin.Context, token string, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
-	if err := w.checkWorkoutOwnerByWorkoutID(c, token, workoutID); err != nil {
-		return nil, err
-	}
-	return w.UploadWorkoutStartAudioByID(c, workoutID, audioNamed, file)
-}
-
-func (w *workout) UploadWorkoutStartAudioByID(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
-	if err := w.checkWorkoutEditableByWorkoutID(c, workoutID); err != nil {
-		return nil, err
-	}
+func (w *workout) UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
 	newAudioNamed, err := w.uploader.UploadWorkoutAudio(file, audioNamed)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
@@ -141,17 +99,7 @@ func (w *workout) UploadWorkoutStartAudioByID(c *gin.Context, workoutID int64, a
 	return &workoutdto.Audio{Named: newAudioNamed}, nil
 }
 
-func (w *workout) UploadWorkoutEndAudioByToken(c *gin.Context, token string, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
-	if err := w.checkWorkoutOwnerByWorkoutID(c, token, workoutID); err != nil {
-		return nil, err
-	}
-	return w.UploadWorkoutEndAudioByID(c, workoutID, audioNamed, file)
-}
-
-func (w *workout) UploadWorkoutEndAudioByID(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
-	if err := w.checkWorkoutEditableByWorkoutID(c, workoutID); err != nil {
-		return nil, err
-	}
+func (w *workout) UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
 	newAudioNamed, err := w.uploader.UploadWorkoutAudio(file, audioNamed)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
@@ -170,60 +118,4 @@ func (w *workout) UploadWorkoutEndAudioByID(c *gin.Context, workoutID int64, aud
 		return nil, w.errHandler.SystemError()
 	}
 	return &workoutdto.Audio{Named: newAudioNamed}, nil
-}
-
-func (w *workout) checkPlanOwnerByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
-	uid, err := w.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return w.errHandler.InvalidToken()
-	}
-	ownerID, err := w.planRepo.FindPlanOwnerByID(planID)
-	if err != nil {
-		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
-		return w.errHandler.SystemError()
-	}
-	if ownerID != uid {
-		return w.errHandler.PermissionDenied()
-	}
-	return nil
-}
-
-func (w *workout) checkPlanEditableByPlanID(c *gin.Context, planID int64) errcode.Error {
-	status, err := w.courseRepo.FindCourseStatusByPlanID(planID)
-	if err != nil {
-		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
-		return w.errHandler.SystemError()
-	}
-	if !(status == 1 || status == 4) {
-		return w.errHandler.PermissionDenied()
-	}
-	return nil
-}
-
-func (w *workout) checkWorkoutOwnerByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
-	uid, err := w.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return w.errHandler.InvalidToken()
-	}
-	ownerID, err := w.workoutRepo.FindWorkoutOwnerByID(workoutID)
-	if err != nil {
-		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
-		return w.errHandler.SystemError()
-	}
-	if ownerID != uid {
-		return w.errHandler.PermissionDenied()
-	}
-	return nil
-}
-
-func (w *workout) checkWorkoutEditableByWorkoutID(c *gin.Context, workoutID int64) errcode.Error {
-	status, err := w.courseRepo.FindCourseStatusByWorkoutID(workoutID)
-	if err != nil {
-		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
-		return w.errHandler.SystemError()
-	}
-	if !(status == 1 || status == 4) {
-		return w.errHandler.PermissionDenied()
-	}
-	return nil
 }
