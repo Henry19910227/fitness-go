@@ -38,7 +38,6 @@ type Course interface {
 	FindCourseStatusByWorkoutID(workoutID int64) (int, error)
 	FindCourseStatusByActionID(actionID int64) (int, error)
 	DeleteCourseByID(courseID int64) error
-	CheckCourseExistByIDAndUID(courseID int64, uid int64) (bool, error)
 }
 
 type Plan interface {
@@ -48,7 +47,6 @@ type Plan interface {
 	UpdatePlanByID(planID int64, name string) error
 	DeletePlanByID(planID int64) error
 	FindPlanOwnerByID(planID int64) (int64, error)
-	CheckPlanExistByUID(uid int64, planID int64) (bool, error)
 }
 
 type Workout interface {
@@ -58,7 +56,6 @@ type Workout interface {
 	UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error
 	DeleteWorkoutByID(workoutID int64) error
 	FindWorkoutOwnerByID(workoutID int64) (int64, error)
-	CheckWorkoutExistByUID(uid int64, workoutID int64) (bool, error)
 }
 
 type Action interface {
@@ -67,5 +64,4 @@ type Action interface {
 	FindActionsByParam(courseID int64, param *model.FindActionsParam, entity interface{}) error
 	UpdateActionByID(actionID int64, param *model.UpdateActionParam) error
 	DeleteActionByID(actionID int64) error
-	CheckActionExistByUID(uid int64, actionID int64) (bool, error)
 }

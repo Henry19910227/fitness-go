@@ -146,17 +146,3 @@ func (p *plan) FindPlanOwnerByID(planID int64) (int64, error) {
 	}
 	return userID, nil
 }
-
-func (p *plan) CheckPlanExistByUID(uid int64, planID int64) (bool, error) {
-	var result int
-	if err := p.gorm.DB().
-		Table("plans").
-		Select("1").
-		Joins("INNER JOIN courses ON plans.course_id = courses.id ").
-		Joins("INNER JOIN users ON courses.user_id = users.id ").
-		Where("plans.id = ? AND users.id = ?", planID, uid).
-		Find(&result).Error; err != nil {
-		return false, err
-	}
-	return result > 0, nil
-}
