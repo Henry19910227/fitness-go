@@ -32,21 +32,6 @@ func NewAction(actionRepo repository.Action,
 	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (a *action) CreateActionByToken(c *gin.Context, token string, courseID int64, param *actiondto.CreateActionParam) (*actiondto.Action, errcode.Error) {
-	uid, err := a.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, a.errHandler.InvalidToken()
-	}
-	isExist, err := a.courseRepo.CheckCourseExistByIDAndUID(courseID, uid)
-	if err != nil {
-		return nil, a.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, a.errHandler.PermissionDenied()
-	}
-	return a.CreateAction(c, courseID, param)
-}
-
 func (a *action) CreateAction(c *gin.Context, courseID int64, param *actiondto.CreateActionParam) (*actiondto.Action, errcode.Error) {
 	 actionID, err := a.actionRepo.CreateAction(courseID, &model.CreateActionParam{
 		 Name:      param.Name,
@@ -68,21 +53,6 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *actiondto.C
 	return &action, nil
 }
 
-func (a *action) UpdateActionByToken(c *gin.Context, token string, actionID int64, param *actiondto.UpdateActionParam) (*actiondto.Action, errcode.Error) {
-	uid, err := a.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, a.errHandler.InvalidToken()
-	}
-	isExist, err := a.actionRepo.CheckActionExistByUID(uid, actionID)
-	if err != nil {
-		return nil, a.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, a.errHandler.PermissionDenied()
-	}
-	return a.UpdateAction(c, actionID, param)
-}
-
 func (a *action) UpdateAction(c *gin.Context, actionID int64, param *actiondto.UpdateActionParam) (*actiondto.Action, errcode.Error) {
 	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
 		Name: param.Name,
@@ -100,21 +70,6 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *actiondto.U
 		return nil, a.errHandler.SystemError()
 	}
 	return &action, nil
-}
-
-func (a *action) SearchActionsByToken(c *gin.Context, token string, courseID int64, param *actiondto.FindActionsParam) ([]*actiondto.Action, errcode.Error) {
-	uid, err := a.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, a.errHandler.InvalidToken()
-	}
-	isExist, err := a.courseRepo.CheckCourseExistByIDAndUID(courseID, uid)
-	if err != nil {
-		return nil, a.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, a.errHandler.PermissionDenied()
-	}
-	return a.SearchActions(c, courseID, param)
 }
 
 func (a *action) SearchActions(c *gin.Context, courseID int64, param *actiondto.FindActionsParam) ([]*actiondto.Action, errcode.Error) {
@@ -181,21 +136,6 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *actiondto.
 	return actions, nil
 }
 
-func (a *action) DeleteActionByToken(c *gin.Context, token string, actionID int64) (*actiondto.ActionID, errcode.Error) {
-	uid, err := a.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, a.errHandler.InvalidToken()
-	}
-	isExist, err := a.actionRepo.CheckActionExistByUID(uid, actionID)
-	if err != nil {
-		return nil, a.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, a.errHandler.PermissionDenied()
-	}
-	return a.DeleteAction(c, actionID)
-}
-
 func (a *action) DeleteAction(c *gin.Context, actionID int64) (*actiondto.ActionID, errcode.Error) {
 	if err := a.actionRepo.DeleteActionByID(actionID); err != nil {
 		if strings.Contains(err.Error(), "9006") {
@@ -206,21 +146,6 @@ func (a *action) DeleteAction(c *gin.Context, actionID int64) (*actiondto.Action
 		return nil, a.errHandler.SystemError()
 	}
 	return &actiondto.ActionID{ID: actionID}, nil
-}
-
-func (a *action) UploadActionCoverByToken(c *gin.Context, token string, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error) {
-	uid, err := a.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, a.errHandler.InvalidToken()
-	}
-	isExist, err := a.actionRepo.CheckActionExistByUID(uid, actionID)
-	if err != nil {
-		return nil, a.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, a.errHandler.PermissionDenied()
-	}
-	return a.UploadActionCover(c, actionID, coverNamed, file)
 }
 
 func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error) {
@@ -244,21 +169,6 @@ func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed st
 		return nil, a.errHandler.SystemError()
 	}
 	return &actiondto.ActionCover{Cover: newImageNamed}, nil
-}
-
-func (a *action) UploadActionVideoByToken(c *gin.Context, token string, actionID int64, videoNamed string, file multipart.File) (*actiondto.ActionVideo, errcode.Error) {
-	uid, err := a.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, a.errHandler.InvalidToken()
-	}
-	isExist, err := a.actionRepo.CheckActionExistByUID(uid, actionID)
-	if err != nil {
-		return nil, a.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, a.errHandler.PermissionDenied()
-	}
-	return a.UploadActionVideo(c, actionID, videoNamed, file)
 }
 
 func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*actiondto.ActionVideo, errcode.Error) {
