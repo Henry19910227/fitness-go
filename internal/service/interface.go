@@ -74,11 +74,8 @@ type Course interface {
 }
 
 type Plan interface {
-	CreatePlanByToken(c *gin.Context, token string, courseID int64, name string) (*plandto.Plan, errcode.Error)
 	CreatePlan(c *gin.Context, courseID int64, name string) (*plandto.Plan, errcode.Error)
-	UpdatePlanByToken(c *gin.Context, token string, planID int64, name string) (*plandto.Plan, errcode.Error)
 	UpdatePlan(c *gin.Context, planID int64, name string) (*plandto.Plan, errcode.Error)
-	DeletePlanByToken(c *gin.Context, token string, planID int64) (*plandto.PlanID, errcode.Error)
 	DeletePlan(c *gin.Context, planID int64) (*plandto.PlanID, errcode.Error)
 	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*plandto.Plan, errcode.Error)
 }
