@@ -5,19 +5,24 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type workout struct {
 	Base
 	workoutService service.Workout
+	permissions service.Permissions
 }
 
-func NewWorkout(baseGroup *gin.RouterGroup, workoutService service.Workout, userMiddleware gin.HandlerFunc) {
-	workout := workout{workoutService: workoutService}
+func NewWorkout(baseGroup *gin.RouterGroup, workoutService service.Workout, permissions service.Permissions, userMiddleware gin.HandlerFunc) {
+	baseGroup.StaticFS("/resource/workout/audio", http.Dir("./volumes/storage/workout/audio"))
+	workout := workout{workoutService: workoutService, permissions: permissions}
 	planGroup := baseGroup.Group("/workout")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:workout_id", workout.UpdateWorkout)
 	planGroup.DELETE("/:workout_id", workout.DeleteWorkout)
+	planGroup.POST("/:workout_id/start_audio", workout.UploadWorkoutStartAudio)
+	planGroup.POST("/:workout_id/end_audio", workout.UploadWorkoutEndAudio)
 }
 
 // UpdateWorkout 修改訓練
@@ -49,7 +54,15 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-    workout, err := w.workoutService.UpdateWorkoutByToken(c, header.Token, uri.WorkoutID, &workoutdto.UpdateWorkoutParam{
+	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+    workout, err := w.workoutService.UpdateWorkout(c, uri.WorkoutID, &workoutdto.UpdateWorkoutParam{
 		Name: body.Name,
 		Equipment: body.Equipment,
 	})
@@ -82,7 +95,15 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	data, err := w.workoutService.DeleteWorkoutByToken(c, header.Token, uri.WorkoutID)
+	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	data, err := w.workoutService.DeleteWorkout(c, uri.WorkoutID)
 	if err != nil {
 		w.JSONErrorResponse(c, err)
 		return
@@ -90,4 +111,90 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 	w.JSONSuccessResponse(c, data, "delete success!")
 }
 
+// UploadWorkoutStartAudio 上傳訓練前導語音
+// @Summary 上傳訓練前導語音
+// @Description 下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
+// @Tags Workout
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param workout_id path int64 true "訓練id"
+// @Param start_audio formData file true "前導語音"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /workout/{workout_id}/start_audio [POST]
+func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("start_audio")
+	if err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := w.workoutService.UploadWorkoutStartAudio(c, uri.WorkoutID, fileHeader.Filename, file)
+	if e != nil {
+		w.JSONErrorResponse(c, e)
+		return
+	}
+	w.JSONSuccessResponse(c, result, "upload success")
+}
 
+// UploadWorkoutEndAudio 上傳訓練結束語音
+// @Summary 上傳訓練結束語音
+// @Description 上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
+// @Tags Workout
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param workout_id path int64 true "訓練id"
+// @Param end_audio formData file true "結束語音"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /workout/{workout_id}/end_audio [POST]
+func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("end_audio")
+	if err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := w.workoutService.UploadWorkoutEndAudio(c, uri.WorkoutID, fileHeader.Filename, file)
+	if e != nil {
+		w.JSONErrorResponse(c, e)
+		return
+	}
+	w.JSONSuccessResponse(c, result, "upload success")
+}

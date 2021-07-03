@@ -65,10 +65,20 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 	return nil
 }
 
-func (c *course) FindCourses(uid int64, entity interface{}) error {
+func (c *course) FindCourses(uid int64, entity interface{}, status *int) error {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 user_id 篩選條件
+	query += "AND user_id = ? "
+	params = append(params, uid)
+	//加入 status 篩選條件
+	if status != nil {
+		query += "AND course_status = ? "
+		params = append(params, *status)
+	}
 	if err := c.gorm.DB().
 		Model(entity).
-		Where("user_id = ?", uid).
+		Where(query, params...).
 		Find(entity).Error; err != nil {
 			return err
 	}
@@ -85,14 +95,116 @@ func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
 	return nil
 }
 
-func (c *course) CheckCourseExistByIDAndUID(courseID int64, uid int64) (bool, error) {
-	var result int
+func (c *course) FindCourseOwnerByID(courseID int64) (int64, error) {
+	var userID int64
 	if err := c.gorm.DB().
 		Table("courses").
-		Select("1").
-		Where("id = ? AND user_id = ?", courseID, uid).
-		Find(&result).Error; err != nil {
-			return false, err
+		Select("user_id").
+		Where("id = ?", courseID).
+		Take(&userID).Error; err != nil {
+		return 0, err
 	}
-	return result > 0, nil
+	return userID, nil
+}
+
+func (c *course) FindCourseOwnerByPlanID(planID int64) (int64, error) {
+	var userID int64
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("courses.user_id").
+		Joins("INNER JOIN plans ON courses.id = plans.course_id").
+		Where("plans.id = ?", planID).
+		Take(&userID).Error; err != nil {
+		return 0, err
+	}
+	return userID, nil
+}
+
+func (c *course) FindCourseOwnerByWorkoutID(workoutID int64) (int64, error) {
+	var userID int64
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("courses.user_id").
+		Joins("INNER JOIN plans ON courses.id = plans.course_id").
+		Joins("INNER JOIN workouts ON plans.id = workouts.plan_id").
+		Where("workouts.id = ?", workoutID).
+		Take(&userID).Error; err != nil {
+		return 0, err
+	}
+	return userID, nil
+}
+
+func (c *course) FindCourseOwnerByActionID(actionID int64) (int64, error) {
+	var userID int64
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("courses.user_id").
+		Joins("INNER JOIN actions ON courses.id = actions.course_id").
+		Where("actions.id = ?", actionID).
+		Take(&userID).Error; err != nil {
+		return 0, err
+	}
+	return userID, nil
+}
+
+
+func (c *course) FindCourseStatusByID(courseID int64) (int, error) {
+	var status int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("course_status").
+		Where("id = ?", courseID).
+		Take(&status).Error; err != nil {
+		return 0, err
+	}
+	return status, nil
+}
+
+func (c *course) FindCourseStatusByPlanID(planID int64) (int, error) {
+	var status int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("course_status").
+		Joins("INNER JOIN plans ON courses.id = plans.course_id").
+		Where("plans.id = ?", planID).
+		Take(&status).Error; err != nil {
+		return 0, err
+	}
+	return status, nil
+}
+
+func (c *course) FindCourseStatusByWorkoutID(workoutID int64) (int, error) {
+	var status int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("course_status").
+		Joins("INNER JOIN plans ON courses.id = plans.course_id").
+		Joins("INNER JOIN workouts ON plans.id = workouts.plan_id").
+		Where("workouts.id = ?", workoutID).
+		Take(&status).Error; err != nil {
+		return 0, err
+	}
+	return status, nil
+}
+
+func (c *course) FindCourseStatusByActionID(actionID int64) (int, error) {
+	var status int
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("course_status").
+		Joins("INNER JOIN actions ON courses.id = actions.course_id").
+		Where("actions.id = ?", actionID).
+		Take(&status).Error; err != nil {
+		return 0, err
+	}
+	return status, nil
+}
+
+func (c *course) DeleteCourseByID(courseID int64) error {
+	if err := c.gorm.DB().
+		Where("id = ?", courseID).
+		Delete(&model.Course{}).Error; err != nil {
+		return err
+	}
+	return nil
 }

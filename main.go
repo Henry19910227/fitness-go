@@ -51,6 +51,8 @@ var (
 	courseService   service.Course
 	planService     service.Plan
 	workoutService  service.Workout
+	actionService   service.Action
+	permissions     service.Permissions
 )
 
 var (
@@ -97,9 +99,10 @@ func main() {
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
-	controller.NewCourse(baseGroup, courseService, planService, userMiddleware)
-	controller.NewPlan(baseGroup, planService, workoutService, userMiddleware)
-	controller.NewWorkout(baseGroup, workoutService, userMiddleware)
+	controller.NewCourse(baseGroup, courseService, planService, actionService, permissions, userMiddleware)
+	controller.NewPlan(baseGroup, planService, workoutService, permissions, userMiddleware)
+	controller.NewWorkout(baseGroup, workoutService, permissions, userMiddleware)
+	controller.NewAction(baseGroup, actionService, permissions, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -185,6 +188,8 @@ func setupService() {
 	setupTrainerService()
 	setupCourseService()
 	setupPlanService()
+	setupActionService()
+	setupPermissionsService()
 	setupWorkoutService()
 }
 
@@ -223,14 +228,24 @@ func setupCourseService()  {
 
 func setupPlanService()  {
 	planRepo := repository.NewPlan(gormTool)
-	courseRepo := repository.NewCourse(gormTool)
-	planService = service.NewPlan(planRepo, courseRepo, logHandler, jwtTool, errcode.NewHandler())
+	planService = service.NewPlan(planRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupWorkoutService()  {
 	workoutRepo := repository.NewWorkout(gormTool)
-	planRepo := repository.NewPlan(gormTool)
-	workoutService = service.NewWorkout(workoutRepo, planRepo, logHandler, jwtTool, errcode.NewHandler())
+	workoutService = service.NewWorkout(workoutRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupActionService()  {
+	actionRepo := repository.NewAction(gormTool)
+	courseRepo := repository.NewCourse(gormTool)
+	actionService = service.NewAction(actionRepo, courseRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupPermissionsService() {
+	courseRepo := repository.NewCourse(gormTool)
+	trainerRepo := repository.NewTrainer(gormTool)
+	permissions = service.NewPermissions(courseRepo, trainerRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

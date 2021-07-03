@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
 	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -12,22 +13,31 @@ type Course struct {
 	Base
 	courseService service.Course
 	planService service.Plan
+	actionService service.Action
+	permissions service.Permissions
 }
 
-func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, userMiddleware gin.HandlerFunc) {
+func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, actionService service.Action, permissions service.Permissions, userMiddleware gin.HandlerFunc) {
 
-	course := &Course{courseService: courseService, planService: planService}
+	course := &Course{courseService: courseService, planService: planService, actionService: actionService, permissions: permissions}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
+	coursesGroup := baseGroup.Group("/courses")
+	coursesGroup.Use(userMiddleware)
+	coursesGroup.GET("", course.GetCourses)
+
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
 	courseGroup.POST("", course.CreateCourse)
 	courseGroup.PATCH("/:course_id", course.UpdateCourse)
 	courseGroup.GET("/list", course.GetCourseList)
 	courseGroup.GET("/:course_id", course.GetCourse)
+	courseGroup.DELETE("/:course_id", course.DeleteCourse)
 	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
 	courseGroup.POST("/:course_id/plan", course.CreatePlan)
 	courseGroup.GET("/:course_id/plans", course.GetPlans)
+	courseGroup.POST("/:course_id/action", course.CreateAction)
+	courseGroup.GET("/:course_id/actions", course.SearchActions)
 }
 
 // CreateCourse 創建課表
@@ -50,6 +60,10 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := cc.permissions.CheckTrainerValidByUID(c, header.Token); err != nil {
+		cc.JSONErrorResponse(c, err)
 		return
 	}
 	result, err := cc.courseService.CreateCourseByToken(c, header.Token, &coursedto.CreateCourseParam{
@@ -127,7 +141,37 @@ func (cc *Course) GetCourseList(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, err := cc.courseService.GetCoursesByToken(c, header.Token)
+	courses, err := cc.courseService.GetCoursesByToken(c, header.Token, nil)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, courses, "success")
+}
+
+// GetCourses 獲取我創建的課表
+// @Summary 獲取我的課表列表
+// @Description 獲取我的課表列表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param status query int false "課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)"
+// @Success 200 {object} model.SuccessResult{data=[]coursedto.Course} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /courses [GET]
+func (cc *Course) GetCourses(c *gin.Context) {
+	var header validator.TokenHeader
+	var query validator.CourseStatusQuery
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindQuery(&query); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	courses, err := cc.courseService.GetCoursesByToken(c, header.Token, query.Status)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
@@ -188,6 +232,14 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	if err := cc.permissions.CheckCourseOwnerByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.permissions.CheckCourseEditableByCourseID(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
 	file, fileHeader, err := c.Request.FormFile("cover")
 	if err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
@@ -202,6 +254,44 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, result, "success upload")
+}
+
+// DeleteCourse 刪除課表
+// @Summary 刪除課表
+// @Description 刪除課表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=coursedto.CourseID} "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /course/{course_id} [DELETE]
+func (cc *Course) DeleteCourse(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := cc.permissions.CheckCourseOwnerByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.permissions.CheckCourseEditableByCourseID(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	result, err := cc.courseService.DeleteCourse(c, uri.CourseID)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, result, "delete success!")
 }
 
 // CreatePlan 創建計畫
@@ -232,7 +322,15 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	plan, err := cc.planService.CreatePlanByToken(c, header.Token, uri.CourseID, body.Name)
+	if err := cc.permissions.CheckCourseOwnerByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.permissions.CheckCourseEditableByCourseID(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	plan, err := cc.planService.CreatePlan(c, uri.CourseID, body.Name)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
@@ -263,4 +361,101 @@ func (cc *Course) GetPlans(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, plans, "success!")
+}
+
+// CreateAction 創建動作
+// @Summary 創建動作
+// @Description 創建動作
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param course_id path int64 true "課表id"
+// @Param json_body body validator.CreateActionBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult{data=actiondto.Action} "創建成功!"
+// @Failure 400 {object} model.ErrorResult "創建失敗"
+// @Router /course/{course_id}/action [POST]
+func (cc *Course) CreateAction(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.CourseIDUri
+	var body validator.CreateActionBody
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := cc.permissions.CheckCourseOwnerByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.permissions.CheckCourseEditableByCourseID(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	action, err := cc.actionService.CreateAction(c, uri.CourseID, &actiondto.CreateActionParam{
+		Name: body.Name,
+		Type: body.Type,
+		Category: body.Category,
+		Body: body.Body,
+		Equipment: body.Equipment,
+		Intro: body.Intro,
+	})
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, action, "success create!")
+}
+
+// SearchActions 搜尋動作列表
+// @Summary 搜尋動作列表
+// @Description 搜尋動作列表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param course_id path int64 true "課表id"
+// @Param name query string false "課表名稱"
+// @Param source query string false "動作來源(1:平台動作/2:教練動作)"
+// @Param category query string false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"
+// @Param body query string false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"
+// @Param equipment query string false "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)"
+// @Success 200 {object} model.SuccessResult{data=[]actiondto.Action} "查詢成功!"
+// @Failure 400 {object} model.ErrorResult "查詢失敗"
+// @Router /course/{course_id}/actions [GET]
+func (cc *Course) SearchActions(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.CourseIDUri
+	var query validator.SearchActionsQuery
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindQuery(&query); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	actions, err := cc.actionService.SearchActions(c, uri.CourseID, &actiondto.FindActionsParam{
+		Name: query.Name,
+		Source: query.Source,
+		Category: query.Category,
+		Body: query.Body,
+		Equipment: query.Equipment,
+	})
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, actions, "success!")
 }

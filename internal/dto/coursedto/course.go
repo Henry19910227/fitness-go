@@ -65,3 +65,7 @@ type Course struct {
 	CreateAt string `json:"create_at" gorm:"column:create_at" example:"2021-05-28 11:00:00"`  // 創建時間
 	UpdateAt string `json:"update_at" gorm:"column:update_at" example:"2021-05-29 11:00:00"`  // 更新時間
 }
+
+type CourseID struct {
+	ID       int64  `json:"id" gorm:"column:id" example:"2"`                                  // 課表 id
+}

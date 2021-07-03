@@ -50,5 +50,9 @@ type Resource interface {
 
 type Upload interface {
 	ImageAllowExts() []string
+	AudioAllowExts() []string
+	VideoAllowExts() []string
 	ImageMaxSize() int
+	AudioMaxSize() int
+	VideoMaxSize() int
 }

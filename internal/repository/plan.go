@@ -94,12 +94,6 @@ func (p *plan) DeletePlanByID(planID int64) error {
 			Take(&courseID).Error; err != nil {
 				return err
 		}
-		//刪除計畫底下的訓練
-		if err := tx.
-			Where("plan_id = ?", planID).
-			Delete(&model.Workout{}).Error; err != nil {
-			return err
-		}
 		//刪除計畫
 		if err := tx.
 			Where("id = ?", planID).
@@ -140,16 +134,15 @@ func (p *plan) DeletePlanByID(planID int64) error {
 	return nil
 }
 
-func (p *plan) CheckPlanExistByUID(uid int64, planID int64) (bool, error) {
-	var result int
+func (p *plan) FindPlanOwnerByID(planID int64) (int64, error) {
+	var userID int64
 	if err := p.gorm.DB().
 		Table("plans").
-		Select("1").
-		Joins("INNER JOIN courses ON plans.course_id = courses.id ").
-		Joins("INNER JOIN users ON courses.user_id = users.id ").
-		Where("plans.id = ? AND users.id = ?", planID, uid).
-		Find(&result).Error; err != nil {
-		return false, err
+		Select("courses.user_id").
+		Joins("INNER JOIN courses ON plans.course_id = courses.id").
+		Where("plans.id = ?", planID).
+		Take(&userID).Error; err != nil {
+		return 0, err
 	}
-	return result > 0, nil
+	return userID, nil
 }

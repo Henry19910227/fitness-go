@@ -11,29 +11,13 @@ import (
 
 type plan struct {
 	planRepo repository.Plan
-	courseRepo repository.Course
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewPlan(planRepo repository.Plan, courseRepo repository.Course, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Plan {
-	return &plan{planRepo: planRepo, courseRepo: courseRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
-}
-
-func (p *plan) CreatePlanByToken(c *gin.Context, token string, courseID int64, name string) (*plandto.Plan, errcode.Error) {
-	uid, err := p.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, p.errHandler.InvalidToken()
-	}
-	isExist, err := p.courseRepo.CheckCourseExistByIDAndUID(courseID, uid)
-	if err != nil {
-		return nil, p.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, p.errHandler.PermissionDenied()
-	}
-	return p.CreatePlan(c, courseID, name)
+func NewPlan(planRepo repository.Plan, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Plan {
+	return &plan{planRepo: planRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (p *plan) CreatePlan(c *gin.Context, courseID int64, name string) (*plandto.Plan, errcode.Error) {
@@ -48,21 +32,6 @@ func (p *plan) CreatePlan(c *gin.Context, courseID int64, name string) (*plandto
 		return nil, p.errHandler.SystemError()
 	}
 	return &plan, nil
-}
-
-func (p *plan) UpdatePlanByToken(c *gin.Context, token string, planID int64, name string) (*plandto.Plan, errcode.Error) {
-	uid, err := p.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, p.errHandler.InvalidToken()
-	}
-	isExist, err := p.planRepo.CheckPlanExistByUID(uid, planID)
-	if err != nil {
-		return nil, p.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, p.errHandler.PermissionDenied()
-	}
-	return p.UpdatePlan(c, planID, name)
 }
 
 func (p *plan) UpdatePlan(c *gin.Context, planID int64, name string) (*plandto.Plan, errcode.Error) {
@@ -94,21 +63,6 @@ func (p *plan) GetPlansByCourseID(c *gin.Context, courseID int64) ([]*plandto.Pl
 		plans = append(plans, &plan)
 	}
 	return plans, nil
-}
-
-func (p *plan) DeletePlanByToken(c *gin.Context, token string, planID int64) (*plandto.PlanID, errcode.Error) {
-	uid, err := p.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, p.errHandler.InvalidToken()
-	}
-	isExist, err := p.planRepo.CheckPlanExistByUID(uid, planID)
-	if err != nil {
-		return nil, p.errHandler.SystemError()
-	}
-	if !isExist {
-		return nil, p.errHandler.PermissionDenied()
-	}
-	return p.DeletePlan(c, planID)
 }
 
 func (p *plan) DeletePlan(c *gin.Context, planID int64) (*plandto.PlanID, errcode.Error) {

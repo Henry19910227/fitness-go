@@ -37,13 +37,6 @@ func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *cours
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
 	}
-	var trainer struct{TrainerStatus int `gorm:"column:trainer_status"`}
-	if err := cs.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil{
-		return nil, cs.errHandler.PermissionDenied()
-	}
-	if trainer.TrainerStatus == 3 {
-		return nil, cs.errHandler.PermissionDenied()
-	}
 	return cs.CreateCourse(c, uid, param)
 }
 
@@ -89,17 +82,25 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.
 	return &course, nil
 }
 
-func (cs *course) GetCoursesByToken(c *gin.Context, token string) ([]*coursedto.Course, errcode.Error) {
+func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*coursedto.CourseID, errcode.Error) {
+	if err := cs.courseRepo.DeleteCourseByID(courseID); err != nil {
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	return &coursedto.CourseID{ID: courseID}, nil
+}
+
+func (cs *course) GetCoursesByToken(c *gin.Context, token string, status *int) ([]*coursedto.Course, errcode.Error) {
 	uid, err := cs.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
 	}
-	return cs.GetCoursesByUID(c, uid)
+	return cs.GetCoursesByUID(c, uid, status)
 }
 
-func (cs *course) GetCoursesByUID(c *gin.Context, uid int64) ([]*coursedto.Course, errcode.Error) {
+func (cs *course) GetCoursesByUID(c *gin.Context, uid int64, status *int) ([]*coursedto.Course, errcode.Error) {
 	courses := make([]*coursedto.Course, 0)
-	if err := cs.courseRepo.FindCourses(uid, &courses); err != nil {
+	if err := cs.courseRepo.FindCourses(uid, &courses, status); err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}

@@ -1,4 +1,68 @@
 definitions:
+  actiondto.Action:
+    properties:
+      body:
+        description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        example: 8
+        type: integer
+      category:
+        description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        example: 1
+        type: integer
+      cover:
+        description: 封面
+        example: 32as1d5f13e4.png
+        type: string
+      equipment:
+        description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        example: 1
+        type: integer
+      id:
+        description: 動作id
+        example: 1
+        type: integer
+      intro:
+        description: 動作介紹
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        type: string
+      name:
+        description: 動作名稱
+        example: 槓鈴臥推
+        type: string
+      source:
+        description: 動作來源(1:系統動作/2:教練自創動作)
+        example: 2
+        type: integer
+      type:
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
+        type: integer
+      video:
+        description: 動作影片
+        example: 11d547we1d4f8e.mp4
+        type: string
+    type: object
+  actiondto.ActionCover:
+    properties:
+      cover:
+        description: 封面圖片
+        example: kd3kf54ew5.png
+        type: string
+    type: object
+  actiondto.ActionID:
+    properties:
+      action_id:
+        description: 動作id
+        example: 1
+        type: integer
+    type: object
+  actiondto.ActionVideo:
+    properties:
+      video:
+        description: 動作影片
+        example: f5e23q5e45fe32.mp4
+        type: string
+    type: object
   coursedto.Course:
     properties:
       body_target:
@@ -96,6 +160,13 @@ definitions:
         description: 課表封面照片
         example: dkf2se51fsdds.png
         type: string
+    type: object
+  coursedto.CourseID:
+    properties:
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
     type: object
   coursedto.CreateResult:
     properties:
@@ -418,6 +489,40 @@ definitions:
         example: 72.5
         type: number
     type: object
+  validator.CreateActionBody:
+    properties:
+      body:
+        description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        example: 8
+        type: integer
+      category:
+        description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        example: 1
+        type: integer
+      equipment:
+        description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        example: 1
+        type: integer
+      intro:
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        type: string
+      name:
+        description: 動作名稱(1~20字元)
+        example: 槓鈴臥推
+        type: string
+      type:
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
+        type: integer
+    required:
+    - body
+    - category
+    - equipment
+    - intro
+    - name
+    - type
+    type: object
   validator.CreateCourseBody:
     properties:
       category:
@@ -527,6 +632,29 @@ definitions:
     - nickname
     - otp_code
     - password
+    type: object
+  validator.UpdateActionBody:
+    properties:
+      body:
+        description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        example: 8
+        type: integer
+      category:
+        description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        example: 1
+        type: integer
+      equipment:
+        description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        example: 1
+        type: integer
+      intro:
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        type: string
+      name:
+        description: 動作名稱(1~20字元)
+        example: 槓鈴臥推
+        type: string
     type: object
   validator.UpdateCourseBody:
     properties:
@@ -654,6 +782,13 @@ definitions:
     required:
     - nickname
     type: object
+  workoutdto.Audio:
+    properties:
+      audio:
+        description: 語音檔案名
+        example: e6d2131w5q.mp3
+        type: string
+    type: object
   workoutdto.Workout:
     properties:
       end_audio:
@@ -693,6 +828,149 @@ info:
   description: 健身平台 api
   title: fitness api
 paths:
+  /action/{action_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除動作
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/actiondto.ActionID'
+              type: object
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除動作
+      tags:
+      - Action
+    patch:
+      consumes:
+      - application/json
+      description: 修改動作
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateActionBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/actiondto.Action'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 修改動作
+      tags:
+      - Action
+  /action/{action_id}/cover:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}'
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 封面照
+        in: formData
+        name: cover
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/actiondto.ActionCover'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳動作封面照
+      tags:
+      - Action
+  /action/{action_id}/video:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 影片檔
+        in: formData
+        name: video
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/actiondto.ActionVideo'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳動作影片
+      tags:
+      - Action
   /course:
     post:
       consumes:
@@ -727,6 +1005,37 @@ paths:
       tags:
       - Course
   /course/{course_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/coursedto.CourseID'
+              type: object
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除課表
+      tags:
+      - Course
     get:
       consumes:
       - application/json
@@ -793,6 +1102,98 @@ paths:
       security:
       - fitness_user_token: []
       summary: 更新課表
+      tags:
+      - Course
+  /course/{course_id}/action:
+    post:
+      consumes:
+      - application/json
+      description: 創建動作
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateActionBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 創建成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/actiondto.Action'
+              type: object
+        "400":
+          description: 創建失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 創建動作
+      tags:
+      - Course
+  /course/{course_id}/actions:
+    get:
+      consumes:
+      - application/json
+      description: 搜尋動作列表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 課表名稱
+        in: query
+        name: name
+        type: string
+      - description: 動作來源(1:平台動作/2:教練動作)
+        in: query
+        name: source
+        type: string
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: query
+        name: category
+        type: string
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: query
+        name: body
+        type: string
+      - description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        in: query
+        name: equipment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查詢成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/actiondto.Action'
+                  type: array
+              type: object
+        "400":
+          description: 查詢失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 搜尋動作列表
       tags:
       - Course
   /course/{course_id}/cover:
@@ -909,6 +1310,39 @@ paths:
       consumes:
       - application/json
       description: 獲取我的課表列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/coursedto.Course'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 獲取我的課表列表
+      tags:
+      - Course
+  /courses:
+    get:
+      consumes:
+      - application/json
+      description: 獲取我的課表列表
+      parameters:
+      - description: 課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        in: query
+        name: status
+        type: integer
       produces:
       - application/json
       responses:
@@ -1705,6 +2139,80 @@ paths:
       security:
       - fitness_user_token: []
       summary: 修改訓練
+      tags:
+      - Workout
+  /workout/{workout_id}/end_audio:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}'
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 結束語音
+        in: formData
+        name: end_audio
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.Audio'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳訓練結束語音
+      tags:
+      - Workout
+  /workout/{workout_id}/start_audio:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}'
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 前導語音
+        in: formData
+        name: start_audio
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.Audio'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳訓練前導語音
       tags:
       - Workout
 securityDefinitions:
