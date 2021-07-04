@@ -58,6 +58,11 @@ type Workout interface {
 	FindWorkoutOwnerByID(workoutID int64) (int64, error)
 }
 
+type WorkoutSet interface {
+	CreateRestSetByWorkoutID(workoutID int64) (int64, error)
+	FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error)
+}
+
 type Action interface {
 	CreateAction(courseID int64, param *model.CreateActionParam) (int64, error)
 	FindActionByID(actionID int64, entity interface{}) error
