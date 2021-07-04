@@ -2284,6 +2284,61 @@ var doc = `{
                 }
             }
         },
+        "/workout/{workout_id}/rest_set": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "新增休息組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "新增休息組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "新增成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "新增失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/workout/{workout_id}/start_audio": {
             "post": {
                 "security": [
@@ -3428,6 +3483,64 @@ var doc = `{
                     "description": "訓練 id",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "workoutdto.WorkoutSet": {
+            "type": "object",
+            "properties": {
+                "auto_next": {
+                    "description": "自動下一組(Y:是/N:否)",
+                    "type": "string",
+                    "example": "N"
+                },
+                "distance": {
+                    "description": "距離(公尺)",
+                    "type": "number",
+                    "example": 0
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 0
+                },
+                "progress_audio": {
+                    "description": "進行中語音",
+                    "type": "string",
+                    "example": "1d2w3e51d3w.mp3"
+                },
+                "remark": {
+                    "description": "備註",
+                    "type": "string"
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 0
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "動作類別(1:動作/2:休息)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 0
                 }
             }
         }

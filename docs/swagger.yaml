@@ -823,6 +823,51 @@ definitions:
         example: 1
         type: integer
     type: object
+  workoutdto.WorkoutSet:
+    properties:
+      auto_next:
+        description: 自動下一組(Y:是/N:否)
+        example: "N"
+        type: string
+      distance:
+        description: 距離(公尺)
+        example: 0
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      id:
+        description: 訓練組id
+        example: 10
+        type: integer
+      incline:
+        description: 坡度
+        example: 0
+        type: number
+      progress_audio:
+        description: 進行中語音
+        example: 1d2w3e51d3w.mp3
+        type: string
+      remark:
+        description: 備註
+        type: string
+      reps:
+        description: 次數
+        example: 0
+        type: integer
+      start_audio:
+        description: 前導語音
+        type: string
+      type:
+        description: 動作類別(1:動作/2:休息)
+        example: 2
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 0
+        type: number
+    type: object
 info:
   contact: {}
   description: 健身平台 api
@@ -2176,6 +2221,38 @@ paths:
       security:
       - fitness_user_token: []
       summary: 上傳訓練結束語音
+      tags:
+      - Workout
+  /workout/{workout_id}/rest_set:
+    post:
+      consumes:
+      - application/json
+      description: 新增休息組
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 新增成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutSet'
+              type: object
+        "400":
+          description: 新增失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 新增休息組
       tags:
       - Workout
   /workout/{workout_id}/start_audio:
