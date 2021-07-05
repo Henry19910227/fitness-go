@@ -182,6 +182,18 @@ func (c *course) FindCourseByWorkoutID(workoutID int64, entity interface{}) erro
 	return c.FindCourseByID(courseID, entity)
 }
 
+func (c *course) FindCourseByActionID(actionID int64, entity interface{}) error {
+	var courseID int64
+	if err := c.gorm.DB().
+		Table("actions").
+		Select("course_id").
+		Where("id = ?", actionID).
+		Take(&courseID).Error; err != nil {
+		return err
+	}
+	return c.FindCourseByID(courseID, entity)
+}
+
 func (c *course) FindCourseOwnerByID(courseID int64) (int64, error) {
 	var userID int64
 	if err := c.gorm.DB().
