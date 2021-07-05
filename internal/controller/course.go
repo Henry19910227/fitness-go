@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
 	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/service"
@@ -12,14 +13,14 @@ import (
 type Course struct {
 	Base
 	courseService service.Course
-	planService service.Plan
+	planService   service.Plan
 	actionService service.Action
-	permissions service.Permissions
+	courseAccess  access.Course
 }
 
-func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, actionService service.Action, permissions service.Permissions, userMiddleware gin.HandlerFunc) {
+func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, actionService service.Action, courseAccess access.Course, userMiddleware gin.HandlerFunc) {
 
-	course := &Course{courseService: courseService, planService: planService, actionService: actionService, permissions: permissions}
+	course := &Course{courseService: courseService, planService: planService, actionService: actionService, courseAccess: courseAccess}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 	coursesGroup := baseGroup.Group("/courses")
@@ -62,7 +63,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CheckTrainerValidByUID(c, header.Token); err != nil {
+	if err := cc.courseAccess.CheckTrainerValidByUID(c, header.Token); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -232,7 +233,7 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.courseAccess.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -274,7 +275,7 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.courseAccess.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -314,7 +315,7 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.courseAccess.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -379,7 +380,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.courseAccess.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}

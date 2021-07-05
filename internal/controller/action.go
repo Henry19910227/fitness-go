@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -11,13 +12,13 @@ import (
 type Action struct {
 	Base
 	actionService service.Action
-	permissions service.Permissions
+	courseAccess  access.Course
 }
 
-func NewAction(baseGroup *gin.RouterGroup, actionService service.Action, permissions service.Permissions, userMiddleware gin.HandlerFunc)  {
+func NewAction(baseGroup *gin.RouterGroup, actionService service.Action, courseAccess access.Course, userMiddleware gin.HandlerFunc) {
 	baseGroup.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
 	baseGroup.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
-	action := &Action{actionService: actionService, permissions: permissions}
+	action := &Action{actionService: actionService, courseAccess: courseAccess}
 	actionGroup := baseGroup.Group("/action")
 	actionGroup.Use(userMiddleware)
 	actionGroup.PATCH("/:action_id", action.UpdateAction)
@@ -54,11 +55,11 @@ func (a *Action) UpdateAction(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.courseAccess.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
+	if err := a.courseAccess.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -98,11 +99,11 @@ func (a *Action) DeleteAction(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.courseAccess.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
+	if err := a.courseAccess.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -137,11 +138,11 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.courseAccess.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
+	if err := a.courseAccess.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -181,11 +182,11 @@ func (a *Action) UploadActionVideo(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.courseAccess.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
+	if err := a.courseAccess.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}

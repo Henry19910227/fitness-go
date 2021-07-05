@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto/workoutdto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -10,18 +11,18 @@ import (
 
 type workout struct {
 	Base
-	workoutService service.Workout
+	workoutService    service.Workout
 	workoutSetService service.WorkoutSet
-	permissions service.Permissions
+	courseAccess      access.Course
 }
 
 func NewWorkout(baseGroup *gin.RouterGroup,
 	workoutService service.Workout,
 	workoutSetService service.WorkoutSet,
-	permissions service.Permissions,
+	courseAccess access.Course,
 	userMiddleware gin.HandlerFunc) {
 	baseGroup.StaticFS("/resource/workout/audio", http.Dir("./volumes/storage/workout/audio"))
-	workout := workout{workoutService: workoutService, workoutSetService: workoutSetService, permissions: permissions}
+	workout := workout{workoutService: workoutService, workoutSetService: workoutSetService, courseAccess: courseAccess}
 	planGroup := baseGroup.Group("/workout")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:workout_id", workout.UpdateWorkout)
@@ -60,7 +61,7 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.courseAccess.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -97,7 +98,7 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.courseAccess.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -132,7 +133,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.courseAccess.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -172,7 +173,7 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.courseAccess.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -211,7 +212,7 @@ func (w *workout) CreateRestSet(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.courseAccess.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}

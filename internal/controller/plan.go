@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -8,13 +9,13 @@ import (
 
 type Plan struct {
 	Base
-	planService service.Plan
+	planService    service.Plan
 	workoutService service.Workout
-	permissions service.Permissions
+	courseAccess   access.Course
 }
 
-func NewPlan(baseGroup *gin.RouterGroup, planService service.Plan, workoutService service.Workout, permissions service.Permissions, userMiddleware gin.HandlerFunc)  {
-	plan := Plan{planService: planService, workoutService: workoutService, permissions: permissions}
+func NewPlan(baseGroup *gin.RouterGroup, planService service.Plan, workoutService service.Workout, courseAccess access.Course, userMiddleware gin.HandlerFunc) {
+	plan := Plan{planService: planService, workoutService: workoutService, courseAccess: courseAccess}
 	planGroup := baseGroup.Group("/plan")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:plan_id", plan.UpdatePlan)
@@ -51,7 +52,7 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.courseAccess.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -85,7 +86,7 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.courseAccess.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -125,7 +126,7 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.courseAccess.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}

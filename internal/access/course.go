@@ -1,4 +1,4 @@
-package service
+package access
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
@@ -8,8 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type permissions struct {
-	Base
+type course struct {
 	courseRepo repository.Course
 	trainerRepo repository.Trainer
 	logger    handler.Logger
@@ -17,19 +16,19 @@ type permissions struct {
 	errHandler errcode.Handler
 }
 
-func NewPermissions(courseRepo repository.Course,
+func NewCourse(courseRepo repository.Course,
 	trainerRepo repository.Trainer,
 	logger handler.Logger,
 	jwtTool tool.JWT,
-	errHandler errcode.Handler) Permissions {
-	return &permissions{courseRepo: courseRepo,
+	errHandler errcode.Handler) Course {
+	return &course{courseRepo: courseRepo,
 		trainerRepo: trainerRepo,
 		logger: logger,
 		jwtTool: jwtTool,
 		errHandler: errHandler}
 }
 
-func (p *permissions) CheckTrainerValidByUID(c *gin.Context, token string) errcode.Error {
+func (p *course) CheckTrainerValidByUID(c *gin.Context, token string) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -44,7 +43,7 @@ func (p *permissions) CheckTrainerValidByUID(c *gin.Context, token string) errco
 	return nil
 }
 
-func (p *permissions) CheckCourseOwnerByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
+func (p *course) CheckCourseOwnerByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -60,7 +59,7 @@ func (p *permissions) CheckCourseOwnerByCourseID(c *gin.Context, token string, c
 	return nil
 }
 
-func (p *permissions) CheckPlanOwnerByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
+func (p *course) CheckPlanOwnerByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -76,7 +75,7 @@ func (p *permissions) CheckPlanOwnerByPlanID(c *gin.Context, token string, planI
 	return nil
 }
 
-func (p *permissions) CheckWorkoutOwnerByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
+func (p *course) CheckWorkoutOwnerByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -92,7 +91,7 @@ func (p *permissions) CheckWorkoutOwnerByWorkoutID(c *gin.Context, token string,
 	return nil
 }
 
-func (p *permissions) CheckActionOwnerByActionID(c *gin.Context, token string, actionID int64) errcode.Error {
+func (p *course) CheckActionOwnerByActionID(c *gin.Context, token string, actionID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -108,7 +107,7 @@ func (p *permissions) CheckActionOwnerByActionID(c *gin.Context, token string, a
 	return nil
 }
 
-func (p *permissions) CourseValidationByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
+func (p *course) CourseValidationByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -122,7 +121,7 @@ func (p *permissions) CourseValidationByCourseID(c *gin.Context, token string, c
 	return nil
 }
 
-func (p *permissions) CourseValidationByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
+func (p *course) CourseValidationByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -136,7 +135,7 @@ func (p *permissions) CourseValidationByPlanID(c *gin.Context, token string, pla
 	return nil
 }
 
-func (p *permissions) CourseValidationByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
+func (p *course) CourseValidationByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -150,7 +149,7 @@ func (p *permissions) CourseValidationByWorkoutID(c *gin.Context, token string, 
 	return nil
 }
 
-func (p *permissions) CourseValidationByActionID(c *gin.Context, token string, actionID int64) errcode.Error {
+func (p *course) CourseValidationByActionID(c *gin.Context, token string, actionID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -164,7 +163,7 @@ func (p *permissions) CourseValidationByActionID(c *gin.Context, token string, a
 	return nil
 }
 
-func (p *permissions) checkTrainerStatusByUID(c *gin.Context, uid int64) errcode.Error {
+func (p *course) checkTrainerStatusByUID(c *gin.Context, uid int64) errcode.Error {
 	var trainer struct{TrainerStatus int `gorm:"column:trainer_status"`}
 	if err := p.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil{
 		p.logger.Set(c, handler.Error, "TrainerRepo", p.errHandler.SystemError().Code(), err.Error())
@@ -176,7 +175,7 @@ func (p *permissions) checkTrainerStatusByUID(c *gin.Context, uid int64) errcode
 	return nil
 }
 
-func (p *permissions) checkCourseEditableByCourseID(c *gin.Context, uid int64, courseID int64) errcode.Error {
+func (p *course) checkCourseEditableByCourseID(c *gin.Context, uid int64, courseID int64) errcode.Error {
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
 		Status int `gorm:"column:course_status"`
@@ -194,7 +193,7 @@ func (p *permissions) checkCourseEditableByCourseID(c *gin.Context, uid int64, c
 	return nil
 }
 
-func (p *permissions) checkCourseEditableByPlanID(c *gin.Context, uid int64, planID int64) errcode.Error {
+func (p *course) checkCourseEditableByPlanID(c *gin.Context, uid int64, planID int64) errcode.Error {
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
 		Status int `gorm:"column:course_status"`
@@ -212,7 +211,7 @@ func (p *permissions) checkCourseEditableByPlanID(c *gin.Context, uid int64, pla
 	return nil
 }
 
-func (p *permissions) checkCourseEditableByWorkoutID(c *gin.Context, uid int64, workoutID int64) errcode.Error {
+func (p *course) checkCourseEditableByWorkoutID(c *gin.Context, uid int64, workoutID int64) errcode.Error {
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
 		Status int `gorm:"column:course_status"`
@@ -230,7 +229,7 @@ func (p *permissions) checkCourseEditableByWorkoutID(c *gin.Context, uid int64, 
 	return nil
 }
 
-func (p *permissions) checkCourseEditableByActionID(c *gin.Context, uid int64, actionID int64) errcode.Error {
+func (p *course) checkCourseEditableByActionID(c *gin.Context, uid int64, actionID int64) errcode.Error {
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
 		Status int `gorm:"column:course_status"`

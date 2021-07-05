@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/controller"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/middleware"
@@ -53,7 +54,11 @@ var (
 	workoutService  service.Workout
 	workoutSetService service.WorkoutSet
 	actionService   service.Action
-	permissions     service.Permissions
+
+)
+
+var (
+	courseAccess access.Course
 )
 
 var (
@@ -72,6 +77,7 @@ func init() {
 	setupTool()
 	setupHandler()
 	setupService()
+	setupAccess()
 	userMiddleware = middleware.UserJWT(ssoHandler, errcode.NewHandler())
 	adminLV1Middleware = middleware.AdminLV1JWT(ssoHandler, errcode.NewHandler())
 	adminLV2Middleware = middleware.AdminLV2JWT(ssoHandler, errcode.NewHandler())
@@ -100,10 +106,10 @@ func main() {
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
-	controller.NewCourse(baseGroup, courseService, planService, actionService, permissions, userMiddleware)
-	controller.NewPlan(baseGroup, planService, workoutService, permissions, userMiddleware)
-	controller.NewWorkout(baseGroup, workoutService, workoutSetService, permissions, userMiddleware)
-	controller.NewAction(baseGroup, actionService, permissions, userMiddleware)
+	controller.NewCourse(baseGroup, courseService, planService, actionService, courseAccess, userMiddleware)
+	controller.NewPlan(baseGroup, planService, workoutService, courseAccess, userMiddleware)
+	controller.NewWorkout(baseGroup, workoutService, workoutSetService, courseAccess, userMiddleware)
+	controller.NewAction(baseGroup, actionService, courseAccess, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -190,7 +196,6 @@ func setupService() {
 	setupCourseService()
 	setupPlanService()
 	setupActionService()
-	setupPermissionsService()
 	setupWorkoutService()
 	setupWorkoutSetService()
 }
@@ -249,13 +254,19 @@ func setupActionService()  {
 	actionService = service.NewAction(actionRepo, courseRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
-func setupPermissionsService() {
-	courseRepo := repository.NewCourse(gormTool)
-	trainerRepo := repository.NewTrainer(gormTool)
-	permissions = service.NewPermissions(courseRepo, trainerRepo, logHandler, jwtTool, errcode.NewHandler())
-}
-
 func setupSwagService()  {
 	swagService = service.NewSwagger(setting.NewSwagger(viperTool))
 }
+
+/** Access */
+func setupAccess()  {
+	setupCourseAccess()
+}
+
+func setupCourseAccess() {
+	courseRepo := repository.NewCourse(gormTool)
+	trainerRepo := repository.NewTrainer(gormTool)
+	courseAccess = access.NewCourse(courseRepo, trainerRepo, logHandler, jwtTool, errcode.NewHandler())
+}
+
 
