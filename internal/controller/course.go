@@ -232,7 +232,7 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CheckCourseEditableByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.permissions.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -274,7 +274,7 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CheckCourseEditableByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.permissions.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -314,7 +314,7 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CheckCourseEditableByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.permissions.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -379,7 +379,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.permissions.CheckCourseEditableByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.permissions.CourseValidationByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}

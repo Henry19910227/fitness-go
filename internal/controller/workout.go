@@ -60,11 +60,7 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -101,11 +97,7 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -140,11 +132,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -184,11 +172,7 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -227,11 +211,7 @@ func (w *workout) CreateRestSet(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.permissions.CheckWorkoutOwnerByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.permissions.CheckWorkoutEditableByWorkoutID(c, uri.WorkoutID); err != nil {
+	if err := w.permissions.CourseValidationByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}

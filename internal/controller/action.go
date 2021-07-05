@@ -58,7 +58,7 @@ func (a *Action) UpdateAction(c *gin.Context) {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+	if err := a.permissions.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -102,7 +102,7 @@ func (a *Action) DeleteAction(c *gin.Context) {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+	if err := a.permissions.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -141,7 +141,7 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+	if err := a.permissions.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -185,7 +185,7 @@ func (a *Action) UploadActionVideo(c *gin.Context) {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+	if err := a.permissions.CourseValidationByActionID(c, "", uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}

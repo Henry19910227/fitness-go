@@ -51,11 +51,7 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
-		p.JSONErrorResponse(c, err)
-		return
-	}
-	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+	if err := p.permissions.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -89,11 +85,7 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
-		p.JSONErrorResponse(c, err)
-		return
-	}
-	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+	if err := p.permissions.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -133,11 +125,7 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
-		p.JSONErrorResponse(c, err)
-		return
-	}
-	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+	if err := p.permissions.CourseValidationByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
