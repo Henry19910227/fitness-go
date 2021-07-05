@@ -31,6 +31,7 @@ type Course interface {
 	FindCourses(uid int64, entity interface{}, status *int) error
 	FindCourseByID(courseID int64, entity interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
+	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
 	FindCourseOwnerByID(courseID int64) (int64, error)
 	FindCourseOwnerByPlanID(planID int64) (int64, error)
 	FindCourseOwnerByWorkoutID(workoutID int64) (int64, error)
