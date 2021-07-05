@@ -41,11 +41,22 @@ func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *cours
 }
 
 func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error) {
+	if param.ScheduleType == 1 {
+		courseID, err := cs.courseRepo.CreateSingleWorkoutCourse(uid, &model.CreateCourseParam{
+			Name: param.Name,
+			Level: param.Level,
+			Category: param.Category,
+		})
+		if err != nil {
+			cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+			return nil, cs.errHandler.SystemError()
+		}
+		return &coursedto.CreateResult{ID: courseID}, nil
+	}
 	courseID, err := cs.courseRepo.CreateCourse(uid, &model.CreateCourseParam{
 		Name: param.Name,
 		Level: param.Level,
 		Category: param.Category,
-		ScheduleType: param.ScheduleType,
 	})
 	if err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
