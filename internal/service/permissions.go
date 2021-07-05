@@ -108,13 +108,23 @@ func (p *permissions) CheckActionOwnerByActionID(c *gin.Context, token string, a
 	return nil
 }
 
-func (p *permissions) CheckCourseEditableByCourseID(c *gin.Context, courseID int64) errcode.Error {
-	status, err := p.courseRepo.FindCourseStatusByID(courseID)
+func (p *permissions) CheckCourseEditableByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
+	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
+		return p.errHandler.InvalidToken()
+	}
+	course := struct {
+		UserID int64 `gorm:"column:user_id"`
+		Status int `gorm:"column:course_status"`
+	}{}
+	if err := p.courseRepo.FindCourseByID(courseID, &course); err != nil {
 		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
 		return p.errHandler.SystemError()
 	}
-	if !(status == 1 || status == 4) {
+	if course.UserID != uid {
+		return p.errHandler.PermissionDenied()
+	}
+	if !(course.Status == 1 || course.Status == 4) {
 		return p.errHandler.PermissionDenied()
 	}
 	return nil
