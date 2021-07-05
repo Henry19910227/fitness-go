@@ -26,6 +26,7 @@ type Trainer interface {
 
 type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
+	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 	FindCourses(uid int64, entity interface{}, status *int) error
 	FindCourseByID(courseID int64, entity interface{}) error

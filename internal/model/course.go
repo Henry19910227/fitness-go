@@ -33,7 +33,6 @@ type CreateCourseParam struct {
 	Name string `gorm:"column:name"`
 	Level int `gorm:"column:level"`
 	Category int `gorm:"column:category"`
-	ScheduleType int `gorm:"column:schedule_type"`
 }
 
 type UpdateCourseParam struct {
