@@ -28,7 +28,7 @@ func NewCourse(courseRepo repository.Course,
 		errHandler: errHandler}
 }
 
-func (p *course) CheckTrainerValidByUID(c *gin.Context, token string) errcode.Error {
+func (p *course) CheckCreateAllow(c *gin.Context, token string) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -43,71 +43,7 @@ func (p *course) CheckTrainerValidByUID(c *gin.Context, token string) errcode.Er
 	return nil
 }
 
-func (p *course) CheckCourseOwnerByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
-	uid, err := p.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return p.errHandler.InvalidToken()
-	}
-	ownerID, err := p.courseRepo.FindCourseOwnerByID(courseID)
-	if err != nil {
-		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
-		return p.errHandler.SystemError()
-	}
-	if ownerID != uid {
-		return p.errHandler.PermissionDenied()
-	}
-	return nil
-}
-
-func (p *course) CheckPlanOwnerByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
-	uid, err := p.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return p.errHandler.InvalidToken()
-	}
-	ownerID, err := p.courseRepo.FindCourseOwnerByPlanID(planID)
-	if err != nil {
-		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
-		return p.errHandler.SystemError()
-	}
-	if ownerID != uid {
-		return p.errHandler.PermissionDenied()
-	}
-	return nil
-}
-
-func (p *course) CheckWorkoutOwnerByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
-	uid, err := p.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return p.errHandler.InvalidToken()
-	}
-	ownerID, err := p.courseRepo.FindCourseOwnerByWorkoutID(workoutID)
-	if err != nil {
-		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
-		return p.errHandler.SystemError()
-	}
-	if ownerID != uid {
-		return p.errHandler.PermissionDenied()
-	}
-	return nil
-}
-
-func (p *course) CheckActionOwnerByActionID(c *gin.Context, token string, actionID int64) errcode.Error {
-	uid, err := p.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return p.errHandler.InvalidToken()
-	}
-	ownerID, err := p.courseRepo.FindCourseOwnerByActionID(actionID)
-	if err != nil {
-		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
-		return p.errHandler.SystemError()
-	}
-	if ownerID != uid {
-		return p.errHandler.PermissionDenied()
-	}
-	return nil
-}
-
-func (p *course) CourseValidationByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
+func (p *course) CheckEditAllowByCourseID(c *gin.Context, token string, courseID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -121,7 +57,7 @@ func (p *course) CourseValidationByCourseID(c *gin.Context, token string, course
 	return nil
 }
 
-func (p *course) CourseValidationByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
+func (p *course) CheckEditAllowByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -135,7 +71,7 @@ func (p *course) CourseValidationByPlanID(c *gin.Context, token string, planID i
 	return nil
 }
 
-func (p *course) CourseValidationByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
+func (p *course) CheckEditAllowByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
@@ -149,7 +85,7 @@ func (p *course) CourseValidationByWorkoutID(c *gin.Context, token string, worko
 	return nil
 }
 
-func (p *course) CourseValidationByActionID(c *gin.Context, token string, actionID int64) errcode.Error {
+func (p *course) CheckEditAllowByActionID(c *gin.Context, token string, actionID int64) errcode.Error {
 	uid, err := p.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return p.errHandler.InvalidToken()
