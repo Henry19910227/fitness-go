@@ -93,14 +93,23 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /course/{course_id} [PATCH]
 func (cc *Course) UpdateCourse(c *gin.Context) {
+	var header validator.TokenHeader
 	var uri validator.CourseIDUri
 	var body validator.UpdateCourseBody
+	if err := c.ShouldBindHeader(&header); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := cc.courseAccess.CheckEditAllowByCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
 		return
 	}
 	course, err := cc.courseService.UpdateCourse(c, uri.CourseID, &coursedto.UpdateCourseParam{
