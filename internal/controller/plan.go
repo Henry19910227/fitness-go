@@ -11,11 +11,23 @@ type Plan struct {
 	Base
 	planService    service.Plan
 	workoutService service.Workout
-	courseAccess   access.Course
+	planAccess     access.Plan
+	workoutAccess access.Workout
+	trainerAccess  access.Trainer
 }
 
-func NewPlan(baseGroup *gin.RouterGroup, planService service.Plan, workoutService service.Workout, courseAccess access.Course, userMiddleware gin.HandlerFunc) {
-	plan := Plan{planService: planService, workoutService: workoutService, courseAccess: courseAccess}
+func NewPlan(baseGroup *gin.RouterGroup,
+	planService service.Plan,
+	workoutService service.Workout,
+	planAccess access.Plan,
+	workoutAccess access.Workout,
+	trainerAccess  access.Trainer,
+	userMiddleware gin.HandlerFunc) {
+	plan := Plan{planService: planService,
+		workoutService: workoutService,
+		planAccess: planAccess,
+		workoutAccess: workoutAccess,
+		trainerAccess: trainerAccess}
 	planGroup := baseGroup.Group("/plan")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:plan_id", plan.UpdatePlan)
@@ -52,7 +64,11 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.courseAccess.CheckEditAllowByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	if err := p.planAccess.UpdateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -86,7 +102,11 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.courseAccess.CheckEditAllowByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	if err := p.planAccess.UpdateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -126,7 +146,11 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.courseAccess.CheckEditAllowByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	if err := p.workoutAccess.CreateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}

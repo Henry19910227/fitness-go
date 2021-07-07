@@ -12,13 +12,18 @@ import (
 type Action struct {
 	Base
 	actionService service.Action
-	courseAccess  access.Course
+	actionAccess  access.Action
+	trainerAccess access.Trainer
 }
 
-func NewAction(baseGroup *gin.RouterGroup, actionService service.Action, courseAccess access.Course, userMiddleware gin.HandlerFunc) {
+func NewAction(baseGroup *gin.RouterGroup,
+	actionService service.Action,
+	actionAccess  access.Action,
+	trainerAccess access.Trainer,
+	userMiddleware gin.HandlerFunc) {
 	baseGroup.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
 	baseGroup.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
-	action := &Action{actionService: actionService, courseAccess: courseAccess}
+	action := &Action{actionService: actionService, actionAccess: actionAccess, trainerAccess: trainerAccess}
 	actionGroup := baseGroup.Group("/action")
 	actionGroup.Use(userMiddleware)
 	actionGroup.PATCH("/:action_id", action.UpdateAction)
@@ -55,7 +60,11 @@ func (a *Action) UpdateAction(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.courseAccess.CheckEditAllowByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -95,7 +104,11 @@ func (a *Action) DeleteAction(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.courseAccess.CheckEditAllowByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -130,7 +143,11 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.courseAccess.CheckEditAllowByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -170,7 +187,11 @@ func (a *Action) UploadActionVideo(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.courseAccess.CheckEditAllowByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}

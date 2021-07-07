@@ -16,11 +16,28 @@ type Course struct {
 	planService   service.Plan
 	actionService service.Action
 	courseAccess  access.Course
+	planAccess    access.Plan
+	actionAccess  access.Action
+	trainerAccess access.Trainer
 }
 
-func NewCourse(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, actionService service.Action, courseAccess access.Course, userMiddleware gin.HandlerFunc) {
+func NewCourse(baseGroup *gin.RouterGroup,
+	courseService service.Course,
+	planService service.Plan,
+	actionService service.Action,
+	courseAccess access.Course,
+	planAccess access.Plan,
+	actionAccess  access.Action,
+	trainerAccess access.Trainer,
+	userMiddleware gin.HandlerFunc) {
 
-	course := &Course{courseService: courseService, planService: planService, actionService: actionService, courseAccess: courseAccess}
+	course := &Course{courseService: courseService,
+		planService: planService,
+		actionService: actionService,
+		courseAccess: courseAccess,
+		planAccess: planAccess,
+		actionAccess: actionAccess,
+		trainerAccess: trainerAccess}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 	coursesGroup := baseGroup.Group("/courses")
@@ -63,7 +80,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.courseAccess.CheckCreateAllow(c, header.Token); err != nil {
+	if err := cc.courseAccess.CreateVerify(c, header.Token); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -108,7 +125,11 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.courseAccess.CheckEditAllowByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.courseAccess.UpdateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -242,7 +263,7 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.courseAccess.CheckEditAllowByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.courseAccess.UpdateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -284,7 +305,7 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.courseAccess.CheckEditAllowByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.courseAccess.UpdateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -324,7 +345,11 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.courseAccess.CheckEditAllowByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.planAccess.CreateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
@@ -389,7 +414,11 @@ func (cc *Course) CreateAction(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.courseAccess.CheckEditAllowByCourseID(c, header.Token, uri.CourseID); err != nil {
+	if err := cc.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	if err := cc.actionAccess.CreateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
 	}

@@ -58,7 +58,12 @@ var (
 )
 
 var (
+	trainerAccess access.Trainer
 	courseAccess access.Course
+	planAccess access.Plan
+	workoutAccess access.Workout
+	workoutSetAccess access.WorkoutSet
+	actionAccess access.Action
 )
 
 var (
@@ -106,10 +111,10 @@ func main() {
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
-	controller.NewCourse(baseGroup, courseService, planService, actionService, courseAccess, userMiddleware)
-	controller.NewPlan(baseGroup, planService, workoutService, courseAccess, userMiddleware)
-	controller.NewWorkout(baseGroup, workoutService, workoutSetService, courseAccess, userMiddleware)
-	controller.NewAction(baseGroup, actionService, courseAccess, userMiddleware)
+	controller.NewCourse(baseGroup, courseService, planService, actionService, courseAccess, planAccess, actionAccess, trainerAccess, userMiddleware)
+	controller.NewPlan(baseGroup, planService, workoutService, planAccess, workoutAccess, trainerAccess, userMiddleware)
+	controller.NewWorkout(baseGroup, workoutService, workoutSetService, workoutAccess, workoutSetAccess, trainerAccess, userMiddleware)
+	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -260,13 +265,43 @@ func setupSwagService()  {
 
 /** Access */
 func setupAccess()  {
+	setupTrainerAccess()
 	setupCourseAccess()
+	setupPlanAccess()
+	setupWorkoutAccess()
+	setupWorkoutSetAccess()
+	setupActionAccess()
+}
+
+func setupTrainerAccess() {
+	trainerRepo := repository.NewTrainer(gormTool)
+	trainerAccess = access.NewTrainer(trainerRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupCourseAccess() {
 	courseRepo := repository.NewCourse(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
 	courseAccess = access.NewCourse(courseRepo, trainerRepo, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupPlanAccess() {
+	courseRepo := repository.NewCourse(gormTool)
+	planAccess = access.NewPlan(courseRepo, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupWorkoutAccess() {
+	courseRepo := repository.NewCourse(gormTool)
+	workoutAccess = access.NewWorkout(courseRepo, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupWorkoutSetAccess() {
+	courseRepo := repository.NewCourse(gormTool)
+	workoutSetAccess = access.NewWorkoutSet(courseRepo, logHandler, jwtTool, errcode.NewHandler())
+}
+
+func setupActionAccess() {
+	courseRepo := repository.NewCourse(gormTool)
+	actionAccess = access.NewAction(courseRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 

@@ -13,16 +13,24 @@ type workout struct {
 	Base
 	workoutService    service.Workout
 	workoutSetService service.WorkoutSet
-	courseAccess      access.Course
+	workoutAccess     access.Workout
+	workoutSetAccess  access.WorkoutSet
+	trainerAccess     access.Trainer
 }
 
 func NewWorkout(baseGroup *gin.RouterGroup,
 	workoutService service.Workout,
 	workoutSetService service.WorkoutSet,
-	courseAccess access.Course,
+	workoutAccess access.Workout,
+	workoutSetAccess  access.WorkoutSet,
+	trainerAccess access.Trainer,
 	userMiddleware gin.HandlerFunc) {
 	baseGroup.StaticFS("/resource/workout/audio", http.Dir("./volumes/storage/workout/audio"))
-	workout := workout{workoutService: workoutService, workoutSetService: workoutSetService, courseAccess: courseAccess}
+	workout := workout{workoutService: workoutService,
+		workoutSetService: workoutSetService,
+		workoutAccess: workoutAccess,
+		workoutSetAccess: workoutSetAccess,
+		trainerAccess: trainerAccess}
 	planGroup := baseGroup.Group("/workout")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:workout_id", workout.UpdateWorkout)
@@ -61,7 +69,11 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.courseAccess.CheckEditAllowByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutAccess.UpdateVerifyByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -98,7 +110,11 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.courseAccess.CheckEditAllowByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutAccess.UpdateVerifyByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -133,7 +149,11 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.courseAccess.CheckEditAllowByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutAccess.UpdateVerifyByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -173,7 +193,11 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.courseAccess.CheckEditAllowByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutAccess.UpdateVerifyByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
@@ -212,7 +236,11 @@ func (w *workout) CreateRestSet(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := w.courseAccess.CheckEditAllowByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutSetAccess.CreateVerifyByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
 		w.JSONErrorResponse(c, err)
 		return
 	}
