@@ -5,10 +5,31 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Course interface {
-	CheckCreateAllow(c *gin.Context, token string) errcode.Error
-	CheckEditAllowByCourseID(c *gin.Context, token string, courseID int64) errcode.Error
-	CheckEditAllowByPlanID(c *gin.Context, token string, planID int64) errcode.Error
-	CheckEditAllowByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error
-	CheckEditAllowByActionID(c *gin.Context, token string, actionID int64) errcode.Error
+type Trainer interface {
+	StatusVerify(c *gin.Context, token string) errcode.Error
 }
+
+type Course interface {
+	CreateVerify(c *gin.Context, token string) errcode.Error
+	UpdateVerifyByCourseID(c *gin.Context, token string, courseID int64) errcode.Error
+}
+
+type Plan interface {
+	CreateVerifyByCourseID(c *gin.Context, token string, courseID int64) errcode.Error
+	UpdateVerifyByPlanID(c *gin.Context, token string, planID int64) errcode.Error
+}
+
+type Workout interface {
+	CreateVerifyByPlanID(c *gin.Context, token string, planID int64) errcode.Error
+	UpdateVerifyByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error
+}
+
+type WorkoutSet interface {
+	CreateVerifyByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error
+}
+
+type Action interface {
+	CreateVerifyByCourseID(c *gin.Context, token string, courseID int64) errcode.Error
+	UpdateVerifyByActionID(c *gin.Context, token string, actionID int64) errcode.Error
+}
+
