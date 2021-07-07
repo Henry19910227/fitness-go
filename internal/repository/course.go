@@ -68,15 +68,13 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 		if err := tx.Create(&workout).Error; err != nil {
 			return err
 		}
-		//更新課表的計畫與訓練數量
 		plantCountQuery := tx.Table("plans").
 			Select("COUNT(*) AS plan_count").
 			Where("course_id = ?", course.ID)
-
 		workoutCountQuery := tx.Table("workouts").
 			Select("COUNT(*) AS workout_count").
 			Where("plan_id = ?", plan.ID)
-
+		//更新課表的計畫與訓練數量
 		if err := tx.Table("courses").
 			Where("id = ?", course.ID).
 			Updates(map[string]interface{}{
@@ -84,6 +82,14 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 				"workout_count": workoutCountQuery,
 		}).Error; err != nil {
 				return err
+		}
+		//更新計畫的訓練數量
+		if err := tx.Table("plans").
+			Where("id = ?", plan.ID).
+			Updates(map[string]interface{}{
+				"workout_count": workoutCountQuery,
+			}).Error; err != nil {
+			return err
 		}
 		return nil
 	}); err != nil {
