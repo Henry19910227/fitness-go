@@ -66,7 +66,7 @@ func NewCourse(baseGroup *gin.RouterGroup,
 // @Produce json
 // @Security fitness_user_token
 // @Param json_body body validator.CreateCourseBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=coursedto.CreateResult} "創建成功!"
+// @Success 200 {object} model.SuccessResult{data=coursedto.Course} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course [POST]
 func (cc *Course) CreateCourse(c *gin.Context) {

@@ -288,7 +288,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CreateResult"
+                                            "$ref": "#/definitions/coursedto.Course"
                                         }
                                     }
                                 }
@@ -2602,16 +2602,6 @@
                     "description": "課表 id",
                     "type": "integer",
                     "example": 2
-                }
-            }
-        },
-        "coursedto.CreateResult": {
-            "type": "object",
-            "properties": {
-                "course_id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 1
                 }
             }
         },

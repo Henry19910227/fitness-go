@@ -2,10 +2,6 @@ package coursedto
 
 import "mime/multipart"
 
-type CreateResult struct {
-	ID int64 `json:"course_id" example:"1"` //課表 id
-}
-
 type CourseCover struct {
 	Cover string `json:"cover" example:"dkf2se51fsdds.png"` // 課表封面照片
 }

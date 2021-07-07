@@ -32,7 +32,7 @@ func NewCourse(courseRepo repository.Course,
 	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error) {
+func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error) {
 	uid, err := cs.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
@@ -40,29 +40,32 @@ func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *cours
 	return cs.CreateCourse(c, uid, param)
 }
 
-func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error) {
+func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error) {
+	var courseID int64
+	var err error
 	if param.ScheduleType == 1 {
-		courseID, err := cs.courseRepo.CreateSingleWorkoutCourse(uid, &model.CreateCourseParam{
+		courseID, err = cs.courseRepo.CreateSingleWorkoutCourse(uid, &model.CreateCourseParam{
 			Name: param.Name,
 			Level: param.Level,
 			Category: param.Category,
 		})
-		if err != nil {
-			cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-			return nil, cs.errHandler.SystemError()
-		}
-		return &coursedto.CreateResult{ID: courseID}, nil
+	} else {
+		courseID, err = cs.courseRepo.CreateCourse(uid, &model.CreateCourseParam{
+			Name: param.Name,
+			Level: param.Level,
+			Category: param.Category,
+		})
 	}
-	courseID, err := cs.courseRepo.CreateCourse(uid, &model.CreateCourseParam{
-		Name: param.Name,
-		Level: param.Level,
-		Category: param.Category,
-	})
 	if err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
-	return &coursedto.CreateResult{ID: courseID}, nil
+	var course coursedto.Course
+	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	return &course, nil
 }
 
 func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error) {

@@ -61,8 +61,8 @@ type Trainer interface {
 }
 
 type Course interface {
-	CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
-	CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
+	CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error)
+	CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error)
 	UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error)
 	DeleteCourse(c *gin.Context, courseID int64) (*coursedto.CourseID, errcode.Error)
 	GetCoursesByToken(c *gin.Context, token string, status *int) ([]*coursedto.Course, errcode.Error)

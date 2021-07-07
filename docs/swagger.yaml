@@ -168,13 +168,6 @@ definitions:
         example: 2
         type: integer
     type: object
-  coursedto.CreateResult:
-    properties:
-      course_id:
-        description: 課表 id
-        example: 1
-        type: integer
-    type: object
   logindto.Admin:
     properties:
       email:
@@ -1068,7 +1061,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CreateResult'
+                  $ref: '#/definitions/coursedto.Course'
               type: object
         "400":
           description: 創建失敗

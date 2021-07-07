@@ -306,7 +306,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CreateResult"
+                                            "$ref": "#/definitions/coursedto.Course"
                                         }
                                     }
                                 }
@@ -2620,16 +2620,6 @@ var doc = `{
                     "description": "課表 id",
                     "type": "integer",
                     "example": 2
-                }
-            }
-        },
-        "coursedto.CreateResult": {
-            "type": "object",
-            "properties": {
-                "course_id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 1
                 }
             }
         },
