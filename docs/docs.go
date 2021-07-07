@@ -3322,11 +3322,6 @@ var doc = `{
                     "type": "integer",
                     "example": 2
                 },
-                "schedule_type": {
-                    "description": "排課類別(1:單一訓練/2:多項計畫)",
-                    "type": "integer",
-                    "example": 2
-                },
                 "suit": {
                     "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
                     "type": "string",

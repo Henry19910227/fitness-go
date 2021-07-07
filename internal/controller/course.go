@@ -135,7 +135,6 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 	}
 	course, err := cc.courseService.UpdateCourse(c, uri.CourseID, &coursedto.UpdateCourseParam{
 		Category: body.Category,
-		ScheduleType: body.ScheduleType,
 		SaleType: body.SaleType,
 		Price: body.Price,
 		Name: body.Name,

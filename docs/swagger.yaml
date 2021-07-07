@@ -702,10 +702,6 @@ definitions:
         description: 銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)
         example: 2
         type: integer
-      schedule_type:
-        description: 排課類別(1:單一訓練/2:多項計畫)
-        example: 2
-        type: integer
       suit:
         description: 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)
         example: 2,5,7

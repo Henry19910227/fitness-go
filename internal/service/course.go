@@ -68,7 +68,6 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.Creat
 func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error) {
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		Category: param.Category,
-		ScheduleType: param.ScheduleType,
 		SaleType: param.SaleType,
 		Price: param.Price,
 		Name: param.Name,

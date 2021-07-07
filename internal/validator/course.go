@@ -16,7 +16,6 @@ type CreateCourseBody struct {
 
 type UpdateCourseBody struct {
 	Category *int `json:"category" binding:"omitempty,oneof=0 1 2 3 4 5 6" example:"3"` // 課表類別(0:未指定/1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
-	ScheduleType *int `json:"schedule_type" binding:"omitempty,oneof=1 2" example:"2"` // 排課類別(1:單一訓練/2:多項計畫)
 	SaleType *int `json:"sale_type" binding:"omitempty,oneof=0 1 2 3" example:"2"` // 銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)
 	Price *int64 `json:"price" binding:"omitempty" example:"330"` // 售價
 	Name *string `json:"name" binding:"omitempty,min=1,max=20" example:"Henry課表"` // 課表名稱(1~20字元)
