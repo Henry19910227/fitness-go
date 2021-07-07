@@ -33,14 +33,6 @@ type Course interface {
 	FindCourseByPlanID(planID int64, entity interface{}) error
 	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
 	FindCourseByActionID(actionID int64, entity interface{}) error
-	FindCourseOwnerByID(courseID int64) (int64, error)
-	FindCourseOwnerByPlanID(planID int64) (int64, error)
-	FindCourseOwnerByWorkoutID(workoutID int64) (int64, error)
-	FindCourseOwnerByActionID(actionID int64) (int64, error)
-	FindCourseStatusByID(courseID int64) (int, error)
-	FindCourseStatusByPlanID(planID int64) (int, error)
-	FindCourseStatusByWorkoutID(workoutID int64) (int, error)
-	FindCourseStatusByActionID(actionID int64) (int, error)
 	DeleteCourseByID(courseID int64) error
 }
 
