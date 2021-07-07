@@ -80,7 +80,7 @@ type Plan interface {
 }
 
 type Workout interface {
-	CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error)
+	CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.Workout, errcode.Error)
 	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutdto.Workout, errcode.Error)
 	UpdateWorkout(c *gin.Context, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error)
 	DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error)

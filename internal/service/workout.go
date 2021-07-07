@@ -24,13 +24,18 @@ func NewWorkout(workoutRepo repository.Workout, uploader handler.Uploader, logge
 	return &workout{workoutRepo: workoutRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error) {
+func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.Workout, errcode.Error) {
 	workoutID, err := w.workoutRepo.CreateWorkout(planID, name)
 	if err != nil {
 		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
 	}
-	return &workoutdto.WorkoutID{ID: workoutID}, nil
+	var workout workoutdto.Workout
+	if err := w.workoutRepo.FindWorkoutByID(workoutID, &workout); err != nil {
+		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
+		return nil, w.errHandler.SystemError()
+	}
+	return &workout, nil
 }
 
 func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutdto.Workout, errcode.Error) {

@@ -1545,7 +1545,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutID"
+                                            "$ref": "#/definitions/workoutdto.Workout"
                                         }
                                     }
                                 }

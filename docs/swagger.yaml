@@ -1805,7 +1805,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.WorkoutID'
+                  $ref: '#/definitions/workoutdto.Workout'
               type: object
         "400":
           description: 創建失敗
