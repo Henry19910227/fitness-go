@@ -18,5 +18,5 @@ type User struct {
 	Target           int     `json:"target" gorm:"column:target" example:"3"`                             // 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
 	CreateAt         string  `json:"create_at" gorm:"column:create_at" example:"2021-06-01 12:00:00"`     // 創建日期
 	UpdateAt         string  `json:"update_at" gorm:"column:update_at" example:"2021-06-01 12:00:00"`     // 修改日期
-	IsTrainer        int     `json:"is_trainer" gorm:"-" example:"1"`                                     // 是否擁有教練身份(0:否/1:是)
+	TrainerInfo      *Trainer `json:"trainer_info" gorm:"-"`                                              // 教練資訊
 }

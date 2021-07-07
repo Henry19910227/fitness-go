@@ -53,16 +53,15 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 	if user.Birthday == "0000-01-01" {
 		user.Birthday = ""
 	}
-	//檢查是否創建過教練身份
-	err := l.trainerRepo.FindTrainerByUID(user.ID, nil)
+	//獲取教練資訊
+	var trainer logindto.Trainer
+	err := l.trainerRepo.FindTrainerByUID(user.ID, &trainer)
 	if err != nil {
-		//不明原因錯誤
-		if !errors.Is(err, gorm.ErrRecordNotFound){
-			l.logger.Set(c, handler.Error, "UserRepo", l.errHandler.SystemError().Code(), err.Error())
-			return nil, "", l.errHandler.SystemError()
-		}
-	} else { //教練身份存在
-		user.IsTrainer = 1
+		l.logger.Set(c, handler.Error, "TrainerRepo", l.errHandler.SystemError().Code(), err.Error())
+		return nil, "", l.errHandler.SystemError()
+	}
+	if trainer.UserID != 0 {
+		user.TrainerInfo = &trainer
 	}
 	//生成 user token
 	token, err := l.ssoHandler.GenerateUserToken(user.ID)
