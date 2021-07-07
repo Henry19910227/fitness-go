@@ -163,7 +163,7 @@ definitions:
     type: object
   coursedto.CourseID:
     properties:
-      id:
+      course_id:
         description: 課表 id
         example: 2
         type: integer

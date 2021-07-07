@@ -2616,7 +2616,7 @@ var doc = `{
         "coursedto.CourseID": {
             "type": "object",
             "properties": {
-                "id": {
+                "course_id": {
                     "description": "課表 id",
                     "type": "integer",
                     "example": 2

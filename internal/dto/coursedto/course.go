@@ -62,5 +62,5 @@ type Course struct {
 }
 
 type CourseID struct {
-	ID       int64  `json:"id" gorm:"column:id" example:"2"`                                  // 課表 id
+	ID       int64  `json:"course_id" gorm:"column:id" example:"2"`                           // 課表 id
 }
