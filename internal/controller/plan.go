@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -8,13 +9,25 @@ import (
 
 type Plan struct {
 	Base
-	planService service.Plan
+	planService    service.Plan
 	workoutService service.Workout
-	permissions service.Permissions
+	planAccess     access.Plan
+	workoutAccess access.Workout
+	trainerAccess  access.Trainer
 }
 
-func NewPlan(baseGroup *gin.RouterGroup, planService service.Plan, workoutService service.Workout, permissions service.Permissions, userMiddleware gin.HandlerFunc)  {
-	plan := Plan{planService: planService, workoutService: workoutService, permissions: permissions}
+func NewPlan(baseGroup *gin.RouterGroup,
+	planService service.Plan,
+	workoutService service.Workout,
+	planAccess access.Plan,
+	workoutAccess access.Workout,
+	trainerAccess  access.Trainer,
+	userMiddleware gin.HandlerFunc) {
+	plan := Plan{planService: planService,
+		workoutService: workoutService,
+		planAccess: planAccess,
+		workoutAccess: workoutAccess,
+		trainerAccess: trainerAccess}
 	planGroup := baseGroup.Group("/plan")
 	planGroup.Use(userMiddleware)
 	planGroup.PATCH("/:plan_id", plan.UpdatePlan)
@@ -51,11 +64,11 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
-	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+	if err := p.planAccess.UpdateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -89,11 +102,11 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
-	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+	if err := p.planAccess.UpdateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -114,7 +127,7 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 // @Security fitness_user_token
 // @Param plan_id path int64 true "計畫id"
 // @Param json_body body validator.CreateWorkoutBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutID} "創建成功!"
+// @Success 200 {object} model.SuccessResult{data=workoutdto.Workout} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /plan/{plan_id}/workout [POST]
 func (p *Plan) CreateWorkout(c *gin.Context) {
@@ -133,11 +146,11 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.permissions.CheckPlanOwnerByPlanID(c, header.Token, uri.PlanID); err != nil {
+	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
-	if err := p.permissions.CheckPlanEditableByPlanID(c, uri.PlanID); err != nil {
+	if err := p.workoutAccess.CreateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}

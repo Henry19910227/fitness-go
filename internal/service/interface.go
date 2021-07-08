@@ -61,8 +61,8 @@ type Trainer interface {
 }
 
 type Course interface {
-	CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
-	CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.CreateResult, errcode.Error)
+	CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error)
+	CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error)
 	UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error)
 	DeleteCourse(c *gin.Context, courseID int64) (*coursedto.CourseID, errcode.Error)
 	GetCoursesByToken(c *gin.Context, token string, status *int) ([]*coursedto.Course, errcode.Error)
@@ -80,12 +80,16 @@ type Plan interface {
 }
 
 type Workout interface {
-	CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.WorkoutID, errcode.Error)
+	CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.Workout, errcode.Error)
 	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutdto.Workout, errcode.Error)
 	UpdateWorkout(c *gin.Context, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error)
 	DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error)
 	UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
 	UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
+}
+
+type WorkoutSet interface {
+	CreateRestSet(c *gin.Context, workoutID int64) (*workoutdto.WorkoutSet, errcode.Error)
 }
 
 type Action interface {
@@ -95,16 +99,4 @@ type Action interface {
 	DeleteAction(c *gin.Context, actionID int64) (*actiondto.ActionID, errcode.Error)
 	UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error)
 	UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*actiondto.ActionVideo, errcode.Error)
-}
-
-type Permissions interface {
-	CheckTrainerValidByUID(c *gin.Context, token string) errcode.Error
-	CheckCourseOwnerByCourseID(c *gin.Context, token string, courseID int64) errcode.Error
-	CheckPlanOwnerByPlanID(c *gin.Context, token string, planID int64) errcode.Error
-	CheckWorkoutOwnerByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error
-	CheckActionOwnerByActionID(c *gin.Context, token string, actionID int64) errcode.Error
-	CheckCourseEditableByCourseID(c *gin.Context, courseID int64) errcode.Error
-	CheckPlanEditableByPlanID(c *gin.Context, planID int64) errcode.Error
-	CheckWorkoutEditableByWorkoutID(c *gin.Context, workoutID int64) errcode.Error
-	CheckActionEditableByActionID(c *gin.Context, actionID int64) errcode.Error
 }

@@ -163,16 +163,9 @@ definitions:
     type: object
   coursedto.CourseID:
     properties:
-      id:
-        description: 課表 id
-        example: 2
-        type: integer
-    type: object
-  coursedto.CreateResult:
-    properties:
       course_id:
         description: 課表 id
-        example: 1
+        example: 2
         type: integer
     type: object
   logindto.Admin:
@@ -193,6 +186,41 @@ definitions:
         description: 暱稱
         example: henry
         type: string
+    type: object
+  logindto.Trainer:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區信義路五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: ld3ae0faf5we.png
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      intro:
+        description: 個人介紹
+        example: 健身比賽冠軍
+        type: string
+      name:
+        description: 教練本名
+        example: 王小明
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      phone:
+        description: 電話
+        example: "0978820789"
+        type: string
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
     type: object
   logindto.User:
     properties:
@@ -236,10 +264,6 @@ definitions:
         description: 帳戶id
         example: 10001
         type: integer
-      is_trainer:
-        description: 是否擁有教練身份(0:否/1:是)
-        example: 1
-        type: integer
       nickname:
         description: 暱稱
         example: Henry
@@ -252,6 +276,9 @@ definitions:
         description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
         example: 3
         type: integer
+      trainer_info:
+        $ref: '#/definitions/logindto.Trainer'
+        description: 教練資訊
       update_at:
         description: 修改日期
         example: "2021-06-01 12:00:00"
@@ -663,7 +690,7 @@ definitions:
         example: 1,2,6
         type: string
       category:
-        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        description: 課表類別(0:未指定/1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
         example: 3
         type: integer
       equipment:
@@ -679,7 +706,7 @@ definitions:
         example: 佛系的健身課表
         type: string
       level:
-        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        description: 強度(0:未指定/1:初級/2:中級/3:中高級/4:高級)
         example: 3
         type: integer
       name:
@@ -699,11 +726,7 @@ definitions:
         example: 330
         type: integer
       sale_type:
-        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-        example: 2
-        type: integer
-      schedule_type:
-        description: 排課類別(1:單一訓練/2:多項計畫)
+        description: 銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)
         example: 2
         type: integer
       suit:
@@ -822,6 +845,51 @@ definitions:
         description: 訓練 id
         example: 1
         type: integer
+    type: object
+  workoutdto.WorkoutSet:
+    properties:
+      auto_next:
+        description: 自動下一組(Y:是/N:否)
+        example: "N"
+        type: string
+      distance:
+        description: 距離(公尺)
+        example: 0
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      id:
+        description: 訓練組id
+        example: 10
+        type: integer
+      incline:
+        description: 坡度
+        example: 0
+        type: number
+      progress_audio:
+        description: 進行中語音
+        example: 1d2w3e51d3w.mp3
+        type: string
+      remark:
+        description: 備註
+        type: string
+      reps:
+        description: 次數
+        example: 0
+        type: integer
+      start_audio:
+        description: 前導語音
+        type: string
+      type:
+        description: 動作類別(1:動作/2:休息)
+        example: 2
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 0
+        type: number
     type: object
 info:
   contact: {}
@@ -993,7 +1061,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CreateResult'
+                  $ref: '#/definitions/coursedto.Course'
               type: object
         "400":
           description: 創建失敗
@@ -1737,7 +1805,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.WorkoutID'
+                  $ref: '#/definitions/workoutdto.Workout'
               type: object
         "400":
           description: 創建失敗
@@ -2176,6 +2244,38 @@ paths:
       security:
       - fitness_user_token: []
       summary: 上傳訓練結束語音
+      tags:
+      - Workout
+  /workout/{workout_id}/rest_set:
+    post:
+      consumes:
+      - application/json
+      description: 新增休息組
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 新增成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutSet'
+              type: object
+        "400":
+          description: 新增失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 新增休息組
       tags:
       - Workout
   /workout/{workout_id}/start_audio:

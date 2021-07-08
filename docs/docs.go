@@ -306,7 +306,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CreateResult"
+                                            "$ref": "#/definitions/coursedto.Course"
                                         }
                                     }
                                 }
@@ -1545,7 +1545,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutID"
+                                            "$ref": "#/definitions/workoutdto.Workout"
                                         }
                                     }
                                 }
@@ -2284,6 +2284,61 @@ var doc = `{
                 }
             }
         },
+        "/workout/{workout_id}/rest_set": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "新增休息組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "新增休息組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "新增成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "新增失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/workout/{workout_id}/start_audio": {
             "post": {
                 "security": [
@@ -2561,20 +2616,10 @@ var doc = `{
         "coursedto.CourseID": {
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
-                }
-            }
-        },
-        "coursedto.CreateResult": {
-            "type": "object",
-            "properties": {
                 "course_id": {
                     "description": "課表 id",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 }
             }
         },
@@ -2600,6 +2645,51 @@ var doc = `{
                     "description": "暱稱",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "logindto.Trainer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區信義路五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "intro": {
+                    "description": "個人介紹",
+                    "type": "string",
+                    "example": "健身比賽冠軍"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0978820789"
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -2656,11 +2746,6 @@ var doc = `{
                     "type": "integer",
                     "example": 10001
                 },
-                "is_trainer": {
-                    "description": "是否擁有教練身份(0:否/1:是)",
-                    "type": "integer",
-                    "example": 1
-                },
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
@@ -2675,6 +2760,10 @@ var doc = `{
                     "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
                     "type": "integer",
                     "example": 3
+                },
+                "trainer_info": {
+                    "description": "教練資訊",
+                    "$ref": "#/definitions/logindto.Trainer"
                 },
                 "update_at": {
                     "description": "修改日期",
@@ -3218,7 +3307,7 @@ var doc = `{
                     "example": "1,2,6"
                 },
                 "category": {
-                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "description": "課表類別(0:未指定/1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
                     "type": "integer",
                     "example": 3
                 },
@@ -3238,7 +3327,7 @@ var doc = `{
                     "example": "佛系的健身課表"
                 },
                 "level": {
-                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "description": "強度(0:未指定/1:初級/2:中級/3:中高級/4:高級)",
                     "type": "integer",
                     "example": 3
                 },
@@ -3263,12 +3352,7 @@ var doc = `{
                     "example": 330
                 },
                 "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "schedule_type": {
-                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "description": "銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)",
                     "type": "integer",
                     "example": 2
                 },
@@ -3428,6 +3512,64 @@ var doc = `{
                     "description": "訓練 id",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "workoutdto.WorkoutSet": {
+            "type": "object",
+            "properties": {
+                "auto_next": {
+                    "description": "自動下一組(Y:是/N:否)",
+                    "type": "string",
+                    "example": "N"
+                },
+                "distance": {
+                    "description": "距離(公尺)",
+                    "type": "number",
+                    "example": 0
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 0
+                },
+                "progress_audio": {
+                    "description": "進行中語音",
+                    "type": "string",
+                    "example": "1d2w3e51d3w.mp3"
+                },
+                "remark": {
+                    "description": "備註",
+                    "type": "string"
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 0
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "動作類別(1:動作/2:休息)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 0
                 }
             }
         }

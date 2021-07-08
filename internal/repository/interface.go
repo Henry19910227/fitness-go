@@ -26,17 +26,13 @@ type Trainer interface {
 
 type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
+	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 	FindCourses(uid int64, entity interface{}, status *int) error
 	FindCourseByID(courseID int64, entity interface{}) error
-	FindCourseOwnerByID(courseID int64) (int64, error)
-	FindCourseOwnerByPlanID(planID int64) (int64, error)
-	FindCourseOwnerByWorkoutID(workoutID int64) (int64, error)
-	FindCourseOwnerByActionID(actionID int64) (int64, error)
-	FindCourseStatusByID(courseID int64) (int, error)
-	FindCourseStatusByPlanID(planID int64) (int, error)
-	FindCourseStatusByWorkoutID(workoutID int64) (int, error)
-	FindCourseStatusByActionID(actionID int64) (int, error)
+	FindCourseByPlanID(planID int64, entity interface{}) error
+	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
+	FindCourseByActionID(actionID int64, entity interface{}) error
 	DeleteCourseByID(courseID int64) error
 }
 
@@ -56,6 +52,11 @@ type Workout interface {
 	UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error
 	DeleteWorkoutByID(workoutID int64) error
 	FindWorkoutOwnerByID(workoutID int64) (int64, error)
+}
+
+type WorkoutSet interface {
+	CreateRestSetByWorkoutID(workoutID int64) (int64, error)
+	FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error)
 }
 
 type Action interface {

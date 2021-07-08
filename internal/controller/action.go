@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -11,13 +12,18 @@ import (
 type Action struct {
 	Base
 	actionService service.Action
-	permissions service.Permissions
+	actionAccess  access.Action
+	trainerAccess access.Trainer
 }
 
-func NewAction(baseGroup *gin.RouterGroup, actionService service.Action, permissions service.Permissions, userMiddleware gin.HandlerFunc)  {
+func NewAction(baseGroup *gin.RouterGroup,
+	actionService service.Action,
+	actionAccess  access.Action,
+	trainerAccess access.Trainer,
+	userMiddleware gin.HandlerFunc) {
 	baseGroup.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
 	baseGroup.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
-	action := &Action{actionService: actionService, permissions: permissions}
+	action := &Action{actionService: actionService, actionAccess: actionAccess, trainerAccess: trainerAccess}
 	actionGroup := baseGroup.Group("/action")
 	actionGroup.Use(userMiddleware)
 	actionGroup.PATCH("/:action_id", action.UpdateAction)
@@ -54,11 +60,11 @@ func (a *Action) UpdateAction(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -98,11 +104,11 @@ func (a *Action) DeleteAction(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -137,11 +143,11 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
@@ -181,11 +187,11 @@ func (a *Action) UploadActionVideo(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := a.permissions.CheckActionOwnerByActionID(c, header.Token, uri.ActionID); err != nil {
+	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	if err := a.permissions.CheckActionEditableByActionID(c, uri.ActionID); err != nil {
+	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
 		a.JSONErrorResponse(c, err)
 		return
 	}

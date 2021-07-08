@@ -35,7 +35,7 @@ func (t *trainer) FindTrainerByUID(uid int64, entity interface{}) error {
 	if err := t.gorm.DB().
 		Model(&model.Trainer{}).
 		Where("user_id = ?", uid).
-		Take(entity).Error; err != nil {
+		Find(entity).Error; err != nil {
 		return err
 	}
 	return nil
