@@ -2400,6 +2400,73 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/workout/{workout_id}/workout_set": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "新增訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "新增訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateWorkoutSetBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "新增成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "新增失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -3206,6 +3273,26 @@ var doc = `{
                 }
             }
         },
+        "validator.CreateWorkoutSetBody": {
+            "type": "object",
+            "required": [
+                "action_ids"
+            ],
+            "properties": {
+                "action_ids": {
+                    "description": "動作id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "example": [
+                        1,
+                        10,
+                        15
+                    ]
+                }
+            }
+        },
         "validator.EmailBody": {
             "type": "object",
             "required": [
@@ -3518,6 +3605,10 @@ var doc = `{
         "workoutdto.WorkoutSet": {
             "type": "object",
             "properties": {
+                "action": {
+                    "description": "動作",
+                    "$ref": "#/definitions/workoutdto.WorkoutSetAction"
+                },
                 "auto_next": {
                     "description": "自動下一組(Y:是/N:否)",
                     "type": "string",
@@ -3570,6 +3661,46 @@ var doc = `{
                     "description": "重量(公斤)",
                     "type": "number",
                     "example": 0
+                }
+            }
+        },
+        "workoutdto.WorkoutSetAction": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "封面",
+                    "type": "string",
+                    "example": "32as1d5f13e4.png"
+                },
+                "id": {
+                    "description": "動作id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "intro": {
+                    "description": "動作介紹",
+                    "type": "string",
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                },
+                "name": {
+                    "description": "動作名稱",
+                    "type": "string",
+                    "example": "槓鈴臥推"
+                },
+                "source": {
+                    "description": "動作來源(1:系統動作/2:教練自創動作)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "type": {
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "video": {
+                    "description": "動作影片",
+                    "type": "string",
+                    "example": "11d547we1d4f8e.mp4"
                 }
             }
         }
