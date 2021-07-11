@@ -84,3 +84,8 @@ func (handler handler) LoginRoleFailure() Error {
 func (handler handler) LoginStatusFailure() Error {
 	return LoginStatusFailure
 }
+
+/** 課表 */
+func (handler handler) ActionNotExist() Error {
+	return ActionNotExist
+}

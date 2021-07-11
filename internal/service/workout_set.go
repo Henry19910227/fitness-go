@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 type set struct {
@@ -23,6 +24,55 @@ func NewWorkoutSet(setRepo repository.WorkoutSet,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) WorkoutSet {
 	return &set{setRepo: setRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+}
+
+func (s *set) CreateWorkoutSet(c *gin.Context, workoutID int64, actionIDs []int64) ([]*workoutdto.WorkoutSet, errcode.Error) {
+	//創建動作組
+	setIDs, err := s.setRepo.CreateWorkoutSetsByWorkoutID(workoutID, actionIDs)
+	if err != nil {
+		if strings.Contains(err.Error(), "1452") {
+			s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.ActionNotExist().Code(), err.Error())
+			return nil, s.errHandler.ActionNotExist()
+		}
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	datas, err := s.setRepo.FindWorkoutSetsByIDs(setIDs)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	//parser回傳資料
+	sets := make([]*workoutdto.WorkoutSet, 0)
+	for _, data := range datas{
+		set := workoutdto.WorkoutSet{
+			ID: data.ID,
+			Type: data.Type,
+			AutoNext: data.AutoNext,
+			StartAudio: data.StartAudio,
+			ProgressAudio: data.ProgressAudio,
+			Remark: data.Remark,
+			Weight: data.Weight,
+			Reps: data.Reps,
+			Distance: data.Distance,
+			Duration: data.Duration,
+			Incline: data.Incline,
+		}
+		if data.Action != nil {
+			action := workoutdto.WorkoutSetAction{
+				ID: data.Action.ID,
+				Name: data.Action.Name,
+				Source: data.Action.Source,
+				Type: data.Action.Type,
+				Intro: data.Action.Intro,
+				Cover: data.Action.Cover,
+				Video: data.Action.Video,
+			}
+			set.Action = &action
+		}
+		sets = append(sets, &set)
+	}
+	return sets, nil
 }
 
 func (s *set) CreateRestSet(c *gin.Context, workoutID int64) (*workoutdto.WorkoutSet, errcode.Error) {

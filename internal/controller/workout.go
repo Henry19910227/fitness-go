@@ -37,6 +37,7 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 	planGroup.DELETE("/:workout_id", workout.DeleteWorkout)
 	planGroup.POST("/:workout_id/start_audio", workout.UploadWorkoutStartAudio)
 	planGroup.POST("/:workout_id/end_audio", workout.UploadWorkoutEndAudio)
+	planGroup.POST("/:workout_id/workout_set", workout.CreateWorkoutSet)
 	planGroup.POST("/:workout_id/rest_set", workout.CreateRestSet)
 }
 
@@ -212,6 +213,50 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, result, "upload success")
+}
+
+// CreateWorkoutSet 新增訓練組
+// @Summary 新增訓練組
+// @Description 新增訓練組
+// @Tags Workout
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_id path int64 true "訓練id"
+// @Param json_body body validator.CreateWorkoutSetBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult{data=[]workoutdto.WorkoutSet} "新增成功!"
+// @Failure 400 {object} model.ErrorResult "新增失敗"
+// @Router /workout/{workout_id}/workout_set [POST]
+func (w *workout) CreateWorkoutSet(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutIDUri
+	var body validator.CreateWorkoutSetBody
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutAccess.UpdateVerifyByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	sets, err := w.workoutSetService.CreateWorkoutSet(c, uri.WorkoutID, body.ActionIDs)
+	if err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, sets, "create success!")
 }
 
 // CreateRestSet 新增休息組

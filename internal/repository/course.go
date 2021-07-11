@@ -181,7 +181,7 @@ func (c *course) FindCourseByWorkoutID(workoutID int64, entity interface{}) erro
 		Table("workouts").
 		Select("plans.course_id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
-		Where("id = ?", workoutID).
+		Where("workouts.id = ?", workoutID).
 		Take(&courseID).Error; err != nil {
 		return err
 	}

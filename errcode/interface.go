@@ -28,6 +28,9 @@ var (
 	NicknameDuplicate  = NewError(1405, errors.New("此名稱已有人使用，請試試其他名稱"))
 	EmailDuplicate     = NewError(1406, errors.New("此郵件已有註冊紀錄，請返回登入"))
 	AccountDuplicate   = NewError(1407, errors.New("該帳號已被使用"))
+
+	// Course
+	ActionNotExist = NewError(1500, errors.New("不存在的動作"))
 )
 
 type Error interface {
@@ -78,4 +81,8 @@ type Handler interface {
 	LoginRoleFailure() Error
 	//NewError(1102, errors.New("帳號無法使用"))
 	LoginStatusFailure() Error
+
+	/** 課表 */
+	// NewError(1500, errors.New("不存在的動作"))
+	ActionNotExist() Error
 }
