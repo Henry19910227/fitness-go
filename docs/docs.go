@@ -2467,6 +2467,64 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/workout/{workout_id}/workout_sets": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "取得訓練內的訓練組列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "取得訓練內的訓練組列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

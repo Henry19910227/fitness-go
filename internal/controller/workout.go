@@ -39,6 +39,7 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 	planGroup.POST("/:workout_id/end_audio", workout.UploadWorkoutEndAudio)
 	planGroup.POST("/:workout_id/workout_set", workout.CreateWorkoutSet)
 	planGroup.POST("/:workout_id/rest_set", workout.CreateRestSet)
+	planGroup.GET("/:workout_id/workout_sets", workout.GetWorkoutSets)
 }
 
 // UpdateWorkout 修改訓練
@@ -295,4 +296,34 @@ func (w *workout) CreateRestSet(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, set, "create success!")
+}
+
+// GetWorkoutSets 取得訓練內的訓練組列表
+// @Summary  取得訓練內的訓練組列表
+// @Description  取得訓練內的訓練組列表
+// @Tags Workout
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_id path int64 true "訓練id"
+// @Success 200 {object} model.SuccessResult{data=[]workoutdto.WorkoutSet} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /workout/{workout_id}/workout_sets [GET]
+func (w *workout) GetWorkoutSets(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	sets, err := w.workoutSetService.GetWorkoutSets(c, uri.WorkoutID)
+	if err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, sets, "success!")
 }
