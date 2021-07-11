@@ -87,16 +87,15 @@ func (u *user) GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.E
 		u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
 		return nil, u.errHandler.SystemError()
 	}
-	//檢查是否創建過教練身份
-	err := u.trainerRepo.FindTrainerByUID(user.ID, nil)
+	//獲取教練資訊
+	var trainer userdto.Trainer
+	err := u.trainerRepo.FindTrainerByUID(user.ID, &trainer)
 	if err != nil {
-		//不明原因錯誤
-		if !errors.Is(err, gorm.ErrRecordNotFound){
-			u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
-			return nil, u.errHandler.SystemError()
-		}
-	} else { //教練身份已存在
-		user.IsTrainer = 1
+		u.logger.Set(c, handler.Error, "TrainerRepo",u.errHandler.SystemError().Code(), err.Error())
+		return nil, u.errHandler.SystemError()
+	}
+	if trainer.UserID != 0 {
+		user.TrainerInfo = &trainer
 	}
 	return &user, nil
 }
