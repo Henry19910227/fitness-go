@@ -90,7 +90,7 @@ type Workout interface {
 
 type WorkoutSet interface {
 	CreateRestSet(c *gin.Context, workoutID int64) (*workoutdto.WorkoutSet, errcode.Error)
-	CreateWorkoutSet(c *gin.Context, workoutID int64, actionIDs []int64) ([]*workoutdto.WorkoutSet, errcode.Error)
+	CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*workoutdto.WorkoutSet, errcode.Error)
 	GetWorkoutSets(c *gin.Context, workoutID int64) ([]*workoutdto.WorkoutSet, errcode.Error)
 }
 

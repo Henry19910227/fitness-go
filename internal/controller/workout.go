@@ -37,7 +37,7 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 	planGroup.DELETE("/:workout_id", workout.DeleteWorkout)
 	planGroup.POST("/:workout_id/start_audio", workout.UploadWorkoutStartAudio)
 	planGroup.POST("/:workout_id/end_audio", workout.UploadWorkoutEndAudio)
-	planGroup.POST("/:workout_id/workout_set", workout.CreateWorkoutSet)
+	planGroup.POST("/:workout_id/workout_set", workout.CreateWorkoutSets)
 	planGroup.POST("/:workout_id/rest_set", workout.CreateRestSet)
 	planGroup.GET("/:workout_id/workout_sets", workout.GetWorkoutSets)
 }
@@ -216,7 +216,7 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 	w.JSONSuccessResponse(c, result, "upload success")
 }
 
-// CreateWorkoutSet 新增訓練組
+// CreateWorkoutSets 新增訓練組
 // @Summary 新增訓練組
 // @Description 新增訓練組
 // @Tags Workout
@@ -228,7 +228,7 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 // @Success 200 {object} model.SuccessResult{data=[]workoutdto.WorkoutSet} "新增成功!"
 // @Failure 400 {object} model.ErrorResult "新增失敗"
 // @Router /workout/{workout_id}/workout_set [POST]
-func (w *workout) CreateWorkoutSet(c *gin.Context) {
+func (w *workout) CreateWorkoutSets(c *gin.Context) {
 	var header validator.TokenHeader
 	var uri validator.WorkoutIDUri
 	var body validator.CreateWorkoutSetBody
@@ -252,7 +252,7 @@ func (w *workout) CreateWorkoutSet(c *gin.Context) {
 		w.JSONErrorResponse(c, err)
 		return
 	}
-	sets, err := w.workoutSetService.CreateWorkoutSet(c, uri.WorkoutID, body.ActionIDs)
+	sets, err := w.workoutSetService.CreateWorkoutSets(c, uri.WorkoutID, body.ActionIDs)
 	if err != nil {
 		w.JSONErrorResponse(c, err)
 		return

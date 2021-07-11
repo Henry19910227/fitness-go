@@ -27,7 +27,7 @@ func NewWorkoutSet(setRepo repository.WorkoutSet,
 	return &set{setRepo: setRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (s *set) CreateWorkoutSet(c *gin.Context, workoutID int64, actionIDs []int64) ([]*workoutdto.WorkoutSet, errcode.Error) {
+func (s *set) CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*workoutdto.WorkoutSet, errcode.Error) {
 	//創建動作組
 	setIDs, err := s.setRepo.CreateWorkoutSetsByWorkoutID(workoutID, actionIDs)
 	if err != nil {
