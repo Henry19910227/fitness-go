@@ -101,3 +101,42 @@ func (s *set) CreateRestSet(c *gin.Context, workoutID int64) (*workoutdto.Workou
 	}
 	return &set, nil
 }
+
+func (s *set) GetWorkoutSets(c *gin.Context, workoutID int64) ([]*workoutdto.WorkoutSet, errcode.Error) {
+	datas, err := s.setRepo.FindWorkoutSetsByWorkoutID(workoutID)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	//parser回傳資料
+	sets := make([]*workoutdto.WorkoutSet, 0)
+	for _, data := range datas{
+		set := workoutdto.WorkoutSet{
+			ID: data.ID,
+			Type: data.Type,
+			AutoNext: data.AutoNext,
+			StartAudio: data.StartAudio,
+			ProgressAudio: data.ProgressAudio,
+			Remark: data.Remark,
+			Weight: data.Weight,
+			Reps: data.Reps,
+			Distance: data.Distance,
+			Duration: data.Duration,
+			Incline: data.Incline,
+		}
+		if data.Action != nil {
+			action := workoutdto.WorkoutSetAction{
+				ID: data.Action.ID,
+				Name: data.Action.Name,
+				Source: data.Action.Source,
+				Type: data.Action.Type,
+				Intro: data.Action.Intro,
+				Cover: data.Action.Cover,
+				Video: data.Action.Video,
+			}
+			set.Action = &action
+		}
+		sets = append(sets, &set)
+	}
+	return sets, nil
+}
