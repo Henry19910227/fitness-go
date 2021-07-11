@@ -59,6 +59,7 @@ type WorkoutSet interface {
 	CreateRestSetByWorkoutID(workoutID int64) (int64, error)
 	FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error)
 	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error)
+	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error)
 }
 
 type Action interface {
