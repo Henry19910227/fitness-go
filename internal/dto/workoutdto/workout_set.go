@@ -24,3 +24,14 @@ type WorkoutSetAction struct {
 	Cover string `json:"cover" example:"32as1d5f13e4.png"` //封面
 	Video string `json:"video" example:"11d547we1d4f8e.mp4"` //動作影片
 }
+
+type UpdateWorkoutSetParam struct {
+	AutoNext *string `gorm:"column:auto_next"` //自動下一組(Y:是/N:否)
+	StartAudio *string `gorm:"column:start_audio"` //前導語音
+	Remark *string `gorm:"column:remark"` //備註
+	Weight *float64 `gorm:"column:weight"` //重量(公斤)
+	Reps *int `gorm:"column:reps"` //次數
+	Distance *float64 `gorm:"column:distance"` //距離(公尺)
+	Duration *int `gorm:"column:duration"` //時長(秒)
+	Incline *float64 `gorm:"column:incline"` //坡度
+}
