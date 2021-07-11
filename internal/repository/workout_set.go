@@ -188,3 +188,30 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 	}
 	return sets, nil
 }
+
+func (s *set) UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error {
+	var selects []interface{}
+	if param.AutoNext != nil { selects = append(selects, "auto_next") }
+	if param.StartAudio != nil { selects = append(selects, "start_audio") }
+	if param.ProgressAudio != nil { selects = append(selects, "progress_audio") }
+	if param.Remark != nil { selects = append(selects, "remark") }
+	if param.Weight != nil { selects = append(selects, "weight") }
+	if param.Reps != nil { selects = append(selects, "reps") }
+	if param.Distance != nil { selects = append(selects, "distance") }
+	if param.Duration != nil { selects = append(selects, "duration") }
+	if param.Incline != nil { selects = append(selects, "incline") }
+	//插入更新時間
+	if param != nil {
+		selects = append(selects, "update_at")
+		var updateAt = time.Now().Format("2006-01-02 15:04:05")
+		param.UpdateAt = &updateAt
+	}
+	if err := s.gorm.DB().
+		Table("workout_sets").
+		Where("id = ?", setID).
+		Select("", selects...).
+		Updates(param).Error; err != nil {
+		return err
+	}
+	return nil
+}

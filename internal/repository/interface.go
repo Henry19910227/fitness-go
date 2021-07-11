@@ -60,6 +60,7 @@ type WorkoutSet interface {
 	FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error)
 	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error)
 	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error)
+	UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error
 }
 
 type Action interface {
