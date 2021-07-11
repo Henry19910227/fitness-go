@@ -43,3 +43,25 @@ func (s *set) CreateVerifyByWorkoutID(c *gin.Context, token string, workoutID in
 	}
 	return nil
 }
+
+func (s *set) UpdateVerifyByWorkoutSetID(c *gin.Context, token string, setID int64) errcode.Error {
+	uid, err := s.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return s.errHandler.InvalidToken()
+	}
+	course := struct {
+		UserID int64 `gorm:"column:user_id"`
+		Status int `gorm:"column:course_status"`
+	}{}
+	if err := s.courseRepo.FindCourseByWorkoutSetID(setID, &course); err != nil {
+		s.logger.Set(c, handler.Error, "CourseRepo", s.errHandler.SystemError().Code(), err.Error())
+		return s.errHandler.SystemError()
+	}
+	if course.UserID != uid {
+		return s.errHandler.PermissionDenied()
+	}
+	if !(course.Status == 1 || course.Status == 4) {
+		return s.errHandler.PermissionDenied()
+	}
+	return nil
+}

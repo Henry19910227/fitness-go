@@ -26,6 +26,7 @@ type Workout interface {
 
 type WorkoutSet interface {
 	CreateVerifyByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error
+	UpdateVerifyByWorkoutSetID(c *gin.Context, token string, setID int64) errcode.Error
 }
 
 type Action interface {
