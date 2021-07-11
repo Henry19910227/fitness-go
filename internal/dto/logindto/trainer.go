@@ -10,4 +10,6 @@ type Trainer struct {
 	Phone            string  `json:"phone" gorm:"column:phone" example:"0978820789"`                    // 電話
 	Address          string  `json:"address" gorm:"column:address" example:"台北市信義區信義路五段五號"`     // 住址
 	Intro            string  `json:"intro" gorm:"column:intro" example:"健身比賽冠軍"`                    // 個人介紹
+	CreateAt         string  `json:"create_at" gorm:"column:create_at" example:"2021-05-10 10:00:00"`   // 創建日期
+	UpdateAt         string  `json:"update_at" gorm:"column:update_at" example:"2021-05-10 10:00:00"`   // 修改日期
 }

@@ -197,6 +197,10 @@ definitions:
         description: 教練大頭照
         example: ld3ae0faf5we.png
         type: string
+      create_at:
+        description: 創建日期
+        example: "2021-05-10 10:00:00"
+        type: string
       email:
         description: 信箱
         example: henry@gmail.com
@@ -221,6 +225,10 @@ definitions:
         description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
         example: 1
         type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-05-10 10:00:00"
+        type: string
     type: object
   logindto.User:
     properties:

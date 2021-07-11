@@ -2728,6 +2728,11 @@ var doc = `{
                     "type": "string",
                     "example": "ld3ae0faf5we.png"
                 },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
                 "email": {
                     "description": "信箱",
                     "type": "string",
@@ -2757,6 +2762,11 @@ var doc = `{
                     "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
                     "type": "integer",
                     "example": 1
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
                 }
             }
         },
