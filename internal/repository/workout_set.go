@@ -90,14 +90,31 @@ func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 	return set.ID, nil
 }
 
-func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error) {
-	var set model.WorkoutSet
-	if err := s.gorm.DB().
-		Table("workout_sets").
-		Select("*").
-		Where("id = ?", setID).
-		Take(&set).Error; err != nil {
-			return nil, err
+func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
+	row := s.gorm.DB().
+		Table("workout_sets AS `set`").
+		Select("`set`.id", "`set`.workout_id", "`set`.type",
+			"`set`.auto_next", "`set`.start_audio", "`set`.progress_audio",
+			"`set`.remark", "`set`.weight", "`set`.reps",
+			"`set`.distance", "`set`.duration", "`set`.incline",
+			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
+			"IFNULL(actions.type, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
+			"IFNULL(actions.video, '')").
+		Joins("LEFT JOIN actions ON set.action_id = actions.id").
+		Where("`set`.id = ?", setID).Row()
+	var set model.WorkoutSetEntity
+	var action model.WorkoutSetAction
+	if err := row.Scan(&set.ID, &set.WorkoutID, &set.Type,
+		&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
+		&set.Remark, &set.Weight, &set.Reps,
+		&set.Distance, &set.Duration, &set.Incline,
+		&action.ID, &action.Name, &action.Source,
+		&action.Type, &action.Intro, &action.Cover,
+		&action.Video); err != nil {
+		return nil, err
+	}
+	if action.ID != 0 {
+		set.Action = &action
 	}
 	return &set, nil
 }
