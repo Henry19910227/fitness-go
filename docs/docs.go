@@ -2728,6 +2728,11 @@ var doc = `{
                     "type": "string",
                     "example": "ld3ae0faf5we.png"
                 },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
                 "email": {
                     "description": "信箱",
                     "type": "string",
@@ -2757,6 +2762,11 @@ var doc = `{
                     "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
                     "type": "integer",
                     "example": 1
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
                 }
             }
         },
@@ -3049,6 +3059,61 @@ var doc = `{
                 }
             }
         },
+        "userdto.Trainer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區信義路五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "intro": {
+                    "description": "個人介紹",
+                    "type": "string",
+                    "example": "健身比賽冠軍"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0978820789"
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                }
+            }
+        },
         "userdto.User": {
             "type": "object",
             "properties": {
@@ -3102,11 +3167,6 @@ var doc = `{
                     "type": "integer",
                     "example": 10001
                 },
-                "is_trainer": {
-                    "description": "是否擁有教練身份(0:否/1:是)",
-                    "type": "integer",
-                    "example": 1
-                },
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
@@ -3121,6 +3181,10 @@ var doc = `{
                     "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
                     "type": "integer",
                     "example": 3
+                },
+                "trainer_info": {
+                    "description": "教練資訊",
+                    "$ref": "#/definitions/userdto.Trainer"
                 },
                 "update_at": {
                     "description": "修改日期",

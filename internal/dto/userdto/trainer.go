@@ -1,4 +1,4 @@
-package logindto
+package userdto
 
 type Trainer struct {
 	UserID           int64   `json:"-" gorm:"column:user_id"`                                           // 用戶id

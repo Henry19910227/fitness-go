@@ -197,6 +197,10 @@ definitions:
         description: 教練大頭照
         example: ld3ae0faf5we.png
         type: string
+      create_at:
+        description: 創建日期
+        example: "2021-05-10 10:00:00"
+        type: string
       email:
         description: 信箱
         example: henry@gmail.com
@@ -221,6 +225,10 @@ definitions:
         description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
         example: 1
         type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-05-10 10:00:00"
+        type: string
     type: object
   logindto.User:
     properties:
@@ -441,6 +449,49 @@ definitions:
         example: dkf2se51fsdds.png
         type: string
     type: object
+  userdto.Trainer:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區信義路五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: ld3ae0faf5we.png
+        type: string
+      create_at:
+        description: 創建日期
+        example: "2021-05-10 10:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      intro:
+        description: 個人介紹
+        example: 健身比賽冠軍
+        type: string
+      name:
+        description: 教練本名
+        example: 王小明
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      phone:
+        description: 電話
+        example: "0978820789"
+        type: string
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-05-10 10:00:00"
+        type: string
+    type: object
   userdto.User:
     properties:
       account:
@@ -483,10 +534,6 @@ definitions:
         description: 帳戶id
         example: 10001
         type: integer
-      is_trainer:
-        description: 是否擁有教練身份(0:否/1:是)
-        example: 1
-        type: integer
       nickname:
         description: 暱稱
         example: Henry
@@ -499,6 +546,9 @@ definitions:
         description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
         example: 3
         type: integer
+      trainer_info:
+        $ref: '#/definitions/userdto.Trainer'
+        description: 教練資訊
       update_at:
         description: 修改日期
         example: "2021-06-01 12:00:00"
