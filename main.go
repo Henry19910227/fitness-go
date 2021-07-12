@@ -114,6 +114,7 @@ func main() {
 	controller.NewCourse(baseGroup, courseService, planService, actionService, courseAccess, planAccess, actionAccess, trainerAccess, userMiddleware)
 	controller.NewPlan(baseGroup, planService, workoutService, planAccess, workoutAccess, trainerAccess, userMiddleware)
 	controller.NewWorkout(baseGroup, workoutService, workoutSetService, workoutAccess, workoutSetAccess, trainerAccess, userMiddleware)
+	controller.NewWorkoutSet(baseGroup, workoutSetService, workoutSetAccess, trainerAccess, userMiddleware)
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMiddleware)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)

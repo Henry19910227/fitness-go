@@ -24,11 +24,11 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 			ActionID: &actionID,
 			Type: 1,
 			AutoNext: "N",
-			Weight: 1,
+			Weight: 0.01,
 			Reps: 1,
-			Distance: 1,
+			Distance: 0.01,
 			Duration: 1,
-			Incline: 1,
+			Incline: 0.01,
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
@@ -90,14 +90,31 @@ func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 	return set.ID, nil
 }
 
-func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error) {
-	var set model.WorkoutSet
-	if err := s.gorm.DB().
-		Table("workout_sets").
-		Select("*").
-		Where("id = ?", setID).
-		Take(&set).Error; err != nil {
-			return nil, err
+func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
+	row := s.gorm.DB().
+		Table("workout_sets AS `set`").
+		Select("`set`.id", "`set`.workout_id", "`set`.type",
+			"`set`.auto_next", "`set`.start_audio", "`set`.progress_audio",
+			"`set`.remark", "`set`.weight", "`set`.reps",
+			"`set`.distance", "`set`.duration", "`set`.incline",
+			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
+			"IFNULL(actions.type, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
+			"IFNULL(actions.video, '')").
+		Joins("LEFT JOIN actions ON set.action_id = actions.id").
+		Where("`set`.id = ?", setID).Row()
+	var set model.WorkoutSetEntity
+	var action model.WorkoutSetAction
+	if err := row.Scan(&set.ID, &set.WorkoutID, &set.Type,
+		&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
+		&set.Remark, &set.Weight, &set.Reps,
+		&set.Distance, &set.Duration, &set.Incline,
+		&action.ID, &action.Name, &action.Source,
+		&action.Type, &action.Intro, &action.Cover,
+		&action.Video); err != nil {
+		return nil, err
+	}
+	if action.ID != 0 {
+		set.Action = &action
 	}
 	return &set, nil
 }
@@ -134,4 +151,67 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, e
 		sets = append(sets, &set)
 	}
 	return sets, nil
+}
+
+func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error) {
+	rows, err := s.gorm.DB().
+		Table("workout_sets AS `set`").
+		Select("`set`.id", "`set`.workout_id", "`set`.type",
+			"`set`.auto_next", "`set`.start_audio", "`set`.progress_audio",
+			"`set`.remark", "`set`.weight", "`set`.reps",
+			"`set`.distance", "`set`.duration", "`set`.incline",
+			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
+			"IFNULL(actions.type, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
+			"IFNULL(actions.video, '')").
+		Joins("LEFT JOIN actions ON set.action_id = actions.id").
+		Where("`set`.workout_id = ?", workoutID).
+		Order("`set`.create_at ASC").
+		Rows()
+	if err != nil {
+		return nil, err
+	}
+	var sets []*model.WorkoutSetEntity
+	for rows.Next() {
+		var set model.WorkoutSetEntity
+		var action model.WorkoutSetAction
+		rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
+			&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
+			&set.Remark, &set.Weight, &set.Reps,
+			&set.Distance, &set.Duration, &set.Incline,
+			&action.ID, &action.Name, &action.Source,
+			&action.Type, &action.Intro, &action.Cover,
+			&action.Video)
+		if action.ID != 0 {
+			set.Action = &action
+		}
+		sets = append(sets, &set)
+	}
+	return sets, nil
+}
+
+func (s *set) UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error {
+	var selects []interface{}
+	if param.AutoNext != nil { selects = append(selects, "auto_next") }
+	if param.StartAudio != nil { selects = append(selects, "start_audio") }
+	if param.ProgressAudio != nil { selects = append(selects, "progress_audio") }
+	if param.Remark != nil { selects = append(selects, "remark") }
+	if param.Weight != nil { selects = append(selects, "weight") }
+	if param.Reps != nil { selects = append(selects, "reps") }
+	if param.Distance != nil { selects = append(selects, "distance") }
+	if param.Duration != nil { selects = append(selects, "duration") }
+	if param.Incline != nil { selects = append(selects, "incline") }
+	//插入更新時間
+	if param != nil {
+		selects = append(selects, "update_at")
+		var updateAt = time.Now().Format("2006-01-02 15:04:05")
+		param.UpdateAt = &updateAt
+	}
+	if err := s.gorm.DB().
+		Table("workout_sets").
+		Where("id = ?", setID).
+		Select("", selects...).
+		Updates(param).Error; err != nil {
+		return err
+	}
+	return nil
 }

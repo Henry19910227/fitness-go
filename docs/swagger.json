@@ -2449,6 +2449,128 @@
                     }
                 }
             }
+        },
+        "/workout/{workout_id}/workout_sets": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "取得訓練內的訓練組列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "取得訓練內的訓練組列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/workout_set/{workout_set_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "修改訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "修改訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateWorkoutSetBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -3564,6 +3686,51 @@
                 "name": {
                     "type": "string",
                     "example": "胸肌訓練"
+                }
+            }
+        },
+        "validator.UpdateWorkoutSetBody": {
+            "type": "object",
+            "properties": {
+                "auto_next": {
+                    "description": "自動下一組(Y:是/N:否)",
+                    "type": "string",
+                    "example": "Y"
+                },
+                "distance": {
+                    "description": "距離(0.01~999.99公里)",
+                    "type": "number",
+                    "example": 20.25
+                },
+                "duration": {
+                    "description": "時長(1~38439秒)",
+                    "type": "integer",
+                    "example": 60
+                },
+                "incline": {
+                    "description": "坡度(0.01~999.99)",
+                    "type": "number",
+                    "example": 15.5
+                },
+                "remark": {
+                    "description": "備註(1~20字元)",
+                    "type": "string",
+                    "example": "注意呼吸"
+                },
+                "reps": {
+                    "description": "次數(1~999次)",
+                    "type": "integer",
+                    "example": 10
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string",
+                    "example": "e6d2131w5q.mp3"
+                },
+                "weight": {
+                    "description": "重量(0.01~999.99公斤)",
+                    "type": "number",
+                    "example": 10.25
                 }
             }
         },

@@ -188,6 +188,20 @@ func (c *course) FindCourseByWorkoutID(workoutID int64, entity interface{}) erro
 	return c.FindCourseByID(courseID, entity)
 }
 
+func (c *course) FindCourseByWorkoutSetID(setID int64, entity interface{}) error {
+	var courseID int64
+	if err := c.gorm.DB().
+		Table("workout_sets AS `set`").
+		Select("plans.course_id").
+		Joins("INNER JOIN workouts ON `set`.workout_id = workouts.id").
+		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
+		Where("`set`.id = ?", setID).
+		Take(&courseID).Error; err != nil {
+		return err
+	}
+	return c.FindCourseByID(courseID, entity)
+}
+
 func (c *course) FindCourseByActionID(actionID int64, entity interface{}) error {
 	var courseID int64
 	if err := c.gorm.DB().

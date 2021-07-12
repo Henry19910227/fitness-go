@@ -32,6 +32,7 @@ type Course interface {
 	FindCourseByID(courseID int64, entity interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
 	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
+	FindCourseByWorkoutSetID(setID int64, entity interface{}) error
 	FindCourseByActionID(actionID int64, entity interface{}) error
 	DeleteCourseByID(courseID int64) error
 }
@@ -57,8 +58,10 @@ type Workout interface {
 type WorkoutSet interface {
 	CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) ([]int64, error)
 	CreateRestSetByWorkoutID(workoutID int64) (int64, error)
-	FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error)
+	FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error)
 	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error)
+	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error)
+	UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error
 }
 
 type Action interface {

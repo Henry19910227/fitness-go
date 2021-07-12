@@ -851,6 +851,41 @@ definitions:
         example: 胸肌訓練
         type: string
     type: object
+  validator.UpdateWorkoutSetBody:
+    properties:
+      auto_next:
+        description: 自動下一組(Y:是/N:否)
+        example: "Y"
+        type: string
+      distance:
+        description: 距離(0.01~999.99公里)
+        example: 20.25
+        type: number
+      duration:
+        description: 時長(1~38439秒)
+        example: 60
+        type: integer
+      incline:
+        description: 坡度(0.01~999.99)
+        example: 15.5
+        type: number
+      remark:
+        description: 備註(1~20字元)
+        example: 注意呼吸
+        type: string
+      reps:
+        description: 次數(1~999次)
+        example: 10
+        type: integer
+      start_audio:
+        description: 前導語音
+        example: e6d2131w5q.mp3
+        type: string
+      weight:
+        description: 重量(0.01~999.99公斤)
+        example: 10.25
+        type: number
+    type: object
   validator.ValidateEmailDupBody:
     properties:
       email:
@@ -2453,6 +2488,78 @@ paths:
       summary: 新增訓練組
       tags:
       - Workout
+  /workout/{workout_id}/workout_sets:
+    get:
+      consumes:
+      - application/json
+      description: 取得訓練內的訓練組列表
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/workoutdto.WorkoutSet'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 取得訓練內的訓練組列表
+      tags:
+      - Workout
+  /workout_set/{workout_set_id}:
+    patch:
+      consumes:
+      - application/json
+      description: 修改訓練組
+      parameters:
+      - description: 訓練組id
+        in: path
+        name: workout_set_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateWorkoutSetBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutSet'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 修改訓練組
+      tags:
+      - WorkoutSet
 securityDefinitions:
   fitness_admin_token:
     in: header
