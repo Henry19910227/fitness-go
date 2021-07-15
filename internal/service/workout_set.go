@@ -104,6 +104,14 @@ func (s *set) UpdateWorkoutSet(c *gin.Context, setID int64, param *workoutdto.Up
 	return parserWorkoutSet(data), nil
 }
 
+func (s *set) DeleteWorkoutSet(c *gin.Context, setID int64) (*workoutdto.WorkoutSetID, errcode.Error) {
+	if err := s.setRepo.DeleteWorkoutSetByID(setID); err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	return &workoutdto.WorkoutSetID{ID: setID}, nil
+}
+
 func parserWorkoutSet(data *model.WorkoutSetEntity) *workoutdto.WorkoutSet {
 	set := workoutdto.WorkoutSet{
 		ID: data.ID,
