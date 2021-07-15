@@ -57,20 +57,7 @@ func (s *set) CreateRestSet(c *gin.Context, workoutID int64) (*workoutdto.Workou
 		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 		return nil, s.errHandler.SystemError()
 	}
-	set := workoutdto.WorkoutSet{
-		ID: data.ID,
-		Type: data.Type,
-		AutoNext: data.AutoNext,
-		StartAudio: data.StartAudio,
-		ProgressAudio: data.ProgressAudio,
-		Remark: data.Remark,
-		Weight: data.Weight,
-		Reps: data.Reps,
-		Distance: data.Distance,
-		Duration: data.Duration,
-		Incline: data.Incline,
-	}
-	return &set, nil
+	return parserWorkoutSet(data), nil
 }
 
 func (s *set) GetWorkoutSets(c *gin.Context, workoutID int64) ([]*workoutdto.WorkoutSet, errcode.Error) {
