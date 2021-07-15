@@ -215,3 +215,42 @@ func (s *set) UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetPar
 	}
 	return nil
 }
+
+func (s *set) DeleteWorkoutSetByID(setID int64) error {
+	if err := s.gorm.DB().Transaction(func(tx *gorm.DB) error {
+		//查詢workout id
+		var workoutID int64
+		if err := tx.
+			Table("workout_sets").
+			Select("workout_id").
+			Where("id = ?", setID).
+			Row().
+			Scan(&workoutID); err != nil {
+			return err
+		}
+		//刪除訓練組
+		if err := tx.
+			Where("id = ?", setID).
+			Delete(&model.WorkoutSet{}).Error; err != nil {
+			return err
+		}
+		//查詢訓練數量
+		var workoutSetCount int
+		if err := tx.
+			Raw("SELECT COUNT(*) FROM workout_sets WHERE workout_id = ? FOR UPDATE", workoutID).
+			Scan(&workoutSetCount).Error; err != nil {
+			return err
+		}
+		//更新訓練擁有的訓練組數量
+		if err := tx.
+			Table("workouts").
+			Where("id = ?", workoutID).
+			Update("workout_set_count", workoutSetCount).Error; err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	return nil
+}
