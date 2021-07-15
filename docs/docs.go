@@ -2527,6 +2527,59 @@ var doc = `{
             }
         },
         "/workout_set/{workout_set_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "刪除訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "刪除訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.WorkoutSetID"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "刪除失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "security": [
                     {
@@ -3932,6 +3985,16 @@ var doc = `{
                     "description": "動作影片",
                     "type": "string",
                     "example": "11d547we1d4f8e.mp4"
+                }
+            }
+        },
+        "workoutdto.WorkoutSetID": {
+            "type": "object",
+            "properties": {
+                "workout_set_id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         }

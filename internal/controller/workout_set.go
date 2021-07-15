@@ -27,6 +27,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	setGroup := baseGroup.Group("/workout_set")
 	setGroup.Use(userMiddleware)
 	setGroup.PATCH("/:workout_set_id", set.UpdateWorkoutSet)
+	setGroup.DELETE("/:workout_set_id", set.DeleteWorkoutSet)
 }
 
 // UpdateWorkoutSet 修改訓練組
@@ -80,4 +81,42 @@ func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, set, "update success!")
+}
+
+// DeleteWorkoutSet 刪除訓練組
+// @Summary 刪除訓練組
+// @Description 刪除訓練組
+// @Tags WorkoutSet
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_set_id path int64 true "訓練組id"
+// @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutSetID} "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /workout_set/{workout_set_id} [DELETE]
+func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutSetIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutSetAccess.UpdateVerifyByWorkoutSetID(c, header.Token, uri.WorkoutSetID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	result, err := w.workoutSetService.DeleteWorkoutSet(c, uri.WorkoutSetID)
+	if err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, result, "delete success!")
 }

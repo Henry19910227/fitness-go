@@ -1024,6 +1024,13 @@ definitions:
         example: 11d547we1d4f8e.mp4
         type: string
     type: object
+  workoutdto.WorkoutSetID:
+    properties:
+      workout_set_id:
+        description: 訓練組id
+        example: 10
+        type: integer
+    type: object
 info:
   contact: {}
   description: 健身平台 api
@@ -2523,6 +2530,37 @@ paths:
       tags:
       - Workout
   /workout_set/{workout_set_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除訓練組
+      parameters:
+      - description: 訓練組id
+        in: path
+        name: workout_set_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutSetID'
+              type: object
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除訓練組
+      tags:
+      - WorkoutSet
     patch:
       consumes:
       - application/json
