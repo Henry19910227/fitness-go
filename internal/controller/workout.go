@@ -40,6 +40,7 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 	planGroup.POST("/:workout_id/workout_set", workout.CreateWorkoutSets)
 	planGroup.POST("/:workout_id/rest_set", workout.CreateRestSet)
 	planGroup.GET("/:workout_id/workout_sets", workout.GetWorkoutSets)
+	planGroup.PATCH("/:workout_id/order", workout.UpdateWorkoutSetOrders)
 }
 
 // UpdateWorkout 修改訓練
@@ -326,4 +327,55 @@ func (w *workout) GetWorkoutSets(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, sets, "success!")
+}
+
+// UpdateWorkoutSetOrders 修改訓練組的順序
+// @Summary 修改訓練組的順序
+// @Description 修改訓練組的順序
+// @Tags Workout
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_id path int64 true "訓練id"
+// @Param json_body body validator.UpdateWorkoutSetOrderBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutSetOrder} "更新成功!"
+// @Failure 400 {object} model.ErrorResult "更新失敗"
+// @Router /workout/{workout_id}/order [PATCH]
+func (w *workout) UpdateWorkoutSetOrders(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutIDUri
+	var body validator.UpdateWorkoutSetOrderBody
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutSetAccess.CreateVerifyByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	var orders []*workoutdto.WorkoutSetOrder
+	for _, data := range body.Orders {
+		order := workoutdto.WorkoutSetOrder{
+			WorkoutSetID: data.WorkoutSetID,
+			Seq: data.Seq,
+		}
+		orders = append(orders, &order)
+	}
+	if err := w.workoutSetService.UpdateWorkoutSetOrders(c, uri.WorkoutID, orders); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, nil, "update success!")
 }

@@ -886,6 +886,16 @@ definitions:
         example: 10.25
         type: number
     type: object
+  validator.UpdateWorkoutSetOrderBody:
+    properties:
+      orders:
+        description: 訓練組排序
+        items:
+          $ref: '#/definitions/validator.WorkoutSetOrder'
+        type: array
+    required:
+    - orders
+    type: object
   validator.ValidateEmailDupBody:
     properties:
       email:
@@ -903,6 +913,19 @@ definitions:
         type: string
     required:
     - nickname
+    type: object
+  validator.WorkoutSetOrder:
+    properties:
+      seq:
+        description: 排列序號
+        example: 1
+        type: integer
+      workout_set_id:
+        description: 訓練組id
+        example: 10
+        type: integer
+    required:
+    - seq
     type: object
   workoutdto.Audio:
     properties:
@@ -1029,6 +1052,15 @@ definitions:
       workout_set_id:
         description: 訓練組id
         example: 10
+        type: integer
+    type: object
+  workoutdto.WorkoutSetOrder:
+    properties:
+      seq:
+        description: 排列序號
+        type: integer
+      workoutSetID:
+        description: 訓練組id
         type: integer
     type: object
 info:
@@ -2384,6 +2416,44 @@ paths:
       security:
       - fitness_user_token: []
       summary: 上傳訓練結束語音
+      tags:
+      - Workout
+  /workout/{workout_id}/order:
+    patch:
+      consumes:
+      - application/json
+      description: 修改訓練組的順序
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateWorkoutSetOrderBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.WorkoutSetOrder'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 修改訓練組的順序
       tags:
       - Workout
   /workout/{workout_id}/rest_set:

@@ -2284,6 +2284,70 @@ var doc = `{
                 }
             }
         },
+        "/workout/{workout_id}/order": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "修改訓練組的順序",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "修改訓練組的順序",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateWorkoutSetOrderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.WorkoutSetOrder"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/workout/{workout_id}/rest_set": {
             "post": {
                 "security": [
@@ -3805,6 +3869,21 @@ var doc = `{
                 }
             }
         },
+        "validator.UpdateWorkoutSetOrderBody": {
+            "type": "object",
+            "required": [
+                "orders"
+            ],
+            "properties": {
+                "orders": {
+                    "description": "訓練組排序",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/validator.WorkoutSetOrder"
+                    }
+                }
+            }
+        },
         "validator.ValidateEmailDupBody": {
             "type": "object",
             "required": [
@@ -3828,6 +3907,24 @@ var doc = `{
                     "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "validator.WorkoutSetOrder": {
+            "type": "object",
+            "required": [
+                "seq"
+            ],
+            "properties": {
+                "seq": {
+                    "description": "排列序號",
+                    "type": "integer",
+                    "example": 1
+                },
+                "workout_set_id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
@@ -3995,6 +4092,19 @@ var doc = `{
                     "description": "訓練組id",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "workoutdto.WorkoutSetOrder": {
+            "type": "object",
+            "properties": {
+                "seq": {
+                    "description": "排列序號",
+                    "type": "integer"
+                },
+                "workoutSetID": {
+                    "description": "訓練組id",
+                    "type": "integer"
                 }
             }
         }

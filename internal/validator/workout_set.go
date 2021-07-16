@@ -24,14 +24,28 @@ type UpdateWorkoutSetBody struct {
 	Incline *float64 `json:"incline" binding:"omitempty,min=0.01,max=999.99" example:"15.5"` //坡度(0.01~999.99)
 }
 
+type UpdateWorkoutSetOrderBody struct {
+	Orders []WorkoutSetOrder `json:"orders" binding:"required,workout_set_orders"` //訓練組排序
+}
+
+type WorkoutSetOrder struct {
+	WorkoutSetID int64 `json:"workout_set_id" binding:"omitempty" example:"10"` //訓練組id
+	Seq int `json:"seq" binding:"required" example:"1"` //排列序號
+}
+
 func init() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		_ = v.RegisterValidation("workout_set_action_ids", WorkoutSetActionIDs)
+		_ = v.RegisterValidation("workout_set_orders", WorkoutSetOrders)
 	}
 }
 
 var WorkoutSetActionIDs validator.Func = func(fl validator.FieldLevel) bool {
 	return validateWorkoutSetActionIDs(fl,10)
+}
+
+var WorkoutSetOrders validator.Func = func(fl validator.FieldLevel) bool {
+	return validateWorkoutSetOrders(fl)
 }
 
 func validateWorkoutSetActionIDs(fl validator.FieldLevel, maxCount int) bool {
@@ -55,6 +69,18 @@ func validateWorkoutSetActionIDs(fl validator.FieldLevel, maxCount int) bool {
 			return false
 		}
 		dupMap[item] = item
+	}
+	return true
+}
+
+func validateWorkoutSetOrders(fl validator.FieldLevel) bool {
+	orders, ok := fl.Field().Interface().([]WorkoutSetOrder)
+	if !ok {
+		return false
+	}
+	//檢查是否丟空陣列
+	if len(orders) == 0 {
+		return false
 	}
 	return true
 }
