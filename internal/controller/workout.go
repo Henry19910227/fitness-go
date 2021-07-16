@@ -40,7 +40,7 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 	planGroup.POST("/:workout_id/workout_set", workout.CreateWorkoutSets)
 	planGroup.POST("/:workout_id/rest_set", workout.CreateRestSet)
 	planGroup.GET("/:workout_id/workout_sets", workout.GetWorkoutSets)
-	planGroup.PATCH("/:workout_id/order", workout.UpdateWorkoutSetOrders)
+	planGroup.PUT("/:workout_id/order", workout.UpdateWorkoutSetOrders)
 }
 
 // UpdateWorkout 修改訓練
@@ -338,9 +338,9 @@ func (w *workout) GetWorkoutSets(c *gin.Context) {
 // @Security fitness_user_token
 // @Param workout_id path int64 true "訓練id"
 // @Param json_body body validator.UpdateWorkoutSetOrderBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutSetOrder} "更新成功!"
+// @Success 200 {object} model.SuccessResult "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
-// @Router /workout/{workout_id}/order [PATCH]
+// @Router /workout/{workout_id}/order [PUT]
 func (w *workout) UpdateWorkoutSetOrders(c *gin.Context) {
 	var header validator.TokenHeader
 	var uri validator.WorkoutIDUri

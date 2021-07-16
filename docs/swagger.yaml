@@ -1054,15 +1054,6 @@ definitions:
         example: 10
         type: integer
     type: object
-  workoutdto.WorkoutSetOrder:
-    properties:
-      seq:
-        description: 排列序號
-        type: integer
-      workoutSetID:
-        description: 訓練組id
-        type: integer
-    type: object
 info:
   contact: {}
   description: 健身平台 api
@@ -2419,7 +2410,7 @@ paths:
       tags:
       - Workout
   /workout/{workout_id}/order:
-    patch:
+    put:
       consumes:
       - application/json
       description: 修改訓練組的順序
@@ -2441,12 +2432,7 @@ paths:
         "200":
           description: 更新成功!
           schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/workoutdto.WorkoutSetOrder'
-              type: object
+            $ref: '#/definitions/model.SuccessResult'
         "400":
           description: 更新失敗
           schema:

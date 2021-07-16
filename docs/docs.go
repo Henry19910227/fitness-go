@@ -2285,7 +2285,7 @@ var doc = `{
             }
         },
         "/workout/{workout_id}/order": {
-            "patch": {
+            "put": {
                 "security": [
                     {
                         "fitness_user_token": []
@@ -2324,19 +2324,7 @@ var doc = `{
                     "200": {
                         "description": "更新成功!",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutSetOrder"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/model.SuccessResult"
                         }
                     },
                     "400": {
@@ -4092,19 +4080,6 @@ var doc = `{
                     "description": "訓練組id",
                     "type": "integer",
                     "example": 10
-                }
-            }
-        },
-        "workoutdto.WorkoutSetOrder": {
-            "type": "object",
-            "properties": {
-                "seq": {
-                    "description": "排列序號",
-                    "type": "integer"
-                },
-                "workoutSetID": {
-                    "description": "訓練組id",
-                    "type": "integer"
                 }
             }
         }
