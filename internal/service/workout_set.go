@@ -99,6 +99,23 @@ func (s *set) DeleteWorkoutSet(c *gin.Context, setID int64) (*workoutdto.Workout
 	return &workoutdto.WorkoutSetID{ID: setID}, nil
 }
 
+func (s *set) UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*workoutdto.WorkoutSetOrder) errcode.Error {
+	var models []*model.WorkoutSetOrder
+	for _, data := range params {
+		model := model.WorkoutSetOrder{
+			WorkoutID: workoutID,
+			WorkoutSetID: data.WorkoutSetID,
+			Seq: data.Seq,
+		}
+		models = append(models, &model)
+	}
+	if err := s.setRepo.UpdateWorkoutSetOrdersByWorkoutID(workoutID, models); err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return s.errHandler.SystemError()
+	}
+	return nil
+}
+
 func parserWorkoutSet(data *model.WorkoutSetEntity) *workoutdto.WorkoutSet {
 	set := workoutdto.WorkoutSet{
 		ID: data.ID,

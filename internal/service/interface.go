@@ -94,6 +94,7 @@ type WorkoutSet interface {
 	GetWorkoutSets(c *gin.Context, workoutID int64) ([]*workoutdto.WorkoutSet, errcode.Error)
 	UpdateWorkoutSet(c *gin.Context, setID int64, param *workoutdto.UpdateWorkoutSetParam) (*workoutdto.WorkoutSet, errcode.Error)
 	DeleteWorkoutSet(c *gin.Context, setID int64) (*workoutdto.WorkoutSetID, errcode.Error)
+	UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*workoutdto.WorkoutSetOrder) errcode.Error
 }
 
 type Action interface {

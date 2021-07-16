@@ -39,3 +39,8 @@ type UpdateWorkoutSetParam struct {
 	Duration *int `gorm:"column:duration"` //時長(秒)
 	Incline *float64 `gorm:"column:incline"` //坡度
 }
+
+type WorkoutSetOrder struct {
+	WorkoutSetID int64 `gorm:"column:workout_set_id"` //訓練組id
+	Seq int `gorm:"column:seq"` //排列序號
+}
