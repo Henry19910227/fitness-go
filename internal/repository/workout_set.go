@@ -163,9 +163,11 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
 			"IFNULL(actions.type, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
 			"IFNULL(actions.video, '')").
-		Joins("LEFT JOIN actions ON set.action_id = actions.id").
+		Joins("LEFT JOIN actions ON `set`.action_id = actions.id").
+		Joins("LEFT JOIN workout_set_orders AS orders ON orders.workout_set_id = `set`.id").
 		Where("`set`.workout_id = ?", workoutID).
-		Order("`set`.create_at ASC").
+		// ORDER BY orders.seq IS NULL 表示 seq 不為空則為0，空則為1，使用ASC排序之後，1的會被排後面，達到將null值的資料放到最後的需求
+		Order("orders.seq IS NULL ASC, orders.seq ASC, `set`.create_at ASC").
 		Rows()
 	if err != nil {
 		return nil, err
