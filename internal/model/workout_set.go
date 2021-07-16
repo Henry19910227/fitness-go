@@ -22,6 +22,16 @@ func (WorkoutSet) TableName() string {
 	return "workout_sets"
 }
 
+type WorkoutSetOrder struct {
+	WorkoutID int64 `gorm:"column:workout_id"` //訓練id
+	WorkoutSetID int64 `gorm:"column:workout_set_id"` //訓練組id
+	Seq int `gorm:"column:seq"` //排列序號
+}
+
+func (WorkoutSetOrder) TableName() string {
+	return "workout_set_orders"
+}
+
 type WorkoutSetEntity struct {
 	ID int64 `gorm:"column:id"` //訓練組id
 	WorkoutID int64 `gorm:"column:workout_id"` //訓練id

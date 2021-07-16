@@ -254,3 +254,22 @@ func (s *set) DeleteWorkoutSetByID(setID int64) error {
 	}
 	return nil
 }
+
+func (s *set) UpdateWorkoutSetOrdersByWorkoutID(workoutID int64, params []*model.WorkoutSetOrder) error {
+	if err := s.gorm.DB().Transaction(func(tx *gorm.DB) error {
+		//刪除舊有排序
+		if err := tx.
+			Where("workout_id = ?", workoutID).
+			Delete(&model.WorkoutSetOrder{}).Error; err != nil {
+			return err
+		}
+		//添加新的排序
+		if err := tx.Create(params).Error; err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	return nil
+}
