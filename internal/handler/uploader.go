@@ -97,6 +97,20 @@ func (u *uploader) UploadWorkoutAudio(file io.Reader, audioNamed string) (string
 	return newAudioNamed, nil
 }
 
+func (u *uploader) UploadWorkoutSetAudio(file io.Reader, audioNamed string) (string, error) {
+	if !u.checkUploadAudioAllowExt(path.Ext(audioNamed)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	if !u.checkImageMaxSize(file) {
+		return "", errors.New("9008-上傳檔案大小超過限制")
+	}
+	newAudioNamed := generateFileName(path.Ext(audioNamed))
+	if err := u.resTool.SaveFile(file, newAudioNamed, "/workout_set/audio"); err != nil {
+		return "", err
+	}
+	return newAudioNamed, nil
+}
+
 func (u *uploader) UploadActionVideo(file io.Reader, videoNamed string) (string, error) {
 	if !u.checkUploadVideoAllowExt(path.Ext(videoNamed)) {
 		return "", errors.New("9007-上傳檔案不符合規範")

@@ -39,6 +39,7 @@ type Uploader interface {
 	UploadTrainerAvatar(file io.Reader, imageNamed string) (string, error)
 	UploadUserAvatar(file io.Reader, imageNamed string) (string, error)
 	UploadWorkoutAudio(file io.Reader, audioNamed string) (string, error)
+	UploadWorkoutSetAudio(file io.Reader, audioNamed string) (string, error)
 	UploadActionVideo(file io.Reader, videoNamed string) (string, error)
 }
 
