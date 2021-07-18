@@ -126,7 +126,7 @@ func (s *set) UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*
 }
 
 func (s *set) UploadWorkoutSetStartAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
-	newAudioNamed, err := s.uploader.UploadWorkoutSetAudio(file, audioNamed)
+	newAudioNamed, err := s.uploader.UploadWorkoutSetStartAudio(file, audioNamed)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
 			return nil, s.errHandler.FileTypeError()

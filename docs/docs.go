@@ -2764,7 +2764,7 @@ var doc = `{
                         "fitness_user_token": []
                     }
                 ],
-                "description": "下載訓練組前導語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/audio/{語音檔案名}",
+                "description": "下載訓練組前導語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}",
                 "consumes": [
                     "multipart/form-data"
                 ],

@@ -97,7 +97,7 @@ func (u *uploader) UploadWorkoutAudio(file io.Reader, audioNamed string) (string
 	return newAudioNamed, nil
 }
 
-func (u *uploader) UploadWorkoutSetAudio(file io.Reader, audioNamed string) (string, error) {
+func (u *uploader) UploadWorkoutSetStartAudio(file io.Reader, audioNamed string) (string, error) {
 	if !u.checkUploadAudioAllowExt(path.Ext(audioNamed)) {
 		return "", errors.New("9007-上傳檔案不符合規範")
 	}
@@ -105,7 +105,7 @@ func (u *uploader) UploadWorkoutSetAudio(file io.Reader, audioNamed string) (str
 		return "", errors.New("9008-上傳檔案大小超過限制")
 	}
 	newAudioNamed := generateFileName(path.Ext(audioNamed))
-	if err := u.resTool.SaveFile(file, newAudioNamed, "/workout_set/audio"); err != nil {
+	if err := u.resTool.SaveFile(file, newAudioNamed, "/workout_set/start_audio"); err != nil {
 		return "", err
 	}
 	return newAudioNamed, nil
