@@ -23,6 +23,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	userMiddleware gin.HandlerFunc)  {
 
 	baseGroup.StaticFS("/resource/workout_set/audio", http.Dir("./volumes/storage/workout_set/audio"))
+	baseGroup.StaticFS("/resource/workout_set/progress_audio", http.Dir("./volumes/storage/workout_set/progress_audio"))
 	set := workoutset{workoutSetService: workoutSetService,
 		workoutSetAccess: workoutSetAccess,
 		trainerAccess: trainerAccess}
@@ -31,6 +32,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	setGroup.PATCH("/:workout_set_id", set.UpdateWorkoutSet)
 	setGroup.DELETE("/:workout_set_id", set.DeleteWorkoutSet)
 	setGroup.POST("/:workout_set_id/start_audio", set.UploadWorkoutSetStartAudio)
+	setGroup.POST("/:workout_set_id/progress_audio", set.UploadWorkoutSetProgressAudio)
 }
 
 // UpdateWorkoutSet 修改訓練組
@@ -161,6 +163,50 @@ func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
 		return
 	}
 	result, e := w.workoutSetService.UploadWorkoutSetStartAudio(c, uri.WorkoutSetID, fileHeader.Filename, file)
+	if e != nil {
+		w.JSONErrorResponse(c, e)
+		return
+	}
+	w.JSONSuccessResponse(c, result, "upload success")
+}
+
+// UploadWorkoutSetProgressAudio 上傳訓練組進行中語音
+// @Summary 上傳訓練組進行中語音
+// @Description 下載訓練組進行中語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}
+// @Tags WorkoutSet
+// @Security fitness_user_token
+// @Accept mpfd
+// @Param workout_set_id path int64 true "訓練組id"
+// @Param progress_audio formData file true "進行中語音"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /workout_set/{workout_set_id}/progress_audio [POST]
+func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutSetIDUri
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutSetAccess.UpdateVerifyByWorkoutSetID(c, header.Token, uri.WorkoutSetID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("progress_audio")
+	if err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, e := w.workoutSetService.UploadWorkoutSetProgressAudio(c, uri.WorkoutSetID, fileHeader.Filename, file)
 	if e != nil {
 		w.JSONErrorResponse(c, e)
 		return

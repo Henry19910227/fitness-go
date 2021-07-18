@@ -2654,6 +2654,43 @@ paths:
       summary: 修改訓練組
       tags:
       - WorkoutSet
+  /workout_set/{workout_set_id}/progress_audio:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '下載訓練組進行中語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}'
+      parameters:
+      - description: 訓練組id
+        in: path
+        name: workout_set_id
+        required: true
+        type: integer
+      - description: 進行中語音
+        in: formData
+        name: progress_audio
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/workoutdto.Audio'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 上傳訓練組進行中語音
+      tags:
+      - WorkoutSet
   /workout_set/{workout_set_id}/start_audio:
     post:
       consumes:

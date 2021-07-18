@@ -146,6 +146,27 @@ func (s *set) UploadWorkoutSetStartAudio(c *gin.Context, setID int64, audioNamed
 	return &workoutdto.Audio{Named: newAudioNamed}, nil
 }
 
+func (s *set) UploadWorkoutSetProgressAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
+	newAudioNamed, err := s.uploader.UploadWorkoutSetProgressAudio(file, audioNamed)
+	if err != nil {
+		if strings.Contains(err.Error(), "9007") {
+			return nil, s.errHandler.FileTypeError()
+		}
+		if strings.Contains(err.Error(), "9008") {
+			return nil, s.errHandler.FileSizeError()
+		}
+		s.logger.Set(c, handler.Error, "Resource Handler", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	if err := s.setRepo.UpdateWorkoutSetByID(setID, &model.UpdateWorkoutSetParam{
+		ProgressAudio: &newAudioNamed,
+	}); err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	return &workoutdto.Audio{Named: newAudioNamed}, nil
+}
+
 func parserWorkoutSet(data *model.WorkoutSetEntity) *workoutdto.WorkoutSet {
 	set := workoutdto.WorkoutSet{
 		ID: data.ID,
