@@ -110,6 +110,14 @@ func (s *set) UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*
 		models = append(models, &model)
 	}
 	if err := s.setRepo.UpdateWorkoutSetOrdersByWorkoutID(workoutID, models); err != nil {
+		//檢測到不存在此課表的訓練組
+		if strings.Contains(err.Error(),"1452")  {
+			return s.errHandler.DataNotFound()
+		}
+		//插入多個重複的組與相同的序號
+		if strings.Contains(err.Error(),"1062")  {
+			return s.errHandler.DataAlreadyExists()
+		}
 		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 		return s.errHandler.SystemError()
 	}
