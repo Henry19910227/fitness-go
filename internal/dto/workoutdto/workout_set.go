@@ -1,5 +1,9 @@
 package workoutdto
 
+type WorkoutSetID struct {
+	ID int64 `json:"workout_set_id" example:"10"` //訓練組id
+}
+
 type WorkoutSet struct {
 	ID int64 `json:"id" example:"10"` //訓練組id
 	Type int `json:"type" example:"2"` //動作類別(1:動作/2:休息)
@@ -34,4 +38,9 @@ type UpdateWorkoutSetParam struct {
 	Distance *float64 `gorm:"column:distance"` //距離(公尺)
 	Duration *int `gorm:"column:duration"` //時長(秒)
 	Incline *float64 `gorm:"column:incline"` //坡度
+}
+
+type WorkoutSetOrder struct {
+	WorkoutSetID int64 `gorm:"column:workout_set_id"` //訓練組id
+	Seq int `gorm:"column:seq"` //排列序號
 }

@@ -25,7 +25,8 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 	workoutSetAccess  access.WorkoutSet,
 	trainerAccess access.Trainer,
 	userMiddleware gin.HandlerFunc) {
-	baseGroup.StaticFS("/resource/workout/audio", http.Dir("./volumes/storage/workout/audio"))
+	baseGroup.StaticFS("/resource/workout/start_audio", http.Dir("./volumes/storage/workout/start_audio"))
+	baseGroup.StaticFS("/resource/workout/end_audio", http.Dir("./volumes/storage/workout/end_audio"))
 	workout := workout{workoutService: workoutService,
 		workoutSetService: workoutSetService,
 		workoutAccess: workoutAccess,
@@ -40,6 +41,7 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 	planGroup.POST("/:workout_id/workout_set", workout.CreateWorkoutSets)
 	planGroup.POST("/:workout_id/rest_set", workout.CreateRestSet)
 	planGroup.GET("/:workout_id/workout_sets", workout.GetWorkoutSets)
+	planGroup.PUT("/:workout_id/order", workout.UpdateWorkoutSetOrders)
 }
 
 // UpdateWorkout 修改訓練
@@ -130,7 +132,7 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 
 // UploadWorkoutStartAudio 上傳訓練前導語音
 // @Summary 上傳訓練前導語音
-// @Description 下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
+// @Description 下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/start_audio/{語音檔案名}
 // @Tags Workout
 // @Security fitness_user_token
 // @Accept mpfd
@@ -174,7 +176,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 
 // UploadWorkoutEndAudio 上傳訓練結束語音
 // @Summary 上傳訓練結束語音
-// @Description 上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
+// @Description 上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/end_audio/{語音檔案名}
 // @Tags Workout
 // @Security fitness_user_token
 // @Accept mpfd
@@ -326,4 +328,55 @@ func (w *workout) GetWorkoutSets(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, sets, "success!")
+}
+
+// UpdateWorkoutSetOrders 修改訓練組的順序
+// @Summary 修改訓練組的順序
+// @Description 修改訓練組的順序
+// @Tags Workout
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_id path int64 true "訓練id"
+// @Param json_body body validator.UpdateWorkoutSetOrderBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult "更新成功!"
+// @Failure 400 {object} model.ErrorResult "更新失敗"
+// @Router /workout/{workout_id}/order [PUT]
+func (w *workout) UpdateWorkoutSetOrders(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutIDUri
+	var body validator.UpdateWorkoutSetOrderBody
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutSetAccess.CreateVerifyByWorkoutID(c, header.Token, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	var orders []*workoutdto.WorkoutSetOrder
+	for _, data := range body.Orders {
+		order := workoutdto.WorkoutSetOrder{
+			WorkoutSetID: data.WorkoutSetID,
+			Seq: data.Seq,
+		}
+		orders = append(orders, &order)
+	}
+	if err := w.workoutSetService.UpdateWorkoutSetOrders(c, uri.WorkoutID, orders); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, nil, "update success!")
 }

@@ -2229,7 +2229,7 @@ var doc = `{
                         "fitness_user_token": []
                     }
                 ],
-                "description": "上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}",
+                "description": "上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/end_audio/{語音檔案名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -2277,6 +2277,58 @@ var doc = `{
                     },
                     "400": {
                         "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/workout/{workout_id}/order": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "修改訓練組的順序",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "修改訓練組的順序",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateWorkoutSetOrderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -2346,7 +2398,7 @@ var doc = `{
                         "fitness_user_token": []
                     }
                 ],
-                "description": "下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}",
+                "description": "下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/start_audio/{語音檔案名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -2527,6 +2579,59 @@ var doc = `{
             }
         },
         "/workout_set/{workout_set_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "刪除訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "刪除訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.WorkoutSetID"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "刪除失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "security": [
                     {
@@ -2583,6 +2688,130 @@ var doc = `{
                     },
                     "400": {
                         "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/workout_set/{workout_set_id}/progress_audio": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "下載訓練組進行中語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "上傳訓練組進行中語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "進行中語音",
+                        "name": "progress_audio",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.Audio"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/workout_set/{workout_set_id}/start_audio": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "下載訓練組前導語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "上傳訓練組前導語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "前導語音",
+                        "name": "start_audio",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/workoutdto.Audio"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -3752,6 +3981,21 @@ var doc = `{
                 }
             }
         },
+        "validator.UpdateWorkoutSetOrderBody": {
+            "type": "object",
+            "required": [
+                "orders"
+            ],
+            "properties": {
+                "orders": {
+                    "description": "訓練組排序",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/validator.WorkoutSetOrder"
+                    }
+                }
+            }
+        },
         "validator.ValidateEmailDupBody": {
             "type": "object",
             "required": [
@@ -3775,6 +4019,24 @@ var doc = `{
                     "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "validator.WorkoutSetOrder": {
+            "type": "object",
+            "required": [
+                "seq"
+            ],
+            "properties": {
+                "seq": {
+                    "description": "排列序號",
+                    "type": "integer",
+                    "example": 1
+                },
+                "workout_set_id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
@@ -3932,6 +4194,16 @@ var doc = `{
                     "description": "動作影片",
                     "type": "string",
                     "example": "11d547we1d4f8e.mp4"
+                }
+            }
+        },
+        "workoutdto.WorkoutSetID": {
+            "type": "object",
+            "properties": {
+                "workout_set_id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         }
