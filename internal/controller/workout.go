@@ -25,7 +25,8 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 	workoutSetAccess  access.WorkoutSet,
 	trainerAccess access.Trainer,
 	userMiddleware gin.HandlerFunc) {
-	baseGroup.StaticFS("/resource/workout/audio", http.Dir("./volumes/storage/workout/audio"))
+	baseGroup.StaticFS("/resource/workout/start_audio", http.Dir("./volumes/storage/workout/start_audio"))
+	baseGroup.StaticFS("/resource/workout/end_audio", http.Dir("./volumes/storage/workout/end_audio"))
 	workout := workout{workoutService: workoutService,
 		workoutSetService: workoutSetService,
 		workoutAccess: workoutAccess,
@@ -131,7 +132,7 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 
 // UploadWorkoutStartAudio 上傳訓練前導語音
 // @Summary 上傳訓練前導語音
-// @Description 下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
+// @Description 下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/start_audio/{語音檔案名}
 // @Tags Workout
 // @Security fitness_user_token
 // @Accept mpfd
@@ -175,7 +176,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 
 // UploadWorkoutEndAudio 上傳訓練結束語音
 // @Summary 上傳訓練結束語音
-// @Description 上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/audio/{語音檔案名}
+// @Description 上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/end_audio/{語音檔案名}
 // @Tags Workout
 // @Security fitness_user_token
 // @Accept mpfd

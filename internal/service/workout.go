@@ -84,7 +84,7 @@ func (w *workout) DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.Wo
 }
 
 func (w *workout) UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
-	newAudioNamed, err := w.uploader.UploadWorkoutAudio(file, audioNamed)
+	newAudioNamed, err := w.uploader.UploadWorkoutStartAudio(file, audioNamed)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
 			return nil, w.errHandler.FileTypeError()
@@ -105,7 +105,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audio
 }
 
 func (w *workout) UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
-	newAudioNamed, err := w.uploader.UploadWorkoutAudio(file, audioNamed)
+	newAudioNamed, err := w.uploader.UploadWorkoutEndAudio(file, audioNamed)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
 			return nil, w.errHandler.FileTypeError()
