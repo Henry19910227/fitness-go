@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS courses (
    `id` INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '課表 id',
    `user_id` INT(11) UNSIGNED NOT NULL COMMENT '用戶 id',
+   `sale_item_id` INT(11) UNSIGNED COMMENT '銷售項目 id',
    `course_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)',
    `category` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)',
    `schedule_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排課類別(1:單一訓練/2:多項計畫)',
@@ -22,4 +23,5 @@ CREATE TABLE IF NOT EXISTS courses (
    `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
    `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
    CONSTRAINT fk_courses_user_id_to_users_id FOREIGN KEY (user_id) REFERENCES users(id)
+   CONSTRAINT fk_courses_sale_item_id_to_sale_items_id FOREIGN KEY (sale_item_id) REFERENCES sale_items(id)
 ) ENGINE=InnoDB CHARSET=utf8mb4;
