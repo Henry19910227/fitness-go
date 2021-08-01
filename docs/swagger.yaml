@@ -1683,34 +1683,6 @@ paths:
       summary: 取得課表內的計畫列表
       tags:
       - Course
-  /course/list:
-    get:
-      consumes:
-      - application/json
-      description: 獲取我的課表列表
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 獲取成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/coursedto.Course'
-                  type: array
-              type: object
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_user_token: []
-      summary: 獲取我的課表列表
-      tags:
-      - Course
   /courses:
     get:
       consumes:
