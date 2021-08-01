@@ -378,7 +378,7 @@ var doc = `{
                         "fitness_user_token": []
                     }
                 ],
-                "description": "以id獲取課表",
+                "description": "獲取課表詳細",
                 "consumes": [
                     "application/json"
                 ],
@@ -388,7 +388,7 @@ var doc = `{
                 "tags": [
                     "Course"
                 ],
-                "summary": "以id獲取課表",
+                "summary": "獲取課表詳細",
                 "parameters": [
                     {
                         "type": "integer",
@@ -410,7 +410,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.Course"
+                                            "$ref": "#/definitions/coursedto.CourseDetail"
                                         }
                                     }
                                 }
@@ -3028,6 +3028,115 @@ var doc = `{
                     "description": "課表封面照片",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "coursedto.CourseDetail": {
+            "type": "object",
+            "properties": {
+                "body_target": {
+                    "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)",
+                    "type": "string",
+                    "example": "4,5"
+                },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2021-05-28 11:00:00"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
+                },
+                "food": {
+                    "description": "飲食建議",
+                    "type": "string",
+                    "example": "佛系飲食"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "intro": {
+                    "description": "課表介紹",
+                    "type": "string",
+                    "example": "佛系課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "notice": {
+                    "description": "注意事項",
+                    "type": "string",
+                    "example": "小心不要受傷"
+                },
+                "place": {
+                    "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
+                    "type": "string",
+                    "example": "1,2"
+                },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 2
+                },
+                "sale_type": {
+                    "description": "銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "suit": {
+                    "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
+                    "type": "string",
+                    "example": "2,5,7"
+                },
+                "train_target": {
+                    "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
+                    "type": "string",
+                    "example": "2,3,4"
+                },
+                "trainer": {
+                    "description": "教練簡介",
+                    "$ref": "#/definitions/trainerdto.TrainerSummary"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2021-05-29 11:00:00"
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },

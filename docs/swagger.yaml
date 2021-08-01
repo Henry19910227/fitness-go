@@ -161,6 +161,92 @@ definitions:
         example: dkf2se51fsdds.png
         type: string
     type: object
+  coursedto.CourseDetail:
+    properties:
+      body_target:
+        description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
+        example: 4,5
+        type: string
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      create_at:
+        description: 創建時間
+        example: "2021-05-28 11:00:00"
+        type: string
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
+      food:
+        description: 飲食建議
+        example: 佛系飲食
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      intro:
+        description: 課表介紹
+        example: 佛系課表
+        type: string
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      notice:
+        description: 注意事項
+        example: 小心不要受傷
+        type: string
+      place:
+        description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
+        example: 1,2
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
+      sale_type:
+        description: 銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)
+        example: 2
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      suit:
+        description: 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)
+        example: 2,5,7
+        type: string
+      train_target:
+        description: 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
+        example: 2,3,4
+        type: string
+      trainer:
+        $ref: '#/definitions/trainerdto.TrainerSummary'
+        description: 教練簡介
+      update_at:
+        description: 更新時間
+        example: "2021-05-29 11:00:00"
+        type: string
+      workout_count:
+        description: 訓練總數
+        example: 10
+        type: integer
+    type: object
   coursedto.CourseID:
     properties:
       course_id:
@@ -1331,7 +1417,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 以id獲取課表
+      description: 獲取課表詳細
       parameters:
       - description: 課表id
         in: path
@@ -1348,7 +1434,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.Course'
+                  $ref: '#/definitions/coursedto.CourseDetail'
               type: object
         "400":
           description: 獲取失敗
@@ -1356,7 +1442,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_user_token: []
-      summary: 以id獲取課表
+      summary: 獲取課表詳細
       tags:
       - Course
     patch:

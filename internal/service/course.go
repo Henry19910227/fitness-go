@@ -185,6 +185,59 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 	return courses, nil
 }
 
+func (cs *course) GetCourseDetailByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.CourseDetail, errcode.Error) {
+	uid, err := cs.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, cs.errHandler.InvalidToken()
+	}
+	course, e := cs.GetCourseDetailByCourseID(c, courseID)
+	if e != nil {
+		return nil, e
+	}
+	//驗證權限
+	if course.Trainer.UserID != uid {
+		return nil, cs.errHandler.PermissionDenied()
+	}
+	return course, nil
+}
+
+func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*coursedto.CourseDetail, errcode.Error) {
+	entity, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result set") {
+			return nil, cs.errHandler.DataNotFound()
+		}
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	course := coursedto.CourseDetail{
+		ID:           entity.ID,
+		CourseStatus: entity.CourseStatus,
+		Category:     entity.Category,
+		ScheduleType: entity.ScheduleType,
+		SaleType:     entity.SaleType,
+		Name:         entity.Name,
+		Cover:        entity.Cover,
+		Intro:        entity.Intro,
+		Food:         entity.Food,
+		Level:        entity.Level,
+		Suit:         entity.Suit,
+		Equipment:    entity.Equipment,
+		Place:        entity.Place,
+		TrainTarget:  entity.TrainTarget,
+		BodyTarget:   entity.BodyTarget,
+		Notice:       entity.Notice,
+		PlanCount:    entity.PlanCount,
+		WorkoutCount: entity.WorkoutCount,
+		CreateAt:     entity.CreateAt,
+		UpdateAt:     entity.UpdateAt,
+	}
+	course.Trainer.UserID = entity.Trainer.UserID
+	course.Trainer.Nickname = entity.Trainer.Nickname
+	course.Trainer.Avatar = entity.Trainer.Avatar
+	return &course, nil
+}
+
 func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := cs.uploader.UploadCourseCover(param.File, param.CoverNamed)

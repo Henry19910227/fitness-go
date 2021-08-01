@@ -209,15 +209,15 @@ func (cc *Course) GetCourses(c *gin.Context) {
 	cc.JSONSuccessResponse(c, courses, "success")
 }
 
-// GetCourse 以id獲取課表
-// @Summary 以id獲取課表
-// @Description 以id獲取課表
+// GetCourse 獲取課表詳細
+// @Summary 獲取課表詳細
+// @Description 獲取課表詳細
 // @Tags Course
 // @Accept json
 // @Produce json
 // @Security fitness_user_token
 // @Param course_id path int64 true "課表id"
-// @Success 200 {object} model.SuccessResult{data=coursedto.Course} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=coursedto.CourseDetail} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course/{course_id} [GET]
 func (cc *Course) GetCourse(c *gin.Context) {
@@ -231,7 +231,7 @@ func (cc *Course) GetCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	course, err := cc.courseService.GetCourseByTokenAndCourseID(c, header.Token, uri.CourseID)
+	course, err := cc.courseService.GetCourseDetailByTokenAndCourseID(c, header.Token, uri.CourseID)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
