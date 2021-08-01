@@ -187,7 +187,7 @@ func (cc *Course) GetCourseList(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param status query int false "課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)"
-// @Success 200 {object} model.SuccessResult{data=[]coursedto.Course} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]coursedto.CourseSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /courses [GET]
 func (cc *Course) GetCourses(c *gin.Context) {
@@ -201,7 +201,7 @@ func (cc *Course) GetCourses(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, err := cc.courseService.GetCoursesByToken(c, header.Token, query.Status)
+	courses, err := cc.courseService.GetCourseSummariesByToken(c, header.Token, query.Status)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return

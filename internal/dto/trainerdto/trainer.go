@@ -14,6 +14,12 @@ type Trainer struct {
 	UpdateAt         string  `json:"update_at" gorm:"column:update_at" example:"2021-05-10 10:00:00"`   // 修改日期
 }
 
+type TrainerSummary struct {
+	UserID           int64   `json:"user_id" example:"10001"`                 // 關聯的用戶id
+	Nickname         string  `json:"nickname" example:"Henry教練"`             // 教練暱稱
+	Avatar           string  `json:"avatar"  example:"d2w3e15d3awe.jpg"`      // 教練大頭照
+}
+
 type CreateTrainerParam struct {
 	Name string
 	Nickname string

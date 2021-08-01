@@ -168,6 +168,52 @@ definitions:
         example: 2
         type: integer
     type: object
+  coursedto.CourseSummary:
+    properties:
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 2
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      trainer:
+        $ref: '#/definitions/trainerdto.TrainerSummary'
+        description: 教練簡介
+      workout_count:
+        description: 訓練總數
+        example: 10
+        type: integer
+    type: object
   logindto.Admin:
     properties:
       email:
@@ -440,6 +486,21 @@ definitions:
       user_id:
         description: 用戶id
         example: 1001
+        type: integer
+    type: object
+  trainerdto.TrainerSummary:
+    properties:
+      avatar:
+        description: 教練大頭照
+        example: d2w3e15d3awe.jpg
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry教練
+        type: string
+      user_id:
+        description: 關聯的用戶id
+        example: 10001
         type: integer
     type: object
   userdto.Avatar:
@@ -1585,7 +1646,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/coursedto.Course'
+                    $ref: '#/definitions/coursedto.CourseSummary'
                   type: array
               type: object
         "400":

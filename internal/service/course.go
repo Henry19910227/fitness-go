@@ -149,6 +149,42 @@ func (cs *course) GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Cour
 	return &course, nil
 }
 
+func (cs *course) GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*coursedto.CourseSummary, errcode.Error) {
+	uid, err := cs.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, cs.errHandler.InvalidToken()
+	}
+	return cs.GetCourseSummariesByUID(c, uid, status)
+}
+
+func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*coursedto.CourseSummary, errcode.Error) {
+	Entities, err := cs.courseRepo.FindCourseSummariesByUserID(uid, status)
+	if err != nil {
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	courses := make([]*coursedto.CourseSummary, 0)
+	for _, entity := range Entities {
+		course := coursedto.CourseSummary{
+			ID:           entity.ID,
+			CourseStatus: entity.CourseStatus,
+			Category:     entity.Category,
+			ScheduleType: entity.ScheduleType,
+			SaleType:     entity.SaleType,
+			Name:         entity.Name,
+			Cover:        entity.Cover,
+			Level:        entity.Level,
+			PlanCount:    entity.PlanCount,
+			WorkoutCount: entity.WorkoutCount,
+		}
+		course.Trainer.UserID = entity.Trainer.UserID
+		course.Trainer.Nickname = entity.Trainer.Nickname
+		course.Trainer.Avatar = entity.Trainer.Avatar
+		courses = append(courses, &course)
+	}
+	return courses, nil
+}
+
 func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := cs.uploader.UploadCourseCover(param.File, param.CoverNamed)
