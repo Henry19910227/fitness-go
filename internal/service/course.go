@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
@@ -9,7 +8,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"strings"
 )
 
@@ -98,52 +96,6 @@ func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*coursedto.Cours
 		return nil, cs.errHandler.SystemError()
 	}
 	return &coursedto.CourseID{ID: courseID}, nil
-}
-
-func (cs *course) GetCoursesByToken(c *gin.Context, token string, status *int) ([]*coursedto.Course, errcode.Error) {
-	uid, err := cs.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, cs.errHandler.InvalidToken()
-	}
-	return cs.GetCoursesByUID(c, uid, status)
-}
-
-func (cs *course) GetCoursesByUID(c *gin.Context, uid int64, status *int) ([]*coursedto.Course, errcode.Error) {
-	courses := make([]*coursedto.Course, 0)
-	if err := cs.courseRepo.FindCourses(uid, &courses, status); err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	return courses, nil
-}
-
-func (cs *course) GetCourseByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.Course, errcode.Error) {
-	uid, err := cs.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, cs.errHandler.InvalidToken()
-	}
-	course, e := cs.GetCourseByID(c, courseID)
-	if e != nil {
-		return nil, e
-	}
-	//驗證權限
-	if course.UserID != uid {
-		return nil, cs.errHandler.PermissionDenied()
-	}
-	return course, nil
-}
-
-func (cs *course) GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error) {
-	//取得課表資料
-	var course coursedto.Course
-	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, cs.errHandler.DataNotFound()
-		}
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	return &course, nil
 }
 
 func (cs *course) GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*coursedto.CourseSummary, errcode.Error) {
