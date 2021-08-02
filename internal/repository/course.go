@@ -170,7 +170,7 @@ func (c *course) FindCourseSummariesByUserID(uid int64, status *int) ([]*model.C
 			"courses.`level`", "courses.plan_count", "courses.workout_count",
 			"IFNULL(sale.type,0)", "trainers.user_id", "trainers.nickname", "trainers.avatar").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
-		Joins("LEFT JOIN sale_items AS sale ON courses.sale_item_id = sale.id").
+		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
 		Where(query, params...).Rows()
 	if err != nil {
 		return nil, err
@@ -200,7 +200,7 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 			"courses.plan_count", "courses.workout_count", "courses.create_at", "courses.update_at",
 			"IFNULL(sale.type,0)", "trainers.user_id", "trainers.nickname", "trainers.avatar").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
-		Joins("LEFT JOIN sale_items AS sale ON courses.sale_item_id = sale.id").
+		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
 		Where("courses.id = ?", courseID).
 		Row().
 		Scan(&course.ID, &course.CourseStatus, &course.Category, &course.ScheduleType, &course.Name,

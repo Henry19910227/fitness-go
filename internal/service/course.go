@@ -68,7 +68,7 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.Creat
 	return &course, nil
 }
 
-func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error) {
+func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.CourseDetail, errcode.Error) {
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		Category: param.Category,
 		SaleID: param.SaleID,
@@ -89,12 +89,7 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
-	var course coursedto.Course
-	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	return &course, nil
+	return cs.GetCourseDetailByCourseID(c, courseID)
 }
 
 func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*coursedto.CourseID, errcode.Error) {

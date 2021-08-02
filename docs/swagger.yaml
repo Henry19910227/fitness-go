@@ -1471,7 +1471,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.Course'
+                  $ref: '#/definitions/coursedto.CourseDetail'
               type: object
         "400":
           description: 更新失敗

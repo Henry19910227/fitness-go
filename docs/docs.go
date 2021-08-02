@@ -476,7 +476,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.Course"
+                                            "$ref": "#/definitions/coursedto.CourseDetail"
                                         }
                                     }
                                 }

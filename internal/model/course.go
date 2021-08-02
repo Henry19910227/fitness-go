@@ -3,7 +3,7 @@ package model
 type Course struct {
 	ID       int64  `gorm:"column:id"`                       // 課表 id
 	UserID   int64  `gorm:"column:user_id"`                  // 用戶 id
-	SaleItemID *int64 `gorm:"column:sale_item_id"`           // 銷售項目 id
+	SaleID *int64 `gorm:"column:sale_id"`                    // 銷售 id
 	CourseStatus int `gorm:"column:course_status"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
 	ScheduleType int `gorm:"column:schedule_type"`           // 排課類別(1:單一訓練/2:多項計畫)
