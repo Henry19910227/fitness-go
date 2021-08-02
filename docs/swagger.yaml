@@ -132,10 +132,9 @@ definitions:
         description: 是否是限制訪問狀態(0:否/1:是)
         example: 0
         type: integer
-      sale_type:
-        description: 銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)
-        example: 2
-        type: integer
+      sale:
+        $ref: '#/definitions/saledto.SaleSummary'
+        description: 銷售資料
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
         example: 2
@@ -197,10 +196,9 @@ definitions:
         description: 計畫總數
         example: 2
         type: integer
-      sale_type:
-        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-        example: 2
-        type: integer
+      sale:
+        $ref: '#/definitions/saledto.SaleSummary'
+        description: 銷售資料
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
         example: 2
@@ -431,6 +429,25 @@ definitions:
       id:
         description: 用戶ID
         example: 10001
+        type: integer
+    type: object
+  saledto.SaleSummary:
+    properties:
+      id:
+        description: 銷售id
+        example: 1
+        type: integer
+      name:
+        description: 銷售名稱
+        example: 銅級課表
+        type: string
+      price:
+        description: 台幣價格
+        example: 330
+        type: number
+      type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 3
         type: integer
     type: object
   trainerdto.Avatar:

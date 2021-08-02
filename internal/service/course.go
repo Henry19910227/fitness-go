@@ -3,6 +3,8 @@ package service
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
+	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
+	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -114,16 +116,27 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 			CourseStatus: entity.CourseStatus,
 			Category:     entity.Category,
 			ScheduleType: entity.ScheduleType,
-			SaleType:     entity.SaleType,
 			Name:         entity.Name,
 			Cover:        entity.Cover,
 			Level:        entity.Level,
 			PlanCount:    entity.PlanCount,
 			WorkoutCount: entity.WorkoutCount,
 		}
-		course.Trainer.UserID = entity.Trainer.UserID
-		course.Trainer.Nickname = entity.Trainer.Nickname
-		course.Trainer.Avatar = entity.Trainer.Avatar
+		trainer := &trainerdto.TrainerSummary{
+			UserID: entity.Trainer.UserID,
+			Nickname: entity.Trainer.Nickname,
+			Avatar: entity.Trainer.Avatar,
+		}
+		course.Trainer = trainer
+		if entity.Sale.ID != 0 {
+			sale := &saledto.SaleSummary{
+				ID: entity.Sale.ID,
+				Type: entity.Sale.Type,
+				Name: entity.Sale.Name,
+				Price: entity.Sale.Twd,
+			}
+			course.Sale = sale
+		}
 		courses = append(courses, &course)
 	}
 	return courses, nil
@@ -143,7 +156,6 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*co
 		CourseStatus: entity.CourseStatus,
 		Category:     entity.Category,
 		ScheduleType: entity.ScheduleType,
-		SaleType:     entity.SaleType,
 		Name:         entity.Name,
 		Cover:        entity.Cover,
 		Intro:        entity.Intro,
@@ -160,10 +172,22 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*co
 		CreateAt:     entity.CreateAt,
 		UpdateAt:     entity.UpdateAt,
 	}
+	trainer := &trainerdto.TrainerSummary{
+		UserID: entity.Trainer.UserID,
+		Nickname: entity.Trainer.Nickname,
+		Avatar: entity.Trainer.Avatar,
+	}
+	course.Trainer = trainer
+	if entity.Sale.ID != 0 {
+		sale := &saledto.SaleSummary{
+			ID: entity.Sale.ID,
+			Type: entity.Sale.Type,
+			Name: entity.Sale.Name,
+			Price: entity.Sale.Twd,
+		}
+		course.Sale = sale
+	}
 	course.Restricted = 0
-	course.Trainer.UserID = entity.Trainer.UserID
-	course.Trainer.Nickname = entity.Trainer.Nickname
-	course.Trainer.Avatar = entity.Trainer.Avatar
 	return &course, nil
 }
 

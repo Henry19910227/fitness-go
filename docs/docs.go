@@ -2945,10 +2945,9 @@ var doc = `{
                     "type": "integer",
                     "example": 0
                 },
-                "sale_type": {
-                    "description": "銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 2
+                "sale": {
+                    "description": "銷售資料",
+                    "$ref": "#/definitions/saledto.SaleSummary"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3029,10 +3028,9 @@ var doc = `{
                     "type": "integer",
                     "example": 2
                 },
-                "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 2
+                "sale": {
+                    "description": "銷售資料",
+                    "$ref": "#/definitions/saledto.SaleSummary"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3336,6 +3334,31 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "saledto.SaleSummary": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "銷售id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "銷售名稱",
+                    "type": "string",
+                    "example": "銅級課表"
+                },
+                "price": {
+                    "description": "台幣價格",
+                    "type": "number",
+                    "example": 330
+                },
+                "type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 3
                 }
             }
         },
