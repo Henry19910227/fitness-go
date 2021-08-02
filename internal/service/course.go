@@ -71,8 +71,7 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.Creat
 func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error) {
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		Category: param.Category,
-		SaleType: param.SaleType,
-		Price: param.Price,
+		SaleID: param.SaleID,
 		Name: param.Name,
 		Intro: param.Intro,
 		Food: param.Food,
@@ -84,6 +83,9 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.
 		BodyTarget: param.BodyTarget,
 		Notice: param.Notice,
 	}); err != nil {
+		if strings.Contains(err.Error(), "1452") {
+			return nil, cs.errHandler.DataNotFound()
+		}
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}

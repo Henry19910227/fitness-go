@@ -3974,13 +3974,8 @@
                     "type": "string",
                     "example": "1,2,3"
                 },
-                "price": {
-                    "description": "售價",
-                    "type": "integer",
-                    "example": 330
-                },
-                "sale_type": {
-                    "description": "銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)",
+                "sale_id": {
+                    "description": "銷售ID",
                     "type": "integer",
                     "example": 2
                 },

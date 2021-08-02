@@ -104,8 +104,7 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 	if param.CourseStatus != nil { selects = append(selects, "course_status") }
 	if param.Category != nil { selects = append(selects, "category") }
 	if param.ScheduleType != nil { selects = append(selects, "schedule_type") }
-	if param.SaleType != nil { selects = append(selects, "sale_type") }
-	if param.Price != nil { selects = append(selects, "price") }
+	if param.SaleID != nil { selects = append(selects, "sale_id") }
 	if param.Name != nil { selects = append(selects, "name") }
 	if param.Cover != nil { selects = append(selects, "cover") }
 	if param.Intro != nil { selects = append(selects, "intro") }

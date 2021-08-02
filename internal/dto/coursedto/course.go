@@ -19,8 +19,7 @@ type CreateCourseParam struct {
 
 type UpdateCourseParam struct {
 	Category *int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
-	SaleType *int `gorm:"column:sale_type"`                   // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-	Price *int64 `gorm:"column:price"`                        // 售價
+	SaleID *int `gorm:"column:sale_id"`                       // 銷售id
 	Name *string `gorm:"column:name"`                         // 課表名稱
 	Intro *string `gorm:"column:intro"`                       // 課表介紹
 	Food *string `gorm:"column:food"`                         // 飲食建議
