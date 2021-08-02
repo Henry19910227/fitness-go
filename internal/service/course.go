@@ -185,22 +185,6 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 	return courses, nil
 }
 
-func (cs *course) GetCourseDetailByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.CourseDetail, errcode.Error) {
-	uid, err := cs.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, cs.errHandler.InvalidToken()
-	}
-	course, e := cs.GetCourseDetailByCourseID(c, courseID)
-	if e != nil {
-		return nil, e
-	}
-	//驗證權限
-	if course.Trainer.UserID != uid {
-		return nil, cs.errHandler.PermissionDenied()
-	}
-	return course, nil
-}
-
 func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*coursedto.CourseDetail, errcode.Error) {
 	entity, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
 	if err != nil {
@@ -232,6 +216,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*co
 		CreateAt:     entity.CreateAt,
 		UpdateAt:     entity.UpdateAt,
 	}
+	course.Restricted = 0
 	course.Trainer.UserID = entity.Trainer.UserID
 	course.Trainer.Nickname = entity.Trainer.Nickname
 	course.Trainer.Avatar = entity.Trainer.Avatar

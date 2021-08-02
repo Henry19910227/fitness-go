@@ -3055,6 +3055,11 @@ var doc = `{
                     "type": "integer",
                     "example": 2
                 },
+                "restricted": {
+                    "description": "是否是限制訪問狀態(0:否/1:是)",
+                    "type": "integer",
+                    "example": 0
+                },
                 "sale_type": {
                     "description": "銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)",
                     "type": "integer",

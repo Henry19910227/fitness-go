@@ -71,7 +71,6 @@ type Course interface {
 	GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error)
 	GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*coursedto.CourseSummary, errcode.Error)
 	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*coursedto.CourseSummary, errcode.Error)
-	GetCourseDetailByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.CourseDetail, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*coursedto.CourseDetail, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error)
 }

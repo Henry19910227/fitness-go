@@ -206,7 +206,11 @@ func (cc *Course) GetCourse(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	course, err := cc.courseService.GetCourseDetailByTokenAndCourseID(c, header.Token, uri.CourseID)
+	if err := cc.courseAccess.OwnVerifyByTokenAndCourseID(c, header.Token, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	course, err := cc.courseService.GetCourseDetailByCourseID(c, uri.CourseID)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return

@@ -12,6 +12,7 @@ type Trainer interface {
 type Course interface {
 	CreateVerify(c *gin.Context, token string) errcode.Error
 	UpdateVerifyByCourseID(c *gin.Context, token string, courseID int64) errcode.Error
+	OwnVerifyByTokenAndCourseID(c *gin.Context, token string, courseID int64) errcode.Error
 }
 
 type Plan interface {

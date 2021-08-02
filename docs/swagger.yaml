@@ -219,6 +219,10 @@ definitions:
         description: 計畫總數
         example: 2
         type: integer
+      restricted:
+        description: 是否是限制訪問狀態(0:否/1:是)
+        example: 0
+        type: integer
       sale_type:
         description: 銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)
         example: 2
