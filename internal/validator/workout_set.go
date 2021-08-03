@@ -27,6 +27,10 @@ type UpdateWorkoutSetOrderBody struct {
 	Orders []WorkoutSetOrder `json:"orders" binding:"required,workout_set_orders"` //訓練組排序
 }
 
+type DuplicateWorkoutSetBody struct {
+	DuplicateCount int `json:"duplicate_count" binding:"required,min=1,max=5" example:"1"` //複製個數
+}
+
 type WorkoutSetOrder struct {
 	WorkoutSetID int64 `json:"workout_set_id" binding:"omitempty" example:"10"` //訓練組id
 	Seq int `json:"seq" binding:"required" example:"1"` //排列序號

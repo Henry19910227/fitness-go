@@ -33,6 +33,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	setGroup.DELETE("/:workout_set_id", set.DeleteWorkoutSet)
 	setGroup.POST("/:workout_set_id/start_audio", set.UploadWorkoutSetStartAudio)
 	setGroup.POST("/:workout_set_id/progress_audio", set.UploadWorkoutSetProgressAudio)
+	setGroup.POST("/:workout_set_id/duplicate", set.DuplicateWorkoutSet)
 }
 
 // UpdateWorkoutSet 修改訓練組
@@ -211,4 +212,48 @@ func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, result, "upload success")
+}
+
+// DuplicateWorkoutSet 複製訓練組
+// @Summary 複製訓練組
+// @Description 複製訓練組
+// @Tags WorkoutSet
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_set_id path int64 true "訓練組id"
+// @Param json_body body validator.DuplicateWorkoutSetBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult{data=[]workoutdto.WorkoutSet} "複製成功!"
+// @Failure 400 {object} model.ErrorResult "複製失敗"
+// @Router /workout_set/{workout_set_id}/duplicate [POST]
+func (w *workoutset) DuplicateWorkoutSet(c *gin.Context) {
+	var header validator.TokenHeader
+	var uri validator.WorkoutSetIDUri
+	var body validator.DuplicateWorkoutSetBody
+	if err := c.ShouldBindHeader(&header); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	if err := w.workoutSetAccess.UpdateVerifyByWorkoutSetID(c, header.Token, uri.WorkoutSetID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	sets, err := w.workoutSetService.DuplicateWorkoutSets(c, uri.WorkoutSetID, body.DuplicateCount)
+	if err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, sets, "duplicate success!")
 }

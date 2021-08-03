@@ -59,6 +59,32 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 	return workoutIDs, nil
 }
 
+func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model.WorkoutSet) ([]int64, error) {
+	if err := s.gorm.DB().Transaction(func(tx *gorm.DB) error {
+		//創建訓練組
+		if err := tx.Create(&sets).Error; err != nil {
+			return err
+		}
+		//更新訓練的訓練組個數
+		countQuery := tx.Table("workout_sets").
+			Select("COUNT(*) AS workout_set_count").
+			Where("workout_id = ?", workoutID)
+		if err := tx.Table("workouts").
+			Where("id = ?", workoutID).
+			Update("workout_set_count", countQuery).Error; err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+	setIDs := make([]int64, 0)
+	for _, set := range sets{
+		setIDs = append(setIDs, set.ID)
+	}
+	return setIDs, nil
+}
+
 func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 	set := model.WorkoutSet{
 		WorkoutID: workoutID,

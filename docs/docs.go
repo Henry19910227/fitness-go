@@ -2695,6 +2695,73 @@ var doc = `{
                 }
             }
         },
+        "/workout_set/{workout_set_id}/duplicate": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "複製訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "複製訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.DuplicateWorkoutSetBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "複製成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "複製失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/workout_set/{workout_set_id}/progress_audio": {
             "post": {
                 "security": [
@@ -3811,6 +3878,19 @@ var doc = `{
                         10,
                         15
                     ]
+                }
+            }
+        },
+        "validator.DuplicateWorkoutSetBody": {
+            "type": "object",
+            "required": [
+                "duplicate_count"
+            ],
+            "properties": {
+                "duplicate_count": {
+                    "description": "複製個數",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

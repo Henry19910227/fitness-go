@@ -759,6 +759,15 @@ definitions:
     required:
     - action_ids
     type: object
+  validator.DuplicateWorkoutSetBody:
+    properties:
+      duplicate_count:
+        description: 複製個數
+        example: 1
+        type: integer
+    required:
+    - duplicate_count
+    type: object
   validator.EmailBody:
     properties:
       email:
@@ -2725,6 +2734,46 @@ paths:
       security:
       - fitness_user_token: []
       summary: 修改訓練組
+      tags:
+      - WorkoutSet
+  /workout_set/{workout_set_id}/duplicate:
+    post:
+      consumes:
+      - application/json
+      description: 複製訓練組
+      parameters:
+      - description: 訓練組id
+        in: path
+        name: workout_set_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.DuplicateWorkoutSetBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 複製成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/workoutdto.WorkoutSet'
+                  type: array
+              type: object
+        "400":
+          description: 複製失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 複製訓練組
       tags:
       - WorkoutSet
   /workout_set/{workout_set_id}/progress_audio:
