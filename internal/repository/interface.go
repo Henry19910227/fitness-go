@@ -75,3 +75,7 @@ type Action interface {
 	UpdateActionByID(actionID int64, param *model.UpdateActionParam) error
 	DeleteActionByID(actionID int64) error
 }
+
+type Sale interface {
+	FinsSaleItems() ([]*model.SaleItemEntity, error)
+}

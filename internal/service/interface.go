@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
 	"github.com/Henry19910227/fitness-go/internal/dto/plandto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
+	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
 	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/workoutdto"
@@ -105,4 +106,8 @@ type Action interface {
 	DeleteAction(c *gin.Context, actionID int64) (*actiondto.ActionID, errcode.Error)
 	UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error)
 	UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*actiondto.ActionVideo, errcode.Error)
+}
+
+type Sale interface {
+	GetSaleItems(c *gin.Context) ([]*saledto.SaleItem, errcode.Error)
 }

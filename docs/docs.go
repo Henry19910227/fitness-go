@@ -1754,6 +1754,55 @@ var doc = `{
                 }
             }
         },
+        "/sale_items": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "取得銷售項目清單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "取得銷售項目清單",
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/saledto.SaleItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/trainer": {
             "post": {
                 "security": [
@@ -3334,6 +3383,46 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "saledto.SaleItem": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2021-08-01 10:00:00"
+                },
+                "id": {
+                    "description": "銷售id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "identifier": {
+                    "description": "銷售識別碼",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
+                },
+                "name": {
+                    "description": "銷售名稱",
+                    "type": "string",
+                    "example": "銅級課表"
+                },
+                "twd": {
+                    "description": "台幣價格",
+                    "type": "number",
+                    "example": 330
+                },
+                "type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2021-08-01 10:00:00"
                 }
             }
         },
