@@ -129,11 +129,12 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 		}
 		course.Trainer = trainer
 		if entity.Sale.ID != 0 {
-			sale := &saledto.SaleSummary{
+			sale := &saledto.SaleItem{
 				ID: entity.Sale.ID,
 				Type: entity.Sale.Type,
 				Name: entity.Sale.Name,
-				Price: entity.Sale.Twd,
+				Twd: entity.Sale.Twd,
+				Identifier: entity.Sale.Identifier,
 			}
 			course.Sale = sale
 		}
@@ -179,11 +180,12 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*co
 	}
 	course.Trainer = trainer
 	if entity.Sale.ID != 0 {
-		sale := &saledto.SaleSummary{
+		sale := &saledto.SaleItem{
 			ID: entity.Sale.ID,
 			Type: entity.Sale.Type,
 			Name: entity.Sale.Name,
-			Price: entity.Sale.Twd,
+			Twd: entity.Sale.Twd,
+			Identifier: entity.Sale.Identifier,
 		}
 		course.Sale = sale
 	}

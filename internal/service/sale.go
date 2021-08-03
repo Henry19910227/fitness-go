@@ -34,8 +34,6 @@ func (s *sale) GetSaleItems(c *gin.Context) ([]*saledto.SaleItem, errcode.Error)
 			Name: entity.Name,
 			Twd: entity.Twd,
 			Identifier: entity.Identifier,
-			CreateAt: entity.CreateAt,
-			UpdateAt: entity.UpdateAt,
 		}
 		saleItems = append(saleItems, &saleItem)
 	}

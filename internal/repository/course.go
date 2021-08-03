@@ -168,7 +168,9 @@ func (c *course) FindCourseSummariesByUserID(uid int64, status *int) ([]*model.C
 		Select("courses.id", "courses.course_status", "courses.category",
 			"courses.schedule_type", "courses.`name`", "courses.cover",
 			"courses.`level`", "courses.plan_count", "courses.workout_count",
-		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')", "IFNULL(sale.twd,0)",
+		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
+		    "IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+		    "IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
 			"trainers.user_id", "trainers.nickname", "trainers.avatar").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
 		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
@@ -182,7 +184,8 @@ func (c *course) FindCourseSummariesByUserID(uid int64, status *int) ([]*model.C
 		if err := rows.Scan(&course.ID, &course.CourseStatus, &course.Category,
 			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
 			&course.PlanCount, &course.WorkoutCount,
-			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd,
+			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
+			&course.Sale.CreateAt, &course.Sale.UpdateAt,
 			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
 			return nil, err
 		}
@@ -200,7 +203,9 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 			"courses.food", "courses.level", "courses.suit", "courses.equipment",
 			"courses.place", "courses.train_target", "courses.body_target", "courses.notice",
 			"courses.plan_count", "courses.workout_count", "courses.create_at", "courses.update_at",
-		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')", "IFNULL(sale.twd,0)",
+		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
+		    "IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+		    "IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
 			"trainers.user_id", "trainers.nickname", "trainers.avatar").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
 		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
@@ -210,7 +215,8 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 			&course.Cover, &course.Intro, &course.Food, &course.Level, &course.Suit, &course.Equipment,
 			&course.Place, &course.TrainTarget, &course.BodyTarget, &course.Notice, &course.PlanCount,
 			&course.WorkoutCount, &course.CreateAt, &course.UpdateAt,
-		    &course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd,
+		    &course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
+		    &course.Sale.CreateAt, &course.Sale.UpdateAt,
 			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
 			return nil, err
 	}

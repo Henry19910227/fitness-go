@@ -2978,7 +2978,7 @@
                 },
                 "sale": {
                     "description": "銷售資料",
-                    "$ref": "#/definitions/saledto.SaleSummary"
+                    "$ref": "#/definitions/saledto.SaleItem"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3061,7 +3061,7 @@
                 },
                 "sale": {
                     "description": "銷售資料",
-                    "$ref": "#/definitions/saledto.SaleSummary"
+                    "$ref": "#/definitions/saledto.SaleItem"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3371,11 +3371,6 @@
         "saledto.SaleItem": {
             "type": "object",
             "properties": {
-                "create_at": {
-                    "description": "創建時間",
-                    "type": "string",
-                    "example": "2021-08-01 10:00:00"
-                },
                 "id": {
                     "description": "銷售id",
                     "type": "integer",
@@ -3392,36 +3387,6 @@
                     "example": "銅級課表"
                 },
                 "twd": {
-                    "description": "台幣價格",
-                    "type": "number",
-                    "example": 330
-                },
-                "type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 3
-                },
-                "update_at": {
-                    "description": "更新時間",
-                    "type": "string",
-                    "example": "2021-08-01 10:00:00"
-                }
-            }
-        },
-        "saledto.SaleSummary": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "description": "銷售id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "description": "銷售名稱",
-                    "type": "string",
-                    "example": "銅級課表"
-                },
-                "price": {
                     "description": "台幣價格",
                     "type": "number",
                     "example": 330
