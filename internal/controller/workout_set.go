@@ -73,7 +73,6 @@ func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 	}
 	set, err := w.workoutSetService.UpdateWorkoutSet(c, uri.WorkoutSetID, &workoutdto.UpdateWorkoutSetParam{
 		AutoNext: body.AutoNext,
-		StartAudio: body.StartAudio,
 		Remark: body.Remark,
 		Weight: body.Weight,
 		Reps: body.Reps,

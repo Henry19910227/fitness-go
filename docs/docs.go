@@ -4070,11 +4070,6 @@ var doc = `{
                     "type": "integer",
                     "example": 10
                 },
-                "start_audio": {
-                    "description": "前導語音",
-                    "type": "string",
-                    "example": "e6d2131w5q.mp3"
-                },
                 "weight": {
                     "description": "重量(0.01~999.99公斤)",
                     "type": "number",

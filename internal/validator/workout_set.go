@@ -15,7 +15,6 @@ type WorkoutSetIDUri struct {
 
 type UpdateWorkoutSetBody struct {
 	AutoNext *string `json:"auto_next" binding:"omitempty,oneof=Y N" example:"Y"` //自動下一組(Y:是/N:否)
-	StartAudio *string `json:"start_audio" binding:"omitempty,max=50" example:"e6d2131w5q.mp3"` //前導語音
 	Remark *string `json:"remark" binding:"omitempty,max=40" example:"注意呼吸"` //備註(1~20字元)
 	Weight *float64 `json:"weight" binding:"omitempty,min=0.01,max=999.99" example:"10.25"` //重量(0.01~999.99公斤)
 	Reps *int `json:"reps" binding:"omitempty,min=1,max=999" example:"10"` //次數(1~999次)

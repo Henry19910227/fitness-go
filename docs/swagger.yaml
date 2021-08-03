@@ -954,10 +954,6 @@ definitions:
         description: 次數(1~999次)
         example: 10
         type: integer
-      start_audio:
-        description: 前導語音
-        example: e6d2131w5q.mp3
-        type: string
       weight:
         description: 重量(0.01~999.99公斤)
         example: 10.25
