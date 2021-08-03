@@ -584,7 +584,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "課表名稱",
+                        "description": "動作名稱",
                         "name": "name",
                         "in": "query"
                     },
@@ -608,7 +608,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                        "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
                         "name": "equipment",
                         "in": "query"
                     }
@@ -2907,7 +2907,7 @@ var doc = `{
                     "example": "32as1d5f13e4.png"
                 },
                 "equipment": {
-                    "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -3754,7 +3754,7 @@ var doc = `{
                     "example": 1
                 },
                 "equipment": {
-                    "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -3970,7 +3970,7 @@ var doc = `{
                     "example": 1
                 },
                 "equipment": {
-                    "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
                     "type": "integer",
                     "example": 1
                 },

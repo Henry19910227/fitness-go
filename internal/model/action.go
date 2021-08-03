@@ -8,7 +8,7 @@ type Action struct {
 	Type int `gorm:"column:type"` //紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
 	Category int `gorm:"column:category"` //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
 	Body int `gorm:"column:body"` //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-	Equipment int `gorm:"column:equipment"` //器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+	Equipment int `gorm:"column:equipment"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
 	Intro string `gorm:"column:intro"` //動作介紹
 	Cover string `gorm:"column:cover"` //封面
 	Video string `gorm:"column:video"` //動作影片
@@ -25,7 +25,7 @@ type CreateActionParam struct {
 	Type int `gorm:"column:type"` //紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
 	Category int `gorm:"column:category"` //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
 	Body int `gorm:"column:body"` //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-	Equipment int `gorm:"column:equipment"` //器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+	Equipment int `gorm:"column:equipment"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
 	Intro string `gorm:"column:intro"` //動作介紹
 }
 
@@ -33,7 +33,7 @@ type UpdateActionParam struct {
 	Name *string `gorm:"column:name"` //課表名稱
 	Category *int `gorm:"column:category"` //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
 	Body *int `gorm:"column:body"` //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-	Equipment *int `gorm:"column:equipment"` //器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+	Equipment *int `gorm:"column:equipment"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
 	Intro *string `gorm:"column:intro"` //動作介紹
 	Cover *string `gorm:"column:cover"` //封面
 	Video *string `gorm:"column:video"` //動作影片
@@ -45,5 +45,5 @@ type FindActionsParam struct {
 	SourceOpt *[]int //動作來源(1:平台動作/2:教練動作)
 	CategoryOpt *[]int //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
 	BodyOpt *[]int //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-	EquipmentOpt *[]int //器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+	EquipmentOpt *[]int //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
 }

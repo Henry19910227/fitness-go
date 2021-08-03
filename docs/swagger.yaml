@@ -14,7 +14,7 @@ definitions:
         example: 32as1d5f13e4.png
         type: string
       equipment:
-        description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
         example: 1
         type: integer
       id:
@@ -658,7 +658,7 @@ definitions:
         example: 1
         type: integer
       equipment:
-        description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
         example: 1
         type: integer
       intro:
@@ -825,7 +825,7 @@ definitions:
         example: 1
         type: integer
       equipment:
-        description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
         example: 1
         type: integer
       intro:
@@ -1466,7 +1466,7 @@ paths:
         name: course_id
         required: true
         type: integer
-      - description: 課表名稱
+      - description: 動作名稱
         in: query
         name: name
         type: string
@@ -1482,7 +1482,7 @@ paths:
         in: query
         name: body
         type: string
-      - description: 器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
         in: query
         name: equipment
         type: string
