@@ -1,5 +1,5 @@
 definitions:
-  actiondto.Action:
+  dto.Action:
     properties:
       body:
         description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
@@ -42,21 +42,21 @@ definitions:
         example: 11d547we1d4f8e.mp4
         type: string
     type: object
-  actiondto.ActionCover:
+  dto.ActionCover:
     properties:
       cover:
         description: 封面圖片
         example: kd3kf54ew5.png
         type: string
     type: object
-  actiondto.ActionID:
+  dto.ActionID:
     properties:
       action_id:
         description: 動作id
         example: 1
         type: integer
     type: object
-  actiondto.ActionVideo:
+  dto.ActionVideo:
     properties:
       video:
         description: 動作影片
@@ -1162,7 +1162,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/actiondto.ActionID'
+                  $ref: '#/definitions/dto.ActionID'
               type: object
         "400":
           description: 刪除失敗
@@ -1199,7 +1199,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/actiondto.Action'
+                  $ref: '#/definitions/dto.Action'
               type: object
         "400":
           description: 更新失敗
@@ -1236,7 +1236,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/actiondto.ActionCover'
+                  $ref: '#/definitions/dto.ActionCover'
               type: object
         "400":
           description: 失敗!
@@ -1273,7 +1273,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/actiondto.ActionVideo'
+                  $ref: '#/definitions/dto.ActionVideo'
               type: object
         "400":
           description: 失敗!
@@ -1444,7 +1444,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/actiondto.Action'
+                  $ref: '#/definitions/dto.Action'
               type: object
         "400":
           description: 創建失敗
@@ -1497,7 +1497,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/actiondto.Action'
+                    $ref: '#/definitions/dto.Action'
                   type: array
               type: object
         "400":

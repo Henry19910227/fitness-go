@@ -63,7 +63,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionID"
+                                            "$ref": "#/definitions/dto.ActionID"
                                         }
                                     }
                                 }
@@ -125,7 +125,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.Action"
+                                            "$ref": "#/definitions/dto.Action"
                                         }
                                     }
                                 }
@@ -187,7 +187,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionCover"
+                                            "$ref": "#/definitions/dto.ActionCover"
                                         }
                                     }
                                 }
@@ -249,7 +249,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionVideo"
+                                            "$ref": "#/definitions/dto.ActionVideo"
                                         }
                                     }
                                 }
@@ -540,7 +540,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.Action"
+                                            "$ref": "#/definitions/dto.Action"
                                         }
                                     }
                                 }
@@ -627,7 +627,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/actiondto.Action"
+                                                "$ref": "#/definitions/dto.Action"
                                             }
                                         }
                                     }
@@ -2888,7 +2888,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "actiondto.Action": {
+        "dto.Action": {
             "type": "object",
             "properties": {
                 "body": {
@@ -2943,7 +2943,7 @@ var doc = `{
                 }
             }
         },
-        "actiondto.ActionCover": {
+        "dto.ActionCover": {
             "type": "object",
             "properties": {
                 "cover": {
@@ -2953,7 +2953,7 @@ var doc = `{
                 }
             }
         },
-        "actiondto.ActionID": {
+        "dto.ActionID": {
             "type": "object",
             "properties": {
                 "action_id": {
@@ -2963,7 +2963,7 @@ var doc = `{
                 }
             }
         },
-        "actiondto.ActionVideo": {
+        "dto.ActionVideo": {
             "type": "object",
             "properties": {
                 "video": {

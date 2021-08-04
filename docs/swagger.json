@@ -45,7 +45,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionID"
+                                            "$ref": "#/definitions/dto.ActionID"
                                         }
                                     }
                                 }
@@ -107,7 +107,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.Action"
+                                            "$ref": "#/definitions/dto.Action"
                                         }
                                     }
                                 }
@@ -169,7 +169,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionCover"
+                                            "$ref": "#/definitions/dto.ActionCover"
                                         }
                                     }
                                 }
@@ -231,7 +231,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionVideo"
+                                            "$ref": "#/definitions/dto.ActionVideo"
                                         }
                                     }
                                 }
@@ -522,7 +522,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.Action"
+                                            "$ref": "#/definitions/dto.Action"
                                         }
                                     }
                                 }
@@ -609,7 +609,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/actiondto.Action"
+                                                "$ref": "#/definitions/dto.Action"
                                             }
                                         }
                                     }
@@ -2870,7 +2870,7 @@
         }
     },
     "definitions": {
-        "actiondto.Action": {
+        "dto.Action": {
             "type": "object",
             "properties": {
                 "body": {
@@ -2925,7 +2925,7 @@
                 }
             }
         },
-        "actiondto.ActionCover": {
+        "dto.ActionCover": {
             "type": "object",
             "properties": {
                 "cover": {
@@ -2935,7 +2935,7 @@
                 }
             }
         },
-        "actiondto.ActionID": {
+        "dto.ActionID": {
             "type": "object",
             "properties": {
                 "action_id": {
@@ -2945,7 +2945,7 @@
                 }
             }
         },
-        "actiondto.ActionVideo": {
+        "dto.ActionVideo": {
             "type": "object",
             "properties": {
                 "video": {

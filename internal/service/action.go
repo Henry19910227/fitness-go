@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -32,7 +32,7 @@ func NewAction(actionRepo repository.Action,
 	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (a *action) CreateAction(c *gin.Context, courseID int64, param *actiondto.CreateActionParam) (*actiondto.Action, errcode.Error) {
+func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error) {
 	 actionID, err := a.actionRepo.CreateAction(courseID, &model.CreateActionParam{
 		 Name:      param.Name,
 		 Type:      param.Type,
@@ -45,7 +45,7 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *actiondto.C
 		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
 		return nil, a.errHandler.SystemError()
 	}
-	var action actiondto.Action
+	var action dto.Action
 	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
 		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
 		return nil, a.errHandler.SystemError()
@@ -53,7 +53,7 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *actiondto.C
 	return &action, nil
 }
 
-func (a *action) UpdateAction(c *gin.Context, actionID int64, param *actiondto.UpdateActionParam) (*actiondto.Action, errcode.Error) {
+func (a *action) UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateActionParam) (*dto.Action, errcode.Error) {
 	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
 		Name: param.Name,
 		Category: param.Category,
@@ -64,7 +64,7 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *actiondto.U
 		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
 		return nil, a.errHandler.SystemError()
 	}
-	var action actiondto.Action
+	var action dto.Action
 	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
 		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
 		return nil, a.errHandler.SystemError()
@@ -72,7 +72,7 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *actiondto.U
 	return &action, nil
 }
 
-func (a *action) SearchActions(c *gin.Context, courseID int64, param *actiondto.FindActionsParam) ([]*actiondto.Action, errcode.Error) {
+func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindActionsParam) ([]*dto.Action, errcode.Error) {
 
 	var sourceOpt []int
 	if param.Source != nil {
@@ -122,7 +122,7 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *actiondto.
 		}
 	}
 
-	var actions []*actiondto.Action
+	var actions []*dto.Action
 	if err := a.actionRepo.FindActionsByParam(courseID, &model.FindActionsParam{
 		Name: param.Name,
 		SourceOpt: &sourceOpt,
@@ -136,7 +136,7 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *actiondto.
 	return actions, nil
 }
 
-func (a *action) DeleteAction(c *gin.Context, actionID int64) (*actiondto.ActionID, errcode.Error) {
+func (a *action) DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, errcode.Error) {
 	if err := a.actionRepo.DeleteActionByID(actionID); err != nil {
 		if strings.Contains(err.Error(), "9006") {
 			a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.PermissionDenied().Code(), err.Error())
@@ -145,10 +145,10 @@ func (a *action) DeleteAction(c *gin.Context, actionID int64) (*actiondto.Action
 		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
 		return nil, a.errHandler.SystemError()
 	}
-	return &actiondto.ActionID{ID: actionID}, nil
+	return &dto.ActionID{ID: actionID}, nil
 }
 
-func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*actiondto.ActionCover, errcode.Error) {
+func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*dto.ActionCover, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := a.uploader.UploadActionCover(file, coverNamed)
 	if err != nil {
@@ -168,10 +168,10 @@ func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed st
 		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
 		return nil, a.errHandler.SystemError()
 	}
-	return &actiondto.ActionCover{Cover: newImageNamed}, nil
+	return &dto.ActionCover{Cover: newImageNamed}, nil
 }
 
-func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*actiondto.ActionVideo, errcode.Error) {
+func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*dto.ActionVideo, errcode.Error) {
 	//上傳影片
 	newVideoNamed, err := a.uploader.UploadActionVideo(file, videoNamed)
 	if err != nil {
@@ -191,5 +191,5 @@ func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed st
 		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
 		return nil, a.errHandler.SystemError()
 	}
-	return &actiondto.ActionVideo{Video: newVideoNamed}, nil
+	return &dto.ActionVideo{Video: newVideoNamed}, nil
 }

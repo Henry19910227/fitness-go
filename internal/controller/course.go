@@ -3,7 +3,6 @@ package controller
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
-	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -372,7 +371,7 @@ func (cc *Course) GetPlans(c *gin.Context) {
 // @Security fitness_user_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.CreateActionBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=actiondto.Action} "創建成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Action} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course/{course_id}/action [POST]
 func (cc *Course) CreateAction(c *gin.Context) {
@@ -399,7 +398,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
-	action, err := cc.actionService.CreateAction(c, uri.CourseID, &actiondto.CreateActionParam{
+	action, err := cc.actionService.CreateAction(c, uri.CourseID, &dto.CreateActionParam{
 		Name: body.Name,
 		Type: body.Type,
 		Category: body.Category,
@@ -427,7 +426,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 // @Param category query string false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"
 // @Param body query string false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"
 // @Param equipment query string false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)"
-// @Success 200 {object} model.SuccessResult{data=[]actiondto.Action} "查詢成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.Action} "查詢成功!"
 // @Failure 400 {object} model.ErrorResult "查詢失敗"
 // @Router /course/{course_id}/actions [GET]
 func (cc *Course) SearchActions(c *gin.Context) {
@@ -446,7 +445,7 @@ func (cc *Course) SearchActions(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	actions, err := cc.actionService.SearchActions(c, uri.CourseID, &actiondto.FindActionsParam{
+	actions, err := cc.actionService.SearchActions(c, uri.CourseID, &dto.FindActionsParam{
 		Name: query.Name,
 		Source: query.Source,
 		Category: query.Category,

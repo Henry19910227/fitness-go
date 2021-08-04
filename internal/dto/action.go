@@ -1,4 +1,4 @@
-package actiondto
+package dto
 
 type Action struct {
 	ID int64  `json:"id" example:"1"` //動作id
