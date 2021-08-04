@@ -32,7 +32,7 @@ func NewCourse(courseRepo repository.Course,
 	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.CourseDetail, errcode.Error) {
+func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error) {
 	uid, err := cs.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
@@ -40,7 +40,7 @@ func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *cours
 	return cs.CreateCourse(c, uid, param)
 }
 
-func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.CourseDetail, errcode.Error) {
+func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error) {
 	var courseID int64
 	var err error
 	if param.ScheduleType == 1 {
@@ -63,7 +63,7 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.Creat
 	return cs.GetCourseDetailByCourseID(c, courseID)
 }
 
-func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.CourseDetail, errcode.Error) {
+func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error) {
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		Category: param.Category,
 		SaleID: param.SaleID,
@@ -143,7 +143,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 	return courses, nil
 }
 
-func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*coursedto.CourseDetail, errcode.Error) {
+func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error) {
 	entity, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
 	if err != nil {
 		if strings.Contains(err.Error(), "no rows in result set") {
@@ -152,7 +152,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*co
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
-	course := coursedto.CourseDetail{
+	course := coursedto.Course{
 		ID:           entity.ID,
 		CourseStatus: entity.CourseStatus,
 		Category:     entity.Category,
