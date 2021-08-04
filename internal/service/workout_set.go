@@ -222,11 +222,14 @@ func parserWorkoutSet(data *model.WorkoutSetEntity) *dto.WorkoutSet {
 		Incline: data.Incline,
 	}
 	if data.Action != nil {
-		action := dto.WorkoutSetAction{
+		action := dto.Action{
 			ID: data.Action.ID,
 			Name: data.Action.Name,
 			Source: data.Action.Source,
 			Type: data.Action.Type,
+			Category: data.Action.Category,
+			Body: data.Action.Body,
+			Equipment: data.Action.Equipment,
 			Intro: data.Action.Intro,
 			Cover: data.Action.Cover,
 			Video: data.Action.Video,
@@ -253,11 +256,14 @@ func parserWorkoutSets(datas []*model.WorkoutSetEntity) []*dto.WorkoutSet {
 			Incline: data.Incline,
 		}
 		if data.Action != nil {
-			action := dto.WorkoutSetAction{
+			action := dto.Action{
 				ID: data.Action.ID,
 				Name: data.Action.Name,
 				Source: data.Action.Source,
 				Type: data.Action.Type,
+				Category: data.Action.Category,
+				Body: data.Action.Body,
+				Equipment: data.Action.Equipment,
 				Intro: data.Action.Intro,
 				Cover: data.Action.Cover,
 				Video: data.Action.Video,

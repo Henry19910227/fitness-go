@@ -124,19 +124,19 @@ func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
 			"`set`.remark", "`set`.weight", "`set`.reps",
 			"`set`.distance", "`set`.duration", "`set`.incline",
 			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
-			"IFNULL(actions.type, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
+			"IFNULL(actions.type, 0)", "IFNULL(actions.category, 0)", "IFNULL(actions.body, 0)",
+			"IFNULL(actions.equipment, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
 			"IFNULL(actions.video, '')").
 		Joins("LEFT JOIN actions ON set.action_id = actions.id").
 		Where("`set`.id = ?", setID).Row()
 	var set model.WorkoutSetEntity
-	var action model.WorkoutSetAction
+	var action model.Action
 	if err := row.Scan(&set.ID, &set.WorkoutID, &set.Type,
 		&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
 		&set.Remark, &set.Weight, &set.Reps,
 		&set.Distance, &set.Duration, &set.Incline,
-		&action.ID, &action.Name, &action.Source,
-		&action.Type, &action.Intro, &action.Cover,
-		&action.Video); err != nil {
+		&action.ID, &action.Name, &action.Source, &action.Type, &action.Category, &action.Equipment,
+		&action.Body, &action.Intro, &action.Cover, &action.Video); err != nil {
 		return nil, err
 	}
 	if action.ID != 0 {
@@ -152,9 +152,10 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, e
 			"`set`.auto_next", "`set`.start_audio", "`set`.progress_audio",
 			"`set`.remark", "`set`.weight", "`set`.reps",
 			"`set`.distance", "`set`.duration", "`set`.incline",
-			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
-			"IFNULL(actions.type, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
-			"IFNULL(actions.video, '')").
+		    "IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
+		    "IFNULL(actions.type, 0)", "IFNULL(actions.category, 0)", "IFNULL(actions.body, 0)",
+		    "IFNULL(actions.equipment, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
+		    "IFNULL(actions.video, '')").
 		Joins("LEFT JOIN actions ON set.action_id = actions.id").
 		Where("`set`.id IN (?)", setIDs).Rows()
 	if err != nil {
@@ -163,14 +164,15 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, e
 	var sets []*model.WorkoutSetEntity
 	for rows.Next() {
 		var set model.WorkoutSetEntity
-		var action model.WorkoutSetAction
-		rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
+		var action model.Action
+		if err := rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
 			&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
 			&set.Remark, &set.Weight, &set.Reps,
 			&set.Distance, &set.Duration, &set.Incline,
-			&action.ID, &action.Name, &action.Source,
-			&action.Type, &action.Intro, &action.Cover,
-			&action.Video)
+			&action.ID, &action.Name, &action.Source, &action.Type, &action.Category, &action.Equipment,
+			&action.Body, &action.Intro, &action.Cover, &action.Video); err != nil {
+			return nil, err
+		}
 		if action.ID != 0 {
 			set.Action = &action
 		}
@@ -186,9 +188,10 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 			"`set`.auto_next", "`set`.start_audio", "`set`.progress_audio",
 			"`set`.remark", "`set`.weight", "`set`.reps",
 			"`set`.distance", "`set`.duration", "`set`.incline",
-			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
-			"IFNULL(actions.type, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
-			"IFNULL(actions.video, '')").
+		    "IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
+		    "IFNULL(actions.type, 0)", "IFNULL(actions.category, 0)", "IFNULL(actions.body, 0)",
+		    "IFNULL(actions.equipment, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
+		    "IFNULL(actions.video, '')").
 		Joins("LEFT JOIN actions ON `set`.action_id = actions.id").
 		Joins("LEFT JOIN workout_set_orders AS orders ON orders.workout_set_id = `set`.id").
 		Where("`set`.workout_id = ?", workoutID).
@@ -201,14 +204,15 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 	var sets []*model.WorkoutSetEntity
 	for rows.Next() {
 		var set model.WorkoutSetEntity
-		var action model.WorkoutSetAction
-		rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
+		var action model.Action
+		if err := rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
 			&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
 			&set.Remark, &set.Weight, &set.Reps,
 			&set.Distance, &set.Duration, &set.Incline,
-			&action.ID, &action.Name, &action.Source,
-			&action.Type, &action.Intro, &action.Cover,
-			&action.Video)
+			&action.ID, &action.Name, &action.Source, &action.Type, &action.Category, &action.Equipment,
+			&action.Body, &action.Intro, &action.Cover, &action.Video); err != nil {
+			return nil, err
+		}
 		if action.ID != 0 {
 			set.Action = &action
 		}
