@@ -9,7 +9,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
 	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
-	"github.com/Henry19910227/fitness-go/internal/dto/workoutdto"
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
 )
@@ -79,24 +78,24 @@ type Plan interface {
 }
 
 type Workout interface {
-	CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.Workout, errcode.Error)
-	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutdto.Workout, errcode.Error)
-	UpdateWorkout(c *gin.Context, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error)
-	DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error)
-	UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
-	UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
+	CreateWorkout(c *gin.Context, planID int64, name string) (*dto.Workout, errcode.Error)
+	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Workout, errcode.Error)
+	UpdateWorkout(c *gin.Context, workoutID int64, param *dto.UpdateWorkoutParam) (*dto.Workout, errcode.Error)
+	DeleteWorkout(c *gin.Context, workoutID int64) (*dto.WorkoutID, errcode.Error)
+	UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
+	UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
 }
 
 type WorkoutSet interface {
-	CreateRestSet(c *gin.Context, workoutID int64) (*workoutdto.WorkoutSet, errcode.Error)
-	CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*workoutdto.WorkoutSet, errcode.Error)
-	DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*workoutdto.WorkoutSet, errcode.Error)
-	GetWorkoutSets(c *gin.Context, workoutID int64) ([]*workoutdto.WorkoutSet, errcode.Error)
-	UpdateWorkoutSet(c *gin.Context, setID int64, param *workoutdto.UpdateWorkoutSetParam) (*workoutdto.WorkoutSet, errcode.Error)
-	DeleteWorkoutSet(c *gin.Context, setID int64) (*workoutdto.WorkoutSetID, errcode.Error)
-	UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*workoutdto.WorkoutSetOrder) errcode.Error
-	UploadWorkoutSetStartAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
-	UploadWorkoutSetProgressAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error)
+	CreateRestSet(c *gin.Context, workoutID int64) (*dto.WorkoutSet, errcode.Error)
+	CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*dto.WorkoutSet, errcode.Error)
+	DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*dto.WorkoutSet, errcode.Error)
+	GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet, errcode.Error)
+	UpdateWorkoutSet(c *gin.Context, setID int64, param *dto.UpdateWorkoutSetParam) (*dto.WorkoutSet, errcode.Error)
+	DeleteWorkoutSet(c *gin.Context, setID int64) (*dto.WorkoutSetID, errcode.Error)
+	UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*dto.WorkoutSetOrder) errcode.Error
+	UploadWorkoutSetStartAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
+	UploadWorkoutSetProgressAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
 }
 
 type Action interface {

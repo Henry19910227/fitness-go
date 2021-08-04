@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
-	"github.com/Henry19910227/fitness-go/internal/dto/workoutdto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -45,7 +45,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 // @Security fitness_user_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Param json_body body validator.UpdateWorkoutSetBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutSet} "更新成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutSet} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /workout_set/{workout_set_id} [PATCH]
 func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
@@ -72,7 +72,7 @@ func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 		w.JSONErrorResponse(c, err)
 		return
 	}
-	set, err := w.workoutSetService.UpdateWorkoutSet(c, uri.WorkoutSetID, &workoutdto.UpdateWorkoutSetParam{
+	set, err := w.workoutSetService.UpdateWorkoutSet(c, uri.WorkoutSetID, &dto.UpdateWorkoutSetParam{
 		AutoNext: body.AutoNext,
 		Remark: body.Remark,
 		Weight: body.Weight,
@@ -96,7 +96,7 @@ func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param workout_set_id path int64 true "訓練組id"
-// @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutSetID} "刪除成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutSetID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
 // @Router /workout_set/{workout_set_id} [DELETE]
 func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
@@ -135,7 +135,7 @@ func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
 // @Param workout_set_id path int64 true "訓練組id"
 // @Param start_audio formData file true "前導語音"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutAudio} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /workout_set/{workout_set_id}/start_audio [POST]
 func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
@@ -179,7 +179,7 @@ func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
 // @Param workout_set_id path int64 true "訓練組id"
 // @Param progress_audio formData file true "進行中語音"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutAudio} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /workout_set/{workout_set_id}/progress_audio [POST]
 func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
@@ -223,7 +223,7 @@ func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
 // @Security fitness_user_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Param json_body body validator.DuplicateWorkoutSetBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=[]workoutdto.WorkoutSet} "複製成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "複製成功!"
 // @Failure 400 {object} model.ErrorResult "複製失敗"
 // @Router /workout_set/{workout_set_id}/duplicate [POST]
 func (w *workoutset) DuplicateWorkoutSet(c *gin.Context) {

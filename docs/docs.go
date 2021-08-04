@@ -1496,7 +1496,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Workout"
+                                            "$ref": "#/definitions/dto.Workout"
                                         }
                                     }
                                 }
@@ -1553,7 +1553,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/workoutdto.Workout"
+                                                "$ref": "#/definitions/dto.Workout"
                                             }
                                         }
                                     }
@@ -2144,7 +2144,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutID"
+                                            "$ref": "#/definitions/dto.WorkoutID"
                                         }
                                     }
                                 }
@@ -2206,7 +2206,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Workout"
+                                            "$ref": "#/definitions/dto.Workout"
                                         }
                                     }
                                 }
@@ -2268,7 +2268,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Audio"
+                                            "$ref": "#/definitions/dto.WorkoutAudio"
                                         }
                                     }
                                 }
@@ -2375,7 +2375,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                            "$ref": "#/definitions/dto.WorkoutSet"
                                         }
                                     }
                                 }
@@ -2437,7 +2437,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Audio"
+                                            "$ref": "#/definitions/dto.WorkoutAudio"
                                         }
                                     }
                                 }
@@ -2503,7 +2503,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                                "$ref": "#/definitions/dto.WorkoutSet"
                                             }
                                         }
                                     }
@@ -2561,7 +2561,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                                "$ref": "#/definitions/dto.WorkoutSet"
                                             }
                                         }
                                     }
@@ -2617,7 +2617,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutSetID"
+                                            "$ref": "#/definitions/dto.WorkoutSetID"
                                         }
                                     }
                                 }
@@ -2679,7 +2679,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                            "$ref": "#/definitions/dto.WorkoutSet"
                                         }
                                     }
                                 }
@@ -2745,7 +2745,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                                "$ref": "#/definitions/dto.WorkoutSet"
                                             }
                                         }
                                     }
@@ -2808,7 +2808,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Audio"
+                                            "$ref": "#/definitions/dto.WorkoutAudio"
                                         }
                                     }
                                 }
@@ -2870,7 +2870,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Audio"
+                                            "$ref": "#/definitions/dto.WorkoutAudio"
                                         }
                                     }
                                 }
@@ -3159,6 +3159,173 @@ var doc = `{
                 },
                 "workout_count": {
                     "description": "訓練總數",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "dto.Workout": {
+            "type": "object",
+            "properties": {
+                "end_audio": {
+                    "description": "結束語音",
+                    "type": "string",
+                    "example": "d2e15qwe42dw.mp3"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,7"
+                },
+                "id": {
+                    "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "訓練名稱",
+                    "type": "string",
+                    "example": "第一天胸肌訓練"
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string",
+                    "example": "e6d2131w5q.mp3"
+                },
+                "workout_set_count": {
+                    "description": "動作組數",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "dto.WorkoutAudio": {
+            "type": "object",
+            "properties": {
+                "audio": {
+                    "description": "語音檔案名",
+                    "type": "string",
+                    "example": "e6d2131w5q.mp3"
+                }
+            }
+        },
+        "dto.WorkoutID": {
+            "type": "object",
+            "properties": {
+                "workout_id": {
+                    "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "dto.WorkoutSet": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "動作",
+                    "$ref": "#/definitions/dto.WorkoutSetAction"
+                },
+                "auto_next": {
+                    "description": "自動下一組(Y:是/N:否)",
+                    "type": "string",
+                    "example": "N"
+                },
+                "distance": {
+                    "description": "距離(公尺)",
+                    "type": "number",
+                    "example": 0
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 0
+                },
+                "progress_audio": {
+                    "description": "進行中語音",
+                    "type": "string",
+                    "example": "1d2w3e51d3w.mp3"
+                },
+                "remark": {
+                    "description": "備註",
+                    "type": "string"
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 0
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "動作類別(1:動作/2:休息)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 0
+                }
+            }
+        },
+        "dto.WorkoutSetAction": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "封面",
+                    "type": "string",
+                    "example": "32as1d5f13e4.png"
+                },
+                "id": {
+                    "description": "動作id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "intro": {
+                    "description": "動作介紹",
+                    "type": "string",
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                },
+                "name": {
+                    "description": "動作名稱",
+                    "type": "string",
+                    "example": "槓鈴臥推"
+                },
+                "source": {
+                    "description": "動作來源(1:系統動作/2:教練自創動作)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "type": {
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "video": {
+                    "description": "動作影片",
+                    "type": "string",
+                    "example": "11d547we1d4f8e.mp4"
+                }
+            }
+        },
+        "dto.WorkoutSetID": {
+            "type": "object",
+            "properties": {
+                "workout_set_id": {
+                    "description": "訓練組id",
                     "type": "integer",
                     "example": 10
                 }
@@ -4209,173 +4376,6 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
-                "workout_set_id": {
-                    "description": "訓練組id",
-                    "type": "integer",
-                    "example": 10
-                }
-            }
-        },
-        "workoutdto.Audio": {
-            "type": "object",
-            "properties": {
-                "audio": {
-                    "description": "語音檔案名",
-                    "type": "string",
-                    "example": "e6d2131w5q.mp3"
-                }
-            }
-        },
-        "workoutdto.Workout": {
-            "type": "object",
-            "properties": {
-                "end_audio": {
-                    "description": "結束語音",
-                    "type": "string",
-                    "example": "d2e15qwe42dw.mp3"
-                },
-                "equipment": {
-                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "string",
-                    "example": "2,3,7"
-                },
-                "id": {
-                    "description": "訓練 id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "description": "訓練名稱",
-                    "type": "string",
-                    "example": "第一天胸肌訓練"
-                },
-                "start_audio": {
-                    "description": "前導語音",
-                    "type": "string",
-                    "example": "e6d2131w5q.mp3"
-                },
-                "workout_set_count": {
-                    "description": "動作組數",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
-        "workoutdto.WorkoutID": {
-            "type": "object",
-            "properties": {
-                "workout_id": {
-                    "description": "訓練 id",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
-        "workoutdto.WorkoutSet": {
-            "type": "object",
-            "properties": {
-                "action": {
-                    "description": "動作",
-                    "$ref": "#/definitions/workoutdto.WorkoutSetAction"
-                },
-                "auto_next": {
-                    "description": "自動下一組(Y:是/N:否)",
-                    "type": "string",
-                    "example": "N"
-                },
-                "distance": {
-                    "description": "距離(公尺)",
-                    "type": "number",
-                    "example": 0
-                },
-                "duration": {
-                    "description": "時長(秒)",
-                    "type": "integer",
-                    "example": 30
-                },
-                "id": {
-                    "description": "訓練組id",
-                    "type": "integer",
-                    "example": 10
-                },
-                "incline": {
-                    "description": "坡度",
-                    "type": "number",
-                    "example": 0
-                },
-                "progress_audio": {
-                    "description": "進行中語音",
-                    "type": "string",
-                    "example": "1d2w3e51d3w.mp3"
-                },
-                "remark": {
-                    "description": "備註",
-                    "type": "string"
-                },
-                "reps": {
-                    "description": "次數",
-                    "type": "integer",
-                    "example": 0
-                },
-                "start_audio": {
-                    "description": "前導語音",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "動作類別(1:動作/2:休息)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "weight": {
-                    "description": "重量(公斤)",
-                    "type": "number",
-                    "example": 0
-                }
-            }
-        },
-        "workoutdto.WorkoutSetAction": {
-            "type": "object",
-            "properties": {
-                "cover": {
-                    "description": "封面",
-                    "type": "string",
-                    "example": "32as1d5f13e4.png"
-                },
-                "id": {
-                    "description": "動作id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "intro": {
-                    "description": "動作介紹",
-                    "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
-                },
-                "name": {
-                    "description": "動作名稱",
-                    "type": "string",
-                    "example": "槓鈴臥推"
-                },
-                "source": {
-                    "description": "動作來源(1:系統動作/2:教練自創動作)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "video": {
-                    "description": "動作影片",
-                    "type": "string",
-                    "example": "11d547we1d4f8e.mp4"
-                }
-            }
-        },
-        "workoutdto.WorkoutSetID": {
-            "type": "object",
-            "properties": {
                 "workout_set_id": {
                     "description": "訓練組id",
                     "type": "integer",

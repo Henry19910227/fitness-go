@@ -211,6 +211,133 @@ definitions:
         example: 10
         type: integer
     type: object
+  dto.Workout:
+    properties:
+      end_audio:
+        description: 結束語音
+        example: d2e15qwe42dw.mp3
+        type: string
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      id:
+        description: 訓練 id
+        example: 1
+        type: integer
+      name:
+        description: 訓練名稱
+        example: 第一天胸肌訓練
+        type: string
+      start_audio:
+        description: 前導語音
+        example: e6d2131w5q.mp3
+        type: string
+      workout_set_count:
+        description: 動作組數
+        example: 1
+        type: integer
+    type: object
+  dto.WorkoutAudio:
+    properties:
+      audio:
+        description: 語音檔案名
+        example: e6d2131w5q.mp3
+        type: string
+    type: object
+  dto.WorkoutID:
+    properties:
+      workout_id:
+        description: 訓練 id
+        example: 1
+        type: integer
+    type: object
+  dto.WorkoutSet:
+    properties:
+      action:
+        $ref: '#/definitions/dto.WorkoutSetAction'
+        description: 動作
+      auto_next:
+        description: 自動下一組(Y:是/N:否)
+        example: "N"
+        type: string
+      distance:
+        description: 距離(公尺)
+        example: 0
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      id:
+        description: 訓練組id
+        example: 10
+        type: integer
+      incline:
+        description: 坡度
+        example: 0
+        type: number
+      progress_audio:
+        description: 進行中語音
+        example: 1d2w3e51d3w.mp3
+        type: string
+      remark:
+        description: 備註
+        type: string
+      reps:
+        description: 次數
+        example: 0
+        type: integer
+      start_audio:
+        description: 前導語音
+        type: string
+      type:
+        description: 動作類別(1:動作/2:休息)
+        example: 2
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 0
+        type: number
+    type: object
+  dto.WorkoutSetAction:
+    properties:
+      cover:
+        description: 封面
+        example: 32as1d5f13e4.png
+        type: string
+      id:
+        description: 動作id
+        example: 1
+        type: integer
+      intro:
+        description: 動作介紹
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        type: string
+      name:
+        description: 動作名稱
+        example: 槓鈴臥推
+        type: string
+      source:
+        description: 動作來源(1:系統動作/2:教練自創動作)
+        example: 2
+        type: integer
+      type:
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
+        type: integer
+      video:
+        description: 動作影片
+        example: 11d547we1d4f8e.mp4
+        type: string
+    type: object
+  dto.WorkoutSetID:
+    properties:
+      workout_set_id:
+        description: 訓練組id
+        example: 10
+        type: integer
+    type: object
   logindto.Admin:
     properties:
       email:
@@ -1008,133 +1135,6 @@ definitions:
         type: integer
     required:
     - seq
-    type: object
-  workoutdto.Audio:
-    properties:
-      audio:
-        description: 語音檔案名
-        example: e6d2131w5q.mp3
-        type: string
-    type: object
-  workoutdto.Workout:
-    properties:
-      end_audio:
-        description: 結束語音
-        example: d2e15qwe42dw.mp3
-        type: string
-      equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,7
-        type: string
-      id:
-        description: 訓練 id
-        example: 1
-        type: integer
-      name:
-        description: 訓練名稱
-        example: 第一天胸肌訓練
-        type: string
-      start_audio:
-        description: 前導語音
-        example: e6d2131w5q.mp3
-        type: string
-      workout_set_count:
-        description: 動作組數
-        example: 1
-        type: integer
-    type: object
-  workoutdto.WorkoutID:
-    properties:
-      workout_id:
-        description: 訓練 id
-        example: 1
-        type: integer
-    type: object
-  workoutdto.WorkoutSet:
-    properties:
-      action:
-        $ref: '#/definitions/workoutdto.WorkoutSetAction'
-        description: 動作
-      auto_next:
-        description: 自動下一組(Y:是/N:否)
-        example: "N"
-        type: string
-      distance:
-        description: 距離(公尺)
-        example: 0
-        type: number
-      duration:
-        description: 時長(秒)
-        example: 30
-        type: integer
-      id:
-        description: 訓練組id
-        example: 10
-        type: integer
-      incline:
-        description: 坡度
-        example: 0
-        type: number
-      progress_audio:
-        description: 進行中語音
-        example: 1d2w3e51d3w.mp3
-        type: string
-      remark:
-        description: 備註
-        type: string
-      reps:
-        description: 次數
-        example: 0
-        type: integer
-      start_audio:
-        description: 前導語音
-        type: string
-      type:
-        description: 動作類別(1:動作/2:休息)
-        example: 2
-        type: integer
-      weight:
-        description: 重量(公斤)
-        example: 0
-        type: number
-    type: object
-  workoutdto.WorkoutSetAction:
-    properties:
-      cover:
-        description: 封面
-        example: 32as1d5f13e4.png
-        type: string
-      id:
-        description: 動作id
-        example: 1
-        type: integer
-      intro:
-        description: 動作介紹
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
-        type: string
-      name:
-        description: 動作名稱
-        example: 槓鈴臥推
-        type: string
-      source:
-        description: 動作來源(1:系統動作/2:教練自創動作)
-        example: 2
-        type: integer
-      type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
-        type: integer
-      video:
-        description: 動作影片
-        example: 11d547we1d4f8e.mp4
-        type: string
-    type: object
-  workoutdto.WorkoutSetID:
-    properties:
-      workout_set_id:
-        description: 訓練組id
-        example: 10
-        type: integer
     type: object
 info:
   contact: {}
@@ -2022,7 +2022,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.Workout'
+                  $ref: '#/definitions/dto.Workout'
               type: object
         "400":
           description: 創建失敗
@@ -2055,7 +2055,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/workoutdto.Workout'
+                    $ref: '#/definitions/dto.Workout'
                   type: array
               type: object
         "400":
@@ -2406,7 +2406,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.WorkoutID'
+                  $ref: '#/definitions/dto.WorkoutID'
               type: object
         "400":
           description: 獲取失敗
@@ -2443,7 +2443,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.Workout'
+                  $ref: '#/definitions/dto.Workout'
               type: object
         "400":
           description: 更新失敗
@@ -2480,7 +2480,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.Audio'
+                  $ref: '#/definitions/dto.WorkoutAudio'
               type: object
         "400":
           description: 失敗!
@@ -2545,7 +2545,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.WorkoutSet'
+                  $ref: '#/definitions/dto.WorkoutSet'
               type: object
         "400":
           description: 新增失敗
@@ -2582,7 +2582,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.Audio'
+                  $ref: '#/definitions/dto.WorkoutAudio'
               type: object
         "400":
           description: 失敗!
@@ -2621,7 +2621,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/workoutdto.WorkoutSet'
+                    $ref: '#/definitions/dto.WorkoutSet'
                   type: array
               type: object
         "400":
@@ -2655,7 +2655,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/workoutdto.WorkoutSet'
+                    $ref: '#/definitions/dto.WorkoutSet'
                   type: array
               type: object
         "400":
@@ -2688,7 +2688,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.WorkoutSetID'
+                  $ref: '#/definitions/dto.WorkoutSetID'
               type: object
         "400":
           description: 刪除失敗
@@ -2725,7 +2725,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.WorkoutSet'
+                  $ref: '#/definitions/dto.WorkoutSet'
               type: object
         "400":
           description: 更新失敗
@@ -2764,7 +2764,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/workoutdto.WorkoutSet'
+                    $ref: '#/definitions/dto.WorkoutSet'
                   type: array
               type: object
         "400":
@@ -2802,7 +2802,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.Audio'
+                  $ref: '#/definitions/dto.WorkoutAudio'
               type: object
         "400":
           description: 失敗!
@@ -2839,7 +2839,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/workoutdto.Audio'
+                  $ref: '#/definitions/dto.WorkoutAudio'
               type: object
         "400":
           description: 失敗!

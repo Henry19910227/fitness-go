@@ -1,4 +1,4 @@
-package workoutdto
+package dto
 
 type Workout struct {
 	ID  int64  `json:"id" example:"1"`  // 訓練 id
@@ -9,7 +9,7 @@ type Workout struct {
 	WorkoutSetCount int `json:"workout_set_count" example:"1"` // 動作組數
 }
 
-type Audio struct {
+type WorkoutAudio struct {
 	Named string `json:"audio" example:"e6d2131w5q.mp3"` // 語音檔案名
 }
 
