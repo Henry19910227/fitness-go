@@ -63,14 +63,7 @@ definitions:
         example: f5e23q5e45fe32.mp4
         type: string
     type: object
-  coursedto.CourseCover:
-    properties:
-      cover:
-        description: 課表封面照片
-        example: dkf2se51fsdds.png
-        type: string
-    type: object
-  coursedto.CourseDetail:
+  dto.Course:
     properties:
       body_target:
         description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
@@ -159,14 +152,21 @@ definitions:
         example: 10
         type: integer
     type: object
-  coursedto.CourseID:
+  dto.CourseCover:
+    properties:
+      cover:
+        description: 課表封面照片
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
+  dto.CourseID:
     properties:
       course_id:
         description: 課表 id
         example: 2
         type: integer
     type: object
-  coursedto.CourseSummary:
+  dto.CourseSummary:
     properties:
       category:
         description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
@@ -1306,7 +1306,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CourseDetail'
+                  $ref: '#/definitions/dto.Course'
               type: object
         "400":
           description: 創建失敗
@@ -1338,7 +1338,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CourseID'
+                  $ref: '#/definitions/dto.CourseID'
               type: object
         "400":
           description: 刪除失敗
@@ -1369,7 +1369,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CourseDetail'
+                  $ref: '#/definitions/dto.Course'
               type: object
         "400":
           description: 獲取失敗
@@ -1406,7 +1406,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CourseDetail'
+                  $ref: '#/definitions/dto.Course'
               type: object
         "400":
           description: 更新失敗
@@ -1535,7 +1535,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/coursedto.CourseCover'
+                  $ref: '#/definitions/dto.CourseCover'
               type: object
         "400":
           description: 失敗!
@@ -1639,7 +1639,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/coursedto.CourseSummary'
+                    $ref: '#/definitions/dto.CourseSummary'
                   type: array
               type: object
         "400":

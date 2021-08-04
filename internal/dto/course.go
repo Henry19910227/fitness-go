@@ -1,4 +1,4 @@
-package coursedto
+package dto
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/dto/saledto"

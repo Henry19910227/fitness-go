@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
 	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
@@ -32,7 +32,7 @@ func NewCourse(courseRepo repository.Course,
 	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error) {
+func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *dto.CreateCourseParam) (*dto.Course, errcode.Error) {
 	uid, err := cs.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
@@ -40,7 +40,7 @@ func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *cours
 	return cs.CreateCourse(c, uid, param)
 }
 
-func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error) {
+func (cs *course) CreateCourse(c *gin.Context, uid int64, param *dto.CreateCourseParam) (*dto.Course, errcode.Error) {
 	var courseID int64
 	var err error
 	if param.ScheduleType == 1 {
@@ -63,7 +63,7 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.Creat
 	return cs.GetCourseDetailByCourseID(c, courseID)
 }
 
-func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error) {
+func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error) {
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		Category: param.Category,
 		SaleID: param.SaleID,
@@ -87,15 +87,15 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.
 	return cs.GetCourseDetailByCourseID(c, courseID)
 }
 
-func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*coursedto.CourseID, errcode.Error) {
+func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, errcode.Error) {
 	if err := cs.courseRepo.DeleteCourseByID(courseID); err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
-	return &coursedto.CourseID{ID: courseID}, nil
+	return &dto.CourseID{ID: courseID}, nil
 }
 
-func (cs *course) GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*coursedto.CourseSummary, errcode.Error) {
+func (cs *course) GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*dto.CourseSummary, errcode.Error) {
 	uid, err := cs.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
@@ -103,15 +103,15 @@ func (cs *course) GetCourseSummariesByToken(c *gin.Context, token string, status
 	return cs.GetCourseSummariesByUID(c, uid, status)
 }
 
-func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*coursedto.CourseSummary, errcode.Error) {
+func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error) {
 	Entities, err := cs.courseRepo.FindCourseSummariesByUserID(uid, status)
 	if err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
-	courses := make([]*coursedto.CourseSummary, 0)
+	courses := make([]*dto.CourseSummary, 0)
 	for _, entity := range Entities {
-		course := coursedto.CourseSummary{
+		course := dto.CourseSummary{
 			ID:           entity.ID,
 			CourseStatus: entity.CourseStatus,
 			Category:     entity.Category,
@@ -143,7 +143,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 	return courses, nil
 }
 
-func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error) {
+func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error) {
 	entity, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
 	if err != nil {
 		if strings.Contains(err.Error(), "no rows in result set") {
@@ -152,7 +152,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*co
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
-	course := coursedto.Course{
+	course := dto.Course{
 		ID:           entity.ID,
 		CourseStatus: entity.CourseStatus,
 		Category:     entity.Category,
@@ -193,7 +193,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*co
 	return &course, nil
 }
 
-func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error) {
+func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := cs.uploader.UploadCourseCover(param.File, param.CoverNamed)
 	if err != nil {
@@ -225,6 +225,6 @@ func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *c
 			cs.logger.Set(c, handler.Error, "ResHandler", cs.errHandler.SystemError().Code(), err.Error())
 		}
 	}
-	return &coursedto.CourseCover{Cover: newImageNamed}, nil
+	return &dto.CourseCover{Cover: newImageNamed}, nil
 }
 

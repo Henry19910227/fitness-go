@@ -288,7 +288,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseDetail"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -343,7 +343,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseDetail"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -396,7 +396,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseID"
+                                            "$ref": "#/definitions/dto.CourseID"
                                         }
                                     }
                                 }
@@ -458,7 +458,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseDetail"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -672,7 +672,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseCover"
+                                            "$ref": "#/definitions/dto.CourseCover"
                                         }
                                     }
                                 }
@@ -850,7 +850,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/coursedto.CourseSummary"
+                                                "$ref": "#/definitions/dto.CourseSummary"
                                             }
                                         }
                                     }
@@ -2955,17 +2955,7 @@
                 }
             }
         },
-        "coursedto.CourseCover": {
-            "type": "object",
-            "properties": {
-                "cover": {
-                    "description": "課表封面照片",
-                    "type": "string",
-                    "example": "dkf2se51fsdds.png"
-                }
-            }
-        },
-        "coursedto.CourseDetail": {
+        "dto.Course": {
             "type": "object",
             "properties": {
                 "body_target": {
@@ -3078,7 +3068,17 @@
                 }
             }
         },
-        "coursedto.CourseID": {
+        "dto.CourseCover": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "課表封面照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.CourseID": {
             "type": "object",
             "properties": {
                 "course_id": {
@@ -3088,7 +3088,7 @@
                 }
             }
         },
-        "coursedto.CourseSummary": {
+        "dto.CourseSummary": {
             "type": "object",
             "properties": {
                 "category": {

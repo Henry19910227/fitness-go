@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
-	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -65,7 +65,7 @@ func NewCourse(baseGroup *gin.RouterGroup,
 // @Produce json
 // @Security fitness_user_token
 // @Param json_body body validator.CreateCourseBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=coursedto.Course} "創建成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Course} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course [POST]
 func (cc *Course) CreateCourse(c *gin.Context) {
@@ -83,7 +83,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
-	result, err := cc.courseService.CreateCourseByToken(c, header.Token, &coursedto.CreateCourseParam{
+	result, err := cc.courseService.CreateCourseByToken(c, header.Token, &dto.CreateCourseParam{
 		Name: body.Name,
 		Level: body.Level,
 		Category: body.Category,
@@ -105,7 +105,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // @Security fitness_user_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.UpdateCourseBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=coursedto.Course} "更新成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Course} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /course/{course_id} [PATCH]
 func (cc *Course) UpdateCourse(c *gin.Context) {
@@ -132,7 +132,7 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 		cc.JSONErrorResponse(c, err)
 		return
 	}
-	course, err := cc.courseService.UpdateCourse(c, uri.CourseID, &coursedto.UpdateCourseParam{
+	course, err := cc.courseService.UpdateCourse(c, uri.CourseID, &dto.UpdateCourseParam{
 		Category: body.Category,
 		SaleID: body.SaleID,
 		Name: body.Name,
@@ -161,7 +161,7 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param status query int false "課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)"
-// @Success 200 {object} model.SuccessResult{data=[]coursedto.CourseSummary} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.CourseSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /courses [GET]
 func (cc *Course) GetCourses(c *gin.Context) {
@@ -191,7 +191,7 @@ func (cc *Course) GetCourses(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param course_id path int64 true "課表id"
-// @Success 200 {object} model.SuccessResult{data=coursedto.Course} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Course} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course/{course_id} [GET]
 func (cc *Course) GetCourse(c *gin.Context) {
@@ -226,7 +226,7 @@ func (cc *Course) GetCourse(c *gin.Context) {
 // @Param course_id path int64 true "課表id"
 // @Param cover formData file true "課表封面照"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=coursedto.CourseCover} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.CourseCover} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /course/{course_id}/cover [POST]
 func (cc *Course) UploadCourseCover(c *gin.Context) {
@@ -249,7 +249,7 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, e := cc.courseService.UploadCourseCoverByID(c, uri.CourseID, &coursedto.UploadCourseCoverParam{
+	result, e := cc.courseService.UploadCourseCoverByID(c, uri.CourseID, &dto.UploadCourseCoverParam{
 		File:       file,
 		CoverNamed: fileHeader.Filename,
 	})
@@ -268,7 +268,7 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param course_id path int64 true "課表id"
-// @Success 200 {object} model.SuccessResult{data=coursedto.CourseID} "刪除成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.CourseID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
 // @Router /course/{course_id} [DELETE]
 func (cc *Course) DeleteCourse(c *gin.Context) {

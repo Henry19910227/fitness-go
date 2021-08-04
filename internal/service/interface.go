@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
-	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
 	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
 	"github.com/Henry19910227/fitness-go/internal/dto/plandto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
@@ -62,14 +62,14 @@ type Trainer interface {
 }
 
 type Course interface {
-	CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error)
-	CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error)
-	UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error)
-	DeleteCourse(c *gin.Context, courseID int64) (*coursedto.CourseID, errcode.Error)
-	GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*coursedto.CourseSummary, errcode.Error)
-	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*coursedto.CourseSummary, errcode.Error)
-	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error)
-	UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error)
+	CreateCourseByToken(c *gin.Context, token string, param *dto.CreateCourseParam) (*dto.Course, errcode.Error)
+	CreateCourse(c *gin.Context, uid int64, param *dto.CreateCourseParam) (*dto.Course, errcode.Error)
+	UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error)
+	DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, errcode.Error)
+	GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*dto.CourseSummary, errcode.Error)
+	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error)
+	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
+	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
 }
 
 type Plan interface {

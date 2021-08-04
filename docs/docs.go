@@ -306,7 +306,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseDetail"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -361,7 +361,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseDetail"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -414,7 +414,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseID"
+                                            "$ref": "#/definitions/dto.CourseID"
                                         }
                                     }
                                 }
@@ -476,7 +476,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseDetail"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -690,7 +690,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseCover"
+                                            "$ref": "#/definitions/dto.CourseCover"
                                         }
                                     }
                                 }
@@ -868,7 +868,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/coursedto.CourseSummary"
+                                                "$ref": "#/definitions/dto.CourseSummary"
                                             }
                                         }
                                     }
@@ -2973,17 +2973,7 @@ var doc = `{
                 }
             }
         },
-        "coursedto.CourseCover": {
-            "type": "object",
-            "properties": {
-                "cover": {
-                    "description": "課表封面照片",
-                    "type": "string",
-                    "example": "dkf2se51fsdds.png"
-                }
-            }
-        },
-        "coursedto.CourseDetail": {
+        "dto.Course": {
             "type": "object",
             "properties": {
                 "body_target": {
@@ -3096,7 +3086,17 @@ var doc = `{
                 }
             }
         },
-        "coursedto.CourseID": {
+        "dto.CourseCover": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "課表封面照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.CourseID": {
             "type": "object",
             "properties": {
                 "course_id": {
@@ -3106,7 +3106,7 @@ var doc = `{
                 }
             }
         },
-        "coursedto.CourseSummary": {
+        "dto.CourseSummary": {
             "type": "object",
             "properties": {
                 "category": {
