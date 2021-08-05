@@ -29,6 +29,8 @@ type Course interface {
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 	FindCourses(uid int64, entity interface{}, status *int) error
+	FindCourseSummariesByUserID(uid int64, status *int) ([]*model.CourseSummaryEntity, error)
+	FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error)
 	FindCourseByID(courseID int64, entity interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
 	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
@@ -57,6 +59,7 @@ type Workout interface {
 
 type WorkoutSet interface {
 	CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) ([]int64, error)
+	CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model.WorkoutSet) ([]int64, error)
 	CreateRestSetByWorkoutID(workoutID int64) (int64, error)
 	FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error)
 	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error)
@@ -72,4 +75,8 @@ type Action interface {
 	FindActionsByParam(courseID int64, param *model.FindActionsParam, entity interface{}) error
 	UpdateActionByID(actionID int64, param *model.UpdateActionParam) error
 	DeleteActionByID(actionID int64) error
+}
+
+type Sale interface {
+	FinsSaleItems() ([]*model.SaleItemEntity, error)
 }

@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
-	"github.com/Henry19910227/fitness-go/internal/dto/workoutdto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -53,7 +53,7 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 // @Security fitness_user_token
 // @Param workout_id path int64 true "訓練id"
 // @Param json_body body validator.UpdateWorkoutBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=workoutdto.Workout} "更新成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Workout} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /workout/{workout_id} [PATCH]
 func (w *workout) UpdateWorkout(c *gin.Context) {
@@ -81,7 +81,7 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 		w.JSONErrorResponse(c, err)
 		return
 	}
-    workout, err := w.workoutService.UpdateWorkout(c, uri.WorkoutID, &workoutdto.UpdateWorkoutParam{
+    workout, err := w.workoutService.UpdateWorkout(c, uri.WorkoutID, &dto.UpdateWorkoutParam{
 		Name: body.Name,
 		Equipment: body.Equipment,
 	})
@@ -100,7 +100,7 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param workout_id path int64 true "訓練id"
-// @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutID} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutID} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /workout/{workout_id} [DELETE]
 func (w *workout) DeleteWorkout(c *gin.Context) {
@@ -139,7 +139,7 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 // @Param workout_id path int64 true "訓練id"
 // @Param start_audio formData file true "前導語音"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutAudio} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /workout/{workout_id}/start_audio [POST]
 func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
@@ -183,7 +183,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 // @Param workout_id path int64 true "訓練id"
 // @Param end_audio formData file true "結束語音"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=workoutdto.Audio} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutAudio} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /workout/{workout_id}/end_audio [POST]
 func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
@@ -227,7 +227,7 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 // @Security fitness_user_token
 // @Param workout_id path int64 true "訓練id"
 // @Param json_body body validator.CreateWorkoutSetBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=[]workoutdto.WorkoutSet} "新增成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "新增成功!"
 // @Failure 400 {object} model.ErrorResult "新增失敗"
 // @Router /workout/{workout_id}/workout_set [POST]
 func (w *workout) CreateWorkoutSets(c *gin.Context) {
@@ -270,7 +270,7 @@ func (w *workout) CreateWorkoutSets(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param workout_id path int64 true "訓練id"
-// @Success 200 {object} model.SuccessResult{data=workoutdto.WorkoutSet} "新增成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutSet} "新增成功!"
 // @Failure 400 {object} model.ErrorResult "新增失敗"
 // @Router /workout/{workout_id}/rest_set [POST]
 func (w *workout) CreateRestSet(c *gin.Context) {
@@ -308,7 +308,7 @@ func (w *workout) CreateRestSet(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param workout_id path int64 true "訓練id"
-// @Success 200 {object} model.SuccessResult{data=[]workoutdto.WorkoutSet} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /workout/{workout_id}/workout_sets [GET]
 func (w *workout) GetWorkoutSets(c *gin.Context) {
@@ -366,9 +366,9 @@ func (w *workout) UpdateWorkoutSetOrders(c *gin.Context) {
 		w.JSONErrorResponse(c, err)
 		return
 	}
-	var orders []*workoutdto.WorkoutSetOrder
+	var orders []*dto.WorkoutSetOrder
 	for _, data := range body.Orders {
-		order := workoutdto.WorkoutSetOrder{
+		order := dto.WorkoutSetOrder{
 			WorkoutSetID: data.WorkoutSetID,
 			Seq: data.Seq,
 		}

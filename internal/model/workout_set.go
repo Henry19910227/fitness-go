@@ -35,7 +35,7 @@ func (WorkoutSetOrder) TableName() string {
 type WorkoutSetEntity struct {
 	ID int64 `gorm:"column:id"` //訓練組id
 	WorkoutID int64 `gorm:"column:workout_id"` //訓練id
-	Action *WorkoutSetAction `gorm:"column:-"` //動作
+	Action *Action `gorm:"column:-"` //動作
 	Type int `gorm:"column:type"` //動作類別(1:動作/2:休息)
 	AutoNext string `gorm:"column:auto_next"` //自動下一組(Y:是/N:否)
 	StartAudio string `gorm:"column:start_audio"` //前導語音
@@ -46,16 +46,6 @@ type WorkoutSetEntity struct {
 	Distance float64 `gorm:"column:distance"` //距離(公尺)
 	Duration int `gorm:"column:duration"` //時長(秒)
 	Incline float64 `gorm:"column:incline"` //坡度
-}
-
-type WorkoutSetAction struct {
-	ID int64  `gorm:"column:id"` //動作id
-	Name string `gorm:"column:name"` //課表名稱
-	Source int `gorm:"column:source"` //動作來源(1:系統動作/2:教練自創動作)
-	Type int `gorm:"column:type"` //紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-	Intro string `gorm:"column:intro"` //動作介紹
-	Cover string `gorm:"column:cover"` //封面
-	Video string `gorm:"column:video"` //動作影片
 }
 
 type UpdateWorkoutSetParam struct {

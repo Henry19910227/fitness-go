@@ -1,6 +1,10 @@
-package coursedto
+package dto
 
-import "mime/multipart"
+import (
+	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
+	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
+	"mime/multipart"
+)
 
 type CourseCover struct {
 	Cover string `json:"cover" example:"dkf2se51fsdds.png"` // 課表封面照片
@@ -16,8 +20,7 @@ type CreateCourseParam struct {
 
 type UpdateCourseParam struct {
 	Category *int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
-	SaleType *int `gorm:"column:sale_type"`                   // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-	Price *int64 `gorm:"column:price"`                        // 售價
+	SaleID *int `gorm:"column:sale_id"`                       // 銷售id
 	Name *string `gorm:"column:name"`                         // 課表名稱
 	Intro *string `gorm:"column:intro"`                       // 課表介紹
 	Food *string `gorm:"column:food"`                         // 飲食建議
@@ -36,14 +39,28 @@ type UploadCourseCoverParam struct {
 	File       multipart.File
 }
 
+type CourseSummary struct {
+	ID       int64  `json:"id" example:"2"`                                                   // 課表 id
+	Trainer  *trainerdto.TrainerSummary `json:"trainer"`                                      // 教練簡介
+	Sale     *saledto.SaleItem `json:"sale"`                                               // 銷售資料
+	CourseStatus int `json:"course_status" example:"1"`                                       // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+	Category int `json:"category" gorm:"column:category" example:"3"`                         // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+	ScheduleType int `json:"schedule_type" gorm:"column:schedule_type" example:"2"`           // 排課類別(1:單一訓練/2:多項計畫)
+	Name string `json:"name" example:"Henry課表"`                                              // 課表名稱
+	Cover string `json:"cover" example:"d2w3e15d3awe.jpg"`                                    // 課表封面
+	Level int `json:"level" example:"3"`                                                      // 強度(1:初級/2:中級/3:中高級/4:高級)
+	PlanCount int `json:"plan_count" gorm:"column:plan_count" example:"2"`                    // 計畫總數
+	WorkoutCount int `json:"workout_count" gorm:"column:workout_count" example:"10"`          // 訓練總數
+}
+
 type Course struct {
 	ID       int64  `json:"id" gorm:"column:id" example:"2"`                                  // 課表 id
-	UserID   int64  `json:"user_id" gorm:"column:user_id" example:"10001"`                    // 用戶 id
+	Trainer  *trainerdto.TrainerSummary `json:"trainer"`                                      // 教練簡介
+	Sale     *saledto.SaleItem  `json:"sale"`                                              // 銷售資料
+	Restricted int `json:"restricted" example:"0"`                                            // 是否是限制訪問狀態(0:否/1:是)
 	CourseStatus int `json:"course_status" gorm:"column:course_status" example:"1"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int `json:"category" gorm:"column:category" example:"3"`                         // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
 	ScheduleType int `json:"schedule_type" gorm:"column:schedule_type" example:"2"`           // 排課類別(1:單一訓練/2:多項計畫)
-	SaleType int `json:"sale_type" gorm:"column:sale_type" example:"2"`                       // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-	Price int64 `json:"price" gorm:"column:price" example:"330"`                              // 售價
 	Name string `json:"name" gorm:"column:name" example:"Henry課表"`                           // 課表名稱
 	Cover string `json:"cover" gorm:"column:cover" example:"d2w3e15d3awe.jpg"`                // 課表封面
 	Intro string `json:"intro" gorm:"column:intro" example:"佛系課表"`                          // 課表介紹

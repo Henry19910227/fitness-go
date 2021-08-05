@@ -104,8 +104,7 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 	if param.CourseStatus != nil { selects = append(selects, "course_status") }
 	if param.Category != nil { selects = append(selects, "category") }
 	if param.ScheduleType != nil { selects = append(selects, "schedule_type") }
-	if param.SaleType != nil { selects = append(selects, "sale_type") }
-	if param.Price != nil { selects = append(selects, "price") }
+	if param.SaleID != nil { selects = append(selects, "sale_id") }
 	if param.Name != nil { selects = append(selects, "name") }
 	if param.Cover != nil { selects = append(selects, "cover") }
 	if param.Intro != nil { selects = append(selects, "intro") }
@@ -151,6 +150,77 @@ func (c *course) FindCourses(uid int64, entity interface{}, status *int) error {
 			return err
 	}
 	return nil
+}
+
+func (c *course) FindCourseSummariesByUserID(uid int64, status *int) ([]*model.CourseSummaryEntity, error) {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 user_id 篩選條件
+	query += "AND courses.user_id = ? "
+	params = append(params, uid)
+	//加入 status 篩選條件
+	if status != nil {
+		query += "AND courses.course_status = ? "
+		params = append(params, *status)
+	}
+	rows, err := c.gorm.DB().
+		Table("courses").
+		Select("courses.id", "courses.course_status", "courses.category",
+			"courses.schedule_type", "courses.`name`", "courses.cover",
+			"courses.`level`", "courses.plan_count", "courses.workout_count",
+		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
+		    "IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+		    "IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
+			"trainers.user_id", "trainers.nickname", "trainers.avatar").
+		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
+		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
+		Where(query, params...).Rows()
+	if err != nil {
+		return nil, err
+	}
+	courses := make([]*model.CourseSummaryEntity, 0)
+	for rows.Next() {
+		var course model.CourseSummaryEntity
+		if err := rows.Scan(&course.ID, &course.CourseStatus, &course.Category,
+			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
+			&course.PlanCount, &course.WorkoutCount,
+			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
+			&course.Sale.CreateAt, &course.Sale.UpdateAt,
+			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
+			return nil, err
+		}
+		courses = append(courses, &course)
+	}
+	return courses, nil
+}
+
+func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error) {
+	var course model.CourseDetailEntity
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("courses.id", "courses.course_status", "courses.category",
+			"courses.schedule_type", "courses.`name`", "courses.cover", "courses.intro",
+			"courses.food", "courses.level", "courses.suit", "courses.equipment",
+			"courses.place", "courses.train_target", "courses.body_target", "courses.notice",
+			"courses.plan_count", "courses.workout_count", "courses.create_at", "courses.update_at",
+		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
+		    "IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+		    "IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
+			"trainers.user_id", "trainers.nickname", "trainers.avatar").
+		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
+		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
+		Where("courses.id = ?", courseID).
+		Row().
+		Scan(&course.ID, &course.CourseStatus, &course.Category, &course.ScheduleType, &course.Name,
+			&course.Cover, &course.Intro, &course.Food, &course.Level, &course.Suit, &course.Equipment,
+			&course.Place, &course.TrainTarget, &course.BodyTarget, &course.Notice, &course.PlanCount,
+			&course.WorkoutCount, &course.CreateAt, &course.UpdateAt,
+		    &course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
+		    &course.Sale.CreateAt, &course.Sale.UpdateAt,
+			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
+			return nil, err
+	}
+	return &course, nil
 }
 
 func (c *course) FindCourseByID(courseID int64, entity interface{}) error {

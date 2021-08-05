@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
-	"github.com/Henry19910227/fitness-go/internal/dto/actiondto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -41,7 +41,7 @@ func NewAction(baseGroup *gin.RouterGroup,
 // @Security fitness_user_token
 // @Param action_id path int64 true "動作id"
 // @Param json_body body validator.UpdateActionBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=actiondto.Action} "更新成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Action} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /action/{action_id} [PATCH]
 func (a *Action) UpdateAction(c *gin.Context) {
@@ -68,7 +68,7 @@ func (a *Action) UpdateAction(c *gin.Context) {
 		a.JSONErrorResponse(c, err)
 		return
 	}
-	action, err := a.actionService.UpdateAction(c, uri.ActionID, &actiondto.UpdateActionParam{
+	action, err := a.actionService.UpdateAction(c, uri.ActionID, &dto.UpdateActionParam{
 		Name: body.Name,
 		Category: body.Category,
 		Body: body.Body,
@@ -90,7 +90,7 @@ func (a *Action) UpdateAction(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param action_id path int64 true "動作id"
-// @Success 200 {object} model.SuccessResult{data=actiondto.ActionID} "刪除成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.ActionID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
 // @Router /action/{action_id} [DELETE]
 func (a *Action) DeleteAction(c *gin.Context) {
@@ -129,7 +129,7 @@ func (a *Action) DeleteAction(c *gin.Context) {
 // @Param action_id path int64 true "動作id"
 // @Param cover formData file true "封面照"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=actiondto.ActionCover} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.ActionCover} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /action/{action_id}/cover [POST]
 func (a *Action) UploadActionCover(c *gin.Context) {
@@ -173,7 +173,7 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 // @Param action_id path int64 true "動作id"
 // @Param video formData file true "影片檔"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=actiondto.ActionVideo} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.ActionVideo} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /action/{action_id}/video [POST]
 func (a *Action) UploadActionVideo(c *gin.Context) {

@@ -63,7 +63,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionID"
+                                            "$ref": "#/definitions/dto.ActionID"
                                         }
                                     }
                                 }
@@ -125,7 +125,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.Action"
+                                            "$ref": "#/definitions/dto.Action"
                                         }
                                     }
                                 }
@@ -187,7 +187,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionCover"
+                                            "$ref": "#/definitions/dto.ActionCover"
                                         }
                                     }
                                 }
@@ -249,7 +249,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.ActionVideo"
+                                            "$ref": "#/definitions/dto.ActionVideo"
                                         }
                                     }
                                 }
@@ -306,7 +306,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.Course"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -322,55 +322,6 @@ var doc = `{
                 }
             }
         },
-        "/course/list": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_user_token": []
-                    }
-                ],
-                "description": "獲取我的課表列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Course"
-                ],
-                "summary": "獲取我的課表列表",
-                "responses": {
-                    "200": {
-                        "description": "獲取成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/coursedto.Course"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "獲取失敗",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
         "/course/{course_id}": {
             "get": {
                 "security": [
@@ -378,7 +329,7 @@ var doc = `{
                         "fitness_user_token": []
                     }
                 ],
-                "description": "以id獲取課表",
+                "description": "獲取課表詳細",
                 "consumes": [
                     "application/json"
                 ],
@@ -388,7 +339,7 @@ var doc = `{
                 "tags": [
                     "Course"
                 ],
-                "summary": "以id獲取課表",
+                "summary": "獲取課表詳細",
                 "parameters": [
                     {
                         "type": "integer",
@@ -410,7 +361,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.Course"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -463,7 +414,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseID"
+                                            "$ref": "#/definitions/dto.CourseID"
                                         }
                                     }
                                 }
@@ -525,7 +476,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.Course"
+                                            "$ref": "#/definitions/dto.Course"
                                         }
                                     }
                                 }
@@ -589,7 +540,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/actiondto.Action"
+                                            "$ref": "#/definitions/dto.Action"
                                         }
                                     }
                                 }
@@ -633,7 +584,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "課表名稱",
+                        "description": "動作名稱",
                         "name": "name",
                         "in": "query"
                     },
@@ -657,7 +608,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                        "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
                         "name": "equipment",
                         "in": "query"
                     }
@@ -676,7 +627,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/actiondto.Action"
+                                                "$ref": "#/definitions/dto.Action"
                                             }
                                         }
                                     }
@@ -739,7 +690,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/coursedto.CourseCover"
+                                            "$ref": "#/definitions/dto.CourseCover"
                                         }
                                     }
                                 }
@@ -917,7 +868,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/coursedto.Course"
+                                                "$ref": "#/definitions/dto.CourseSummary"
                                             }
                                         }
                                     }
@@ -1545,7 +1496,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Workout"
+                                            "$ref": "#/definitions/dto.Workout"
                                         }
                                     }
                                 }
@@ -1602,7 +1553,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/workoutdto.Workout"
+                                                "$ref": "#/definitions/dto.Workout"
                                             }
                                         }
                                     }
@@ -1796,6 +1747,55 @@ var doc = `{
                     },
                     "400": {
                         "description": "該資料已存在",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/sale_items": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "取得銷售項目清單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "取得銷售項目清單",
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/saledto.SaleItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -2144,7 +2144,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutID"
+                                            "$ref": "#/definitions/dto.WorkoutID"
                                         }
                                     }
                                 }
@@ -2206,7 +2206,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Workout"
+                                            "$ref": "#/definitions/dto.Workout"
                                         }
                                     }
                                 }
@@ -2268,7 +2268,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Audio"
+                                            "$ref": "#/definitions/dto.WorkoutAudio"
                                         }
                                     }
                                 }
@@ -2375,7 +2375,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                            "$ref": "#/definitions/dto.WorkoutSet"
                                         }
                                     }
                                 }
@@ -2437,7 +2437,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Audio"
+                                            "$ref": "#/definitions/dto.WorkoutAudio"
                                         }
                                     }
                                 }
@@ -2503,7 +2503,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                                "$ref": "#/definitions/dto.WorkoutSet"
                                             }
                                         }
                                     }
@@ -2561,7 +2561,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                                "$ref": "#/definitions/dto.WorkoutSet"
                                             }
                                         }
                                     }
@@ -2617,7 +2617,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutSetID"
+                                            "$ref": "#/definitions/dto.WorkoutSetID"
                                         }
                                     }
                                 }
@@ -2679,7 +2679,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.WorkoutSet"
+                                            "$ref": "#/definitions/dto.WorkoutSet"
                                         }
                                     }
                                 }
@@ -2688,6 +2688,73 @@ var doc = `{
                     },
                     "400": {
                         "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/workout_set/{workout_set_id}/duplicate": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_user_token": []
+                    }
+                ],
+                "description": "複製訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "複製訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.DuplicateWorkoutSetBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "複製成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.WorkoutSet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "複製失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -2741,7 +2808,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Audio"
+                                            "$ref": "#/definitions/dto.WorkoutAudio"
                                         }
                                     }
                                 }
@@ -2803,7 +2870,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/workoutdto.Audio"
+                                            "$ref": "#/definitions/dto.WorkoutAudio"
                                         }
                                     }
                                 }
@@ -2821,7 +2888,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "actiondto.Action": {
+        "dto.Action": {
             "type": "object",
             "properties": {
                 "body": {
@@ -2840,7 +2907,7 @@ var doc = `{
                     "example": "32as1d5f13e4.png"
                 },
                 "equipment": {
-                    "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -2876,7 +2943,7 @@ var doc = `{
                 }
             }
         },
-        "actiondto.ActionCover": {
+        "dto.ActionCover": {
             "type": "object",
             "properties": {
                 "cover": {
@@ -2886,7 +2953,7 @@ var doc = `{
                 }
             }
         },
-        "actiondto.ActionID": {
+        "dto.ActionID": {
             "type": "object",
             "properties": {
                 "action_id": {
@@ -2896,7 +2963,7 @@ var doc = `{
                 }
             }
         },
-        "actiondto.ActionVideo": {
+        "dto.ActionVideo": {
             "type": "object",
             "properties": {
                 "video": {
@@ -2906,7 +2973,7 @@ var doc = `{
                 }
             }
         },
-        "coursedto.Course": {
+        "dto.Course": {
             "type": "object",
             "properties": {
                 "body_target": {
@@ -2979,15 +3046,14 @@ var doc = `{
                     "type": "integer",
                     "example": 2
                 },
-                "price": {
-                    "description": "售價",
+                "restricted": {
+                    "description": "是否是限制訪問狀態(0:否/1:是)",
                     "type": "integer",
-                    "example": 330
+                    "example": 0
                 },
-                "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 2
+                "sale": {
+                    "description": "銷售資料",
+                    "$ref": "#/definitions/saledto.SaleItem"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3004,15 +3070,14 @@ var doc = `{
                     "type": "string",
                     "example": "2,3,4"
                 },
+                "trainer": {
+                    "description": "教練簡介",
+                    "$ref": "#/definitions/trainerdto.TrainerSummary"
+                },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
                     "example": "2021-05-29 11:00:00"
-                },
-                "user_id": {
-                    "description": "用戶 id",
-                    "type": "integer",
-                    "example": 10001
                 },
                 "workout_count": {
                     "description": "訓練總數",
@@ -3021,7 +3086,7 @@ var doc = `{
                 }
             }
         },
-        "coursedto.CourseCover": {
+        "dto.CourseCover": {
             "type": "object",
             "properties": {
                 "cover": {
@@ -3031,13 +3096,198 @@ var doc = `{
                 }
             }
         },
-        "coursedto.CourseID": {
+        "dto.CourseID": {
             "type": "object",
             "properties": {
                 "course_id": {
                     "description": "課表 id",
                     "type": "integer",
                     "example": 2
+                }
+            }
+        },
+        "dto.CourseSummary": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 2
+                },
+                "sale": {
+                    "description": "銷售資料",
+                    "$ref": "#/definitions/saledto.SaleItem"
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "trainer": {
+                    "description": "教練簡介",
+                    "$ref": "#/definitions/trainerdto.TrainerSummary"
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "dto.Workout": {
+            "type": "object",
+            "properties": {
+                "end_audio": {
+                    "description": "結束語音",
+                    "type": "string",
+                    "example": "d2e15qwe42dw.mp3"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,7"
+                },
+                "id": {
+                    "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "訓練名稱",
+                    "type": "string",
+                    "example": "第一天胸肌訓練"
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string",
+                    "example": "e6d2131w5q.mp3"
+                },
+                "workout_set_count": {
+                    "description": "動作組數",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "dto.WorkoutAudio": {
+            "type": "object",
+            "properties": {
+                "audio": {
+                    "description": "語音檔案名",
+                    "type": "string",
+                    "example": "e6d2131w5q.mp3"
+                }
+            }
+        },
+        "dto.WorkoutID": {
+            "type": "object",
+            "properties": {
+                "workout_id": {
+                    "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "dto.WorkoutSet": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "動作",
+                    "$ref": "#/definitions/dto.Action"
+                },
+                "auto_next": {
+                    "description": "自動下一組(Y:是/N:否)",
+                    "type": "string",
+                    "example": "N"
+                },
+                "distance": {
+                    "description": "距離(公尺)",
+                    "type": "number",
+                    "example": 0
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 0
+                },
+                "progress_audio": {
+                    "description": "進行中語音",
+                    "type": "string",
+                    "example": "1d2w3e51d3w.mp3"
+                },
+                "remark": {
+                    "description": "備註",
+                    "type": "string"
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 0
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "動作類別(1:動作/2:休息)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 0
+                }
+            }
+        },
+        "dto.WorkoutSetID": {
+            "type": "object",
+            "properties": {
+                "workout_set_id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
@@ -3330,6 +3580,36 @@ var doc = `{
                 }
             }
         },
+        "saledto.SaleItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "銷售id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "identifier": {
+                    "description": "銷售識別碼",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
+                },
+                "name": {
+                    "description": "銷售名稱",
+                    "type": "string",
+                    "example": "銅級課表"
+                },
+                "twd": {
+                    "description": "台幣價格",
+                    "type": "number",
+                    "example": 330
+                },
+                "type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
         "trainerdto.Avatar": {
             "type": "object",
             "properties": {
@@ -3397,6 +3677,26 @@ var doc = `{
                     "description": "用戶id",
                     "type": "integer",
                     "example": 1001
+                }
+            }
+        },
+        "trainerdto.TrainerSummary": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry教練"
+                },
+                "user_id": {
+                    "description": "關聯的用戶id",
+                    "type": "integer",
+                    "example": 10001
                 }
             }
         },
@@ -3581,7 +3881,7 @@ var doc = `{
                     "example": 1
                 },
                 "equipment": {
-                    "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -3708,6 +4008,19 @@ var doc = `{
                 }
             }
         },
+        "validator.DuplicateWorkoutSetBody": {
+            "type": "object",
+            "required": [
+                "duplicate_count"
+            ],
+            "properties": {
+                "duplicate_count": {
+                    "description": "複製個數",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "validator.EmailBody": {
             "type": "object",
             "required": [
@@ -3784,7 +4097,7 @@ var doc = `{
                     "example": 1
                 },
                 "equipment": {
-                    "description": "器材(1:槓鈴/2:啞鈴/3:長凳/4:機械/5:壺鈴/6:彎曲槓/7:自體體重運動/8:其他)",
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -3848,13 +4161,8 @@ var doc = `{
                     "type": "string",
                     "example": "1,2,3"
                 },
-                "price": {
-                    "description": "售價",
-                    "type": "integer",
-                    "example": 330
-                },
-                "sale_type": {
-                    "description": "銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)",
+                "sale_id": {
+                    "description": "銷售ID",
                     "type": "integer",
                     "example": 2
                 },
@@ -3969,11 +4277,6 @@ var doc = `{
                     "type": "integer",
                     "example": 10
                 },
-                "start_audio": {
-                    "description": "前導語音",
-                    "type": "string",
-                    "example": "e6d2131w5q.mp3"
-                },
                 "weight": {
                     "description": "重量(0.01~999.99公斤)",
                     "type": "number",
@@ -4033,173 +4336,6 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
-                "workout_set_id": {
-                    "description": "訓練組id",
-                    "type": "integer",
-                    "example": 10
-                }
-            }
-        },
-        "workoutdto.Audio": {
-            "type": "object",
-            "properties": {
-                "audio": {
-                    "description": "語音檔案名",
-                    "type": "string",
-                    "example": "e6d2131w5q.mp3"
-                }
-            }
-        },
-        "workoutdto.Workout": {
-            "type": "object",
-            "properties": {
-                "end_audio": {
-                    "description": "結束語音",
-                    "type": "string",
-                    "example": "d2e15qwe42dw.mp3"
-                },
-                "equipment": {
-                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "string",
-                    "example": "2,3,7"
-                },
-                "id": {
-                    "description": "訓練 id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "description": "訓練名稱",
-                    "type": "string",
-                    "example": "第一天胸肌訓練"
-                },
-                "start_audio": {
-                    "description": "前導語音",
-                    "type": "string",
-                    "example": "e6d2131w5q.mp3"
-                },
-                "workout_set_count": {
-                    "description": "動作組數",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
-        "workoutdto.WorkoutID": {
-            "type": "object",
-            "properties": {
-                "workout_id": {
-                    "description": "訓練 id",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
-        "workoutdto.WorkoutSet": {
-            "type": "object",
-            "properties": {
-                "action": {
-                    "description": "動作",
-                    "$ref": "#/definitions/workoutdto.WorkoutSetAction"
-                },
-                "auto_next": {
-                    "description": "自動下一組(Y:是/N:否)",
-                    "type": "string",
-                    "example": "N"
-                },
-                "distance": {
-                    "description": "距離(公尺)",
-                    "type": "number",
-                    "example": 0
-                },
-                "duration": {
-                    "description": "時長(秒)",
-                    "type": "integer",
-                    "example": 30
-                },
-                "id": {
-                    "description": "訓練組id",
-                    "type": "integer",
-                    "example": 10
-                },
-                "incline": {
-                    "description": "坡度",
-                    "type": "number",
-                    "example": 0
-                },
-                "progress_audio": {
-                    "description": "進行中語音",
-                    "type": "string",
-                    "example": "1d2w3e51d3w.mp3"
-                },
-                "remark": {
-                    "description": "備註",
-                    "type": "string"
-                },
-                "reps": {
-                    "description": "次數",
-                    "type": "integer",
-                    "example": 0
-                },
-                "start_audio": {
-                    "description": "前導語音",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "動作類別(1:動作/2:休息)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "weight": {
-                    "description": "重量(公斤)",
-                    "type": "number",
-                    "example": 0
-                }
-            }
-        },
-        "workoutdto.WorkoutSetAction": {
-            "type": "object",
-            "properties": {
-                "cover": {
-                    "description": "封面",
-                    "type": "string",
-                    "example": "32as1d5f13e4.png"
-                },
-                "id": {
-                    "description": "動作id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "intro": {
-                    "description": "動作介紹",
-                    "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
-                },
-                "name": {
-                    "description": "動作名稱",
-                    "type": "string",
-                    "example": "槓鈴臥推"
-                },
-                "source": {
-                    "description": "動作來源(1:系統動作/2:教練自創動作)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "video": {
-                    "description": "動作影片",
-                    "type": "string",
-                    "example": "11d547we1d4f8e.mp4"
-                }
-            }
-        },
-        "workoutdto.WorkoutSetID": {
-            "type": "object",
-            "properties": {
                 "workout_set_id": {
                     "description": "訓練組id",
                     "type": "integer",

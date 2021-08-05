@@ -127,7 +127,7 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 // @Security fitness_user_token
 // @Param plan_id path int64 true "計畫id"
 // @Param json_body body validator.CreateWorkoutBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=workoutdto.Workout} "創建成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Workout} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /plan/{plan_id}/workout [POST]
 func (p *Plan) CreateWorkout(c *gin.Context) {
@@ -170,7 +170,7 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 // @Produce json
 // @Security fitness_user_token
 // @Param plan_id path int64 true "計畫id"
-// @Success 200 {object} model.SuccessResult{data=[]workoutdto.Workout} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.Workout} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /plan/{plan_id}/workouts [GET]
 func (p *Plan) GetWorkouts(c *gin.Context) {

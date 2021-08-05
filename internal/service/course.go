@@ -1,15 +1,15 @@
 package service
 
 import (
-	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/coursedto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
+	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"strings"
 )
 
@@ -32,7 +32,7 @@ func NewCourse(courseRepo repository.Course,
 	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error) {
+func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *dto.CreateCourseParam) (*dto.Course, errcode.Error) {
 	uid, err := cs.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, cs.errHandler.InvalidToken()
@@ -40,7 +40,7 @@ func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *cours
 	return cs.CreateCourse(c, uid, param)
 }
 
-func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.CreateCourseParam) (*coursedto.Course, errcode.Error) {
+func (cs *course) CreateCourse(c *gin.Context, uid int64, param *dto.CreateCourseParam) (*dto.Course, errcode.Error) {
 	var courseID int64
 	var err error
 	if param.ScheduleType == 1 {
@@ -60,19 +60,13 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *coursedto.Creat
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
-	var course coursedto.Course
-	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	return &course, nil
+	return cs.GetCourseDetailByCourseID(c, courseID)
 }
 
-func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.UpdateCourseParam) (*coursedto.Course, errcode.Error) {
+func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error) {
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		Category: param.Category,
-		SaleType: param.SaleType,
-		Price: param.Price,
+		SaleID: param.SaleID,
 		Name: param.Name,
 		Intro: param.Intro,
 		Food: param.Food,
@@ -84,72 +78,122 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *coursedto.
 		BodyTarget: param.BodyTarget,
 		Notice: param.Notice,
 	}); err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	var course coursedto.Course
-	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	return &course, nil
-}
-
-func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*coursedto.CourseID, errcode.Error) {
-	if err := cs.courseRepo.DeleteCourseByID(courseID); err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	return &coursedto.CourseID{ID: courseID}, nil
-}
-
-func (cs *course) GetCoursesByToken(c *gin.Context, token string, status *int) ([]*coursedto.Course, errcode.Error) {
-	uid, err := cs.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, cs.errHandler.InvalidToken()
-	}
-	return cs.GetCoursesByUID(c, uid, status)
-}
-
-func (cs *course) GetCoursesByUID(c *gin.Context, uid int64, status *int) ([]*coursedto.Course, errcode.Error) {
-	courses := make([]*coursedto.Course, 0)
-	if err := cs.courseRepo.FindCourses(uid, &courses, status); err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	return courses, nil
-}
-
-func (cs *course) GetCourseByTokenAndCourseID(c *gin.Context, token string, courseID int64) (*coursedto.Course, errcode.Error) {
-	uid, err := cs.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, cs.errHandler.InvalidToken()
-	}
-	course, e := cs.GetCourseByID(c, courseID)
-	if e != nil {
-		return nil, e
-	}
-	//驗證權限
-	if course.UserID != uid {
-		return nil, cs.errHandler.PermissionDenied()
-	}
-	return course, nil
-}
-
-func (cs *course) GetCourseByID(c *gin.Context, courseID int64) (*coursedto.Course, errcode.Error) {
-	//取得課表資料
-	var course coursedto.Course
-	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		if strings.Contains(err.Error(), "1452") {
 			return nil, cs.errHandler.DataNotFound()
 		}
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
+	return cs.GetCourseDetailByCourseID(c, courseID)
+}
+
+func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, errcode.Error) {
+	if err := cs.courseRepo.DeleteCourseByID(courseID); err != nil {
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	return &dto.CourseID{ID: courseID}, nil
+}
+
+func (cs *course) GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*dto.CourseSummary, errcode.Error) {
+	uid, err := cs.jwtTool.GetIDByToken(token)
+	if err != nil {
+		return nil, cs.errHandler.InvalidToken()
+	}
+	return cs.GetCourseSummariesByUID(c, uid, status)
+}
+
+func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error) {
+	Entities, err := cs.courseRepo.FindCourseSummariesByUserID(uid, status)
+	if err != nil {
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	courses := make([]*dto.CourseSummary, 0)
+	for _, entity := range Entities {
+		course := dto.CourseSummary{
+			ID:           entity.ID,
+			CourseStatus: entity.CourseStatus,
+			Category:     entity.Category,
+			ScheduleType: entity.ScheduleType,
+			Name:         entity.Name,
+			Cover:        entity.Cover,
+			Level:        entity.Level,
+			PlanCount:    entity.PlanCount,
+			WorkoutCount: entity.WorkoutCount,
+		}
+		trainer := &trainerdto.TrainerSummary{
+			UserID: entity.Trainer.UserID,
+			Nickname: entity.Trainer.Nickname,
+			Avatar: entity.Trainer.Avatar,
+		}
+		course.Trainer = trainer
+		if entity.Sale.ID != 0 {
+			sale := &saledto.SaleItem{
+				ID: entity.Sale.ID,
+				Type: entity.Sale.Type,
+				Name: entity.Sale.Name,
+				Twd: entity.Sale.Twd,
+				Identifier: entity.Sale.Identifier,
+			}
+			course.Sale = sale
+		}
+		courses = append(courses, &course)
+	}
+	return courses, nil
+}
+
+func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error) {
+	entity, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result set") {
+			return nil, cs.errHandler.DataNotFound()
+		}
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	course := dto.Course{
+		ID:           entity.ID,
+		CourseStatus: entity.CourseStatus,
+		Category:     entity.Category,
+		ScheduleType: entity.ScheduleType,
+		Name:         entity.Name,
+		Cover:        entity.Cover,
+		Intro:        entity.Intro,
+		Food:         entity.Food,
+		Level:        entity.Level,
+		Suit:         entity.Suit,
+		Equipment:    entity.Equipment,
+		Place:        entity.Place,
+		TrainTarget:  entity.TrainTarget,
+		BodyTarget:   entity.BodyTarget,
+		Notice:       entity.Notice,
+		PlanCount:    entity.PlanCount,
+		WorkoutCount: entity.WorkoutCount,
+		CreateAt:     entity.CreateAt,
+		UpdateAt:     entity.UpdateAt,
+	}
+	trainer := &trainerdto.TrainerSummary{
+		UserID: entity.Trainer.UserID,
+		Nickname: entity.Trainer.Nickname,
+		Avatar: entity.Trainer.Avatar,
+	}
+	course.Trainer = trainer
+	if entity.Sale.ID != 0 {
+		sale := &saledto.SaleItem{
+			ID: entity.Sale.ID,
+			Type: entity.Sale.Type,
+			Name: entity.Sale.Name,
+			Twd: entity.Sale.Twd,
+			Identifier: entity.Sale.Identifier,
+		}
+		course.Sale = sale
+	}
+	course.Restricted = 0
 	return &course, nil
 }
 
-func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *coursedto.UploadCourseCoverParam) (*coursedto.CourseCover, errcode.Error) {
+func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := cs.uploader.UploadCourseCover(param.File, param.CoverNamed)
 	if err != nil {
@@ -181,6 +225,6 @@ func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *c
 			cs.logger.Set(c, handler.Error, "ResHandler", cs.errHandler.SystemError().Code(), err.Error())
 		}
 	}
-	return &coursedto.CourseCover{Cover: newImageNamed}, nil
+	return &dto.CourseCover{Cover: newImageNamed}, nil
 }
 

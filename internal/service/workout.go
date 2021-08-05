@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/workoutdto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -24,13 +24,13 @@ func NewWorkout(workoutRepo repository.Workout, uploader handler.Uploader, logge
 	return &workout{workoutRepo: workoutRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*workoutdto.Workout, errcode.Error) {
+func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*dto.Workout, errcode.Error) {
 	workoutID, err := w.workoutRepo.CreateWorkout(planID, name)
 	if err != nil {
 		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
 	}
-	var workout workoutdto.Workout
+	var workout dto.Workout
 	if err := w.workoutRepo.FindWorkoutByID(workoutID, &workout); err != nil {
 		w.logger.Set(c, handler.Error, "CourseRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
@@ -38,15 +38,15 @@ func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*wor
 	return &workout, nil
 }
 
-func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutdto.Workout, errcode.Error) {
+func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Workout, errcode.Error) {
 	datas, err := w.workoutRepo.FindWorkoutsByPlanID(planID)
 	if err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
 	}
-	workouts := make([]*workoutdto.Workout, 0)
+	workouts := make([]*dto.Workout, 0)
 	for _, data := range datas {
-		workout := workoutdto.Workout{
+		workout := dto.Workout{
 			ID: data.ID,
 			Name: data.Name,
 			Equipment: data.Equipment,
@@ -59,7 +59,7 @@ func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*workoutd
 	return workouts, nil
 }
 
-func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *workoutdto.UpdateWorkoutParam) (*workoutdto.Workout, errcode.Error) {
+func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *dto.UpdateWorkoutParam) (*dto.Workout, errcode.Error) {
 	if err := w.workoutRepo.UpdateWorkoutByID(workoutID, &model.UpdateWorkoutParam{
 		Name: param.Name,
 		Equipment: param.Equipment,
@@ -67,7 +67,7 @@ func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *workoutd
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
 	}
-	var workout workoutdto.Workout
+	var workout dto.Workout
 	if err := w.workoutRepo.FindWorkoutByID(workoutID, &workout); err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
@@ -75,15 +75,15 @@ func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *workoutd
 	return &workout, nil
 }
 
-func (w *workout) DeleteWorkout(c *gin.Context, workoutID int64) (*workoutdto.WorkoutID, errcode.Error) {
+func (w *workout) DeleteWorkout(c *gin.Context, workoutID int64) (*dto.WorkoutID, errcode.Error) {
 	if err := w.workoutRepo.DeleteWorkoutByID(workoutID); err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
 	}
-	return &workoutdto.WorkoutID{ID: workoutID}, nil
+	return &dto.WorkoutID{ID: workoutID}, nil
 }
 
-func (w *workout) UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
+func (w *workout) UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error) {
 	newAudioNamed, err := w.uploader.UploadWorkoutStartAudio(file, audioNamed)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
@@ -101,10 +101,10 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audio
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
 	}
-	return &workoutdto.Audio{Named: newAudioNamed}, nil
+	return &dto.WorkoutAudio{Named: newAudioNamed}, nil
 }
 
-func (w *workout) UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*workoutdto.Audio, errcode.Error) {
+func (w *workout) UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error) {
 	newAudioNamed, err := w.uploader.UploadWorkoutEndAudio(file, audioNamed)
 	if err != nil {
 		if strings.Contains(err.Error(), "9007") {
@@ -122,5 +122,5 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNa
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
 		return nil, w.errHandler.SystemError()
 	}
-	return &workoutdto.Audio{Named: newAudioNamed}, nil
+	return &dto.WorkoutAudio{Named: newAudioNamed}, nil
 }
