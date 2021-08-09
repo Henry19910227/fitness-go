@@ -754,7 +754,7 @@ definitions:
         example: 1
         type: integer
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 1
         type: integer
       intro:
@@ -921,7 +921,7 @@ definitions:
         example: 1
         type: integer
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 1
         type: integer
       intro:
