@@ -28,9 +28,9 @@ type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
-	FindCourses(uid int64, entity interface{}, status *int) error
 	FindCourseSummariesByUserID(uid int64, status *int) ([]*model.CourseSummaryEntity, error)
 	FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error)
+	FindCourseAmountByUserID(uid int64) (int, error)
 	FindCourseByID(courseID int64, entity interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
 	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
