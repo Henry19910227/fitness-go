@@ -135,15 +135,16 @@ func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, image
 }
 
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {
-	err := t.trainerRepo.FindTrainerByUID(uid, nil)
-	//教練身份已存在
-	if err == nil {
-		return true, nil
+	var trainer struct{
+		UserID int64 `gorm:"column:user_id"`
+		TrainerStatus int `gorm:"column:trainer_status"`
 	}
-	//不明原因錯誤
-	if !errors.Is(err, gorm.ErrRecordNotFound){
-		t.logger.Set(c, handler.Error, "UserRepo", t.errHandler.SystemError().Code(), err.Error())
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil{
+		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
 		return false, t.errHandler.SystemError()
+	}
+	if trainer.UserID != 0 {
+		return false, nil
 	}
 	return false, nil
 }
