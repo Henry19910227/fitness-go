@@ -45,6 +45,18 @@ func (p *course) CreateVerify(c *gin.Context, token string) errcode.Error {
 	if trainer.UserID == 0 {
 		return p.errHandler.PermissionDenied()
 	}
+	//教練審核中狀態
+	if trainer.TrainerStatus == 2 {
+		amount, err := p.courseRepo.FindCourseAmountByUserID(trainer.UserID)
+		if err != nil {
+			p.logger.Set(c, handler.Error, "TrainerRepo", p.errHandler.SystemError().Code(), err.Error())
+			return p.errHandler.SystemError()
+		}
+		if amount > 1 {
+			return p.errHandler.PermissionDenied()
+		}
+	}
+	//教練停權狀態
 	if trainer.TrainerStatus == 3 {
 		return p.errHandler.PermissionDenied()
 	}
