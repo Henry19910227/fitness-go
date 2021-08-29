@@ -110,3 +110,7 @@ type Action interface {
 type Sale interface {
 	GetSaleItems(c *gin.Context) ([]*saledto.SaleItem, errcode.Error)
 }
+
+type Review interface {
+	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
+}
