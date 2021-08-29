@@ -55,6 +55,7 @@ var (
 	workoutSetService service.WorkoutSet
 	actionService   service.Action
 	saleService     service.Sale
+	reviewService   service.Review
 )
 
 var (
@@ -71,6 +72,9 @@ var (
 	trainerMiddleware gin.HandlerFunc
 	adminLV1Middleware  gin.HandlerFunc
 	adminLV2Middleware  gin.HandlerFunc
+
+	userMidd middleware.User
+	courseMidd middleware.Course
 )
 
 func init() {
@@ -86,6 +90,9 @@ func init() {
 	userMiddleware = middleware.UserJWT(ssoHandler, errcode.NewHandler())
 	adminLV1Middleware = middleware.AdminLV1JWT(ssoHandler, errcode.NewHandler())
 	adminLV2Middleware = middleware.AdminLV2JWT(ssoHandler, errcode.NewHandler())
+
+	userMidd = middleware.NewUserMiddleware(viperTool, gormTool)
+	courseMidd = middleware.NewCourseMiddleware(viperTool, gormTool)
 }
 
 // @title fitness api
@@ -117,6 +124,7 @@ func main() {
 	controller.NewWorkoutSet(baseGroup, workoutSetService, workoutSetAccess, trainerAccess, userMiddleware)
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMiddleware)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
+	controller.NewReview(baseGroup, reviewService, userMidd, courseMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -206,6 +214,7 @@ func setupService() {
 	setupWorkoutService()
 	setupWorkoutSetService()
 	setupSaleService()
+	reviewService = service.NewReviewService(viperTool, gormTool)
 }
 
 func setupLoginService() {

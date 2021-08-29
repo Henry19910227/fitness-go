@@ -1587,6 +1587,33 @@ paths:
       summary: 取得課表內的計畫列表
       tags:
       - Course
+  /course/{course_id}/submit:
+    post:
+      consumes:
+      - application/json
+      description: 送審課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 送審課表
+      tags:
+      - Course
   /courses:
     get:
       consumes:
