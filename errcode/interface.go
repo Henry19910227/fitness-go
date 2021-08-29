@@ -1,17 +1,30 @@
 package errcode
 
-import "errors"
+import (
+	"errors"
+	"github.com/gin-gonic/gin"
+)
+
+const (
+	SystemError int = 9000 // 系統發生錯誤
+	UpdateError int = 9001 // 更新失敗
+	DataNotFound int = 9002 // 查無資料
+	DataAlreadyExists int = 9003 // 資料已存在
+	InvalidThirdParty int = 9004 // 無效的第三方驗證
+	InvalidToken int = 9005 // 無效的token
+	PermissionDenied int = 9006 // 權限不足,存取遭拒
+)
 
 var (
 
 	// Common
-	systemError       = NewError(9000, errors.New("系統發生錯誤"))
-	updateError       = NewError(9001, errors.New("更新失敗"))
-	dataNotFound      = NewError(9002, errors.New("查無資料"))
-	dataAlreadyExists = NewError(9003, errors.New("資料已存在"))
-	InvalidThirdParty = NewError(9004, errors.New("無效的第三方驗證"))
-	InvalidToken      = NewError(9005, errors.New("無效的token"))
-	PermissionDenied  = NewError(9006, errors.New("權限不足,存取遭拒"))
+	systemError       = NewError(SystemError, errors.New("系統發生錯誤"))
+	updateError       = NewError(UpdateError, errors.New("更新失敗"))
+	dataNotFound      = NewError(DataNotFound, errors.New("查無資料"))
+	dataAlreadyExists = NewError(DataAlreadyExists, errors.New("資料已存在"))
+	invalidThirdParty = NewError(InvalidThirdParty, errors.New("無效的第三方驗證"))
+	invalidToken      = NewError(InvalidToken, errors.New("無效的token"))
+	permissionDenied  = NewError(PermissionDenied, errors.New("權限不足,存取遭拒"))
 	FileTypeError     = NewError(9007, errors.New("上傳檔案類型不符合規範"))
 	FileSizeError     = NewError(9008, errors.New("上傳檔案大小超過限制"))
 
@@ -41,6 +54,7 @@ type Error interface {
 type Handler interface {
 	/** 公共 */
 	Custom(code int, err error) Error
+	Set(c *gin.Context, tag string, err error) Error
 	// SystemError 9000 - 系統發生錯誤
 	SystemError() Error
 	// UpdateError 9001 - 更新失敗
