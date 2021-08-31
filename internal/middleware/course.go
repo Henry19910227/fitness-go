@@ -58,6 +58,39 @@ func (cm *course) CourseOwnerVerify() gin.HandlerFunc {
 	}
 }
 
+func (cm *course) WorkoutPermission(status []CourseStatus) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		uid, isExists := c.Get("uid")
+		if !isExists {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "gin", errors.New(strconv.Itoa(errcode.DataNotFound))))
+			return
+		}
+		var uri validator.WorkoutIDUri
+		if err := c.ShouldBindUri(&uri); err != nil {
+			cm.JSONValidatorErrorResponse(c, err)
+			return
+		}
+		course := struct {
+			UserID int64 `gorm:"column:user_id"`
+			Status int `gorm:"column:course_status"`
+		}{}
+		if err := cm.courseRepo.FindCourseByWorkoutID(uri.WorkoutID, &course); err != nil {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
+			c.Abort()
+			return
+		}
+		if course.UserID != uid {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.PermissionDenied))))
+			c.Abort()
+			return
+		}
+		if !containCourseStatus(status, CourseStatus(course.Status)) {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
+			c.Abort()
+		}
+	}
+}
+
 func (cm *course) CourseStatusPermission(status []CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var uri validator.CourseIDUri
