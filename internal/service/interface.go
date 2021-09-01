@@ -96,6 +96,7 @@ type WorkoutSet interface {
 	UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*dto.WorkoutSetOrder) errcode.Error
 	UploadWorkoutSetStartAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
 	UploadWorkoutSetProgressAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
+	DeleteWorkoutSetStartAudio(c *gin.Context, setID int64) errcode.Error
 }
 
 type Action interface {

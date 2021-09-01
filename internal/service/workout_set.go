@@ -207,6 +207,17 @@ func (s *set) UploadWorkoutSetProgressAudio(c *gin.Context, setID int64, audioNa
 	return &dto.WorkoutAudio{Named: newAudioNamed}, nil
 }
 
+func (s *set) DeleteWorkoutSetStartAudio(c *gin.Context, setID int64) errcode.Error {
+	var startAudio = ""
+	if err := s.setRepo.UpdateWorkoutSetByID(setID, &model.UpdateWorkoutSetParam{
+		StartAudio: &startAudio,
+	}); err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return s.errHandler.SystemError()
+	}
+	return nil
+}
+
 func parserWorkoutSet(data *model.WorkoutSetEntity) *dto.WorkoutSet {
 	set := dto.WorkoutSet{
 		ID: data.ID,

@@ -2810,6 +2810,32 @@ paths:
       tags:
       - WorkoutSet
   /workout_set/{workout_set_id}/start_audio:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除訓練組前導語音
+      parameters:
+      - description: 訓練組id
+        in: path
+        name: workout_set_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除訓練組前導語音
+      tags:
+      - WorkoutSet
     post:
       consumes:
       - multipart/form-data

@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,9 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	workoutSetService service.WorkoutSet,
 	workoutSetAccess access.WorkoutSet,
 	trainerAccess access.Trainer,
-	userMiddleware gin.HandlerFunc)  {
+	userMiddleware gin.HandlerFunc,
+	userMidd midd.User,
+	courseMidd midd.Course)  {
 
 	baseGroup.StaticFS("/resource/workout_set/start_audio", http.Dir("./volumes/storage/workout_set/start_audio"))
 	baseGroup.StaticFS("/resource/workout_set/progress_audio", http.Dir("./volumes/storage/workout_set/progress_audio"))
@@ -34,6 +37,12 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	setGroup.POST("/:workout_set_id/start_audio", set.UploadWorkoutSetStartAudio)
 	setGroup.POST("/:workout_set_id/progress_audio", set.UploadWorkoutSetProgressAudio)
 	setGroup.POST("/:workout_set_id/duplicate", set.DuplicateWorkoutSet)
+
+	baseGroup.DELETE("/workout_set/:workout_set_id/start_audio",
+		userMidd.TokenPermission([]midd.Role{midd.UserRole}),
+		userMidd.UserStatusPermission([]midd.UserStatus{midd.UserActivity}),
+		courseMidd.WorkoutPermission([]midd.CourseStatus{midd.Preparing, midd.Reject}),
+		set.DeleteWorkoutSetStartAudio)
 }
 
 // UpdateWorkoutSet 修改訓練組
@@ -168,6 +177,30 @@ func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, result, "upload success")
+}
+
+// DeleteWorkoutSetStartAudio 刪除訓練組前導語音
+// @Summary 刪除訓練組前導語音
+// @Description 刪除訓練組前導語音
+// @Tags WorkoutSet
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_set_id path int64 true "訓練組id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /workout_set/{workout_set_id}/start_audio [DELETE]
+func (w *workoutset) DeleteWorkoutSetStartAudio(c *gin.Context) {
+	var uri validator.WorkoutSetIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.workoutSetService.DeleteWorkoutSetStartAudio(c, uri.WorkoutSetID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, nil, "success")
 }
 
 // UploadWorkoutSetProgressAudio 上傳訓練組進行中語音
