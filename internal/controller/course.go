@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,8 @@ type Course struct {
 	planAccess    access.Plan
 	actionAccess  access.Action
 	trainerAccess access.Trainer
+	userMidd midd.User
+	courseMidd midd.Course
 }
 
 func NewCourse(baseGroup *gin.RouterGroup,
@@ -28,7 +31,9 @@ func NewCourse(baseGroup *gin.RouterGroup,
 	planAccess access.Plan,
 	actionAccess  access.Action,
 	trainerAccess access.Trainer,
-	userMiddleware gin.HandlerFunc) {
+	userMiddleware gin.HandlerFunc,
+	userMidd midd.User,
+	courseMidd midd.Course) {
 
 	course := &Course{courseService: courseService,
 		planService: planService,
@@ -36,7 +41,9 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		courseAccess: courseAccess,
 		planAccess: planAccess,
 		actionAccess: actionAccess,
-		trainerAccess: trainerAccess}
+		trainerAccess: trainerAccess,
+		userMidd: userMidd,
+		courseMidd: courseMidd}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 	coursesGroup := baseGroup.Group("/courses")
@@ -45,7 +52,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
-	courseGroup.POST("", course.CreateCourse)
 	courseGroup.PATCH("/:course_id", course.UpdateCourse)
 	courseGroup.GET("/:course_id", course.GetCourse)
 	courseGroup.DELETE("/:course_id", course.DeleteCourse)
@@ -54,6 +60,12 @@ func NewCourse(baseGroup *gin.RouterGroup,
 	courseGroup.GET("/:course_id/plans", course.GetPlans)
 	courseGroup.POST("/:course_id/action", course.CreateAction)
 	courseGroup.GET("/:course_id/actions", course.SearchActions)
+
+	baseGroup.POST("/course",
+		userMidd.TokenPermission([]midd.Role{midd.UserRole}),
+		userMidd.UserStatusPermission([]midd.UserStatus{midd.UserActivity}),
+		userMidd.TrainerStatusPermission([]midd.TrainerStatus{midd.TrainerActivity, midd.TrainerReviewing}),
+		course.CreateCourse)
 }
 
 // CreateCourse 創建課表
@@ -68,21 +80,13 @@ func NewCourse(baseGroup *gin.RouterGroup,
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course [POST]
 func (cc *Course) CreateCourse(c *gin.Context) {
-	var header validator.TokenHeader
+	uid, _ := c.Get("uid")
 	var body validator.CreateCourseBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := cc.courseAccess.CreateVerify(c, header.Token); err != nil {
-		cc.JSONErrorResponse(c, err)
-		return
-	}
-	result, err := cc.courseService.CreateCourseByToken(c, header.Token, &dto.CreateCourseParam{
+	result, err := cc.courseService.CreateCourse(c, uid.(int64), &dto.CreateCourseParam{
 		Name: body.Name,
 		Level: body.Level,
 		Category: body.Category,

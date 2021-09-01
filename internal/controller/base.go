@@ -1,11 +1,10 @@
 package controller
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/model"
-	"net/http"
-
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // Base ...
