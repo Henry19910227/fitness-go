@@ -18,8 +18,7 @@ func NewReview(baseGroup *gin.RouterGroup, reviewService service.Review, userMid
 	courseGroup.POST("/:course_id/submit",
 		userMiddleware.TokenPermission([]midd.Role{midd.UserRole}),
 		userMiddleware.UserStatusPermission([]midd.UserStatus{midd.UserActivity}),
-		courseMiddleware.CourseOwnerVerify(),
-		courseMiddleware.CourseStatusPermission([]midd.CourseStatus{midd.Preparing, midd.Reject}),
+		courseMiddleware.CoursePermission([]midd.CourseStatus{midd.Preparing, midd.Reject}),
 		review.SubmitForReview)
 }
 

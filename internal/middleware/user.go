@@ -90,11 +90,20 @@ func (u *user) TokenPermission(roles []Role) gin.HandlerFunc {
 			return
 		}
 		c.Set("uid", uid)
+		c.Set("role", role)
 	}
 }
 
 func (u *user) UserStatusPermission(status []UserStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		role, isExists := c.Get("role")
+		if !isExists {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
+			return
+		}
+		if Role(role.(int)) == AdminRole {
+			return
+		}
 		uid, isExists := c.Get("uid")
 		if !isExists {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
@@ -119,23 +128,23 @@ func (u *user) UserStatusPermission(status []UserStatus) gin.HandlerFunc {
 
 func (u *user) TrainerStatusPermission(status []TrainerStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var header validator.TokenHeader
-		if err := c.ShouldBindHeader(&header); err != nil {
-			u.JSONValidatorErrorResponse(c, err)
-			c.Abort()
+		role, isExists := c.Get("role")
+		if !isExists {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
 			return
 		}
-		uid, err := u.jwtTool.GetIDByToken(header.Token)
-		if err != nil {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "jwt", errors.New(strconv.Itoa(errcode.InvalidToken))))
-			c.Abort()
+		if Role(role.(int)) == AdminRole {
 			return
 		}
-		c.Set("uid", uid)
+		uid, isExists := c.Get("uid")
+		if !isExists {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
+			return
+		}
 		trainer := struct {
 			TrainerStatus int `gorm:"column:trainer_status"`
 		}{}
-		if err := u.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		if err := u.trainerRepo.FindTrainerByUID(uid.(int64), &trainer); err != nil {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "jwt", err))
 			c.Abort()
 			return
