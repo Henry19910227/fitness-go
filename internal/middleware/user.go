@@ -142,12 +142,18 @@ func (u *user) TrainerStatusPermission(status []TrainerStatus) gin.HandlerFunc {
 			return
 		}
 		trainer := struct {
+			UserID int64 `gorm:"column:user_id"`
 			TrainerStatus int `gorm:"column:trainer_status"`
 		}{}
 		if err := u.trainerRepo.FindTrainerByUID(uid.(int64), &trainer); err != nil {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "jwt", err))
 			c.Abort()
 			return
+		}
+		// 此人不是教練
+		if uid == 0 {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "jwt", errors.New(strconv.Itoa(errcode.PermissionDenied))))
+			c.Abort()
 		}
 		// 驗證是否包含所選的狀態
 		if !containTrainerStatus(status, TrainerStatus(trainer.TrainerStatus)) {
