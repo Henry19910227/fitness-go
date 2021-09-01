@@ -10,6 +10,6 @@ type User interface {
 
 type Course interface {
 	CourseOwnerVerify() gin.HandlerFunc
-	WorkoutPermission(status []CourseStatus) gin.HandlerFunc
+	WorkoutSetPermission(status []CourseStatus) gin.HandlerFunc
 	CourseStatusPermission(status []CourseStatus) gin.HandlerFunc
 }

@@ -41,7 +41,8 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	baseGroup.DELETE("/workout_set/:workout_set_id/start_audio",
 		userMidd.TokenPermission([]midd.Role{midd.UserRole}),
 		userMidd.UserStatusPermission([]midd.UserStatus{midd.UserActivity}),
-		courseMidd.WorkoutPermission([]midd.CourseStatus{midd.Preparing, midd.Reject}),
+		userMidd.TrainerStatusPermission([]midd.TrainerStatus{midd.TrainerActivity, midd.TrainerReviewing}),
+		courseMidd.WorkoutSetPermission([]midd.CourseStatus{midd.Preparing, midd.Reject}),
 		set.DeleteWorkoutSetStartAudio)
 }
 

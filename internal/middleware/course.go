@@ -58,23 +58,25 @@ func (cm *course) CourseOwnerVerify() gin.HandlerFunc {
 	}
 }
 
-func (cm *course) WorkoutPermission(status []CourseStatus) gin.HandlerFunc {
+func (cm *course) WorkoutSetPermission(status []CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid, isExists := c.Get("uid")
 		if !isExists {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "gin", errors.New(strconv.Itoa(errcode.DataNotFound))))
+			c.Abort()
 			return
 		}
-		var uri validator.WorkoutIDUri
+		var uri validator.WorkoutSetIDUri
 		if err := c.ShouldBindUri(&uri); err != nil {
 			cm.JSONValidatorErrorResponse(c, err)
+			c.Abort()
 			return
 		}
 		course := struct {
 			UserID int64 `gorm:"column:user_id"`
 			Status int `gorm:"column:course_status"`
 		}{}
-		if err := cm.courseRepo.FindCourseByWorkoutID(uri.WorkoutID, &course); err != nil {
+		if err := cm.courseRepo.FindCourseByWorkoutSetID(uri.WorkoutSetID, &course); err != nil {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
 			c.Abort()
 			return
@@ -87,6 +89,7 @@ func (cm *course) WorkoutPermission(status []CourseStatus) gin.HandlerFunc {
 		if !containCourseStatus(status, CourseStatus(course.Status)) {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
 			c.Abort()
+			return
 		}
 	}
 }
