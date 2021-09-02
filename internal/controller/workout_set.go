@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -39,10 +40,10 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	setGroup.POST("/:workout_set_id/duplicate", set.DuplicateWorkoutSet)
 
 	baseGroup.DELETE("/workout_set/:workout_set_id/start_audio",
-		userMidd.TokenPermission([]midd.Role{midd.UserRole}),
-		userMidd.UserStatusPermission([]midd.UserStatus{midd.UserActivity}),
-		userMidd.TrainerStatusPermission([]midd.TrainerStatus{midd.TrainerActivity, midd.TrainerReviewing}),
-		courseMidd.WorkoutSetPermission([]midd.CourseStatus{midd.Preparing, midd.Reject}),
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.WorkoutSetPermission([]global.CourseStatus{global.Preparing, global.Reject}),
 		set.DeleteWorkoutSetStartAudio)
 }
 

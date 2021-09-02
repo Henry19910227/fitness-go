@@ -1,14 +1,17 @@
 package middleware
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/Henry19910227/fitness-go/internal/global"
+	"github.com/gin-gonic/gin"
+)
 
 type User interface {
-	TokenPermission(roles []Role) gin.HandlerFunc
-	UserStatusPermission(status []UserStatus) gin.HandlerFunc
-	TrainerStatusPermission(status []TrainerStatus) gin.HandlerFunc
+	TokenPermission(roles []global.Role) gin.HandlerFunc
+	UserStatusPermission(status []global.UserStatus) gin.HandlerFunc
+	TrainerStatusPermission(status []global.TrainerStatus) gin.HandlerFunc
 }
 
 type Course interface {
-	WorkoutSetPermission(status []CourseStatus) gin.HandlerFunc
-	CoursePermission(status []CourseStatus) gin.HandlerFunc
+	WorkoutSetPermission(status []global.CourseStatus) gin.HandlerFunc
+	CoursePermission(status []global.CourseStatus) gin.HandlerFunc
 }

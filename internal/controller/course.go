@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -52,7 +53,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
-	courseGroup.PATCH("/:course_id", course.UpdateCourse)
 	courseGroup.GET("/:course_id", course.GetCourse)
 	courseGroup.DELETE("/:course_id", course.DeleteCourse)
 	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
@@ -62,10 +62,17 @@ func NewCourse(baseGroup *gin.RouterGroup,
 	courseGroup.GET("/:course_id/actions", course.SearchActions)
 
 	baseGroup.POST("/course",
-		userMidd.TokenPermission([]midd.Role{midd.UserRole}),
-		userMidd.UserStatusPermission([]midd.UserStatus{midd.UserActivity}),
-		userMidd.TrainerStatusPermission([]midd.TrainerStatus{midd.TrainerActivity, midd.TrainerReviewing}),
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		course.CreateCourse)
+
+	baseGroup.PATCH("/course/:course_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CoursePermission([]global.CourseStatus{global.Preparing, global.Reject}),
+		course.UpdateCourse)
 }
 
 // CreateCourse 創建課表
@@ -112,27 +119,14 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /course/{course_id} [PATCH]
 func (cc *Course) UpdateCourse(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.CourseIDUri
 	var body validator.UpdateCourseBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := cc.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		cc.JSONErrorResponse(c, err)
-		return
-	}
-	if err := cc.courseAccess.UpdateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
-		cc.JSONErrorResponse(c, err)
 		return
 	}
 	course, err := cc.courseService.UpdateCourse(c, uri.CourseID, &dto.UpdateCourseParam{

@@ -3,20 +3,12 @@ package middleware
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
 	"strconv"
-)
-
-type CourseStatus int
-const (
-	Preparing CourseStatus = 1
-	Reviewing = 2
-	Sale = 3
-	Reject = 4
-	Remove = 5
 )
 
 type course struct {
@@ -30,14 +22,14 @@ func NewCourse(courseRepo repository.Course, jwtTool tool.JWT, errHandler errcod
 	return &course{courseRepo:courseRepo, jwtTool:jwtTool, errHandler: errHandler}
 }
 
-func (cm *course) WorkoutSetPermission(status []CourseStatus) gin.HandlerFunc {
+func (cm *course) WorkoutSetPermission(status []global.CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, isExists := c.Get("role")
 		if !isExists {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
 			return
 		}
-		if Role(role.(int)) == AdminRole {
+		if global.Role(role.(int)) == global.AdminRole {
 			return
 		}
 		uid, isExists := c.Get("uid")
@@ -65,7 +57,7 @@ func (cm *course) WorkoutSetPermission(status []CourseStatus) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if !containCourseStatus(status, CourseStatus(course.Status)) {
+		if !containCourseStatus(status, global.CourseStatus(course.Status)) {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
 			c.Abort()
 			return
@@ -73,14 +65,14 @@ func (cm *course) WorkoutSetPermission(status []CourseStatus) gin.HandlerFunc {
 	}
 }
 
-func (cm *course) CoursePermission(status []CourseStatus) gin.HandlerFunc {
+func (cm *course) CoursePermission(status []global.CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, isExists := c.Get("role")
 		if !isExists {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
 			return
 		}
-		if Role(role.(int)) == AdminRole {
+		if global.Role(role.(int)) == global.AdminRole {
 			return
 		}
 		uid, isExists := c.Get("uid")
@@ -106,14 +98,14 @@ func (cm *course) CoursePermission(status []CourseStatus) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if !containCourseStatus(status, CourseStatus(course.Status)) {
+		if !containCourseStatus(status, global.CourseStatus(course.Status)) {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
 			c.Abort()
 		}
 	}
 }
 
-func containCourseStatus(items []CourseStatus, target CourseStatus) bool {
+func containCourseStatus(items []global.CourseStatus, target global.CourseStatus) bool {
 	for _, v := range items {
 		if target == v {
 			return true
