@@ -54,7 +54,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
 	courseGroup.DELETE("/:course_id", course.DeleteCourse)
-	courseGroup.POST("/:course_id/cover", course.UploadCourseCover)
 	courseGroup.POST("/:course_id/plan", course.CreatePlan)
 	courseGroup.GET("/:course_id/plans", course.GetPlans)
 	courseGroup.POST("/:course_id/action", course.CreateAction)
@@ -80,6 +79,13 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		courseMidd.CourseCreatorVerify(),
 		courseMidd.CourseStatusAccessRange([]global.CourseStatus{global.Preparing, global.Reviewing, global.Sale, global.Reject}, nil),
 		course.GetCourse)
+
+	baseGroup.POST("/course/:course_id/cover",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.CourseStatusAccessRange([]global.CourseStatus{global.Preparing, global.Reject}, nil),
+		course.UploadCourseCover)
+
 }
 
 // CreateCourse 創建課表
@@ -234,18 +240,9 @@ func (cc *Course) GetCourse(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /course/{course_id}/cover [POST]
 func (cc *Course) UploadCourseCover(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.CourseIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := cc.courseAccess.UpdateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
-		cc.JSONErrorResponse(c, err)
 		return
 	}
 	file, fileHeader, err := c.Request.FormFile("cover")
