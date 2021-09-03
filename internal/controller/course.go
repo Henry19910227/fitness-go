@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
@@ -16,10 +15,6 @@ type Course struct {
 	courseService service.Course
 	planService   service.Plan
 	actionService service.Action
-	courseAccess  access.Course
-	planAccess    access.Plan
-	actionAccess  access.Action
-	trainerAccess access.Trainer
 	userMidd midd.User
 	courseMidd midd.Course
 }
@@ -28,27 +23,18 @@ func NewCourse(baseGroup *gin.RouterGroup,
 	courseService service.Course,
 	planService service.Plan,
 	actionService service.Action,
-	courseAccess access.Course,
-	planAccess access.Plan,
-	actionAccess  access.Action,
-	trainerAccess access.Trainer,
-	userMiddleware gin.HandlerFunc,
 	userMidd midd.User,
 	courseMidd midd.Course) {
 
 	course := &Course{courseService: courseService,
 		planService: planService,
 		actionService: actionService,
-		courseAccess: courseAccess,
-		planAccess: planAccess,
-		actionAccess: actionAccess,
-		trainerAccess: trainerAccess,
 		userMidd: userMidd,
 		courseMidd: courseMidd}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 
-	baseGroup.POST("/courses",
+	baseGroup.GET("/courses",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		course.GetCourses)
@@ -127,13 +113,16 @@ func NewCourse(baseGroup *gin.RouterGroup,
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course [POST]
 func (cc *Course) CreateCourse(c *gin.Context) {
-	uid, _ := c.Get("uid")
+	uid, e := cc.GetUID(c)
+	if e != nil {
+		cc.JSONValidatorErrorResponse(c, e.Error())
+	}
 	var body validator.CreateCourseBody
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, err := cc.courseService.CreateCourse(c, uid.(int64), &dto.CreateCourseParam{
+	result, err := cc.courseService.CreateCourse(c, uid, &dto.CreateCourseParam{
 		Name: body.Name,
 		Level: body.Level,
 		Category: body.Category,
@@ -202,17 +191,16 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /courses [GET]
 func (cc *Course) GetCourses(c *gin.Context) {
-	var header validator.TokenHeader
-	var query validator.CourseStatusQuery
-	if err := c.ShouldBindHeader(&header); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
+	uid, e := cc.GetUID(c)
+	if e != nil {
+		cc.JSONValidatorErrorResponse(c, e.Error())
 	}
+	var query validator.CourseStatusQuery
 	if err := c.ShouldBindQuery(&query); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, err := cc.courseService.GetCourseSummariesByToken(c, header.Token, query.Status)
+	courses, err := cc.courseService.GetCourseSummariesByUID(c, uid, query.Status)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
@@ -232,18 +220,9 @@ func (cc *Course) GetCourses(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course/{course_id} [GET]
 func (cc *Course) GetCourse(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.CourseIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := cc.courseAccess.OwnVerifyByTokenAndCourseID(c, header.Token, uri.CourseID); err != nil {
-		cc.JSONErrorResponse(c, err)
 		return
 	}
 	course, err := cc.courseService.GetCourseDetailByCourseID(c, uri.CourseID)
