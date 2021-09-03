@@ -53,7 +53,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
-	courseGroup.POST("/:course_id/plan", course.CreatePlan)
 	courseGroup.GET("/:course_id/plans", course.GetPlans)
 	courseGroup.POST("/:course_id/action", course.CreateAction)
 	courseGroup.GET("/:course_id/actions", course.SearchActions)
@@ -90,6 +89,12 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
 		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
 		course.DeleteCourse)
+
+	baseGroup.POST("/course/:course_id/plan",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		course.CreatePlan)
 }
 
 // CreateCourse 創建課表
@@ -303,27 +308,14 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course/{course_id}/plan [POST]
 func (cc *Course) CreatePlan(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.CourseIDUri
 	var body validator.CreatePlanBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := cc.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		cc.JSONErrorResponse(c, err)
-		return
-	}
-	if err := cc.planAccess.CreateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
-		cc.JSONErrorResponse(c, err)
 		return
 	}
 	plan, err := cc.planService.CreatePlan(c, uri.CourseID, body.Name)

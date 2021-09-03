@@ -99,6 +99,7 @@ func (cm *course) UserAccessCourseByStatusRange(status []global.CourseStatus) gi
 		role, isExists := c.Get("role")
 		if !isExists {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
+			c.Abort()
 			return
 		}
 		if global.Role(role.(int)) == global.AdminRole {
@@ -125,9 +126,10 @@ func (cm *course) AdminAccessCourseByStatusRange(status []global.CourseStatus) g
 		role, isExists := c.Get("role")
 		if !isExists {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
+			c.Abort()
 			return
 		}
-		if global.Role(role.(int)) == global.AdminRole {
+		if global.Role(role.(int)) == global.UserRole {
 			return
 		}
 		course := struct {
