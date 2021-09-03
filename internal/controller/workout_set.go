@@ -41,10 +41,15 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 
 	baseGroup.DELETE("/workout_set/:workout_set_id/start_audio",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		set.DeleteWorkoutSetStartAudio)
+
+	baseGroup.DELETE("/workout_set/:workout_set_id/progress_audio",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		set.DeleteWorkoutSetProgressAudio)
 }
 
 // UpdateWorkoutSet 修改訓練組
@@ -247,6 +252,30 @@ func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, result, "upload success")
+}
+
+// DeleteWorkoutSetProgressAudio 刪除訓練組進行中語音
+// @Summary 刪除訓練組進行中語音
+// @Description 刪除訓練組進行中語音
+// @Tags WorkoutSet
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_set_id path int64 true "訓練組id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /workout_set/{workout_set_id}/progress_audio [DELETE]
+func (w *workoutset) DeleteWorkoutSetProgressAudio(c *gin.Context) {
+	var uri validator.WorkoutSetIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.workoutSetService.DeleteWorkoutSetProgressAudio(c, uri.WorkoutSetID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, nil, "success")
 }
 
 // DuplicateWorkoutSet 複製訓練組

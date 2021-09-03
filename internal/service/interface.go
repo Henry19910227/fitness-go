@@ -97,6 +97,7 @@ type WorkoutSet interface {
 	UploadWorkoutSetStartAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
 	UploadWorkoutSetProgressAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
 	DeleteWorkoutSetStartAudio(c *gin.Context, setID int64) errcode.Error
+	DeleteWorkoutSetProgressAudio(c *gin.Context, setID int64) errcode.Error
 }
 
 type Action interface {
