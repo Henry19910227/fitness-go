@@ -53,7 +53,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
-	courseGroup.GET("/:course_id/actions", course.SearchActions)
 
 	baseGroup.POST("/course",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
@@ -70,11 +69,13 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	baseGroup.GET("/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.CourseCreatorVerify(),
 		course.GetCourse)
 
 	baseGroup.POST("/course/:course_id/cover",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.CourseCreatorVerify(),
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
@@ -82,6 +83,7 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	baseGroup.DELETE("/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.CourseCreatorVerify(),
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
 		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
@@ -96,6 +98,7 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	baseGroup.GET("/course/:course_id/plans",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.CourseCreatorVerify(),
 		course.GetPlans)
 
@@ -105,6 +108,12 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		courseMidd.CourseCreatorVerify(),
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.CreateAction)
+
+	baseGroup.GET("/course/:course_id/actions",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		course.SearchActions)
 }
 
 // CreateCourse 創建課表
@@ -416,13 +425,8 @@ func (cc *Course) CreateAction(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "查詢失敗"
 // @Router /course/{course_id}/actions [GET]
 func (cc *Course) SearchActions(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.CourseIDUri
 	var query validator.SearchActionsQuery
-	if err := c.ShouldBindHeader(&header); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
