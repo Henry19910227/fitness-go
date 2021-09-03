@@ -47,12 +47,11 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		courseMidd: courseMidd}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
-	coursesGroup := baseGroup.Group("/courses")
-	coursesGroup.Use(userMiddleware)
-	coursesGroup.GET("", course.GetCourses)
 
-	courseGroup := baseGroup.Group("/course")
-	courseGroup.Use(userMiddleware)
+	baseGroup.POST("/courses",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		course.GetCourses)
 
 	baseGroup.POST("/course",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
