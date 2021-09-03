@@ -60,35 +60,35 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	baseGroup.POST("/course",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		course.CreateCourse)
 
 	baseGroup.PATCH("/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
-		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.CourseCreatorVerify(),
-		courseMidd.CourseStatusAccessRange([]global.CourseStatus{global.Preparing, global.Reject}, nil),
+		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.UpdateCourse)
 
 	baseGroup.GET("/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		courseMidd.CourseCreatorVerify(),
-		courseMidd.CourseStatusAccessRange([]global.CourseStatus{global.Preparing, global.Reviewing, global.Sale, global.Reject}, nil),
 		course.GetCourse)
 
 	baseGroup.POST("/course/:course_id/cover",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		courseMidd.CourseCreatorVerify(),
-		courseMidd.CourseStatusAccessRange([]global.CourseStatus{global.Preparing, global.Reject}, nil),
+		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.UploadCourseCover)
 
 	baseGroup.DELETE("/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		courseMidd.CourseCreatorVerify(),
-		courseMidd.CourseStatusAccessRange([]global.CourseStatus{global.Preparing}, nil),
+		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
 		course.DeleteCourse)
 }
 

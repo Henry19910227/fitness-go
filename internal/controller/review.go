@@ -20,7 +20,7 @@ func NewReview(baseGroup *gin.RouterGroup, reviewService service.Review, userMid
 		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
 		userMiddleware.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		courseMiddleware.CourseCreatorVerify(),
-		courseMiddleware.CourseStatusAccessRange([]global.CourseStatus{global.Preparing, global.Reject}, nil),
+		courseMiddleware.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		review.SubmitForReview)
 }
 

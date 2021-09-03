@@ -12,7 +12,8 @@ type User interface {
 }
 
 type Course interface {
-	WorkoutSetPermission(status []global.CourseStatus) gin.HandlerFunc
+	WorkoutSetStatusAccessRange(status []global.CourseStatus, ext []global.CourseStatus) gin.HandlerFunc
 	CourseCreatorVerify() gin.HandlerFunc
-	CourseStatusAccessRange(status []global.CourseStatus, ext []global.CourseStatus) gin.HandlerFunc
+	UserAccessCourseByStatusRange(status []global.CourseStatus) gin.HandlerFunc
+	AdminAccessCourseByStatusRange(status []global.CourseStatus) gin.HandlerFunc
 }

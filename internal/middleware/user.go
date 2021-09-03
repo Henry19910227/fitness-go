@@ -136,6 +136,7 @@ func (u *user) TrainerStatusPermission(status []global.TrainerStatus) gin.Handle
 		if uid == 0 {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "jwt", errors.New(strconv.Itoa(errcode.PermissionDenied))))
 			c.Abort()
+			return
 		}
 		// 驗證是否包含所選的狀態
 		if !containTrainerStatus(status, global.TrainerStatus(trainer.TrainerStatus)) {

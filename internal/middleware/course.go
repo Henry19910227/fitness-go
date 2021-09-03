@@ -22,7 +22,7 @@ func NewCourse(courseRepo repository.Course, jwtTool tool.JWT, errHandler errcod
 	return &course{courseRepo:courseRepo, jwtTool:jwtTool, errHandler: errHandler}
 }
 
-func (cm *course) WorkoutSetPermission(status []global.CourseStatus) gin.HandlerFunc {
+func (cm *course) WorkoutSetStatusAccessRange(status []global.CourseStatus, ext []global.CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, isExists := c.Get("role")
 		if !isExists {
@@ -32,11 +32,6 @@ func (cm *course) WorkoutSetPermission(status []global.CourseStatus) gin.Handler
 		if global.Role(role.(int)) == global.AdminRole {
 			return
 		}
-		uid, isExists := c.Get("uid")
-		if !isExists {
-			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
-			return
-		}
 		var uri validator.WorkoutSetIDUri
 		if err := c.ShouldBindUri(&uri); err != nil {
 			cm.JSONValidatorErrorResponse(c, err)
@@ -44,7 +39,6 @@ func (cm *course) WorkoutSetPermission(status []global.CourseStatus) gin.Handler
 			return
 		}
 		course := struct {
-			UserID int64 `gorm:"column:user_id"`
 			Status int `gorm:"column:course_status"`
 		}{}
 		if err := cm.courseRepo.FindCourseByWorkoutSetID(uri.WorkoutSetID, &course); err != nil {
@@ -52,12 +46,11 @@ func (cm *course) WorkoutSetPermission(status []global.CourseStatus) gin.Handler
 			c.Abort()
 			return
 		}
-		if course.UserID != uid {
-			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.PermissionDenied))))
-			c.Abort()
-			return
+		s := status
+		if global.Role(role.(int)) == global.AdminRole && ext != nil{
+			s = ext
 		}
-		if !containCourseStatus(status, global.CourseStatus(course.Status)) {
+		if !containCourseStatus(s, global.CourseStatus(course.Status)) {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
 			c.Abort()
 			return
@@ -91,6 +84,7 @@ func (cm *course) CourseCreatorVerify() gin.HandlerFunc {
 		if err := cm.courseRepo.FindCourseByID(uri.CourseID, &course); err != nil {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
 			c.Abort()
+			return
 		}
 		if course.UserID != uid {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.PermissionDenied))))
@@ -100,34 +94,85 @@ func (cm *course) CourseCreatorVerify() gin.HandlerFunc {
 	}
 }
 
-func (cm *course) CourseStatusAccessRange(status []global.CourseStatus, ext []global.CourseStatus) gin.HandlerFunc {
+func (cm *course) UserAccessCourseByStatusRange(status []global.CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, isExists := c.Get("role")
 		if !isExists {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
 			return
 		}
-		var uri validator.CourseIDUri
-		if err := c.ShouldBindUri(&uri); err != nil {
-			cm.JSONValidatorErrorResponse(c, err)
+		if global.Role(role.(int)) == global.AdminRole {
 			return
 		}
 		course := struct {
 			Status int `gorm:"column:course_status"`
 		}{}
-		if err := cm.courseRepo.FindCourseByID(uri.CourseID, &course); err != nil {
+		if err := cm.findCourse(c, &course); err != nil {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
 			c.Abort()
+			return
 		}
-		s := status
-		if global.Role(role.(int)) == global.AdminRole && ext != nil{
-			s = ext
-		}
-		if !containCourseStatus(s, global.CourseStatus(course.Status)) {
+		if !containCourseStatus(status, global.CourseStatus(course.Status)) {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
 			c.Abort()
+			return
 		}
 	}
+}
+
+func (cm *course) AdminAccessCourseByStatusRange(status []global.CourseStatus) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		role, isExists := c.Get("role")
+		if !isExists {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
+			return
+		}
+		if global.Role(role.(int)) == global.AdminRole {
+			return
+		}
+		course := struct {
+			Status int `gorm:"column:course_status"`
+		}{}
+		if err := cm.findCourse(c, &course); err != nil {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
+			c.Abort()
+			return
+		}
+		if !containCourseStatus(status, global.CourseStatus(course.Status)) {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
+			c.Abort()
+			return
+		}
+	}
+}
+
+func (cm *course) findCourse(c *gin.Context, course interface{}) error {
+	var courseUri validator.CourseIDUri
+	var err error
+	if err = c.ShouldBindUri(&courseUri); err == nil {
+		if err = cm.courseRepo.FindCourseByID(courseUri.CourseID, course); err == nil {
+			return nil
+		}
+	}
+	var planUri validator.PlanIDUri
+	if err = c.ShouldBindUri(&planUri); err == nil {
+		if err = cm.courseRepo.FindCourseByPlanID(planUri.PlanID, course); err == nil {
+			return nil
+		}
+	}
+	var workoutUri validator.WorkoutIDUri
+	if err = c.ShouldBindUri(&workoutUri); err == nil {
+		if err = cm.courseRepo.FindCourseByWorkoutID(workoutUri.WorkoutID, course); err == nil {
+			return nil
+		}
+	}
+	var workoutSetUri validator.WorkoutSetIDUri
+	if err = c.ShouldBindUri(&workoutSetUri); err == nil {
+		if err = cm.courseRepo.FindCourseByWorkoutSetID(workoutSetUri.WorkoutSetID, course); err == nil {
+			return nil
+		}
+	}
+	return err
 }
 
 func containCourseStatus(items []global.CourseStatus, target global.CourseStatus) bool {
