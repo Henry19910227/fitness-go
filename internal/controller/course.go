@@ -53,7 +53,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
-	courseGroup.GET("/:course_id/plans", course.GetPlans)
 	courseGroup.POST("/:course_id/action", course.CreateAction)
 	courseGroup.GET("/:course_id/actions", course.SearchActions)
 
@@ -72,7 +71,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	baseGroup.GET("/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
-		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		courseMidd.CourseCreatorVerify(),
 		course.GetCourse)
 
@@ -95,6 +93,11 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.CreatePlan)
+
+	baseGroup.GET("/course/:course_id/plans",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		courseMidd.CourseCreatorVerify(),
+		course.GetPlans)
 }
 
 // CreateCourse 創建課表
