@@ -53,7 +53,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.Use(userMiddleware)
-	courseGroup.POST("/:course_id/action", course.CreateAction)
 	courseGroup.GET("/:course_id/actions", course.SearchActions)
 
 	baseGroup.POST("/course",
@@ -65,7 +64,7 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.CourseCreatorVerify(),
-		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.UpdateCourse)
 
@@ -77,27 +76,35 @@ func NewCourse(baseGroup *gin.RouterGroup,
 	baseGroup.POST("/course/:course_id/cover",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		courseMidd.CourseCreatorVerify(),
-		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.UploadCourseCover)
 
 	baseGroup.DELETE("/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		courseMidd.CourseCreatorVerify(),
-		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
 		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing}),
 		course.DeleteCourse)
 
 	baseGroup.POST("/course/:course_id/plan",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
-		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.CreatePlan)
 
 	baseGroup.GET("/course/:course_id/plans",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		courseMidd.CourseCreatorVerify(),
 		course.GetPlans)
+
+	baseGroup.POST("/course/:course_id/action",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		course.CreateAction)
 }
 
 // CreateCourse 創建課表
@@ -367,27 +374,14 @@ func (cc *Course) GetPlans(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course/{course_id}/action [POST]
 func (cc *Course) CreateAction(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.CourseIDUri
 	var body validator.CreateActionBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := cc.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		cc.JSONErrorResponse(c, err)
-		return
-	}
-	if err := cc.actionAccess.CreateVerifyByCourseID(c, header.Token, uri.CourseID); err != nil {
-		cc.JSONErrorResponse(c, err)
 		return
 	}
 	action, err := cc.actionService.CreateAction(c, uri.CourseID, &dto.CreateActionParam{

@@ -43,7 +43,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
-		courseMidd.UserAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		set.DeleteWorkoutSetStartAudio)
 }
 

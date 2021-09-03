@@ -94,7 +94,7 @@ func (cm *course) CourseCreatorVerify() gin.HandlerFunc {
 	}
 }
 
-func (cm *course) UserAccessCourseByStatusRange(status []global.CourseStatus) gin.HandlerFunc {
+func (cm *course) UserRoleAccessCourseByStatusRange(status []global.CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, isExists := c.Get("role")
 		if !isExists {
