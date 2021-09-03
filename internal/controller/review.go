@@ -19,7 +19,8 @@ func NewReview(baseGroup *gin.RouterGroup, reviewService service.Review, userMid
 	courseGroup.POST("/:course_id/submit",
 		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
 		userMiddleware.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		courseMiddleware.CoursePermission([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMiddleware.CourseCreatorVerify(),
+		courseMiddleware.CourseStatusAccessRange([]global.CourseStatus{global.Preparing, global.Reject}, nil),
 		review.SubmitForReview)
 }
 
