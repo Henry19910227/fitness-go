@@ -42,7 +42,7 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 		//更新訓練的訓練組個數
 		countQuery := tx.Table("workout_sets").
 			Select("COUNT(*) AS workout_set_count").
-			Where("workout_id = ?", workoutID)
+			Where("workout_id = ? AND type = ?", workoutID, 1)
 		if err := tx.Table("workouts").
 			Where("id = ?", workoutID).
 			Update("workout_set_count", countQuery).Error; err != nil {
@@ -68,7 +68,7 @@ func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model
 		//更新訓練的訓練組個數
 		countQuery := tx.Table("workout_sets").
 			Select("COUNT(*) AS workout_set_count").
-			Where("workout_id = ?", workoutID)
+			Where("workout_id = ? AND type = ?", workoutID, 1)
 		if err := tx.Table("workouts").
 			Where("id = ?", workoutID).
 			Update("workout_set_count", countQuery).Error; err != nil {
@@ -94,23 +94,7 @@ func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
-	if err := s.gorm.DB().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(&set).Error; err != nil {
-			return err
-		}
-		var setCount int
-		if err := tx.Raw("SELECT COUNT(*) FROM workout_sets WHERE workout_id = ? FOR UPDATE", workoutID).
-			Scan(&setCount).Error; err != nil {
-				return err
-		}
-		if err := tx.
-			Table("workouts").
-			Where("id = ?", workoutID).
-			Update("workout_set_count", setCount).Error; err != nil {
-			return err
-		}
-		return nil
-	}); err != nil {
+	if err := s.gorm.DB().Create(&set).Error; err != nil {
 		return 0, err
 	}
 	return set.ID, nil
