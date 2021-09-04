@@ -1,7 +1,8 @@
 package controller
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/access"
+	"github.com/Henry19910227/fitness-go/internal/global"
+	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -11,29 +12,45 @@ type Plan struct {
 	Base
 	planService    service.Plan
 	workoutService service.Workout
-	planAccess     access.Plan
-	workoutAccess access.Workout
-	trainerAccess  access.Trainer
 }
 
 func NewPlan(baseGroup *gin.RouterGroup,
 	planService service.Plan,
 	workoutService service.Workout,
-	planAccess access.Plan,
-	workoutAccess access.Workout,
-	trainerAccess  access.Trainer,
-	userMiddleware gin.HandlerFunc) {
+	userMidd midd.User,
+	courseMidd midd.Course) {
 	plan := Plan{planService: planService,
-		workoutService: workoutService,
-		planAccess: planAccess,
-		workoutAccess: workoutAccess,
-		trainerAccess: trainerAccess}
-	planGroup := baseGroup.Group("/plan")
-	planGroup.Use(userMiddleware)
-	planGroup.PATCH("/:plan_id", plan.UpdatePlan)
-	planGroup.DELETE("/:plan_id", plan.DeletePlan)
-	planGroup.POST("/:plan_id/workout", plan.CreateWorkout)
-	planGroup.GET("/:plan_id/workouts", plan.GetWorkouts)
+		workoutService: workoutService}
+
+	baseGroup.PATCH("/plan/:plan_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		plan.UpdatePlan)
+
+	baseGroup.DELETE("/plan/:plan_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		plan.DeletePlan)
+
+	baseGroup.POST("/plan/:plan_id/workout",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		plan.CreateWorkout)
+
+	baseGroup.GET("/plan/:plan_id/workouts",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		plan.GetWorkouts)
 }
 
 // UpdatePlan 修改計畫
@@ -49,27 +66,14 @@ func NewPlan(baseGroup *gin.RouterGroup,
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /plan/{plan_id} [PATCH]
 func (p *Plan) UpdatePlan(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.PlanIDUri
 	var body validator.UpdatePlanBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		p.JSONErrorResponse(c, err)
-		return
-	}
-	if err := p.planAccess.UpdateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
-		p.JSONErrorResponse(c, err)
 		return
 	}
 	planData, err := p.planService.UpdatePlan(c, uri.PlanID, body.Name)
@@ -92,22 +96,9 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /plan/{plan_id} [DELETE]
 func (p *Plan) DeletePlan(c *gin.Context)  {
-	var header validator.TokenHeader
 	var uri validator.PlanIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		p.JSONErrorResponse(c, err)
-		return
-	}
-	if err := p.planAccess.UpdateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
-		p.JSONErrorResponse(c, err)
 		return
 	}
 	data, err := p.planService.DeletePlan(c, uri.PlanID)
@@ -131,27 +122,14 @@ func (p *Plan) DeletePlan(c *gin.Context)  {
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /plan/{plan_id}/workout [POST]
 func (p *Plan) CreateWorkout(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.PlanIDUri
 	var body validator.CreateWorkoutBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := p.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		p.JSONErrorResponse(c, err)
-		return
-	}
-	if err := p.workoutAccess.CreateVerifyByPlanID(c, header.Token, uri.PlanID); err != nil {
-		p.JSONErrorResponse(c, err)
 		return
 	}
 	data, err := p.workoutService.CreateWorkout(c, uri.PlanID, body.Name)
