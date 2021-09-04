@@ -149,27 +149,31 @@ func (cm *course) findCourse(c *gin.Context, course interface{}) error {
 	var courseUri validator.CourseIDUri
 	var err error
 	if err = c.ShouldBindUri(&courseUri); err == nil {
-		if err = cm.courseRepo.FindCourseByID(courseUri.CourseID, course); err == nil {
-			return nil
+		if err = cm.courseRepo.FindCourseByID(courseUri.CourseID, course); err != nil {
+			return err
 		}
+		return nil
 	}
 	var planUri validator.PlanIDUri
 	if err = c.ShouldBindUri(&planUri); err == nil {
-		if err = cm.courseRepo.FindCourseByPlanID(planUri.PlanID, course); err == nil {
-			return nil
+		if err = cm.courseRepo.FindCourseByPlanID(planUri.PlanID, course); err != nil {
+			return err
 		}
+		return nil
 	}
 	var workoutUri validator.WorkoutIDUri
 	if err = c.ShouldBindUri(&workoutUri); err == nil {
-		if err = cm.courseRepo.FindCourseByWorkoutID(workoutUri.WorkoutID, course); err == nil {
-			return nil
+		if err = cm.courseRepo.FindCourseByWorkoutID(workoutUri.WorkoutID, course); err != nil {
+			return err
 		}
+		return nil
 	}
 	var workoutSetUri validator.WorkoutSetIDUri
 	if err = c.ShouldBindUri(&workoutSetUri); err == nil {
-		if err = cm.courseRepo.FindCourseByWorkoutSetID(workoutSetUri.WorkoutSetID, course); err == nil {
-			return nil
+		if err = cm.courseRepo.FindCourseByWorkoutSetID(workoutSetUri.WorkoutSetID, course); err != nil {
+			return err
 		}
+		return nil
 	}
 	return err
 }
