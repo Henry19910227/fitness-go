@@ -121,7 +121,7 @@ func main() {
 	controller.NewCourse(baseGroup, courseService, planService, actionService, userMidd, courseMidd)
 	controller.NewPlan(baseGroup, planService, workoutService, planAccess, workoutAccess, trainerAccess, userMiddleware)
 	controller.NewWorkout(baseGroup, workoutService, workoutSetService, workoutAccess, workoutSetAccess, trainerAccess, userMiddleware)
-	controller.NewWorkoutSet(baseGroup, workoutSetService, workoutSetAccess, trainerAccess, userMiddleware, userMidd, courseMidd)
+	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMiddleware)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
 	controller.NewReview(baseGroup, reviewService, userMidd, courseMidd)

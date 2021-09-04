@@ -63,6 +63,7 @@ func (cm *course) CourseCreatorVerify() gin.HandlerFunc {
 		role, isExists := c.Get("role")
 		if !isExists {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
+			c.Abort()
 			return
 		}
 		if global.Role(role.(int)) == global.AdminRole {
@@ -71,17 +72,13 @@ func (cm *course) CourseCreatorVerify() gin.HandlerFunc {
 		uid, isExists := c.Get("uid")
 		if !isExists {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
-			return
-		}
-		var uri validator.CourseIDUri
-		if err := c.ShouldBindUri(&uri); err != nil {
-			cm.JSONValidatorErrorResponse(c, err)
+			c.Abort()
 			return
 		}
 		course := struct {
 			UserID int64 `gorm:"column:user_id"`
 		}{}
-		if err := cm.courseRepo.FindCourseByID(uri.CourseID, &course); err != nil {
+		if err := cm.findCourse(c, &course); err != nil {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
 			c.Abort()
 			return

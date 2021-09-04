@@ -35,6 +35,7 @@ func (u *user) TokenPermission(roles []global.Role) gin.HandlerFunc {
 		var header validator.TokenHeader
 		if err := c.ShouldBindHeader(&header); err != nil {
 			u.JSONValidatorErrorResponse(c, err)
+			c.Abort()
 			return
 		}
 		uid, err := u.jwtTool.GetIDByToken(header.Token)
@@ -113,6 +114,7 @@ func (u *user) TrainerStatusPermission(status []global.TrainerStatus) gin.Handle
 		role, isExists := c.Get("role")
 		if !isExists {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
+			c.Abort()
 			return
 		}
 		if global.Role(role.(int)) == global.AdminRole {
@@ -121,6 +123,7 @@ func (u *user) TrainerStatusPermission(status []global.TrainerStatus) gin.Handle
 		uid, isExists := c.Get("uid")
 		if !isExists {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
+			c.Abort()
 			return
 		}
 		trainer := struct {

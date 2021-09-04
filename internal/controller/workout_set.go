@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
@@ -14,30 +13,56 @@ import (
 type workoutset struct {
 	Base
 	workoutSetService service.WorkoutSet
-	workoutSetAccess  access.WorkoutSet
-	trainerAccess access.Trainer
 }
 
 func NewWorkoutSet(baseGroup *gin.RouterGroup,
 	workoutSetService service.WorkoutSet,
-	workoutSetAccess access.WorkoutSet,
-	trainerAccess access.Trainer,
-	userMiddleware gin.HandlerFunc,
 	userMidd midd.User,
 	courseMidd midd.Course)  {
 
 	baseGroup.StaticFS("/resource/workout_set/start_audio", http.Dir("./volumes/storage/workout_set/start_audio"))
 	baseGroup.StaticFS("/resource/workout_set/progress_audio", http.Dir("./volumes/storage/workout_set/progress_audio"))
-	set := workoutset{workoutSetService: workoutSetService,
-		workoutSetAccess: workoutSetAccess,
-		trainerAccess: trainerAccess}
-	setGroup := baseGroup.Group("/workout_set")
-	setGroup.Use(userMiddleware)
-	setGroup.PATCH("/:workout_set_id", set.UpdateWorkoutSet)
-	setGroup.DELETE("/:workout_set_id", set.DeleteWorkoutSet)
-	setGroup.POST("/:workout_set_id/start_audio", set.UploadWorkoutSetStartAudio)
-	setGroup.POST("/:workout_set_id/progress_audio", set.UploadWorkoutSetProgressAudio)
-	setGroup.POST("/:workout_set_id/duplicate", set.DuplicateWorkoutSet)
+	set := workoutset{workoutSetService: workoutSetService}
+
+	baseGroup.POST("/workout_set/:workout_set_id/start_audio",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		set.UploadWorkoutSetStartAudio)
+
+	baseGroup.POST("/workout_set/:workout_set_id/progress_audio",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		set.UploadWorkoutSetProgressAudio)
+
+	baseGroup.POST("/workout_set/:workout_set_id/duplicate",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		set.DuplicateWorkoutSet)
+
+	baseGroup.DELETE("/workout_set/:workout_set_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		set.DeleteWorkoutSet)
+
+	baseGroup.PATCH("/workout_set/:workout_set_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		set.UpdateWorkoutSet)
 
 	baseGroup.DELETE("/workout_set/:workout_set_id/start_audio",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
@@ -65,27 +90,14 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /workout_set/{workout_set_id} [PATCH]
 func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.WorkoutSetIDUri
 	var body validator.UpdateWorkoutSetBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.workoutSetAccess.UpdateVerifyByWorkoutSetID(c, header.Token, uri.WorkoutSetID); err != nil {
-		w.JSONErrorResponse(c, err)
 		return
 	}
 	set, err := w.workoutSetService.UpdateWorkoutSet(c, uri.WorkoutSetID, &dto.UpdateWorkoutSetParam{
@@ -116,22 +128,9 @@ func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
 // @Router /workout_set/{workout_set_id} [DELETE]
 func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.WorkoutSetIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.workoutSetAccess.UpdateVerifyByWorkoutSetID(c, header.Token, uri.WorkoutSetID); err != nil {
-		w.JSONErrorResponse(c, err)
 		return
 	}
 	result, err := w.workoutSetService.DeleteWorkoutSet(c, uri.WorkoutSetID)
@@ -155,22 +154,9 @@ func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /workout_set/{workout_set_id}/start_audio [POST]
 func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.WorkoutSetIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.workoutSetAccess.UpdateVerifyByWorkoutSetID(c, header.Token, uri.WorkoutSetID); err != nil {
-		w.JSONErrorResponse(c, err)
 		return
 	}
 	file, fileHeader, err := c.Request.FormFile("start_audio")
@@ -223,22 +209,9 @@ func (w *workoutset) DeleteWorkoutSetStartAudio(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /workout_set/{workout_set_id}/progress_audio [POST]
 func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.WorkoutSetIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.workoutSetAccess.UpdateVerifyByWorkoutSetID(c, header.Token, uri.WorkoutSetID); err != nil {
-		w.JSONErrorResponse(c, err)
 		return
 	}
 	file, fileHeader, err := c.Request.FormFile("progress_audio")
@@ -291,27 +264,14 @@ func (w *workoutset) DeleteWorkoutSetProgressAudio(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "複製失敗"
 // @Router /workout_set/{workout_set_id}/duplicate [POST]
 func (w *workoutset) DuplicateWorkoutSet(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.WorkoutSetIDUri
 	var body validator.DuplicateWorkoutSetBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		w.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := w.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		w.JSONErrorResponse(c, err)
-		return
-	}
-	if err := w.workoutSetAccess.UpdateVerifyByWorkoutSetID(c, header.Token, uri.WorkoutSetID); err != nil {
-		w.JSONErrorResponse(c, err)
 		return
 	}
 	sets, err := w.workoutSetService.DuplicateWorkoutSets(c, uri.WorkoutSetID, body.DuplicateCount)
