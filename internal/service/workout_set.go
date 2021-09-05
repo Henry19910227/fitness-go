@@ -16,6 +16,7 @@ import (
 type set struct {
 	setRepo repository.WorkoutSet
 	uploader handler.Uploader
+	resHandler handler.Resource
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
@@ -23,10 +24,11 @@ type set struct {
 
 func NewWorkoutSet(setRepo repository.WorkoutSet,
 	uploader handler.Uploader,
+	resHandler handler.Resource,
 	logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) WorkoutSet {
-	return &set{setRepo: setRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+	return &set{setRepo: setRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (s *set) CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*dto.WorkoutSet, errcode.Error) {
@@ -208,6 +210,12 @@ func (s *set) UploadWorkoutSetProgressAudio(c *gin.Context, setID int64, audioNa
 }
 
 func (s *set) DeleteWorkoutSetStartAudio(c *gin.Context, setID int64) errcode.Error {
+	set, err := s.setRepo.FindWorkoutSetByID(setID)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return s.errHandler.SystemError()
+	}
+	//移除workout_set與start_audio檔案關聯
 	var startAudio = ""
 	if err := s.setRepo.UpdateWorkoutSetByID(setID, &model.UpdateWorkoutSetParam{
 		StartAudio: &startAudio,
@@ -215,16 +223,44 @@ func (s *set) DeleteWorkoutSetStartAudio(c *gin.Context, setID int64) errcode.Er
 		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 		return s.errHandler.SystemError()
 	}
+	count, err := s.setRepo.FindStartAudioCountByAudioName(set.StartAudio)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return s.errHandler.SystemError()
+	}
+	if count > 0 {
+		return nil
+	}
+	//移除start_audio檔案
+	if err := s.resHandler.DeleteWorkoutSetStartAudio(set.StartAudio); err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+	}
 	return nil
 }
 
 func (s *set) DeleteWorkoutSetProgressAudio(c *gin.Context, setID int64) errcode.Error {
+	set, err := s.setRepo.FindWorkoutSetByID(setID)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return s.errHandler.SystemError()
+	}
 	var progressAudio = ""
 	if err := s.setRepo.UpdateWorkoutSetByID(setID, &model.UpdateWorkoutSetParam{
 		ProgressAudio: &progressAudio,
 	}); err != nil {
 		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 		return s.errHandler.SystemError()
+	}
+	count, err := s.setRepo.FindProgressAudioCountByAudioName(set.ProgressAudio)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return s.errHandler.SystemError()
+	}
+	if count > 0 {
+		return nil
+	}
+	if err := s.resHandler.DeleteWorkoutSetProgressAudio(set.ProgressAudio); err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 	}
 	return nil
 }

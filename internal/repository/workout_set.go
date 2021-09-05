@@ -205,6 +205,30 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 	return sets, nil
 }
 
+func (s *set) FindStartAudioCountByAudioName(audioName string) (int, error) {
+	var startAudioCount int
+	if err := s.gorm.DB().
+		Table("workout_sets").
+		Select("COUNT(*)").
+		Where("start_audio = ?", audioName).
+		Take(&startAudioCount).Error; err != nil {
+			return 0, err
+	}
+	return startAudioCount, nil
+}
+
+func (s *set) FindProgressAudioCountByAudioName(audioName string) (int, error) {
+	var progressAudioCount int
+	if err := s.gorm.DB().
+		Table("workout_sets").
+		Select("COUNT(*)").
+		Where("progress_audio = ?", audioName).
+		Take(&progressAudioCount).Error; err != nil {
+		return 0, err
+	}
+	return progressAudioCount, nil
+}
+
 func (s *set) UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error {
 	var selects []interface{}
 	if param.AutoNext != nil { selects = append(selects, "auto_next") }

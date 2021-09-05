@@ -141,7 +141,7 @@ func setupTool() {
 	jwtTool = tool.NewJWT(setting.NewJWT(viperTool))
 	redisTool = tool.NewRedis(setting.NewRedis(viperTool))
 	otpTool = tool.NewOTP()
-	resTool = tool.NewFile(setting.NewUploader(viperTool))
+	resTool = tool.NewResource(setting.NewResource(viperTool))
 }
 
 func setupLogTool() {
@@ -256,7 +256,7 @@ func setupWorkoutService()  {
 
 func setupWorkoutSetService()  {
 	workoutSetRepo := repository.NewWorkoutSet(gormTool)
-	workoutSetService = service.NewWorkoutSet(workoutSetRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
+	workoutSetService = service.NewWorkoutSet(workoutSetRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupActionService()  {

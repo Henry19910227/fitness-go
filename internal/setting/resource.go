@@ -8,7 +8,7 @@ type resource struct {
 	vp *viper.Viper
 }
 
-func NewUploader(viperTool *viper.Viper) Resource {
+func NewResource(viperTool *viper.Viper) Resource {
 	return &resource{viperTool}
 }
 
