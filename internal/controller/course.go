@@ -116,6 +116,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 	uid, e := cc.GetUID(c)
 	if e != nil {
 		cc.JSONValidatorErrorResponse(c, e.Error())
+		return
 	}
 	var body validator.CreateCourseBody
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -194,6 +195,7 @@ func (cc *Course) GetCourses(c *gin.Context) {
 	uid, e := cc.GetUID(c)
 	if e != nil {
 		cc.JSONValidatorErrorResponse(c, e.Error())
+		return
 	}
 	var query validator.CourseStatusQuery
 	if err := c.ShouldBindQuery(&query); err != nil {

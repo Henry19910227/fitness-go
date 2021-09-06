@@ -29,3 +29,16 @@ func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewCourse(courseRepo, trainerRepo, uploader, resHandler, logger, jwtTool, errHandler)
 }
+
+func NewWorkoutService(viperTool *viper.Viper, gormTool tool.Gorm) Workout {
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	courseRepo := repository.NewCourse(gormTool)
+	workoutRepo := repository.NewWorkout(gormTool)
+	workoutSetRepo := repository.NewWorkoutSet(gormTool)
+	resTool := tool.NewResource(setting.NewResource(viperTool))
+	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	logger := handler.NewLogger(logTool, jwtTool)
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewWorkout(courseRepo, workoutRepo, workoutSetRepo, uploader, logger, jwtTool, errHandler)
+}

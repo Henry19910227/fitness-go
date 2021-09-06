@@ -60,6 +60,9 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 }
 
 func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model.WorkoutSet) ([]int64, error) {
+	if len(sets) == 0 {
+		return []int64{}, nil
+	}
 	if err := s.gorm.DB().Transaction(func(tx *gorm.DB) error {
 		//創建訓練組
 		if err := tx.Create(&sets).Error; err != nil {

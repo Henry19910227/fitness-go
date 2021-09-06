@@ -4110,6 +4110,11 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "胸肌訓練"
+                },
+                "workout_template_id": {
+                    "description": "訓練模板ID",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
@@ -12,15 +13,18 @@ type Plan struct {
 	Base
 	planService    service.Plan
 	workoutService service.Workout
+	workoutSetAccess access.WorkoutSet
 }
 
 func NewPlan(baseGroup *gin.RouterGroup,
 	planService service.Plan,
 	workoutService service.Workout,
+	workoutSetAccess access.WorkoutSet,
 	userMidd midd.User,
 	courseMidd midd.Course) {
 	plan := Plan{planService: planService,
-		workoutService: workoutService}
+		workoutService: workoutService,
+		workoutSetAccess: workoutSetAccess}
 
 	baseGroup.PATCH("/plan/:plan_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
@@ -132,7 +136,27 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	data, err := p.workoutService.CreateWorkout(c, uri.PlanID, body.Name)
+	//直接創建訓練
+	if body.WorkoutTemplateID == nil {
+		data, err := p.workoutService.CreateWorkout(c, uri.PlanID, body.Name)
+		if err != nil {
+			p.JSONErrorResponse(c, err)
+			return
+		}
+		p.JSONSuccessResponse(c, data, "create success!")
+		return
+	}
+	//使用訓練模板複製訓練
+	uid, e := p.GetUID(c)
+	if e != nil {
+		p.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	if err := p.workoutSetAccess.CreateVerifyByWorkoutID(c, uid, *body.WorkoutTemplateID); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Msg())
+		return
+	}
+	data, err := p.workoutService.CreateWorkoutByTemplate(c, uri.PlanID, body.Name, *body.WorkoutTemplateID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return

@@ -21,12 +21,12 @@ type Plan interface {
 }
 
 type Workout interface {
-	CreateVerifyByPlanID(c *gin.Context, token string, planID int64) errcode.Error
+	CreateVerifyByPlanID(c *gin.Context, uid int64, planID int64) errcode.Error
 	UpdateVerifyByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error
 }
 
 type WorkoutSet interface {
-	CreateVerifyByWorkoutID(c *gin.Context, token string, workoutID int64) errcode.Error
+	CreateVerifyByWorkoutID(c *gin.Context, uid int64, workoutID int64) errcode.Error
 	UpdateVerifyByWorkoutSetID(c *gin.Context, token string, setID int64) errcode.Error
 }
 

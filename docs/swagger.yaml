@@ -838,6 +838,10 @@ definitions:
       name:
         example: 胸肌訓練
         type: string
+      workout_template_id:
+        description: 訓練模板ID
+        example: 1
+        type: integer
     required:
     - name
     type: object
