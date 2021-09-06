@@ -83,7 +83,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 // @Tags WorkoutSet
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Param json_body body validator.UpdateWorkoutSetBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.WorkoutSet} "更新成功!"
@@ -122,7 +122,7 @@ func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 // @Tags WorkoutSet
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Success 200 {object} model.SuccessResult{data=dto.WorkoutSetID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
@@ -145,7 +145,7 @@ func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
 // @Summary 上傳訓練組前導語音
 // @Description 下載訓練組前導語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}
 // @Tags WorkoutSet
-// @Security fitness_user_token
+// @Security fitness_token
 // @Accept mpfd
 // @Param workout_set_id path int64 true "訓練組id"
 // @Param start_audio formData file true "前導語音"
@@ -178,7 +178,7 @@ func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
 // @Tags WorkoutSet
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
@@ -200,7 +200,7 @@ func (w *workoutset) DeleteWorkoutSetStartAudio(c *gin.Context) {
 // @Summary 上傳訓練組進行中語音
 // @Description 下載訓練組進行中語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}
 // @Tags WorkoutSet
-// @Security fitness_user_token
+// @Security fitness_token
 // @Accept mpfd
 // @Param workout_set_id path int64 true "訓練組id"
 // @Param progress_audio formData file true "進行中語音"
@@ -233,7 +233,7 @@ func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
 // @Tags WorkoutSet
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
@@ -257,7 +257,7 @@ func (w *workoutset) DeleteWorkoutSetProgressAudio(c *gin.Context) {
 // @Tags WorkoutSet
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Param json_body body validator.DuplicateWorkoutSetBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "複製成功!"

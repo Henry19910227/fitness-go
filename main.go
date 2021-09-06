@@ -98,11 +98,7 @@ func init() {
 // @title fitness api
 // @description 健身平台 api
 
-// @securityDefinitions.apikey fitness_user_token
-// @in header
-// @name Token
-
-// @securityDefinitions.apikey fitness_admin_token
+// @securityDefinitions.apikey fitness_token
 // @in header
 // @name Token
 

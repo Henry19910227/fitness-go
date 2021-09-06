@@ -38,7 +38,7 @@ func NewAction(baseGroup *gin.RouterGroup,
 // @Tags Action
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param action_id path int64 true "動作id"
 // @Param json_body body validator.UpdateActionBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Action} "更新成功!"
@@ -88,7 +88,7 @@ func (a *Action) UpdateAction(c *gin.Context) {
 // @Tags Action
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param action_id path int64 true "動作id"
 // @Success 200 {object} model.SuccessResult{data=dto.ActionID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
@@ -124,7 +124,7 @@ func (a *Action) DeleteAction(c *gin.Context) {
 // @Summary 上傳動作封面照
 // @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
 // @Tags Action
-// @Security fitness_user_token
+// @Security fitness_token
 // @Accept mpfd
 // @Param action_id path int64 true "動作id"
 // @Param cover formData file true "封面照"
@@ -168,7 +168,7 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 // @Summary 上傳動作影片
 // @Description 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}
 // @Tags Action
-// @Security fitness_user_token
+// @Security fitness_token
 // @Accept mpfd
 // @Param action_id path int64 true "動作id"
 // @Param video formData file true "影片檔"

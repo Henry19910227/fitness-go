@@ -30,7 +30,7 @@ func NewReview(baseGroup *gin.RouterGroup, reviewService service.Review, userMid
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"

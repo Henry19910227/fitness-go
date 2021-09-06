@@ -107,7 +107,7 @@ func NewCourse(baseGroup *gin.RouterGroup,
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param json_body body validator.CreateCourseBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Course} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
@@ -142,7 +142,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.UpdateCourseBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Course} "更新成功!"
@@ -186,7 +186,7 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param status query int false "課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)"
 // @Success 200 {object} model.SuccessResult{data=[]dto.CourseSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
@@ -216,7 +216,7 @@ func (cc *Course) GetCourses(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.Course} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
@@ -239,7 +239,7 @@ func (cc *Course) GetCourse(c *gin.Context) {
 // @Summary 上傳課表封面照
 // @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}
 // @Tags Course
-// @Security fitness_user_token
+// @Security fitness_token
 // @Accept mpfd
 // @Param course_id path int64 true "課表id"
 // @Param cover formData file true "課表封面照"
@@ -275,7 +275,7 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
@@ -300,7 +300,7 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.CreatePlanBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=plandto.Plan} "創建成功!"
@@ -331,7 +331,7 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=[]plandto.Plan} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
@@ -356,7 +356,7 @@ func (cc *Course) GetPlans(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.CreateActionBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Action} "創建成功!"
@@ -394,13 +394,13 @@ func (cc *Course) CreateAction(c *gin.Context) {
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Param name query string false "動作名稱"
 // @Param source query string false "動作來源(1:平台動作/2:教練動作)"
 // @Param category query string false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"
 // @Param body query string false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"
-// @Param equipment query string false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)"
+// @Param equipment query string false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"
 // @Success 200 {object} model.SuccessResult{data=[]dto.Action} "查詢成功!"
 // @Failure 400 {object} model.ErrorResult "查詢失敗"
 // @Router /course/{course_id}/actions [GET]

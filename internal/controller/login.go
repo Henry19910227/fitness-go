@@ -83,7 +83,7 @@ func (l *Login) AdminLoginByEmail(c *gin.Context)  {
 // @Tags Login
 // @Accept json
 // @Produce json
-// @Security fitness_admin_token
+// @Security fitness_token
 // @Success 200 {object} model.SuccessResult "登出成功"
 // @Failure 400 {object} model.ErrorResult "登出失敗"
 // @Router /logout/admin [POST]
@@ -106,7 +106,7 @@ func (l *Login) AdminLogout(c *gin.Context) {
 // @Tags Login
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Success 200 {object} model.SuccessResult "登出成功"
 // @Failure 400 {object} model.ErrorResult "登出失敗"
 // @Router /logout/user [POST]

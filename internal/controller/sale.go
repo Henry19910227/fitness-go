@@ -26,7 +26,7 @@ func NewSale(baseGroup *gin.RouterGroup, saleService service.Sale, userMiddlewar
 // @Tags Sale
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=[]saledto.SaleItem} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /sale_items [GET]

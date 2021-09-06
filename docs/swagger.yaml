@@ -14,7 +14,7 @@ definitions:
         example: 32as1d5f13e4.png
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 1
         type: integer
       id:
@@ -1142,7 +1142,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除動作
       tags:
       - Action
@@ -1179,7 +1179,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 修改動作
       tags:
       - Action
@@ -1216,7 +1216,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳動作封面照
       tags:
       - Action
@@ -1253,7 +1253,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳動作影片
       tags:
       - Action
@@ -1286,7 +1286,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 創建課表
       tags:
       - Course
@@ -1318,7 +1318,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除課表
       tags:
       - Course
@@ -1349,7 +1349,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 獲取課表詳細
       tags:
       - Course
@@ -1386,7 +1386,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 更新課表
       tags:
       - Course
@@ -1424,7 +1424,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 創建動作
       tags:
       - Course
@@ -1455,7 +1455,7 @@ paths:
         in: query
         name: body
         type: string
-      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         in: query
         name: equipment
         type: string
@@ -1478,7 +1478,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 搜尋動作列表
       tags:
       - Course
@@ -1515,7 +1515,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳課表封面照
       tags:
       - Course
@@ -1553,7 +1553,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 創建計畫
       tags:
       - Course
@@ -1587,7 +1587,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 取得課表內的計畫列表
       tags:
       - Course
@@ -1614,7 +1614,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 送審課表
       tags:
       - Course
@@ -1647,7 +1647,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 獲取我的課表列表
       tags:
       - Course
@@ -1730,7 +1730,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_admin_token: []
+      - fitness_token: []
       summary: 管理員登出
       tags:
       - Login
@@ -1751,7 +1751,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 用戶登出
       tags:
       - Login
@@ -1772,7 +1772,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_admin_token: []
+      - fitness_token: []
       summary: 回滾 Schema 至初始版本
       tags:
       - Migrate
@@ -1799,7 +1799,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_admin_token: []
+      - fitness_token: []
       summary: 將 Schema 回滾N個版本
       tags:
       - Migrate
@@ -1826,7 +1826,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_admin_token: []
+      - fitness_token: []
       summary: 修正 Schema 版本並解除錯誤狀態
       tags:
       - Migrate
@@ -1847,7 +1847,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_admin_token: []
+      - fitness_token: []
       summary: 將 Schema 升至最新版本
       tags:
       - Migrate
@@ -1874,7 +1874,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_admin_token: []
+      - fitness_token: []
       summary: 將 Schema 升級N個版本
       tags:
       - Migrate
@@ -1895,7 +1895,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_admin_token: []
+      - fitness_token: []
       summary: 獲取當前 Schema 版本
       tags:
       - Migrate
@@ -1922,7 +1922,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_admin_token: []
+      - fitness_token: []
       summary: 升級至指定 Schema 版本
       tags:
       - Migrate
@@ -1954,7 +1954,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除計畫
       tags:
       - Plan
@@ -1991,7 +1991,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 修改計畫
       tags:
       - Plan
@@ -2029,7 +2029,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 創建訓練
       tags:
       - Plan
@@ -2063,7 +2063,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 取得計畫內的訓練列表
       tags:
       - Plan
@@ -2205,7 +2205,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 取得銷售項目清單
       tags:
       - Sale
@@ -2233,7 +2233,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 創建我的教練身份
       tags:
       - Trainer
@@ -2265,7 +2265,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳我的教練大頭照
       tags:
       - Trainer
@@ -2291,7 +2291,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 取得我的教練身份資訊
       tags:
       - Trainer
@@ -2323,7 +2323,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳我的大頭照
       tags:
       - User
@@ -2349,7 +2349,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 獲取個人資訊
       tags:
       - User
@@ -2381,7 +2381,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 更新個人資訊
       tags:
       - User
@@ -2413,7 +2413,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除訓練
       tags:
       - Workout
@@ -2450,7 +2450,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 修改訓練
       tags:
       - Workout
@@ -2477,7 +2477,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除訓練結束語音
       tags:
       - Workout
@@ -2513,7 +2513,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳訓練結束語音
       tags:
       - Workout
@@ -2546,7 +2546,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 修改訓練組的順序
       tags:
       - Workout
@@ -2578,7 +2578,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 新增休息組
       tags:
       - Workout
@@ -2605,7 +2605,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除訓練前導語音
       tags:
       - Workout
@@ -2641,7 +2641,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳訓練前導語音
       tags:
       - Workout
@@ -2681,7 +2681,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 新增訓練組
       tags:
       - Workout
@@ -2715,7 +2715,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 取得訓練內的訓練組列表
       tags:
       - Workout
@@ -2747,7 +2747,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除訓練組
       tags:
       - WorkoutSet
@@ -2784,7 +2784,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 修改訓練組
       tags:
       - WorkoutSet
@@ -2824,7 +2824,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 複製訓練組
       tags:
       - WorkoutSet
@@ -2851,7 +2851,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除訓練組進行中語音
       tags:
       - WorkoutSet
@@ -2887,7 +2887,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳訓練組進行中語音
       tags:
       - WorkoutSet
@@ -2914,7 +2914,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 刪除訓練組前導語音
       tags:
       - WorkoutSet
@@ -2950,16 +2950,12 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       security:
-      - fitness_user_token: []
+      - fitness_token: []
       summary: 上傳訓練組前導語音
       tags:
       - WorkoutSet
 securityDefinitions:
-  fitness_admin_token:
-    in: header
-    name: Token
-    type: apiKey
-  fitness_user_token:
+  fitness_token:
     in: header
     name: Token
     type: apiKey
