@@ -5,15 +5,15 @@ Server:
     WriteTimeout: 60
 App:
     Debug:
-      Version: 1.6.2
+      Version: 1.6.3
     Release:
-      Version: 1.6.2
+      Version: 1.6.3
 Resource:
     RootPath: ./volumes/storage
 Upload:
     UploadImageMaxSize: 5 #MB
     UploadAudioMaxSize: 10 #MB
-    UploadVideoMaxSize: 30 #MB
+    UploadVideoMaxSize: 60 #MB
     UploadImageAllowExt:
       - .jpg
       - .png
