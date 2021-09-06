@@ -54,6 +54,20 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		workout.UploadWorkoutEndAudio)
 
+	baseGroup.DELETE("/workout/:workout_id/start_audio",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		workout.DeleteWorkoutStartAudio)
+
+	baseGroup.DELETE("/workout/:workout_id/end_audio",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		workout.DeleteWorkoutEndAudio)
+
 	baseGroup.POST("/workout/:workout_id/workout_set",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
@@ -201,6 +215,54 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 		return
 	}
 	w.JSONSuccessResponse(c, result, "upload success")
+}
+
+// DeleteWorkoutStartAudio 刪除訓練前導語音
+// @Summary 刪除訓練前導語音
+// @Description 刪除訓練前導語音
+// @Tags Workout
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_id path int64 true "訓練id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /workout/{workout_id}/start_audio [DELETE]
+func (w *workout) DeleteWorkoutStartAudio(c *gin.Context) {
+	var uri validator.WorkoutIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.workoutService.DeleteWorkoutStartAudio(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, nil, "success")
+}
+
+// DeleteWorkoutEndAudio 刪除訓練結束語音
+// @Summary 刪除訓練結束語音
+// @Description 刪除訓練結束語音
+// @Tags Workout
+// @Accept json
+// @Produce json
+// @Security fitness_user_token
+// @Param workout_id path int64 true "訓練id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /workout/{workout_id}/end_audio [DELETE]
+func (w *workout) DeleteWorkoutEndAudio(c *gin.Context) {
+	var uri validator.WorkoutIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		w.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := w.workoutService.DeleteWorkoutEndAudio(c, uri.WorkoutID); err != nil {
+		w.JSONErrorResponse(c, err)
+		return
+	}
+	w.JSONSuccessResponse(c, nil, "success")
 }
 
 // CreateWorkoutSets 新增訓練組

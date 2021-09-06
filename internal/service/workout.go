@@ -19,14 +19,15 @@ type workout struct {
 	courseRepo repository.Course
 	workoutRepo repository.Workout
 	workoutSetRepo repository.WorkoutSet
+	resHandler handler.Resource
 	uploader handler.Uploader
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewWorkout(courseRepo repository.Course, workoutRepo repository.Workout, workoutSetRepo repository.WorkoutSet, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
-	return &workout{courseRepo: courseRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewWorkout(courseRepo repository.Course, workoutRepo repository.Workout, workoutSetRepo repository.WorkoutSet, resHandler handler.Resource, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
+	return &workout{courseRepo: courseRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo, resHandler: resHandler, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*dto.Workout, errcode.Error) {
@@ -185,4 +186,58 @@ func (w *workout) CreateWorkoutByTemplate(c *gin.Context, planID int64, name str
 		return nil, w.errHandler.Set(c, "Workout Repo", err)
 	}
 	return &workout, nil
+}
+
+func (w *workout) DeleteWorkoutStartAudio(c *gin.Context, workoutID int64) errcode.Error {
+	var workout dto.Workout
+	if err := w.workoutRepo.FindWorkoutByID(workoutID, &workout); err != nil {
+		return w.errHandler.Set(c, "Workout Repo", err)
+	}
+	//移除檔案關聯
+	var startAudio = ""
+	if err := w.workoutRepo.UpdateWorkoutByID(workoutID, &model.UpdateWorkoutParam{
+		StartAudio: &startAudio,
+	}); err != nil {
+		return w.errHandler.Set(c, "Workout Repo", err)
+	}
+	//查找是否有其他物件使用此物件
+	count, err := w.workoutRepo.FindStartAudioCountByAudioName(workout.StartAudio)
+	if err != nil {
+		return w.errHandler.Set(c, "Workout Repo", err)
+	}
+	if count > 0 {
+		return nil
+	}
+	//移除start_audio檔案
+	if err := w.resHandler.DeleteWorkoutStartAudio(workout.StartAudio); err != nil {
+		return w.errHandler.Set(c, "ResHandler", err)
+	}
+	return nil
+}
+
+func (w *workout) DeleteWorkoutEndAudio(c *gin.Context, workoutID int64) errcode.Error {
+	var workout dto.Workout
+	if err := w.workoutRepo.FindWorkoutByID(workoutID, &workout); err != nil {
+		return w.errHandler.Set(c, "Workout Repo", err)
+	}
+	//移除檔案關聯
+	var endAudio = ""
+	if err := w.workoutRepo.UpdateWorkoutByID(workoutID, &model.UpdateWorkoutParam{
+		EndAudio: &endAudio,
+	}); err != nil {
+		return w.errHandler.Set(c, "Workout Repo", err)
+	}
+	//查找是否有其他物件使用此物件
+	count, err := w.workoutRepo.FindEndAudioCountByAudioName(workout.StartAudio)
+	if err != nil {
+		return w.errHandler.Set(c, "Workout Repo", err)
+	}
+	if count > 0 {
+		return nil
+	}
+	//移除end_audio檔案
+	if err := w.resHandler.DeleteWorkoutEndAudio(workout.EndAudio); err != nil {
+		return w.errHandler.Set(c, "ResHandler", err)
+	}
+	return nil
 }

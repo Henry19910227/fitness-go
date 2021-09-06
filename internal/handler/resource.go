@@ -31,3 +31,12 @@ func (r *resource) DeleteWorkoutSetStartAudio(audioNamed string) error {
 func (r *resource) DeleteWorkoutSetProgressAudio(audioNamed string) error {
 	return r.resTool.RemoveFile("/workout_set/progress_audio", audioNamed)
 }
+
+func (r *resource) DeleteWorkoutStartAudio(audioNamed string) error {
+	return r.resTool.RemoveFile("/workout/start_audio", audioNamed)
+}
+
+func (r *resource) DeleteWorkoutEndAudio(audioNamed string) error {
+	return r.resTool.RemoveFile("/workout/end_audio", audioNamed)
+}
+

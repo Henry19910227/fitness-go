@@ -2455,6 +2455,32 @@ paths:
       tags:
       - Workout
   /workout/{workout_id}/end_audio:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除訓練結束語音
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除訓練結束語音
+      tags:
+      - Workout
     post:
       consumes:
       - multipart/form-data
@@ -2557,6 +2583,32 @@ paths:
       tags:
       - Workout
   /workout/{workout_id}/start_audio:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除訓練前導語音
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_user_token: []
+      summary: 刪除訓練前導語音
+      tags:
+      - Workout
     post:
       consumes:
       - multipart/form-data
