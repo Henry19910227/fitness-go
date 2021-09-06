@@ -42,7 +42,7 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 		//更新訓練的訓練組個數
 		countQuery := tx.Table("workout_sets").
 			Select("COUNT(*) AS workout_set_count").
-			Where("workout_id = ?", workoutID)
+			Where("workout_id = ? AND type = ?", workoutID, 1)
 		if err := tx.Table("workouts").
 			Where("id = ?", workoutID).
 			Update("workout_set_count", countQuery).Error; err != nil {
@@ -60,6 +60,9 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 }
 
 func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model.WorkoutSet) ([]int64, error) {
+	if len(sets) == 0 {
+		return []int64{}, nil
+	}
 	if err := s.gorm.DB().Transaction(func(tx *gorm.DB) error {
 		//創建訓練組
 		if err := tx.Create(&sets).Error; err != nil {
@@ -68,7 +71,7 @@ func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model
 		//更新訓練的訓練組個數
 		countQuery := tx.Table("workout_sets").
 			Select("COUNT(*) AS workout_set_count").
-			Where("workout_id = ?", workoutID)
+			Where("workout_id = ? AND type = ?", workoutID, 1)
 		if err := tx.Table("workouts").
 			Where("id = ?", workoutID).
 			Update("workout_set_count", countQuery).Error; err != nil {
@@ -94,23 +97,7 @@ func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
-	if err := s.gorm.DB().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(&set).Error; err != nil {
-			return err
-		}
-		var setCount int
-		if err := tx.Raw("SELECT COUNT(*) FROM workout_sets WHERE workout_id = ? FOR UPDATE", workoutID).
-			Scan(&setCount).Error; err != nil {
-				return err
-		}
-		if err := tx.
-			Table("workouts").
-			Where("id = ?", workoutID).
-			Update("workout_set_count", setCount).Error; err != nil {
-			return err
-		}
-		return nil
-	}); err != nil {
+	if err := s.gorm.DB().Create(&set).Error; err != nil {
 		return 0, err
 	}
 	return set.ID, nil
@@ -219,6 +206,30 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 		sets = append(sets, &set)
 	}
 	return sets, nil
+}
+
+func (s *set) FindStartAudioCountByAudioName(audioName string) (int, error) {
+	var startAudioCount int
+	if err := s.gorm.DB().
+		Table("workout_sets").
+		Select("COUNT(*)").
+		Where("start_audio = ?", audioName).
+		Take(&startAudioCount).Error; err != nil {
+			return 0, err
+	}
+	return startAudioCount, nil
+}
+
+func (s *set) FindProgressAudioCountByAudioName(audioName string) (int, error) {
+	var progressAudioCount int
+	if err := s.gorm.DB().
+		Table("workout_sets").
+		Select("COUNT(*)").
+		Where("progress_audio = ?", audioName).
+		Take(&progressAudioCount).Error; err != nil {
+		return 0, err
+	}
+	return progressAudioCount, nil
 }
 
 func (s *set) UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error {

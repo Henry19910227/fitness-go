@@ -29,7 +29,7 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 // @Tags User
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param json_body body validator.UpdateUserInfoBody true "更新欄位"
 // @Success 200 {object} model.SuccessResult{data=userdto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
@@ -68,7 +68,7 @@ func (u *user) UpdateUserInfo(c *gin.Context)  {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=userdto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /user/info [GET]
@@ -90,7 +90,7 @@ func (u *user) GetUserInfo(c *gin.Context) {
 // @Summary 上傳我的大頭照
 // @Description 查看我的大頭照 : https://www.fitness-app.tk/api/v1/resource/user/avatar/{圖片名}
 // @Tags User
-// @Security fitness_user_token
+// @Security fitness_token
 // @Accept mpfd
 // @Param avatar formData file true "用戶大頭照"
 // @Produce json

@@ -10,7 +10,7 @@ type resource struct {
 	setting setting.Resource
 }
 
-func NewFile(setting setting.Resource) Resource {
+func NewResource(setting setting.Resource) Resource {
 	return &resource{setting}
 }
 

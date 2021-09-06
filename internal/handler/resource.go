@@ -1,6 +1,8 @@
 package handler
 
-import "github.com/Henry19910227/fitness-go/internal/tool"
+import (
+	"github.com/Henry19910227/fitness-go/internal/tool"
+)
 
 type resource struct {
 	resTool tool.Resource
@@ -21,3 +23,20 @@ func (r *resource) DeleteTrainerAvatar(imageNamed string) error {
 func (r *resource) DeleteUserAvatar(imageNamed string) error {
 	return r.resTool.RemoveFile("/user/avatar", imageNamed)
 }
+
+func (r *resource) DeleteWorkoutSetStartAudio(audioNamed string) error {
+	return r.resTool.RemoveFile("/workout_set/start_audio", audioNamed)
+}
+
+func (r *resource) DeleteWorkoutSetProgressAudio(audioNamed string) error {
+	return r.resTool.RemoveFile("/workout_set/progress_audio", audioNamed)
+}
+
+func (r *resource) DeleteWorkoutStartAudio(audioNamed string) error {
+	return r.resTool.RemoveFile("/workout/start_audio", audioNamed)
+}
+
+func (r *resource) DeleteWorkoutEndAudio(audioNamed string) error {
+	return r.resTool.RemoveFile("/workout/end_audio", audioNamed)
+}
+

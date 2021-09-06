@@ -28,7 +28,7 @@ var doc = `{
             "delete": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "刪除動作",
@@ -81,7 +81,7 @@ var doc = `{
             "patch": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "修改動作",
@@ -145,7 +145,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}",
@@ -207,7 +207,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}",
@@ -269,7 +269,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "創建課表",
@@ -326,7 +326,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "獲取課表詳細",
@@ -379,7 +379,7 @@ var doc = `{
             "delete": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "刪除課表",
@@ -432,7 +432,7 @@ var doc = `{
             "patch": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "更新課表",
@@ -496,7 +496,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "創建動作",
@@ -560,7 +560,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "搜尋動作列表",
@@ -608,7 +608,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
+                        "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
                         "name": "equipment",
                         "in": "query"
                     }
@@ -648,7 +648,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}",
@@ -710,7 +710,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "創建計畫",
@@ -774,7 +774,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "取得課表內的計畫列表",
@@ -832,7 +832,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "送審課表",
@@ -875,7 +875,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "獲取我的課表列表",
@@ -1036,7 +1036,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_admin_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "管理員登出",
@@ -1070,7 +1070,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "用戶登出",
@@ -1104,7 +1104,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "fitness_admin_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "回滾 Schema 至初始版本",
@@ -1138,7 +1138,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "fitness_admin_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "將 Schema 回滾N個版本",
@@ -1181,7 +1181,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "fitness_admin_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "Schema 升級時遇到錯誤時的操作模式",
@@ -1224,7 +1224,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "fitness_admin_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "將 Schema 升至最新版本",
@@ -1258,7 +1258,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "fitness_admin_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "將 Schema 升級N個版本",
@@ -1301,7 +1301,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_admin_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "獲取當前 Schema 版本",
@@ -1335,7 +1335,7 @@ var doc = `{
             "put": {
                 "security": [
                     {
-                        "fitness_admin_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "升級至指定 Schema 版本",
@@ -1378,7 +1378,7 @@ var doc = `{
             "delete": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "刪除計畫",
@@ -1431,7 +1431,7 @@ var doc = `{
             "patch": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "修改計畫",
@@ -1495,7 +1495,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "創建訓練",
@@ -1559,7 +1559,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "取得計畫內的訓練列表",
@@ -1801,7 +1801,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "取得銷售項目清單",
@@ -1850,7 +1850,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "創建我的教練身份",
@@ -1895,7 +1895,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}",
@@ -1950,7 +1950,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "取得我的教練身份資訊",
@@ -1996,7 +1996,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "查看我的大頭照 : https://www.fitness-app.tk/api/v1/resource/user/avatar/{圖片名}",
@@ -2051,7 +2051,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "獲取個人資訊",
@@ -2095,7 +2095,7 @@ var doc = `{
             "patch": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "更新個人資訊",
@@ -2152,7 +2152,7 @@ var doc = `{
             "delete": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "刪除訓練",
@@ -2205,7 +2205,7 @@ var doc = `{
             "patch": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "修改訓練",
@@ -2269,7 +2269,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/end_audio/{語音檔案名}",
@@ -2325,13 +2325,54 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除訓練結束語音",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "刪除訓練結束語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "刪除失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
             }
         },
         "/workout/{workout_id}/order": {
             "put": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "修改訓練組的順序",
@@ -2383,7 +2424,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "新增休息組",
@@ -2438,7 +2479,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/start_audio/{語音檔案名}",
@@ -2494,13 +2535,54 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除訓練前導語音",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "刪除訓練前導語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "刪除失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
             }
         },
         "/workout/{workout_id}/workout_set": {
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "新增訓練組",
@@ -2567,7 +2649,7 @@ var doc = `{
             "get": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "取得訓練內的訓練組列表",
@@ -2625,7 +2707,7 @@ var doc = `{
             "delete": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "刪除訓練組",
@@ -2678,7 +2760,7 @@ var doc = `{
             "patch": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "修改訓練組",
@@ -2742,7 +2824,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "複製訓練組",
@@ -2809,7 +2891,7 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "下載訓練組進行中語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}",
@@ -2865,13 +2947,54 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除訓練組進行中語音",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "刪除訓練組進行中語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "刪除失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
             }
         },
         "/workout_set/{workout_set_id}/start_audio": {
             "post": {
                 "security": [
                     {
-                        "fitness_user_token": []
+                        "fitness_token": []
                     }
                 ],
                 "description": "下載訓練組前導語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}",
@@ -2927,6 +3050,47 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除訓練組前導語音",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutSet"
+                ],
+                "summary": "刪除訓練組前導語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "刪除失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
             }
         }
     },
@@ -2950,7 +3114,7 @@ var doc = `{
                     "example": "32as1d5f13e4.png"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)",
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -4028,6 +4192,11 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "胸肌訓練"
+                },
+                "workout_template_id": {
+                    "description": "訓練模板ID",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -4388,12 +4557,7 @@ var doc = `{
         }
     },
     "securityDefinitions": {
-        "fitness_admin_token": {
-            "type": "apiKey",
-            "name": "Token",
-            "in": "header"
-        },
-        "fitness_user_token": {
+        "fitness_token": {
             "type": "apiKey",
             "name": "Token",
             "in": "header"

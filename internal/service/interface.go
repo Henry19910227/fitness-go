@@ -84,6 +84,9 @@ type Workout interface {
 	DeleteWorkout(c *gin.Context, workoutID int64) (*dto.WorkoutID, errcode.Error)
 	UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
 	UploadWorkoutEndAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
+	CreateWorkoutByTemplate(c *gin.Context, planID int64, name string, workoutTemplateID int64) (*dto.Workout, errcode.Error)
+	DeleteWorkoutStartAudio(c *gin.Context, workoutID int64) errcode.Error
+	DeleteWorkoutEndAudio(c *gin.Context, workoutID int64) errcode.Error
 }
 
 type WorkoutSet interface {
@@ -96,6 +99,8 @@ type WorkoutSet interface {
 	UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*dto.WorkoutSetOrder) errcode.Error
 	UploadWorkoutSetStartAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
 	UploadWorkoutSetProgressAudio(c *gin.Context, setID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
+	DeleteWorkoutSetStartAudio(c *gin.Context, setID int64) errcode.Error
+	DeleteWorkoutSetProgressAudio(c *gin.Context, setID int64) errcode.Error
 }
 
 type Action interface {

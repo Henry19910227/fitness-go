@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
@@ -16,10 +17,10 @@ func NewReview(baseGroup *gin.RouterGroup, reviewService service.Review, userMid
 	review := Review{reviewService: reviewService}
 	courseGroup := baseGroup.Group("/course")
 	courseGroup.POST("/:course_id/submit",
-		userMiddleware.TokenPermission([]midd.Role{midd.UserRole}),
-		userMiddleware.UserStatusPermission([]midd.UserStatus{midd.UserActivity}),
-		courseMiddleware.CourseOwnerVerify(),
-		courseMiddleware.CourseStatusPermission([]midd.CourseStatus{midd.Preparing, midd.Reject}),
+		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
+		userMiddleware.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		courseMiddleware.CourseCreatorVerify(),
+		courseMiddleware.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		review.SubmitForReview)
 }
 
@@ -29,7 +30,7 @@ func NewReview(baseGroup *gin.RouterGroup, reviewService service.Review, userMid
 // @Tags Course
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"

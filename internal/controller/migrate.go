@@ -31,7 +31,7 @@ func NewMigrate(baseGroup *gin.RouterGroup, migService service.Migrate, middlewa
 // @Tags Migrate
 // @Accept json
 // @Produce json
-// @Security fitness_admin_token
+// @Security fitness_token
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /migrate/version [GET]
@@ -50,7 +50,7 @@ func (m *Migrate) Version(c *gin.Context) {
 // @Tags Migrate
 // @Accept json
 // @Produce json
-// @Security fitness_admin_token
+// @Security fitness_token
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /migrate/up [PUT]
@@ -69,7 +69,7 @@ func (m *Migrate) UpToLatest(c *gin.Context) {
 // @Tags Migrate
 // @Accept json
 // @Produce json
-// @Security fitness_admin_token
+// @Security fitness_token
 // @Param step path int true "版本跨度"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
@@ -94,7 +94,7 @@ func (m *Migrate) UpStep(c *gin.Context) {
 // @Tags Migrate
 // @Accept json
 // @Produce json
-// @Security fitness_admin_token
+// @Security fitness_token
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /migrate/down [PUT]
@@ -113,7 +113,7 @@ func (m *Migrate) DownToOldest(c *gin.Context) {
 // @Tags Migrate
 // @Accept json
 // @Produce json
-// @Security fitness_admin_token
+// @Security fitness_token
 // @Param step path int true "版本跨度"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
@@ -143,7 +143,7 @@ func (m *Migrate) DownStep(c *gin.Context) {
 // @Tags Migrate
 // @Accept json
 // @Produce json
-// @Security fitness_admin_token
+// @Security fitness_token
 // @Param version path int true "版本號"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
@@ -168,7 +168,7 @@ func (m *Migrate) Force(c *gin.Context) {
 // @Tags Migrate
 // @Accept json
 // @Produce json
-// @Security fitness_admin_token
+// @Security fitness_token
 // @Param version path int true "版本號"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"

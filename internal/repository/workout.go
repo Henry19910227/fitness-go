@@ -189,3 +189,26 @@ func (w *workout) FindWorkoutOwnerByID(workoutID int64) (int64, error) {
 	return userID, nil
 }
 
+func (w *workout) FindStartAudioCountByAudioName(audioName string) (int, error) {
+	var startAudioCount int
+	if err := w.gorm.DB().
+		Table("workouts").
+		Select("COUNT(*)").
+		Where("start_audio = ?", audioName).
+		Take(&startAudioCount).Error; err != nil {
+		return 0, err
+	}
+	return startAudioCount, nil
+}
+
+func (w *workout) FindEndAudioCountByAudioName(audioName string) (int, error) {
+	var endAudioCount int
+	if err := w.gorm.DB().
+		Table("workouts").
+		Select("COUNT(*)").
+		Where("end_audio = ?", audioName).
+		Take(&endAudioCount).Error; err != nil {
+		return 0, err
+	}
+	return endAudioCount, nil
+}

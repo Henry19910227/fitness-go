@@ -22,11 +22,7 @@ func NewWorkout(courseRepo repository.Course,
 	return &workout{courseRepo: courseRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (p *workout) CreateVerifyByPlanID(c *gin.Context, token string, planID int64) errcode.Error {
-	uid, err := p.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return p.errHandler.InvalidToken()
-	}
+func (p *workout) CreateVerifyByPlanID(c *gin.Context, uid int64, planID int64) errcode.Error {
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
 		Status int `gorm:"column:course_status"`

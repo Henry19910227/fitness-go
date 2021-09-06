@@ -98,11 +98,7 @@ func init() {
 // @title fitness api
 // @description 健身平台 api
 
-// @securityDefinitions.apikey fitness_user_token
-// @in header
-// @name Token
-
-// @securityDefinitions.apikey fitness_admin_token
+// @securityDefinitions.apikey fitness_token
 // @in header
 // @name Token
 
@@ -118,10 +114,10 @@ func main() {
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
-	controller.NewCourse(baseGroup, courseService, planService, actionService, courseAccess, planAccess, actionAccess, trainerAccess, userMiddleware)
-	controller.NewPlan(baseGroup, planService, workoutService, planAccess, workoutAccess, trainerAccess, userMiddleware)
-	controller.NewWorkout(baseGroup, workoutService, workoutSetService, workoutAccess, workoutSetAccess, trainerAccess, userMiddleware)
-	controller.NewWorkoutSet(baseGroup, workoutSetService, workoutSetAccess, trainerAccess, userMiddleware)
+	controller.NewCourse(baseGroup, courseService, planService, actionService, userMidd, courseMidd)
+	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
+	controller.NewWorkout(baseGroup, workoutService, workoutSetService, userMidd, courseMidd)
+	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMiddleware)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
 	controller.NewReview(baseGroup, reviewService, userMidd, courseMidd)
@@ -141,7 +137,7 @@ func setupTool() {
 	jwtTool = tool.NewJWT(setting.NewJWT(viperTool))
 	redisTool = tool.NewRedis(setting.NewRedis(viperTool))
 	otpTool = tool.NewOTP()
-	resTool = tool.NewFile(setting.NewUploader(viperTool))
+	resTool = tool.NewResource(setting.NewResource(viperTool))
 }
 
 func setupLogTool() {
@@ -208,13 +204,13 @@ func setupService() {
 	setupRegService()
 	setupUserService()
 	setupTrainerService()
-	setupCourseService()
 	setupPlanService()
 	setupActionService()
-	setupWorkoutService()
 	setupWorkoutSetService()
 	setupSaleService()
+	courseService = service.NewCourseService(viperTool, gormTool)
 	reviewService = service.NewReviewService(viperTool, gormTool)
+	workoutService = service.NewWorkoutService(viperTool, gormTool)
 }
 
 func setupLoginService() {
@@ -244,25 +240,14 @@ func setupTrainerService()  {
 	trainerService = service.NewTrainer(trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
-func setupCourseService()  {
-	courseRepo := repository.NewCourse(gormTool)
-	trainerRepo := repository.NewTrainer(gormTool)
-	courseService = service.NewCourse(courseRepo, trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
 func setupPlanService()  {
 	planRepo := repository.NewPlan(gormTool)
 	planService = service.NewPlan(planRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
-func setupWorkoutService()  {
-	workoutRepo := repository.NewWorkout(gormTool)
-	workoutService = service.NewWorkout(workoutRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
 func setupWorkoutSetService()  {
 	workoutSetRepo := repository.NewWorkoutSet(gormTool)
-	workoutSetService = service.NewWorkoutSet(workoutSetRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
+	workoutSetService = service.NewWorkoutSet(workoutSetRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupActionService()  {
@@ -313,7 +298,8 @@ func setupWorkoutAccess() {
 
 func setupWorkoutSetAccess() {
 	courseRepo := repository.NewCourse(gormTool)
-	workoutSetAccess = access.NewWorkoutSet(courseRepo, logHandler, jwtTool, errcode.NewHandler())
+	logger := handler.NewLogger(logTool, jwtTool)
+	workoutSetAccess = access.NewWorkoutSet(courseRepo, logHandler, jwtTool, errcode.NewErrHandler(logger))
 }
 
 func setupActionAccess() {

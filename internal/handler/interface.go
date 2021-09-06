@@ -49,4 +49,8 @@ type Resource interface {
 	DeleteCourseCover(imageNamed string) error
 	DeleteTrainerAvatar(imageNamed string) error
 	DeleteUserAvatar(imageNamed string) error
+	DeleteWorkoutSetStartAudio(audioNamed string) error
+	DeleteWorkoutSetProgressAudio(audioNamed string) error
+	DeleteWorkoutStartAudio(audioNamed string) error
+	DeleteWorkoutEndAudio(audioNamed string) error
 }

@@ -1,15 +1,28 @@
 package controller
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/model"
-	"net/http"
-
+	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"strconv"
 )
 
 // Base ...
 type Base struct {
+}
+
+func (bc *Base) GetUID(c *gin.Context) (int64, error) {
+	v, exists := c.Get("uid")
+	if !exists {
+		return 0, errors.New(strconv.Itoa(errcode.DataNotFound))
+	}
+	uid, ok := v.(int64)
+	if !ok {
+		return 0, errors.New(strconv.Itoa(errcode.DataNotFound))
+	}
+	return uid, nil
 }
 
 // JSONValidatorErrorResponse ...

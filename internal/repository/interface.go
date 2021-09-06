@@ -52,6 +52,8 @@ type Workout interface {
 	CreateWorkout(planID int64, name string) (int64, error)
 	FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error)
 	FindWorkoutByID(workoutID int64, entity interface{}) error
+	FindStartAudioCountByAudioName(audioName string) (int, error)
+	FindEndAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error
 	DeleteWorkoutByID(workoutID int64) error
 	FindWorkoutOwnerByID(workoutID int64) (int64, error)
@@ -64,6 +66,8 @@ type WorkoutSet interface {
 	FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error)
 	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error)
 	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error)
+	FindStartAudioCountByAudioName(audioName string) (int, error)
+	FindProgressAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error
 	DeleteWorkoutSetByID(setID int64) error
 	UpdateWorkoutSetOrdersByWorkoutID(workoutID int64, params []*model.WorkoutSetOrder) error

@@ -29,7 +29,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 // @Tags Trainer
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Param json_body body validator.CreateTrainerBody true "輸入欄位"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
@@ -64,7 +64,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 // @Tags Trainer
 // @Accept json
 // @Produce json
-// @Security fitness_user_token
+// @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=trainerdto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /trainer/info [GET]
@@ -86,7 +86,7 @@ func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 // @Summary 上傳我的教練大頭照
 // @Description 查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
 // @Tags Trainer
-// @Security fitness_user_token
+// @Security fitness_token
 // @Accept mpfd
 // @Param avatar formData file true "教練大頭照"
 // @Produce json

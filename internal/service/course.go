@@ -57,8 +57,7 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *dto.CreateCours
 		})
 	}
 	if err != nil {
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
+		return nil, cs.errHandler.Set(c, "course repo", err)
 	}
 	return cs.GetCourseDetailByCourseID(c, courseID)
 }
@@ -78,11 +77,7 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *dto.Update
 		BodyTarget: param.BodyTarget,
 		Notice: param.Notice,
 	}); err != nil {
-		if strings.Contains(err.Error(), "1452") {
-			return nil, cs.errHandler.DataNotFound()
-		}
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
+		return nil, cs.errHandler.Set(c, "course repo", err)
 	}
 	return cs.GetCourseDetailByCourseID(c, courseID)
 }
