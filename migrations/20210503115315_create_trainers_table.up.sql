@@ -8,6 +8,11 @@ CREATE TABLE IF NOT EXISTS trainers (
     `phone` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '電話',
     `address` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '地址',
     `intro` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '教練介紹',
+    `experience` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '年資',
+    `motto` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '座右銘',
+    `card_id` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '身分證字號',
+    `card_front_image` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '身分證正面',
+    `card_back_image` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '身分證反面',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
     CONSTRAINT fk_trainers_users FOREIGN KEY (user_id) REFERENCES users(id)
