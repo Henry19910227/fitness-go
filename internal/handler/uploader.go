@@ -217,7 +217,7 @@ func (u *uploader) checkUploadImageMaxSize(file io.Reader) (io.Reader, bool) {
 }
 
 func generateFileName(ext string) string {
-	timeStr := time.Now().Format("20060102150405")
+	timeStr := time.Now().Format("20060102150405.000")
 	m := md5.New()
 	m.Write([]byte(timeStr))
 	return hex.EncodeToString(m.Sum(nil)) + ext
