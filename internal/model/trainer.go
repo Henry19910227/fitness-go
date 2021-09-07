@@ -26,7 +26,7 @@ type TrainerSummaryEntity struct {
 
 type CreateTrainerParam struct {
 	Name string `gorm:"column:name"`
-	Nickname string `gorm:"column:nickname"`
+	Address string `gorm:"column:address"`
 	Phone string `gorm:"column:phone"`
 	Email string `gorm:"column:email"`
 }

@@ -12,7 +12,7 @@ type UpdateUserInfoBody struct {
 
 type CreateTrainerBody struct {
 	Name     string `json:"name" binding:"required,min=1,max=20" example:"王小明"`                // 本名 (1~20字元)
-	Nickname string `json:"nickname" binding:"required,min=1,max=20" example:"jason"`            // 教練名稱 (1~20字元)
 	Phone    string `json:"phone" binding:"required" example:"0978820789"`                       // 手機
 	Email    string `json:"email" binding:"required,email,max=255" example:"jason@gmail.com"`    // 信箱 (最大255字元)
+	Address  string `json:"address" binding:"required,min=1,max=100" example:"台北市信義區松智路五段五號"`  // 地址 (最大100字元)
 }

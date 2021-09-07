@@ -63,6 +63,13 @@ definitions:
         example: f5e23q5e45fe32.mp4
         type: string
     type: object
+  dto.Avatar:
+    properties:
+      avatar:
+        description: 教練大頭照
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
   dto.Course:
     properties:
       body_target:
@@ -141,7 +148,7 @@ definitions:
         example: 2,3,4
         type: string
       trainer:
-        $ref: '#/definitions/trainerdto.TrainerSummary'
+        $ref: '#/definitions/dto.TrainerSummary'
         description: 教練簡介
       update_at:
         description: 更新時間
@@ -204,11 +211,93 @@ definitions:
         example: 2
         type: integer
       trainer:
-        $ref: '#/definitions/trainerdto.TrainerSummary'
+        $ref: '#/definitions/dto.TrainerSummary'
         description: 教練簡介
       workout_count:
         description: 訓練總數
         example: 10
+        type: integer
+    type: object
+  dto.Trainer:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區信義路五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: ld3ae0faf5we.png
+        type: string
+      card_back_image:
+        description: 身分證反
+        example: ld3ae0faf5we.png
+        type: string
+      card_front_image:
+        description: 身分證正面
+        example: ld3ae0faf5we.png
+        type: string
+      card_id:
+        description: 身分證字號
+        example: A123456789
+        type: string
+      create_at:
+        description: 創建日期
+        example: "2021-05-10 10:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 年資
+        example: 1
+        type: integer
+      intro:
+        description: 個人介紹
+        example: 健身比賽冠軍
+        type: string
+      motto:
+        description: 座右銘
+        example: 我的座右銘
+        type: string
+      name:
+        description: 教練本名
+        example: 王小明
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      phone:
+        description: 電話
+        example: "0978820789"
+        type: string
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-05-10 10:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 1001
+        type: integer
+    type: object
+  dto.TrainerSummary:
+    properties:
+      avatar:
+        description: 教練大頭照
+        example: d2w3e15d3awe.jpg
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry教練
+        type: string
+      user_id:
+        description: 關聯的用戶id
+        example: 10001
         type: integer
     type: object
   dto.Workout:
@@ -550,75 +639,6 @@ definitions:
         example: 3
         type: integer
     type: object
-  trainerdto.Avatar:
-    properties:
-      avatar:
-        description: 教練大頭照
-        example: dkf2se51fsdds.png
-        type: string
-    type: object
-  trainerdto.Trainer:
-    properties:
-      address:
-        description: 住址
-        example: 台北市信義區信義路五段五號
-        type: string
-      avatar:
-        description: 教練大頭照
-        example: ld3ae0faf5we.png
-        type: string
-      create_at:
-        description: 創建日期
-        example: "2021-05-10 10:00:00"
-        type: string
-      email:
-        description: 信箱
-        example: henry@gmail.com
-        type: string
-      intro:
-        description: 個人介紹
-        example: 健身比賽冠軍
-        type: string
-      name:
-        description: 教練本名
-        example: 王小明
-        type: string
-      nickname:
-        description: 教練暱稱
-        example: Henry
-        type: string
-      phone:
-        description: 電話
-        example: "0978820789"
-        type: string
-      trainer_status:
-        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
-        example: 1
-        type: integer
-      update_at:
-        description: 修改日期
-        example: "2021-05-10 10:00:00"
-        type: string
-      user_id:
-        description: 用戶id
-        example: 1001
-        type: integer
-    type: object
-  trainerdto.TrainerSummary:
-    properties:
-      avatar:
-        description: 教練大頭照
-        example: d2w3e15d3awe.jpg
-        type: string
-      nickname:
-        description: 教練暱稱
-        example: Henry教練
-        type: string
-      user_id:
-        description: 關聯的用戶id
-        example: 10001
-        type: integer
-    type: object
   userdto.Avatar:
     properties:
       avatar:
@@ -811,6 +831,10 @@ definitions:
     type: object
   validator.CreateTrainerBody:
     properties:
+      address:
+        description: 地址 (最大100字元)
+        example: 台北市信義區松智路五段五號
+        type: string
       email:
         description: 信箱 (最大255字元)
         example: jason@gmail.com
@@ -819,18 +843,14 @@ definitions:
         description: 本名 (1~20字元)
         example: 王小明
         type: string
-      nickname:
-        description: 教練名稱 (1~20字元)
-        example: jason
-        type: string
       phone:
         description: 手機
         example: "0978820789"
         type: string
     required:
+    - address
     - email
     - name
-    - nickname
     - phone
     type: object
   validator.CreateWorkoutBody:
@@ -2227,7 +2247,12 @@ paths:
         "200":
           description: 成功!
           schema:
-            $ref: '#/definitions/model.SuccessResult'
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Trainer'
+              type: object
         "400":
           description: 失敗!
           schema:
@@ -2258,7 +2283,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/trainerdto.Avatar'
+                  $ref: '#/definitions/dto.Avatar'
               type: object
         "400":
           description: 失敗!
@@ -2284,7 +2309,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/trainerdto.Trainer'
+                  $ref: '#/definitions/dto.Trainer'
               type: object
         "400":
           description: 失敗!

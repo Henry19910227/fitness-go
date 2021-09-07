@@ -1879,7 +1879,19 @@ var doc = `{
                     "200": {
                         "description": "成功!",
                         "schema": {
-                            "$ref": "#/definitions/model.SuccessResult"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1930,7 +1942,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/trainerdto.Avatar"
+                                            "$ref": "#/definitions/dto.Avatar"
                                         }
                                     }
                                 }
@@ -1976,7 +1988,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/trainerdto.Trainer"
+                                            "$ref": "#/definitions/dto.Trainer"
                                         }
                                     }
                                 }
@@ -3180,6 +3192,16 @@ var doc = `{
                 }
             }
         },
+        "dto.Avatar": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
         "dto.Course": {
             "type": "object",
             "properties": {
@@ -3279,7 +3301,7 @@ var doc = `{
                 },
                 "trainer": {
                     "description": "教練簡介",
-                    "$ref": "#/definitions/trainerdto.TrainerSummary"
+                    "$ref": "#/definitions/dto.TrainerSummary"
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -3362,12 +3384,117 @@ var doc = `{
                 },
                 "trainer": {
                     "description": "教練簡介",
-                    "$ref": "#/definitions/trainerdto.TrainerSummary"
+                    "$ref": "#/definitions/dto.TrainerSummary"
                 },
                 "workout_count": {
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.Trainer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區信義路五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "card_back_image": {
+                    "description": "身分證反",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "card_front_image": {
+                    "description": "身分證正面",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "card_id": {
+                    "description": "身分證字號",
+                    "type": "string",
+                    "example": "A123456789"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "年資",
+                    "type": "integer",
+                    "example": 1
+                },
+                "intro": {
+                    "description": "個人介紹",
+                    "type": "string",
+                    "example": "健身比賽冠軍"
+                },
+                "motto": {
+                    "description": "座右銘",
+                    "type": "string",
+                    "example": "我的座右銘"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0978820789"
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 1001
+                }
+            }
+        },
+        "dto.TrainerSummary": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry教練"
+                },
+                "user_id": {
+                    "description": "關聯的用戶id",
+                    "type": "integer",
+                    "example": 10001
                 }
             }
         },
@@ -3817,96 +3944,6 @@ var doc = `{
                 }
             }
         },
-        "trainerdto.Avatar": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "dkf2se51fsdds.png"
-                }
-            }
-        },
-        "trainerdto.Trainer": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "description": "住址",
-                    "type": "string",
-                    "example": "台北市信義區信義路五段五號"
-                },
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "ld3ae0faf5we.png"
-                },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
-                },
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "intro": {
-                    "description": "個人介紹",
-                    "type": "string",
-                    "example": "健身比賽冠軍"
-                },
-                "name": {
-                    "description": "教練本名",
-                    "type": "string",
-                    "example": "王小明"
-                },
-                "nickname": {
-                    "description": "教練暱稱",
-                    "type": "string",
-                    "example": "Henry"
-                },
-                "phone": {
-                    "description": "電話",
-                    "type": "string",
-                    "example": "0978820789"
-                },
-                "trainer_status": {
-                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
-                },
-                "user_id": {
-                    "description": "用戶id",
-                    "type": "integer",
-                    "example": 1001
-                }
-            }
-        },
-        "trainerdto.TrainerSummary": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "d2w3e15d3awe.jpg"
-                },
-                "nickname": {
-                    "description": "教練暱稱",
-                    "type": "string",
-                    "example": "Henry教練"
-                },
-                "user_id": {
-                    "description": "關聯的用戶id",
-                    "type": "integer",
-                    "example": 10001
-                }
-            }
-        },
         "userdto.Avatar": {
             "type": "object",
             "properties": {
@@ -4155,12 +4192,17 @@ var doc = `{
         "validator.CreateTrainerBody": {
             "type": "object",
             "required": [
+                "address",
                 "email",
                 "name",
-                "nickname",
                 "phone"
             ],
             "properties": {
+                "address": {
+                    "description": "地址 (最大100字元)",
+                    "type": "string",
+                    "example": "台北市信義區松智路五段五號"
+                },
                 "email": {
                     "description": "信箱 (最大255字元)",
                     "type": "string",
@@ -4170,11 +4212,6 @@ var doc = `{
                     "description": "本名 (1~20字元)",
                     "type": "string",
                     "example": "王小明"
-                },
-                "nickname": {
-                    "description": "教練名稱 (1~20字元)",
-                    "type": "string",
-                    "example": "jason"
                 },
                 "phone": {
                     "description": "手機",

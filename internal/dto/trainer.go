@@ -1,4 +1,4 @@
-package trainerdto
+package dto
 
 type Trainer struct {
 	UserID           int64   `json:"user_id" gorm:"column:user_id" example:"1001"`                      // 用戶id
@@ -10,6 +10,11 @@ type Trainer struct {
 	Phone            string  `json:"phone" gorm:"column:phone" example:"0978820789"`                    // 電話
 	Address          string  `json:"address" gorm:"column:address" example:"台北市信義區信義路五段五號"`     // 住址
 	Intro            string  `json:"intro" gorm:"column:intro" example:"健身比賽冠軍"`                    // 個人介紹
+	Experience       int     `json:"experience" gorm:"column:experience" example:"1"`                   // 年資
+	Motto            string  `json:"motto" gorm:"column:motto" example:"我的座右銘"`                      // 座右銘
+	CardID           string  `json:"card_id" gorm:"column:card_id" example:"A123456789"`                 // 身分證字號
+	CardFrontImage   string  `json:"card_front_image" gorm:"column:card_front_image" example:"ld3ae0faf5we.png"`  // 身分證正面
+	CardBackImage    string  `json:"card_back_image" gorm:"column:card_back_image" example:"ld3ae0faf5we.png"`  // 身分證反
 	CreateAt         string  `json:"create_at" gorm:"column:create_at" example:"2021-05-10 10:00:00"`   // 創建日期
 	UpdateAt         string  `json:"update_at" gorm:"column:update_at" example:"2021-05-10 10:00:00"`   // 修改日期
 }
@@ -22,13 +27,9 @@ type TrainerSummary struct {
 
 type CreateTrainerParam struct {
 	Name string
-	Nickname string
 	Phone string
 	Email string
-}
-
-type CreateTrainerResult struct {
-	UserID int64 `json:"user_id" example:"10001"`
+	Address string
 }
 
 type Avatar struct {

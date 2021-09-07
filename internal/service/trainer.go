@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -29,7 +29,7 @@ func NewTrainer(trainerRepo repository.Trainer, uploader handler.Uploader, resHa
 }
 
 
-func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error) {
+func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error) {
 	//檢查教練身份是否存在
 	isExists, e := t.trainerIsExists(c, uid)
 	if e != nil {
@@ -39,38 +39,24 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *trainerdto.Cre
 		return nil, t.errHandler.DataAlreadyExists()
 	}
 	//創建教練身份
-	err := t.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
+	if err := t.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
 		Name: param.Name,
-		Nickname: param.Nickname,
+		Address: param.Address,
 		Phone: param.Phone,
 		Email: param.Email,
-	})
-	if err != nil {
-		//資料已存在
-		if t.MysqlDuplicateEntry(err) {
-			if strings.Contains(err.Error(), "nickname") {
-				return nil, t.errHandler.Custom(9004, errors.New("重複的暱稱"))
-			}
-			return nil, t.errHandler.DataAlreadyExists()
-		}
-		//不明原因錯誤
-		t.logger.Set(c, handler.Error, "Trainer Repo", t.errHandler.SystemError().Code(), err.Error())
-		return nil, t.errHandler.SystemError()
+	}); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
-	return &trainerdto.CreateTrainerResult{UserID: uid}, nil
+	var trainer dto.Trainer
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	return &trainer, nil
 }
 
-func (t *trainer) CreateTrainerByToken(c *gin.Context, token string, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error) {
-	uid, err := t.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, t.errHandler.InvalidToken()
-	}
-	return t.CreateTrainer(c, uid, param)
-}
-
-func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer, errcode.Error) {
+func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error) {
 	//獲取trainer資訊
-	var result trainerdto.Trainer
+	var result dto.Trainer
 	if err := t.trainerRepo.FindTrainerByUID(uid, &result); err != nil {
 		//查無此資料
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -83,7 +69,7 @@ func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer
 	return &result, nil
 }
 
-func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*trainerdto.Trainer, errcode.Error) {
+func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error) {
 	uid, err := t.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, t.errHandler.InvalidToken()
@@ -91,7 +77,7 @@ func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*trainerd
 	return t.GetTrainerInfo(c, uid)
 }
 
-func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error) {
+func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.Avatar, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := t.uploader.UploadTrainerAvatar(imageFile, imageNamed)
 	if err != nil {
@@ -123,10 +109,10 @@ func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed
 			t.logger.Set(c, handler.Error, "ResHandler", t.errHandler.SystemError().Code(), err.Error())
 		}
 	}
-	return &trainerdto.Avatar{Avatar: newImageNamed}, nil
+	return &dto.Avatar{Avatar: newImageNamed}, nil
 }
 
-func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error) {
+func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.Avatar, errcode.Error) {
 	uid, err := t.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, t.errHandler.InvalidToken()

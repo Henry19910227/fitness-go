@@ -18,7 +18,7 @@ func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) erro
 	trainer := model.Trainer{
 		UserID: uid,
 		Name: param.Name,
-		Nickname: param.Nickname,
+		Address: param.Address,
 		Phone: param.Phone,
 		Email: param.Email,
 		TrainerStatus: 1,

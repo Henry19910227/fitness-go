@@ -113,7 +113,7 @@ func main() {
 	controller.NewRegister(baseGroup, regService)
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
-	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
+	controller.NewTrainer(baseGroup, trainerService, userMiddleware, userMidd)
 	controller.NewCourse(baseGroup, courseService, planService, actionService, userMidd, courseMidd)
 	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
 	controller.NewWorkout(baseGroup, workoutService, workoutSetService, userMidd, courseMidd)
@@ -211,6 +211,7 @@ func setupService() {
 	courseService = service.NewCourseService(viperTool, gormTool)
 	reviewService = service.NewReviewService(viperTool, gormTool)
 	workoutService = service.NewWorkoutService(viperTool, gormTool)
+	trainerService = service.NewTrainerService(viperTool, gormTool)
 }
 
 func setupLoginService() {
