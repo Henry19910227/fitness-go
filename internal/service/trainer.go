@@ -39,12 +39,7 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrai
 		return nil, t.errHandler.DataAlreadyExists()
 	}
 	//創建教練身份
-	if err := t.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
-		Name: param.Name,
-		Address: param.Address,
-		Phone: param.Phone,
-		Email: param.Email,
-	}); err != nil {
+	if err := t.trainerRepo.CreateTrainer(uid); err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
 	var trainer dto.Trainer
@@ -75,6 +70,39 @@ func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trai
 		return nil, t.errHandler.InvalidToken()
 	}
 	return t.GetTrainerInfo(c, uid)
+}
+
+func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error) {
+	//檢查教練身份是否存在
+	isExists, e := t.trainerIsExists(c, uid)
+	if e != nil {
+		return nil, e
+	}
+	if !isExists {
+		if err := t.trainerRepo.CreateTrainer(uid); err != nil {
+			return nil, t.errHandler.Set(c, "trainer repo", err)
+		}
+	}
+	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
+		Name: param.Name,
+		Nickname: param.Nickname,
+		Email: param.Email,
+		Phone: param.Phone,
+		Address: param.Address,
+		Intro: param.Intro,
+		Experience: param.Experience,
+		Motto: param.Motto,
+		FacebookURL: param.FacebookURL,
+		InstagramURL: param.InstagramURL,
+		YoutubeURL: param.YoutubeURL,
+	}); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	var trainer dto.Trainer
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	return &trainer, nil
 }
 
 func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.Avatar, errcode.Error) {
@@ -130,7 +158,7 @@ func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Erro
 		return false, t.errHandler.SystemError()
 	}
 	if trainer.UserID != 0 {
-		return false, nil
+		return true, nil
 	}
 	return false, nil
 }

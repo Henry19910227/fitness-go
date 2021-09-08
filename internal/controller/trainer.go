@@ -27,6 +27,11 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		trainer.CreateTrainer)
+
+	baseGroup.PATCH("/trainer",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		trainer.UpdateTrainer)
 }
 
 // CreateTrainer 創建我的教練身份
@@ -62,6 +67,48 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 		return
 	}
 	t.JSONSuccessResponse(c, result, "create success!")
+}
+
+// UpdateTrainer 修改我的教練資訊
+// @Summary 修改我的教練資訊
+// @Description 修改我的教練資訊
+// @Tags Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body validator.UpdateTrainerBody true "輸入欄位"
+// @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /trainer [PATCH]
+func (t *Trainer) UpdateTrainer(c *gin.Context) {
+	uid, e := t.GetUID(c)
+	if e != nil {
+		t.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var body validator.UpdateTrainerBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	trainer, err := t.trainerService.UpdateTrainer(c, uid, &dto.UpdateTrainerParam{
+		Name: body.Name,
+		Nickname: body.Nickname,
+		Email: body.Email,
+		Phone: body.Phone,
+		Address: body.Address,
+		Intro: body.Intro,
+		Experience: body.Experience,
+		Motto: body.Motto,
+		FacebookURL: body.FacebookURL,
+		InstagramURL: body.InstagramURL,
+		YoutubeURL: body.YoutubeURL,
+	})
+	if err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessResponse(c, trainer, "update success!")
 }
 
 // GetTrainerInfo 取得我的教練身份資訊

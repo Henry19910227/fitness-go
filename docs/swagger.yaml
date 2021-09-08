@@ -229,7 +229,7 @@ definitions:
         example: ld3ae0faf5we.png
         type: string
       card_back_image:
-        description: 身分證反
+        description: 身分證反面
         example: ld3ae0faf5we.png
         type: string
       card_front_image:
@@ -252,6 +252,14 @@ definitions:
         description: 年資
         example: 1
         type: integer
+      facebook_url:
+        description: 臉書連結
+        example: www.facebook.com
+        type: string
+      instagram_url:
+        description: ig連結
+        example: www.instagram.com
+        type: string
       intro:
         description: 個人介紹
         example: 健身比賽冠軍
@@ -284,6 +292,10 @@ definitions:
         description: 用戶id
         example: 1001
         type: integer
+      youtube_url:
+        description: youtube連結
+        example: www.youtube.com
+        type: string
     type: object
   dto.TrainerSummary:
     properties:
@@ -1015,6 +1027,53 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  validator.UpdateTrainerBody:
+    properties:
+      address:
+        description: 地址 (最大100字元)
+        example: 台北市信義區松智路五段五號
+        type: string
+      email:
+        description: 信箱 (最大255字元)
+        example: jason@gmail.com
+        type: string
+      experience:
+        description: 年資
+        example: 5
+        type: integer
+      facebook_url:
+        description: 臉書連結
+        example: www.facebook.com
+        type: string
+      instagram_url:
+        description: instagram連結
+        example: www.instagram.com
+        type: string
+      intro:
+        description: 教練介紹 (1~400字元)
+        example: 我叫戰車老師
+        type: string
+      motto:
+        description: 座右銘 (1~100字元)
+        example: 戰車老師
+        type: string
+      name:
+        description: 本名 (1~20字元)
+        example: 史考特
+        type: string
+      nickname:
+        description: 暱稱 (1~20字元)
+        example: 戰車老師
+        type: string
+      phone:
+        description: 手機
+        example: "0922244123"
+        type: string
+      youtube_url:
+        description: youtube連結
+        example: www.youtube.com
+        type: string
     type: object
   validator.UpdateUserInfoBody:
     properties:
@@ -2230,6 +2289,38 @@ paths:
       tags:
       - Sale
   /trainer:
+    patch:
+      consumes:
+      - application/json
+      description: 修改我的教練資訊
+      parameters:
+      - description: 輸入欄位
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateTrainerBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Trainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 修改我的教練資訊
+      tags:
+      - Trainer
     post:
       consumes:
       - application/json
