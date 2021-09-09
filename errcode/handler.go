@@ -39,7 +39,7 @@ func (h *handle) Set(c *gin.Context, tag string, err error) Error {
 		return NewError(DataNotFound, errors.New("查無資料"))
 	}
 	if strings.Contains(err.Error(), "1062")  {
-		return NewError(DataAlreadyExists, errors.New("資料已存在"))
+		return NewError(DataAlreadyExists, err)
 	}
 	//自定義錯誤碼映射
 	code, _ := strconv.Atoi(err.Error())
