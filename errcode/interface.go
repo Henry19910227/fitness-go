@@ -13,6 +13,8 @@ const (
 	InvalidThirdParty int = 9004 // 無效的第三方驗證
 	InvalidToken int = 9005 // 無效的token
 	PermissionDenied int = 9006 // 權限不足,存取遭拒
+	FileTypeError int = 9007 // 上傳檔案類型不符合規範
+	FileSizeError int = 9008 // 上傳檔案大小超過限制
 )
 
 var (
@@ -25,8 +27,8 @@ var (
 	invalidThirdParty = NewError(InvalidThirdParty, errors.New("無效的第三方驗證"))
 	invalidToken      = NewError(InvalidToken, errors.New("無效的token"))
 	permissionDenied  = NewError(PermissionDenied, errors.New("權限不足,存取遭拒"))
-	FileTypeError     = NewError(9007, errors.New("上傳檔案類型不符合規範"))
-	FileSizeError     = NewError(9008, errors.New("上傳檔案大小超過限制"))
+	fileTypeError     = NewError(FileTypeError, errors.New("上傳檔案類型不符合規範"))
+	fileSizeError     = NewError(FileSizeError, errors.New("上傳檔案大小超過限制"))
 
 	// Login
 	LoginFailure     = NewError(1100, errors.New("登入失敗, 帳號或密碼錯誤"))

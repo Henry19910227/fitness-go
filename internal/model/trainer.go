@@ -42,6 +42,9 @@ type UpdateTrainerParam struct {
 	Intro            *string  `gorm:"column:intro"`           // 個人介紹
 	Experience       *int     // 年資
 	Motto            *string  // 座右銘
+	CardID           *string  // 身分證字號
+	CardFrontImage   *string  // 身分證正面
+	CardBackImage   *string   // 身分證反面
 	FacebookURL      *string  // 臉書連結
 	InstagramURL     *string  // ig連結
 	YoutubeURL       *string  // youtube連結

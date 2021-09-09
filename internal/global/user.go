@@ -2,9 +2,10 @@ package global
 
 type TrainerStatus int
 const (
-	TrainerActivity TrainerStatus = 1
-	TrainerReviewing = 2
-	TrainerRevoke = 3
+	TrainerActivity TrainerStatus = 1 //正常
+	TrainerReviewing = 2 //審核中
+	TrainerRevoke = 3  //停權
+	TrainerDraft = 4 //編輯中
 )
 
 // UserStatus 用戶狀態(1:正常/2:違規)

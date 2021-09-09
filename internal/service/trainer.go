@@ -148,6 +148,32 @@ func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, image
 	return t.UploadTrainerAvatarByUID(c, uid, imageNamed, imageFile)
 }
 
+func (t *trainer) UploadCardFrontImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardFront, errcode.Error) {
+	//上傳照片
+	newImageNamed, err := t.uploader.UploadCardFrontImage(imageFile, imageNamed)
+	if err != nil {
+		return nil, t.errHandler.Set(c, "uploader", err)
+	}
+	//查詢教練資訊
+	var trainer struct{ CardFrontImage string `gorm:"column:card_front_image"`}
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	//修改教練資訊
+	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
+		CardFrontImage: &newImageNamed,
+	}); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	//刪除舊照片
+	if len(trainer.CardFrontImage) > 0 {
+		if err := t.resHandler.DeleteCardFrontImage(trainer.CardFrontImage); err != nil {
+			t.errHandler.Set(c, "res handler", err)
+		}
+	}
+	return &dto.TrainerCardFront{Image: newImageNamed}, nil
+}
+
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {
 	var trainer struct{
 		UserID int64 `gorm:"column:user_id"`

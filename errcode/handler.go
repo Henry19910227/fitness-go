@@ -28,6 +28,8 @@ func NewErrHandler(logger logger.Logger) Handler {
 	errHandler.errMap[DataAlreadyExists] = NewError(DataAlreadyExists, errors.New("資料已存在"))
 	errHandler.errMap[InvalidToken] = NewError(InvalidToken, errors.New("無效的token"))
 	errHandler.errMap[PermissionDenied] = NewError(PermissionDenied, errors.New("權限不足,存取遭拒"))
+	errHandler.errMap[FileTypeError] = NewError(FileTypeError, errors.New("上傳檔案類型不符合規範"))
+	errHandler.errMap[FileSizeError] = NewError(FileSizeError, errors.New("上傳檔案大小超過限制"))
 	return errHandler
 }
 
@@ -40,6 +42,12 @@ func (h *handle) Set(c *gin.Context, tag string, err error) Error {
 	}
 	if strings.Contains(err.Error(), "1062")  {
 		return NewError(DataAlreadyExists, err)
+	}
+	if strings.Contains(err.Error(), "9007")  {
+		return NewError(FileTypeError, err)
+	}
+	if strings.Contains(err.Error(), "9008")  {
+		return NewError(FileSizeError, err)
 	}
 	//自定義錯誤碼映射
 	code, _ := strconv.Atoi(err.Error())
@@ -83,11 +91,11 @@ func (h handle) PermissionDenied() Error {
 }
 
 func (h handle) FileTypeError() Error {
-	return FileTypeError
+	return fileTypeError
 }
 
 func (h handle) FileSizeError() Error {
-	return FileSizeError
+	return fileSizeError
 }
 
 /** 註冊 */

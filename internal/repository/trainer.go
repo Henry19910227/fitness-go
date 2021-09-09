@@ -49,6 +49,9 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	if param.Intro != nil { selects = append(selects, "intro") }
 	if param.Experience != nil { selects = append(selects, "experience") }
 	if param.Motto != nil { selects = append(selects, "motto") }
+	if param.CardID != nil { selects = append(selects, "card_id") }
+	if param.CardFrontImage != nil { selects = append(selects, "card_front_image") }
+	if param.CardBackImage != nil { selects = append(selects, "card_back_image") }
 	if param.FacebookURL != nil { selects = append(selects, "facebook_url") }
 	if param.InstagramURL != nil { selects = append(selects, "instagram_url") }
 	if param.YoutubeURL != nil { selects = append(selects, "youtube_url") }

@@ -52,3 +52,7 @@ type UpdateTrainerParam struct {
 type TrainerAvatar struct {
 	Avatar string `json:"avatar" example:"dkf2se51fsdds.png"` // 教練大頭照
 }
+
+type TrainerCardFront struct {
+	Image string `json:"card_front_image" example:"dkf2se51fsdds.png"` // 身分證正面
+}

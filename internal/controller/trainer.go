@@ -17,6 +17,7 @@ type Trainer struct {
 
 func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, userMiddleware gin.HandlerFunc, userMidd midd.User)  {
 	baseGroup.StaticFS("/resource/trainer/avatar", http.Dir("./volumes/storage/trainer/avatar"))
+	baseGroup.StaticFS("/resource/trainer/card_front_image", http.Dir("./volumes/storage/trainer/card_front_image"))
 	trainer := &Trainer{trainerService: trainerService}
 	trainerGroup := baseGroup.Group("/trainer")
 	trainerGroup.Use(userMiddleware)
@@ -32,6 +33,11 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		trainer.UpdateTrainer)
+
+	baseGroup.POST("/card_front_image",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerDraft}),
+		trainer.UploadCardFrontImage)
 }
 
 // CreateTrainer 創建我的教練身份
@@ -160,6 +166,36 @@ func (t *Trainer) UploadMyTrainerAvatar(c *gin.Context) {
 	result, e := t.trainerService.UploadTrainerAvatarByToken(c, header.Token, fileHeader.Filename, file)
 	if e != nil {
 		t.JSONErrorResponse(c, e)
+		return
+	}
+	t.JSONSuccessResponse(c, result, "success upload")
+}
+
+// UploadCardFrontImage 上傳身分證正面
+// @Summary 上傳身分證正面
+// @Description 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+// @Tags Trainer
+// @Security fitness_token
+// @Accept mpfd
+// @Param card_front_image formData file true "身分證正面"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=dto.TrainerCardFront} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /card_front_image [POST]
+func (t *Trainer) UploadCardFrontImage(c *gin.Context) {
+	uid, e := t.GetUID(c)
+	if e != nil {
+		t.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("card_front_image")
+	if err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, er := t.trainerService.UploadCardFrontImageByUID(c, uid, fileHeader.Filename, file)
+	if er != nil {
+		t.JSONErrorResponse(c, er)
 		return
 	}
 	t.JSONSuccessResponse(c, result, "success upload")
