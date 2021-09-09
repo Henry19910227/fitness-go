@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -37,7 +37,7 @@ func NewUser(userRepo repository.User, trainerRepo repository.Trainer,
 		errHandler: errHandler}
 }
 
-func (u *user) UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
+func (u *user) UpdateUserByToken(c *gin.Context, token string, param *dto.UpdateUserParam) (*dto.User, errcode.Error) {
 	uid, err := u.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, u.errHandler.InvalidToken()
@@ -45,7 +45,7 @@ func (u *user) UpdateUserByToken(c *gin.Context, token string, param *userdto.Up
 	return u.UpdateUserByUID(c, uid, param)
 }
 
-func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error) {
+func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *dto.UpdateUserParam) (*dto.User, errcode.Error) {
 	//更新user
 	if err := u.userRepo.UpdateUserByUID(uid, &model.UpdateUserParam{
 		Nickname: param.Nickname,
@@ -75,9 +75,9 @@ func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateU
 	return user, nil
 }
 
-func (u *user) GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.Error) {
+func (u *user) GetUserByUID(c *gin.Context, uid int64) (*dto.User, errcode.Error) {
 	//查找user
-	var user userdto.User
+	var user dto.User
 	if err := u.userRepo.FindUserByUID(uid, &user); err != nil {
 		//查無此資料
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -88,7 +88,7 @@ func (u *user) GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.E
 		return nil, u.errHandler.SystemError()
 	}
 	//獲取教練資訊
-	var trainer userdto.Trainer
+	var trainer dto.Trainer
 	err := u.trainerRepo.FindTrainerByUID(user.ID, &trainer)
 	if err != nil {
 		u.logger.Set(c, handler.Error, "TrainerRepo",u.errHandler.SystemError().Code(), err.Error())
@@ -100,7 +100,7 @@ func (u *user) GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.E
 	return &user, nil
 }
 
-func (u *user) GetUserByToken(c *gin.Context, token string) (*userdto.User, errcode.Error) {
+func (u *user) GetUserByToken(c *gin.Context, token string) (*dto.User, errcode.Error) {
 	uid, err := u.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, u.errHandler.InvalidToken()
@@ -108,7 +108,7 @@ func (u *user) GetUserByToken(c *gin.Context, token string) (*userdto.User, errc
 	return u.GetUserByUID(c, uid)
 }
 
-func (u *user) UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*userdto.Avatar, errcode.Error) {
+func (u *user) UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := u.uploader.UploadUserAvatar(imageFile, imageNamed)
 	if err != nil {
@@ -140,10 +140,10 @@ func (u *user) UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed strin
 			u.logger.Set(c, handler.Error, "ResHandler", u.errHandler.SystemError().Code(), err.Error())
 		}
 	}
-	return &userdto.Avatar{Avatar: newImageNamed}, nil
+	return &dto.UserAvatar{Avatar: newImageNamed}, nil
 }
 
-func (u *user) UploadUserAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*userdto.Avatar, errcode.Error) {
+func (u *user) UploadUserAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error) {
 	uid, err := u.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, u.errHandler.InvalidToken()

@@ -1,4 +1,4 @@
-package logindto
+package dto
 
 type Admin struct {
 	ID          int64  `json:"id" gorm:"column:id" example:"1"`                       // 帳戶id

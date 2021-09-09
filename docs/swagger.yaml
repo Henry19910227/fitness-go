@@ -63,11 +63,23 @@ definitions:
         example: f5e23q5e45fe32.mp4
         type: string
     type: object
-  dto.Avatar:
+  dto.Admin:
     properties:
-      avatar:
-        description: 教練大頭照
-        example: dkf2se51fsdds.png
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      id:
+        description: 帳戶id
+        example: 1
+        type: integer
+      lv:
+        description: 身份 (1:一般管理員)
+        example: 1
+        type: integer
+      nickname:
+        description: 暱稱
+        example: henry
         type: string
     type: object
   dto.Course:
@@ -281,7 +293,7 @@ definitions:
         example: "0978820789"
         type: string
       trainer_status:
-        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)
         example: 1
         type: integer
       update_at:
@@ -295,6 +307,13 @@ definitions:
       youtube_url:
         description: youtube連結
         example: www.youtube.com
+        type: string
+    type: object
+  dto.TrainerAvatar:
+    properties:
+      avatar:
+        description: 教練大頭照
+        example: dkf2se51fsdds.png
         type: string
     type: object
   dto.TrainerSummary:
@@ -311,6 +330,87 @@ definitions:
         description: 關聯的用戶id
         example: 10001
         type: integer
+    type: object
+  dto.User:
+    properties:
+      account:
+        description: 帳號
+        example: henry@gmail.com
+        type: string
+      account_type:
+        description: 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
+        example: 1
+        type: integer
+      avatar:
+        description: 用戶大頭貼
+        example: d2fe5w321a.png
+        type: string
+      birthday:
+        description: 生日
+        example: "1991-02-27"
+        type: string
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      device_token:
+        description: 推播 Token
+        example: f144b48d9695...
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
+        example: 2
+        type: integer
+      height:
+        description: 身高
+        example: 176.5
+        type: number
+      id:
+        description: 帳戶id
+        example: 10001
+        type: integer
+      nickname:
+        description: 暱稱
+        example: Henry
+        type: string
+      sex:
+        description: 性別 (m:男/f:女)
+        example: m
+        type: string
+      target:
+        description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
+        example: 3
+        type: integer
+      trainer_info:
+        $ref: '#/definitions/dto.Trainer'
+        description: 教練資訊
+      update_at:
+        description: 修改日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      user_status:
+        description: 用戶狀態 (1:正常/2:違規/3:刪除)
+        example: 1
+        type: integer
+      user_type:
+        description: 用戶狀態 (1:一般用戶/2:訂閱用戶)
+        example: 1
+        type: integer
+      weight:
+        description: 體重
+        example: 72.5
+        type: number
+    type: object
+  dto.UserAvatar:
+    properties:
+      avatar:
+        description: 用戶大頭照
+        example: dkf2se51fsdds.png
+        type: string
     type: object
   dto.Workout:
     properties:
@@ -407,142 +507,6 @@ definitions:
         description: 訓練組id
         example: 10
         type: integer
-    type: object
-  logindto.Admin:
-    properties:
-      email:
-        description: 信箱
-        example: henry@gmail.com
-        type: string
-      id:
-        description: 帳戶id
-        example: 1
-        type: integer
-      lv:
-        description: 身份 (1:一般管理員)
-        example: 1
-        type: integer
-      nickname:
-        description: 暱稱
-        example: henry
-        type: string
-    type: object
-  logindto.Trainer:
-    properties:
-      address:
-        description: 住址
-        example: 台北市信義區信義路五段五號
-        type: string
-      avatar:
-        description: 教練大頭照
-        example: ld3ae0faf5we.png
-        type: string
-      create_at:
-        description: 創建日期
-        example: "2021-05-10 10:00:00"
-        type: string
-      email:
-        description: 信箱
-        example: henry@gmail.com
-        type: string
-      intro:
-        description: 個人介紹
-        example: 健身比賽冠軍
-        type: string
-      name:
-        description: 教練本名
-        example: 王小明
-        type: string
-      nickname:
-        description: 教練暱稱
-        example: Henry
-        type: string
-      phone:
-        description: 電話
-        example: "0978820789"
-        type: string
-      trainer_status:
-        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
-        example: 1
-        type: integer
-      update_at:
-        description: 修改日期
-        example: "2021-05-10 10:00:00"
-        type: string
-    type: object
-  logindto.User:
-    properties:
-      account:
-        description: 帳號
-        example: henry@gmail.com
-        type: string
-      account_type:
-        description: 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
-        example: 1
-        type: integer
-      avatar:
-        description: 用戶大頭貼
-        example: d2fe5w321a.png
-        type: string
-      birthday:
-        description: 生日
-        example: "1991-02-27"
-        type: string
-      create_at:
-        description: 創建日期
-        example: "2021-06-01 12:00:00"
-        type: string
-      device_token:
-        description: 推播 Token
-        example: f144b48d9695...
-        type: string
-      email:
-        description: 信箱
-        example: henry@gmail.com
-        type: string
-      experience:
-        description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
-        example: 2
-        type: integer
-      height:
-        description: 身高
-        example: 176.5
-        type: number
-      id:
-        description: 帳戶id
-        example: 10001
-        type: integer
-      nickname:
-        description: 暱稱
-        example: Henry
-        type: string
-      sex:
-        description: 性別 (m:男/f:女)
-        example: m
-        type: string
-      target:
-        description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
-        example: 3
-        type: integer
-      trainer_info:
-        $ref: '#/definitions/logindto.Trainer'
-        description: 教練資訊
-      update_at:
-        description: 修改日期
-        example: "2021-06-01 12:00:00"
-        type: string
-      user_status:
-        description: 用戶狀態 (1:正常/2:違規/3:刪除)
-        example: 1
-        type: integer
-      user_type:
-        description: 用戶狀態 (1:一般用戶/2:訂閱用戶)
-        example: 1
-        type: integer
-      weight:
-        description: 體重
-        example: 72.5
-        type: number
     type: object
   model.Data:
     type: object
@@ -650,130 +614,6 @@ definitions:
         description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
         example: 3
         type: integer
-    type: object
-  userdto.Avatar:
-    properties:
-      avatar:
-        description: 用戶大頭照
-        example: dkf2se51fsdds.png
-        type: string
-    type: object
-  userdto.Trainer:
-    properties:
-      address:
-        description: 住址
-        example: 台北市信義區信義路五段五號
-        type: string
-      avatar:
-        description: 教練大頭照
-        example: ld3ae0faf5we.png
-        type: string
-      create_at:
-        description: 創建日期
-        example: "2021-05-10 10:00:00"
-        type: string
-      email:
-        description: 信箱
-        example: henry@gmail.com
-        type: string
-      intro:
-        description: 個人介紹
-        example: 健身比賽冠軍
-        type: string
-      name:
-        description: 教練本名
-        example: 王小明
-        type: string
-      nickname:
-        description: 教練暱稱
-        example: Henry
-        type: string
-      phone:
-        description: 電話
-        example: "0978820789"
-        type: string
-      trainer_status:
-        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
-        example: 1
-        type: integer
-      update_at:
-        description: 修改日期
-        example: "2021-05-10 10:00:00"
-        type: string
-    type: object
-  userdto.User:
-    properties:
-      account:
-        description: 帳號
-        example: henry@gmail.com
-        type: string
-      account_type:
-        description: 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
-        example: 1
-        type: integer
-      avatar:
-        description: 用戶大頭貼
-        example: d2fe5w321a.png
-        type: string
-      birthday:
-        description: 生日
-        example: "1991-02-27"
-        type: string
-      create_at:
-        description: 創建日期
-        example: "2021-06-01 12:00:00"
-        type: string
-      device_token:
-        description: 推播 Token
-        example: f144b48d9695...
-        type: string
-      email:
-        description: 信箱
-        example: henry@gmail.com
-        type: string
-      experience:
-        description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
-        example: 2
-        type: integer
-      height:
-        description: 身高
-        example: 176.5
-        type: number
-      id:
-        description: 帳戶id
-        example: 10001
-        type: integer
-      nickname:
-        description: 暱稱
-        example: Henry
-        type: string
-      sex:
-        description: 性別 (m:男/f:女)
-        example: m
-        type: string
-      target:
-        description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
-        example: 3
-        type: integer
-      trainer_info:
-        $ref: '#/definitions/userdto.Trainer'
-        description: 教練資訊
-      update_at:
-        description: 修改日期
-        example: "2021-06-01 12:00:00"
-        type: string
-      user_status:
-        description: 用戶狀態 (1:正常/2:違規/3:刪除)
-        example: 1
-        type: integer
-      user_type:
-        description: 用戶狀態 (1:一般用戶/2:訂閱用戶)
-        example: 1
-        type: integer
-      weight:
-        description: 體重
-        example: 72.5
-        type: number
     type: object
   validator.CreateActionBody:
     properties:
@@ -1752,7 +1592,7 @@ paths:
             - $ref: '#/definitions/model.SuccessLoginResult'
             - properties:
                 data:
-                  $ref: '#/definitions/logindto.Admin'
+                  $ref: '#/definitions/dto.Admin'
               type: object
         "400":
           description: 登入失敗
@@ -1783,7 +1623,7 @@ paths:
             - $ref: '#/definitions/model.SuccessLoginResult'
             - properties:
                 data:
-                  $ref: '#/definitions/logindto.User'
+                  $ref: '#/definitions/dto.User'
               type: object
         "400":
           description: 登入失敗
@@ -2374,7 +2214,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.Avatar'
+                  $ref: '#/definitions/dto.TrainerAvatar'
               type: object
         "400":
           description: 失敗!
@@ -2432,7 +2272,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/userdto.Avatar'
+                  $ref: '#/definitions/dto.UserAvatar'
               type: object
         "400":
           description: 失敗!
@@ -2458,7 +2298,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/userdto.User'
+                  $ref: '#/definitions/dto.User'
               type: object
         "400":
           description: 失敗!
@@ -2490,7 +2330,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/userdto.User'
+                  $ref: '#/definitions/dto.User'
               type: object
         "400":
           description: 失敗!

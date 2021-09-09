@@ -143,7 +143,7 @@ func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 // @Accept mpfd
 // @Param avatar formData file true "教練大頭照"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.Avatar} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.TrainerAvatar} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /trainer/avatar [POST]
 func (t *Trainer) UploadMyTrainerAvatar(c *gin.Context) {

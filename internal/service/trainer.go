@@ -105,7 +105,7 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	return &trainer, nil
 }
 
-func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.Avatar, errcode.Error) {
+func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := t.uploader.UploadTrainerAvatar(imageFile, imageNamed)
 	if err != nil {
@@ -137,10 +137,10 @@ func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed
 			t.logger.Set(c, handler.Error, "ResHandler", t.errHandler.SystemError().Code(), err.Error())
 		}
 	}
-	return &dto.Avatar{Avatar: newImageNamed}, nil
+	return &dto.TrainerAvatar{Avatar: newImageNamed}, nil
 }
 
-func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.Avatar, errcode.Error) {
+func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error) {
 	uid, err := t.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, t.errHandler.InvalidToken()

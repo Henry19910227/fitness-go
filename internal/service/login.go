@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
@@ -38,9 +38,9 @@ func NewLogin(adminRepo repository.Admin,
 		errHandler: errHandler}
 }
 
-func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) (*logindto.User, string, errcode.Error) {
+func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) (*dto.User, string, errcode.Error) {
 	//從db查詢用戶
-	var user logindto.User
+	var user dto.User
 	if err := l.userRepo.FindUserByAccountAndPassword(email, password, &user); err != nil {
 		//查無此人
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -54,7 +54,7 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 		user.Birthday = ""
 	}
 	//獲取教練資訊
-	var trainer logindto.Trainer
+	var trainer dto.Trainer
 	err := l.trainerRepo.FindTrainerByUID(user.ID, &trainer)
 	if err != nil {
 		l.logger.Set(c, handler.Error, "TrainerRepo", l.errHandler.SystemError().Code(), err.Error())
@@ -72,7 +72,7 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 	return &user, token, nil
 }
 
-func (l *login) AdminLoginByEmail(c *gin.Context, email string, password string) (*logindto.Admin, string, errcode.Error) {
+func (l *login) AdminLoginByEmail(c *gin.Context, email string, password string) (*dto.Admin, string, errcode.Error) {
 	uid, err := l.adminRepo.GetAdminID(email, password)
 	if err != nil {
 		//查無此人
@@ -83,7 +83,7 @@ func (l *login) AdminLoginByEmail(c *gin.Context, email string, password string)
 		l.logger.Set(c, handler.Error, "AdminRepo", l.errHandler.SystemError().Code(), err.Error())
 		return nil, "", l.errHandler.SystemError()
 	}
-	var admin logindto.Admin
+	var admin dto.Admin
 	if err := l.adminRepo.GetAdmin(uid, &admin); err != nil {
 		l.logger.Set(c, handler.Error, "AdminRepo", l.errHandler.SystemError().Code(), err.Error())
 		return nil, "", l.errHandler.SystemError()

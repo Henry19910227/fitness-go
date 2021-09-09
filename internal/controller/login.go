@@ -36,7 +36,7 @@ func NewLogin(baseGroup *gin.RouterGroup, loginService service.Login, userMiddle
 // @Accept json
 // @Produce json
 // @Param json_body body validator.LoginByEmailBody true "輸入參數"
-// @Success 200 {object} model.SuccessLoginResult{data=logindto.User} "登入成功"
+// @Success 200 {object} model.SuccessLoginResult{data=dto.User} "登入成功"
 // @Failure 400 {object} model.ErrorResult "登入失敗"
 // @Router /login/user/email [POST]
 func (l *Login) UserLoginByEmail(c *gin.Context)  {
@@ -60,7 +60,7 @@ func (l *Login) UserLoginByEmail(c *gin.Context)  {
 // @Accept json
 // @Produce json
 // @Param json_body body validator.LoginByEmailBody true "輸入參數"
-// @Success 200 {object} model.SuccessLoginResult{data=logindto.Admin} "登入成功"
+// @Success 200 {object} model.SuccessLoginResult{data=dto.Admin} "登入成功"
 // @Failure 400 {object} model.ErrorResult "登入失敗"
 // @Router /login/admin/email [POST]
 func (l *Login) AdminLoginByEmail(c *gin.Context)  {

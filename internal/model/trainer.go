@@ -5,7 +5,7 @@ type Trainer struct {
 	Name             string  `gorm:"column:name"`            // 教練本名
 	Nickname         *string  `gorm:"column:nickname"`        // 教練暱稱
 	Avatar           string  `gorm:"column:avatar"`          // 教練大頭照
-	TrainerStatus    int     `gorm:"column:trainer_status"`  // 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+	TrainerStatus    int     `gorm:"column:trainer_status"`  // 教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)
 	Email            string  `gorm:"column:email"`           // 信箱
 	Phone            string  `gorm:"column:phone"`           // 電話
 	Address          string  `gorm:"column:address"`         // 住址
@@ -35,7 +35,7 @@ type UpdateTrainerParam struct {
 	Name             *string  `gorm:"column:name"`            // 教練本名
 	Nickname         *string  `gorm:"column:nickname"`        // 教練暱稱
 	Avatar           *string  `gorm:"column:avatar"`          // 教練大頭照
-	TrainerStatus    *int     `gorm:"column:trainer_status"`  // 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+	TrainerStatus    *int     `gorm:"column:trainer_status"`  // 教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)
 	Email            *string  `gorm:"column:email"`           // 信箱
 	Phone            *string  `gorm:"column:phone"`           // 電話
 	Address          *string  `gorm:"column:address"`         // 住址
