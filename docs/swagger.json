@@ -2151,6 +2151,61 @@
                 }
             }
         },
+        "/trainer_album_photo": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "上傳教練相簿照片",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "教練相簿照片",
+                        "name": "trainer_album_photo",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.TrainerAlbumPhoto"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/user/avatar": {
             "post": {
                 "security": [
@@ -3652,6 +3707,16 @@
                     "description": "youtube連結",
                     "type": "string",
                     "example": "www.youtube.com"
+                }
+            }
+        },
+        "dto.TrainerAlbumPhoto": {
+            "type": "object",
+            "properties": {
+                "photo": {
+                    "description": "教練相簿照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
                 }
             }
         },

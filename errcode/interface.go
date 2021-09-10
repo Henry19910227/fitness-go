@@ -15,6 +15,7 @@ const (
 	PermissionDenied int = 9006 // 權限不足,存取遭拒
 	FileTypeError int = 9007 // 上傳檔案類型不符合規範
 	FileSizeError int = 9008 // 上傳檔案大小超過限制
+	FileCountError int = 9009 // 上傳檔案數量超過限制
 )
 
 var (

@@ -17,6 +17,7 @@ import (
 type trainer struct {
 	Base
 	trainerRepo repository.Trainer
+	albumRepo repository.TrainerAlbum
 	uploader  handler.Uploader
 	resHandler handler.Resource
 	logger    handler.Logger
@@ -24,8 +25,8 @@ type trainer struct {
 	errHandler errcode.Handler
 }
 
-func NewTrainer(trainerRepo repository.Trainer, uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
-	return &trainer{trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
+	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 
@@ -198,6 +199,19 @@ func (t *trainer) UploadCardBackImageByUID(c *gin.Context, uid int64, imageNamed
 		}
 	}
 	return &dto.TrainerCardBack{Image: newImageNamed}, nil
+}
+
+func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhoto, errcode.Error) {
+	//上傳照片
+	newImageNamed, err := t.uploader.UploadTrainerAlbumPhoto(imageFile, imageNamed)
+	if err != nil {
+		return nil, t.errHandler.Set(c, "uploader", err)
+	}
+	//修改教練資訊
+	if err := t.albumRepo.CreateAlbumPhoto(uid, newImageNamed); err != nil {
+		return nil, t.errHandler.Set(c, "album repo", err)
+	}
+	return &dto.TrainerAlbumPhoto{Photo: newImageNamed}, nil
 }
 
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {

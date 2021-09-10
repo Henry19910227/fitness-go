@@ -309,6 +309,13 @@ definitions:
         example: www.youtube.com
         type: string
     type: object
+  dto.TrainerAlbumPhoto:
+    properties:
+      photo:
+        description: 教練相簿照片
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
   dto.TrainerAvatar:
     properties:
       avatar:
@@ -2327,6 +2334,38 @@ paths:
       security:
       - fitness_token: []
       summary: 取得我的教練身份資訊
+      tags:
+      - Trainer
+  /trainer_album_photo:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}'
+      parameters:
+      - description: 教練相簿照片
+        in: formData
+        name: trainer_album_photo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.TrainerAlbumPhoto'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 上傳教練相簿照片
       tags:
       - Trainer
   /user/avatar:

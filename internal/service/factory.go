@@ -47,11 +47,12 @@ func NewWorkoutService(viperTool *viper.Viper, gormTool tool.Gorm) Workout {
 func NewTrainerService(viperTool *viper.Viper, gormTool tool.Gorm) Trainer {
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	trainerRepo := repository.NewTrainer(gormTool)
+	albumRepo := repository.NewTrainerAlbum(gormTool)
 	resTool := tool.NewResource(setting.NewResource(viperTool))
 	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
 	resHandler := handler.NewResource(resTool)
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	logger := handler.NewLogger(logTool, jwtTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewTrainer(trainerRepo, uploader, resHandler, logger, jwtTool, errHandler)
+	return NewTrainer(trainerRepo, albumRepo, uploader, resHandler, logger, jwtTool, errHandler)
 }

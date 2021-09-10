@@ -203,7 +203,6 @@ func setupService() {
 	setupLoginService()
 	setupRegService()
 	setupUserService()
-	setupTrainerService()
 	setupPlanService()
 	setupActionService()
 	setupWorkoutSetService()
@@ -234,11 +233,6 @@ func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
 	userService = service.NewUser(userRepo, trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
-func setupTrainerService()  {
-	trainerRepo := repository.NewTrainer(gormTool)
-	trainerService = service.NewTrainer(trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupPlanService()  {

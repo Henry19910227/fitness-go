@@ -30,6 +30,7 @@ func NewErrHandler(logger logger.Logger) Handler {
 	errHandler.errMap[PermissionDenied] = NewError(PermissionDenied, errors.New("權限不足,存取遭拒"))
 	errHandler.errMap[FileTypeError] = NewError(FileTypeError, errors.New("上傳檔案類型不符合規範"))
 	errHandler.errMap[FileSizeError] = NewError(FileSizeError, errors.New("上傳檔案大小超過限制"))
+	errHandler.errMap[FileCountError] = NewError(FileCountError, errors.New("上傳檔案數量超過限制"))
 	return errHandler
 }
 

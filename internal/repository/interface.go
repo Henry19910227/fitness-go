@@ -84,3 +84,8 @@ type Action interface {
 type Sale interface {
 	FinsSaleItems() ([]*model.SaleItemEntity, error)
 }
+
+type TrainerAlbum interface {
+	CreateAlbumPhoto(uid int64, imageNamed string) error
+	FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error)
+}
