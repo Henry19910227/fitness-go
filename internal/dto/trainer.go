@@ -56,3 +56,7 @@ type TrainerAvatar struct {
 type TrainerCardFront struct {
 	Image string `json:"card_front_image" example:"dkf2se51fsdds.png"` // 身分證正面
 }
+
+type TrainerCardBack struct {
+	Image string `json:"card_back_image" example:"dkf2se51fsdds.png"` // 身分證背面
+}

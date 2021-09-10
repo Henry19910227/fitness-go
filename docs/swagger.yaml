@@ -316,6 +316,13 @@ definitions:
         example: dkf2se51fsdds.png
         type: string
     type: object
+  dto.TrainerCardBack:
+    properties:
+      card_back_image:
+        description: 身分證背面
+        example: dkf2se51fsdds.png
+        type: string
+    type: object
   dto.TrainerCardFront:
     properties:
       card_front_image:
@@ -1183,6 +1190,38 @@ paths:
       summary: 上傳動作影片
       tags:
       - Action
+  /card_back_image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}'
+      parameters:
+      - description: 身分證背面
+        in: formData
+        name: card_back_image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.TrainerCardBack'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 上傳身分證背面
+      tags:
+      - Trainer
   /card_front_image:
     post:
       consumes:

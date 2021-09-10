@@ -265,6 +265,61 @@ var doc = `{
                 }
             }
         },
+        "/card_back_image": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "上傳身分證背面",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "身分證背面",
+                        "name": "card_back_image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.TrainerCardBack"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/card_front_image": {
             "post": {
                 "security": [
@@ -3623,6 +3678,16 @@ var doc = `{
             "properties": {
                 "avatar": {
                     "description": "教練大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.TrainerCardBack": {
+            "type": "object",
+            "properties": {
+                "card_back_image": {
+                    "description": "身分證背面",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"
                 }

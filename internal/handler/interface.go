@@ -44,6 +44,7 @@ type Uploader interface {
 	UploadWorkoutSetProgressAudio(file io.Reader, audioNamed string) (string, error)
 	UploadActionVideo(file io.Reader, videoNamed string) (string, error)
 	UploadCardFrontImage(file io.Reader, imageNamed string) (string, error)
+	UploadCardBackImage(file io.Reader, imageNamed string) (string, error)
 }
 
 type Resource interface {
@@ -55,4 +56,5 @@ type Resource interface {
 	DeleteWorkoutStartAudio(audioNamed string) error
 	DeleteWorkoutEndAudio(audioNamed string) error
 	DeleteCardFrontImage(imageNamed string) error
+	DeleteCardBackImage(imageNamed string) error
 }

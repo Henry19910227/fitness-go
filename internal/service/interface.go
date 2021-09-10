@@ -55,6 +55,7 @@ type Trainer interface {
 	UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error)
 	UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error)
 	UploadCardFrontImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardFront, errcode.Error)
+	UploadCardBackImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardBack, errcode.Error)
 }
 
 type Course interface {
