@@ -15,5 +15,5 @@ CREATE TABLE IF NOT EXISTS trainers (
     `card_back_image` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '身分證反面',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
-    CONSTRAINT fk_trainers_users FOREIGN KEY (user_id) REFERENCES users(id)
+    CONSTRAINT `fk_trainers_user_id_to_users_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
