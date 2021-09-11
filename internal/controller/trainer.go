@@ -47,6 +47,10 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.TrainerAlbumPhotoLimit(5),
 		trainer.UploadTrainerAlbumPhoto)
+
+	baseGroup.DELETE("/trainer_album_photo/:photo_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		trainer.DeleteTrainerAlbumPhoto)
 }
 
 // CreateTrainer 創建我的教練身份
@@ -268,4 +272,28 @@ func (t *Trainer) UploadTrainerAlbumPhoto(c *gin.Context) {
 		return
 	}
 	t.JSONSuccessResponse(c, result, "success upload")
+}
+
+// DeleteTrainerAlbumPhoto 刪除教練相簿照片
+// @Summary 刪除教練相簿照片
+// @Description 刪除教練相簿照片
+// @Tags Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param photo_id path int64 true "照片id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /trainer_album_photo/{photo_id} [DELETE]
+func (t *Trainer) DeleteTrainerAlbumPhoto(c *gin.Context) {
+	var uri validator.TrainerAlbumPhotoIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := t.trainerService.DeleteAlbumPhoto(c, uri.PhotoID); err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessResponse(c, nil, "delete success!")
 }

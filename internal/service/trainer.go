@@ -214,6 +214,20 @@ func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string,
 	return &dto.TrainerAlbumPhoto{Photo: newImageNamed}, nil
 }
 
+func (t *trainer) DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error {
+	entity, err := t.albumRepo.FindAlbumPhotoByID(photoID)
+	if err != nil {
+		return t.errHandler.Set(c, "album repo", err)
+	}
+	if err := t.albumRepo.DeleteAlbumPhotoByID(entity.ID); err != nil {
+		return t.errHandler.Set(c, "album repo", err)
+	}
+	if err := t.resHandler.DeleteTrainerAlbumPhoto(entity.Photo); err != nil {
+		t.errHandler.Set(c, "resource handler", err)
+	}
+	return nil
+}
+
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {
 	var trainer struct{
 		UserID int64 `gorm:"column:user_id"`

@@ -57,6 +57,7 @@ type Trainer interface {
 	UploadCardFrontImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardFront, errcode.Error)
 	UploadCardBackImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardBack, errcode.Error)
 	UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhoto, errcode.Error)
+	DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error
 }
 
 type Course interface {

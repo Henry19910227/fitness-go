@@ -2368,6 +2368,33 @@ paths:
       summary: 上傳教練相簿照片
       tags:
       - Trainer
+  /trainer_album_photo/{photo_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除教練相簿照片
+      parameters:
+      - description: 照片id
+        in: path
+        name: photo_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除教練相簿照片
+      tags:
+      - Trainer
   /user/avatar:
     post:
       consumes:

@@ -36,3 +36,22 @@ func (t *trainerAlbum) FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhot
 	}
 	return photos, nil
 }
+
+func (t *trainerAlbum) FindAlbumPhotoByID(photoID int64) (*model.TrainerAlbumPhotoEntity, error) {
+	var photo model.TrainerAlbumPhotoEntity
+	if err := t.gorm.DB().Table("trainer_albums").
+		Select("id", "photo", "create_at").
+		Where("id = ?", photoID).
+		Take(&photo).Error; err != nil {
+		return nil, err
+	}
+	return &photo, nil
+}
+
+func (t *trainerAlbum) DeleteAlbumPhotoByID(photoID int64) error {
+	if err := t.gorm.DB().Where("id = ?", photoID).
+		Delete(&model.TrainerAlbumPhoto{}).Error; err != nil {
+			return err
+	}
+	return nil
+}
