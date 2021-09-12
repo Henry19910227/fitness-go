@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -31,7 +31,7 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.UpdateUserInfoBody true "更新欄位"
-// @Success 200 {object} model.SuccessResult{data=userdto.User} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /user/info [PATCH]
 func (u *user) UpdateUserInfo(c *gin.Context)  {
@@ -46,7 +46,7 @@ func (u *user) UpdateUserInfo(c *gin.Context)  {
 		return
 	}
 	//更新個人資訊
-	user, err := u.userService.UpdateUserByToken(c, header.Token, &userdto.UpdateUserParam{
+	user, err := u.userService.UpdateUserByToken(c, header.Token, &dto.UpdateUserParam{
 		Nickname: body.Nickname,
 		Sex: body.Sex,
 		Birthday: body.Birthday,
@@ -69,7 +69,7 @@ func (u *user) UpdateUserInfo(c *gin.Context)  {
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Success 200 {object} model.SuccessResult{data=userdto.User} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /user/info [GET]
 func (u *user) GetUserInfo(c *gin.Context) {
@@ -94,7 +94,7 @@ func (u *user) GetUserInfo(c *gin.Context) {
 // @Accept mpfd
 // @Param avatar formData file true "用戶大頭照"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=userdto.Avatar} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.UserAvatar} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /user/avatar [POST]
 func (u *user) UploadMyUserAvatar(c *gin.Context) {

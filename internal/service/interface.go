@@ -3,12 +3,9 @@ package service
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
-	"github.com/Henry19910227/fitness-go/internal/dto/logindto"
 	"github.com/Henry19910227/fitness-go/internal/dto/plandto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
-	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
-	"github.com/Henry19910227/fitness-go/internal/dto/userdto"
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
 )
@@ -28,8 +25,8 @@ type Swagger interface {
 }
 
 type Login interface {
-	UserLoginByEmail(c *gin.Context, email string, password string) (*logindto.User, string, errcode.Error)
-	AdminLoginByEmail(c *gin.Context, email string, password string) (*logindto.Admin, string, errcode.Error)
+	UserLoginByEmail(c *gin.Context, email string, password string) (*dto.User, string, errcode.Error)
+	AdminLoginByEmail(c *gin.Context, email string, password string) (*dto.Admin, string, errcode.Error)
 	UserLogoutByToken(c *gin.Context, token string) errcode.Error
 	AdminLogoutByToken(c *gin.Context, token string) errcode.Error
 }
@@ -42,21 +39,25 @@ type Register interface {
 }
 
 type User interface {
-	UpdateUserByUID(c *gin.Context, uid int64, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
-	UpdateUserByToken(c *gin.Context, token string, param *userdto.UpdateUserParam) (*userdto.User, errcode.Error)
-	GetUserByUID(c *gin.Context, uid int64) (*userdto.User, errcode.Error)
-	GetUserByToken(c *gin.Context, token string) (*userdto.User, errcode.Error)
-	UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*userdto.Avatar, errcode.Error)
-	UploadUserAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*userdto.Avatar, errcode.Error)
+	UpdateUserByUID(c *gin.Context, uid int64, param *dto.UpdateUserParam) (*dto.User, errcode.Error)
+	UpdateUserByToken(c *gin.Context, token string, param *dto.UpdateUserParam) (*dto.User, errcode.Error)
+	GetUserByUID(c *gin.Context, uid int64) (*dto.User, errcode.Error)
+	GetUserByToken(c *gin.Context, token string) (*dto.User, errcode.Error)
+	UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error)
+	UploadUserAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error)
 }
 
 type Trainer interface {
-	CreateTrainer(c *gin.Context, uid int64, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
-	CreateTrainerByToken(c *gin.Context, token string, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error)
-	GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer, errcode.Error)
-	GetTrainerInfoByToken(c *gin.Context, token string) (*trainerdto.Trainer, errcode.Error)
-	UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error)
-	UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error)
+	CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error)
+	GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
+	GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error)
+	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
+	UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error)
+	UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error)
+	UploadCardFrontImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardFront, errcode.Error)
+	UploadCardBackImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardBack, errcode.Error)
+	UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhoto, errcode.Error)
+	DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error
 }
 
 type Course interface {

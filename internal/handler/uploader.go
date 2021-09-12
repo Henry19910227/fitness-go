@@ -154,6 +154,48 @@ func (u *uploader) UploadActionVideo(file io.Reader, videoNamed string) (string,
 	return newVideoNamed, nil
 }
 
+func (u *uploader) UploadCardFrontImage(file io.Reader, imageNamed string) (string, error) {
+	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	if !u.checkImageMaxSize(file) {
+		return "", errors.New("9008-上傳檔案大小超過限制")
+	}
+	newImageNamed := generateFileName(path.Ext(imageNamed))
+	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/card_front_image"); err != nil {
+		return "", err
+	}
+	return newImageNamed, nil
+}
+
+func (u *uploader) UploadCardBackImage(file io.Reader, imageNamed string) (string, error) {
+	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	if !u.checkImageMaxSize(file) {
+		return "", errors.New("9008-上傳檔案大小超過限制")
+	}
+	newImageNamed := generateFileName(path.Ext(imageNamed))
+	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/card_back_image"); err != nil {
+		return "", err
+	}
+	return newImageNamed, nil
+}
+
+func (u *uploader) UploadTrainerAlbumPhoto(file io.Reader, imageNamed string) (string, error) {
+	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	if !u.checkImageMaxSize(file) {
+		return "", errors.New("9008-上傳檔案大小超過限制")
+	}
+	newImageNamed := generateFileName(path.Ext(imageNamed))
+	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/album"); err != nil {
+		return "", err
+	}
+	return newImageNamed, nil
+}
+
 func (u *uploader) checkUploadImageAllowExt(ext string) bool {
 	ext = strings.ToUpper(ext)
 	for _, v := range u.uploadSetting.ImageAllowExts() {
@@ -217,7 +259,7 @@ func (u *uploader) checkUploadImageMaxSize(file io.Reader) (io.Reader, bool) {
 }
 
 func generateFileName(ext string) string {
-	timeStr := time.Now().Format("20060102150405")
+	timeStr := time.Now().Format("20060102150405.000")
 	m := md5.New()
 	m.Write([]byte(timeStr))
 	return hex.EncodeToString(m.Sum(nil)) + ext

@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -17,6 +17,7 @@ import (
 type trainer struct {
 	Base
 	trainerRepo repository.Trainer
+	albumRepo repository.TrainerAlbum
 	uploader  handler.Uploader
 	resHandler handler.Resource
 	logger    handler.Logger
@@ -24,12 +25,12 @@ type trainer struct {
 	errHandler errcode.Handler
 }
 
-func NewTrainer(trainerRepo repository.Trainer, uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
-	return &trainer{trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
+	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 
-func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error) {
+func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error) {
 	//檢查教練身份是否存在
 	isExists, e := t.trainerIsExists(c, uid)
 	if e != nil {
@@ -39,38 +40,19 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *trainerdto.Cre
 		return nil, t.errHandler.DataAlreadyExists()
 	}
 	//創建教練身份
-	err := t.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
-		Name: param.Name,
-		Nickname: param.Nickname,
-		Phone: param.Phone,
-		Email: param.Email,
-	})
-	if err != nil {
-		//資料已存在
-		if t.MysqlDuplicateEntry(err) {
-			if strings.Contains(err.Error(), "nickname") {
-				return nil, t.errHandler.Custom(9004, errors.New("重複的暱稱"))
-			}
-			return nil, t.errHandler.DataAlreadyExists()
-		}
-		//不明原因錯誤
-		t.logger.Set(c, handler.Error, "Trainer Repo", t.errHandler.SystemError().Code(), err.Error())
-		return nil, t.errHandler.SystemError()
+	if err := t.trainerRepo.CreateTrainer(uid); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
-	return &trainerdto.CreateTrainerResult{UserID: uid}, nil
+	var trainer dto.Trainer
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	return &trainer, nil
 }
 
-func (t *trainer) CreateTrainerByToken(c *gin.Context, token string, param *trainerdto.CreateTrainerParam) (*trainerdto.CreateTrainerResult, errcode.Error) {
-	uid, err := t.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, t.errHandler.InvalidToken()
-	}
-	return t.CreateTrainer(c, uid, param)
-}
-
-func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer, errcode.Error) {
+func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error) {
 	//獲取trainer資訊
-	var result trainerdto.Trainer
+	var result dto.Trainer
 	if err := t.trainerRepo.FindTrainerByUID(uid, &result); err != nil {
 		//查無此資料
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -83,7 +65,7 @@ func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*trainerdto.Trainer
 	return &result, nil
 }
 
-func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*trainerdto.Trainer, errcode.Error) {
+func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error) {
 	uid, err := t.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, t.errHandler.InvalidToken()
@@ -91,7 +73,40 @@ func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*trainerd
 	return t.GetTrainerInfo(c, uid)
 }
 
-func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error) {
+func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error) {
+	//檢查教練身份是否存在
+	isExists, e := t.trainerIsExists(c, uid)
+	if e != nil {
+		return nil, e
+	}
+	if !isExists {
+		if err := t.trainerRepo.CreateTrainer(uid); err != nil {
+			return nil, t.errHandler.Set(c, "trainer repo", err)
+		}
+	}
+	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
+		Name: param.Name,
+		Nickname: param.Nickname,
+		Email: param.Email,
+		Phone: param.Phone,
+		Address: param.Address,
+		Intro: param.Intro,
+		Experience: param.Experience,
+		Motto: param.Motto,
+		FacebookURL: param.FacebookURL,
+		InstagramURL: param.InstagramURL,
+		YoutubeURL: param.YoutubeURL,
+	}); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	var trainer dto.Trainer
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	return &trainer, nil
+}
+
+func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := t.uploader.UploadTrainerAvatar(imageFile, imageNamed)
 	if err != nil {
@@ -123,15 +138,94 @@ func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed
 			t.logger.Set(c, handler.Error, "ResHandler", t.errHandler.SystemError().Code(), err.Error())
 		}
 	}
-	return &trainerdto.Avatar{Avatar: newImageNamed}, nil
+	return &dto.TrainerAvatar{Avatar: newImageNamed}, nil
 }
 
-func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*trainerdto.Avatar, errcode.Error) {
+func (t *trainer) UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error) {
 	uid, err := t.jwtTool.GetIDByToken(token)
 	if err != nil {
 		return nil, t.errHandler.InvalidToken()
 	}
 	return t.UploadTrainerAvatarByUID(c, uid, imageNamed, imageFile)
+}
+
+func (t *trainer) UploadCardFrontImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardFront, errcode.Error) {
+	//上傳照片
+	newImageNamed, err := t.uploader.UploadCardFrontImage(imageFile, imageNamed)
+	if err != nil {
+		return nil, t.errHandler.Set(c, "uploader", err)
+	}
+	//查詢教練資訊
+	var trainer struct{ CardFrontImage string `gorm:"column:card_front_image"`}
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	//修改教練資訊
+	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
+		CardFrontImage: &newImageNamed,
+	}); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	//刪除舊照片
+	if len(trainer.CardFrontImage) > 0 {
+		if err := t.resHandler.DeleteCardFrontImage(trainer.CardFrontImage); err != nil {
+			t.errHandler.Set(c, "res handler", err)
+		}
+	}
+	return &dto.TrainerCardFront{Image: newImageNamed}, nil
+}
+
+func (t *trainer) UploadCardBackImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardBack, errcode.Error) {
+	//上傳照片
+	newImageNamed, err := t.uploader.UploadCardBackImage(imageFile, imageNamed)
+	if err != nil {
+		return nil, t.errHandler.Set(c, "uploader", err)
+	}
+	//查詢教練資訊
+	var trainer struct{ CardBackImage string `gorm:"column:card_back_image"`}
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	//修改教練資訊
+	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
+		CardBackImage: &newImageNamed,
+	}); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	//刪除舊照片
+	if len(trainer.CardBackImage) > 0 {
+		if err := t.resHandler.DeleteCardBackImage(trainer.CardBackImage); err != nil {
+			t.errHandler.Set(c, "res handler", err)
+		}
+	}
+	return &dto.TrainerCardBack{Image: newImageNamed}, nil
+}
+
+func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhoto, errcode.Error) {
+	//上傳照片
+	newImageNamed, err := t.uploader.UploadTrainerAlbumPhoto(imageFile, imageNamed)
+	if err != nil {
+		return nil, t.errHandler.Set(c, "uploader", err)
+	}
+	//修改教練資訊
+	if err := t.albumRepo.CreateAlbumPhoto(uid, newImageNamed); err != nil {
+		return nil, t.errHandler.Set(c, "album repo", err)
+	}
+	return &dto.TrainerAlbumPhoto{Photo: newImageNamed}, nil
+}
+
+func (t *trainer) DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error {
+	entity, err := t.albumRepo.FindAlbumPhotoByID(photoID)
+	if err != nil {
+		return t.errHandler.Set(c, "album repo", err)
+	}
+	if err := t.albumRepo.DeleteAlbumPhotoByID(entity.ID); err != nil {
+		return t.errHandler.Set(c, "album repo", err)
+	}
+	if err := t.resHandler.DeleteTrainerAlbumPhoto(entity.Photo); err != nil {
+		t.errHandler.Set(c, "resource handler", err)
+	}
+	return nil
 }
 
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {
@@ -144,7 +238,7 @@ func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Erro
 		return false, t.errHandler.SystemError()
 	}
 	if trainer.UserID != 0 {
-		return false, nil
+		return true, nil
 	}
 	return false, nil
 }

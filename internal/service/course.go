@@ -4,7 +4,6 @@ import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
-	"github.com/Henry19910227/fitness-go/internal/dto/trainerdto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -117,7 +116,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 			PlanCount:    entity.PlanCount,
 			WorkoutCount: entity.WorkoutCount,
 		}
-		trainer := &trainerdto.TrainerSummary{
+		trainer := &dto.TrainerSummary{
 			UserID: entity.Trainer.UserID,
 			Nickname: entity.Trainer.Nickname,
 			Avatar: entity.Trainer.Avatar,
@@ -168,7 +167,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 		CreateAt:     entity.CreateAt,
 		UpdateAt:     entity.UpdateAt,
 	}
-	trainer := &trainerdto.TrainerSummary{
+	trainer := &dto.TrainerSummary{
 		UserID: entity.Trainer.UserID,
 		Nickname: entity.Trainer.Nickname,
 		Avatar: entity.Trainer.Avatar,

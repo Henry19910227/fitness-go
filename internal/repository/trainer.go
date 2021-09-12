@@ -14,14 +14,10 @@ func NewTrainer(gormTool  tool.Gorm) Trainer {
 	return &trainer{gorm: gormTool}
 }
 
-func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) error {
+func (t *trainer) CreateTrainer(uid int64) error {
 	trainer := model.Trainer{
 		UserID: uid,
-		Name: param.Name,
-		Nickname: param.Nickname,
-		Phone: param.Phone,
-		Email: param.Email,
-		TrainerStatus: 1,
+		TrainerStatus: 4,
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
@@ -51,6 +47,14 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	if param.Phone != nil { selects = append(selects, "phone") }
 	if param.Address != nil { selects = append(selects, "address") }
 	if param.Intro != nil { selects = append(selects, "intro") }
+	if param.Experience != nil { selects = append(selects, "experience") }
+	if param.Motto != nil { selects = append(selects, "motto") }
+	if param.CardID != nil { selects = append(selects, "card_id") }
+	if param.CardFrontImage != nil { selects = append(selects, "card_front_image") }
+	if param.CardBackImage != nil { selects = append(selects, "card_back_image") }
+	if param.FacebookURL != nil { selects = append(selects, "facebook_url") }
+	if param.InstagramURL != nil { selects = append(selects, "instagram_url") }
+	if param.YoutubeURL != nil { selects = append(selects, "youtube_url") }
 	//插入更新時間
 	if param != nil {
 		selects = append(selects, "update_at")

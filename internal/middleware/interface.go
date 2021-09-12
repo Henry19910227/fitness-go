@@ -9,6 +9,7 @@ type User interface {
 	TokenPermission(roles []global.Role) gin.HandlerFunc
 	UserStatusPermission(status []global.UserStatus) gin.HandlerFunc
 	TrainerStatusPermission(status []global.TrainerStatus) gin.HandlerFunc
+	TrainerAlbumPhotoLimit(count int) gin.HandlerFunc
 }
 
 type Course interface {

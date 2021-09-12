@@ -40,3 +40,15 @@ func (r *resource) DeleteWorkoutEndAudio(audioNamed string) error {
 	return r.resTool.RemoveFile("/workout/end_audio", audioNamed)
 }
 
+func (r *resource) DeleteCardFrontImage(imageNamed string) error {
+	return r.resTool.RemoveFile("/trainer/card_front_image", imageNamed)
+}
+
+func (r *resource) DeleteCardBackImage(imageNamed string) error {
+	return r.resTool.RemoveFile("/trainer/card_back_image", imageNamed)
+}
+
+func (r *resource) DeleteTrainerAlbumPhoto(imageNamed string) error {
+	return r.resTool.RemoveFile("/trainer/album", imageNamed)
+}
+

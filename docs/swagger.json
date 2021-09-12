@@ -247,6 +247,116 @@
                 }
             }
         },
+        "/card_back_image": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "上傳身分證背面",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "身分證背面",
+                        "name": "card_back_image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.TrainerCardBack"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/card_front_image": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "上傳身分證正面",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "身分證正面",
+                        "name": "card_front_image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.TrainerCardFront"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course": {
             "post": {
                 "security": [
@@ -946,7 +1056,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/logindto.Admin"
+                                            "$ref": "#/definitions/dto.Admin"
                                         }
                                     }
                                 }
@@ -998,7 +1108,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/logindto.User"
+                                            "$ref": "#/definitions/dto.User"
                                         }
                                     }
                                 }
@@ -1861,7 +1971,74 @@
                     "200": {
                         "description": "成功!",
                         "schema": {
-                            "$ref": "#/definitions/model.SuccessResult"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "修改我的教練資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "修改我的教練資訊",
+                "parameters": [
+                    {
+                        "description": "輸入欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateTrainerBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1912,7 +2089,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/trainerdto.Avatar"
+                                            "$ref": "#/definitions/dto.TrainerAvatar"
                                         }
                                     }
                                 }
@@ -1958,7 +2135,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/trainerdto.Trainer"
+                                            "$ref": "#/definitions/dto.Trainer"
                                         }
                                     }
                                 }
@@ -1967,6 +2144,104 @@
                     },
                     "400": {
                         "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer_album_photo": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "上傳教練相簿照片",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "教練相簿照片",
+                        "name": "trainer_album_photo",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.TrainerAlbumPhoto"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer_album_photo/{photo_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除教練相簿照片",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "刪除教練相簿照片",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "照片id",
+                        "name": "photo_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -2013,7 +2288,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/userdto.Avatar"
+                                            "$ref": "#/definitions/dto.UserAvatar"
                                         }
                                     }
                                 }
@@ -2059,7 +2334,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/userdto.User"
+                                            "$ref": "#/definitions/dto.User"
                                         }
                                     }
                                 }
@@ -2114,7 +2389,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/userdto.User"
+                                            "$ref": "#/definitions/dto.User"
                                         }
                                     }
                                 }
@@ -3162,6 +3437,31 @@
                 }
             }
         },
+        "dto.Admin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "lv": {
+                    "description": "身份 (1:一般管理員)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        },
         "dto.Course": {
             "type": "object",
             "properties": {
@@ -3261,7 +3561,7 @@
                 },
                 "trainer": {
                     "description": "教練簡介",
-                    "$ref": "#/definitions/trainerdto.TrainerSummary"
+                    "$ref": "#/definitions/dto.TrainerSummary"
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -3344,12 +3644,276 @@
                 },
                 "trainer": {
                     "description": "教練簡介",
-                    "$ref": "#/definitions/trainerdto.TrainerSummary"
+                    "$ref": "#/definitions/dto.TrainerSummary"
                 },
                 "workout_count": {
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.Trainer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區信義路五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "card_back_image": {
+                    "description": "身分證反面",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "card_front_image": {
+                    "description": "身分證正面",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "card_id": {
+                    "description": "身分證字號",
+                    "type": "string",
+                    "example": "A123456789"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "年資",
+                    "type": "integer",
+                    "example": 1
+                },
+                "facebook_url": {
+                    "description": "臉書連結",
+                    "type": "string",
+                    "example": "www.facebook.com"
+                },
+                "instagram_url": {
+                    "description": "ig連結",
+                    "type": "string",
+                    "example": "www.instagram.com"
+                },
+                "intro": {
+                    "description": "個人介紹",
+                    "type": "string",
+                    "example": "健身比賽冠軍"
+                },
+                "motto": {
+                    "description": "座右銘",
+                    "type": "string",
+                    "example": "我的座右銘"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0978820789"
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-05-10 10:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 1001
+                },
+                "youtube_url": {
+                    "description": "youtube連結",
+                    "type": "string",
+                    "example": "www.youtube.com"
+                }
+            }
+        },
+        "dto.TrainerAlbumPhoto": {
+            "type": "object",
+            "properties": {
+                "photo": {
+                    "description": "教練相簿照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.TrainerAvatar": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.TrainerCardBack": {
+            "type": "object",
+            "properties": {
+                "card_back_image": {
+                    "description": "身分證背面",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.TrainerCardFront": {
+            "type": "object",
+            "properties": {
+                "card_front_image": {
+                    "description": "身分證正面",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.TrainerSummary": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry教練"
+                },
+                "user_id": {
+                    "description": "關聯的用戶id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
+        "dto.User": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帳號",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "account_type": {
+                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "avatar": {
+                    "description": "用戶大頭貼",
+                    "type": "string",
+                    "example": "d2fe5w321a.png"
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "device_token": {
+                    "description": "推播 Token",
+                    "type": "string",
+                    "example": "f144b48d9695..."
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "trainer_info": {
+                    "description": "教練資訊",
+                    "$ref": "#/definitions/dto.Trainer"
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_type": {
+                    "description": "用戶狀態 (1:一般用戶/2:訂閱用戶)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 72.5
+                }
+            }
+        },
+        "dto.UserAvatar": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "用戶大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
                 }
             }
         },
@@ -3477,180 +4041,6 @@
                     "description": "訓練組id",
                     "type": "integer",
                     "example": 10
-                }
-            }
-        },
-        "logindto.Admin": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "id": {
-                    "description": "帳戶id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "lv": {
-                    "description": "身份 (1:一般管理員)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "nickname": {
-                    "description": "暱稱",
-                    "type": "string",
-                    "example": "henry"
-                }
-            }
-        },
-        "logindto.Trainer": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "description": "住址",
-                    "type": "string",
-                    "example": "台北市信義區信義路五段五號"
-                },
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "ld3ae0faf5we.png"
-                },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
-                },
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "intro": {
-                    "description": "個人介紹",
-                    "type": "string",
-                    "example": "健身比賽冠軍"
-                },
-                "name": {
-                    "description": "教練本名",
-                    "type": "string",
-                    "example": "王小明"
-                },
-                "nickname": {
-                    "description": "教練暱稱",
-                    "type": "string",
-                    "example": "Henry"
-                },
-                "phone": {
-                    "description": "電話",
-                    "type": "string",
-                    "example": "0978820789"
-                },
-                "trainer_status": {
-                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
-                }
-            }
-        },
-        "logindto.User": {
-            "type": "object",
-            "properties": {
-                "account": {
-                    "description": "帳號",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "account_type": {
-                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "avatar": {
-                    "description": "用戶大頭貼",
-                    "type": "string",
-                    "example": "d2fe5w321a.png"
-                },
-                "birthday": {
-                    "description": "生日",
-                    "type": "string",
-                    "example": "1991-02-27"
-                },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
-                },
-                "device_token": {
-                    "description": "推播 Token",
-                    "type": "string",
-                    "example": "f144b48d9695..."
-                },
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "experience": {
-                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "height": {
-                    "description": "身高",
-                    "type": "number",
-                    "example": 176.5
-                },
-                "id": {
-                    "description": "帳戶id",
-                    "type": "integer",
-                    "example": 10001
-                },
-                "nickname": {
-                    "description": "暱稱",
-                    "type": "string",
-                    "example": "Henry"
-                },
-                "sex": {
-                    "description": "性別 (m:男/f:女)",
-                    "type": "string",
-                    "example": "m"
-                },
-                "target": {
-                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
-                    "type": "integer",
-                    "example": 3
-                },
-                "trainer_info": {
-                    "description": "教練資訊",
-                    "$ref": "#/definitions/logindto.Trainer"
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
-                },
-                "user_status": {
-                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "user_type": {
-                    "description": "用戶狀態 (1:一般用戶/2:訂閱用戶)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "weight": {
-                    "description": "體重",
-                    "type": "number",
-                    "example": 72.5
                 }
             }
         },
@@ -3799,255 +4189,6 @@
                 }
             }
         },
-        "trainerdto.Avatar": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "dkf2se51fsdds.png"
-                }
-            }
-        },
-        "trainerdto.Trainer": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "description": "住址",
-                    "type": "string",
-                    "example": "台北市信義區信義路五段五號"
-                },
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "ld3ae0faf5we.png"
-                },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
-                },
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "intro": {
-                    "description": "個人介紹",
-                    "type": "string",
-                    "example": "健身比賽冠軍"
-                },
-                "name": {
-                    "description": "教練本名",
-                    "type": "string",
-                    "example": "王小明"
-                },
-                "nickname": {
-                    "description": "教練暱稱",
-                    "type": "string",
-                    "example": "Henry"
-                },
-                "phone": {
-                    "description": "電話",
-                    "type": "string",
-                    "example": "0978820789"
-                },
-                "trainer_status": {
-                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
-                },
-                "user_id": {
-                    "description": "用戶id",
-                    "type": "integer",
-                    "example": 1001
-                }
-            }
-        },
-        "trainerdto.TrainerSummary": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "d2w3e15d3awe.jpg"
-                },
-                "nickname": {
-                    "description": "教練暱稱",
-                    "type": "string",
-                    "example": "Henry教練"
-                },
-                "user_id": {
-                    "description": "關聯的用戶id",
-                    "type": "integer",
-                    "example": 10001
-                }
-            }
-        },
-        "userdto.Avatar": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "description": "用戶大頭照",
-                    "type": "string",
-                    "example": "dkf2se51fsdds.png"
-                }
-            }
-        },
-        "userdto.Trainer": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "description": "住址",
-                    "type": "string",
-                    "example": "台北市信義區信義路五段五號"
-                },
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "ld3ae0faf5we.png"
-                },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
-                },
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "intro": {
-                    "description": "個人介紹",
-                    "type": "string",
-                    "example": "健身比賽冠軍"
-                },
-                "name": {
-                    "description": "教練本名",
-                    "type": "string",
-                    "example": "王小明"
-                },
-                "nickname": {
-                    "description": "教練暱稱",
-                    "type": "string",
-                    "example": "Henry"
-                },
-                "phone": {
-                    "description": "電話",
-                    "type": "string",
-                    "example": "0978820789"
-                },
-                "trainer_status": {
-                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
-                }
-            }
-        },
-        "userdto.User": {
-            "type": "object",
-            "properties": {
-                "account": {
-                    "description": "帳號",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "account_type": {
-                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "avatar": {
-                    "description": "用戶大頭貼",
-                    "type": "string",
-                    "example": "d2fe5w321a.png"
-                },
-                "birthday": {
-                    "description": "生日",
-                    "type": "string",
-                    "example": "1991-02-27"
-                },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
-                },
-                "device_token": {
-                    "description": "推播 Token",
-                    "type": "string",
-                    "example": "f144b48d9695..."
-                },
-                "email": {
-                    "description": "信箱",
-                    "type": "string",
-                    "example": "henry@gmail.com"
-                },
-                "experience": {
-                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "height": {
-                    "description": "身高",
-                    "type": "number",
-                    "example": 176.5
-                },
-                "id": {
-                    "description": "帳戶id",
-                    "type": "integer",
-                    "example": 10001
-                },
-                "nickname": {
-                    "description": "暱稱",
-                    "type": "string",
-                    "example": "Henry"
-                },
-                "sex": {
-                    "description": "性別 (m:男/f:女)",
-                    "type": "string",
-                    "example": "m"
-                },
-                "target": {
-                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
-                    "type": "integer",
-                    "example": 3
-                },
-                "trainer_info": {
-                    "description": "教練資訊",
-                    "$ref": "#/definitions/userdto.Trainer"
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
-                },
-                "user_status": {
-                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "user_type": {
-                    "description": "用戶狀態 (1:一般用戶/2:訂閱用戶)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "weight": {
-                    "description": "體重",
-                    "type": "number",
-                    "example": 72.5
-                }
-            }
-        },
         "validator.CreateActionBody": {
             "type": "object",
             "required": [
@@ -4137,12 +4278,17 @@
         "validator.CreateTrainerBody": {
             "type": "object",
             "required": [
+                "address",
                 "email",
                 "name",
-                "nickname",
                 "phone"
             ],
             "properties": {
+                "address": {
+                    "description": "地址 (最大100字元)",
+                    "type": "string",
+                    "example": "台北市信義區松智路五段五號"
+                },
                 "email": {
                     "description": "信箱 (最大255字元)",
                     "type": "string",
@@ -4152,11 +4298,6 @@
                     "description": "本名 (1~20字元)",
                     "type": "string",
                     "example": "王小明"
-                },
-                "nickname": {
-                    "description": "教練名稱 (1~20字元)",
-                    "type": "string",
-                    "example": "jason"
                 },
                 "phone": {
                     "description": "手機",
@@ -4381,6 +4522,66 @@
                 "name": {
                     "type": "string",
                     "example": "第一週增肌計畫"
+                }
+            }
+        },
+        "validator.UpdateTrainerBody": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "地址 (最大100字元)",
+                    "type": "string",
+                    "example": "台北市信義區松智路五段五號"
+                },
+                "email": {
+                    "description": "信箱 (最大255字元)",
+                    "type": "string",
+                    "example": "jason@gmail.com"
+                },
+                "experience": {
+                    "description": "年資",
+                    "type": "integer",
+                    "example": 5
+                },
+                "facebook_url": {
+                    "description": "臉書連結",
+                    "type": "string",
+                    "example": "www.facebook.com"
+                },
+                "instagram_url": {
+                    "description": "instagram連結",
+                    "type": "string",
+                    "example": "www.instagram.com"
+                },
+                "intro": {
+                    "description": "教練介紹 (1~400字元)",
+                    "type": "string",
+                    "example": "我叫戰車老師"
+                },
+                "motto": {
+                    "description": "座右銘 (1~100字元)",
+                    "type": "string",
+                    "example": "戰車老師"
+                },
+                "name": {
+                    "description": "本名 (1~20字元)",
+                    "type": "string",
+                    "example": "史考特"
+                },
+                "nickname": {
+                    "description": "暱稱 (1~20字元)",
+                    "type": "string",
+                    "example": "戰車老師"
+                },
+                "phone": {
+                    "description": "手機",
+                    "type": "string",
+                    "example": "0922244123"
+                },
+                "youtube_url": {
+                    "description": "youtube連結",
+                    "type": "string",
+                    "example": "www.youtube.com"
                 }
             }
         },

@@ -113,7 +113,7 @@ func main() {
 	controller.NewRegister(baseGroup, regService)
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
-	controller.NewTrainer(baseGroup, trainerService, userMiddleware)
+	controller.NewTrainer(baseGroup, trainerService, userMiddleware, userMidd)
 	controller.NewCourse(baseGroup, courseService, planService, actionService, userMidd, courseMidd)
 	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
 	controller.NewWorkout(baseGroup, workoutService, workoutSetService, userMidd, courseMidd)
@@ -203,7 +203,6 @@ func setupService() {
 	setupLoginService()
 	setupRegService()
 	setupUserService()
-	setupTrainerService()
 	setupPlanService()
 	setupActionService()
 	setupWorkoutSetService()
@@ -211,6 +210,7 @@ func setupService() {
 	courseService = service.NewCourseService(viperTool, gormTool)
 	reviewService = service.NewReviewService(viperTool, gormTool)
 	workoutService = service.NewWorkoutService(viperTool, gormTool)
+	trainerService = service.NewTrainerService(viperTool, gormTool)
 }
 
 func setupLoginService() {
@@ -233,11 +233,6 @@ func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
 	userService = service.NewUser(userRepo, trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
-func setupTrainerService()  {
-	trainerRepo := repository.NewTrainer(gormTool)
-	trainerService = service.NewTrainer(trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupPlanService()  {

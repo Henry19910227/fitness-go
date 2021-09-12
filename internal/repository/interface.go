@@ -19,7 +19,7 @@ type User interface {
 }
 
 type Trainer interface {
-	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
+	CreateTrainer(uid int64) error
 	FindTrainerByUID(uid int64, entity interface{}) error
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
 }
@@ -83,4 +83,11 @@ type Action interface {
 
 type Sale interface {
 	FinsSaleItems() ([]*model.SaleItemEntity, error)
+}
+
+type TrainerAlbum interface {
+	CreateAlbumPhoto(uid int64, imageNamed string) error
+	FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error)
+	FindAlbumPhotoByID(photoID int64) (*model.TrainerAlbumPhotoEntity, error)
+	DeleteAlbumPhotoByID(photoID int64) error
 }

@@ -148,20 +148,31 @@ func (w *workout) CreateWorkoutByTemplate(c *gin.Context, planID int64, name str
 	if course1.ID != course2.ID {
 		return nil, w.errHandler.Set(c, "course Repo", errors.New(strconv.Itoa(errcode.PermissionDenied)))
 	}
-	//搜尋該workout底下的set
-	entities, err := w.workoutSetRepo.FindWorkoutSetsByWorkoutID(workoutTemplateID)
-	if err != nil {
-		return nil, w.errHandler.Set(c, "WorkoutSet Repo", err)
+	//複製workout
+	var template dto.Workout
+	if err := w.workoutRepo.FindWorkoutByID(workoutTemplateID, &template); err != nil {
+		return nil, w.errHandler.Set(c, "Workout Repo", err)
 	}
 	newWorkoutID, err := w.workoutRepo.CreateWorkout(planID, name)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "Workout Repo", err)
 	}
+	if err := w.workoutRepo.UpdateWorkoutByID(newWorkoutID, &model.UpdateWorkoutParam{
+		Equipment: &template.Equipment,
+		StartAudio: &template.StartAudio,
+		EndAudio: &template.EndAudio,
+	}); err != nil {
+		return nil, w.errHandler.Set(c, "Workout Repo", err)
+	}
+	//複製workout底下的sets
+	entities, err := w.workoutSetRepo.FindWorkoutSetsByWorkoutID(workoutTemplateID)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "WorkoutSet Repo", err)
+	}
 	sets := make([]*model.WorkoutSet, 0)
 	for _, v := range entities {
 		set := model.WorkoutSet{
 			WorkoutID:     newWorkoutID,
-			ActionID:      &v.Action.ID,
 			Type:          v.Type,
 			AutoNext:      v.AutoNext,
 			StartAudio:    v.StartAudio,
@@ -175,12 +186,16 @@ func (w *workout) CreateWorkoutByTemplate(c *gin.Context, planID int64, name str
 			CreateAt:      time.Now().Format("2006-01-02 15:04:05"),
 			UpdateAt:      time.Now().Format("2006-01-02 15:04:05"),
 		}
+		if v.Action != nil {
+			set.ActionID = &v.Action.ID
+		}
 		sets = append(sets, &set)
 	}
 	_, err = w.workoutSetRepo.CreateWorkoutSetsByWorkoutIDAndSets(newWorkoutID, sets)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "WorkoutSet Repo", err)
 	}
+	//回傳此workout
 	var workout dto.Workout
 	if err := w.workoutRepo.FindWorkoutByID(newWorkoutID, &workout); err != nil {
 		return nil, w.errHandler.Set(c, "Workout Repo", err)

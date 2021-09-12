@@ -21,13 +21,14 @@ type user struct {
 	Base
 	userRepo repository.User
 	trainerRepo repository.Trainer
+	trainerAlbumRepo repository.TrainerAlbum
 	jwtTool tool.JWT
 	redisTool tool.Redis
 	errHandler errcode.Handler
 }
 
-func NewUser(userRepo repository.User, trainerRepo repository.Trainer, jwtTool tool.JWT, redisTool tool.Redis, errHandler errcode.Handler) User {
-	return &user{userRepo: userRepo, trainerRepo: trainerRepo, jwtTool: jwtTool, redisTool: redisTool, errHandler: errHandler}
+func NewUser(userRepo repository.User, trainerRepo repository.Trainer, trainerAlbumRepo repository.TrainerAlbum, jwtTool tool.JWT, redisTool tool.Redis, errHandler errcode.Handler) User {
+	return &user{userRepo: userRepo, trainerRepo: trainerRepo, trainerAlbumRepo: trainerAlbumRepo, jwtTool: jwtTool, redisTool: redisTool, errHandler: errHandler}
 }
 
 func (u *user) TokenPermission(roles []global.Role) gin.HandlerFunc {
@@ -144,6 +145,29 @@ func (u *user) TrainerStatusPermission(status []global.TrainerStatus) gin.Handle
 		// 驗證是否包含所選的狀態
 		if !containTrainerStatus(status, global.TrainerStatus(trainer.TrainerStatus)) {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "jwt", errors.New(strconv.Itoa(errcode.PermissionDenied))))
+			c.Abort()
+			return
+		}
+	}
+}
+
+func (u *user) TrainerAlbumPhotoLimit(count int) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		uid, isExists := c.Get("uid")
+		if !isExists {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
+			c.Abort()
+			return
+		}
+		entities, err := u.trainerAlbumRepo.FindAlbumPhotoByUID(uid.(int64))
+		if err != nil {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "trainer album repo", err))
+			c.Abort()
+			return
+		}
+		// 數量超過限制
+		if len(entities) >= count {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "limit", errors.New(strconv.Itoa(errcode.FileCountError))))
 			c.Abort()
 			return
 		}
