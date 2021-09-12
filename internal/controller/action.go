@@ -3,6 +3,8 @@ package controller
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
+	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -20,16 +22,46 @@ func NewAction(baseGroup *gin.RouterGroup,
 	actionService service.Action,
 	actionAccess  access.Action,
 	trainerAccess access.Trainer,
-	userMiddleware gin.HandlerFunc) {
+	userMidd midd.User,
+	courseMidd midd.Course) {
 	baseGroup.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
 	baseGroup.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
 	action := &Action{actionService: actionService, actionAccess: actionAccess, trainerAccess: trainerAccess}
-	actionGroup := baseGroup.Group("/action")
-	actionGroup.Use(userMiddleware)
-	actionGroup.PATCH("/:action_id", action.UpdateAction)
-	actionGroup.DELETE("/:action_id", action.DeleteAction)
-	actionGroup.POST("/:action_id/cover", action.UploadActionCover)
-	actionGroup.POST("/:action_id/video", action.UploadActionVideo)
+
+	baseGroup.PATCH("/action/:action_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		action.UpdateAction)
+
+	baseGroup.DELETE("/action/:action_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		action.DeleteAction)
+
+	baseGroup.POST("/action/:action_id/cover",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		action.UploadActionCover)
+
+	baseGroup.POST("/action/:action_id/video",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		action.UploadActionVideo)
+
+	baseGroup.DELETE("/action/:action_id/video",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		action.DeleteActionVideo)
 }
 
 // UpdateAction 修改動作
@@ -45,27 +77,14 @@ func NewAction(baseGroup *gin.RouterGroup,
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /action/{action_id} [PATCH]
 func (a *Action) UpdateAction(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.ActionIDUri
 	var body validator.UpdateActionBody
-	if err := c.ShouldBindHeader(&header); err != nil {
-		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		a.JSONErrorResponse(c, err)
-		return
-	}
-	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
-		a.JSONErrorResponse(c, err)
 		return
 	}
 	action, err := a.actionService.UpdateAction(c, uri.ActionID, &dto.UpdateActionParam{
@@ -94,22 +113,9 @@ func (a *Action) UpdateAction(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
 // @Router /action/{action_id} [DELETE]
 func (a *Action) DeleteAction(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.ActionIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		a.JSONErrorResponse(c, err)
-		return
-	}
-	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
-		a.JSONErrorResponse(c, err)
 		return
 	}
 	result, err := a.actionService.DeleteAction(c, uri.ActionID)
@@ -133,22 +139,9 @@ func (a *Action) DeleteAction(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /action/{action_id}/cover [POST]
 func (a *Action) UploadActionCover(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.ActionIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		a.JSONErrorResponse(c, err)
-		return
-	}
-	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
-		a.JSONErrorResponse(c, err)
 		return
 	}
 	file, fileHeader, err := c.Request.FormFile("cover")
@@ -177,22 +170,9 @@ func (a *Action) UploadActionCover(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /action/{action_id}/video [POST]
 func (a *Action) UploadActionVideo(c *gin.Context) {
-	var header validator.TokenHeader
 	var uri validator.ActionIDUri
-	if err := c.ShouldBindHeader(&header); err != nil {
-		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	if err := c.ShouldBindUri(&uri); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := a.trainerAccess.StatusVerify(c, header.Token); err != nil {
-		a.JSONErrorResponse(c, err)
-		return
-	}
-	if err := a.actionAccess.UpdateVerifyByActionID(c, header.Token, uri.ActionID); err != nil {
-		a.JSONErrorResponse(c, err)
 		return
 	}
 	file, fileHeader, err := c.Request.FormFile("video")
@@ -206,4 +186,28 @@ func (a *Action) UploadActionVideo(c *gin.Context) {
 		return
 	}
 	a.JSONSuccessResponse(c, result, "success upload")
+}
+
+// DeleteActionVideo 刪除動作影片
+// @Summary 刪除動作影片
+// @Description 刪除動作影片
+// @Tags Action
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作影片id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /action/{action_id}/video [DELETE]
+func (a *Action) DeleteActionVideo(c *gin.Context) {
+	var uri validator.ActionIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := a.actionService.DeleteActionVideo(c, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	a.JSONSuccessResponse(c, nil, "delete success")
 }

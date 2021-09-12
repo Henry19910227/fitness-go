@@ -118,7 +118,7 @@ func main() {
 	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
 	controller.NewWorkout(baseGroup, workoutService, workoutSetService, userMidd, courseMidd)
 	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
-	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMiddleware)
+	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMidd, courseMidd)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
 	controller.NewReview(baseGroup, reviewService, userMidd, courseMidd)
 	controller.NewSwagger(router, swagService)
@@ -204,13 +204,13 @@ func setupService() {
 	setupRegService()
 	setupUserService()
 	setupPlanService()
-	setupActionService()
 	setupWorkoutSetService()
 	setupSaleService()
 	courseService = service.NewCourseService(viperTool, gormTool)
 	reviewService = service.NewReviewService(viperTool, gormTool)
 	workoutService = service.NewWorkoutService(viperTool, gormTool)
 	trainerService = service.NewTrainerService(viperTool, gormTool)
+	actionService = service.NewActionService(viperTool, gormTool)
 }
 
 func setupLoginService() {
@@ -243,12 +243,6 @@ func setupPlanService()  {
 func setupWorkoutSetService()  {
 	workoutSetRepo := repository.NewWorkoutSet(gormTool)
 	workoutSetService = service.NewWorkoutSet(workoutSetRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
-func setupActionService()  {
-	actionRepo := repository.NewAction(gormTool)
-	courseRepo := repository.NewCourse(gormTool)
-	actionService = service.NewAction(actionRepo, courseRepo, uploadHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSaleService()  {

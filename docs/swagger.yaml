@@ -1161,6 +1161,32 @@ paths:
       tags:
       - Action
   /action/{action_id}/video:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除動作影片
+      parameters:
+      - description: 動作影片id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除動作影片
+      tags:
+      - Action
     post:
       consumes:
       - multipart/form-data
