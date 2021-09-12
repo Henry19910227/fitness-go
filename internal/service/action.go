@@ -19,6 +19,7 @@ type action struct {
 	courseRepo repository.Course
 	uploader  handler.Uploader
 	logger    handler.Logger
+	resHandler handler.Resource
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
@@ -27,9 +28,11 @@ func NewAction(actionRepo repository.Action,
 	courseRepo repository.Course,
 	uploader handler.Uploader,
 	logger handler.Logger,
+	resHandler handler.Resource,
 	jwtTool tool.JWT,
+
 	errHandler errcode.Handler) Action {
-	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, logger: logger, resHandler: resHandler, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error) {
@@ -192,4 +195,21 @@ func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed st
 		return nil, a.errHandler.SystemError()
 	}
 	return &dto.ActionVideo{Video: newVideoNamed}, nil
+}
+
+func (a *action) DeleteActionVideo(c *gin.Context, actionID int64) errcode.Error {
+	var action dto.Action
+	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
+		return a.errHandler.Set(c, "action repo", err)
+	}
+	var video = ""
+	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
+		Video: &video,
+	}); err != nil {
+		return a.errHandler.Set(c, "action repo", err)
+	}
+	if err := a.resHandler.DeleteActionVideo(action.Video); err != nil {
+		a.errHandler.Set(c, "resource handler", err)
+	}
+	return nil
 }

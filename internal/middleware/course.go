@@ -175,6 +175,13 @@ func (cm *course) findCourse(c *gin.Context, course interface{}) error {
 		}
 		return nil
 	}
+	var actionUri validator.ActionIDUri
+	if err = c.ShouldBindUri(&actionUri); err == nil {
+		if err = cm.courseRepo.FindCourseByActionID(actionUri.ActionID, course); err != nil {
+			return err
+		}
+		return nil
+	}
 	return err
 }
 

@@ -3,6 +3,8 @@ package controller
 import (
 	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
+	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -20,7 +22,9 @@ func NewAction(baseGroup *gin.RouterGroup,
 	actionService service.Action,
 	actionAccess  access.Action,
 	trainerAccess access.Trainer,
-	userMiddleware gin.HandlerFunc) {
+	userMiddleware gin.HandlerFunc,
+	userMidd midd.User,
+	courseMidd midd.Course) {
 	baseGroup.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
 	baseGroup.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
 	action := &Action{actionService: actionService, actionAccess: actionAccess, trainerAccess: trainerAccess}
@@ -30,6 +34,13 @@ func NewAction(baseGroup *gin.RouterGroup,
 	actionGroup.DELETE("/:action_id", action.DeleteAction)
 	actionGroup.POST("/:action_id/cover", action.UploadActionCover)
 	actionGroup.POST("/:action_id/video", action.UploadActionVideo)
+
+	baseGroup.DELETE("/action/:action_id/video",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		action.DeleteActionVideo)
 }
 
 // UpdateAction 修改動作
@@ -206,4 +217,28 @@ func (a *Action) UploadActionVideo(c *gin.Context) {
 		return
 	}
 	a.JSONSuccessResponse(c, result, "success upload")
+}
+
+// DeleteActionVideo 刪除動作影片
+// @Summary 刪除動作影片
+// @Description 刪除動作影片
+// @Tags Action
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作影片id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "刪除失敗"
+// @Router /action/{action_id}/video [DELETE]
+func (a *Action) DeleteActionVideo(c *gin.Context) {
+	var uri validator.ActionIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := a.actionService.DeleteActionVideo(c, uri.ActionID); err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	a.JSONSuccessResponse(c, nil, "delete success")
 }
