@@ -65,7 +65,6 @@ func NewActionService(viperTool *viper.Viper, gormTool tool.Gorm) Action {
 	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
 	resHandler := handler.NewResource(resTool)
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
-	logger := handler.NewLogger(logTool, jwtTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewAction(actionRepo, courseRepo, uploader, logger, resHandler, jwtTool, errHandler)
+	return NewAction(actionRepo, courseRepo, uploader, resHandler, errHandler)
 }

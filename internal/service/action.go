@@ -6,7 +6,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
-	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
 	"strconv"
@@ -18,21 +17,17 @@ type action struct {
 	actionRepo repository.Action
 	courseRepo repository.Course
 	uploader  handler.Uploader
-	logger    handler.Logger
 	resHandler handler.Resource
-	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
 func NewAction(actionRepo repository.Action,
 	courseRepo repository.Course,
 	uploader handler.Uploader,
-	logger handler.Logger,
 	resHandler handler.Resource,
-	jwtTool tool.JWT,
 
 	errHandler errcode.Handler) Action {
-	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, logger: logger, resHandler: resHandler, jwtTool: jwtTool, errHandler: errHandler}
+	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, resHandler: resHandler, errHandler: errHandler}
 }
 
 func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error) {
@@ -45,13 +40,11 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateA
 		 Intro:     param.Intro,
 	 })
 	if err != nil {
-		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	var action dto.Action
 	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
-		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	return &action, nil
 }
@@ -64,13 +57,11 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateA
 		Equipment: param.Equipment,
 		Intro: param.Intro,
 	}); err != nil {
-		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	var action dto.Action
 	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
-		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	return &action, nil
 }
@@ -82,8 +73,7 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 		for _, item := range strings.Split(*param.Source, ",") {
 			opt, err := strconv.Atoi(item)
 			if err != nil {
-				a.logger.Set(c, handler.Error, "strconv", a.errHandler.SystemError().Code(), err.Error())
-				return nil, a.errHandler.SystemError()
+				return nil, a.errHandler.Set(c, "strconv", err)
 			}
 			sourceOpt = append(sourceOpt, opt)
 		}
@@ -94,8 +84,7 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 		for _, item := range strings.Split(*param.Category, ",") {
 			opt, err := strconv.Atoi(item)
 			if err != nil {
-				a.logger.Set(c, handler.Error, "strconv", a.errHandler.SystemError().Code(), err.Error())
-				return nil, a.errHandler.SystemError()
+				return nil, a.errHandler.Set(c, "strconv", err)
 			}
 			categoryOpt = append(categoryOpt, opt)
 		}
@@ -106,8 +95,7 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 		for _, item := range strings.Split(*param.Body, ",") {
 			opt, err := strconv.Atoi(item)
 			if err != nil {
-				a.logger.Set(c, handler.Error, "strconv", a.errHandler.SystemError().Code(), err.Error())
-				return nil, a.errHandler.SystemError()
+				return nil, a.errHandler.Set(c, "strconv", err)
 			}
 			bodyOpt = append(bodyOpt, opt)
 		}
@@ -118,8 +106,7 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 		for _, item := range strings.Split(*param.Equipment, ",") {
 			opt, err := strconv.Atoi(item)
 			if err != nil {
-				a.logger.Set(c, handler.Error, "strconv", a.errHandler.SystemError().Code(), err.Error())
-				return nil, a.errHandler.SystemError()
+				return nil, a.errHandler.Set(c, "strconv", err)
 			}
 			equipmentOpt = append(equipmentOpt, opt)
 		}
@@ -133,20 +120,14 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 		BodyOpt: &bodyOpt,
 		EquipmentOpt: &equipmentOpt,
 	}, &actions); err != nil {
-		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	return actions, nil
 }
 
 func (a *action) DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, errcode.Error) {
 	if err := a.actionRepo.DeleteActionByID(actionID); err != nil {
-		if strings.Contains(err.Error(), "9006") {
-			a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.PermissionDenied().Code(), err.Error())
-			return nil, a.errHandler.PermissionDenied()
-		}
-		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	return &dto.ActionID{ID: actionID}, nil
 }
@@ -155,21 +136,13 @@ func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed st
 	//上傳照片
 	newImageNamed, err := a.uploader.UploadActionCover(file, coverNamed)
 	if err != nil {
-		if strings.Contains(err.Error(), "9007") {
-			return nil, a.errHandler.FileTypeError()
-		}
-		if strings.Contains(err.Error(), "9008") {
-			return nil, a.errHandler.FileSizeError()
-		}
-		a.logger.Set(c, handler.Error, "Resource Handler", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "uploader", err)
 	}
 	//修改動作欄位
 	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
 		Cover: &newImageNamed,
 	}); err != nil {
-		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	return &dto.ActionCover{Cover: newImageNamed}, nil
 }
@@ -178,21 +151,13 @@ func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed st
 	//上傳影片
 	newVideoNamed, err := a.uploader.UploadActionVideo(file, videoNamed)
 	if err != nil {
-		if strings.Contains(err.Error(), "9007") {
-			return nil, a.errHandler.FileTypeError()
-		}
-		if strings.Contains(err.Error(), "9008") {
-			return nil, a.errHandler.FileSizeError()
-		}
-		a.logger.Set(c, handler.Error, "Resource Handler", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "uploader", err)
 	}
 	//修改動作欄位
 	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
 		Video: &newVideoNamed,
 	}); err != nil {
-		a.logger.Set(c, handler.Error, "ActionRepo", a.errHandler.SystemError().Code(), err.Error())
-		return nil, a.errHandler.SystemError()
+		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	return &dto.ActionVideo{Video: newVideoNamed}, nil
 }
