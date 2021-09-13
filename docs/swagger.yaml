@@ -82,6 +82,29 @@ definitions:
         example: henry
         type: string
     type: object
+  dto.Certificate:
+    properties:
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      id:
+        description: 證照id
+        example: 1
+        type: integer
+      image:
+        description: 證照照片
+        example: dkf2se51fsdds.png
+        type: string
+      name:
+        description: 證照名稱
+        example: A級教練證照
+        type: string
+      update_at:
+        description: 修改日期
+        example: "2021-06-01 12:00:00"
+        type: string
+    type: object
   dto.Course:
     properties:
       body_target:
@@ -1285,6 +1308,43 @@ paths:
       security:
       - fitness_token: []
       summary: 上傳身分證正面
+      tags:
+      - Trainer
+  /certificate:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}'
+      parameters:
+      - description: 證照名稱
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 證照照片
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Certificate'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 新增證照
       tags:
       - Trainer
   /course:

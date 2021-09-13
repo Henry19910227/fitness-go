@@ -20,6 +20,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 	baseGroup.StaticFS("/resource/trainer/card_front_image", http.Dir("./volumes/storage/trainer/card_front_image"))
 	baseGroup.StaticFS("/resource/trainer/card_back_image", http.Dir("./volumes/storage/trainer/card_back_image"))
 	baseGroup.StaticFS("/resource/trainer/album", http.Dir("./volumes/storage/trainer/album"))
+	baseGroup.StaticFS("/resource/trainer/certificate", http.Dir("./volumes/storage/trainer/certificate"))
 	trainer := &Trainer{trainerService: trainerService}
 	trainerGroup := baseGroup.Group("/trainer")
 	trainerGroup.Use(userMiddleware)
@@ -51,6 +52,10 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 	baseGroup.DELETE("/trainer_album_photo/:photo_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		trainer.DeleteTrainerAlbumPhoto)
+
+	baseGroup.POST("/certificate",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		trainer.CreateCertificate)
 }
 
 // CreateTrainer 創建我的教練身份
@@ -296,4 +301,40 @@ func (t *Trainer) DeleteTrainerAlbumPhoto(c *gin.Context) {
 		return
 	}
 	t.JSONSuccessResponse(c, nil, "delete success!")
+}
+
+// CreateCertificate 新增證照
+// @Summary 新增證照
+// @Description 查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+// @Tags Trainer
+// @Security fitness_token
+// @Accept mpfd
+// @Param name formData string true "證照名稱"
+// @Param image formData file true "證照照片"
+// @Produce json
+// @Success 200 {object} model.SuccessResult{data=dto.Certificate} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /certificate [POST]
+func (t *Trainer) CreateCertificate(c *gin.Context) {
+	uid, e := t.GetUID(c)
+	if e != nil {
+		t.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("image")
+	if err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var uri validator.CreateCertificateQuery
+	if err := c.ShouldBind(&uri); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	certificate, errs := t.trainerService.CreateCertificate(c, uid, uri.Name, fileHeader.Filename, file)
+	if err != nil {
+		t.JSONErrorResponse(c, errs)
+		return
+	}
+	t.JSONSuccessResponse(c, certificate, "create success!")
 }

@@ -91,3 +91,8 @@ type TrainerAlbum interface {
 	FindAlbumPhotoByID(photoID int64) (*model.TrainerAlbumPhotoEntity, error)
 	DeleteAlbumPhotoByID(photoID int64) error
 }
+
+type Certificate interface {
+	CreateCertificate(uid int64, name string, imageNamed string) (int64, error)
+	FindCertificate(cerID int64, entity interface{}) error
+}

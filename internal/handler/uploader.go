@@ -196,6 +196,20 @@ func (u *uploader) UploadTrainerAlbumPhoto(file io.Reader, imageNamed string) (s
 	return newImageNamed, nil
 }
 
+func (u *uploader) UploadCertificateImage(file io.Reader, imageNamed string) (string, error) {
+	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	if !u.checkImageMaxSize(file) {
+		return "", errors.New("9008-上傳檔案大小超過限制")
+	}
+	newImageNamed := generateFileName(path.Ext(imageNamed))
+	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/certificate"); err != nil {
+		return "", err
+	}
+	return newImageNamed, nil
+}
+
 func (u *uploader) checkUploadImageAllowExt(ext string) bool {
 	ext = strings.ToUpper(ext)
 	for _, v := range u.uploadSetting.ImageAllowExts() {

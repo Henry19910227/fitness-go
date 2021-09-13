@@ -416,6 +416,68 @@ var doc = `{
                 }
             }
         },
+        "/certificate": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "新增證照",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "證照名稱",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "證照照片",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Certificate"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course": {
             "post": {
                 "security": [
@@ -3518,6 +3580,36 @@ var doc = `{
                     "description": "暱稱",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "dto.Certificate": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "id": {
+                    "description": "證照id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "image": {
+                    "description": "證照照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                },
+                "name": {
+                    "description": "證照名稱",
+                    "type": "string",
+                    "example": "A級教練證照"
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
                 }
             }
         },

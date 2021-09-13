@@ -56,3 +56,7 @@ func (r *resource) DeleteActionVideo(videoNamed string) error {
 	return r.resTool.RemoveFile("/action/video", videoNamed)
 }
 
+func (r *resource) DeleteCertificateImage(videoNamed string) error {
+	return r.resTool.RemoveFile("/trainer/certificate", videoNamed)
+}
+

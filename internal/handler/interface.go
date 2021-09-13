@@ -46,6 +46,7 @@ type Uploader interface {
 	UploadCardFrontImage(file io.Reader, imageNamed string) (string, error)
 	UploadCardBackImage(file io.Reader, imageNamed string) (string, error)
 	UploadTrainerAlbumPhoto(file io.Reader, imageNamed string) (string, error)
+	UploadCertificateImage(file io.Reader, imageNamed string) (string, error)
 }
 
 type Resource interface {
@@ -60,4 +61,5 @@ type Resource interface {
 	DeleteCardBackImage(imageNamed string) error
 	DeleteTrainerAlbumPhoto(imageNamed string) error
 	DeleteActionVideo(videoNamed string) error
+	DeleteCertificateImage(videoNamed string) error
 }

@@ -18,6 +18,7 @@ type trainer struct {
 	Base
 	trainerRepo repository.Trainer
 	albumRepo repository.TrainerAlbum
+	cerRepo repository.Certificate
 	uploader  handler.Uploader
 	resHandler handler.Resource
 	logger    handler.Logger
@@ -25,8 +26,8 @@ type trainer struct {
 	errHandler errcode.Handler
 }
 
-func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
-	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, cerRepo repository.Certificate, uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
+	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, cerRepo: cerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 
@@ -226,6 +227,22 @@ func (t *trainer) DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error 
 		t.errHandler.Set(c, "resource handler", err)
 	}
 	return nil
+}
+
+func (t *trainer) CreateCertificate(c *gin.Context, uid int64, name, imageNamed string, imageFile multipart.File) (*dto.Certificate, errcode.Error) {
+	newImageNamed, err := t.uploader.UploadCertificateImage(imageFile, imageNamed)
+	if err != nil {
+		return nil, t.errHandler.Set(c, "uploader", err)
+	}
+	cerID, err := t.cerRepo.CreateCertificate(uid, name, newImageNamed)
+	if err != nil {
+		return nil, t.errHandler.Set(c, "cer repo", err)
+	}
+	var certificate dto.Certificate
+	if err := t.cerRepo.FindCertificate(cerID, &certificate); err != nil {
+		return nil, t.errHandler.Set(c, "cer repo", err)
+	}
+	return &certificate, nil
 }
 
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {
