@@ -1347,6 +1347,33 @@ paths:
       summary: 新增證照
       tags:
       - Trainer
+  /certificate/{certificate_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除證照
+      parameters:
+      - description: 證照id
+        in: path
+        name: certificate_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除證照
+      tags:
+      - Trainer
   /course:
     post:
       consumes:

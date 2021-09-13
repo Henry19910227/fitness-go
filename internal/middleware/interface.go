@@ -10,6 +10,7 @@ type User interface {
 	UserStatusPermission(status []global.UserStatus) gin.HandlerFunc
 	TrainerStatusPermission(status []global.TrainerStatus) gin.HandlerFunc
 	TrainerAlbumPhotoLimit(count int) gin.HandlerFunc
+	CertificateCreatorVerify() gin.HandlerFunc
 }
 
 type Course interface {

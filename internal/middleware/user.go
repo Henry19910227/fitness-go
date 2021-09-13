@@ -22,13 +22,14 @@ type user struct {
 	userRepo repository.User
 	trainerRepo repository.Trainer
 	trainerAlbumRepo repository.TrainerAlbum
+	cerRepo repository.Certificate
 	jwtTool tool.JWT
 	redisTool tool.Redis
 	errHandler errcode.Handler
 }
 
-func NewUser(userRepo repository.User, trainerRepo repository.Trainer, trainerAlbumRepo repository.TrainerAlbum, jwtTool tool.JWT, redisTool tool.Redis, errHandler errcode.Handler) User {
-	return &user{userRepo: userRepo, trainerRepo: trainerRepo, trainerAlbumRepo: trainerAlbumRepo, jwtTool: jwtTool, redisTool: redisTool, errHandler: errHandler}
+func NewUser(userRepo repository.User, trainerRepo repository.Trainer, trainerAlbumRepo repository.TrainerAlbum, cerRepo repository.Certificate, jwtTool tool.JWT, redisTool tool.Redis, errHandler errcode.Handler) User {
+	return &user{userRepo: userRepo, trainerRepo: trainerRepo, trainerAlbumRepo: trainerAlbumRepo, cerRepo: cerRepo, jwtTool: jwtTool, redisTool: redisTool, errHandler: errHandler}
 }
 
 func (u *user) TokenPermission(roles []global.Role) gin.HandlerFunc {
@@ -168,6 +169,45 @@ func (u *user) TrainerAlbumPhotoLimit(count int) gin.HandlerFunc {
 		// 數量超過限制
 		if len(entities) >= count {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "limit", errors.New(strconv.Itoa(errcode.FileCountError))))
+			c.Abort()
+			return
+		}
+	}
+}
+
+func (u *user) CertificateCreatorVerify() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		role, isExists := c.Get("role")
+		if !isExists {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
+			c.Abort()
+			return
+		}
+		if global.Role(role.(int)) == global.AdminRole {
+			return
+		}
+		uid, isExists := c.Get("uid")
+		if !isExists {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
+			c.Abort()
+			return
+		}
+		var uri validator.CertificateIDUri
+		if err := c.ShouldBindUri(&uri); err != nil {
+			u.JSONValidatorErrorResponse(c, err)
+			c.Abort()
+			return
+		}
+		certificate := struct {
+			UserID int64 `gorm:"column:user_id"`
+		}{}
+		if err := u.cerRepo.FindCertificate(uri.CerID, &certificate); err != nil {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", err))
+			c.Abort()
+			return
+		}
+		if certificate.UserID != uid {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "verify", errors.New(strconv.Itoa(errcode.PermissionDenied))))
 			c.Abort()
 			return
 		}

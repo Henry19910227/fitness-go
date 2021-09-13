@@ -28,6 +28,15 @@ func (c *certificate) CreateCertificate(uid int64, name string, imageNamed strin
 	return certificate.ID, nil
 }
 
+func (c *certificate) DeleteCertificateByID(cerID int64) error {
+	if err := c.gorm.DB().
+		Where("id = ?", cerID).
+		Delete(&model.Certificate{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *certificate) FindCertificate(cerID int64, entity interface{}) error {
 	if err := c.gorm.DB().
 		Model(&model.Certificate{}).

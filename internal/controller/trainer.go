@@ -56,6 +56,11 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 	baseGroup.POST("/certificate",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		trainer.CreateCertificate)
+
+	baseGroup.DELETE("/certificate/:certificate_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.CertificateCreatorVerify(),
+		trainer.DeleteCertificate)
 }
 
 // CreateTrainer 創建我的教練身份
@@ -337,4 +342,28 @@ func (t *Trainer) CreateCertificate(c *gin.Context) {
 		return
 	}
 	t.JSONSuccessResponse(c, certificate, "create success!")
+}
+
+// DeleteCertificate 刪除證照
+// @Summary 刪除證照
+// @Description 刪除證照
+// @Tags Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param certificate_id path int64 true "證照id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /certificate/{certificate_id} [DELETE]
+func (t *Trainer) DeleteCertificate(c *gin.Context) {
+	var uri validator.CertificateIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := t.trainerService.DeleteCertificate(c, uri.CerID); err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessResponse(c, nil, "delete success!")
 }

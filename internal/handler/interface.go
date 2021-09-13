@@ -61,5 +61,5 @@ type Resource interface {
 	DeleteCardBackImage(imageNamed string) error
 	DeleteTrainerAlbumPhoto(imageNamed string) error
 	DeleteActionVideo(videoNamed string) error
-	DeleteCertificateImage(videoNamed string) error
+	DeleteCertificateImage(imageNamed string) error
 }

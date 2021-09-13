@@ -245,6 +245,20 @@ func (t *trainer) CreateCertificate(c *gin.Context, uid int64, name, imageNamed 
 	return &certificate, nil
 }
 
+func (t *trainer) DeleteCertificate(c *gin.Context, cerID int64) errcode.Error {
+	var certificate dto.Certificate
+	if err := t.cerRepo.FindCertificate(cerID, &certificate); err != nil {
+		return t.errHandler.Set(c, "cer repo", err)
+	}
+	if err := t.cerRepo.DeleteCertificateByID(cerID); err != nil {
+		return t.errHandler.Set(c, "cer repo", err)
+	}
+	if err := t.resHandler.DeleteCertificateImage(certificate.Image); err != nil {
+		t.errHandler.Set(c, "resource handler", err)
+	}
+	return nil
+}
+
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {
 	var trainer struct{
 		UserID int64 `gorm:"column:user_id"`
