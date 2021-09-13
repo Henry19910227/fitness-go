@@ -214,6 +214,45 @@ func (u *user) CertificateCreatorVerify() gin.HandlerFunc {
 	}
 }
 
+func (u *user) TrainerAlbumPhotoCreatorVerify() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		role, isExists := c.Get("role")
+		if !isExists {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
+			c.Abort()
+			return
+		}
+		if global.Role(role.(int)) == global.AdminRole {
+			return
+		}
+		uid, isExists := c.Get("uid")
+		if !isExists {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
+			c.Abort()
+			return
+		}
+		var uri validator.TrainerAlbumPhotoIDUri
+		if err := c.ShouldBindUri(&uri); err != nil {
+			u.JSONValidatorErrorResponse(c, err)
+			c.Abort()
+			return
+		}
+		photo := struct {
+			UserID int64 `gorm:"column:user_id"`
+		}{}
+		if err := u.trainerAlbumRepo.FindAlbumPhotoByID(uri.PhotoID, &photo); err != nil {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", err))
+			c.Abort()
+			return
+		}
+		if photo.UserID != uid {
+			u.JSONErrorResponse(c, u.errHandler.Set(c, "verify", errors.New(strconv.Itoa(errcode.PermissionDenied))))
+			c.Abort()
+			return
+		}
+	}
+}
+
 func containUserStatus(items []global.UserStatus, target global.UserStatus) bool {
 	for _, v := range items {
 		if target == v {

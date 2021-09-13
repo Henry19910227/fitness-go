@@ -88,7 +88,7 @@ type Sale interface {
 type TrainerAlbum interface {
 	CreateAlbumPhoto(uid int64, imageNamed string) error
 	FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error)
-	FindAlbumPhotoByID(photoID int64) (*model.TrainerAlbumPhotoEntity, error)
+	FindAlbumPhotoByID(photoID int64, entity interface{}) error
 	DeleteAlbumPhotoByID(photoID int64) error
 }
 

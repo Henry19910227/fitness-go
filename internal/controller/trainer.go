@@ -51,6 +51,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 
 	baseGroup.DELETE("/trainer_album_photo/:photo_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerAlbumPhotoCreatorVerify(),
 		trainer.DeleteTrainerAlbumPhoto)
 
 	baseGroup.POST("/certificate",
@@ -262,7 +263,7 @@ func (t *Trainer) UploadCardBackImage(c *gin.Context) {
 // @Accept mpfd
 // @Param trainer_album_photo formData file true "教練相簿照片"
 // @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.TrainerAlbumPhoto} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.TrainerAlbumPhotoResult} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /trainer_album_photo [POST]
 func (t *Trainer) UploadTrainerAlbumPhoto(c *gin.Context) {

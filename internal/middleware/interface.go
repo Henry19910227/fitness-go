@@ -11,6 +11,7 @@ type User interface {
 	TrainerStatusPermission(status []global.TrainerStatus) gin.HandlerFunc
 	TrainerAlbumPhotoLimit(count int) gin.HandlerFunc
 	CertificateCreatorVerify() gin.HandlerFunc
+	TrainerAlbumPhotoCreatorVerify() gin.HandlerFunc
 }
 
 type Course interface {

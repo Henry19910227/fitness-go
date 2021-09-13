@@ -202,7 +202,7 @@ func (t *trainer) UploadCardBackImageByUID(c *gin.Context, uid int64, imageNamed
 	return &dto.TrainerCardBack{Image: newImageNamed}, nil
 }
 
-func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhoto, errcode.Error) {
+func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhotoResult, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := t.uploader.UploadTrainerAlbumPhoto(imageFile, imageNamed)
 	if err != nil {
@@ -212,18 +212,19 @@ func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string,
 	if err := t.albumRepo.CreateAlbumPhoto(uid, newImageNamed); err != nil {
 		return nil, t.errHandler.Set(c, "album repo", err)
 	}
-	return &dto.TrainerAlbumPhoto{Photo: newImageNamed}, nil
+	return &dto.TrainerAlbumPhotoResult{Photo: newImageNamed}, nil
 }
 
 func (t *trainer) DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error {
-	entity, err := t.albumRepo.FindAlbumPhotoByID(photoID)
+	var albumPhoto dto.TrainerAlbumPhoto
+	err := t.albumRepo.FindAlbumPhotoByID(photoID, &albumPhoto)
 	if err != nil {
 		return t.errHandler.Set(c, "album repo", err)
 	}
-	if err := t.albumRepo.DeleteAlbumPhotoByID(entity.ID); err != nil {
+	if err := t.albumRepo.DeleteAlbumPhotoByID(albumPhoto.ID); err != nil {
 		return t.errHandler.Set(c, "album repo", err)
 	}
-	if err := t.resHandler.DeleteTrainerAlbumPhoto(entity.Photo); err != nil {
+	if err := t.resHandler.DeleteTrainerAlbumPhoto(albumPhoto.Photo); err != nil {
 		t.errHandler.Set(c, "resource handler", err)
 	}
 	return nil
