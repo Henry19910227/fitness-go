@@ -345,6 +345,10 @@ func (t *Trainer) CreateCertificate(c *gin.Context) {
 	t.JSONSuccessResponse(c, certificate, "create success!")
 }
 
+func (t *Trainer) UpdateCertificate(c *gin.Context) {
+
+}
+
 // DeleteCertificate 刪除證照
 // @Summary 刪除證照
 // @Description 刪除證照

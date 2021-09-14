@@ -94,6 +94,7 @@ type TrainerAlbum interface {
 
 type Certificate interface {
 	CreateCertificate(uid int64, name string, imageNamed string) (int64, error)
+	UpdateCertificate(cerID int64, name *string, imageNamed *string) error
 	DeleteCertificateByID(cerID int64) error
 	FindCertificate(cerID int64, entity interface{}) error
 }

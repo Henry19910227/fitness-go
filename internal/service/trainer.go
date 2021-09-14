@@ -246,6 +246,36 @@ func (t *trainer) CreateCertificate(c *gin.Context, uid int64, name, imageNamed 
 	return &certificate, nil
 }
 
+func (t *trainer) UpdateCertificate(c *gin.Context, cerID int64, name *string, file *dto.File) (*dto.Certificate, errcode.Error) {
+	var newImageNamed *string
+	var oldImageNamed string
+	if file != nil {
+		var certificate dto.Certificate
+		if err := t.cerRepo.FindCertificate(cerID, &certificate); err != nil {
+			return nil, t.errHandler.Set(c, "cer repo", err)
+		}
+		imageNamed, err := t.uploader.UploadCertificateImage(file.Data, file.FileNamed)
+		if err != nil {
+			return nil, t.errHandler.Set(c, "uploader", err)
+		}
+		newImageNamed = &imageNamed
+		oldImageNamed = certificate.Image
+	}
+	if err := t.cerRepo.UpdateCertificate(cerID, name, newImageNamed); err != nil {
+		return nil, t.errHandler.Set(c, "cer repo", err)
+	}
+	if len(oldImageNamed) > 0 {
+		if err := t.resHandler.DeleteCertificateImage(oldImageNamed); err != nil {
+			t.errHandler.Set(c, "res handler", err)
+		}
+	}
+	var certificate dto.Certificate
+	if err := t.cerRepo.FindCertificate(cerID, &certificate); err != nil {
+		return nil, t.errHandler.Set(c, "cer repo", err)
+	}
+	return &certificate, nil
+}
+
 func (t *trainer) DeleteCertificate(c *gin.Context, cerID int64) errcode.Error {
 	var certificate dto.Certificate
 	if err := t.cerRepo.FindCertificate(cerID, &certificate); err != nil {

@@ -28,6 +28,30 @@ func (c *certificate) CreateCertificate(uid int64, name string, imageNamed strin
 	return certificate.ID, nil
 }
 
+func (c *certificate) UpdateCertificate(cerID int64, name *string, imageNamed *string) error {
+	var selects []interface{}
+	param := make(map[string]interface{})
+	if name != nil {
+		selects = append(selects, "name")
+		param["name"] = name
+	}
+	if imageNamed != nil {
+		selects = append(selects, "image")
+		param["image"] = imageNamed
+	}
+	selects = append(selects, "update_at")
+	param["update_at"] = time.Now().Format("2006-01-02 15:04:05")
+
+	if err := c.gorm.DB().
+		Table("certificates").
+		Where("id = ?", cerID).
+		Select("", selects...).
+		Updates(param).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *certificate) DeleteCertificateByID(cerID int64) error {
 	if err := c.gorm.DB().
 		Where("id = ?", cerID).
