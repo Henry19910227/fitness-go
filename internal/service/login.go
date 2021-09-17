@@ -48,6 +48,9 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 	//從db查詢用戶
 	var user dto.User
 	if err := l.userRepo.FindUserByAccountAndPassword(email, password, &user); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, "", errcode.LoginFailure
+		}
 		return nil, "", l.errHandler.Set(c, "user repo", err)
 	}
 	if user.Birthday == "0000-01-01" {
