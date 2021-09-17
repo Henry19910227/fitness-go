@@ -37,6 +37,15 @@ func (t *trainerAlbum) FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhot
 	return photos, nil
 }
 
+func (t *trainerAlbum) FindAlbumPhotosByUID(uid int64, entity interface{}) error {
+	if err := t.gorm.DB().Model(&model.TrainerAlbumPhoto{}).
+		Where("user_id = ?", uid).
+		Find(entity).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (t *trainerAlbum) FindAlbumPhotoByID(photoID int64, entity interface{}) error {
 	if err := t.gorm.DB().
 		Model(&model.TrainerAlbumPhoto{}).

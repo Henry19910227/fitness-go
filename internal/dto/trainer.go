@@ -15,8 +15,8 @@ type Trainer struct {
 	FacebookURL      string  `json:"facebook_url" gorm:"column:facebook_url" example:"www.facebook.com"`  // 臉書連結
 	InstagramURL     string  `json:"instagram_url" gorm:"column:instagram_url" example:"www.instagram.com"`  // ig連結
 	YoutubeURL       string  `json:"youtube_url" gorm:"column:youtube_url" example:"www.youtube.com"`  // youtube連結
-	CreateAt         string  `json:"create_at" gorm:"column:create_at" example:"2021-05-10 10:00:00"`   // 創建日期
-	UpdateAt         string  `json:"update_at" gorm:"column:update_at" example:"2021-05-10 10:00:00"`   // 修改日期
+	TrainerAlbumPhotos  []*TrainerAlbumPhoto `json:"trainer_album_photos" gorm:"-"`  // 教練相簿
+	Certificates        []*Certificate `json:"certificates" gorm:"-"`  // 教練證照
 }
 
 type TrainerSummary struct {

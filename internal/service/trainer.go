@@ -148,6 +148,12 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrai
 	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
+	if err := t.albumRepo.FindAlbumPhotosByUID(uid, &trainer.TrainerAlbumPhotos); err != nil {
+		return nil, t.errHandler.Set(c, "trainer album repo", err)
+	}
+	if err := t.cerRepo.FindCertificatesByUID(uid, &trainer.Certificates); err != nil {
+		return nil, t.errHandler.Set(c, "trainer album repo", err)
+	}
 	return &trainer, nil
 }
 

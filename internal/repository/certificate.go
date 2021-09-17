@@ -28,6 +28,15 @@ func (c *certificate) CreateCertificate(uid int64, name string, imageNamed strin
 	return certificate.ID, nil
 }
 
+func (c *certificate) FindCertificatesByUID(uid int64, entity interface{}) error {
+	if err := c.gorm.DB().Model(&model.Certificate{}).
+		Where("user_id = ?", uid).
+		Find(entity).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *certificate) UpdateCertificate(cerID int64, name *string, imageNamed *string) error {
 	var selects []interface{}
 	param := make(map[string]interface{})
