@@ -21,6 +21,7 @@ func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) erro
 		UserID: uid,
 		Name: param.Name,
 		Nickname: param.Nickname,
+		Skill: param.Skill,
 		Avatar: param.Avatar,
 		Email: param.Email,
 		Phone: param.Phone,

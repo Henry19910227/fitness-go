@@ -73,8 +73,8 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 		trainer.DeleteCertificate)
 }
 
-// CreateTrainer 創建我的教練身份
-// @Summary 創建我的教練身份
+// CreateTrainer 創建教練
+// @Summary 創建教練
 // @Description 查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}
 // @Tags Trainer
 // @Accept mpfd
@@ -82,6 +82,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 // @Security fitness_token
 // @Param name formData string true "教練本名"
 // @Param nickname formData string true "教練暱稱"
+// @Param skill formData []int true "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)"
 // @Param email formData string true "信箱"
 // @Param phone formData string true "手機"
 // @Param address formData string true "地址 (最大100字元)"
@@ -196,6 +197,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 	result, errs := t.trainerService.CreateTrainer(c, uid, &dto.CreateTrainerParam{
 		Name:               form.Name,
 		Nickname:           form.Nickname,
+		Skill:              form.Skill,
 		Email:              form.Email,
 		Phone:              form.Phone,
 		Address:            form.Address,

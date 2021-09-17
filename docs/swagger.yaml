@@ -296,6 +296,10 @@ definitions:
         description: 電話
         example: "0978820789"
         type: string
+      skill:
+        description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        example: 1,3,5
+        type: string
       trainer_album_photos:
         description: 教練相簿
         items:
@@ -2217,6 +2221,13 @@ paths:
         name: nickname
         required: true
         type: string
+      - description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        in: formData
+        items:
+          type: integer
+        name: skill
+        required: true
+        type: array
       - description: 信箱
         in: formData
         name: email
@@ -2332,7 +2343,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 創建我的教練身份
+      summary: 創建教練
       tags:
       - Trainer
   /user/avatar:

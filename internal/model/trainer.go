@@ -4,6 +4,7 @@ type Trainer struct {
 	UserID           int64   `gorm:"column:user_id"`         // 關聯的用戶id
 	Name             string  `gorm:"column:name"`            // 教練本名
 	Nickname         string  `gorm:"column:nickname"`        // 教練暱稱
+	Skill            string  `gorm:"column:skill"`           // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
 	Avatar           string  `gorm:"column:avatar"`          // 教練大頭照
 	TrainerStatus    int     `gorm:"column:trainer_status"`  // 教練帳戶狀態 (1:正常/2:審核中/3:停權)
 	Email            string  `gorm:"column:email"`           // 信箱
@@ -32,6 +33,7 @@ type TrainerSummaryEntity struct {
 type CreateTrainerParam struct {
 	Name               string     // 教練本名
 	Nickname           string     // 教練暱稱
+	Skill              string     // 專長
 	Email              string     // 信箱
 	Phone              string     // 電話
 	Address            string     // 住址

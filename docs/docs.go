@@ -1948,7 +1948,7 @@ var doc = `{
                 "tags": [
                     "Trainer"
                 ],
-                "summary": "創建我的教練身份",
+                "summary": "創建教練",
                 "parameters": [
                     {
                         "type": "string",
@@ -1961,6 +1961,16 @@ var doc = `{
                         "type": "string",
                         "description": "教練暱稱",
                         "name": "nickname",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "name": "skill",
                         "in": "formData",
                         "required": true
                     },
@@ -3674,6 +3684,11 @@ var doc = `{
                     "description": "電話",
                     "type": "string",
                     "example": "0978820789"
+                },
+                "skill": {
+                    "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                    "type": "string",
+                    "example": "1,3,5"
                 },
                 "trainer_album_photos": {
                     "description": "教練相簿",

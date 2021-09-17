@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"mime/multipart"
+	"strconv"
 )
 
 type trainer struct {
@@ -91,6 +92,7 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrai
 	if err := t.trainerRepo.CreateTrainer(uid, &model.CreateTrainerParam{
 		Name:               param.Name,
 		Nickname:           param.Nickname,
+		Skill:              transformSkills(param.Skill),
 		Email:              param.Email,
 		Phone:              param.Phone,
 		Address:            param.Address,
@@ -446,4 +448,15 @@ func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Erro
 		return true, nil
 	}
 	return false, nil
+}
+
+func transformSkills(skills []int) string {
+	var value string
+	for i, skill := range skills {
+		value += strconv.Itoa(skill)
+		if i != len(skills) - 1 {
+			value += ","
+		}
+	}
+	return value
 }
