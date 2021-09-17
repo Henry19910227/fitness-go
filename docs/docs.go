@@ -2111,7 +2111,7 @@ var doc = `{
                 ],
                 "description": "創建我的教練身份",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -2122,13 +2122,156 @@ var doc = `{
                 "summary": "創建我的教練身份",
                 "parameters": [
                     {
-                        "description": "輸入欄位",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.CreateTrainerBody"
-                        }
+                        "type": "string",
+                        "description": "教練本名",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練暱稱",
+                        "name": "nickname",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "信箱",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "手機",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "地址 (最大100字元)",
+                        "name": "address",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練介紹 (1~400字元)",
+                        "name": "Intro",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "年資 (0~40年)",
+                        "name": "experience",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "座右銘 (1~100字元)",
+                        "name": "motto",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "臉書連結",
+                        "name": "facebook_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "instagram連結",
+                        "name": "instagram_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "youtube連結",
+                        "name": "youtube_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "教練形象照",
+                        "name": "avatar",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "身分證正面照片",
+                        "name": "card_front_image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "身分證背面照片",
+                        "name": "card_back_image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "教練相簿照片(可一次傳多張)",
+                        "name": "trainer_album_photos",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "證照照片(可一次傳多張)",
+                        "name": "certificate_images",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "證照名稱(需與證照照片數量相同)",
+                        "name": "certificate_names",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "帳戶名稱",
+                        "name": "account_name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "帳戶",
+                        "name": "account",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "帳戶照片",
+                        "name": "account_image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分行",
+                        "name": "branch",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "銀行代碼",
+                        "name": "bank_code",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2354,7 +2497,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.TrainerAlbumPhoto"
+                                            "$ref": "#/definitions/dto.TrainerAlbumPhotoResult"
                                         }
                                     }
                                 }
@@ -3860,21 +4003,6 @@ var doc = `{
                     "type": "string",
                     "example": "ld3ae0faf5we.png"
                 },
-                "card_back_image": {
-                    "description": "身分證反面",
-                    "type": "string",
-                    "example": "ld3ae0faf5we.png"
-                },
-                "card_front_image": {
-                    "description": "身分證正面",
-                    "type": "string",
-                    "example": "ld3ae0faf5we.png"
-                },
-                "card_id": {
-                    "description": "身分證字號",
-                    "type": "string",
-                    "example": "A123456789"
-                },
                 "create_at": {
                     "description": "創建日期",
                     "type": "string",
@@ -3947,7 +4075,7 @@ var doc = `{
                 }
             }
         },
-        "dto.TrainerAlbumPhoto": {
+        "dto.TrainerAlbumPhotoResult": {
             "type": "object",
             "properties": {
                 "photo": {
@@ -4466,37 +4594,6 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "第一週增肌計畫"
-                }
-            }
-        },
-        "validator.CreateTrainerBody": {
-            "type": "object",
-            "required": [
-                "address",
-                "email",
-                "name",
-                "phone"
-            ],
-            "properties": {
-                "address": {
-                    "description": "地址 (最大100字元)",
-                    "type": "string",
-                    "example": "台北市信義區松智路五段五號"
-                },
-                "email": {
-                    "description": "信箱 (最大255字元)",
-                    "type": "string",
-                    "example": "jason@gmail.com"
-                },
-                "name": {
-                    "description": "本名 (1~20字元)",
-                    "type": "string",
-                    "example": "王小明"
-                },
-                "phone": {
-                    "description": "手機",
-                    "type": "string",
-                    "example": "0978820789"
                 }
             }
         },

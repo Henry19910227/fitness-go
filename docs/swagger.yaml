@@ -263,18 +263,6 @@ definitions:
         description: 教練大頭照
         example: ld3ae0faf5we.png
         type: string
-      card_back_image:
-        description: 身分證反面
-        example: ld3ae0faf5we.png
-        type: string
-      card_front_image:
-        description: 身分證正面
-        example: ld3ae0faf5we.png
-        type: string
-      card_id:
-        description: 身分證字號
-        example: A123456789
-        type: string
       create_at:
         description: 創建日期
         example: "2021-05-10 10:00:00"
@@ -332,7 +320,7 @@ definitions:
         example: www.youtube.com
         type: string
     type: object
-  dto.TrainerAlbumPhoto:
+  dto.TrainerAlbumPhotoResult:
     properties:
       photo:
         description: 教練相簿照片
@@ -724,30 +712,6 @@ definitions:
         type: string
     required:
     - name
-    type: object
-  validator.CreateTrainerBody:
-    properties:
-      address:
-        description: 地址 (最大100字元)
-        example: 台北市信義區松智路五段五號
-        type: string
-      email:
-        description: 信箱 (最大255字元)
-        example: jason@gmail.com
-        type: string
-      name:
-        description: 本名 (1~20字元)
-        example: 王小明
-        type: string
-      phone:
-        description: 手機
-        example: "0978820789"
-        type: string
-    required:
-    - address
-    - email
-    - name
-    - phone
     type: object
   validator.CreateWorkoutBody:
     properties:
@@ -2361,15 +2325,116 @@ paths:
       - Trainer
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: 創建我的教練身份
       parameters:
-      - description: 輸入欄位
-        in: body
-        name: json_body
+      - description: 教練本名
+        in: formData
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/validator.CreateTrainerBody'
+        type: string
+      - description: 教練暱稱
+        in: formData
+        name: nickname
+        required: true
+        type: string
+      - description: 信箱
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: 手機
+        in: formData
+        name: phone
+        required: true
+        type: string
+      - description: 地址 (最大100字元)
+        in: formData
+        name: address
+        required: true
+        type: string
+      - description: 教練介紹 (1~400字元)
+        in: formData
+        name: Intro
+        required: true
+        type: string
+      - description: 年資 (0~40年)
+        in: formData
+        name: experience
+        required: true
+        type: string
+      - description: 座右銘 (1~100字元)
+        in: formData
+        name: motto
+        type: string
+      - description: 臉書連結
+        in: formData
+        name: facebook_url
+        type: string
+      - description: instagram連結
+        in: formData
+        name: instagram_url
+        type: string
+      - description: youtube連結
+        in: formData
+        name: youtube_url
+        type: string
+      - description: 教練形象照
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      - description: 身分證正面照片
+        in: formData
+        name: card_front_image
+        required: true
+        type: file
+      - description: 身分證背面照片
+        in: formData
+        name: card_back_image
+        required: true
+        type: file
+      - description: 教練相簿照片(可一次傳多張)
+        in: formData
+        name: trainer_album_photos
+        type: file
+      - description: 證照照片(可一次傳多張)
+        in: formData
+        name: certificate_images
+        required: true
+        type: file
+      - description: 證照名稱(需與證照照片數量相同)
+        in: formData
+        items:
+          type: string
+        name: certificate_names
+        required: true
+        type: array
+      - description: 帳戶名稱
+        in: formData
+        name: account_name
+        required: true
+        type: string
+      - description: 帳戶
+        in: formData
+        name: account
+        required: true
+        type: string
+      - description: 帳戶照片
+        in: formData
+        name: account_image
+        required: true
+        type: file
+      - description: 分行
+        in: formData
+        name: branch
+        required: true
+        type: string
+      - description: 銀行代碼
+        in: formData
+        name: bank_code
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -2470,7 +2535,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.TrainerAlbumPhoto'
+                  $ref: '#/definitions/dto.TrainerAlbumPhotoResult'
               type: object
         "400":
           description: 失敗!

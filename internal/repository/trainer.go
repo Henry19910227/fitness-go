@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -14,14 +15,98 @@ func NewTrainer(gormTool  tool.Gorm) Trainer {
 	return &trainer{gorm: gormTool}
 }
 
-func (t *trainer) CreateTrainer(uid int64) error {
+func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) error {
+	// 創建 Trainer model
 	trainer := model.Trainer{
 		UserID: uid,
-		TrainerStatus: 4,
+		Name: param.Name,
+		Nickname: param.Nickname,
+		Avatar: param.Avatar,
+		Email: param.Email,
+		Phone: param.Phone,
+		Address: param.Address,
+		Intro: param.Intro,
+		Experience: param.Experience,
+		TrainerStatus: 2,
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
-	if err := t.gorm.DB().Create(&trainer).Error; err != nil {
+	if param.Motto != nil {
+		trainer.Motto = *param.Motto
+	}
+	if param.FacebookURL != nil {
+		trainer.FacebookURL = *param.FacebookURL
+	}
+	if param.InstagramURL != nil {
+		trainer.InstagramURL = *param.InstagramURL
+	}
+	if param.YoutubeURL != nil {
+		trainer.YoutubeURL = *param.YoutubeURL
+	}
+	// 創建 card model
+	card := model.Card{
+		UserID: uid,
+		FrontImage: param.CardFrontImage,
+		BackImage: param.CardBackImage,
+		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+	}
+	// 創建相簿照片model
+	var albumPhotos []*model.TrainerAlbumPhoto
+	for _, photoName := range param.TrainerAlbumPhotos {
+		 photo := model.TrainerAlbumPhoto{
+		 	UserID: uid,
+			Photo: photoName,
+			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
+		 }
+		albumPhotos = append(albumPhotos, &photo)
+	}
+	// 創建證照model
+	var certificates []*model.Certificate
+	for i, image := range param.CertificateImages {
+		certificate := model.Certificate{
+			UserID: uid,
+			Name: param.CertificateNames[i],
+			Image: image,
+			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
+			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		}
+		certificates = append(certificates, &certificate)
+	}
+	// 創建銀行帳戶model
+	bankAccount := model.BankAccount{
+		UserID:       uid,
+		AccountName:  param.AccountName,
+		AccountImage: param.AccountImage,
+		BackCode:     param.BankCode,
+		Account:      param.Account,
+		Branch:       param.Branch,
+		CreateAt:     time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:     time.Now().Format("2006-01-02 15:04:05"),
+	}
+	// 導入db
+	if err := t.gorm.DB().Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&trainer).Error; err != nil {
+			return err
+		}
+		if err := tx.Create(&card).Error; err != nil {
+			return err
+		}
+		if err := tx.Create(&bankAccount).Error; err != nil {
+			return err
+		}
+		if albumPhotos != nil {
+			if err := tx.Create(&albumPhotos).Error; err != nil {
+				return err
+			}
+		}
+		if certificates != nil {
+			if err := tx.Create(&certificates).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
 		return err
 	}
 	return nil

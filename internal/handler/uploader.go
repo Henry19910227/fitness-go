@@ -3,13 +3,16 @@ package handler
 import (
 	"bytes"
 	"crypto/md5"
+	"crypto/rand"
 	"encoding/hex"
 	"errors"
 	"github.com/Henry19910227/fitness-go/internal/setting"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"io"
 	"io/ioutil"
+	"math/big"
 	"path"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -25,6 +28,13 @@ type uploader struct {
 
 func NewUploader(resTool tool.Resource, uploadSetting setting.Upload) Uploader {
 	return &uploader{resTool: resTool, uploadSetting: uploadSetting}
+}
+
+func (u *uploader) GenerateNewImageName(original string) (string, error) {
+	if !u.checkUploadImageAllowExt(path.Ext(original)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	return generateFileName(path.Ext(original)), nil
 }
 
 func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string) (string, error) {
@@ -55,18 +65,14 @@ func (u *uploader) UploadActionCover(file io.Reader, imageNamed string) (string,
 	return newImageNamed, nil
 }
 
-func (u *uploader) UploadTrainerAvatar(file io.Reader, imageNamed string) (string, error) {
-	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
-		return "", errors.New("9007-上傳檔案不符合規範")
-	}
+func (u *uploader) UploadTrainerAvatar(file io.Reader, imageNamed string) error {
 	if !u.checkImageMaxSize(file) {
-		return "", errors.New("9008-上傳檔案大小超過限制")
+		return errors.New("9008-上傳檔案大小超過限制")
 	}
-	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/avatar"); err != nil {
-		return "", err
+	if err := u.resTool.SaveFile(file, imageNamed, "/trainer/avatar"); err != nil {
+		return err
 	}
-	return newImageNamed, nil
+	return nil
 }
 
 func (u *uploader) UploadUserAvatar(file io.Reader, imageNamed string) (string, error) {
@@ -154,61 +160,54 @@ func (u *uploader) UploadActionVideo(file io.Reader, videoNamed string) (string,
 	return newVideoNamed, nil
 }
 
-func (u *uploader) UploadCardFrontImage(file io.Reader, imageNamed string) (string, error) {
-	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
-		return "", errors.New("9007-上傳檔案不符合規範")
-	}
+func (u *uploader) UploadCardFrontImage(file io.Reader, imageNamed string) error {
 	if !u.checkImageMaxSize(file) {
-		return "", errors.New("9008-上傳檔案大小超過限制")
+		return errors.New("9008-上傳檔案大小超過限制")
 	}
-	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/card_front_image"); err != nil {
-		return "", err
+	if err := u.resTool.SaveFile(file, imageNamed, "/trainer/card_front_image"); err != nil {
+		return err
 	}
-	return newImageNamed, nil
+	return nil
 }
 
-func (u *uploader) UploadCardBackImage(file io.Reader, imageNamed string) (string, error) {
-	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
-		return "", errors.New("9007-上傳檔案不符合規範")
-	}
+func (u *uploader) UploadCardBackImage(file io.Reader, imageNamed string) error {
 	if !u.checkImageMaxSize(file) {
-		return "", errors.New("9008-上傳檔案大小超過限制")
+		return errors.New("9008-上傳檔案大小超過限制")
 	}
-	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/card_back_image"); err != nil {
-		return "", err
+	if err := u.resTool.SaveFile(file, imageNamed, "/trainer/card_back_image"); err != nil {
+		return err
 	}
-	return newImageNamed, nil
+	return nil
 }
 
-func (u *uploader) UploadTrainerAlbumPhoto(file io.Reader, imageNamed string) (string, error) {
-	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
-		return "", errors.New("9007-上傳檔案不符合規範")
-	}
+func (u *uploader) UploadTrainerAlbumPhoto(file io.Reader, imageNamed string) error {
 	if !u.checkImageMaxSize(file) {
-		return "", errors.New("9008-上傳檔案大小超過限制")
+		return errors.New("9008-上傳檔案大小超過限制")
 	}
-	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/album"); err != nil {
-		return "", err
+	if err := u.resTool.SaveFile(file, imageNamed, "/trainer/album"); err != nil {
+		return err
 	}
-	return newImageNamed, nil
+	return nil
 }
 
-func (u *uploader) UploadCertificateImage(file io.Reader, imageNamed string) (string, error) {
-	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
-		return "", errors.New("9007-上傳檔案不符合規範")
-	}
+func (u *uploader) UploadCertificateImage(file io.Reader, imageNamed string) error {
 	if !u.checkImageMaxSize(file) {
-		return "", errors.New("9008-上傳檔案大小超過限制")
+		return errors.New("9008-上傳檔案大小超過限制")
 	}
-	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.resTool.SaveFile(file, newImageNamed, "/trainer/certificate"); err != nil {
-		return "", err
+	if err := u.resTool.SaveFile(file, imageNamed, "/trainer/certificate"); err != nil {
+		return err
 	}
-	return newImageNamed, nil
+	return nil
 }
+
+func (u *uploader) UploadAccountImage(file io.Reader, imageNamed string) error {
+	if !u.checkImageMaxSize(file) {
+		return errors.New("9008-上傳檔案大小超過限制")
+	}
+	if err := u.resTool.SaveFile(file, imageNamed, "/trainer/account_image"); err != nil {
+		return err
+	}
+	return nil}
 
 func (u *uploader) checkUploadImageAllowExt(ext string) bool {
 	ext = strings.ToUpper(ext)
@@ -273,8 +272,17 @@ func (u *uploader) checkUploadImageMaxSize(file io.Reader) (io.Reader, bool) {
 }
 
 func generateFileName(ext string) string {
-	timeStr := time.Now().Format("20060102150405.000")
+	seed := randRange(1, 1000)
+	timeStr := time.Now().Format("20060102150405.000") + strconv.Itoa(int(seed))
 	m := md5.New()
 	m.Write([]byte(timeStr))
 	return hex.EncodeToString(m.Sum(nil)) + ext
+}
+
+func randRange(min int64, max int64) int64 {
+	if min > max || min < 0 {
+		return 0
+	}
+	result, _ := rand.Int(rand.Reader, big.NewInt(max-min+1))
+	return min + result.Int64()
 }

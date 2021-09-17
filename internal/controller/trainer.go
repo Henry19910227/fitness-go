@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"errors"
+	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
@@ -8,6 +10,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 type Trainer struct {
@@ -21,6 +24,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 	baseGroup.StaticFS("/resource/trainer/card_back_image", http.Dir("./volumes/storage/trainer/card_back_image"))
 	baseGroup.StaticFS("/resource/trainer/album", http.Dir("./volumes/storage/trainer/album"))
 	baseGroup.StaticFS("/resource/trainer/certificate", http.Dir("./volumes/storage/trainer/certificate"))
+	baseGroup.StaticFS("/resource/trainer/account_image", http.Dir("./volumes/storage/trainer/account_image"))
 	trainer := &Trainer{trainerService: trainerService}
 	trainerGroup := baseGroup.Group("/trainer")
 	trainerGroup.Use(userMiddleware)
@@ -66,12 +70,33 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 
 // CreateTrainer 創建我的教練身份
 // @Summary 創建我的教練身份
-// @Description 創建我的教練身份
+// @Description 查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}
 // @Tags Trainer
-// @Accept json
+// @Accept mpfd
 // @Produce json
 // @Security fitness_token
-// @Param json_body body validator.CreateTrainerBody true "輸入欄位"
+// @Param name formData string true "教練本名"
+// @Param nickname formData string true "教練暱稱"
+// @Param email formData string true "信箱"
+// @Param phone formData string true "手機"
+// @Param address formData string true "地址 (最大100字元)"
+// @Param Intro formData string true "教練介紹 (1~400字元)"
+// @Param experience formData string true "年資 (0~40年)"
+// @Param motto formData string false "座右銘 (1~100字元)"
+// @Param facebook_url formData string false "臉書連結"
+// @Param instagram_url formData string false "instagram連結"
+// @Param youtube_url formData string false "youtube連結"
+// @Param avatar formData file true "教練形象照"
+// @Param card_front_image formData file true "身分證正面照片"
+// @Param card_back_image formData file true "身分證背面照片"
+// @Param trainer_album_photos formData file false "教練相簿照片(可一次傳多張)"
+// @Param certificate_images formData file true "證照照片(可一次傳多張)"
+// @Param certificate_names formData []string true "證照名稱(需與證照照片數量相同)"
+// @Param account_name formData string true "帳戶名稱"
+// @Param account formData string true "帳戶"
+// @Param account_image formData file true "帳戶照片"
+// @Param branch formData string true "分行"
+// @Param bank_code formData string true "銀行代碼"
 // @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /trainer [POST]
@@ -81,19 +106,114 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 		t.JSONValidatorErrorResponse(c, e.Error())
 		return
 	}
-	var body validator.CreateTrainerBody
-	if err := c.ShouldBindJSON(&body); err != nil {
+	var form validator.CreateTrainerForm
+	if err := c.ShouldBind(&form); err != nil {
 		t.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result , err := t.trainerService.CreateTrainer(c, uid, &dto.CreateTrainerParam{
-		Name: body.Name,
-		Address: body.Address,
-		Phone: body.Phone,
-		Email: body.Email,
-	})
+	//獲取身分證正面照
+	file, fileHeader, err := c.Request.FormFile("card_front_image")
 	if err != nil {
-		t.JSONErrorResponse(c, err)
+		t.JSONValidatorErrorResponse(c, errors.New("需上傳card_front_image").Error())
+		return
+	}
+	cardFrontImage := &dto.File{
+		FileNamed: fileHeader.Filename,
+		Data: file,
+	}
+	//獲取身分證背面照
+	file, fileHeader, err = c.Request.FormFile("card_back_image")
+	if err != nil {
+		t.JSONValidatorErrorResponse(c, errors.New("需上傳card_back_image").Error())
+		return
+	}
+	cardBackImage := &dto.File{
+		FileNamed: fileHeader.Filename,
+		Data: file,
+	}
+	//獲取形象照
+	file, fileHeader, err = c.Request.FormFile("avatar")
+	if err != nil {
+		t.JSONValidatorErrorResponse(c, errors.New("需上傳avatar").Error())
+		return
+	}
+	avatar := &dto.File{
+		FileNamed: fileHeader.Filename,
+		Data: file,
+	}
+	//獲取教練相簿照片
+	files := c.Request.MultipartForm.File["trainer_album_photos"]
+	var trainerAlbumPhotos []*dto.File
+	for _, f := range files {
+		file := &dto.File{
+			FileNamed: f.Filename,
+			Data: file,
+		}
+		trainerAlbumPhotos = append(trainerAlbumPhotos, file)
+	}
+	if len(files) > 5 {
+		t.JSONValidatorErrorResponse(c, errors.New(strconv.Itoa(errcode.FileCountError)).Error())
+		return
+	}
+	//獲取教練證照照片
+	files = c.Request.MultipartForm.File["certificate_images"]
+	var certificateImages []*dto.File
+	for _, f := range files {
+		file := &dto.File{
+			FileNamed: f.Filename,
+			Data: file,
+		}
+		certificateImages = append(certificateImages, file)
+	}
+	if len(files) == 0 {
+		t.JSONValidatorErrorResponse(c, errors.New("至少上傳一張certificate_images").Error())
+		return
+	}
+	if len(files) > 20 {
+		t.JSONValidatorErrorResponse(c, errors.New(strconv.Itoa(errcode.FileCountError)).Error())
+		return
+	}
+	if len(certificateImages) != len(form.CerNames) {
+		t.JSONValidatorErrorResponse(c, errors.New("證照名稱與照片數量不一致").Error())
+		return
+	}
+	//獲取銀行帳戶照片
+	file, fileHeader, err = c.Request.FormFile("account_image")
+	if err != nil {
+		t.JSONValidatorErrorResponse(c, errors.New("需上傳account_image").Error())
+		return
+	}
+	accountImage := &dto.File{
+		FileNamed: fileHeader.Filename,
+		Data: file,
+	}
+	//創建教練
+	result, errs := t.trainerService.CreateTrainer(c, uid, &dto.CreateTrainerParam{
+		Name:               form.Name,
+		Nickname:           form.Nickname,
+		Email:              form.Email,
+		Phone:              form.Phone,
+		Address:            form.Address,
+		Intro:              form.Intro,
+		Experience:         form.Experience,
+		Motto:              form.Motto,
+		FacebookURL:        form.FacebookURL,
+		InstagramURL:       form.InstagramURL,
+		YoutubeURL:         form.YoutubeURL,
+		Avatar:             avatar,
+		CardFrontImage:     cardFrontImage,
+		CardBackImage:      cardBackImage,
+		TrainerAlbumPhotos: trainerAlbumPhotos,
+		CertificateImages:  certificateImages,
+		CertificateNames:   form.CerNames,
+		AccountName:        form.AccountName,
+		AccountImage:       accountImage,
+		BankCode:           form.BankCode,
+		Account:            form.Account,
+		Branch:             form.Branch,
+	})
+	if errs != nil {
+		t.JSONErrorResponse(c, errs)
 		return
 	}
 	t.JSONSuccessResponse(c, result, "create success!")

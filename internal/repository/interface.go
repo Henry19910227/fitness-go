@@ -19,7 +19,7 @@ type User interface {
 }
 
 type Trainer interface {
-	CreateTrainer(uid int64) error
+	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
 	FindTrainerByUID(uid int64, entity interface{}) error
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
 }
