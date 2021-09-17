@@ -2139,61 +2139,6 @@ var doc = `{
                         }
                     }
                 }
-            },
-            "patch": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "修改我的教練資訊",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Trainer"
-                ],
-                "summary": "修改我的教練資訊",
-                "parameters": [
-                    {
-                        "description": "輸入欄位",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.UpdateTrainerBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.Trainer"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
             }
         },
         "/user/avatar": {
@@ -4427,66 +4372,6 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "第一週增肌計畫"
-                }
-            }
-        },
-        "validator.UpdateTrainerBody": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "description": "地址 (最大100字元)",
-                    "type": "string",
-                    "example": "台北市信義區松智路五段五號"
-                },
-                "email": {
-                    "description": "信箱 (最大255字元)",
-                    "type": "string",
-                    "example": "jason@gmail.com"
-                },
-                "experience": {
-                    "description": "年資",
-                    "type": "integer",
-                    "example": 5
-                },
-                "facebook_url": {
-                    "description": "臉書連結",
-                    "type": "string",
-                    "example": "www.facebook.com"
-                },
-                "instagram_url": {
-                    "description": "instagram連結",
-                    "type": "string",
-                    "example": "www.instagram.com"
-                },
-                "intro": {
-                    "description": "教練介紹 (1~400字元)",
-                    "type": "string",
-                    "example": "我叫戰車老師"
-                },
-                "motto": {
-                    "description": "座右銘 (1~100字元)",
-                    "type": "string",
-                    "example": "戰車老師"
-                },
-                "name": {
-                    "description": "本名 (1~20字元)",
-                    "type": "string",
-                    "example": "史考特"
-                },
-                "nickname": {
-                    "description": "暱稱 (1~20字元)",
-                    "type": "string",
-                    "example": "戰車老師"
-                },
-                "phone": {
-                    "description": "手機",
-                    "type": "string",
-                    "example": "0922244123"
-                },
-                "youtube_url": {
-                    "description": "youtube連結",
-                    "type": "string",
-                    "example": "www.youtube.com"
                 }
             }
         },

@@ -250,17 +250,7 @@ func (t *Trainer) GetTrainer(c *gin.Context) {
 	t.JSONSuccessResponse(c, trainer, "success!")
 }
 
-// UpdateTrainer 修改我的教練資訊
-// @Summary 修改我的教練資訊
-// @Description 修改我的教練資訊
-// @Tags Trainer
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Param json_body body validator.UpdateTrainerBody true "輸入欄位"
-// @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer [PATCH]
+
 func (t *Trainer) UpdateTrainer(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
