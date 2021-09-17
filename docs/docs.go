@@ -3772,11 +3772,6 @@ var doc = `{
         "dto.Certificate": {
             "type": "object",
             "properties": {
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
-                },
                 "id": {
                     "description": "證照id",
                     "type": "integer",
@@ -3791,11 +3786,6 @@ var doc = `{
                     "description": "證照名稱",
                     "type": "string",
                     "example": "A級教練證照"
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
                 }
             }
         },
@@ -4003,10 +3993,12 @@ var doc = `{
                     "type": "string",
                     "example": "ld3ae0faf5we.png"
                 },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
+                "certificates": {
+                    "description": "教練證照",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Certificate"
+                    }
                 },
                 "email": {
                     "description": "信箱",
@@ -4053,15 +4045,17 @@ var doc = `{
                     "type": "string",
                     "example": "0978820789"
                 },
+                "trainer_album_photos": {
+                    "description": "教練相簿",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TrainerAlbumPhoto"
+                    }
+                },
                 "trainer_status": {
                     "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)",
                     "type": "integer",
                     "example": 1
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -4072,6 +4066,21 @@ var doc = `{
                     "description": "youtube連結",
                     "type": "string",
                     "example": "www.youtube.com"
+                }
+            }
+        },
+        "dto.TrainerAlbumPhoto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "教練相簿照片id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "photo": {
+                    "description": "教練相簿照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
                 }
             }
         },

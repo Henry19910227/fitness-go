@@ -9,6 +9,21 @@ import (
 	"github.com/spf13/viper"
 )
 
+func NewLoginService(viperTool *viper.Viper, gormTool tool.Gorm) Login {
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	redisTool := tool.NewRedis(setting.NewRedis(viperTool))
+	adminRepo := repository.NewAdmin(gormTool)
+	userRepo := repository.NewUser(gormTool)
+	trainerRepo := repository.NewTrainer(gormTool)
+	albumRepo := repository.NewTrainerAlbum(gormTool)
+	cerRepo := repository.NewCertificate(gormTool)
+	ssoHandler := handler.NewSSO(jwtTool, redisTool, setting.NewUser(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	logger := handler.NewLogger(logTool, jwtTool)
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewLogin(adminRepo, userRepo, trainerRepo, albumRepo, cerRepo, ssoHandler, logger, jwtTool, errHandler)
+}
+
 func NewReviewService(viperTool *viper.Viper, gormTool tool.Gorm) Review {
 	courseRepo := repository.NewCourse(gormTool)
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))

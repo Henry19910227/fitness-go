@@ -84,10 +84,6 @@ definitions:
     type: object
   dto.Certificate:
     properties:
-      create_at:
-        description: 創建日期
-        example: "2021-06-01 12:00:00"
-        type: string
       id:
         description: 證照id
         example: 1
@@ -99,10 +95,6 @@ definitions:
       name:
         description: 證照名稱
         example: A級教練證照
-        type: string
-      update_at:
-        description: 修改日期
-        example: "2021-06-01 12:00:00"
         type: string
     type: object
   dto.Course:
@@ -263,10 +255,11 @@ definitions:
         description: 教練大頭照
         example: ld3ae0faf5we.png
         type: string
-      create_at:
-        description: 創建日期
-        example: "2021-05-10 10:00:00"
-        type: string
+      certificates:
+        description: 教練證照
+        items:
+          $ref: '#/definitions/dto.Certificate'
+        type: array
       email:
         description: 信箱
         example: henry@gmail.com
@@ -303,14 +296,15 @@ definitions:
         description: 電話
         example: "0978820789"
         type: string
+      trainer_album_photos:
+        description: 教練相簿
+        items:
+          $ref: '#/definitions/dto.TrainerAlbumPhoto'
+        type: array
       trainer_status:
         description: 教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)
         example: 1
         type: integer
-      update_at:
-        description: 修改日期
-        example: "2021-05-10 10:00:00"
-        type: string
       user_id:
         description: 用戶id
         example: 1001
@@ -318,6 +312,17 @@ definitions:
       youtube_url:
         description: youtube連結
         example: www.youtube.com
+        type: string
+    type: object
+  dto.TrainerAlbumPhoto:
+    properties:
+      id:
+        description: 教練相簿照片id
+        example: 1
+        type: integer
+      photo:
+        description: 教練相簿照片
+        example: dkf2se51fsdds.png
         type: string
     type: object
   dto.TrainerAlbumPhotoResult:
