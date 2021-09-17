@@ -2296,6 +2296,31 @@ paths:
       tags:
       - Sale
   /trainer:
+    get:
+      consumes:
+      - application/json
+      description: 取得我的教練資訊
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Trainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得我的教練資訊
+      tags:
+      - Trainer
     patch:
       consumes:
       - application/json

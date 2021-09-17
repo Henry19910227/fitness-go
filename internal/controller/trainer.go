@@ -36,6 +36,11 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		trainer.CreateTrainer)
 
+	baseGroup.GET("/trainer",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing, global.TrainerRevoke}),
+		trainer.GetTrainer)
+
 	baseGroup.PATCH("/trainer",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		trainer.UpdateTrainer)
@@ -217,6 +222,30 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 		return
 	}
 	t.JSONSuccessResponse(c, result, "create success!")
+}
+
+// GetTrainer 取得我的教練資訊
+// @Summary 取得我的教練資訊
+// @Description 取得我的教練資訊
+// @Tags Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /trainer [GET]
+func (t *Trainer) GetTrainer(c *gin.Context) {
+	uid, e := t.GetUID(c)
+	if e != nil {
+		t.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	trainer, err := t.trainerService.GetTrainer(c, uid)
+	if err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessResponse(c, trainer, "success!")
 }
 
 // UpdateTrainer 修改我的教練資訊

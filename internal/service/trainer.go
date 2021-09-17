@@ -157,6 +157,20 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrai
 	return &trainer, nil
 }
 
+func (t *trainer) GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error) {
+	var trainer dto.Trainer
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	if err := t.albumRepo.FindAlbumPhotosByUID(uid, &trainer.TrainerAlbumPhotos); err != nil {
+		return nil, t.errHandler.Set(c, "trainer album repo", err)
+	}
+	if err := t.cerRepo.FindCertificatesByUID(uid, &trainer.Certificates); err != nil {
+		return nil, t.errHandler.Set(c, "trainer album repo", err)
+	}
+	return &trainer, nil
+}
+
 func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error) {
 	//獲取trainer資訊
 	var result dto.Trainer

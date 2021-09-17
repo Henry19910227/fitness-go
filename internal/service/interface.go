@@ -49,6 +49,7 @@ type User interface {
 
 type Trainer interface {
 	CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error)
+	GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error)
 	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
