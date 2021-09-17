@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS trainers (
     `user_id` INT(11) UNSIGNED PRIMARY KEY COMMENT '用戶id',
     `name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '教練本名',
     `nickname` VARCHAR(20) NOT NULL UNIQUE DEFAULT '' COMMENT '教練暱稱',
+    `skill` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)',
     `avatar` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '教練大頭照',
     `trainer_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '教練狀態(1:正常/2:審核中/3:停權)',
     `email` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '信箱',
