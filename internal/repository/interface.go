@@ -19,7 +19,7 @@ type User interface {
 }
 
 type Trainer interface {
-	CreateTrainer(uid int64) error
+	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
 	FindTrainerByUID(uid int64, entity interface{}) error
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
 }
@@ -88,6 +88,15 @@ type Sale interface {
 type TrainerAlbum interface {
 	CreateAlbumPhoto(uid int64, imageNamed string) error
 	FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error)
-	FindAlbumPhotoByID(photoID int64) (*model.TrainerAlbumPhotoEntity, error)
+	FindAlbumPhotosByUID(uid int64, entity interface{}) error
+	FindAlbumPhotoByID(photoID int64, entity interface{}) error
 	DeleteAlbumPhotoByID(photoID int64) error
+}
+
+type Certificate interface {
+	CreateCertificate(uid int64, name string, imageNamed string) (int64, error)
+	FindCertificatesByUID(uid int64, entity interface{}) error
+	UpdateCertificate(cerID int64, name *string, imageNamed *string) error
+	DeleteCertificateByID(cerID int64) error
+	FindCertificate(cerID int64, entity interface{}) error
 }

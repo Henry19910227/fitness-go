@@ -4,22 +4,20 @@ type Trainer struct {
 	UserID           int64   `json:"user_id" gorm:"column:user_id" example:"1001"`                      // 用戶id
 	Name             string  `json:"name" gorm:"column:name" example:"王小明"`                           // 教練本名
 	Nickname         string  `json:"nickname" gorm:"column:nickname" example:"Henry"`                   // 教練暱稱
+	Skill            string  `json:"skill" gorm:"column:skill" example:"1,3,5"`                         // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
 	Avatar           string  `json:"avatar" gorm:"column:avatar" example:"ld3ae0faf5we.png"`            // 教練大頭照
-	TrainerStatus    int     `json:"trainer_status" gorm:"column:trainer_status" example:"1"`           // 教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)
+	TrainerStatus    int     `json:"trainer_status" gorm:"column:trainer_status" example:"1"`           // 教練帳戶狀態 (1:正常/2:審核中/3:停權)
 	Email            string  `json:"email" gorm:"column:email" example:"henry@gmail.com"`               // 信箱
 	Phone            string  `json:"phone" gorm:"column:phone" example:"0978820789"`                    // 電話
 	Address          string  `json:"address" gorm:"column:address" example:"台北市信義區信義路五段五號"`     // 住址
 	Intro            string  `json:"intro" gorm:"column:intro" example:"健身比賽冠軍"`                    // 個人介紹
 	Experience       int     `json:"experience" gorm:"column:experience" example:"1"`                   // 年資
 	Motto            string  `json:"motto" gorm:"column:motto" example:"我的座右銘"`                      // 座右銘
-	CardID           string  `json:"card_id" gorm:"column:card_id" example:"A123456789"`                 // 身分證字號
-	CardFrontImage   string  `json:"card_front_image" gorm:"column:card_front_image" example:"ld3ae0faf5we.png"`  // 身分證正面
-	CardBackImage    string  `json:"card_back_image" gorm:"column:card_back_image" example:"ld3ae0faf5we.png"`  // 身分證反面
 	FacebookURL      string  `json:"facebook_url" gorm:"column:facebook_url" example:"www.facebook.com"`  // 臉書連結
 	InstagramURL     string  `json:"instagram_url" gorm:"column:instagram_url" example:"www.instagram.com"`  // ig連結
 	YoutubeURL       string  `json:"youtube_url" gorm:"column:youtube_url" example:"www.youtube.com"`  // youtube連結
-	CreateAt         string  `json:"create_at" gorm:"column:create_at" example:"2021-05-10 10:00:00"`   // 創建日期
-	UpdateAt         string  `json:"update_at" gorm:"column:update_at" example:"2021-05-10 10:00:00"`   // 修改日期
+	TrainerAlbumPhotos  []*TrainerAlbumPhoto `json:"trainer_album_photos" gorm:"-"`  // 教練相簿
+	Certificates        []*Certificate `json:"certificates" gorm:"-"`  // 教練證照
 }
 
 type TrainerSummary struct {
@@ -29,10 +27,29 @@ type TrainerSummary struct {
 }
 
 type CreateTrainerParam struct {
-	Name string
-	Phone string
-	Email string
-	Address string
+	Name             string  // 教練本名
+	Nickname          string  // 教練暱稱
+	Skill             []int   // 專長
+	Email             string  // 信箱
+	Phone             string  // 電話
+	Address            string  // 住址
+	Intro              string  // 個人介紹
+	Experience         int     // 年資
+	Motto              *string  // 座右銘
+	FacebookURL        *string  // 臉書連結
+	InstagramURL       *string  // ig連結
+	YoutubeURL         *string  // youtube連結
+	Avatar             *File
+	CardFrontImage     *File
+	CardBackImage      *File
+	TrainerAlbumPhotos []*File
+	CertificateImages  []*File
+	CertificateNames   []string
+	AccountName        string     // 帳戶名稱
+	AccountImage       *File      // 帳戶照片
+	BankCode           string     // 銀行代號
+	Account            string     // 帳戶
+	Branch             string     // 銀行分行
 }
 
 type UpdateTrainerParam struct {

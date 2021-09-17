@@ -200,7 +200,6 @@ func setupHandler() {
 func setupService() {
 	setupMigrateService()
 	setupSwagService()
-	setupLoginService()
 	setupRegService()
 	setupUserService()
 	setupPlanService()
@@ -211,13 +210,7 @@ func setupService() {
 	workoutService = service.NewWorkoutService(viperTool, gormTool)
 	trainerService = service.NewTrainerService(viperTool, gormTool)
 	actionService = service.NewActionService(viperTool, gormTool)
-}
-
-func setupLoginService() {
-	adminRepo := repository.NewAdmin(gormTool)
-	userRepo := repository.NewUser(gormTool)
-	trainerRepo := repository.NewTrainer(gormTool)
-	loginService = service.NewLogin(adminRepo, userRepo, trainerRepo, ssoHandler, logHandler, jwtTool, errcode.NewHandler())
+	loginService = service.NewLoginService(viperTool, gormTool)
 }
 
 func setupMigrateService()  {

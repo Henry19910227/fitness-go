@@ -306,116 +306,6 @@ var doc = `{
                 }
             }
         },
-        "/card_back_image": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Trainer"
-                ],
-                "summary": "上傳身分證背面",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "身分證背面",
-                        "name": "card_back_image",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.TrainerCardBack"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
-        "/card_front_image": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Trainer"
-                ],
-                "summary": "上傳身分證正面",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "身分證正面",
-                        "name": "card_front_image",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.TrainerCardFront"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
         "/course": {
             "post": {
                 "security": [
@@ -1998,13 +1888,13 @@ var doc = `{
             }
         },
         "/trainer": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "fitness_token": []
                     }
                 ],
-                "description": "創建我的教練身份",
+                "description": "取得我的教練資訊",
                 "consumes": [
                     "application/json"
                 ],
@@ -2014,18 +1904,7 @@ var doc = `{
                 "tags": [
                     "Trainer"
                 ],
-                "summary": "創建我的教練身份",
-                "parameters": [
-                    {
-                        "description": "輸入欄位",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.CreateTrainerBody"
-                        }
-                    }
-                ],
+                "summary": "取得我的教練資訊",
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -2053,70 +1932,13 @@ var doc = `{
                     }
                 }
             },
-            "patch": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "修改我的教練資訊",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Trainer"
-                ],
-                "summary": "修改我的教練資訊",
-                "parameters": [
-                    {
-                        "description": "輸入欄位",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.UpdateTrainerBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.Trainer"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
-        "/trainer/avatar": {
             "post": {
                 "security": [
                     {
                         "fitness_token": []
                     }
                 ],
-                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}",
+                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -2126,62 +1948,171 @@ var doc = `{
                 "tags": [
                     "Trainer"
                 ],
-                "summary": "上傳我的教練大頭照",
+                "summary": "創建教練",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "教練本名",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練暱稱",
+                        "name": "nickname",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "name": "skill",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "信箱",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "手機",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "地址 (最大100字元)",
+                        "name": "address",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練介紹 (1~400字元)",
+                        "name": "Intro",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "年資 (0~40年)",
+                        "name": "experience",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "座右銘 (1~100字元)",
+                        "name": "motto",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "臉書連結",
+                        "name": "facebook_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "instagram連結",
+                        "name": "instagram_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "youtube連結",
+                        "name": "youtube_url",
+                        "in": "formData"
+                    },
+                    {
                         "type": "file",
-                        "description": "教練大頭照",
+                        "description": "教練形象照",
                         "name": "avatar",
                         "in": "formData",
                         "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.TrainerAvatar"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
                     },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
-        "/trainer/info": {
-            "get": {
-                "security": [
                     {
-                        "fitness_token": []
+                        "type": "file",
+                        "description": "身分證正面照片",
+                        "name": "card_front_image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "身分證背面照片",
+                        "name": "card_back_image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "教練相簿照片(可一次傳多張)",
+                        "name": "trainer_album_photos",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "證照照片(可一次傳多張)",
+                        "name": "certificate_images",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "證照名稱(需與證照照片數量相同)",
+                        "name": "certificate_names",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "帳戶名稱",
+                        "name": "account_name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "帳戶",
+                        "name": "account",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "帳戶照片",
+                        "name": "account_image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分行",
+                        "name": "branch",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "銀行代碼",
+                        "name": "bank_code",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
-                "description": "取得我的教練身份資訊",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Trainer"
-                ],
-                "summary": "取得我的教練身份資訊",
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -2203,104 +2134,6 @@ var doc = `{
                     },
                     "400": {
                         "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
-        "/trainer_album_photo": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Trainer"
-                ],
-                "summary": "上傳教練相簿照片",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "教練相簿照片",
-                        "name": "trainer_album_photo",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.TrainerAlbumPhoto"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
-        "/trainer_album_photo/{photo_id}": {
-            "delete": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "刪除教練相簿照片",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Trainer"
-                ],
-                "summary": "刪除教練相簿照片",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "照片id",
-                        "name": "photo_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "刪除成功!",
-                        "schema": {
-                            "$ref": "#/definitions/model.SuccessResult"
-                        }
-                    },
-                    "400": {
-                        "description": "獲取失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -3521,6 +3354,26 @@ var doc = `{
                 }
             }
         },
+        "dto.Certificate": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "證照id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "image": {
+                    "description": "證照照片",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                },
+                "name": {
+                    "description": "證照名稱",
+                    "type": "string",
+                    "example": "A級教練證照"
+                }
+            }
+        },
         "dto.Course": {
             "type": "object",
             "properties": {
@@ -3725,25 +3578,12 @@ var doc = `{
                     "type": "string",
                     "example": "ld3ae0faf5we.png"
                 },
-                "card_back_image": {
-                    "description": "身分證反面",
-                    "type": "string",
-                    "example": "ld3ae0faf5we.png"
-                },
-                "card_front_image": {
-                    "description": "身分證正面",
-                    "type": "string",
-                    "example": "ld3ae0faf5we.png"
-                },
-                "card_id": {
-                    "description": "身分證字號",
-                    "type": "string",
-                    "example": "A123456789"
-                },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
+                "certificates": {
+                    "description": "教練證照",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Certificate"
+                    }
                 },
                 "email": {
                     "description": "信箱",
@@ -3790,15 +3630,22 @@ var doc = `{
                     "type": "string",
                     "example": "0978820789"
                 },
+                "skill": {
+                    "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                    "type": "string",
+                    "example": "1,3,5"
+                },
+                "trainer_album_photos": {
+                    "description": "教練相簿",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TrainerAlbumPhoto"
+                    }
+                },
                 "trainer_status": {
-                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)",
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
                     "type": "integer",
                     "example": 1
-                },
-                "update_at": {
-                    "description": "修改日期",
-                    "type": "string",
-                    "example": "2021-05-10 10:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -3815,38 +3662,13 @@ var doc = `{
         "dto.TrainerAlbumPhoto": {
             "type": "object",
             "properties": {
+                "id": {
+                    "description": "教練相簿照片id",
+                    "type": "integer",
+                    "example": 1
+                },
                 "photo": {
                     "description": "教練相簿照片",
-                    "type": "string",
-                    "example": "dkf2se51fsdds.png"
-                }
-            }
-        },
-        "dto.TrainerAvatar": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "description": "教練大頭照",
-                    "type": "string",
-                    "example": "dkf2se51fsdds.png"
-                }
-            }
-        },
-        "dto.TrainerCardBack": {
-            "type": "object",
-            "properties": {
-                "card_back_image": {
-                    "description": "身分證背面",
-                    "type": "string",
-                    "example": "dkf2se51fsdds.png"
-                }
-            }
-        },
-        "dto.TrainerCardFront": {
-            "type": "object",
-            "properties": {
-                "card_front_image": {
-                    "description": "身分證正面",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"
                 }
@@ -4334,37 +4156,6 @@ var doc = `{
                 }
             }
         },
-        "validator.CreateTrainerBody": {
-            "type": "object",
-            "required": [
-                "address",
-                "email",
-                "name",
-                "phone"
-            ],
-            "properties": {
-                "address": {
-                    "description": "地址 (最大100字元)",
-                    "type": "string",
-                    "example": "台北市信義區松智路五段五號"
-                },
-                "email": {
-                    "description": "信箱 (最大255字元)",
-                    "type": "string",
-                    "example": "jason@gmail.com"
-                },
-                "name": {
-                    "description": "本名 (1~20字元)",
-                    "type": "string",
-                    "example": "王小明"
-                },
-                "phone": {
-                    "description": "手機",
-                    "type": "string",
-                    "example": "0978820789"
-                }
-            }
-        },
         "validator.CreateWorkoutBody": {
             "type": "object",
             "required": [
@@ -4581,66 +4372,6 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "第一週增肌計畫"
-                }
-            }
-        },
-        "validator.UpdateTrainerBody": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "description": "地址 (最大100字元)",
-                    "type": "string",
-                    "example": "台北市信義區松智路五段五號"
-                },
-                "email": {
-                    "description": "信箱 (最大255字元)",
-                    "type": "string",
-                    "example": "jason@gmail.com"
-                },
-                "experience": {
-                    "description": "年資",
-                    "type": "integer",
-                    "example": 5
-                },
-                "facebook_url": {
-                    "description": "臉書連結",
-                    "type": "string",
-                    "example": "www.facebook.com"
-                },
-                "instagram_url": {
-                    "description": "instagram連結",
-                    "type": "string",
-                    "example": "www.instagram.com"
-                },
-                "intro": {
-                    "description": "教練介紹 (1~400字元)",
-                    "type": "string",
-                    "example": "我叫戰車老師"
-                },
-                "motto": {
-                    "description": "座右銘 (1~100字元)",
-                    "type": "string",
-                    "example": "戰車老師"
-                },
-                "name": {
-                    "description": "本名 (1~20字元)",
-                    "type": "string",
-                    "example": "史考特"
-                },
-                "nickname": {
-                    "description": "暱稱 (1~20字元)",
-                    "type": "string",
-                    "example": "戰車老師"
-                },
-                "phone": {
-                    "description": "手機",
-                    "type": "string",
-                    "example": "0922244123"
-                },
-                "youtube_url": {
-                    "description": "youtube連結",
-                    "type": "string",
-                    "example": "www.youtube.com"
                 }
             }
         },

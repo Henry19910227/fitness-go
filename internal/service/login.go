@@ -16,6 +16,8 @@ type login struct {
 	adminRepo repository.Admin
 	userRepo  repository.User
 	trainerRepo repository.Trainer
+	albumRepo repository.TrainerAlbum
+	cerRepo repository.Certificate
 	ssoHandler handler.SSO
 	jwtTool   tool.JWT
 	logger handler.Logger
@@ -25,6 +27,8 @@ type login struct {
 func NewLogin(adminRepo repository.Admin,
 	userRepo  repository.User,
 	trainerRepo repository.Trainer,
+	albumRepo repository.TrainerAlbum,
+    cerRepo repository.Certificate,
 	ssoHandler handler.SSO,
 	logger handler.Logger,
 	jwtTool tool.JWT,
@@ -32,6 +36,8 @@ func NewLogin(adminRepo repository.Admin,
 	return &login{adminRepo: adminRepo,
 		userRepo: userRepo,
 		trainerRepo: trainerRepo,
+		albumRepo: albumRepo,
+		cerRepo: cerRepo,
 		ssoHandler: ssoHandler,
 		logger: logger,
 		jwtTool: jwtTool,
@@ -42,32 +48,29 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 	//從db查詢用戶
 	var user dto.User
 	if err := l.userRepo.FindUserByAccountAndPassword(email, password, &user); err != nil {
-		//查無此人
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, "", l.errHandler.LoginFailure()
-		}
-		//不明原因錯誤
-		l.logger.Set(c, handler.Error, "UserRepo", l.errHandler.SystemError().Code(), err.Error())
-		return nil, "", l.errHandler.SystemError()
+		return nil, "", l.errHandler.Set(c, "user repo", err)
 	}
 	if user.Birthday == "0000-01-01" {
 		user.Birthday = ""
 	}
 	//獲取教練資訊
 	var trainer dto.Trainer
-	err := l.trainerRepo.FindTrainerByUID(user.ID, &trainer)
-	if err != nil {
-		l.logger.Set(c, handler.Error, "TrainerRepo", l.errHandler.SystemError().Code(), err.Error())
-		return nil, "", l.errHandler.SystemError()
+	if err := l.trainerRepo.FindTrainerByUID(user.ID, &trainer); err != nil {
+		return nil, "", l.errHandler.Set(c, "trainer repo", err)
 	}
 	if trainer.UserID != 0 {
+		if err := l.albumRepo.FindAlbumPhotosByUID(user.ID, &trainer.TrainerAlbumPhotos); err != nil {
+			return nil, "", l.errHandler.Set(c, "trainer album repo", err)
+		}
+		if err := l.cerRepo.FindCertificatesByUID(user.ID, &trainer.Certificates); err != nil {
+			return nil, "", l.errHandler.Set(c, "cer repo", err)
+		}
 		user.TrainerInfo = &trainer
 	}
 	//生成 user token
 	token, err := l.ssoHandler.GenerateUserToken(user.ID)
 	if err != nil {
-		l.logger.Set(c, handler.Error, "SsoHandler", l.errHandler.SystemError().Code(), err.Error())
-		return nil, "", l.errHandler.SystemError()
+		return nil, "", l.errHandler.Set(c, "sso handler", err)
 	}
 	return &user, token, nil
 }
