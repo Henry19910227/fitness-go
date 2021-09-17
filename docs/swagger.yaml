@@ -302,7 +302,7 @@ definitions:
           $ref: '#/definitions/dto.TrainerAlbumPhoto'
         type: array
       trainer_status:
-        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權/4:未啟用)
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
         example: 1
         type: integer
       user_id:
@@ -322,34 +322,6 @@ definitions:
         type: integer
       photo:
         description: 教練相簿照片
-        example: dkf2se51fsdds.png
-        type: string
-    type: object
-  dto.TrainerAlbumPhotoResult:
-    properties:
-      photo:
-        description: 教練相簿照片
-        example: dkf2se51fsdds.png
-        type: string
-    type: object
-  dto.TrainerAvatar:
-    properties:
-      avatar:
-        description: 教練大頭照
-        example: dkf2se51fsdds.png
-        type: string
-    type: object
-  dto.TrainerCardBack:
-    properties:
-      card_back_image:
-        description: 身分證背面
-        example: dkf2se51fsdds.png
-        type: string
-    type: object
-  dto.TrainerCardFront:
-    properties:
-      card_front_image:
-        description: 身分證正面
         example: dkf2se51fsdds.png
         type: string
     type: object
@@ -1215,134 +1187,6 @@ paths:
       summary: 上傳動作影片
       tags:
       - Action
-  /card_back_image:
-    post:
-      consumes:
-      - multipart/form-data
-      description: '查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}'
-      parameters:
-      - description: 身分證背面
-        in: formData
-        name: card_back_image
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.TrainerCardBack'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 上傳身分證背面
-      tags:
-      - Trainer
-  /card_front_image:
-    post:
-      consumes:
-      - multipart/form-data
-      description: '查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}'
-      parameters:
-      - description: 身分證正面
-        in: formData
-        name: card_front_image
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.TrainerCardFront'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 上傳身分證正面
-      tags:
-      - Trainer
-  /certificate:
-    post:
-      consumes:
-      - multipart/form-data
-      description: '查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}'
-      parameters:
-      - description: 證照名稱
-        in: formData
-        name: name
-        required: true
-        type: string
-      - description: 證照照片
-        in: formData
-        name: image
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.Certificate'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 新增證照
-      tags:
-      - Trainer
-  /certificate/{certificate_id}:
-    delete:
-      consumes:
-      - application/json
-      description: 刪除證照
-      parameters:
-      - description: 證照id
-        in: path
-        name: certificate_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 刪除成功!
-          schema:
-            $ref: '#/definitions/model.SuccessResult'
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 刪除證照
-      tags:
-      - Trainer
   /course:
     post:
       consumes:
@@ -2356,7 +2200,12 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 創建我的教練身份
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -2484,123 +2333,6 @@ paths:
       security:
       - fitness_token: []
       summary: 創建我的教練身份
-      tags:
-      - Trainer
-  /trainer/avatar:
-    post:
-      consumes:
-      - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}'
-      parameters:
-      - description: 教練大頭照
-        in: formData
-        name: avatar
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.TrainerAvatar'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 上傳我的教練大頭照
-      tags:
-      - Trainer
-  /trainer/info:
-    get:
-      consumes:
-      - application/json
-      description: 取得我的教練身份資訊
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.Trainer'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 取得我的教練身份資訊
-      tags:
-      - Trainer
-  /trainer_album_photo:
-    post:
-      consumes:
-      - multipart/form-data
-      description: '查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}'
-      parameters:
-      - description: 教練相簿照片
-        in: formData
-        name: trainer_album_photo
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.TrainerAlbumPhotoResult'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 上傳教練相簿照片
-      tags:
-      - Trainer
-  /trainer_album_photo/{photo_id}:
-    delete:
-      consumes:
-      - application/json
-      description: 刪除教練相簿照片
-      parameters:
-      - description: 照片id
-        in: path
-        name: photo_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 刪除成功!
-          schema:
-            $ref: '#/definitions/model.SuccessResult'
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 刪除教練相簿照片
       tags:
       - Trainer
   /user/avatar:

@@ -290,16 +290,6 @@ func (t *Trainer) UpdateTrainer(c *gin.Context) {
 	t.JSONSuccessResponse(c, trainer, "update success!")
 }
 
-// GetTrainerInfo 取得我的教練身份資訊
-// @Summary 取得我的教練身份資訊
-// @Description 取得我的教練身份資訊
-// @Tags Trainer
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer/info [GET]
 func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 	var header validator.TokenHeader
 	if err := c.ShouldBindHeader(&header); err != nil {
@@ -314,17 +304,6 @@ func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 	t.JSONSuccessResponse(c, result, "success!")
 }
 
-// UploadMyTrainerAvatar 上傳我的教練大頭照
-// @Summary 上傳我的教練大頭照
-// @Description 查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-// @Tags Trainer
-// @Security fitness_token
-// @Accept mpfd
-// @Param avatar formData file true "教練大頭照"
-// @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.TrainerAvatar} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer/avatar [POST]
 func (t *Trainer) UploadMyTrainerAvatar(c *gin.Context) {
 	var header validator.TokenHeader
 	if err := c.ShouldBindHeader(&header); err != nil {
@@ -344,17 +323,6 @@ func (t *Trainer) UploadMyTrainerAvatar(c *gin.Context) {
 	t.JSONSuccessResponse(c, result, "success upload")
 }
 
-// UploadCardFrontImage 上傳身分證正面
-// @Summary 上傳身分證正面
-// @Description 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-// @Tags Trainer
-// @Security fitness_token
-// @Accept mpfd
-// @Param card_front_image formData file true "身分證正面"
-// @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.TrainerCardFront} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /card_front_image [POST]
 func (t *Trainer) UploadCardFrontImage(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
@@ -374,17 +342,6 @@ func (t *Trainer) UploadCardFrontImage(c *gin.Context) {
 	t.JSONSuccessResponse(c, result, "success upload")
 }
 
-// UploadCardBackImage 上傳身分證背面
-// @Summary 上傳身分證背面
-// @Description 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-// @Tags Trainer
-// @Security fitness_token
-// @Accept mpfd
-// @Param card_back_image formData file true "身分證背面"
-// @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.TrainerCardBack} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /card_back_image [POST]
 func (t *Trainer) UploadCardBackImage(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
@@ -404,17 +361,6 @@ func (t *Trainer) UploadCardBackImage(c *gin.Context) {
 	t.JSONSuccessResponse(c, result, "success upload")
 }
 
-// UploadTrainerAlbumPhoto 上傳教練相簿照片
-// @Summary 上傳教練相簿照片
-// @Description 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-// @Tags Trainer
-// @Security fitness_token
-// @Accept mpfd
-// @Param trainer_album_photo formData file true "教練相簿照片"
-// @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.TrainerAlbumPhotoResult} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer_album_photo [POST]
 func (t *Trainer) UploadTrainerAlbumPhoto(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
@@ -434,17 +380,6 @@ func (t *Trainer) UploadTrainerAlbumPhoto(c *gin.Context) {
 	t.JSONSuccessResponse(c, result, "success upload")
 }
 
-// DeleteTrainerAlbumPhoto 刪除教練相簿照片
-// @Summary 刪除教練相簿照片
-// @Description 刪除教練相簿照片
-// @Tags Trainer
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Param photo_id path int64 true "照片id"
-// @Success 200 {object} model.SuccessResult "刪除成功!"
-// @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /trainer_album_photo/{photo_id} [DELETE]
 func (t *Trainer) DeleteTrainerAlbumPhoto(c *gin.Context) {
 	var uri validator.TrainerAlbumPhotoIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -458,18 +393,6 @@ func (t *Trainer) DeleteTrainerAlbumPhoto(c *gin.Context) {
 	t.JSONSuccessResponse(c, nil, "delete success!")
 }
 
-// CreateCertificate 新增證照
-// @Summary 新增證照
-// @Description 查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-// @Tags Trainer
-// @Security fitness_token
-// @Accept mpfd
-// @Param name formData string true "證照名稱"
-// @Param image formData file true "證照照片"
-// @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.Certificate} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /certificate [POST]
 func (t *Trainer) CreateCertificate(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
@@ -498,17 +421,6 @@ func (t *Trainer) UpdateCertificate(c *gin.Context) {
 
 }
 
-// DeleteCertificate 刪除證照
-// @Summary 刪除證照
-// @Description 刪除證照
-// @Tags Trainer
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Param certificate_id path int64 true "證照id"
-// @Success 200 {object} model.SuccessResult "刪除成功!"
-// @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /certificate/{certificate_id} [DELETE]
 func (t *Trainer) DeleteCertificate(c *gin.Context) {
 	var uri validator.CertificateIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
