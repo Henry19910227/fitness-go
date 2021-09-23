@@ -86,7 +86,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 // @Param email formData string true "信箱"
 // @Param phone formData string true "手機"
 // @Param address formData string true "地址 (最大100字元)"
-// @Param Intro formData string true "教練介紹 (1~400字元)"
+// @Param intro formData string true "教練介紹 (1~400字元)"
 // @Param experience formData string true "年資 (0~40年)"
 // @Param motto formData string false "座右銘 (1~100字元)"
 // @Param facebook_url formData string false "臉書連結"

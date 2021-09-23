@@ -2166,7 +2166,7 @@ paths:
         type: string
       - description: 教練介紹 (1~400字元)
         in: formData
-        name: Intro
+        name: intro
         required: true
         type: string
       - description: 年資 (0~40年)

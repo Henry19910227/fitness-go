@@ -1998,7 +1998,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "教練介紹 (1~400字元)",
-                        "name": "Intro",
+                        "name": "intro",
                         "in": "formData",
                         "required": true
                     },
