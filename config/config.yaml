@@ -5,9 +5,9 @@ Server:
     WriteTimeout: 60
 App:
     Debug:
-      Version: 1.7.1
+      Version: 1.7.2
     Release:
-      Version: 1.7.1
+      Version: 1.7.2
 Resource:
     RootPath: ./volumes/storage
 Upload:
@@ -58,7 +58,7 @@ Redis:
 JWT:
     Secret: mi
     Issuer: fitness
-    Expire: 120 # Minute
+    Expire: 3600 # Minute
 Swagger:
     Debug:
       Protocol: http
