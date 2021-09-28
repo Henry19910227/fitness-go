@@ -18,7 +18,7 @@ type CreateTrainerForm struct {
 	FacebookURL      *string  `form:"facebook_url" binding:"omitempty,max=100" example:"www.facebook.com"`    // 臉書連結
 	InstagramURL     *string  `form:"instagram_url" binding:"omitempty,max=100" example:"www.instagram.com"`  // instagram連結
 	YoutubeURL       *string  `form:"youtube_url" binding:"omitempty,max=100" example:"www.youtube.com"`      // youtube連結
-	CerNames        []string  `form:"certificate_names" binding:"required,max=20" example:"A級教練證照,B級教練證照"` // 證照名稱
+	CerNames        []string  `form:"certificate_names" binding:"omitempty,max=20" example:"A級教練證照,B級教練證照"` // 證照名稱
 	AccountName      string   `form:"account_name" binding:"required,max=40" example:"史考特的帳戶"`              // 帳戶名稱 (1~20字元)
 	Account          string   `form:"account" binding:"required,min=6,max=16" example:"090005556789"`           // 帳戶 (6~16字元)
 	Branch           string   `form:"branch" binding:"required,max=40" example:"信義分行"`                        // 分行

@@ -2064,8 +2064,7 @@ var doc = `{
                         "type": "file",
                         "description": "證照照片(可一次傳多張)",
                         "name": "certificate_images",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "type": "array",
@@ -2074,8 +2073,7 @@ var doc = `{
                         },
                         "description": "證照名稱(需與證照照片數量相同)",
                         "name": "certificate_names",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "type": "string",

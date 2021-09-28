@@ -2212,14 +2212,12 @@ paths:
       - description: 證照照片(可一次傳多張)
         in: formData
         name: certificate_images
-        required: true
         type: file
       - description: 證照名稱(需與證照照片數量相同)
         in: formData
         items:
           type: string
         name: certificate_names
-        required: true
         type: array
       - description: 帳戶名稱
         in: formData
