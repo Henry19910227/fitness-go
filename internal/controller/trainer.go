@@ -96,8 +96,8 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 // @Param card_front_image formData file true "身分證正面照片"
 // @Param card_back_image formData file true "身分證背面照片"
 // @Param trainer_album_photos formData file false "教練相簿照片(可一次傳多張)"
-// @Param certificate_images formData file true "證照照片(可一次傳多張)"
-// @Param certificate_names formData []string true "證照名稱(需與證照照片數量相同)"
+// @Param certificate_images formData false true "證照照片(可一次傳多張)"
+// @Param certificate_names formData []string false "證照名稱(需與證照照片數量相同)"
 // @Param account_name formData string true "帳戶名稱"
 // @Param account formData string true "帳戶"
 // @Param account_image formData file true "帳戶照片"
@@ -151,9 +151,10 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 	files := c.Request.MultipartForm.File["trainer_album_photos"]
 	var trainerAlbumPhotos []*dto.File
 	for _, f := range files {
+		data, _ := f.Open()
 		file := &dto.File{
 			FileNamed: f.Filename,
-			Data: file,
+			Data: data,
 		}
 		trainerAlbumPhotos = append(trainerAlbumPhotos, file)
 	}
@@ -165,15 +166,12 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 	files = c.Request.MultipartForm.File["certificate_images"]
 	var certificateImages []*dto.File
 	for _, f := range files {
+		data, _ := f.Open()
 		file := &dto.File{
 			FileNamed: f.Filename,
-			Data: file,
+			Data: data,
 		}
 		certificateImages = append(certificateImages, file)
-	}
-	if len(files) == 0 {
-		t.JSONValidatorErrorResponse(c, errors.New("至少上傳一張certificate_images").Error())
-		return
 	}
 	if len(files) > 20 {
 		t.JSONValidatorErrorResponse(c, errors.New(strconv.Itoa(errcode.FileCountError)).Error())
