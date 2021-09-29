@@ -185,6 +185,10 @@ func (u *user) TrainerAlbumPhotoLimit(currentCount func(c *gin.Context, uid int6
 	}
 }
 
+func (u *user) CertificateLimit(currentCount func(c *gin.Context, uid int64) (int, errcode.Error), createCount, deleteCount func(c *gin.Context) int, limitCount int) gin.HandlerFunc {
+	return u.TrainerAlbumPhotoLimit(currentCount, createCount, deleteCount, limitCount)
+}
+
 func (u *user) CertificateCreatorVerify() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, isExists := c.Get("role")
