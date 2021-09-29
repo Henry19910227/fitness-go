@@ -152,22 +152,32 @@ func (u *user) TrainerStatusPermission(status []global.TrainerStatus) gin.Handle
 	}
 }
 
-func (u *user) TrainerAlbumPhotoLimit(count int) gin.HandlerFunc {
+func (u *user) TrainerAlbumPhotoLimit(currentCount func(c *gin.Context, uid int64) (int, errcode.Error), createCount, deleteCount func(c *gin.Context) int, limitCount int) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid, isExists := c.Get("uid")
 		if !isExists {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
-			c.Abort()
 			return
 		}
-		entities, err := u.trainerAlbumRepo.FindAlbumPhotoByUID(uid.(int64))
-		if err != nil {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "trainer album repo", err))
-			c.Abort()
-			return
+		var currentCountValue int
+		if currentCount != nil {
+			count, err := currentCount(c, uid.(int64))
+			if err != nil {
+				c.Abort()
+				u.JSONErrorResponse(c, err)
+				return
+			}
+			currentCountValue = count
 		}
-		// 數量超過限制
-		if len(entities) >= count {
+		var createCountValue int
+		if createCount != nil {
+			createCountValue = createCount(c)
+		}
+		var deleteCountValue int
+		if deleteCount != nil {
+			deleteCountValue = deleteCount(c)
+		}
+		if (currentCountValue + createCountValue - deleteCountValue) > limitCount {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "limit", errors.New(strconv.Itoa(errcode.FileCountError))))
 			c.Abort()
 			return
