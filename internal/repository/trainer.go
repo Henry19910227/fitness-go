@@ -124,34 +124,100 @@ func (t *trainer) FindTrainerByUID(uid int64, entity interface{}) error {
 }
 
 func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error {
+	if param == nil { return nil }
 	var selects []interface{}
-	if param.Name != nil { selects = append(selects, "name") }
 	if param.Nickname != nil { selects = append(selects, "nickname") }
 	if param.Avatar != nil { selects = append(selects, "avatar") }
 	if param.TrainerStatus != nil { selects = append(selects, "trainer_status") }
-	if param.Email != nil { selects = append(selects, "email") }
-	if param.Phone != nil { selects = append(selects, "phone") }
-	if param.Address != nil { selects = append(selects, "address") }
 	if param.Intro != nil { selects = append(selects, "intro") }
 	if param.Experience != nil { selects = append(selects, "experience") }
+	if param.Skill != nil { selects = append(selects, "skill") }
 	if param.Motto != nil { selects = append(selects, "motto") }
-	if param.CardID != nil { selects = append(selects, "card_id") }
-	if param.CardFrontImage != nil { selects = append(selects, "card_front_image") }
-	if param.CardBackImage != nil { selects = append(selects, "card_back_image") }
 	if param.FacebookURL != nil { selects = append(selects, "facebook_url") }
 	if param.InstagramURL != nil { selects = append(selects, "instagram_url") }
 	if param.YoutubeURL != nil { selects = append(selects, "youtube_url") }
-	//插入更新時間
-	if param != nil {
-		selects = append(selects, "update_at")
-		var updateAt = time.Now().Format("2006-01-02 15:04:05")
-		param.UpdateAt = &updateAt
+	// 插入更新時間
+	selects = append(selects, "update_at")
+	var updateAt = time.Now().Format("2006-01-02 15:04:05")
+	param.UpdateAt = &updateAt
+
+	// 建立待新增的相簿照片array
+	var createAlbumPhotos []*model.TrainerAlbumPhoto
+	for _, photoName := range param.CreateAlbumPhotos {
+		photo := model.TrainerAlbumPhoto{
+			UserID: uid,
+			Photo: photoName,
+			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
+		}
+		createAlbumPhotos = append(createAlbumPhotos, &photo)
 	}
-	if err := t.gorm.DB().
-		Table("trainers").
-		Where("user_id = ?", uid).
-		Select("", selects...).
-		Updates(param).Error; err != nil {
+	// 建立待更新的證照array
+	var updateCertificates []*model.Certificate
+	for i, cerID := range param.UpdateCerIDs {
+		certificate := model.Certificate{
+			ID: cerID,
+			UserID: uid,
+			Name: param.UpdateCerNames[i],
+			Image: param.UpdateCerImages[i],
+			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		}
+		updateCertificates = append(updateCertificates, &certificate)
+	}
+	// 建立待新增的證照array
+	var createCertificates []*model.Certificate
+	for i, image := range param.CreateCerImages {
+		certificate := model.Certificate{
+			UserID: uid,
+			Name: param.CreateCerNames[i],
+			Image: image,
+			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		}
+		createCertificates = append(createCertificates, &certificate)
+	}
+	// DB操作
+	if err := t.gorm.DB().Transaction(func(tx *gorm.DB) error {
+		if err := tx.
+			Table("trainers").
+			Where("user_id = ?", uid).
+			Select("", selects...).
+			Updates(param).Error; err != nil {
+			return err
+		}
+		//刪除指定教練相簿照片
+		if len(param.DeleteAlbumPhotosIDs) > 0 {
+			if err := tx.Delete(&model.TrainerAlbumPhoto{}, param.DeleteAlbumPhotosIDs).Error; err != nil {
+				return err
+			}
+		}
+		//新增指定教練相簿照片
+		if createAlbumPhotos != nil {
+			if err := tx.Create(&createAlbumPhotos).Error; err != nil {
+				return err
+			}
+		}
+		//刪除指定證照照片
+		if len(param.DeleteCerIDs) > 0 {
+			if err := tx.Delete(&model.Certificate{}, param.DeleteCerIDs).Error; err != nil {
+				return err
+			}
+		}
+		//更新指定證照照片
+		for _, item := range updateCertificates {
+			if err := tx.Table("certificates").
+				Where("user_id = ?", uid).
+				Select("name", "image", "update_at").
+				Updates(item).Error; err != nil {
+					return err
+			}
+		}
+		//新增指定證照照片
+		if createCertificates != nil {
+			if err := tx.Create(&createCertificates).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
 		return err
 	}
 	return nil

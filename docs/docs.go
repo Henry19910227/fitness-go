@@ -2137,6 +2137,172 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "編輯教練",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "教練暱稱",
+                        "name": "nickname",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "專長-需按照順序排列(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "name": "skill",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練介紹 (1~400字元)",
+                        "name": "intro",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "年資 (0~40年)",
+                        "name": "experience",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "座右銘 (1~100字元)",
+                        "name": "motto",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "臉書連結",
+                        "name": "facebook_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "instagram連結",
+                        "name": "instagram_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "youtube連結",
+                        "name": "youtube_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "教練形象照",
+                        "name": "avatar",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "待刪除的相簿照片id",
+                        "name": "delete_trainer_album_photos_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "待新增的教練相簿照片(可一次新增多張)",
+                        "name": "create_trainer_album_photos",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "待刪除的證照照片id",
+                        "name": "delete_certificate_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "待更新的證照照片id(可一次更新多個id)",
+                        "name": "update_certificate_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "待更新的證照照片(需與待更新的證照照片id數量相同)",
+                        "name": "update_certificate_images",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "待更新的證照名稱(需與待更新的證照照片id數量相同)",
+                        "name": "update_certificate_names",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "待新增的證照照片(可一次新增多張)",
+                        "name": "create_certificate_images",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "待新增的證照名稱(需與待新增的證照照片數量相同)",
+                        "name": "create_certificate_names",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
             }
         },
         "/user/avatar": {

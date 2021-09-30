@@ -49,19 +49,17 @@ type User interface {
 
 type Trainer interface {
 	CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error)
+	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
 	GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error)
-	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
-	UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error)
-	UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error)
-	UploadCardFrontImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardFront, errcode.Error)
-	UploadCardBackImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardBack, errcode.Error)
 	UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhotoResult, errcode.Error)
 	DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error
 	CreateCertificate(c *gin.Context, uid int64, name, imageNamed string, imageFile multipart.File) (*dto.Certificate, errcode.Error)
 	UpdateCertificate(c *gin.Context, cerID int64, name *string, file *dto.File) (*dto.Certificate, errcode.Error)
 	DeleteCertificate(c *gin.Context, cerID int64) errcode.Error
+	GetTrainerAlbumPhotoCount(c *gin.Context, uid int64) (int, errcode.Error)
+	GetCertificateCount(c *gin.Context, uid int64) (int, errcode.Error)
 }
 
 type Course interface {

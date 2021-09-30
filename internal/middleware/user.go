@@ -152,22 +152,32 @@ func (u *user) TrainerStatusPermission(status []global.TrainerStatus) gin.Handle
 	}
 }
 
-func (u *user) TrainerAlbumPhotoLimit(count int) gin.HandlerFunc {
+func (u *user) TrainerAlbumPhotoLimit(currentCount func(c *gin.Context, uid int64) (int, errcode.Error), createCount, deleteCount func(c *gin.Context) int, limitCount int) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid, isExists := c.Get("uid")
 		if !isExists {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
-			c.Abort()
 			return
 		}
-		entities, err := u.trainerAlbumRepo.FindAlbumPhotoByUID(uid.(int64))
-		if err != nil {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "trainer album repo", err))
-			c.Abort()
-			return
+		var currentCountValue int
+		if currentCount != nil {
+			count, err := currentCount(c, uid.(int64))
+			if err != nil {
+				c.Abort()
+				u.JSONErrorResponse(c, err)
+				return
+			}
+			currentCountValue = count
 		}
-		// 數量超過限制
-		if len(entities) >= count {
+		var createCountValue int
+		if createCount != nil {
+			createCountValue = createCount(c)
+		}
+		var deleteCountValue int
+		if deleteCount != nil {
+			deleteCountValue = deleteCount(c)
+		}
+		if (currentCountValue + createCountValue - deleteCountValue) > limitCount {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "limit", errors.New(strconv.Itoa(errcode.FileCountError))))
 			c.Abort()
 			return
@@ -175,82 +185,8 @@ func (u *user) TrainerAlbumPhotoLimit(count int) gin.HandlerFunc {
 	}
 }
 
-func (u *user) CertificateCreatorVerify() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		role, isExists := c.Get("role")
-		if !isExists {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
-			c.Abort()
-			return
-		}
-		if global.Role(role.(int)) == global.AdminRole {
-			return
-		}
-		uid, isExists := c.Get("uid")
-		if !isExists {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
-			c.Abort()
-			return
-		}
-		var uri validator.CertificateIDUri
-		if err := c.ShouldBindUri(&uri); err != nil {
-			u.JSONValidatorErrorResponse(c, err)
-			c.Abort()
-			return
-		}
-		certificate := struct {
-			UserID int64 `gorm:"column:user_id"`
-		}{}
-		if err := u.cerRepo.FindCertificate(uri.CerID, &certificate); err != nil {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", err))
-			c.Abort()
-			return
-		}
-		if certificate.UserID != uid {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "verify", errors.New(strconv.Itoa(errcode.PermissionDenied))))
-			c.Abort()
-			return
-		}
-	}
-}
-
-func (u *user) TrainerAlbumPhotoCreatorVerify() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		role, isExists := c.Get("role")
-		if !isExists {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
-			c.Abort()
-			return
-		}
-		if global.Role(role.(int)) == global.AdminRole {
-			return
-		}
-		uid, isExists := c.Get("uid")
-		if !isExists {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.InvalidToken))))
-			c.Abort()
-			return
-		}
-		var uri validator.TrainerAlbumPhotoIDUri
-		if err := c.ShouldBindUri(&uri); err != nil {
-			u.JSONValidatorErrorResponse(c, err)
-			c.Abort()
-			return
-		}
-		photo := struct {
-			UserID int64 `gorm:"column:user_id"`
-		}{}
-		if err := u.trainerAlbumRepo.FindAlbumPhotoByID(uri.PhotoID, &photo); err != nil {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", err))
-			c.Abort()
-			return
-		}
-		if photo.UserID != uid {
-			u.JSONErrorResponse(c, u.errHandler.Set(c, "verify", errors.New(strconv.Itoa(errcode.PermissionDenied))))
-			c.Abort()
-			return
-		}
-	}
+func (u *user) CertificateLimit(currentCount func(c *gin.Context, uid int64) (int, errcode.Error), createCount, deleteCount func(c *gin.Context) int, limitCount int) gin.HandlerFunc {
+	return u.TrainerAlbumPhotoLimit(currentCount, createCount, deleteCount, limitCount)
 }
 
 func containUserStatus(items []global.UserStatus, target global.UserStatus) bool {

@@ -2122,6 +2122,117 @@ paths:
       summary: 取得我的教練資訊
       tags:
       - Trainer
+    patch:
+      consumes:
+      - multipart/form-data
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      parameters:
+      - description: 教練暱稱
+        in: formData
+        name: nickname
+        type: string
+      - description: 專長-需按照順序排列(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        in: formData
+        items:
+          type: integer
+        name: skill
+        type: array
+      - description: 教練介紹 (1~400字元)
+        in: formData
+        name: intro
+        type: string
+      - description: 年資 (0~40年)
+        in: formData
+        name: experience
+        type: string
+      - description: 座右銘 (1~100字元)
+        in: formData
+        name: motto
+        type: string
+      - description: 臉書連結
+        in: formData
+        name: facebook_url
+        type: string
+      - description: instagram連結
+        in: formData
+        name: instagram_url
+        type: string
+      - description: youtube連結
+        in: formData
+        name: youtube_url
+        type: string
+      - description: 教練形象照
+        in: formData
+        name: avatar
+        type: file
+      - description: 待刪除的相簿照片id
+        in: formData
+        items:
+          type: integer
+        name: delete_trainer_album_photos_id
+        type: array
+      - description: 待新增的教練相簿照片(可一次新增多張)
+        in: formData
+        name: create_trainer_album_photos
+        type: file
+      - description: 待刪除的證照照片id
+        in: formData
+        items:
+          type: integer
+        name: delete_certificate_id
+        type: array
+      - description: 待更新的證照照片id(可一次更新多個id)
+        in: formData
+        items:
+          type: integer
+        name: update_certificate_id
+        type: array
+      - description: 待更新的證照照片(需與待更新的證照照片id數量相同)
+        in: formData
+        name: update_certificate_images
+        type: file
+      - description: 待更新的證照名稱(需與待更新的證照照片id數量相同)
+        in: formData
+        items:
+          type: string
+        name: update_certificate_names
+        type: array
+      - description: 待新增的證照照片(可一次新增多張)
+        in: formData
+        name: create_certificate_images
+        type: file
+      - description: 待新增的證照名稱(需與待新增的證照照片數量相同)
+        in: formData
+        items:
+          type: string
+        name: create_certificate_names
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Trainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 編輯教練
+      tags:
+      - Trainer
     post:
       consumes:
       - multipart/form-data
