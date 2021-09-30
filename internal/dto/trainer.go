@@ -53,17 +53,23 @@ type CreateTrainerParam struct {
 }
 
 type UpdateTrainerParam struct {
-	Name             *string  // 教練本名
-	Nickname         *string  // 教練暱稱
-	Email            *string  // 信箱
-	Phone            *string  // 電話
-	Address          *string  // 住址
-	Intro            *string  // 個人介紹
+	Nickname         *string  // 暱稱 (1~20字元)
+	Skill            []int   // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+	Intro            *string  // 教練介紹 (1~400字元)
 	Experience       *int     // 年資
-	Motto            *string  // 座右銘
-	FacebookURL      *string  // 臉書連結
-	InstagramURL     *string  // ig連結
+	Motto            *string // 座右銘 (1~100字元)
+	FacebookURL      *string // 臉書連結
+	InstagramURL     *string  // instagram連結
 	YoutubeURL       *string  // youtube連結
+	Avatar           *File
+	DeleteAlbumPhotosIDs []int64 // 待刪除的相簿照片id
+	CreateAlbumPhotos []*File // 待新增的相簿照片
+	DeleteCerIDs     []int64  // 待刪除的證照照片id
+	UpdateCerIDs     []int64  // 待更新的證照照片id
+	UpdateCerImages  []*File // 待更新的證照照片
+	UpdateCerNames   []string // 待更新的證照名稱
+	CreateCerNames   []string // 待新增的證照名稱
+	CreateCerImages  []*File // 待更新的證照照片
 }
 
 type TrainerAvatar struct {

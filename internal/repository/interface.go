@@ -90,6 +90,7 @@ type TrainerAlbum interface {
 	FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error)
 	FindAlbumPhotosByUID(uid int64, entity interface{}) error
 	FindAlbumPhotoByID(photoID int64, entity interface{}) error
+	FindAlbumPhotosByIDs(photoIDs []int64, entity interface{}) error
 	DeleteAlbumPhotoByID(photoID int64) error
 }
 
@@ -99,4 +100,5 @@ type Certificate interface {
 	UpdateCertificate(cerID int64, name *string, imageNamed *string) error
 	DeleteCertificateByID(cerID int64) error
 	FindCertificate(cerID int64, entity interface{}) error
+	FindCertificatesByIDs(cerIDs []int64, entity interface{}) error
 }

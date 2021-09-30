@@ -25,18 +25,20 @@ type CreateTrainerForm struct {
 	BankCode         string   `form:"bank_code" binding:"required,max=40" example:"史考特的帳戶"`                  // 銀行代碼
 }
 
-type UpdateTrainerBody struct {
-	Name             *string  `json:"name" binding:"omitempty,max=20" example:"史考特"`                      // 本名 (1~20字元)
-	Nickname         *string  `json:"nickname" binding:"omitempty,max=20" example:"戰車老師"`                // 暱稱 (1~20字元)
-	Email            *string  `json:"email" binding:"omitempty,email,max=255" example:"jason@gmail.com"`    // 信箱 (最大255字元)
-	Phone            *string  `json:"phone" binding:"omitempty,startswith=09,len=10" example:"0922244123"`  // 手機
-	Address          *string  `json:"address" binding:"omitempty,max=200" example:"台北市信義區松智路五段五號"`  // 地址 (最大100字元)
-	Intro            *string  `json:"intro" binding:"omitempty,max=800" example:"我叫戰車老師"`                // 教練介紹 (1~400字元)
-	Experience       *int     `json:"experience" binding:"omitempty,max=40" example:"5"`                      // 年資
-	Motto            *string  `json:"motto" binding:"omitempty,max=200" example:"戰車老師"`                    // 座右銘 (1~100字元)
-	FacebookURL      *string  `json:"facebook_url" binding:"omitempty,max=100" example:"www.facebook.com"`    // 臉書連結
-	InstagramURL     *string  `json:"instagram_url" binding:"omitempty,max=100" example:"www.instagram.com"`  // instagram連結
-	YoutubeURL       *string  `json:"youtube_url" binding:"omitempty,max=100" example:"www.youtube.com"`      // youtube連結
+type UpdateTrainerForm struct {
+	Nickname         *string  `form:"nickname" binding:"omitempty,max=20" example:"戰車老師"`                // 暱稱 (1~20字元)
+	Skill            []int   `form:"skill" binding:"omitempty,skills" example:"1,3,5"`                     // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+	Intro            *string  `form:"intro" binding:"omitempty,max=800" example:"我叫戰車老師"`                // 教練介紹 (1~400字元)
+	Experience       *int     `form:"experience" binding:"omitempty,max=40" example:"5"`                      // 年資
+	Motto            *string  `form:"motto" binding:"omitempty,max=200" example:"戰車老師"`                    // 座右銘 (1~100字元)
+	FacebookURL      *string  `form:"facebook_url" binding:"omitempty,max=100" example:"www.facebook.com"`    // 臉書連結
+	InstagramURL     *string  `form:"instagram_url" binding:"omitempty,max=100" example:"www.instagram.com"`  // instagram連結
+	YoutubeURL       *string  `form:"youtube_url" binding:"omitempty,max=100" example:"www.youtube.com"`      // youtube連結
+	DeleteAlbumPhotosIDs []int64 `form:"delete_trainer_album_photos_id" binding:"omitempty" example:"1"` // 證照名稱
+	DeleteCerIDs     []int64  `form:"delete_certificate_id"    binding:"omitempty" example:"1"` // 待刪除的證照照片id
+	UpdateCerIDs     []int64  `form:"update_certificate_id"    binding:"omitempty" example:"1"` // 待更新的證照照片id
+	UpdateCerNames   []string `form:"update_certificate_names" binding:"omitempty,max=40" example:"A級教練證照"` // 待更新的證照名稱
+	CreateCerNames   []string `form:"create_certificate_names" binding:"omitempty,max=40" example:"A級教練證照"` // 待新增的證照名稱
 }
 
 type TrainerAlbumPhotoIDUri struct {
@@ -67,17 +69,24 @@ func validateSkills(fl validator.FieldLevel, min int, max int, maxCount int) boo
 	if len(skills) > maxCount {
 		return false
 	}
-	//檢查是否重複，沒重複就把新值加入map備查
+
+	var maxValue int
 	dupMap := make(map[int]int)
 	for _, item := range skills {
+		//檢查是否重複，沒重複就把新值加入map
 		_, ok := dupMap[item]
 		if ok {
+			return false
+		}
+		//檢查是否按順序排列
+		if item < maxValue {
 			return false
 		}
 		//檢查選項是否在範圍內
 		if item < min || item > max {
 			return false
 		}
+		maxValue = item
 		dupMap[item] = item
 	}
 	return true
