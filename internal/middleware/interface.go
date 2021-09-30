@@ -12,8 +12,6 @@ type User interface {
 	TrainerStatusPermission(status []global.TrainerStatus) gin.HandlerFunc
 	TrainerAlbumPhotoLimit(currentCount func(c *gin.Context, uid int64) (int, errcode.Error), createCount, deleteCount func(c *gin.Context) int, limitCount int) gin.HandlerFunc
 	CertificateLimit(currentCount func(c *gin.Context, uid int64) (int, errcode.Error), createCount, deleteCount func(c *gin.Context) int, limitCount int) gin.HandlerFunc
-	CertificateCreatorVerify() gin.HandlerFunc
-	TrainerAlbumPhotoCreatorVerify() gin.HandlerFunc
 }
 
 type Course interface {

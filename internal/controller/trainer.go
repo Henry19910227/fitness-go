@@ -46,24 +46,6 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 		userMidd.TrainerAlbumPhotoLimit(trainer.trainerService.GetTrainerAlbumPhotoCount, trainer.GetCreateAlbumPhotoCount, trainer.GetDeleteAlbumPhotoCount, 5),
 		userMidd.CertificateLimit(trainer.trainerService.GetCertificateCount, trainer.GetCreateCertificateCount, trainer.GetDeleteCertificateCount, 20),
 		trainer.UpdateTrainer)
-
-	baseGroup.POST("/trainer_album_photo",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		trainer.UploadTrainerAlbumPhoto)
-
-	baseGroup.DELETE("/trainer_album_photo/:photo_id",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		userMidd.TrainerAlbumPhotoCreatorVerify(),
-		trainer.DeleteTrainerAlbumPhoto)
-
-	baseGroup.POST("/certificate",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		trainer.CreateCertificate)
-
-	baseGroup.DELETE("/certificate/:certificate_id",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		userMidd.CertificateCreatorVerify(),
-		trainer.DeleteCertificate)
 }
 
 // CreateTrainer 創建教練
@@ -355,74 +337,6 @@ func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 	t.JSONSuccessResponse(c, result, "success!")
 }
 
-func (t *Trainer) UploadTrainerAlbumPhoto(c *gin.Context) {
-	uid, e := t.GetUID(c)
-	if e != nil {
-		t.JSONValidatorErrorResponse(c, e.Error())
-		return
-	}
-	file, fileHeader, err := c.Request.FormFile("trainer_album_photo")
-	if err != nil {
-		t.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	result, errs := t.trainerService.UploadAlbumPhoto(c, uid, fileHeader.Filename, file)
-	if errs != nil {
-		t.JSONErrorResponse(c, errs)
-		return
-	}
-	t.JSONSuccessResponse(c, result, "success upload")
-}
-
-func (t *Trainer) DeleteTrainerAlbumPhoto(c *gin.Context) {
-	var uri validator.TrainerAlbumPhotoIDUri
-	if err := c.ShouldBindUri(&uri); err != nil {
-		t.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := t.trainerService.DeleteAlbumPhoto(c, uri.PhotoID); err != nil {
-		t.JSONErrorResponse(c, err)
-		return
-	}
-	t.JSONSuccessResponse(c, nil, "delete success!")
-}
-
-func (t *Trainer) CreateCertificate(c *gin.Context) {
-	uid, e := t.GetUID(c)
-	if e != nil {
-		t.JSONValidatorErrorResponse(c, e.Error())
-		return
-	}
-	file, fileHeader, err := c.Request.FormFile("image")
-	if err != nil {
-		t.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	var uri validator.CreateCertificateQuery
-	if err := c.ShouldBind(&uri); err != nil {
-		t.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	certificate, errs := t.trainerService.CreateCertificate(c, uid, uri.Name, fileHeader.Filename, file)
-	if err != nil {
-		t.JSONErrorResponse(c, errs)
-		return
-	}
-	t.JSONSuccessResponse(c, certificate, "create success!")
-}
-
-func (t *Trainer) DeleteCertificate(c *gin.Context) {
-	var uri validator.CertificateIDUri
-	if err := c.ShouldBindUri(&uri); err != nil {
-		t.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := t.trainerService.DeleteCertificate(c, uri.CerID); err != nil {
-		t.JSONErrorResponse(c, err)
-		return
-	}
-	t.JSONSuccessResponse(c, nil, "delete success!")
-}
 func (t *Trainer) GetTrainerAlbumPhotoCount(c *gin.Context) int {
 	_ = c.Request.ParseMultipartForm(10000000)
 	files := c.Request.MultipartForm.File["trainer_album_photos"]
