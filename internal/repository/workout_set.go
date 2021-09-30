@@ -100,6 +100,15 @@ func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 	if err := s.gorm.DB().Create(&set).Error; err != nil {
 		return 0, err
 	}
+	//更新訓練的訓練組個數
+	countQuery := s.gorm.DB().Table("workout_sets").
+		Select("COUNT(*) AS workout_set_count").
+		Where("workout_id = ? AND type = ?", workoutID, 1)
+	if err := s.gorm.DB().Table("workouts").
+		Where("id = ?", workoutID).
+		Update("workout_set_count", countQuery).Error; err != nil {
+		return 0, err
+	}
 	return set.ID, nil
 }
 
@@ -280,7 +289,7 @@ func (s *set) DeleteWorkoutSetByID(setID int64) error {
 		//查詢訓練數量
 		var workoutSetCount int
 		if err := tx.
-			Raw("SELECT COUNT(*) FROM workout_sets WHERE workout_id = ? FOR UPDATE", workoutID).
+			Raw("SELECT COUNT(*) FROM workout_sets WHERE workout_id = ? AND type = ? FOR UPDATE", workoutID, 1).
 			Scan(&workoutSetCount).Error; err != nil {
 			return err
 		}
