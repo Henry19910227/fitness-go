@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -118,6 +120,24 @@ func (t *trainer) FindTrainerByUID(uid int64, entity interface{}) error {
 		Model(&model.Trainer{}).
 		Where("user_id = ?", uid).
 		Find(entity).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *trainer) FindTrainers(entity interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error {
+	var db *gorm.DB
+	db = t.gorm.DB().Model(&model.Trainer{})
+	if status != nil {
+		db = db.Where("trainer_status = ?", *status)
+	}
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	if err := db.Find(entity).Error; err != nil {
 		return err
 	}
 	return nil

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 )
 
@@ -21,6 +22,7 @@ type User interface {
 type Trainer interface {
 	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
 	FindTrainerByUID(uid int64, entity interface{}) error
+	FindTrainers(entity interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
 }
 

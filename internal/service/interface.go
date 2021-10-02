@@ -67,7 +67,6 @@ type Course interface {
 	CreateCourse(c *gin.Context, uid int64, param *dto.CreateCourseParam) (*dto.Course, errcode.Error)
 	UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error)
 	DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, errcode.Error)
-	GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*dto.CourseSummary, errcode.Error)
 	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
@@ -122,4 +121,8 @@ type Sale interface {
 
 type Review interface {
 	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
+}
+
+type Store interface {
+	GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error)
 }

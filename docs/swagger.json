@@ -1869,6 +1869,52 @@
                 }
             }
         },
+        "/store_home_page": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店首頁資料",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Store"
+                ],
+                "summary": "獲取商店首頁資料",
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.StoreHomePage"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/trainer": {
             "get": {
                 "security": [
@@ -3708,6 +3754,39 @@
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.StoreHomePage": {
+            "type": "object",
+            "properties": {
+                "latest_courses": {
+                    "description": "最新課表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CourseSummary"
+                    }
+                },
+                "latest_trainers": {
+                    "description": "最新教練",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TrainerSummary"
+                    }
+                },
+                "popular_courses": {
+                    "description": "熱門課表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CourseSummary"
+                    }
+                },
+                "popular_trainers": {
+                    "description": "熱門教練",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TrainerSummary"
+                    }
                 }
             }
         },

@@ -66,6 +66,11 @@ type CourseDetailEntity struct {
 	UpdateAt string `gorm:"column:update_at"`                // 更新時間
 }
 
+type FindCourseSummariesParam struct {
+	UID *int64
+	Status *int
+}
+
 type CreateCourseParam struct {
 	Name string `gorm:"column:name"`
 	Level int `gorm:"column:level"`

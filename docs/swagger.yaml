@@ -245,6 +245,29 @@ definitions:
         example: 10
         type: integer
     type: object
+  dto.StoreHomePage:
+    properties:
+      latest_courses:
+        description: 最新課表
+        items:
+          $ref: '#/definitions/dto.CourseSummary'
+        type: array
+      latest_trainers:
+        description: 最新教練
+        items:
+          $ref: '#/definitions/dto.TrainerSummary'
+        type: array
+      popular_courses:
+        description: 熱門課表
+        items:
+          $ref: '#/definitions/dto.CourseSummary'
+        type: array
+      popular_trainers:
+        description: 熱門教練
+        items:
+          $ref: '#/definitions/dto.TrainerSummary'
+        type: array
+    type: object
   dto.Trainer:
     properties:
       address:
@@ -2096,6 +2119,32 @@ paths:
       summary: 取得銷售項目清單
       tags:
       - Sale
+  /store_home_page:
+    get:
+      consumes:
+      - application/json
+      description: 獲取商店首頁資料
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.StoreHomePage'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取商店首頁資料
+      tags:
+      - Store
   /trainer:
     get:
       consumes:
