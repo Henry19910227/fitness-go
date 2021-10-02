@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -144,29 +145,46 @@ func (c *course) FindCourseAmountByUserID(uid int64) (int, error) {
 	return amount, nil
 }
 
-func (c *course) FindCourseSummariesByUserID(uid int64, status *int) ([]*model.CourseSummaryEntity, error) {
+func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummaryEntity, error) {
+	if param == nil {
+		return nil, nil
+	}
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 user_id 篩選條件
-	query += "AND courses.user_id = ? "
-	params = append(params, uid)
-	//加入 status 篩選條件
-	if status != nil {
-		query += "AND courses.course_status = ? "
-		params = append(params, *status)
+	if param.UID != nil {
+		query += "AND courses.user_id = ? "
+		params = append(params, param.UID)
 	}
-	rows, err := c.gorm.DB().
+	//加入 status 篩選條件
+	if param.Status != nil {
+		query += "AND courses.course_status = ? "
+		params = append(params, *param.Status)
+	}
+	var db *gorm.DB
+	//基本查詢
+	db = c.gorm.DB().
 		Table("courses").
 		Select("courses.id", "courses.course_status", "courses.category",
 			"courses.schedule_type", "courses.`name`", "courses.cover",
 			"courses.`level`", "courses.plan_count", "courses.workout_count",
-		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
-		    "IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
-		    "IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
+			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
+			"IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
 			"trainers.user_id", "trainers.nickname", "trainers.avatar").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
 		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
-		Where(query, params...).Rows()
+		Where(query, params...)
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	//分頁
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	//查詢數據
+	rows, err := db.Rows()
 	if err != nil {
 		return nil, err
 	}

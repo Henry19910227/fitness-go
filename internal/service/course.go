@@ -89,22 +89,17 @@ func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, e
 	return &dto.CourseID{ID: courseID}, nil
 }
 
-func (cs *course) GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*dto.CourseSummary, errcode.Error) {
-	uid, err := cs.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, cs.errHandler.InvalidToken()
-	}
-	return cs.GetCourseSummariesByUID(c, uid, status)
-}
-
 func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error) {
-	Entities, err := cs.courseRepo.FindCourseSummariesByUserID(uid, status)
+	entities, err := cs.courseRepo.FindCourseSummaries(&model.FindCourseSummariesParam{
+		UID: &uid,
+		Status: status,
+	}, nil, nil)
 	if err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
 	courses := make([]*dto.CourseSummary, 0)
-	for _, entity := range Entities {
+	for _, entity := range entities {
 		course := dto.CourseSummary{
 			ID:           entity.ID,
 			CourseStatus: entity.CourseStatus,
