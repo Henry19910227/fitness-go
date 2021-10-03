@@ -31,3 +31,8 @@ func (b *Base) MysqlDuplicateEntry(err error) bool {
 	}
 	return false
 }
+
+func (b *Base) GetPagingIndex(page int, size int) (int, int) {
+	offset := (page - 1) * size
+	return offset, size
+}

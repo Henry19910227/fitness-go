@@ -36,6 +36,25 @@ func (s *store) GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error) 
 		PopularCourses: latestCourses}, nil
 }
 
+func (s *store) GetCourseProduct(c *gin.Context, page, size int) ([]*dto.CourseSummary, errcode.Error) {
+	offset, limit := s.GetPagingIndex(page, size)
+	var status = global.Sale
+	entities, err := s.courseRepo.FindCourseSummaries(&model.FindCourseSummariesParam{
+		Status: &status,
+	}, &model.OrderBy{
+		Field:     "courses.update_at",
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: offset,
+		Limit:  limit,
+	})
+	if err != nil {
+		return nil, s.errHandler.Set(c, "store", err)
+	}
+	return parserCourses(entities), nil
+}
+
+
 func (s *store) getLatestTrainerSummaries() ([]*dto.TrainerSummary, error) {
 	trainers := make([]*dto.TrainerSummary, 0)
 	var trainerStatus = global.TrainerActivity
@@ -65,6 +84,10 @@ func (s *store) getLatestCourseSummaries() ([]*dto.CourseSummary, error) {
 	if err != nil {
 		return nil, err
 	}
+	return parserCourses(entities), nil
+}
+
+func parserCourses(entities []*model.CourseSummaryEntity) []*dto.CourseSummary {
 	courses := make([]*dto.CourseSummary, 0)
 	for _, entity := range entities {
 		course := dto.CourseSummary{
@@ -96,5 +119,5 @@ func (s *store) getLatestCourseSummaries() ([]*dto.CourseSummary, error) {
 		}
 		courses = append(courses, &course)
 	}
-	return courses, nil
+	return courses
 }

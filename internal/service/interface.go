@@ -125,4 +125,5 @@ type Review interface {
 
 type Store interface {
 	GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error)
+	GetCourseProduct(c *gin.Context, page, size int) ([]*dto.CourseSummary, errcode.Error)
 }
