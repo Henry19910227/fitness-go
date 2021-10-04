@@ -99,6 +99,13 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
 		courseMidd.CourseCreatorVerify(),
 		course.SearchActions)
+
+	baseGroup.POST("/:course_id/submit",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		course.SubmitForReview)
 }
 
 // CreateCourse 創建課表
@@ -427,4 +434,28 @@ func (cc *Course) SearchActions(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, actions, "success!")
+}
+
+// SubmitForReview 送審課表
+// @Summary 送審課表
+// @Description 送審課表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /course/{course_id}/submit [POST]
+func (cc *Course) SubmitForReview(c *gin.Context)  {
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := cc.courseService.CourseSubmit(c, uri.CourseID); err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, nil, "success!")
 }

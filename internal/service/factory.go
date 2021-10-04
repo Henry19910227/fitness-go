@@ -24,14 +24,6 @@ func NewLoginService(viperTool *viper.Viper, gormTool tool.Gorm) Login {
 	return NewLogin(adminRepo, userRepo, trainerRepo, albumRepo, cerRepo, ssoHandler, logger, jwtTool, errHandler)
 }
 
-func NewReviewService(viperTool *viper.Viper, gormTool tool.Gorm) Review {
-	courseRepo := repository.NewCourse(gormTool)
-	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
-	loggerTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
-	errHandler := errcode.NewErrHandler(handler.NewLogger(loggerTool, jwtTool))
-	return NewReview(courseRepo, errHandler)
-}
-
 func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	courseRepo := repository.NewCourse(gormTool)

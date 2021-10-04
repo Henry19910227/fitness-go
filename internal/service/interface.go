@@ -70,6 +70,7 @@ type Course interface {
 	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
+	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
 }
 
 type Plan interface {
@@ -117,10 +118,6 @@ type Action interface {
 
 type Sale interface {
 	GetSaleItems(c *gin.Context) ([]*saledto.SaleItem, errcode.Error)
-}
-
-type Review interface {
-	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
 }
 
 type Store interface {
