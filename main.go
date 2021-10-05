@@ -56,6 +56,7 @@ var (
 	actionService   service.Action
 	saleService     service.Sale
 	storeService    service.Store
+	reviewService   service.Review
 )
 
 var (
@@ -114,7 +115,7 @@ func main() {
 	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
 	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewTrainer(baseGroup, trainerService, userMiddleware, userMidd)
-	controller.NewCourse(baseGroup, courseService, planService, actionService, userMidd, courseMidd)
+	controller.NewCourse(baseGroup, courseService, planService, actionService, reviewService, userMidd, courseMidd)
 	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
 	controller.NewWorkout(baseGroup, workoutService, workoutSetService, userMidd, courseMidd)
 	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
@@ -211,6 +212,7 @@ func setupService() {
 	actionService = service.NewActionService(viperTool, gormTool)
 	loginService = service.NewLoginService(viperTool, gormTool)
 	storeService = service.NewStoreService(viperTool, gormTool)
+	reviewService = service.NewReviewService(viperTool, gormTool)
 }
 
 func setupMigrateService()  {

@@ -104,3 +104,9 @@ type Certificate interface {
 	FindCertificate(cerID int64, entity interface{}) error
 	FindCertificatesByIDs(cerIDs []int64, entity interface{}) error
 }
+
+type Review interface {
+	CreateReview(param *model.CreateReviewParam) error
+	FindReviewByCourseIDAndUserID(courseID int64, userID int64, entity interface{}) error
+	FindReviewImagesByReviewID(courseID, userID int64, entity interface{}) error
+}

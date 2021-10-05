@@ -49,6 +49,7 @@ type Uploader interface {
 	UploadTrainerAlbumPhoto(file io.Reader, imageNamed string) error
 	UploadCertificateImage(file io.Reader, imageNamed string) error
 	UploadAccountImage(file io.Reader, imageNamed string) error
+	UploadReviewImage(file io.Reader, imageNamed string) error
 }
 
 type Resource interface {

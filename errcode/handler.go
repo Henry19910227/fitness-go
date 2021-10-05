@@ -42,13 +42,13 @@ func (h *handle) Set(c *gin.Context, tag string, err error) Error {
 		return NewError(DataNotFound, errors.New("查無資料"))
 	}
 	if strings.Contains(err.Error(), "1062")  {
-		return NewError(DataAlreadyExists, err)
+		return NewError(DataAlreadyExists, errors.New("資料已存在"))
 	}
 	if strings.Contains(err.Error(), "9007")  {
-		return NewError(FileTypeError, err)
+		return NewError(FileTypeError, errors.New("上傳檔案類型不符合規範"))
 	}
 	if strings.Contains(err.Error(), "9008")  {
-		return NewError(FileSizeError, err)
+		return NewError(FileSizeError, errors.New("上傳檔案數量超過限制"))
 	}
 	//自定義錯誤碼映射
 	code, _ := strconv.Atoi(err.Error())

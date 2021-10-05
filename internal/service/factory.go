@@ -87,3 +87,15 @@ func NewStoreService(viperTool *viper.Viper, gormTool tool.Gorm) Store {
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewStore(courseRepo, trainerRepo, errHandler)
 }
+
+func NewReviewService(viperTool *viper.Viper, gormTool tool.Gorm) Review {
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+
+	reviewRepo := repository.NewReview(gormTool)
+	resTool := tool.NewResource(setting.NewResource(viperTool))
+	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
+	resHandler := handler.NewResource(resTool)
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewReview(reviewRepo, uploader, resHandler, errHandler)
+}
