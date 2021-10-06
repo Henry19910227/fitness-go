@@ -37,9 +37,9 @@ func (s *store) GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error) 
 }
 
 func (s *store) GetCourseProduct(c *gin.Context, orderType string, page, size int) ([]*dto.CourseProductSummary, errcode.Error) {
-	var field = string(global.FieldUpdateAt)
+	var field = string(global.UpdateAt)
 	if orderType != "latest" {
-		field = string(global.FieldUpdateAt)
+		field = string(global.UpdateAt)
 	}
 	offset, limit := s.GetPagingIndex(page, size)
 	datas, err := s.courseRepo.FindCourseProductSummaries(&model.OrderBy{
@@ -52,6 +52,40 @@ func (s *store) GetCourseProduct(c *gin.Context, orderType string, page, size in
 	if err != nil {
 		return nil, s.errHandler.Set(c, "store", err)
 	}
+	return parserCourses(datas), nil
+}
+
+
+func (s *store) getLatestTrainerSummaries() ([]*dto.TrainerSummary, error) {
+	trainers := make([]*dto.TrainerSummary, 0)
+	var trainerStatus = global.TrainerActivity
+	if err := s.trainerRepo.FindTrainers(&trainers, &trainerStatus, &model.OrderBy{
+		Field:     "create_at",
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: 0,
+		Limit:  5,
+	}); err != nil {
+		return nil, err
+	}
+	return trainers, nil
+}
+
+func (s *store) getLatestCourseSummaries() ([]*dto.CourseProductSummary, error) {
+	entities, err := s.courseRepo.FindCourseProductSummaries(&model.OrderBy{
+		Field:     "update_at",
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: 0,
+		Limit:  5,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return parserCourses(entities), nil
+}
+
+func parserCourses(datas []*model.CourseProductSummary) []*dto.CourseProductSummary {
 	courses := make([]*dto.CourseProductSummary, 0)
 	for _, data := range datas {
 		course := dto.CourseProductSummary{
@@ -81,75 +115,6 @@ func (s *store) GetCourseProduct(c *gin.Context, orderType string, page, size in
 				Name: data.Sale.Name,
 				Twd: data.Sale.Twd,
 				Identifier: data.Sale.Identifier,
-			}
-			course.Sale = sale
-		}
-		courses = append(courses, &course)
-	}
-	return courses, nil
-}
-
-
-func (s *store) getLatestTrainerSummaries() ([]*dto.TrainerSummary, error) {
-	trainers := make([]*dto.TrainerSummary, 0)
-	var trainerStatus = global.TrainerActivity
-	if err := s.trainerRepo.FindTrainers(&trainers, &trainerStatus, &model.OrderBy{
-		Field:     "create_at",
-		OrderType: global.DESC,
-	}, &model.PagingParam{
-		Offset: 0,
-		Limit:  5,
-	}); err != nil {
-		return nil, err
-	}
-	return trainers, nil
-}
-
-func (s *store) getLatestCourseSummaries() ([]*dto.CourseSummary, error) {
-	var status = global.Sale
-	entities, err := s.courseRepo.FindCourseSummaries(&model.FindCourseSummariesParam{
-		Status: &status,
-	}, &model.OrderBy{
-		Field:     "courses.update_at",
-		OrderType: global.DESC,
-	}, &model.PagingParam{
-		Offset: 0,
-		Limit:  5,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return parserCourses(entities), nil
-}
-
-func parserCourses(entities []*model.CourseSummaryEntity) []*dto.CourseSummary {
-	courses := make([]*dto.CourseSummary, 0)
-	for _, entity := range entities {
-		course := dto.CourseSummary{
-			ID:           entity.ID,
-			CourseStatus: entity.CourseStatus,
-			Category:     entity.Category,
-			ScheduleType: entity.ScheduleType,
-			Name:         entity.Name,
-			Cover:        entity.Cover,
-			Level:        entity.Level,
-			PlanCount:    entity.PlanCount,
-			WorkoutCount: entity.WorkoutCount,
-		}
-		trainer := &dto.TrainerSummary{
-			UserID: entity.Trainer.UserID,
-			Nickname: entity.Trainer.Nickname,
-			Avatar: entity.Trainer.Avatar,
-		}
-		course.Trainer = trainer
-		if entity.Sale.ID != 0 {
-			sale := &dto.SaleItem{
-				ID: entity.Sale.ID,
-				Type: entity.Sale.Type,
-				Name: entity.Sale.Name,
-				Twd: entity.Sale.Twd,
-				Identifier: entity.Sale.Identifier,
 			}
 			course.Sale = sale
 		}

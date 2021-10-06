@@ -8,5 +8,5 @@ const (
 
 type OrderTypeField string
 const (
-	FieldUpdateAt OrderTypeField = "update_at"
+	UpdateAt OrderTypeField = "update_at"
 )
