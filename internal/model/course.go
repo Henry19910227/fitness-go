@@ -66,6 +66,21 @@ type CourseDetailEntity struct {
 	UpdateAt string `gorm:"column:update_at"`                // 更新時間
 }
 
+type CourseProductSummary struct {
+	ID       int64  `gorm:"column:id"`                       // 課表 id
+	Trainer  TrainerSummaryEntity                            // 教練簡介
+	Sale     SaleItemEntity                                  // 銷售項目
+	CourseStatus int `gorm:"column:course_status"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+	Category int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+	ScheduleType int `gorm:"column:schedule_type"`           // 排課類別(1:單一訓練/2:多項計畫)
+	Name string `gorm:"column:name"`                         // 課表名稱
+	Cover string `gorm:"column:cover"`                       // 課表封面
+	Level int `gorm:"column:level"`                          // 強度(1:初級/2:中級/3:中高級/4:高級)
+	PlanCount int `gorm:"column:plan_count"`                 // 計畫總數
+	WorkoutCount int `gorm:"column:workout_count"`           // 訓練總數
+	ReviewStatistic ReviewStatisticSummary                   // 統計資料
+}
+
 type FindCourseSummariesParam struct {
 	UID *int64
 	Status *int

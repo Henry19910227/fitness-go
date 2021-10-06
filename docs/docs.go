@@ -995,6 +995,13 @@ var doc = `{
                 "summary": "獲取課表產品",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "排序類型(latest:最新/popular:熱門)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "頁數(從第一頁開始)",
                         "name": "page",
@@ -1021,7 +1028,10 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.StoreHomePage"
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.CourseProductSummary"
+                                            }
                                         }
                                     }
                                 }
@@ -1995,7 +2005,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/saledto.SaleItem"
+                                                "$ref": "#/definitions/dto.SaleItem"
                                             }
                                         }
                                     }
@@ -3789,7 +3799,7 @@ var doc = `{
                 },
                 "sale": {
                     "description": "銷售資料",
-                    "$ref": "#/definitions/saledto.SaleItem"
+                    "$ref": "#/definitions/dto.SaleItem"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3842,6 +3852,68 @@ var doc = `{
                 }
             }
         },
+        "dto.CourseProductSummary": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 2
+                },
+                "review": {
+                    "description": "評分統計",
+                    "$ref": "#/definitions/dto.ReviewStatisticSummary"
+                },
+                "sale": {
+                    "description": "銷售項目",
+                    "$ref": "#/definitions/dto.SaleItem"
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "trainer": {
+                    "description": "教練簡介",
+                    "$ref": "#/definitions/dto.TrainerSummary"
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
         "dto.CourseSummary": {
             "type": "object",
             "properties": {
@@ -3882,7 +3954,7 @@ var doc = `{
                 },
                 "sale": {
                     "description": "銷售資料",
-                    "$ref": "#/definitions/saledto.SaleItem"
+                    "$ref": "#/definitions/dto.SaleItem"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3897,6 +3969,51 @@ var doc = `{
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.ReviewStatisticSummary": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "description": "評分筆數",
+                    "type": "integer",
+                    "example": 450
+                },
+                "score_total": {
+                    "description": "評分累積",
+                    "type": "integer",
+                    "example": 1000
+                }
+            }
+        },
+        "dto.SaleItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "銷售id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "identifier": {
+                    "description": "銷售識別碼",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
+                },
+                "name": {
+                    "description": "銷售名稱",
+                    "type": "string",
+                    "example": "銅級課表"
+                },
+                "twd": {
+                    "description": "台幣價格",
+                    "type": "number",
+                    "example": 330
+                },
+                "type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 3
                 }
             }
         },
@@ -4405,36 +4522,6 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
-                }
-            }
-        },
-        "saledto.SaleItem": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "description": "銷售id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "identifier": {
-                    "description": "銷售識別碼",
-                    "type": "string",
-                    "example": "com.fitness.xxx"
-                },
-                "name": {
-                    "description": "銷售名稱",
-                    "type": "string",
-                    "example": "銅級課表"
-                },
-                "twd": {
-                    "description": "台幣價格",
-                    "type": "number",
-                    "example": 330
-                },
-                "type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 3
                 }
             }
         },

@@ -36,6 +36,11 @@ type ReviewStatistic struct {
 	UpdateAt string `gorm:"column:update_at"` //更新時間
 }
 
+type ReviewStatisticSummary struct {
+	ScoreTotal int `gorm:"column:score_total"` //評分累積
+	Amount int `gorm:"column:amount"` //評分筆數
+}
+
 func (ReviewStatistic) TableName() string {
 	return "review_statistics"
 }

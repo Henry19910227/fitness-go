@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -196,6 +197,53 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 			&course.PlanCount, &course.WorkoutCount,
 			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
 			&course.Sale.CreateAt, &course.Sale.UpdateAt,
+			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
+			return nil, err
+		}
+		courses = append(courses, &course)
+	}
+	return courses, nil
+}
+
+func (c *course) FindCourseProductSummaries(orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error) {
+	var db *gorm.DB
+	//基本查詢
+	db = c.gorm.DB().
+		Table("courses").
+		Select("courses.id", "courses.course_status", "courses.category",
+			"courses.schedule_type", "courses.`name`", "courses.cover",
+			"courses.`level`", "courses.plan_count", "courses.workout_count",
+			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
+			"IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
+		    "IFNULL(review.score_total,0)", "IFNULL(review.amount,0)",
+			"trainers.user_id", "trainers.nickname", "trainers.avatar").
+		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
+		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
+		Joins("LEFT JOIN review_statistics AS review ON courses.id = review.course_id").
+		Where("courses.course_status = ?", global.Sale)
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("courses.%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	//分頁
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	//查詢數據
+	rows, err := db.Rows()
+	if err != nil {
+		return nil, err
+	}
+	courses := make([]*model.CourseProductSummary, 0)
+	for rows.Next() {
+		var course model.CourseProductSummary
+		if err := rows.Scan(&course.ID, &course.CourseStatus, &course.Category,
+			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
+			&course.PlanCount, &course.WorkoutCount,
+			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
+			&course.Sale.CreateAt, &course.Sale.UpdateAt,
+			&course.ReviewStatistic.ScoreTotal, &course.ReviewStatistic.Amount,
 			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
 			return nil, err
 		}

@@ -31,6 +31,7 @@ type Course interface {
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummaryEntity, error)
+	FindCourseProductSummaries(orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
 	FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
 	FindCourseByID(courseID int64, entity interface{}) error

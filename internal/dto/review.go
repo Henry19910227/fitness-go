@@ -25,6 +25,11 @@ type ReviewStatistic struct {
 	UpdateAt string `json:"update_at" gorm:"column:update_at" example:"100"` //更新時間
 }
 
+type ReviewStatisticSummary struct {
+	ScoreTotal int `json:"score_total" gorm:"column:score_total" example:"1000"` //評分累積
+	Amount int `json:"amount" gorm:"column:amount" example:"450"` //評分筆數
+}
+
 type CreateReviewParam struct {
 	CourseID int64 //課表id
 	UserID int64 //用戶id

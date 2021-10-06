@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
@@ -20,15 +20,15 @@ func NewSale(saleRepo repository.Sale, logger handler.Logger, jwtTool tool.JWT, 
 	return &sale{saleRepo: saleRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
-func (s *sale) GetSaleItems(c *gin.Context) ([]*saledto.SaleItem, errcode.Error) {
+func (s *sale) GetSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error) {
 	entities, err := s.saleRepo.FinsSaleItems()
 	if err != nil {
 		s.logger.Set(c, handler.Error, "PlanRepo", s.errHandler.SystemError().Code(), err.Error())
 		return nil, s.errHandler.SystemError()
 	}
-	var saleItems []*saledto.SaleItem
+	var saleItems []*dto.SaleItem
 	for _, entity := range entities {
-		saleItem := saledto.SaleItem{
+		saleItem := dto.SaleItem{
 			ID: entity.ID,
 			Type: entity.Type,
 			Name: entity.Name,

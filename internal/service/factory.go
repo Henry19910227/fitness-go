@@ -83,9 +83,10 @@ func NewStoreService(viperTool *viper.Viper, gormTool tool.Gorm) Store {
 
 	courseRepo := repository.NewCourse(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
+	reviewRepo := repository.NewReview(gormTool)
 
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewStore(courseRepo, trainerRepo, errHandler)
+	return NewStore(courseRepo, trainerRepo, reviewRepo, errHandler)
 }
 
 func NewReviewService(viperTool *viper.Viper, gormTool tool.Gorm) Review {

@@ -160,7 +160,7 @@ definitions:
         example: 0
         type: integer
       sale:
-        $ref: '#/definitions/saledto.SaleItem'
+        $ref: '#/definitions/dto.SaleItem'
         description: 銷售資料
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -200,6 +200,54 @@ definitions:
         example: 2
         type: integer
     type: object
+  dto.CourseProductSummary:
+    properties:
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
+      review:
+        $ref: '#/definitions/dto.ReviewStatisticSummary'
+        description: 評分統計
+      sale:
+        $ref: '#/definitions/dto.SaleItem'
+        description: 銷售項目
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      trainer:
+        $ref: '#/definitions/dto.TrainerSummary'
+        description: 教練簡介
+      workout_count:
+        description: 訓練總數
+        example: 10
+        type: integer
+    type: object
   dto.CourseSummary:
     properties:
       category:
@@ -231,7 +279,7 @@ definitions:
         example: 2
         type: integer
       sale:
-        $ref: '#/definitions/saledto.SaleItem'
+        $ref: '#/definitions/dto.SaleItem'
         description: 銷售資料
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -243,6 +291,40 @@ definitions:
       workout_count:
         description: 訓練總數
         example: 10
+        type: integer
+    type: object
+  dto.ReviewStatisticSummary:
+    properties:
+      amount:
+        description: 評分筆數
+        example: 450
+        type: integer
+      score_total:
+        description: 評分累積
+        example: 1000
+        type: integer
+    type: object
+  dto.SaleItem:
+    properties:
+      id:
+        description: 銷售id
+        example: 1
+        type: integer
+      identifier:
+        description: 銷售識別碼
+        example: com.fitness.xxx
+        type: string
+      name:
+        description: 銷售名稱
+        example: 銅級課表
+        type: string
+      twd:
+        description: 台幣價格
+        example: 330
+        type: number
+      type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 3
         type: integer
     type: object
   dto.StoreHomePage:
@@ -626,29 +708,6 @@ definitions:
       id:
         description: 用戶ID
         example: 10001
-        type: integer
-    type: object
-  saledto.SaleItem:
-    properties:
-      id:
-        description: 銷售id
-        example: 1
-        type: integer
-      identifier:
-        description: 銷售識別碼
-        example: com.fitness.xxx
-        type: string
-      name:
-        description: 銷售名稱
-        example: 銅級課表
-        type: string
-      twd:
-        description: 台幣價格
-        example: 330
-        type: number
-      type:
-        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-        example: 3
         type: integer
     type: object
   validator.CreateActionBody:
@@ -1575,6 +1634,11 @@ paths:
       - application/json
       description: 獲取課表產品
       parameters:
+      - description: 排序類型(latest:最新/popular:熱門)
+        in: query
+        name: order_type
+        required: true
+        type: string
       - description: 頁數(從第一頁開始)
         in: query
         name: page
@@ -1595,7 +1659,9 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.StoreHomePage'
+                  items:
+                    $ref: '#/definitions/dto.CourseProductSummary'
+                  type: array
               type: object
         "400":
           description: 獲取失敗
@@ -2185,7 +2251,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/saledto.SaleItem'
+                    $ref: '#/definitions/dto.SaleItem'
                   type: array
               type: object
         "400":

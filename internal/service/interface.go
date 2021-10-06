@@ -5,7 +5,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/dto/plandto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
-	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
 )
@@ -117,12 +116,12 @@ type Action interface {
 }
 
 type Sale interface {
-	GetSaleItems(c *gin.Context) ([]*saledto.SaleItem, errcode.Error)
+	GetSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error)
 }
 
 type Store interface {
 	GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error)
-	GetCourseProduct(c *gin.Context, page, size int) ([]*dto.CourseSummary, errcode.Error)
+	GetCourseProduct(c *gin.Context, orderType string, page, size int) ([]*dto.CourseProductSummary, errcode.Error)
 }
 
 type Review interface {
