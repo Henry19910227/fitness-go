@@ -36,13 +36,22 @@ func (s *store) GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error) 
 		PopularCourses: latestCourses}, nil
 }
 
-func (s *store) GetCourseProduct(c *gin.Context, orderType string, page, size int) ([]*dto.CourseProductSummary, errcode.Error) {
+func (s *store) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error) {
 	var field = string(global.UpdateAt)
-	if orderType != "latest" {
-		field = string(global.UpdateAt)
-	}
 	offset, limit := s.GetPagingIndex(page, size)
-	datas, err := s.courseRepo.FindCourseProductSummaries(&model.OrderBy{
+	datas, err := s.courseRepo.FindCourseProductSummaries(&model.FindCourseProductSummariesParam{
+		Score: param.Score,
+		Level: param.Level,
+		Category: param.Category,
+		Suit: param.Suit,
+		Equipment: param.Equipment,
+		Place: param.Place,
+		TrainTarget: param.TrainTarget,
+		BodyTarget: param.BodyTarget,
+		SaleType: param.SaleType,
+		TrainerSex: param.TrainerSex,
+		TrainerSkill: param.TrainerSkill,
+	}, &model.OrderBy{
 		Field:     field,
 		OrderType: global.DESC,
 	}, &model.PagingParam{
@@ -72,7 +81,7 @@ func (s *store) getLatestTrainerSummaries() ([]*dto.TrainerSummary, error) {
 }
 
 func (s *store) getLatestCourseSummaries() ([]*dto.CourseProductSummary, error) {
-	entities, err := s.courseRepo.FindCourseProductSummaries(&model.OrderBy{
+	entities, err := s.courseRepo.FindCourseProductSummaries(nil, &model.OrderBy{
 		Field:     "update_at",
 		OrderType: global.DESC,
 	}, &model.PagingParam{

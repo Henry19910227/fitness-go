@@ -998,8 +998,73 @@ var doc = `{
                         "type": "string",
                         "description": "排序類型(latest:最新/popular:熱門)",
                         "name": "order_type",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "評價(1~5分)-單選",
+                        "name": "score",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "強度(1:初級/2:中級/3:中高級/4:高級)-複選",
+                        "name": "level",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)-複選",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)-複選",
+                        "name": "suit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)-複選",
+                        "name": "equipment",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選",
+                        "name": "place",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選",
+                        "name": "train_target",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選",
+                        "name": "body_target",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選",
+                        "name": "sale_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練性別(m:男性/f:女性)-複選",
+                        "name": "trainer_sex",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "name": "trainer_skill",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
@@ -4024,7 +4089,7 @@ var doc = `{
                     "description": "最新課表",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.CourseSummary"
+                        "$ref": "#/definitions/dto.CourseProductSummary"
                     }
                 },
                 "latest_trainers": {
@@ -4038,7 +4103,7 @@ var doc = `{
                     "description": "熱門課表",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.CourseSummary"
+                        "$ref": "#/definitions/dto.CourseProductSummary"
                     }
                 },
                 "popular_trainers": {

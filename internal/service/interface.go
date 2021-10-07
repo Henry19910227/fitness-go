@@ -121,7 +121,7 @@ type Sale interface {
 
 type Store interface {
 	GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error)
-	GetCourseProduct(c *gin.Context, orderType string, page, size int) ([]*dto.CourseProductSummary, errcode.Error)
+	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error)
 }
 
 type Review interface {

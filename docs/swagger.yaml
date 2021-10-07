@@ -332,7 +332,7 @@ definitions:
       latest_courses:
         description: 最新課表
         items:
-          $ref: '#/definitions/dto.CourseSummary'
+          $ref: '#/definitions/dto.CourseProductSummary'
         type: array
       latest_trainers:
         description: 最新教練
@@ -342,7 +342,7 @@ definitions:
       popular_courses:
         description: 熱門課表
         items:
-          $ref: '#/definitions/dto.CourseSummary'
+          $ref: '#/definitions/dto.CourseProductSummary'
         type: array
       popular_trainers:
         description: 熱門教練
@@ -1637,8 +1637,51 @@ paths:
       - description: 排序類型(latest:最新/popular:熱門)
         in: query
         name: order_type
-        required: true
         type: string
+      - description: 評價(1~5分)-單選
+        in: query
+        name: score
+        type: integer
+      - description: 強度(1:初級/2:中級/3:中高級/4:高級)-複選
+        in: query
+        name: level
+        type: integer
+      - description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)-複選
+        in: query
+        name: category
+        type: integer
+      - description: 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)-複選
+        in: query
+        name: suit
+        type: integer
+      - description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)-複選
+        in: query
+        name: equipment
+        type: integer
+      - description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選
+        in: query
+        name: place
+        type: integer
+      - description: 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選
+        in: query
+        name: train_target
+        type: integer
+      - description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選
+        in: query
+        name: body_target
+        type: integer
+      - description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選
+        in: query
+        name: sale_type
+        type: integer
+      - description: 教練性別(m:男性/f:女性)-複選
+        in: query
+        name: trainer_sex
+        type: string
+      - description: 教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        in: query
+        name: trainer_skill
+        type: integer
       - description: 頁數(從第一頁開始)
         in: query
         name: page
@@ -2318,12 +2361,7 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -2429,12 +2467,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
