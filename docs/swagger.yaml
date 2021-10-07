@@ -160,7 +160,7 @@ definitions:
         example: 0
         type: integer
       sale:
-        $ref: '#/definitions/saledto.SaleItem'
+        $ref: '#/definitions/dto.SaleItem'
         description: 銷售資料
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -200,6 +200,54 @@ definitions:
         example: 2
         type: integer
     type: object
+  dto.CourseProductSummary:
+    properties:
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
+      review:
+        $ref: '#/definitions/dto.ReviewStatisticSummary'
+        description: 評分統計
+      sale:
+        $ref: '#/definitions/dto.SaleItem'
+        description: 銷售項目
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      trainer:
+        $ref: '#/definitions/dto.TrainerSummary'
+        description: 教練簡介
+      workout_count:
+        description: 訓練總數
+        example: 10
+        type: integer
+    type: object
   dto.CourseSummary:
     properties:
       category:
@@ -231,7 +279,7 @@ definitions:
         example: 2
         type: integer
       sale:
-        $ref: '#/definitions/saledto.SaleItem'
+        $ref: '#/definitions/dto.SaleItem'
         description: 銷售資料
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -244,6 +292,63 @@ definitions:
         description: 訓練總數
         example: 10
         type: integer
+    type: object
+  dto.ReviewStatisticSummary:
+    properties:
+      amount:
+        description: 評分筆數
+        example: 450
+        type: integer
+      score_total:
+        description: 評分累積
+        example: 1000
+        type: integer
+    type: object
+  dto.SaleItem:
+    properties:
+      id:
+        description: 銷售id
+        example: 1
+        type: integer
+      identifier:
+        description: 銷售識別碼
+        example: com.fitness.xxx
+        type: string
+      name:
+        description: 銷售名稱
+        example: 銅級課表
+        type: string
+      twd:
+        description: 台幣價格
+        example: 330
+        type: number
+      type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 3
+        type: integer
+    type: object
+  dto.StoreHomePage:
+    properties:
+      latest_courses:
+        description: 最新課表
+        items:
+          $ref: '#/definitions/dto.CourseProductSummary'
+        type: array
+      latest_trainers:
+        description: 最新教練
+        items:
+          $ref: '#/definitions/dto.TrainerSummary'
+        type: array
+      popular_courses:
+        description: 熱門課表
+        items:
+          $ref: '#/definitions/dto.CourseProductSummary'
+        type: array
+      popular_trainers:
+        description: 熱門教練
+        items:
+          $ref: '#/definitions/dto.TrainerSummary'
+        type: array
     type: object
   dto.Trainer:
     properties:
@@ -603,29 +708,6 @@ definitions:
       id:
         description: 用戶ID
         example: 10001
-        type: integer
-    type: object
-  saledto.SaleItem:
-    properties:
-      id:
-        description: 銷售id
-        example: 1
-        type: integer
-      identifier:
-        description: 銷售識別碼
-        example: com.fitness.xxx
-        type: string
-      name:
-        description: 銷售名稱
-        example: 銅級課表
-        type: string
-      twd:
-        description: 台幣價格
-        example: 330
-        type: number
-      type:
-        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-        example: 3
         type: integer
     type: object
   validator.CreateActionBody:
@@ -1478,6 +1560,47 @@ paths:
       summary: 取得課表內的計畫列表
       tags:
       - Course
+  /course/{course_id}/review:
+    post:
+      consumes:
+      - application/json
+      description: 創建課表評論
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 評分
+        in: formData
+        name: score
+        required: true
+        type: integer
+      - description: 評論內文
+        in: formData
+        name: body
+        required: true
+        type: string
+      - description: 評論照片(多張)
+        in: formData
+        name: review_images
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 創建課表評論
+      tags:
+      - Course
   /course/{course_id}/submit:
     post:
       consumes:
@@ -1505,6 +1628,93 @@ paths:
       summary: 送審課表
       tags:
       - Course
+  /course_products:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表產品
+      parameters:
+      - description: 排序類型(latest:最新/popular:熱門)
+        in: query
+        name: order_type
+        type: string
+      - description: 評價(1~5分)-單選
+        in: query
+        name: score
+        type: integer
+      - description: 強度(1:初級/2:中級/3:中高級/4:高級)-複選
+        in: query
+        name: level
+        type: integer
+      - description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)-複選
+        in: query
+        name: category
+        type: integer
+      - description: 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)-複選
+        in: query
+        name: suit
+        type: integer
+      - description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)-複選
+        in: query
+        name: equipment
+        type: integer
+      - description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選
+        in: query
+        name: place
+        type: integer
+      - description: 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選
+        in: query
+        name: train_target
+        type: integer
+      - description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選
+        in: query
+        name: body_target
+        type: integer
+      - description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選
+        in: query
+        name: sale_type
+        type: integer
+      - description: 教練性別(m:男性/f:女性)-複選
+        in: query
+        name: trainer_sex
+        type: string
+      - description: 教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        in: query
+        name: trainer_skill
+        type: integer
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.CourseProductSummary'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取課表產品
+      tags:
+      - Store
   /courses:
     get:
       consumes:
@@ -2084,7 +2294,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/saledto.SaleItem'
+                    $ref: '#/definitions/dto.SaleItem'
                   type: array
               type: object
         "400":
@@ -2096,6 +2306,32 @@ paths:
       summary: 取得銷售項目清單
       tags:
       - Sale
+  /store_home_page:
+    get:
+      consumes:
+      - application/json
+      description: 獲取商店首頁資料
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.StoreHomePage'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取商店首頁資料
+      tags:
+      - Store
   /trainer:
     get:
       consumes:
@@ -2122,15 +2358,116 @@ paths:
       summary: 取得我的教練資訊
       tags:
       - Trainer
+    patch:
+      consumes:
+      - multipart/form-data
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      parameters:
+      - description: 教練暱稱
+        in: formData
+        name: nickname
+        type: string
+      - description: 專長-需按照順序排列(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        in: formData
+        items:
+          type: integer
+        name: skill
+        type: array
+      - description: 教練介紹 (1~400字元)
+        in: formData
+        name: intro
+        type: string
+      - description: 年資 (0~40年)
+        in: formData
+        name: experience
+        type: string
+      - description: 座右銘 (1~100字元)
+        in: formData
+        name: motto
+        type: string
+      - description: 臉書連結
+        in: formData
+        name: facebook_url
+        type: string
+      - description: instagram連結
+        in: formData
+        name: instagram_url
+        type: string
+      - description: youtube連結
+        in: formData
+        name: youtube_url
+        type: string
+      - description: 教練形象照
+        in: formData
+        name: avatar
+        type: file
+      - description: 待刪除的相簿照片id
+        in: formData
+        items:
+          type: integer
+        name: delete_trainer_album_photos_id
+        type: array
+      - description: 待新增的教練相簿照片(可一次新增多張)
+        in: formData
+        name: create_trainer_album_photos
+        type: file
+      - description: 待刪除的證照照片id
+        in: formData
+        items:
+          type: integer
+        name: delete_certificate_id
+        type: array
+      - description: 待更新的證照照片id(可一次更新多個id)
+        in: formData
+        items:
+          type: integer
+        name: update_certificate_id
+        type: array
+      - description: 待更新的證照照片(需與待更新的證照照片id數量相同)
+        in: formData
+        name: update_certificate_images
+        type: file
+      - description: 待更新的證照名稱(需與待更新的證照照片id數量相同)
+        in: formData
+        items:
+          type: string
+        name: update_certificate_names
+        type: array
+      - description: 待新增的證照照片(可一次新增多張)
+        in: formData
+        name: create_certificate_images
+        type: file
+      - description: 待新增的證照名稱(需與待新增的證照照片數量相同)
+        in: formData
+        items:
+          type: string
+        name: create_certificate_names
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Trainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 編輯教練
+      tags:
+      - Trainer
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -2166,7 +2503,7 @@ paths:
         type: string
       - description: 教練介紹 (1~400字元)
         in: formData
-        name: Intro
+        name: intro
         required: true
         type: string
       - description: 年資 (0~40年)
@@ -2212,14 +2549,12 @@ paths:
       - description: 證照照片(可一次傳多張)
         in: formData
         name: certificate_images
-        required: true
         type: file
       - description: 證照名稱(需與證照照片數量相同)
         in: formData
         items:
           type: string
         name: certificate_names
-        required: true
         type: array
       - description: 帳戶名稱
         in: formData

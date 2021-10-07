@@ -1,4 +1,4 @@
-package saledto
+package dto
 
 type SaleItem struct {
 	ID   int64 `json:"id" example:"1"`  // 銷售id

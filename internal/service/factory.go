@@ -24,14 +24,6 @@ func NewLoginService(viperTool *viper.Viper, gormTool tool.Gorm) Login {
 	return NewLogin(adminRepo, userRepo, trainerRepo, albumRepo, cerRepo, ssoHandler, logger, jwtTool, errHandler)
 }
 
-func NewReviewService(viperTool *viper.Viper, gormTool tool.Gorm) Review {
-	courseRepo := repository.NewCourse(gormTool)
-	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
-	loggerTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
-	errHandler := errcode.NewErrHandler(handler.NewLogger(loggerTool, jwtTool))
-	return NewReview(courseRepo, errHandler)
-}
-
 func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	courseRepo := repository.NewCourse(gormTool)
@@ -83,4 +75,28 @@ func NewActionService(viperTool *viper.Viper, gormTool tool.Gorm) Action {
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewAction(actionRepo, courseRepo, uploader, resHandler, errHandler)
+}
+
+func NewStoreService(viperTool *viper.Viper, gormTool tool.Gorm) Store {
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+
+	courseRepo := repository.NewCourse(gormTool)
+	trainerRepo := repository.NewTrainer(gormTool)
+	reviewRepo := repository.NewReview(gormTool)
+
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewStore(courseRepo, trainerRepo, reviewRepo, errHandler)
+}
+
+func NewReviewService(viperTool *viper.Viper, gormTool tool.Gorm) Review {
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+
+	reviewRepo := repository.NewReview(gormTool)
+	resTool := tool.NewResource(setting.NewResource(viperTool))
+	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
+	resHandler := handler.NewResource(resTool)
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewReview(reviewRepo, uploader, resHandler, errHandler)
 }

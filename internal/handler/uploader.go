@@ -207,7 +207,18 @@ func (u *uploader) UploadAccountImage(file io.Reader, imageNamed string) error {
 	if err := u.resTool.SaveFile(file, imageNamed, "/trainer/account_image"); err != nil {
 		return err
 	}
-	return nil}
+	return nil
+}
+
+func (u *uploader) UploadReviewImage(file io.Reader, imageNamed string) error {
+	if !u.checkImageMaxSize(file) {
+		return errors.New("9008-上傳檔案大小超過限制")
+	}
+	if err := u.resTool.SaveFile(file, imageNamed, "/course/review"); err != nil {
+		return err
+	}
+	return nil
+}
 
 func (u *uploader) checkUploadImageAllowExt(ext string) bool {
 	ext = strings.ToUpper(ext)

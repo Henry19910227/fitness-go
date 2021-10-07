@@ -869,6 +869,69 @@ var doc = `{
                 }
             }
         },
+        "/course/{course_id}/review": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建課表評論",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "創建課表評論",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "評分",
+                        "name": "score",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "評論內文",
+                        "name": "body",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "評論照片(多張)",
+                        "name": "review_images",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course/{course_id}/submit": {
             "post": {
                 "security": [
@@ -905,6 +968,143 @@ var doc = `{
                     },
                     "400": {
                         "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/course_products": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表產品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Store"
+                ],
+                "summary": "獲取課表產品",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "排序類型(latest:最新/popular:熱門)",
+                        "name": "order_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "評價(1~5分)-單選",
+                        "name": "score",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "強度(1:初級/2:中級/3:中高級/4:高級)-複選",
+                        "name": "level",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)-複選",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)-複選",
+                        "name": "suit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)-複選",
+                        "name": "equipment",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選",
+                        "name": "place",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選",
+                        "name": "train_target",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選",
+                        "name": "body_target",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選",
+                        "name": "sale_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練性別(m:男性/f:女性)-複選",
+                        "name": "trainer_sex",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "name": "trainer_skill",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.CourseProductSummary"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -1870,8 +2070,54 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/saledto.SaleItem"
+                                                "$ref": "#/definitions/dto.SaleItem"
                                             }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/store_home_page": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店首頁資料",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Store"
+                ],
+                "summary": "獲取商店首頁資料",
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.StoreHomePage"
                                         }
                                     }
                                 }
@@ -1998,7 +2244,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "教練介紹 (1~400字元)",
-                        "name": "Intro",
+                        "name": "intro",
                         "in": "formData",
                         "required": true
                     },
@@ -2064,8 +2310,7 @@ var doc = `{
                         "type": "file",
                         "description": "證照照片(可一次傳多張)",
                         "name": "certificate_images",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "type": "array",
@@ -2074,8 +2319,7 @@ var doc = `{
                         },
                         "description": "證照名稱(需與證照照片數量相同)",
                         "name": "certificate_names",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "type": "string",
@@ -2111,6 +2355,172 @@ var doc = `{
                         "name": "bank_code",
                         "in": "formData",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "編輯教練",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "教練暱稱",
+                        "name": "nickname",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "專長-需按照順序排列(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "name": "skill",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練介紹 (1~400字元)",
+                        "name": "intro",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "年資 (0~40年)",
+                        "name": "experience",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "座右銘 (1~100字元)",
+                        "name": "motto",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "臉書連結",
+                        "name": "facebook_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "instagram連結",
+                        "name": "instagram_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "youtube連結",
+                        "name": "youtube_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "教練形象照",
+                        "name": "avatar",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "待刪除的相簿照片id",
+                        "name": "delete_trainer_album_photos_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "待新增的教練相簿照片(可一次新增多張)",
+                        "name": "create_trainer_album_photos",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "待刪除的證照照片id",
+                        "name": "delete_certificate_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "待更新的證照照片id(可一次更新多個id)",
+                        "name": "update_certificate_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "待更新的證照照片(需與待更新的證照照片id數量相同)",
+                        "name": "update_certificate_images",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "待更新的證照名稱(需與待更新的證照照片id數量相同)",
+                        "name": "update_certificate_names",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "待新增的證照照片(可一次新增多張)",
+                        "name": "create_certificate_images",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "待新增的證照名稱(需與待新增的證照照片數量相同)",
+                        "name": "create_certificate_names",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -3454,7 +3864,7 @@ var doc = `{
                 },
                 "sale": {
                     "description": "銷售資料",
-                    "$ref": "#/definitions/saledto.SaleItem"
+                    "$ref": "#/definitions/dto.SaleItem"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3507,6 +3917,68 @@ var doc = `{
                 }
             }
         },
+        "dto.CourseProductSummary": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 2
+                },
+                "review": {
+                    "description": "評分統計",
+                    "$ref": "#/definitions/dto.ReviewStatisticSummary"
+                },
+                "sale": {
+                    "description": "銷售項目",
+                    "$ref": "#/definitions/dto.SaleItem"
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "trainer": {
+                    "description": "教練簡介",
+                    "$ref": "#/definitions/dto.TrainerSummary"
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
         "dto.CourseSummary": {
             "type": "object",
             "properties": {
@@ -3547,7 +4019,7 @@ var doc = `{
                 },
                 "sale": {
                     "description": "銷售資料",
-                    "$ref": "#/definitions/saledto.SaleItem"
+                    "$ref": "#/definitions/dto.SaleItem"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -3562,6 +4034,84 @@ var doc = `{
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.ReviewStatisticSummary": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "description": "評分筆數",
+                    "type": "integer",
+                    "example": 450
+                },
+                "score_total": {
+                    "description": "評分累積",
+                    "type": "integer",
+                    "example": 1000
+                }
+            }
+        },
+        "dto.SaleItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "銷售id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "identifier": {
+                    "description": "銷售識別碼",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
+                },
+                "name": {
+                    "description": "銷售名稱",
+                    "type": "string",
+                    "example": "銅級課表"
+                },
+                "twd": {
+                    "description": "台幣價格",
+                    "type": "number",
+                    "example": 330
+                },
+                "type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "dto.StoreHomePage": {
+            "type": "object",
+            "properties": {
+                "latest_courses": {
+                    "description": "最新課表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CourseProductSummary"
+                    }
+                },
+                "latest_trainers": {
+                    "description": "最新教練",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TrainerSummary"
+                    }
+                },
+                "popular_courses": {
+                    "description": "熱門課表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CourseProductSummary"
+                    }
+                },
+                "popular_trainers": {
+                    "description": "熱門教練",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TrainerSummary"
+                    }
                 }
             }
         },
@@ -4037,36 +4587,6 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
-                }
-            }
-        },
-        "saledto.SaleItem": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "description": "銷售id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "identifier": {
-                    "description": "銷售識別碼",
-                    "type": "string",
-                    "example": "com.fitness.xxx"
-                },
-                "name": {
-                    "description": "銷售名稱",
-                    "type": "string",
-                    "example": "銅級課表"
-                },
-                "twd": {
-                    "description": "台幣價格",
-                    "type": "number",
-                    "example": 330
-                },
-                "type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 3
                 }
             }
         },

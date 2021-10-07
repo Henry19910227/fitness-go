@@ -1,45 +1,61 @@
 package service
 
 import (
-	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 type review struct {
-	courseRepo repository.Course
+	Base
+	reviewRepo repository.Review
+	uploader  handler.Uploader
+	resHandler handler.Resource
 	errHandler errcode.Handler
 }
 
-func NewReview(courseRepo repository.Course, errHandler errcode.Handler) Review {
-	return &review{courseRepo: courseRepo, errHandler: errHandler}
+func NewReview(reviewRepo repository.Review, uploader  handler.Uploader, resHandler handler.Resource, errHandler errcode.Handler) Review {
+	return &review{reviewRepo: reviewRepo, uploader: uploader, resHandler: resHandler, errHandler: errHandler}
 }
 
-func (r *review) CourseSubmit(c *gin.Context, courseID int64) errcode.Error {
-	//驗證課表填寫完整性
-	entity, err := r.courseRepo.FindCourseDetailByCourseID(courseID)
+func (r *review) CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dto.Review, errcode.Error) {
+	//生成教練相簿照片名稱
+	var reviewImageNames []string
+	for _, file := range param.Images {
+		reviewImageName, err := r.uploader.GenerateNewImageName(file.FileNamed)
+		if err != nil {
+			return nil, r.errHandler.Set(c, "uploader", err)
+		}
+		file.FileNamed = reviewImageName
+		reviewImageNames = append(reviewImageNames, reviewImageName)
+	}
+	//創建評論
+	err := r.reviewRepo.CreateReview(&model.CreateReviewParam{
+		CourseID: param.CourseID,
+		UserID: param.UserID,
+		Score: param.Score,
+		Body: param.Body,
+		ImageNames: reviewImageNames,
+	})
 	if err != nil {
-		return r.errHandler.Set(c, "course repo", err)
+		return nil, r.errHandler.Set(c, "review repo", err)
 	}
-	if err := r.VerifyCourse(entity); err != nil {
-		return r.errHandler.Set(c, "verify course", err)
+	//儲存評論照片
+	for _, file := range param.Images {
+		if err := r.uploader.UploadReviewImage(file.Data, file.FileNamed); err != nil {
+			r.errHandler.Set(c, "uploader", err)
+		}
 	}
-	//送審課表(測試暫時將課表狀態改為"銷售中")
-	var courseStatus = 3
-	if err := r.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
-		CourseStatus: &courseStatus,
-	}); err != nil {
-		return r.errHandler.Set(c, "course repo", err)
+	//查詢並回傳創建資料
+	var review dto.Review
+	if err := r.reviewRepo.FindReviewByCourseIDAndUserID(param.CourseID, param.UserID, &review); err != nil {
+		return nil, r.errHandler.Set(c, "review repo", err)
 	}
-	return nil
-}
-
-func (r *review) VerifyCourse(course *model.CourseDetailEntity) error {
-	if course.Sale.ID == 0 {
-		return errors.New(strconv.Itoa(errcode.UpdateError))
+	if err := r.reviewRepo.FindReviewImagesByReviewID(param.CourseID, param.UserID, &review.Images); err != nil {
+		return nil, r.errHandler.Set(c, "review repo", err)
 	}
-	return nil
+	return &review, nil
 }

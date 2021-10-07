@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 )
 
@@ -21,6 +22,7 @@ type User interface {
 type Trainer interface {
 	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
 	FindTrainerByUID(uid int64, entity interface{}) error
+	FindTrainers(entity interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
 }
 
@@ -28,7 +30,8 @@ type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
-	FindCourseSummariesByUserID(uid int64, status *int) ([]*model.CourseSummaryEntity, error)
+	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummaryEntity, error)
+	FindCourseProductSummaries(param *model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
 	FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
 	FindCourseByID(courseID int64, entity interface{}) error
@@ -90,6 +93,7 @@ type TrainerAlbum interface {
 	FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error)
 	FindAlbumPhotosByUID(uid int64, entity interface{}) error
 	FindAlbumPhotoByID(photoID int64, entity interface{}) error
+	FindAlbumPhotosByIDs(photoIDs []int64, entity interface{}) error
 	DeleteAlbumPhotoByID(photoID int64) error
 }
 
@@ -99,4 +103,11 @@ type Certificate interface {
 	UpdateCertificate(cerID int64, name *string, imageNamed *string) error
 	DeleteCertificateByID(cerID int64) error
 	FindCertificate(cerID int64, entity interface{}) error
+	FindCertificatesByIDs(cerIDs []int64, entity interface{}) error
+}
+
+type Review interface {
+	CreateReview(param *model.CreateReviewParam) error
+	FindReviewByCourseIDAndUserID(courseID int64, userID int64, entity interface{}) error
+	FindReviewImagesByReviewID(courseID, userID int64, entity interface{}) error
 }

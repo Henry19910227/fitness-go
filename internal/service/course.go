@@ -1,14 +1,15 @@
 package service
 
 import (
+	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
-	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"strings"
 )
 
@@ -89,22 +90,17 @@ func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, e
 	return &dto.CourseID{ID: courseID}, nil
 }
 
-func (cs *course) GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*dto.CourseSummary, errcode.Error) {
-	uid, err := cs.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, cs.errHandler.InvalidToken()
-	}
-	return cs.GetCourseSummariesByUID(c, uid, status)
-}
-
 func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error) {
-	Entities, err := cs.courseRepo.FindCourseSummariesByUserID(uid, status)
+	entities, err := cs.courseRepo.FindCourseSummaries(&model.FindCourseSummariesParam{
+		UID: &uid,
+		Status: status,
+	}, nil, nil)
 	if err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
 	courses := make([]*dto.CourseSummary, 0)
-	for _, entity := range Entities {
+	for _, entity := range entities {
 		course := dto.CourseSummary{
 			ID:           entity.ID,
 			CourseStatus: entity.CourseStatus,
@@ -123,7 +119,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 		}
 		course.Trainer = trainer
 		if entity.Sale.ID != 0 {
-			sale := &saledto.SaleItem{
+			sale := &dto.SaleItem{
 				ID: entity.Sale.ID,
 				Type: entity.Sale.Type,
 				Name: entity.Sale.Name,
@@ -174,7 +170,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 	}
 	course.Trainer = trainer
 	if entity.Sale.ID != 0 {
-		sale := &saledto.SaleItem{
+		sale := &dto.SaleItem{
 			ID: entity.Sale.ID,
 			Type: entity.Sale.Type,
 			Name: entity.Sale.Name,
@@ -221,4 +217,31 @@ func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *d
 	}
 	return &dto.CourseCover{Cover: newImageNamed}, nil
 }
+
+func (cs *course) CourseSubmit(c *gin.Context, courseID int64) errcode.Error {
+	//驗證課表填寫完整性
+	entity, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	if err != nil {
+		return cs.errHandler.Set(c, "course repo", err)
+	}
+	if err := cs.VerifyCourse(entity); err != nil {
+		return cs.errHandler.Set(c, "verify course", err)
+	}
+	//送審課表(測試暫時將課表狀態改為"銷售中")
+	var courseStatus = 3
+	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
+		CourseStatus: &courseStatus,
+	}); err != nil {
+		return cs.errHandler.Set(c, "course repo", err)
+	}
+	return nil
+}
+
+func (cs *course) VerifyCourse(course *model.CourseDetailEntity) error {
+	if course.Sale.ID == 0 {
+		return errors.New(strconv.Itoa(errcode.UpdateError))
+	}
+	return nil
+}
+
 

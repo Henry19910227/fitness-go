@@ -50,7 +50,17 @@ func (t *trainerAlbum) FindAlbumPhotoByID(photoID int64, entity interface{}) err
 	if err := t.gorm.DB().
 		Model(&model.TrainerAlbumPhoto{}).
 		Where("id = ?", photoID).
-		Take(entity).Error; err != nil {
+		Find(entity).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *trainerAlbum) FindAlbumPhotosByIDs(photoIDs []int64, entity interface{}) error {
+	if err := t.gorm.DB().
+		Model(&model.TrainerAlbumPhoto{}).
+		Where("id IN (?)", photoIDs).
+		Find(entity).Error; err != nil {
 		return err
 	}
 	return nil

@@ -5,7 +5,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/dto/plandto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
-	"github.com/Henry19910227/fitness-go/internal/dto/saledto"
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
 )
@@ -49,19 +48,17 @@ type User interface {
 
 type Trainer interface {
 	CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error)
+	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
 	GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error)
-	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
-	UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error)
-	UploadTrainerAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error)
-	UploadCardFrontImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardFront, errcode.Error)
-	UploadCardBackImageByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerCardBack, errcode.Error)
 	UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhotoResult, errcode.Error)
 	DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error
 	CreateCertificate(c *gin.Context, uid int64, name, imageNamed string, imageFile multipart.File) (*dto.Certificate, errcode.Error)
 	UpdateCertificate(c *gin.Context, cerID int64, name *string, file *dto.File) (*dto.Certificate, errcode.Error)
 	DeleteCertificate(c *gin.Context, cerID int64) errcode.Error
+	GetTrainerAlbumPhotoCount(c *gin.Context, uid int64) (int, errcode.Error)
+	GetCertificateCount(c *gin.Context, uid int64) (int, errcode.Error)
 }
 
 type Course interface {
@@ -69,10 +66,10 @@ type Course interface {
 	CreateCourse(c *gin.Context, uid int64, param *dto.CreateCourseParam) (*dto.Course, errcode.Error)
 	UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error)
 	DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, errcode.Error)
-	GetCourseSummariesByToken(c *gin.Context, token string, status *int) ([]*dto.CourseSummary, errcode.Error)
 	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
+	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
 }
 
 type Plan interface {
@@ -119,9 +116,14 @@ type Action interface {
 }
 
 type Sale interface {
-	GetSaleItems(c *gin.Context) ([]*saledto.SaleItem, errcode.Error)
+	GetSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error)
+}
+
+type Store interface {
+	GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error)
+	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error)
 }
 
 type Review interface {
-	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
+	CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dto.Review, errcode.Error)
 }

@@ -80,3 +80,13 @@ func (c *certificate) FindCertificate(cerID int64, entity interface{}) error {
 	return nil
 }
 
+func (c *certificate) FindCertificatesByIDs(cerIDs []int64, entity interface{}) error {
+	if err := c.gorm.DB().
+		Model(&model.Certificate{}).
+		Where("id IN (?)", cerIDs).
+		Find(entity).Error; err != nil{
+		return err
+	}
+	return nil
+}
+
