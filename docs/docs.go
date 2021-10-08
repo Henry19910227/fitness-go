@@ -560,13 +560,59 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.CreateActionBody"
-                        }
+                        "type": "string",
+                        "description": "動作名稱(1~20字元)",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                        "name": "type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                        "name": "category",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                        "name": "body",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                        "name": "equipment",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "動作介紹(1~400字元)",
+                        "name": "intro",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "cover",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "影片檔",
+                        "name": "video",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -4587,49 +4633,6 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
-                }
-            }
-        },
-        "validator.CreateActionBody": {
-            "type": "object",
-            "required": [
-                "body",
-                "category",
-                "equipment",
-                "intro",
-                "name",
-                "type"
-            ],
-            "properties": {
-                "body": {
-                    "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
-                    "type": "integer",
-                    "example": 8
-                },
-                "category": {
-                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "intro": {
-                    "description": "動作介紹(1~400字元)",
-                    "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
-                },
-                "name": {
-                    "description": "動作名稱(1~20字元)",
-                    "type": "string",
-                    "example": "槓鈴臥推"
-                },
-                "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
-                    "type": "integer",
-                    "example": 1
                 }
             }
         },

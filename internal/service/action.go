@@ -31,6 +31,27 @@ func NewAction(actionRepo repository.Action,
 }
 
 func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error) {
+	//生成Cover名稱
+	var cover *string
+	if param.Cover != nil {
+		coverImageNamed, err := a.uploader.GenerateNewImageName(param.Cover.FileNamed)
+		if err != nil {
+			return nil, a.errHandler.Set(c, "uploader", err)
+		}
+		cover = &coverImageNamed
+		param.Cover.FileNamed = coverImageNamed
+	}
+	//生成Video名稱
+	var video *string
+	if param.Video != nil {
+		videoNamed, err := a.uploader.GenerateNewVideoName(param.Video.FileNamed)
+		if err != nil {
+			return nil, a.errHandler.Set(c, "uploader", err)
+		}
+		video = &videoNamed
+		param.Video.FileNamed = videoNamed
+	}
+	//創建動作
 	 actionID, err := a.actionRepo.CreateAction(courseID, &model.CreateActionParam{
 		 Name:      param.Name,
 		 Type:      param.Type,
@@ -38,9 +59,25 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateA
 		 Body:      param.Body,
 		 Equipment: param.Equipment,
 		 Intro:     param.Intro,
+		 Video:     video,
+		 Cover:     cover,
 	 })
 	if err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
+	}
+	//儲存動作封面照
+	if param.Cover != nil {
+		err = a.uploader.UploadActionCover(param.Cover.Data, param.Cover.FileNamed)
+		if err != nil {
+			a.errHandler.Set(c, "uploader", err)
+		}
+	}
+	//儲存動作影片
+	if param.Video != nil {
+		err = a.uploader.UploadActionVideo(param.Video.Data, param.Video.FileNamed)
+		if err != nil {
+			a.errHandler.Set(c, "uploader", err)
+		}
 	}
 	var action dto.Action
 	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
@@ -133,33 +170,11 @@ func (a *action) DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, er
 }
 
 func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*dto.ActionCover, errcode.Error) {
-	//上傳照片
-	newImageNamed, err := a.uploader.UploadActionCover(file, coverNamed)
-	if err != nil {
-		return nil, a.errHandler.Set(c, "uploader", err)
-	}
-	//修改動作欄位
-	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
-		Cover: &newImageNamed,
-	}); err != nil {
-		return nil, a.errHandler.Set(c, "action repo", err)
-	}
-	return &dto.ActionCover{Cover: newImageNamed}, nil
+	return nil, nil
 }
 
 func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*dto.ActionVideo, errcode.Error) {
-	//上傳影片
-	newVideoNamed, err := a.uploader.UploadActionVideo(file, videoNamed)
-	if err != nil {
-		return nil, a.errHandler.Set(c, "uploader", err)
-	}
-	//修改動作欄位
-	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
-		Video: &newVideoNamed,
-	}); err != nil {
-		return nil, a.errHandler.Set(c, "action repo", err)
-	}
-	return &dto.ActionVideo{Video: newVideoNamed}, nil
+	return nil, nil
 }
 
 func (a *action) DeleteActionVideo(c *gin.Context, actionID int64) errcode.Error {

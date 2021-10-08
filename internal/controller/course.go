@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
@@ -374,31 +375,59 @@ func (cc *Course) GetPlans(c *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
-// @Param json_body body validator.CreateActionBody true "輸入參數"
+// @Param name formData string true "動作名稱(1~20字元)"`
+// @Param type formData string true "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)"`
+// @Param category formData string true "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"`
+// @Param body formData string true "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"`
+// @Param equipment formData string true "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"`
+// @Param intro formData string true "動作介紹(1~400字元)"`
+// @Param cover formData file true "課表封面照"
+// @Param video formData file false "影片檔"
 // @Success 200 {object} model.SuccessResult{data=dto.Action} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course/{course_id}/action [POST]
 func (cc *Course) CreateAction(c *gin.Context) {
 	var uri validator.CourseIDUri
-	var body validator.CreateActionBody
+	var form validator.CreateActionForm
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := c.ShouldBindJSON(&body); err != nil {
+	if err := c.ShouldBind(&form); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	action, err := cc.actionService.CreateAction(c, uri.CourseID, &dto.CreateActionParam{
-		Name: body.Name,
-		Type: body.Type,
-		Category: body.Category,
-		Body: body.Body,
-		Equipment: body.Equipment,
-		Intro: body.Intro,
-	})
+	//獲取動作封面
+	file, fileHeader, err := c.Request.FormFile("cover")
 	if err != nil {
-		cc.JSONErrorResponse(c, err)
+		cc.JSONValidatorErrorResponse(c, errors.New("需上傳cover").Error())
+		return
+	}
+	cover := &dto.File{
+		FileNamed: fileHeader.Filename,
+		Data: file,
+	}
+	//獲取動作影片
+	file, fileHeader, err = c.Request.FormFile("video")
+	var video *dto.File
+	if file != nil {
+		video = &dto.File{
+			FileNamed: fileHeader.Filename,
+			Data: file,
+		}
+	}
+	action, e := cc.actionService.CreateAction(c, uri.CourseID, &dto.CreateActionParam{
+		Name:      form.Name,
+		Type:      form.Type,
+		Category:  form.Category,
+		Body:      form.Body,
+		Equipment: form.Equipment,
+		Intro:     form.Intro,
+		Cover:     cover,
+		Video:     video,
+	})
+	if e != nil {
+		cc.JSONErrorResponse(c, e)
 		return
 	}
 	cc.JSONSuccessResponse(c, action, "success create!")
