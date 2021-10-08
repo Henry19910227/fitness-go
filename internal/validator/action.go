@@ -20,12 +20,12 @@ type CreateActionForm struct {
 	Intro string `form:"intro" binding:"required,min=1,max=400" example:"槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"` //動作介紹(1~400字元)
 }
 
-type UpdateActionBody struct {
-	Name *string `json:"name" binding:"omitempty,min=1,max=20" example:"槓鈴臥推"` //動作名稱(1~20字元)
-	Category *int `json:"category" binding:"omitempty,oneof=1 2 3 4 5" example:"1"` //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
-	Body *int `json:"body" binding:"omitempty,oneof=1 2 3 4 5 6 7 8" example:"8"` //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-	Equipment *int `json:"equipment" binding:"omitempty,oneof=1 2 3 4 5 6 7 8" example:"1"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-	Intro *string `json:"intro" binding:"omitempty,min=1,max=400" example:"槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"` //動作介紹(1~400字元)
+type UpdateActionForm struct {
+	Name *string `form:"name" binding:"omitempty,min=1,max=20" example:"槓鈴臥推"` //動作名稱(1~20字元)
+	Category *int `form:"category" binding:"omitempty,oneof=1 2 3 4 5" example:"1"` //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+	Body *int `form:"body" binding:"omitempty,oneof=1 2 3 4 5 6 7 8" example:"8"` //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+	Equipment *int `form:"equipment" binding:"omitempty,oneof=1 2 3 4 5 6 7 8" example:"1"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+	Intro *string `form:"intro" binding:"omitempty,min=1,max=400" example:"槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"` //動作介紹(1~400字元)
 }
 
 type SearchActionsQuery struct {

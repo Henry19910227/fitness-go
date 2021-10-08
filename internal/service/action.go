@@ -87,14 +87,68 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateA
 }
 
 func (a *action) UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateActionParam) (*dto.Action, errcode.Error) {
+	//生成Cover名稱
+	var cover *string
+	if param.Cover != nil {
+		coverImageNamed, err := a.uploader.GenerateNewImageName(param.Cover.FileNamed)
+		if err != nil {
+			return nil, a.errHandler.Set(c, "uploader", err)
+		}
+		cover = &coverImageNamed
+		param.Cover.FileNamed = coverImageNamed
+	}
+	//生成Video名稱
+	var video *string
+	if param.Video != nil {
+		videoNamed, err := a.uploader.GenerateNewVideoName(param.Video.FileNamed)
+		if err != nil {
+			return nil, a.errHandler.Set(c, "uploader", err)
+		}
+		video = &videoNamed
+		param.Video.FileNamed = videoNamed
+	}
+	//查詢更新前的動作資料
+	var oldAction dto.Action
+	if err := a.actionRepo.FindActionByID(actionID, &oldAction); err != nil {
+		return nil, a.errHandler.Set(c, "action repo", err)
+	}
+	//更新動作
 	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
 		Name: param.Name,
 		Category: param.Category,
 		Body: param.Body,
 		Equipment: param.Equipment,
 		Intro: param.Intro,
+		Cover: cover,
+		Video: video,
 	}); err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
+	}
+	//處理動作封面照
+	if param.Cover != nil {
+		//刪除舊的動作封面照
+		if len(oldAction.Cover) > 0 {
+			if err := a.resHandler.DeleteActionCover(oldAction.Cover); err != nil {
+				a.errHandler.Set(c, "res handler", err)
+			}
+		}
+		//修改新的動作封面照
+		if err := a.uploader.UploadActionCover(param.Cover.Data, param.Cover.FileNamed); err != nil {
+			a.errHandler.Set(c, "uploader", err)
+		}
+	}
+	//處理動作影片
+	if param.Video != nil {
+		//刪除舊的動作影片
+		if len(oldAction.Video) > 0 {
+			if err := a.resHandler.DeleteActionVideo(oldAction.Video); err != nil {
+				a.errHandler.Set(c, "res handler", err)
+			}
+		}
+		//上傳新的動作影片
+		if err := a.uploader.UploadActionVideo(param.Video.Data, param.Video.FileNamed); err != nil {
+			a.errHandler.Set(c, "uploader", err)
+		}
 	}
 	var action dto.Action
 	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {

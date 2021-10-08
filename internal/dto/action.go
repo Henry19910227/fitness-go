@@ -30,6 +30,8 @@ type UpdateActionParam struct {
 	Body *int `gorm:"column:body"` //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
 	Equipment *int `gorm:"column:equipment"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:其他)
 	Intro *string `gorm:"column:intro"` //動作介紹
+	Cover *File //動作封面
+	Video *File //動作影片
 }
 
 type FindActionsParam struct {

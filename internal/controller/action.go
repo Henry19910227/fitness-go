@@ -72,27 +72,53 @@ func NewAction(baseGroup *gin.RouterGroup,
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
-// @Param json_body body validator.UpdateActionBody true "輸入參數"
+// @Param name formData string false "動作名稱(1~20字元)"`
+// @Param category formData int false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"`
+// @Param body formData int false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"`
+// @Param equipment formData int false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"`
+// @Param intro formData string false "動作介紹(1~400字元)"`
+// @Param cover formData file false "課表封面照"
+// @Param video formData file false "影片檔"
 // @Success 200 {object} model.SuccessResult{data=dto.Action} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /action/{action_id} [PATCH]
 func (a *Action) UpdateAction(c *gin.Context) {
 	var uri validator.ActionIDUri
-	var body validator.UpdateActionBody
+	var form validator.UpdateActionForm
 	if err := c.ShouldBindUri(&uri); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := c.ShouldBindJSON(&body); err != nil {
+	if err := c.ShouldBind(&form); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	//獲取動作封面
+	file, fileHeader, _ := c.Request.FormFile("cover")
+	var cover *dto.File
+	if file != nil {
+		cover = &dto.File{
+			FileNamed: fileHeader.Filename,
+			Data: file,
+		}
+	}
+	//獲取動作影片
+	file, fileHeader, _ = c.Request.FormFile("video")
+	var video *dto.File
+	if file != nil {
+		video = &dto.File{
+			FileNamed: fileHeader.Filename,
+			Data: file,
+		}
+	}
 	action, err := a.actionService.UpdateAction(c, uri.ActionID, &dto.UpdateActionParam{
-		Name: body.Name,
-		Category: body.Category,
-		Body: body.Body,
-		Equipment: body.Equipment,
-		Intro: body.Intro,
+		Name: form.Name,
+		Category: form.Category,
+		Body: form.Body,
+		Equipment: form.Equipment,
+		Intro: form.Intro,
+		Cover: cover,
+		Video: video,
 	})
 	if err != nil {
 		a.JSONErrorResponse(c, err)
