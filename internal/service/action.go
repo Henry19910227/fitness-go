@@ -7,7 +7,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/gin-gonic/gin"
-	"mime/multipart"
 	"strconv"
 	"strings"
 )
@@ -221,14 +220,6 @@ func (a *action) DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, er
 		return nil, a.errHandler.Set(c, "action repo", err)
 	}
 	return &dto.ActionID{ID: actionID}, nil
-}
-
-func (a *action) UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*dto.ActionCover, errcode.Error) {
-	return nil, nil
-}
-
-func (a *action) UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*dto.ActionVideo, errcode.Error) {
-	return nil, nil
 }
 
 func (a *action) DeleteActionVideo(c *gin.Context, actionID int64) errcode.Error {

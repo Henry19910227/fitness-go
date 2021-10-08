@@ -66,7 +66,7 @@
                         "fitness_token": []
                     }
                 ],
-                "description": "修改動作",
+                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -156,129 +156,7 @@
                 }
             }
         },
-        "/action/{action_id}/cover": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Action"
-                ],
-                "summary": "上傳動作封面照",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "動作id",
-                        "name": "action_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "封面照",
-                        "name": "cover",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.ActionCover"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
         "/action/{action_id}/video": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Action"
-                ],
-                "summary": "上傳動作影片",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "動作id",
-                        "name": "action_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "影片檔",
-                        "name": "video",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.ActionVideo"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "security": [
                     {
@@ -3770,16 +3648,6 @@
                 }
             }
         },
-        "dto.ActionCover": {
-            "type": "object",
-            "properties": {
-                "cover": {
-                    "description": "封面圖片",
-                    "type": "string",
-                    "example": "kd3kf54ew5.png"
-                }
-            }
-        },
         "dto.ActionID": {
             "type": "object",
             "properties": {
@@ -3787,16 +3655,6 @@
                     "description": "動作id",
                     "type": "integer",
                     "example": 1
-                }
-            }
-        },
-        "dto.ActionVideo": {
-            "type": "object",
-            "properties": {
-                "video": {
-                    "description": "動作影片",
-                    "type": "string",
-                    "example": "f5e23q5e45fe32.mp4"
                 }
             }
         },

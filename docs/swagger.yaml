@@ -42,26 +42,12 @@ definitions:
         example: 11d547we1d4f8e.mp4
         type: string
     type: object
-  dto.ActionCover:
-    properties:
-      cover:
-        description: 封面圖片
-        example: kd3kf54ew5.png
-        type: string
-    type: object
   dto.ActionID:
     properties:
       action_id:
         description: 動作id
         example: 1
         type: integer
-    type: object
-  dto.ActionVideo:
-    properties:
-      video:
-        description: 動作影片
-        example: f5e23q5e45fe32.mp4
-        type: string
     type: object
   dto.Admin:
     properties:
@@ -1035,7 +1021,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: 修改動作
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -1091,43 +1077,6 @@ paths:
       summary: 修改動作
       tags:
       - Action
-  /action/{action_id}/cover:
-    post:
-      consumes:
-      - multipart/form-data
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}'
-      parameters:
-      - description: 動作id
-        in: path
-        name: action_id
-        required: true
-        type: integer
-      - description: 封面照
-        in: formData
-        name: cover
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.ActionCover'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 上傳動作封面照
-      tags:
-      - Action
   /action/{action_id}/video:
     delete:
       consumes:
@@ -1153,42 +1102,6 @@ paths:
       security:
       - fitness_token: []
       summary: 刪除動作影片
-      tags:
-      - Action
-    post:
-      consumes:
-      - multipart/form-data
-      description: '查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
-      parameters:
-      - description: 動作id
-        in: path
-        name: action_id
-        required: true
-        type: integer
-      - description: 影片檔
-        in: formData
-        name: video
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.ActionVideo'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 上傳動作影片
       tags:
       - Action
   /course:
@@ -2359,12 +2272,7 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -2470,12 +2378,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
