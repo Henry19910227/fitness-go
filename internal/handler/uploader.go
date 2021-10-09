@@ -37,6 +37,13 @@ func (u *uploader) GenerateNewImageName(original string) (string, error) {
 	return generateFileName(path.Ext(original)), nil
 }
 
+func (u *uploader) GenerateNewVideoName(original string) (string, error) {
+	if !u.checkUploadVideoAllowExt(path.Ext(original)) {
+		return "", errors.New("9007-上傳檔案不符合規範")
+	}
+	return generateFileName(path.Ext(original)), nil
+}
+
 func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string) (string, error) {
 	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
 		return "", errors.New("9007-上傳檔案不符合規範")
@@ -51,18 +58,14 @@ func (u *uploader) UploadCourseCover(file io.Reader, imageNamed string) (string,
 	return newImageNamed, nil
 }
 
-func (u *uploader) UploadActionCover(file io.Reader, imageNamed string) (string, error) {
-	if !u.checkUploadImageAllowExt(path.Ext(imageNamed)) {
-		return "", errors.New("9007-上傳檔案不符合規範")
-	}
+func (u *uploader) UploadActionCover(file io.Reader, imageNamed string) error {
 	if !u.checkImageMaxSize(file) {
-		return "", errors.New("9008-上傳檔案大小超過限制")
+		return errors.New("9008-上傳檔案大小超過限制")
 	}
-	newImageNamed := generateFileName(path.Ext(imageNamed))
-	if err := u.resTool.SaveFile(file, newImageNamed, "/action/cover"); err != nil {
-		return "", err
+	if err := u.resTool.SaveFile(file, imageNamed, "/action/cover"); err != nil {
+		return err
 	}
-	return newImageNamed, nil
+	return nil
 }
 
 func (u *uploader) UploadTrainerAvatar(file io.Reader, imageNamed string) error {
@@ -146,18 +149,14 @@ func (u *uploader) UploadWorkoutSetProgressAudio(file io.Reader, audioNamed stri
 }
 
 
-func (u *uploader) UploadActionVideo(file io.Reader, videoNamed string) (string, error) {
-	if !u.checkUploadVideoAllowExt(path.Ext(videoNamed)) {
-		return "", errors.New("9007-上傳檔案不符合規範")
-	}
+func (u *uploader) UploadActionVideo(file io.Reader, videoNamed string) error {
 	if !u.checkVideoMaxSize(file) {
-		return "", errors.New("9008-上傳檔案大小超過限制")
+		return errors.New("9008-上傳檔案大小超過限制")
 	}
-	newVideoNamed := generateFileName(path.Ext(videoNamed))
-	if err := u.resTool.SaveFile(file, newVideoNamed, "/action/video"); err != nil {
-		return "", err
+	if err := u.resTool.SaveFile(file, videoNamed, "/action/video"); err != nil {
+		return err
 	}
-	return newVideoNamed, nil
+	return nil
 }
 
 func (u *uploader) UploadCardFrontImage(file io.Reader, imageNamed string) error {

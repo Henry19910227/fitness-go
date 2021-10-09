@@ -110,8 +110,6 @@ type Action interface {
 	UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateActionParam) (*dto.Action, errcode.Error)
 	SearchActions(c *gin.Context, courseID int64, param *dto.FindActionsParam) ([]*dto.Action, errcode.Error)
 	DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, errcode.Error)
-	UploadActionCover(c *gin.Context, actionID int64, coverNamed string, file multipart.File) (*dto.ActionCover, errcode.Error)
-	UploadActionVideo(c *gin.Context, actionID int64, videoNamed string, file multipart.File) (*dto.ActionVideo, errcode.Error)
 	DeleteActionVideo(c *gin.Context, actionID int64) errcode.Error
 }
 
