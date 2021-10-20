@@ -53,7 +53,7 @@ func init() {
 }
 
 var Skills validator.Func = func(fl validator.FieldLevel) bool {
-	return validateSkills(fl, 1,14,3)
+	return validateSkills(fl, 1,14,6)
 }
 
 func validateSkills(fl validator.FieldLevel, min int, max int, maxCount int) bool {
