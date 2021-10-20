@@ -52,6 +52,10 @@ func (r *resource) DeleteTrainerAlbumPhoto(imageNamed string) error {
 	return r.resTool.RemoveFile("/trainer/album", imageNamed)
 }
 
+func (r *resource) DeleteActionCover(coverNamed string) error {
+	return r.resTool.RemoveFile("/action/cover", coverNamed)
+}
+
 func (r *resource) DeleteActionVideo(videoNamed string) error {
 	return r.resTool.RemoveFile("/action/video", videoNamed)
 }

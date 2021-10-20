@@ -205,7 +205,7 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 	return courses, nil
 }
 
-func (c *course) FindCourseProductSummaries(param *model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error) {
+func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error) {
 	var db *gorm.DB
 	query := "1=1 "
 	params := make([]interface{}, 0)

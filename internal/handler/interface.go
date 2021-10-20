@@ -35,15 +35,16 @@ type Logger interface {
 
 type Uploader interface {
 	GenerateNewImageName(original string) (string, error)
+	GenerateNewVideoName(original string) (string, error)
 	UploadCourseCover(file io.Reader, imageNamed string) (string, error)
-	UploadActionCover(file io.Reader, imageNamed string) (string, error)
+	UploadActionCover(file io.Reader, imageNamed string) error
 	UploadTrainerAvatar(file io.Reader, imageNamed string) error
 	UploadUserAvatar(file io.Reader, imageNamed string) (string, error)
 	UploadWorkoutStartAudio(file io.Reader, audioNamed string) (string, error)
 	UploadWorkoutEndAudio(file io.Reader, audioNamed string) (string, error)
 	UploadWorkoutSetStartAudio(file io.Reader, audioNamed string) (string, error)
 	UploadWorkoutSetProgressAudio(file io.Reader, audioNamed string) (string, error)
-	UploadActionVideo(file io.Reader, videoNamed string) (string, error)
+	UploadActionVideo(file io.Reader, videoNamed string) error
 	UploadCardFrontImage(file io.Reader, imageNamed string) error
 	UploadCardBackImage(file io.Reader, imageNamed string) error
 	UploadTrainerAlbumPhoto(file io.Reader, imageNamed string) error
@@ -63,6 +64,7 @@ type Resource interface {
 	DeleteCardFrontImage(imageNamed string) error
 	DeleteCardBackImage(imageNamed string) error
 	DeleteTrainerAlbumPhoto(imageNamed string) error
+	DeleteActionCover(coverNamed string) error
 	DeleteActionVideo(videoNamed string) error
 	DeleteCertificateImage(imageNamed string) error
 }

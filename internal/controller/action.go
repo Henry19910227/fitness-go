@@ -42,20 +42,6 @@ func NewAction(baseGroup *gin.RouterGroup,
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		action.DeleteAction)
 
-	baseGroup.POST("/action/:action_id/cover",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
-		courseMidd.CourseCreatorVerify(),
-		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
-		action.UploadActionCover)
-
-	baseGroup.POST("/action/:action_id/video",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
-		courseMidd.CourseCreatorVerify(),
-		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
-		action.UploadActionVideo)
-
 	baseGroup.DELETE("/action/:action_id/video",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
@@ -66,33 +52,59 @@ func NewAction(baseGroup *gin.RouterGroup,
 
 // UpdateAction 修改動作
 // @Summary 修改動作
-// @Description 修改動作
+// @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}
 // @Tags Action
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
-// @Param json_body body validator.UpdateActionBody true "輸入參數"
+// @Param name formData string false "動作名稱(1~20字元)"`
+// @Param category formData int false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"`
+// @Param body formData int false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"`
+// @Param equipment formData int false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"`
+// @Param intro formData string false "動作介紹(1~400字元)"`
+// @Param cover formData file false "課表封面照"
+// @Param video formData file false "影片檔"
 // @Success 200 {object} model.SuccessResult{data=dto.Action} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /action/{action_id} [PATCH]
 func (a *Action) UpdateAction(c *gin.Context) {
 	var uri validator.ActionIDUri
-	var body validator.UpdateActionBody
+	var form validator.UpdateActionForm
 	if err := c.ShouldBindUri(&uri); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := c.ShouldBindJSON(&body); err != nil {
+	if err := c.ShouldBind(&form); err != nil {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
+	//獲取動作封面
+	file, fileHeader, _ := c.Request.FormFile("cover")
+	var cover *dto.File
+	if file != nil {
+		cover = &dto.File{
+			FileNamed: fileHeader.Filename,
+			Data: file,
+		}
+	}
+	//獲取動作影片
+	file, fileHeader, _ = c.Request.FormFile("video")
+	var video *dto.File
+	if file != nil {
+		video = &dto.File{
+			FileNamed: fileHeader.Filename,
+			Data: file,
+		}
+	}
 	action, err := a.actionService.UpdateAction(c, uri.ActionID, &dto.UpdateActionParam{
-		Name: body.Name,
-		Category: body.Category,
-		Body: body.Body,
-		Equipment: body.Equipment,
-		Intro: body.Intro,
+		Name: form.Name,
+		Category: form.Category,
+		Body: form.Body,
+		Equipment: form.Equipment,
+		Intro: form.Intro,
+		Cover: cover,
+		Video: video,
 	})
 	if err != nil {
 		a.JSONErrorResponse(c, err)
@@ -126,67 +138,6 @@ func (a *Action) DeleteAction(c *gin.Context) {
 	a.JSONSuccessResponse(c, result, "delete success!")
 }
 
-// UploadActionCover 上傳動作封面照
-// @Summary 上傳動作封面照
-// @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
-// @Tags Action
-// @Security fitness_token
-// @Accept mpfd
-// @Param action_id path int64 true "動作id"
-// @Param cover formData file true "封面照"
-// @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.ActionCover} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /action/{action_id}/cover [POST]
-func (a *Action) UploadActionCover(c *gin.Context) {
-	var uri validator.ActionIDUri
-	if err := c.ShouldBindUri(&uri); err != nil {
-		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	file, fileHeader, err := c.Request.FormFile("cover")
-	if err != nil {
-		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	result, e := a.actionService.UploadActionCover(c, uri.ActionID, fileHeader.Filename, file)
-	if e != nil {
-		a.JSONErrorResponse(c, e)
-		return
-	}
-	a.JSONSuccessResponse(c, result, "success upload")
-}
-
-// UploadActionVideo 上傳動作影片
-// @Summary 上傳動作影片
-// @Description 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}
-// @Tags Action
-// @Security fitness_token
-// @Accept mpfd
-// @Param action_id path int64 true "動作id"
-// @Param video formData file true "影片檔"
-// @Produce json
-// @Success 200 {object} model.SuccessResult{data=dto.ActionVideo} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /action/{action_id}/video [POST]
-func (a *Action) UploadActionVideo(c *gin.Context) {
-	var uri validator.ActionIDUri
-	if err := c.ShouldBindUri(&uri); err != nil {
-		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	file, fileHeader, err := c.Request.FormFile("video")
-	if err != nil {
-		a.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	result, e := a.actionService.UploadActionVideo(c, uri.ActionID, fileHeader.Filename, file)
-	if e != nil {
-		a.JSONErrorResponse(c, e)
-		return
-	}
-	a.JSONSuccessResponse(c, result, "success upload")
-}
 
 // DeleteActionVideo 刪除動作影片
 // @Summary 刪除動作影片

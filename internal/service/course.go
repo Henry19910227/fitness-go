@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -228,7 +229,7 @@ func (cs *course) CourseSubmit(c *gin.Context, courseID int64) errcode.Error {
 		return cs.errHandler.Set(c, "verify course", err)
 	}
 	//送審課表(測試暫時將課表狀態改為"銷售中")
-	var courseStatus = 3
+	var courseStatus = global.Sale
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		CourseStatus: &courseStatus,
 	}); err != nil {
@@ -239,6 +240,9 @@ func (cs *course) CourseSubmit(c *gin.Context, courseID int64) errcode.Error {
 
 func (cs *course) VerifyCourse(course *model.CourseDetailEntity) error {
 	if course.Sale.ID == 0 {
+		return errors.New(strconv.Itoa(errcode.UpdateError))
+	}
+	if course.Trainer.UserID == 0 {
 		return errors.New(strconv.Itoa(errcode.UpdateError))
 	}
 	return nil

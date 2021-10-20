@@ -27,6 +27,12 @@ func (a *action) CreateAction(courseID int64, param *model.CreateActionParam) (i
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
+	if param.Cover != nil {
+		action.Cover = *param.Cover
+	}
+	if param.Video != nil {
+		action.Video = *param.Video
+	}
 	if err := a.gorm.DB().Create(&action).Error; err != nil {
 		return 0, err
 	}
