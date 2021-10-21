@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -114,9 +115,32 @@ func (a *action) FindActionsByParam(courseID int64, param *model.FindActionsPara
 }
 
 func (a *action) DeleteActionByID(actionID int64) error {
-	if err := a.gorm.DB().Where("id = ?", actionID).
-		Delete(&model.Action{}).Error; err != nil {
+	if err := a.gorm.DB().Transaction(func(tx *gorm.DB) error {
+		//查找刪除此action後受影響之workout id (去除重複)
+		workoutIDs := make([]int, 0)
+		if err := tx.Table("workout_sets").
+			Select("workout_id").
+			Where("action_id = ?", actionID).
+			Group("workout_id").
+			Find(&workoutIDs).Error; err != nil {
 			return err
+		}
+		//刪除action
+		if err := tx.Where("id = ?", actionID).
+			Delete(&model.Action{}).Error; err != nil {
+			return err
+		}
+		//更新相關聯workout內訓練組數量
+		for _, workoutID := range workoutIDs {
+			if err := tx.Table("workouts").Where("id = ?", workoutID).Update("workout_set_count",
+				tx.Table("workout_sets AS sets").Select("count(*)").Where("sets.workout_id = ?", workoutID),
+			).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
+		return err
 	}
 	return nil
 }
