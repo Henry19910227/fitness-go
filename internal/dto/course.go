@@ -92,6 +92,7 @@ type CourseProductSummary struct {
 }
 
 type GetCourseProductSummariesParam struct {
+	Name *string `form:"name" binding:"omitempty,min=1,max=20" example:"增肌課表"` //課表名稱(1~20字元)
 	OrderType *string `form:"order_type" binding:"omitempty,oneof=latest popular" example:"latest"` // 排序類型(latest:最新/popular:熱門)-單選
 	Score *int `form:"score" binding:"omitempty,min=1,max=5" example:"5"` // 評價(1~5分)-單選
 	Level []int `form:"level" binding:"omitempty" example:"3"` // 強度(1:初級/2:中級/3:中高級/4:高級)-複選

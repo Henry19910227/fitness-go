@@ -212,6 +212,11 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	//加入 course_status 篩選條件
 	query += "AND courses.course_status = ? "
 	params = append(params, global.Sale)
+	//加入 name 篩選條件
+	if param.Name != nil {
+		query += "AND courses.name LIKE ? "
+		params = append(params, "%" + *param.Name + "%")
+	}
 	//加入 score 篩選條件
 	if param.Score != nil {
 		query += "AND FLOOR(review.score_total / review.amount) >= ? "
