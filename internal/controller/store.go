@@ -46,6 +46,7 @@ func (s *Store) GetHomePage(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
+// @Param name query string false "課表名稱(1~20字元)"
 // @Param order_type query string false "排序類型(latest:最新/popular:熱門)"
 // @Param score query int false "評價(1~5分)-單選"
 // @Param level query int false "強度(1:初級/2:中級/3:中高級/4:高級)-複選"
@@ -70,6 +71,7 @@ func (s *Store) SearchCourseProducts(c *gin.Context) {
 		return
 	}
 	courses, err := s.storeService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
+		Name: query.Name,
 		OrderType: query.OrderType,
 		Score: query.Score,
 		Level: query.Level,

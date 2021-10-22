@@ -40,6 +40,7 @@ func (s *store) GetCourseProductSummaries(c *gin.Context, param *dto.GetCoursePr
 	var field = string(global.UpdateAt)
 	offset, limit := s.GetPagingIndex(page, size)
 	datas, err := s.courseRepo.FindCourseProductSummaries(model.FindCourseProductSummariesParam{
+		Name: param.Name,
 		Score: param.Score,
 		Level: param.Level,
 		Category: param.Category,

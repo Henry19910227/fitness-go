@@ -953,6 +953,12 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "課表名稱(1~20字元)",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "排序類型(latest:最新/popular:熱門)",
                         "name": "order_type",
                         "in": "query"
