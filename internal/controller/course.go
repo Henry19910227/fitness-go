@@ -62,6 +62,12 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		courseMidd.CourseCreatorVerify(),
 		course.GetCourse)
 
+	baseGroup.GET("/course/:course_id/overview",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		course.GetCourseOverview)
+
 	baseGroup.POST("/course/:course_id/cover",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
@@ -252,6 +258,31 @@ func (cc *Course) GetCourse(c *gin.Context) {
 	cc.JSONSuccessResponse(c, course, "獲取成功")
 }
 
+// GetCourseOverview 獲取課表總覽
+// @Summary 獲取課表總覽
+// @Description 獲取課表總覽
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=dto.CourseProduct} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course/{course_id}/overview [GET]
+func (cc *Course) GetCourseOverview(c *gin.Context) {
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	course, err := cc.courseService.GetCourseOverviewByCourseID(c, uri.CourseID)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, course, "獲取成功")
+}
+
 // UploadCourseCover 上傳課表封面照
 // @Summary 上傳課表封面照
 // @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}
@@ -320,7 +351,7 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Param json_body body validator.CreatePlanBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=plandto.Plan} "創建成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Plan} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
 // @Router /course/{course_id}/plan [POST]
 func (cc *Course) CreatePlan(c *gin.Context) {
@@ -350,7 +381,7 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
-// @Success 200 {object} model.SuccessResult{data=[]plandto.Plan} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.Plan} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course/{course_id}/plans [GET]
 func (cc *Course) GetPlans(c *gin.Context) {
