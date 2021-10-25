@@ -133,7 +133,7 @@ func (a *action) DeleteActionByID(actionID int64) error {
 		//更新相關聯workout內訓練組數量
 		for _, workoutID := range workoutIDs {
 			if err := tx.Table("workouts").Where("id = ?", workoutID).Update("workout_set_count",
-				tx.Table("workout_sets AS sets").Select("count(*)").Where("sets.workout_id = ?", workoutID),
+				tx.Table("workout_sets AS sets").Select("count(*)").Where("sets.workout_id = ? AND sets.type = ?", workoutID, 1),
 			).Error; err != nil {
 				return err
 			}
