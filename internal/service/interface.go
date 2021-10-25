@@ -124,4 +124,5 @@ type Store interface {
 
 type Review interface {
 	CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dto.Review, errcode.Error)
+	GetReviews(c *gin.Context, courseID int64, uid int64, page int, size int) ([]*dto.Review, errcode.Error)
 }

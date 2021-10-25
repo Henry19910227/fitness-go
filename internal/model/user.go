@@ -25,6 +25,11 @@ func (User) TableName() string {
 	return "users"
 }
 
+type UserSummary struct {
+	ID               int64   `gorm:"column:id"`                  // 帳戶id
+	Avatar           string  `gorm:"column:avatar"`              // 用戶大頭貼
+}
+
 type UpdateUserParam struct {
 	AccountType *int    `gorm:"column:account_type"`
 	Account     *string `gorm:"column:account"`

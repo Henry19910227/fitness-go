@@ -122,6 +122,12 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Sale}),
 		course.CreateCourseReview)
+
+	baseGroup.GET("/course/:course_id/reviews",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Sale}),
+		course.GetCourseReviews)
 }
 
 // CreateCourse 創建課表
@@ -540,7 +546,7 @@ func (cc *Course) CourseSubmit(c *gin.Context)  {
 // @Param score formData int true "評分"
 // @Param body formData string true "評論內文"
 // @Param review_images formData file false "評論照片(多張)"
-// @Success 200 {object} model.SuccessResult "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Review} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
 // @Router /course/{course_id}/review [POST]
 func (cc *Course) CreateCourseReview(c *gin.Context) {
@@ -582,4 +588,41 @@ func (cc *Course) CreateCourseReview(c *gin.Context) {
 		return
 	}
 	cc.JSONSuccessResponse(c, review, "success!")
+}
+
+// GetCourseReviews 獲取課表評論列表
+// @Summary 獲取課表評論列表
+// @Description 獲取課表評論列表
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} model.SuccessResult{data=[]dto.Review} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course/{course_id}/reviews [GET]
+func (cc *Course) GetCourseReviews(c *gin.Context) {
+	var uri validator.CourseIDUri
+	var query validator.PagingQuery
+	uid, e := cc.GetUID(c)
+	if e != nil {
+		cc.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBind(&query); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	reviews, err := cc.reviewService.GetReviews(c, uri.CourseID, uid, *query.Page, *query.Size)
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, reviews, "success!")
 }

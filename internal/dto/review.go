@@ -2,7 +2,7 @@ package dto
 
 type Review struct {
 	CourseID int64 `json:"course_id" gorm:"column:course_id" example:"1000"` //課表id
-	UserID int64 `json:"user_id" gorm:"column:user_id" example:"1000"` //用戶id
+	User *UserSummary `json:"user_id" gorm:"column:user_id"` //用戶id
 	Score int `json:"score" gorm:"column:score" example:"1000"` //評分
 	Body string `json:"body" gorm:"column:body" example:"這個課表很棒!"` //評論內容
 	Images []*ReviewImage `json:"images" gorm:"-"` //評論照片

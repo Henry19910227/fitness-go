@@ -914,11 +914,95 @@
                     "200": {
                         "description": "成功!",
                         "schema": {
-                            "$ref": "#/definitions/model.SuccessResult"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Review"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
                         "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/{course_id}/reviews": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表評論列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "獲取課表評論列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.Review"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -4146,6 +4230,57 @@
                 }
             }
         },
+        "dto.Review": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "評論內容",
+                    "type": "string",
+                    "example": "這個課表很棒!"
+                },
+                "course_id": {
+                    "description": "課表id",
+                    "type": "integer",
+                    "example": 1000
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "1000"
+                },
+                "images": {
+                    "description": "評論照片",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ReviewImage"
+                    }
+                },
+                "score": {
+                    "description": "評分",
+                    "type": "integer",
+                    "example": 1000
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "$ref": "#/definitions/dto.UserSummary"
+                }
+            }
+        },
+        "dto.ReviewImage": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "圖片id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "image": {
+                    "description": "圖片",
+                    "type": "string",
+                    "example": "ds241w564d5e2.png"
+                }
+            }
+        },
         "dto.ReviewStatistic": {
             "type": "object",
             "properties": {
@@ -4499,6 +4634,20 @@
                     "description": "用戶大頭照",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.UserSummary": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "用戶大頭照",
+                    "type": "string",
+                    "example": "dkf2se51fsdds.png"
+                },
+                "id": {
+                    "description": "用戶id",
+                    "type": "integer"
                 }
             }
         },
