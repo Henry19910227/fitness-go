@@ -31,6 +31,11 @@ type User struct {
 	TrainerInfo      *Trainer `json:"trainer_info" gorm:"-"`                                            // 教練資訊
 }
 
+type UserSummary struct {
+	ID               int64   `json:"id" gorm:"column:id"`                  // 用戶id
+	Avatar           string  `json:"avatar" example:"dkf2se51fsdds.png"`   // 用戶大頭照
+}
+
 type UserAvatar struct {
 	Avatar string `json:"avatar" example:"dkf2se51fsdds.png"` // 用戶大頭照
 }

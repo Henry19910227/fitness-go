@@ -18,6 +18,7 @@ type course struct {
 	Base
 	courseRepo repository.Course
 	trainerRepo repository.Trainer
+	planRepo  repository.Plan
 	uploader  handler.Uploader
 	resHandler handler.Resource
 	logger    handler.Logger
@@ -27,10 +28,11 @@ type course struct {
 
 func NewCourse(courseRepo repository.Course,
 	trainerRepo repository.Trainer,
+	planRepo  repository.Plan,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
-	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, planRepo: planRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *dto.CreateCourseParam) (*dto.Course, errcode.Error) {
@@ -117,6 +119,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 			UserID: entity.Trainer.UserID,
 			Nickname: entity.Trainer.Nickname,
 			Avatar: entity.Trainer.Avatar,
+			Skill: entity.Trainer.Skill,
 		}
 		course.Trainer = trainer
 		if entity.Sale.ID != 0 {
@@ -168,6 +171,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 		UserID: entity.Trainer.UserID,
 		Nickname: entity.Trainer.Nickname,
 		Avatar: entity.Trainer.Avatar,
+		Skill: entity.Trainer.Skill,
 	}
 	course.Trainer = trainer
 	if entity.Sale.ID != 0 {
@@ -177,6 +181,67 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 			Name: entity.Sale.Name,
 			Twd: entity.Sale.Twd,
 			Identifier: entity.Sale.Identifier,
+		}
+		course.Sale = sale
+	}
+	course.Restricted = 0
+	return &course, nil
+}
+
+func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error) {
+	//查詢課表詳情
+	courseItem, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result set") {
+			return nil, cs.errHandler.DataNotFound()
+		}
+		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	course := dto.CourseProduct{
+		ID:           courseItem.ID,
+		CourseStatus: courseItem.CourseStatus,
+		Category:     courseItem.Category,
+		ScheduleType: courseItem.ScheduleType,
+		Name:         courseItem.Name,
+		Cover:        courseItem.Cover,
+		Intro:        courseItem.Intro,
+		Level:        courseItem.Level,
+		Suit:         courseItem.Suit,
+		Equipment:    courseItem.Equipment,
+		Place:        courseItem.Place,
+		TrainTarget:  courseItem.TrainTarget,
+		PlanCount:    courseItem.PlanCount,
+		WorkoutCount: courseItem.WorkoutCount,
+	}
+	//查詢計畫
+	planItems, err := cs.planRepo.FindPlansByCourseID(courseID)
+	if err != nil {
+		cs.logger.Set(c, handler.Error, "plan repo", cs.errHandler.SystemError().Code(), err.Error())
+		return nil, cs.errHandler.SystemError()
+	}
+	plans := make([]*dto.Plan, 0)
+	for _, item := range planItems{
+		plan := dto.Plan{ID: item.ID}
+		plans = append(plans, &plan)
+	}
+	course.Plans = plans
+	//配置教練資訊
+	trainer := &dto.TrainerSummary{
+		UserID:   courseItem.Trainer.UserID,
+		Nickname: courseItem.Trainer.Nickname,
+		Avatar:   courseItem.Trainer.Avatar,
+		Skill:    courseItem.Trainer.Skill,
+	}
+	course.Trainer = trainer
+	//配置銷售資訊
+	if courseItem.Sale.ID != 0 {
+		sale := &dto.SaleItem{
+			ID:         courseItem.Sale.ID,
+			Type:       courseItem.Sale.Type,
+			Name:       courseItem.Sale.Name,
+			Twd:        courseItem.Sale.Twd,
+			Identifier: courseItem.Sale.Identifier,
 		}
 		course.Sale = sale
 	}

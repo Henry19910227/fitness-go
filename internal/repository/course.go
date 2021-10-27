@@ -172,7 +172,7 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
 			"IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
 			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
-			"trainers.user_id", "trainers.nickname", "trainers.avatar").
+			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
 		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
 		Where(query, params...)
@@ -197,7 +197,7 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 			&course.PlanCount, &course.WorkoutCount,
 			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
 			&course.Sale.CreateAt, &course.Sale.UpdateAt,
-			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
+			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
 			return nil, err
 		}
 		courses = append(courses, &course)
@@ -282,7 +282,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 			"IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
 			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
 		    "IFNULL(review.score_total,0)", "IFNULL(review.amount,0)",
-			"trainers.user_id", "trainers.nickname", "trainers.avatar").
+			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
 		Joins("INNER JOIN users ON courses.user_id = users.id").
 		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
@@ -311,7 +311,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
 			&course.Sale.CreateAt, &course.Sale.UpdateAt,
 			&course.ReviewStatistic.ScoreTotal, &course.ReviewStatistic.Amount,
-			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
+			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
 			return nil, err
 		}
 		courses = append(courses, &course)
@@ -331,7 +331,7 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
 		    "IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
 		    "IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
-			"trainers.user_id", "trainers.nickname", "trainers.avatar").
+			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
 		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
 		Where("courses.id = ?", courseID).
@@ -342,7 +342,7 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 			&course.WorkoutCount, &course.CreateAt, &course.UpdateAt,
 		    &course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
 		    &course.Sale.CreateAt, &course.Sale.UpdateAt,
-			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar); err != nil {
+			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
 			return nil, err
 	}
 	return &course, nil

@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
-	"github.com/Henry19910227/fitness-go/internal/dto/plandto"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
@@ -68,15 +67,16 @@ type Course interface {
 	DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, errcode.Error)
 	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
+	GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
 	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
 }
 
 type Plan interface {
-	CreatePlan(c *gin.Context, courseID int64, name string) (*plandto.Plan, errcode.Error)
-	UpdatePlan(c *gin.Context, planID int64, name string) (*plandto.Plan, errcode.Error)
-	DeletePlan(c *gin.Context, planID int64) (*plandto.PlanID, errcode.Error)
-	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*plandto.Plan, errcode.Error)
+	CreatePlan(c *gin.Context, courseID int64, name string) (*dto.Plan, errcode.Error)
+	UpdatePlan(c *gin.Context, planID int64, name string) (*dto.Plan, errcode.Error)
+	DeletePlan(c *gin.Context, planID int64) (*dto.PlanID, errcode.Error)
+	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*dto.Plan, errcode.Error)
 }
 
 type Workout interface {
@@ -124,4 +124,5 @@ type Store interface {
 
 type Review interface {
 	CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dto.Review, errcode.Error)
+	GetReviews(c *gin.Context, courseID int64, uid int64, page int, size int) ([]*dto.Review, errcode.Error)
 }

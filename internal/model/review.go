@@ -36,13 +36,29 @@ type ReviewStatistic struct {
 	UpdateAt string `gorm:"column:update_at"` //更新時間
 }
 
+func (ReviewStatistic) TableName() string {
+	return "review_statistics"
+}
+
+type ReviewItem struct {
+	CourseID int64 `gorm:"column:course_id"` //課表id
+	User *UserSummary `gorm:"-"` //用戶
+	Score int `gorm:"column:score"` //評分
+	Body string `gorm:"column:body"` //內容
+	Images []*ReviewImageItem `gorm:"-"` //圖片
+	CreateAt string `gorm:"column:create_at"` //創建時間
+}
+
+type ReviewImageItem struct {
+	ID int64 `gorm:"column:id"` //圖片id
+	CourseID int64 `gorm:"column:course_id"` //課表id
+	UserID int64  `gorm:"column:user_id"` //用戶id
+	Image string `gorm:"column:image"` //圖片
+}
+
 type ReviewStatisticSummary struct {
 	ScoreTotal int `gorm:"column:score_total"` //評分累積
 	Amount int `gorm:"column:amount"` //評分筆數
-}
-
-func (ReviewStatistic) TableName() string {
-	return "review_statistics"
 }
 
 type CreateReviewParam struct {

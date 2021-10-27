@@ -66,7 +66,7 @@ func NewPlan(baseGroup *gin.RouterGroup,
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
 // @Param json_body body validator.UpdatePlanBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult{data=plandto.Plan} "更新成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.Plan} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
 // @Router /plan/{plan_id} [PATCH]
 func (p *Plan) UpdatePlan(c *gin.Context) {
@@ -96,7 +96,7 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
-// @Success 200 {object} model.SuccessResult{data=plandto.PlanID} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.PlanID} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /plan/{plan_id} [DELETE]
 func (p *Plan) DeletePlan(c *gin.Context)  {

@@ -108,6 +108,6 @@ type Certificate interface {
 
 type Review interface {
 	CreateReview(param *model.CreateReviewParam) error
-	FindReviewByCourseIDAndUserID(courseID int64, userID int64, entity interface{}) error
-	FindReviewImagesByReviewID(courseID, userID int64, entity interface{}) error
+	FindReviewByCourseIDAndUserID(courseID int64, userID int64) (*model.ReviewItem, error)
+	FindReviewsByCourseIDAndUserID(courseID int64, userID int64, paging *model.PagingParam) ([]*model.ReviewItem, error)
 }

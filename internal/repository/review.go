@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -86,22 +87,76 @@ func (r *review) CreateReview(param *model.CreateReviewParam) error {
 	return nil
 }
 
-func (r *review) FindReviewByCourseIDAndUserID(courseID int64, userID int64, entity interface{}) error {
+func (r *review) FindReviewByCourseIDAndUserID(courseID int64, userID int64) (*model.ReviewItem, error) {
+	var review model.ReviewItem
+	var user model.UserSummary
 	if err := r.gorm.DB().
-		Model(&model.Review{}).
-		Where("course_id = ? AND user_id = ?", courseID, userID).
-		Take(entity).Error; err != nil{
-		return err
+		Table("reviews").
+		Select("reviews.course_id AS course_id", "reviews.score AS score", "reviews.body AS body", "reviews.create_at",
+			"users.id AS user_id", "users.avatar AS avatar").
+		Joins("INNER JOIN users ON reviews.user_id = users.id").
+		Where("reviews.course_id = ? AND reviews.user_id = ?", courseID, userID).
+		Row().
+		Scan(&review.CourseID, &review.Score, &review.Body, &review.CreateAt,
+			&user.ID, &user.Avatar); err != nil {
+		return nil, err
 	}
-	return nil
+	reviewImages := make([]*model.ReviewImageItem, 0)
+	if err := r.gorm.DB().Model(&model.ReviewImage{}).
+		Where("course_id = ? AND user_id = ?", courseID, userID).
+		Find(&reviewImages).Error; err != nil {
+		return nil, err
+	}
+	review.User = &user
+	review.Images = reviewImages
+	return &review, nil
 }
 
-func (r *review) FindReviewImagesByReviewID(courseID, userID int64, entity interface{}) error {
+func (r *review) FindReviewsByCourseIDAndUserID(courseID int64, userID int64, paging *model.PagingParam) ([]*model.ReviewItem, error) {
+	//將查詢會員的ID排在第一個
+	orderQuery := fmt.Sprintf("reviews.user_id <> %v, reviews.create_at ASC", userID)
+	db := r.gorm.DB().
+		Table("reviews").
+		Select("reviews.course_id AS course_id", "reviews.score AS score", "reviews.body AS body", "reviews.create_at",
+			"users.id AS user_id", "users.avatar AS avatar").
+		Joins("INNER JOIN users ON reviews.user_id = users.id").
+		Where("reviews.course_id = ?", courseID).
+		Order(orderQuery)
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	rows, err := db.Rows()
+	if err != nil {
+		return nil, err
+	}
+	reviewMap := make(map[int64]*model.ReviewItem)
+	userIDs := make([]int64, 0)
+	courseIDs := make([]int64, 0)
+	reviews := make([]*model.ReviewItem, 0)
+	for rows.Next() {
+		var review model.ReviewItem
+		var user model.UserSummary
+		if err := rows.Scan(&review.CourseID, &review.Score, &review.Body, &review.CreateAt,
+			&user.ID, &user.Avatar); err != nil {
+			return nil, err
+		}
+		review.User = &user
+		userIDs = append(userIDs, user.ID)
+		courseIDs = append(courseIDs, review.CourseID)
+		reviewMap[user.ID] = &review
+		reviews = append(reviews, &review)
+	}
+	var reviewImages []*model.ReviewImageItem
 	if err := r.gorm.DB().
 		Model(&model.ReviewImage{}).
-		Where("course_id = ? AND user_id = ?", courseID, userID).
-		Find(entity).Error; err != nil{
-		return err
+		Where("course_id IN (?) AND user_id IN (?)",courseIDs, userIDs).
+		Find(&reviewImages).Error; err != nil {
+			return nil, err
 	}
-	return nil
+	for _, image := range reviewImages {
+		if review, ok := reviewMap[image.UserID]; ok {
+			review.Images = append(review.Images, image)
+		}
+	}
+	return reviews, nil
 }

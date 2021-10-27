@@ -50,12 +50,65 @@ func (r *review) CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dt
 		}
 	}
 	//查詢並回傳創建資料
-	var review dto.Review
-	if err := r.reviewRepo.FindReviewByCourseIDAndUserID(param.CourseID, param.UserID, &review); err != nil {
+	item, err := r.reviewRepo.FindReviewByCourseIDAndUserID(param.CourseID, param.UserID)
+	if err != nil {
 		return nil, r.errHandler.Set(c, "review repo", err)
 	}
-	if err := r.reviewRepo.FindReviewImagesByReviewID(param.CourseID, param.UserID, &review.Images); err != nil {
-		return nil, r.errHandler.Set(c, "review repo", err)
+	// parser data
+	review := dto.Review{
+		CourseID: item.CourseID,
+		User: &dto.UserSummary{
+			ID:     item.User.ID,
+			Avatar: item.User.Avatar,
+		},
+		Score: item.Score,
+		Body: item.Body,
+		CreateAt: item.CreateAt,
 	}
+	reviewImages := make([]*dto.ReviewImage, 0)
+	for _, imageItem := range item.Images {
+		reviewImage := dto.ReviewImage{
+			ID: imageItem.ID,
+			Image: imageItem.Image,
+		}
+		reviewImages = append(reviewImages, &reviewImage)
+	}
+	review.Images = reviewImages
 	return &review, nil
+}
+
+func (r *review) GetReviews(c *gin.Context, courseID int64, uid int64, page int, size int) ([]*dto.Review, errcode.Error) {
+	//查詢並回傳創建資料
+	offset, limit := r.GetPagingIndex(page, size)
+	items, err := r.reviewRepo.FindReviewsByCourseIDAndUserID(courseID, uid, &model.PagingParam{
+		Offset: offset,
+		Limit: limit,
+	})
+	if err != nil {
+		return nil, r.errHandler.Set(c, "review repo", err)
+	}
+	reviews := make([]*dto.Review, 0)
+	for _, item := range items{
+		review := dto.Review{
+			CourseID: item.CourseID,
+			User: &dto.UserSummary{
+				ID:     item.User.ID,
+				Avatar: item.User.Avatar,
+			},
+			Score: item.Score,
+			Body: item.Body,
+			CreateAt: item.CreateAt,
+		}
+		reviewImages := make([]*dto.ReviewImage, 0)
+		for _, imageItem := range item.Images {
+			reviewImage := dto.ReviewImage{
+				ID: imageItem.ID,
+				Image: imageItem.Image,
+			}
+			reviewImages = append(reviewImages, &reviewImage)
+		}
+		review.Images = reviewImages
+		reviews = append(reviews, &review)
+	}
+	return reviews, nil
 }
