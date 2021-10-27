@@ -602,6 +602,10 @@ definitions:
         description: 教練暱稱
         example: Henry教練
         type: string
+      skill:
+        description: 專長
+        example: d2w3e15d3awe.jpg
+        type: string
       user_id:
         description: 關聯的用戶id
         example: 10001

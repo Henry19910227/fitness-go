@@ -119,6 +119,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 			UserID: entity.Trainer.UserID,
 			Nickname: entity.Trainer.Nickname,
 			Avatar: entity.Trainer.Avatar,
+			Skill: entity.Trainer.Skill,
 		}
 		course.Trainer = trainer
 		if entity.Sale.ID != 0 {
@@ -170,6 +171,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 		UserID: entity.Trainer.UserID,
 		Nickname: entity.Trainer.Nickname,
 		Avatar: entity.Trainer.Avatar,
+		Skill: entity.Trainer.Skill,
 	}
 	course.Trainer = trainer
 	if entity.Sale.ID != 0 {
@@ -229,6 +231,7 @@ func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*
 		UserID:   courseItem.Trainer.UserID,
 		Nickname: courseItem.Trainer.Nickname,
 		Avatar:   courseItem.Trainer.Avatar,
+		Skill:    courseItem.Trainer.Skill,
 	}
 	course.Trainer = trainer
 	//配置銷售資訊

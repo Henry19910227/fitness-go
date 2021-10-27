@@ -24,6 +24,7 @@ type TrainerSummary struct {
 	UserID           int64   `json:"user_id" example:"10001"`                 // 關聯的用戶id
 	Nickname         string  `json:"nickname" example:"Henry教練"`             // 教練暱稱
 	Avatar           string  `json:"avatar"  example:"d2w3e15d3awe.jpg"`      // 教練大頭照
+	Skill            string  `json:"skill"  example:"d2w3e15d3awe.jpg"`      // 專長
 }
 
 type CreateTrainerParam struct {

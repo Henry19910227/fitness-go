@@ -113,6 +113,7 @@ func parserCourses(datas []*model.CourseProductSummary) []*dto.CourseProductSumm
 			UserID: data.Trainer.UserID,
 			Nickname: data.Trainer.Nickname,
 			Avatar: data.Trainer.Avatar,
+			Skill: data.Trainer.Skill,
 		}
 		course.Review = dto.ReviewStatisticSummary{
 			ScoreTotal: data.ReviewStatistic.ScoreTotal,

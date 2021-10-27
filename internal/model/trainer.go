@@ -28,6 +28,7 @@ type TrainerSummaryEntity struct {
 	UserID           int64   `gorm:"column:user_id"`         // 關聯的用戶id
 	Nickname         string  `gorm:"column:nickname"`        // 教練暱稱
 	Avatar           string  `gorm:"column:avatar"`          // 教練大頭照
+	Skill            string  `gorm:"column:skill"`           // 專長
 }
 
 type CreateTrainerParam struct {

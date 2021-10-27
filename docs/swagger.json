@@ -4526,6 +4526,11 @@
                     "type": "string",
                     "example": "Henry教練"
                 },
+                "skill": {
+                    "description": "專長",
+                    "type": "string",
+                    "example": "d2w3e15d3awe.jpg"
+                },
                 "user_id": {
                     "description": "關聯的用戶id",
                     "type": "integer",
