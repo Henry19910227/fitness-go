@@ -4742,7 +4742,7 @@ var doc = `{
                     "example": "N"
                 },
                 "distance": {
-                    "description": "距離(公尺)",
+                    "description": "距離(公里)",
                     "type": "number",
                     "example": 0
                 },

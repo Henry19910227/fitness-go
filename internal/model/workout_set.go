@@ -11,7 +11,7 @@ type WorkoutSet struct {
 	Remark string `gorm:"column:remark"` //備註
 	Weight float64 `gorm:"column:weight"` //重量(公斤)
 	Reps int `gorm:"column:reps"` //次數
-	Distance float64 `gorm:"column:distance"` //距離(公尺)
+	Distance float64 `gorm:"column:distance"` //距離(公里)
 	Duration int `gorm:"column:duration"` //時長(秒)
 	Incline float64 `gorm:"column:incline"` //坡度
 	CreateAt string `gorm:"column:create_at"` // 創建時間
@@ -43,7 +43,7 @@ type WorkoutSetEntity struct {
 	Remark string `gorm:"column:remark"` //備註
 	Weight float64 `gorm:"column:weight"` //重量(公斤)
 	Reps int `gorm:"column:reps"` //次數
-	Distance float64 `gorm:"column:distance"` //距離(公尺)
+	Distance float64 `gorm:"column:distance"` //距離(公里)
 	Duration int `gorm:"column:duration"` //時長(秒)
 	Incline float64 `gorm:"column:incline"` //坡度
 }
@@ -55,7 +55,7 @@ type UpdateWorkoutSetParam struct {
 	Remark *string `gorm:"column:remark"` //備註
 	Weight *float64 `gorm:"column:weight"` //重量(公斤)
 	Reps *int `gorm:"column:reps"` //次數
-	Distance *float64 `gorm:"column:distance"` //距離(公尺)
+	Distance *float64 `gorm:"column:distance"` //距離(公里)
 	Duration *int `gorm:"column:duration"` //時長(秒)
 	Incline *float64 `gorm:"column:incline"` //坡度
 	UpdateAt *string `gorm:"column:update_at"` //更新時間

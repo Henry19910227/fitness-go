@@ -26,7 +26,7 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 			AutoNext: "N",
 			Weight: 10,
 			Reps: 10,
-			Distance: 1000,
+			Distance: 1,
 			Duration: 60,
 			Incline: 1,
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
