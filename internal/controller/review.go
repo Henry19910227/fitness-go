@@ -1,0 +1,134 @@
+package controller
+
+import (
+	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
+	midd "github.com/Henry19910227/fitness-go/internal/middleware"
+	"github.com/Henry19910227/fitness-go/internal/service"
+	"github.com/Henry19910227/fitness-go/internal/validator"
+	"github.com/gin-gonic/gin"
+)
+
+type Review struct {
+	Base
+	courseService service.Course
+	reviewService service.Review
+	userMidd midd.User
+	courseMidd midd.Course
+}
+
+func NewReview(baseGroup *gin.RouterGroup,
+	courseService service.Course,
+	reviewService service.Review,
+	userMidd midd.User,
+	courseMidd midd.Course) {
+
+	review := &Review{courseService: courseService,
+		reviewService: reviewService,
+		userMidd: userMidd,
+		courseMidd: courseMidd}
+
+	baseGroup.POST("/course_product/:course_id/review",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Sale}),
+		review.CreateReview)
+
+	baseGroup.GET("/course_product/:course_id/reviews",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Sale}),
+		review.GetReviews)
+}
+
+// CreateReview 創建課表產品評論
+// @Summary 創建課表產品評論
+// @Description 創建課表產品評論
+// @Tags Review
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Param score formData int true "評分"
+// @Param body formData string true "評論內文"
+// @Param review_images formData file false "評論照片(多張)"
+// @Success 200 {object} model.SuccessResult{data=dto.Review} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /course_product/{course_id}/review [POST]
+func (r *Review) CreateReview(c *gin.Context) {
+	var uri validator.CourseIDUri
+	var form validator.CreateReviewForm
+	uid, e := r.GetUID(c)
+	if e != nil {
+		r.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		r.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBind(&form); err != nil {
+		r.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	//獲取評論照片
+	files := c.Request.MultipartForm.File["review_images"]
+	var reviewImages []*dto.File
+	for _, f := range files {
+		data, _ := f.Open()
+		file := &dto.File{
+			FileNamed: f.Filename,
+			Data: data,
+		}
+		reviewImages = append(reviewImages, file)
+	}
+	review, err := r.reviewService.CreateReview(c, &dto.CreateReviewParam{
+		CourseID: uri.CourseID,
+		UserID: uid,
+		Score: form.Score,
+		Body: form.Body,
+		Images: reviewImages,
+	})
+	if err != nil {
+		r.JSONErrorResponse(c, err)
+		return
+	}
+	r.JSONSuccessResponse(c, review, "success!")
+}
+
+// GetReviews 獲取課表產品評論列表
+// @Summary 獲取課表產品列表
+// @Description 獲取課表產品列表
+// @Tags Review
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} model.SuccessResult{data=[]dto.Review} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course_product/{course_id}/reviews [GET]
+func (r *Review) GetReviews(c *gin.Context) {
+	var uri validator.CourseIDUri
+	var query validator.PagingQuery
+	uid, e := r.GetUID(c)
+	if e != nil {
+		r.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	if err := c.ShouldBindUri(&uri); err != nil {
+		r.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBind(&query); err != nil {
+		r.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	reviews, err := r.reviewService.GetReviews(c, uri.CourseID, uid, *query.Page, *query.Size)
+	if err != nil {
+		r.JSONErrorResponse(c, err)
+		return
+	}
+	r.JSONSuccessResponse(c, reviews, "success!")
+}

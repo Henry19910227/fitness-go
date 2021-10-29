@@ -122,6 +122,7 @@ func main() {
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMidd, courseMidd)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
 	controller.NewStore(baseGroup, storeService, courseService, courseMidd)
+	controller.NewReview(baseGroup, courseService, reviewService, userMidd, courseMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 

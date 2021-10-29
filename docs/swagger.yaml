@@ -1668,96 +1668,6 @@ paths:
       summary: 取得課表內的計畫列表
       tags:
       - Course
-  /course/{course_id}/review:
-    post:
-      consumes:
-      - application/json
-      description: 創建課表評論
-      parameters:
-      - description: 課表id
-        in: path
-        name: course_id
-        required: true
-        type: integer
-      - description: 評分
-        in: formData
-        name: score
-        required: true
-        type: integer
-      - description: 評論內文
-        in: formData
-        name: body
-        required: true
-        type: string
-      - description: 評論照片(多張)
-        in: formData
-        name: review_images
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.Review'
-              type: object
-        "400":
-          description: 失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 創建課表評論
-      tags:
-      - Course
-  /course/{course_id}/reviews:
-    get:
-      consumes:
-      - application/json
-      description: 獲取課表評論列表
-      parameters:
-      - description: 課表id
-        in: path
-        name: course_id
-        required: true
-        type: integer
-      - description: 頁數(從第一頁開始)
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: 筆數
-        in: query
-        name: size
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 獲取成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/dto.Review'
-                  type: array
-              type: object
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 獲取課表評論列表
-      tags:
-      - Course
   /course/{course_id}/submit:
     post:
       consumes:
@@ -1817,6 +1727,96 @@ paths:
       summary: 獲取課表產品詳細
       tags:
       - Store
+  /course_product/{course_id}/review:
+    post:
+      consumes:
+      - application/json
+      description: 創建課表產品評論
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 評分
+        in: formData
+        name: score
+        required: true
+        type: integer
+      - description: 評論內文
+        in: formData
+        name: body
+        required: true
+        type: string
+      - description: 評論照片(多張)
+        in: formData
+        name: review_images
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Review'
+              type: object
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 創建課表產品評論
+      tags:
+      - Review
+  /course_product/{course_id}/reviews:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表產品列表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.Review'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取課表產品列表
+      tags:
+      - Review
   /course_products:
     get:
       consumes:
