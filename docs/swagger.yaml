@@ -1785,6 +1785,38 @@ paths:
       summary: 送審課表
       tags:
       - Course
+  /course_product/{course_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表產品詳細
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CourseProduct'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取課表產品詳細
+      tags:
+      - Store
   /course_products:
     get:
       consumes:

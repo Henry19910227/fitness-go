@@ -145,6 +145,28 @@ func (cm *course) AdminAccessCourseByStatusRange(status []global.CourseStatus) g
 	}
 }
 
+func (cm *course) CourseStatusVerify(currentStatus func(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error), allowStatus []global.CourseStatus) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var courseUri validator.CourseIDUri
+		var err error
+		if err = c.ShouldBindUri(&courseUri); err != nil {
+			c.Abort()
+			return
+		}
+		current, e := currentStatus(c, courseUri.CourseID)
+		if e != nil {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
+			c.Abort()
+			return
+		}
+		if !containCourseStatus(allowStatus, current) {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
+			c.Abort()
+			return
+		}
+	}
+}
+
 func (cm *course) findCourse(c *gin.Context, course interface{}) error {
 	var courseUri validator.CourseIDUri
 	var err error

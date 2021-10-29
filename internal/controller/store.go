@@ -2,6 +2,8 @@ package controller
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
+	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
@@ -10,14 +12,19 @@ import (
 type Store struct {
 	Base
 	storeService service.Store
+	courseService service.Course
 }
 
-func NewStore(baseGroup *gin.RouterGroup, storeService service.Store) {
+func NewStore(baseGroup *gin.RouterGroup, storeService service.Store, courseService service.Course, courseMidd midd.Course) {
 	store := Store{
 		storeService: storeService,
+		courseService: courseService,
 	}
 	baseGroup.GET("/store_home_page",store.GetHomePage)
-	baseGroup.GET("/course_products",store.SearchCourseProducts)
+	baseGroup.GET("/course_product/:course_id",
+		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
+		store.GetCourseProduct)
+	baseGroup.GET("/course_products", store.SearchCourseProducts)
 }
 
 // GetHomePage 獲取商店首頁資料
@@ -37,6 +44,31 @@ func (s *Store) GetHomePage(c *gin.Context) {
 		return
 	}
 	s.JSONSuccessResponse(c, homePage, "success!")
+}
+
+// GetCourseProduct 獲取課表產品詳細
+// @Summary 獲取課表產品詳細
+// @Description 獲取課表產品詳細
+// @Tags Store
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=dto.CourseProduct} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course_product/{course_id} [GET]
+func (s *Store) GetCourseProduct(c *gin.Context) {
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		s.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	course, err := s.courseService.GetCourseProductByCourseID(c, uri.CourseID)
+	if err != nil {
+		s.JSONErrorResponse(c, err)
+		return
+	}
+	s.JSONSuccessResponse(c, course, "success!")
 }
 
 // SearchCourseProducts 獲取課表產品

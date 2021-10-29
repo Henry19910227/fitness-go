@@ -188,65 +188,22 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 	return &course, nil
 }
 
+func (cs *course) GetCourseProductByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error) {
+	course, err := cs.parserCourseProduct(courseID)
+	if err != nil {
+		return course, cs.errHandler.Set(c, "course repo", err)
+	}
+	course.Restricted = 1
+	return course, nil
+}
+
 func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error) {
-	//查詢課表詳情
-	courseItem, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	course, err := cs.parserCourseProduct(courseID)
 	if err != nil {
-		if strings.Contains(err.Error(), "no rows in result set") {
-			return nil, cs.errHandler.DataNotFound()
-		}
-		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	course := dto.CourseProduct{
-		ID:           courseItem.ID,
-		CourseStatus: courseItem.CourseStatus,
-		Category:     courseItem.Category,
-		ScheduleType: courseItem.ScheduleType,
-		Name:         courseItem.Name,
-		Cover:        courseItem.Cover,
-		Intro:        courseItem.Intro,
-		Level:        courseItem.Level,
-		Suit:         courseItem.Suit,
-		Equipment:    courseItem.Equipment,
-		Place:        courseItem.Place,
-		TrainTarget:  courseItem.TrainTarget,
-		PlanCount:    courseItem.PlanCount,
-		WorkoutCount: courseItem.WorkoutCount,
-	}
-	//查詢計畫
-	planItems, err := cs.planRepo.FindPlansByCourseID(courseID)
-	if err != nil {
-		cs.logger.Set(c, handler.Error, "plan repo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
-	}
-	plans := make([]*dto.Plan, 0)
-	for _, item := range planItems{
-		plan := dto.Plan{ID: item.ID}
-		plans = append(plans, &plan)
-	}
-	course.Plans = plans
-	//配置教練資訊
-	trainer := &dto.TrainerSummary{
-		UserID:   courseItem.Trainer.UserID,
-		Nickname: courseItem.Trainer.Nickname,
-		Avatar:   courseItem.Trainer.Avatar,
-		Skill:    courseItem.Trainer.Skill,
-	}
-	course.Trainer = trainer
-	//配置銷售資訊
-	if courseItem.Sale.ID != 0 {
-		sale := &dto.SaleItem{
-			ID:         courseItem.Sale.ID,
-			Type:       courseItem.Sale.Type,
-			Name:       courseItem.Sale.Name,
-			Twd:        courseItem.Sale.Twd,
-			Identifier: courseItem.Sale.Identifier,
-		}
-		course.Sale = sale
+		return course, cs.errHandler.Set(c, "course repo", err)
 	}
 	course.Restricted = 0
-	return &course, nil
+	return course, nil
 }
 
 func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error) {
@@ -303,6 +260,16 @@ func (cs *course) CourseSubmit(c *gin.Context, courseID int64) errcode.Error {
 	return nil
 }
 
+func (cs *course) GetCourseStatus(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error) {
+	course := struct {
+		CourseStatus int `json:"course_status"`
+	}{}
+	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
+		return 0, cs.errHandler.Set(c, "course repo", err)
+	}
+	return global.CourseStatus(course.CourseStatus), nil
+}
+
 func (cs *course) VerifyCourse(course *model.CourseDetailEntity) error {
 	if course.Sale.ID == 0 {
 		return errors.New(strconv.Itoa(errcode.UpdateError))
@@ -311,6 +278,61 @@ func (cs *course) VerifyCourse(course *model.CourseDetailEntity) error {
 		return errors.New(strconv.Itoa(errcode.UpdateError))
 	}
 	return nil
+}
+
+func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error) {
+	//查詢課表詳情
+	courseItem, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	if err != nil {
+		return nil, err
+	}
+	course := dto.CourseProduct{
+		ID:           courseItem.ID,
+		CourseStatus: courseItem.CourseStatus,
+		Category:     courseItem.Category,
+		ScheduleType: courseItem.ScheduleType,
+		Name:         courseItem.Name,
+		Cover:        courseItem.Cover,
+		Intro:        courseItem.Intro,
+		Level:        courseItem.Level,
+		Suit:         courseItem.Suit,
+		Equipment:    courseItem.Equipment,
+		Place:        courseItem.Place,
+		TrainTarget:  courseItem.TrainTarget,
+		PlanCount:    courseItem.PlanCount,
+		WorkoutCount: courseItem.WorkoutCount,
+	}
+	//查詢計畫
+	planItems, err := cs.planRepo.FindPlansByCourseID(courseID)
+	if err != nil {
+		return nil, err
+	}
+	plans := make([]*dto.Plan, 0)
+	for _, item := range planItems{
+		plan := dto.Plan{ID: item.ID}
+		plans = append(plans, &plan)
+	}
+	course.Plans = plans
+	//配置教練資訊
+	trainer := &dto.TrainerSummary{
+		UserID:   courseItem.Trainer.UserID,
+		Nickname: courseItem.Trainer.Nickname,
+		Avatar:   courseItem.Trainer.Avatar,
+		Skill:    courseItem.Trainer.Skill,
+	}
+	course.Trainer = trainer
+	//配置銷售資訊
+	if courseItem.Sale.ID != 0 {
+		sale := &dto.SaleItem{
+			ID:         courseItem.Sale.ID,
+			Type:       courseItem.Sale.Type,
+			Name:       courseItem.Sale.Name,
+			Twd:        courseItem.Sale.Twd,
+			Identifier: courseItem.Sale.Identifier,
+		}
+		course.Sale = sale
+	}
+	return &course, nil
 }
 
 

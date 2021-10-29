@@ -19,4 +19,5 @@ type Course interface {
 	CourseCreatorVerify() gin.HandlerFunc
 	UserRoleAccessCourseByStatusRange(status []global.CourseStatus) gin.HandlerFunc
 	AdminAccessCourseByStatusRange(status []global.CourseStatus) gin.HandlerFunc
+	CourseStatusVerify(currentStatus func(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error), allowStatus []global.CourseStatus) gin.HandlerFunc
 }
