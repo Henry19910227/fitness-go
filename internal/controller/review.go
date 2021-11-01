@@ -31,13 +31,18 @@ func NewReview(baseGroup *gin.RouterGroup,
 	baseGroup.POST("/course_product/:course_id/review",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Sale}),
+		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		review.CreateReview)
+
+	baseGroup.GET("/review/:review_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		review.GetReview)
 
 	baseGroup.GET("/course_product/:course_id/reviews",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Sale}),
+		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		review.GetReviews)
 }
 
@@ -131,4 +136,44 @@ func (r *Review) GetReviews(c *gin.Context) {
 		return
 	}
 	r.JSONSuccessResponse(c, reviews, "success!")
+}
+
+// GetReview 獲取評論
+// @Summary 獲取評論
+// @Description 獲取評論
+// @Tags Review
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param review_id path int64 true "評論id"
+// @Success 200 {object} model.SuccessResult{data=dto.Review} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /review/{review_id} [GET]
+func (r *Review) GetReview(c *gin.Context) {
+	var uri validator.ReviewIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		r.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	review, err := r.reviewService.GetReview(c, uri.ReviewID)
+	if err != nil {
+		r.JSONErrorResponse(c, err)
+		return
+	}
+	r.JSONSuccessResponse(c, review, "success!")
+}
+
+// DeleteReview 刪除課表產品評論
+// @Summary 刪除課表產品評論
+// @Description 刪除課表產品評論
+// @Tags Review
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param review_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /review/{review_id} [DELETE]
+func (r *Review) DeleteReview(c *gin.Context) {
+
 }

@@ -33,7 +33,7 @@ func (r *review) CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dt
 		reviewImageNames = append(reviewImageNames, reviewImageName)
 	}
 	//創建評論
-	err := r.reviewRepo.CreateReview(&model.CreateReviewParam{
+	reviewID, err := r.reviewRepo.CreateReview(&model.CreateReviewParam{
 		CourseID: param.CourseID,
 		UserID: param.UserID,
 		Score: param.Score,
@@ -50,65 +50,74 @@ func (r *review) CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dt
 		}
 	}
 	//查詢並回傳創建資料
-	item, err := r.reviewRepo.FindReviewByCourseIDAndUserID(param.CourseID, param.UserID)
+	item, err := r.reviewRepo.FindReviewByID(reviewID)
 	if err != nil {
 		return nil, r.errHandler.Set(c, "review repo", err)
 	}
-	// parser data
-	review := dto.Review{
-		CourseID: item.CourseID,
-		User: &dto.UserSummary{
-			ID:     item.User.ID,
-			Avatar: item.User.Avatar,
-		},
-		Score: item.Score,
-		Body: item.Body,
-		CreateAt: item.CreateAt,
+	return parserReview(item), nil
+}
+
+func (r *review) GetReview(c *gin.Context, reviewID int64) (*dto.Review, errcode.Error) {
+	item, err := r.reviewRepo.FindReviewByID(reviewID)
+	if err != nil {
+		return nil, r.errHandler.Set(c, "review repo", err)
 	}
-	reviewImages := make([]*dto.ReviewImage, 0)
-	for _, imageItem := range item.Images {
-		reviewImage := dto.ReviewImage{
-			ID: imageItem.ID,
-			Image: imageItem.Image,
-		}
-		reviewImages = append(reviewImages, &reviewImage)
-	}
-	review.Images = reviewImages
-	return &review, nil
+	return parserReview(item), nil
 }
 
 func (r *review) GetReviews(c *gin.Context, courseID int64, uid int64, page int, size int) ([]*dto.Review, errcode.Error) {
 	//查詢並回傳創建資料
 	offset, limit := r.GetPagingIndex(page, size)
-	items, err := r.reviewRepo.FindReviewsByCourseIDAndUserID(courseID, uid, &model.PagingParam{
+	items, err := r.reviewRepo.FindReviewsByCourseID(courseID, uid, &model.PagingParam{
 		Offset: offset,
-		Limit: limit,
+		Limit:  limit,
 	})
 	if err != nil {
 		return nil, r.errHandler.Set(c, "review repo", err)
 	}
 	reviews := make([]*dto.Review, 0)
 	for _, item := range items{
-		review := dto.Review{
-			CourseID: item.CourseID,
-			User: &dto.UserSummary{
-				ID:     item.User.ID,
-				Avatar: item.User.Avatar,
-			},
-			Score: item.Score,
-			Body: item.Body,
-			CreateAt: item.CreateAt,
-		}
-		reviewImages := make([]*dto.ReviewImage, 0)
-		for _, imageItem := range item.Images {
-			reviewImage := dto.ReviewImage{
-				ID: imageItem.ID,
-				Image: imageItem.Image,
-			}
-			reviewImages = append(reviewImages, &reviewImage)
-		}
-		review.Images = reviewImages
-		reviews = append(reviews, &review)
+		reviews = append(reviews, parserReview(item))
 	}
 	return reviews, nil
 }
+
+func (r *review) DeleteReview(c *gin.Context, courseID int64, uid int64) errcode.Error {
+	images, err := r.reviewRepo.FindReviewImages(courseID, uid)
+	if err != nil {
+		return r.errHandler.Set(c, "review image repo", err)
+	}
+	if err := r.reviewRepo.DeleteReview(courseID, uid); err != nil {
+		return r.errHandler.Set(c, "review repo", err)
+	}
+	for _, image := range images {
+		if err := r.resHandler.DeleteReviewImage(image.Image); err != nil {
+			r.errHandler.Set(c, "resource handler", err)
+		}
+	}
+	return nil
+}
+
+func parserReview(item *model.Review) *dto.Review {
+	review := dto.Review{
+		User: &dto.UserSummary{
+			ID:     item.User.ID,
+			Avatar: item.User.Avatar,
+		},
+		CourseID: item.CourseID,
+		Score: item.Score,
+		Body: item.Body,
+		CreateAt: item.CreateAt,
+	}
+	images := make([]*dto.ReviewImage, 0)
+	for _, imageItem := range item.Images{
+		image := dto.ReviewImage{
+			ID: imageItem.ID,
+			Image: imageItem.Image,
+		}
+		images = append(images, &image)
+	}
+	review.Images = images
+	return &review
+}
+

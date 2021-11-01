@@ -67,4 +67,5 @@ type Resource interface {
 	DeleteActionCover(coverNamed string) error
 	DeleteActionVideo(videoNamed string) error
 	DeleteCertificateImage(imageNamed string) error
+	DeleteReviewImage(imageNamed string) error
 }

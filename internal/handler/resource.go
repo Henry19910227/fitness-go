@@ -64,3 +64,7 @@ func (r *resource) DeleteCertificateImage(imageNamed string) error {
 	return r.resTool.RemoveFile("/trainer/certificate", imageNamed)
 }
 
+func (r *resource) DeleteReviewImage(imageNamed string) error {
+	return r.resTool.RemoveFile("/course/review", imageNamed)
+}
+

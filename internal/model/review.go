@@ -1,29 +1,5 @@
 package model
 
-type Review struct {
-	CourseID int64 `gorm:"column:course_id"` //課表id
-	UserID int64 `gorm:"column:user_id"` //用戶id
-	Score int `gorm:"column:score"` //評分
-	Body string `gorm:"column:body"` //內容
-	CreateAt string `gorm:"column:create_at"` //創建時間
-}
-
-func (Review) TableName() string {
-	return "reviews"
-}
-
-type ReviewImage struct {
-	ID int64 `gorm:"column:id"` //圖片id
-	CourseID int64 `gorm:"column:course_id"` //課表id
-	UserID int64 `gorm:"column:user_id"` //用戶id
-	Image string `gorm:"column:image"` //圖片
-	CreateAt string `gorm:"column:create_at"` //創建時間
-}
-
-func (ReviewImage) TableName() string {
-	return "review_images"
-}
-
 type ReviewStatistic struct {
 	CourseID int64 `gorm:"column:course_id"` //課表id
 	ScoreTotal int `gorm:"column:score_total"` //評分累積
@@ -40,20 +16,30 @@ func (ReviewStatistic) TableName() string {
 	return "review_statistics"
 }
 
-type ReviewItem struct {
+type Review struct {
+	ID int64 `gorm:"column:id"` //評論id
 	CourseID int64 `gorm:"column:course_id"` //課表id
-	User *UserSummary `gorm:"-"` //用戶
+	UserID int64 `gorm:"column:user_id"` //用戶id
+	User *UserSummary `gorm:"foreignkey:id;references:user_id"` //用戶
 	Score int `gorm:"column:score"` //評分
 	Body string `gorm:"column:body"` //內容
-	Images []*ReviewImageItem `gorm:"-"` //圖片
+	Images []*ReviewImageItem `gorm:"foreignKey:review_id;references:id"` //圖片
 	CreateAt string `gorm:"column:create_at"` //創建時間
+}
+
+func (Review) TableName() string {
+	return "reviews"
 }
 
 type ReviewImageItem struct {
 	ID int64 `gorm:"column:id"` //圖片id
-	CourseID int64 `gorm:"column:course_id"` //課表id
-	UserID int64  `gorm:"column:user_id"` //用戶id
+	ReviewID int64 `gorm:"column:review_id"` //評論id
 	Image string `gorm:"column:image"` //圖片
+	CreateAt string `gorm:"column:create_at"` //創建時間
+}
+
+func (ReviewImageItem) TableName() string {
+	return "review_images"
 }
 
 type ReviewStatisticSummary struct {
