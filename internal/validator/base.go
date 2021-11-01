@@ -5,7 +5,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func validateByIntRange(fl validator.FieldLevel, min int, max int, maxCount int) bool {
+func validateByIntRange(fl validator.FieldLevel, min int, max int) bool {
 	items, ok := fl.Field().Interface().([]int)
 	if !ok {
 		return false
@@ -14,11 +14,6 @@ func validateByIntRange(fl validator.FieldLevel, min int, max int, maxCount int)
 	if len(items) == 0 {
 		return false
 	}
-	//檢查個數是否超過上限
-	if len(items) > maxCount {
-		return false
-	}
-
 	dupMap := make(map[int]int)
 	for _, item := range items {
 		//檢查是否重複，沒重複就把新值加入map
@@ -80,39 +75,39 @@ func init() {
 }
 
 var LevelInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 4, 3)
+	return validateByIntRange(fl, 1, 4)
 }
 
 var CourseCategoryInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 6, 3)
+	return validateByIntRange(fl, 1, 6)
 }
 
 var SuitInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 10, 3)
+	return validateByIntRange(fl, 1, 10)
 }
 
 var EquipmentInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 9, 3)
+	return validateByIntRange(fl, 1, 9)
 }
 
 var PlaceInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 5, 3)
+	return validateByIntRange(fl, 1, 5)
 }
 
 var TrainerTargetInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 5, 3)
+	return validateByIntRange(fl, 1, 5)
 }
 
 var BodyTargetInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 7, 3)
+	return validateByIntRange(fl, 1, 7)
 }
 
 var SaleTypeInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 3, 3)
+	return validateByIntRange(fl, 1, 3)
 }
 
 var TrainerSkillInspect validator.Func = func(fl validator.FieldLevel) bool {
-	return validateByIntRange(fl, 1, 14, 2)
+	return validateByIntRange(fl, 1, 14)
 }
 
 var TrainerSexInspect validator.Func = func(fl validator.FieldLevel) bool {

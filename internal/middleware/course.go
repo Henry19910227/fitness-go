@@ -150,6 +150,7 @@ func (cm *course) CourseStatusVerify(currentStatus func(c *gin.Context, courseID
 		var courseUri validator.CourseIDUri
 		var err error
 		if err = c.ShouldBindUri(&courseUri); err != nil {
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
 			c.Abort()
 			return
 		}

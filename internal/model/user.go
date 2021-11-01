@@ -30,6 +30,10 @@ type UserSummary struct {
 	Avatar           string  `gorm:"column:avatar"`              // 用戶大頭貼
 }
 
+func (UserSummary) TableName() string {
+	return "users"
+}
+
 type UpdateUserParam struct {
 	AccountType *int    `gorm:"column:account_type"`
 	Account     *string `gorm:"column:account"`

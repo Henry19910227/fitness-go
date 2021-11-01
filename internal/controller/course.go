@@ -116,18 +116,6 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		courseMidd.CourseCreatorVerify(),
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.CourseSubmit)
-
-	baseGroup.POST("/course/:course_id/review",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Sale}),
-		course.CreateCourseReview)
-
-	baseGroup.GET("/course/:course_id/reviews",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Sale}),
-		course.GetCourseReviews)
 }
 
 // CreateCourse 創建課表
@@ -533,96 +521,4 @@ func (cc *Course) CourseSubmit(c *gin.Context)  {
 		return
 	}
 	cc.JSONSuccessResponse(c, nil, "success!")
-}
-
-// CreateCourseReview 創建課表評論
-// @Summary 創建課表評論
-// @Description 創建課表評論
-// @Tags Course
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Param course_id path int64 true "課表id"
-// @Param score formData int true "評分"
-// @Param body formData string true "評論內文"
-// @Param review_images formData file false "評論照片(多張)"
-// @Success 200 {object} model.SuccessResult{data=dto.Review} "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /course/{course_id}/review [POST]
-func (cc *Course) CreateCourseReview(c *gin.Context) {
-	var uri validator.CourseIDUri
-	var form validator.CreateReviewForm
-	uid, e := cc.GetUID(c)
-	if e != nil {
-		cc.JSONValidatorErrorResponse(c, e.Error())
-		return
-	}
-	if err := c.ShouldBindUri(&uri); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := c.ShouldBind(&form); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	//獲取評論照片
-	files := c.Request.MultipartForm.File["review_images"]
-	var reviewImages []*dto.File
-	for _, f := range files {
-		data, _ := f.Open()
-		file := &dto.File{
-			FileNamed: f.Filename,
-			Data: data,
-		}
-		reviewImages = append(reviewImages, file)
-	}
-	review, err := cc.reviewService.CreateReview(c, &dto.CreateReviewParam{
-		CourseID: uri.CourseID,
-		UserID: uid,
-		Score: form.Score,
-		Body: form.Body,
-		Images: reviewImages,
-	})
-	if err != nil {
-		cc.JSONErrorResponse(c, err)
-		return
-	}
-	cc.JSONSuccessResponse(c, review, "success!")
-}
-
-// GetCourseReviews 獲取課表評論列表
-// @Summary 獲取課表評論列表
-// @Description 獲取課表評論列表
-// @Tags Course
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Param course_id path int64 true "課表id"
-// @Param page query int true "頁數(從第一頁開始)"
-// @Param size query int true "筆數"
-// @Success 200 {object} model.SuccessResult{data=[]dto.Review} "獲取成功!"
-// @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course/{course_id}/reviews [GET]
-func (cc *Course) GetCourseReviews(c *gin.Context) {
-	var uri validator.CourseIDUri
-	var query validator.PagingQuery
-	uid, e := cc.GetUID(c)
-	if e != nil {
-		cc.JSONValidatorErrorResponse(c, e.Error())
-		return
-	}
-	if err := c.ShouldBindUri(&uri); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := c.ShouldBind(&query); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	reviews, err := cc.reviewService.GetReviews(c, uri.CourseID, uid, *query.Page, *query.Size)
-	if err != nil {
-		cc.JSONErrorResponse(c, err)
-		return
-	}
-	cc.JSONSuccessResponse(c, reviews, "success!")
 }
