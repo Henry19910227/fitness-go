@@ -82,20 +82,31 @@ func (r *review) GetReviews(c *gin.Context, courseID int64, uid int64, page int,
 	return reviews, nil
 }
 
-func (r *review) DeleteReview(c *gin.Context, courseID int64, uid int64) errcode.Error {
-	images, err := r.reviewRepo.FindReviewImages(courseID, uid)
+func (r *review) DeleteReview(c *gin.Context, reviewID int64) errcode.Error {
+	// 查詢當前 review 狀態
+	review, err := r.reviewRepo.FindReviewByID(reviewID)
 	if err != nil {
-		return r.errHandler.Set(c, "review image repo", err)
-	}
-	if err := r.reviewRepo.DeleteReview(courseID, uid); err != nil {
 		return r.errHandler.Set(c, "review repo", err)
 	}
-	for _, image := range images {
+	// 刪除 review
+	if err := r.reviewRepo.DeleteReview(review.ID); err != nil {
+		return r.errHandler.Set(c, "review repo", err)
+	}
+	// 刪除該 review 底下的圖片檔
+	for _, image := range review.Images {
 		if err := r.resHandler.DeleteReviewImage(image.Image); err != nil {
 			r.errHandler.Set(c, "resource handler", err)
 		}
 	}
 	return nil
+}
+
+func (r *review) GetReviewOwner(c *gin.Context, reviewID int64) (int64, errcode.Error) {
+	review, err := r.reviewRepo.FindReviewByID(reviewID)
+	if err != nil {
+		return 0, r.errHandler.Set(c, "review repo", err)
+	}
+	return review.UserID, nil
 }
 
 func parserReview(item *model.Review) *dto.Review {

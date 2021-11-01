@@ -1185,7 +1185,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
+        查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -1730,7 +1731,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 創建課表產品評論
+      description: 創建評論
       parameters:
       - description: 課表id
         in: path
@@ -1769,14 +1770,14 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 創建課表產品評論
+      summary: 創建評論
       tags:
       - Review
   /course_product/{course_id}/reviews:
     get:
       consumes:
       - application/json
-      description: 獲取課表產品列表
+      description: 獲取評論列表
       parameters:
       - description: 課表id
         in: path
@@ -1813,7 +1814,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取課表產品列表
+      summary: 獲取評論列表
       tags:
       - Review
   /course_products:
@@ -2474,7 +2475,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 刪除課表產品評論
+      description: 刪除評論
       parameters:
       - description: 課表id
         in: path
@@ -2494,7 +2495,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 刪除課表產品評論
+      summary: 刪除評論
       tags:
       - Review
     get:
@@ -2611,7 +2612,12 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -2717,7 +2723,12 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData

@@ -28,3 +28,10 @@ func NewCourseMiddleware(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	errHandler := errcode.NewErrHandler(handler.NewLogger(loggerTool, jwtTool))
 	return NewCourse(courseRepo, jwtTool, errHandler)
 }
+
+func NewReviewMiddleware(viperTool *viper.Viper, gormTool tool.Gorm) Review {
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	loggerTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(loggerTool, jwtTool))
+	return NewReview(errHandler)
+}

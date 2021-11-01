@@ -92,6 +92,7 @@ func (u *user) UserStatusPermission(status []global.UserStatus) gin.HandlerFunc 
 		uid, isExists := c.Get("uid")
 		if !isExists {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.DataNotFound))))
+			c.Abort()
 			return
 		}
 		user := struct {

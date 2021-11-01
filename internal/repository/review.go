@@ -6,6 +6,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"time"
 )
 
@@ -87,12 +88,12 @@ func (r *review) CreateReview(param *model.CreateReviewParam) (int64, error) {
 	return review.ID, nil
 }
 
-func (r *review) DeleteReview(courseID int64, userID int64) error {
+func (r *review) DeleteReview(reviewID int64) error {
 	if err := r.gorm.DB().Transaction(func(tx *gorm.DB) error {
 		//查詢當前評論狀態
 		var review model.Review
 		if err := tx.Table("reviews").
-			Where("course_id = ? AND user_id = ?", courseID, userID).
+			Where("id = ?", reviewID).
 			Find(&review).Error; err != nil {
 				return err
 		}
@@ -103,7 +104,8 @@ func (r *review) DeleteReview(courseID int64, userID int64) error {
 		//修改當前評論統計狀態
 		var reviewStat *model.ReviewStatistic
 		if err := tx.Table("review_statistics").
-			Where("course_id = ? FOR UPDATE", courseID).
+			Clauses(clause.Locking{Strength: "UPDATE"}).
+			Where("course_id = ?", review.CourseID).
 			Find(&reviewStat).Error; err != nil {
 			return err
 		}

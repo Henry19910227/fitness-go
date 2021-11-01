@@ -986,7 +986,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "創建課表產品評論",
+                "description": "創建評論",
                 "consumes": [
                     "application/json"
                 ],
@@ -996,7 +996,7 @@ var doc = `{
                 "tags": [
                     "Review"
                 ],
-                "summary": "創建課表產品評論",
+                "summary": "創建評論",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1061,7 +1061,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取課表產品列表",
+                "description": "獲取評論列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -1071,7 +1071,7 @@ var doc = `{
                 "tags": [
                     "Review"
                 ],
-                "summary": "獲取課表產品列表",
+                "summary": "獲取評論列表",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2255,7 +2255,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "刪除課表產品評論",
+                "description": "刪除評論",
                 "consumes": [
                     "application/json"
                 ],
@@ -2265,7 +2265,7 @@ var doc = `{
                 "tags": [
                     "Review"
                 ],
-                "summary": "刪除課表產品評論",
+                "summary": "刪除評論",
                 "parameters": [
                     {
                         "type": "integer",

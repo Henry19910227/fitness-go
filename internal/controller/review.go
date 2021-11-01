@@ -13,20 +13,16 @@ type Review struct {
 	Base
 	courseService service.Course
 	reviewService service.Review
-	userMidd midd.User
-	courseMidd midd.Course
 }
 
 func NewReview(baseGroup *gin.RouterGroup,
 	courseService service.Course,
 	reviewService service.Review,
 	userMidd midd.User,
-	courseMidd midd.Course) {
+	courseMidd midd.Course,
+	reviewMidd midd.Review) {
 
-	review := &Review{courseService: courseService,
-		reviewService: reviewService,
-		userMidd: userMidd,
-		courseMidd: courseMidd}
+	review := &Review{courseService: courseService, reviewService: reviewService}
 
 	baseGroup.POST("/course_product/:course_id/review",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
@@ -44,11 +40,17 @@ func NewReview(baseGroup *gin.RouterGroup,
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		review.GetReviews)
+
+	baseGroup.DELETE("/review/:review_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		reviewMidd.ReviewCreatorVerify(reviewService.GetReviewOwner),
+		review.DeleteReview)
 }
 
-// CreateReview 創建課表產品評論
-// @Summary 創建課表產品評論
-// @Description 創建課表產品評論
+// CreateReview 創建評論
+// @Summary 創建評論
+// @Description 創建評論
 // @Tags Review
 // @Accept json
 // @Produce json
@@ -101,9 +103,9 @@ func (r *Review) CreateReview(c *gin.Context) {
 	r.JSONSuccessResponse(c, review, "success!")
 }
 
-// GetReviews 獲取課表產品評論列表
-// @Summary 獲取課表產品列表
-// @Description 獲取課表產品列表
+// GetReviews 獲取評論列表
+// @Summary 獲取評論列表
+// @Description 獲取評論列表
 // @Tags Review
 // @Accept json
 // @Produce json
@@ -163,9 +165,9 @@ func (r *Review) GetReview(c *gin.Context) {
 	r.JSONSuccessResponse(c, review, "success!")
 }
 
-// DeleteReview 刪除課表產品評論
-// @Summary 刪除課表產品評論
-// @Description 刪除課表產品評論
+// DeleteReview 刪除評論
+// @Summary 刪除評論
+// @Description 刪除評論
 // @Tags Review
 // @Accept json
 // @Produce json
@@ -175,5 +177,14 @@ func (r *Review) GetReview(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗"
 // @Router /review/{review_id} [DELETE]
 func (r *Review) DeleteReview(c *gin.Context) {
-
+	var uri validator.ReviewIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		r.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := r.reviewService.DeleteReview(c, uri.ReviewID); err != nil {
+		r.JSONErrorResponse(c, err)
+		return
+	}
+	r.JSONSuccessResponse(c, nil, "delete success!")
 }
