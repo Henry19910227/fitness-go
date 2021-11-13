@@ -208,6 +208,10 @@ definitions:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
+      food:
+        description: 飲食建議
+        example: 佛系飲食
+        type: string
       id:
         description: 課表 id
         example: 2
@@ -223,6 +227,10 @@ definitions:
       name:
         description: 課表名稱
         example: Henry課表
+        type: string
+      notice:
+        description: 注意事項
+        example: 小心不要受傷
         type: string
       place:
         description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)

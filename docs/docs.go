@@ -4178,6 +4178,11 @@ var doc = `{
                     "type": "string",
                     "example": "2,3,6"
                 },
+                "food": {
+                    "description": "飲食建議",
+                    "type": "string",
+                    "example": "佛系飲食"
+                },
                 "id": {
                     "description": "課表 id",
                     "type": "integer",
@@ -4197,6 +4202,11 @@ var doc = `{
                     "description": "課表名稱",
                     "type": "string",
                     "example": "Henry課表"
+                },
+                "notice": {
+                    "description": "注意事項",
+                    "type": "string",
+                    "example": "小心不要受傷"
                 },
                 "place": {
                     "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
