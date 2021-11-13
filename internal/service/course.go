@@ -299,6 +299,7 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 		Equipment:    courseItem.Equipment,
 		Place:        courseItem.Place,
 		TrainTarget:  courseItem.TrainTarget,
+		BodyTarget:   courseItem.BodyTarget,
 		PlanCount:    courseItem.PlanCount,
 		WorkoutCount: courseItem.WorkoutCount,
 	}

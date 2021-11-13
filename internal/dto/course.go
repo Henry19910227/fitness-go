@@ -92,6 +92,7 @@ type CourseProduct struct {
 	Equipment string              `json:"equipment" gorm:"column:equipment" example:"2,3,6"`            // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
 	Place string                  `json:"place" gorm:"column:place" example:"1,2"`                      // 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
 	TrainTarget string            `json:"train_target" gorm:"column:train_target" example:"2,3,4"`      // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
+	BodyTarget string             `json:"body_target" gorm:"column:body_target" example:"4,5"`           // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
 	PlanCount int                 `json:"plan_count" gorm:"column:plan_count" example:"2"`              // 計畫總數
 	WorkoutCount int              `json:"workout_count" gorm:"column:workout_count" example:"10"`       // 訓練總數
 	Plans []*Plan                 `json:"plans"`                                                        // 計畫內容
