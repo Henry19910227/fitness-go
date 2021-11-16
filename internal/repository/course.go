@@ -319,6 +319,20 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	return courses, nil
 }
 
+func (c *course) FindCourseProduct(courseID int64) (*model.CourseProduct, error) {
+	var course model.CourseProduct
+	if err := c.gorm.DB().
+		Preload("Trainer").
+		Preload("Sale").
+		Preload("Plans").
+		Preload("Review").
+		Where("id = ?", courseID).
+		Take(&course).Error; err != nil {
+			return nil, err
+	}
+	return &course, nil
+}
+
 func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error) {
 	var course model.CourseDetailEntity
 	if err := c.gorm.DB().

@@ -282,7 +282,7 @@ func (cs *course) VerifyCourse(course *model.CourseDetailEntity) error {
 
 func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error) {
 	//查詢課表詳情
-	courseItem, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	courseItem, err := cs.courseRepo.FindCourseProduct(courseID)
 	if err != nil {
 		return nil, err
 	}
@@ -305,14 +305,14 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 		PlanCount:    courseItem.PlanCount,
 		WorkoutCount: courseItem.WorkoutCount,
 	}
-	//查詢計畫
-	planItems, err := cs.planRepo.FindPlansByCourseID(courseID)
-	if err != nil {
-		return nil, err
-	}
+	//配置計畫列表
 	plans := make([]*dto.Plan, 0)
-	for _, item := range planItems{
-		plan := dto.Plan{ID: item.ID}
+	for _, item := range courseItem.Plans{
+		plan := dto.Plan{
+			ID: item.ID,
+			Name: item.Name,
+			WorkoutCount: item.WorkoutCount,
+		}
 		plans = append(plans, &plan)
 	}
 	course.Plans = plans
@@ -335,6 +335,17 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 		}
 		course.Sale = sale
 	}
+	review := dto.ReviewStatistic{
+		ScoreTotal: courseItem.Review.ScoreTotal,
+		Amount: courseItem.Review.Amount,
+		FiveTotal: courseItem.Review.FiveTotal,
+		FourTotal: courseItem.Review.FourTotal,
+		ThreeTotal: courseItem.Review.ThreeTotal,
+		TwoTotal: courseItem.Review.TwoTotal,
+		OneTotal: courseItem.Review.OneTotal,
+		UpdateAt: courseItem.Review.UpdateAt,
+	}
+	course.Review = review
 	return &course, nil
 }
 
