@@ -266,7 +266,7 @@ func (s *set) DeleteWorkoutSetProgressAudio(c *gin.Context, setID int64) errcode
 	return nil
 }
 
-func parserWorkoutSet(data *model.WorkoutSetEntity) *dto.WorkoutSet {
+func parserWorkoutSet(data *model.WorkoutSet) *dto.WorkoutSet {
 	set := dto.WorkoutSet{
 		ID: data.ID,
 		Type: data.Type,
@@ -298,7 +298,7 @@ func parserWorkoutSet(data *model.WorkoutSetEntity) *dto.WorkoutSet {
 	return &set
 }
 
-func parserWorkoutSets(datas []*model.WorkoutSetEntity) []*dto.WorkoutSet {
+func parserWorkoutSets(datas []*model.WorkoutSet) []*dto.WorkoutSet {
 	sets := make([]*dto.WorkoutSet, 0)
 	for _, data := range datas {
 		set := dto.WorkoutSet{

@@ -113,7 +113,7 @@ func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 	return set.ID, nil
 }
 
-func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
+func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error) {
 	row := s.gorm.DB().
 		Table("workout_sets AS `set`").
 		Select("`set`.id", "`set`.workout_id", "`set`.type",
@@ -126,7 +126,7 @@ func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
 			"IFNULL(actions.video, '')").
 		Joins("LEFT JOIN actions ON set.action_id = actions.id").
 		Where("`set`.id = ?", setID).Row()
-	var set model.WorkoutSetEntity
+	var set model.WorkoutSet
 	var action model.Action
 	if err := row.Scan(&set.ID, &set.WorkoutID, &set.Type,
 		&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
@@ -142,7 +142,7 @@ func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
 	return &set, nil
 }
 
-func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error) {
+func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error) {
 	rows, err := s.gorm.DB().
 		Table("workout_sets AS `set`").
 		Select("`set`.id", "`set`.workout_id", "`set`.type",
@@ -158,9 +158,9 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, e
 	if err != nil {
 		return nil, err
 	}
-	var sets []*model.WorkoutSetEntity
+	var sets []*model.WorkoutSet
 	for rows.Next() {
-		var set model.WorkoutSetEntity
+		var set model.WorkoutSet
 		var action model.Action
 		if err := rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
 			&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
@@ -178,7 +178,7 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, e
 	return sets, nil
 }
 
-func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error) {
+func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSet, error) {
 	rows, err := s.gorm.DB().
 		Table("workout_sets AS `set`").
 		Select("`set`.id", "`set`.workout_id", "`set`.type",
@@ -198,9 +198,9 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 	if err != nil {
 		return nil, err
 	}
-	var sets []*model.WorkoutSetEntity
+	var sets []*model.WorkoutSet
 	for rows.Next() {
-		var set model.WorkoutSetEntity
+		var set model.WorkoutSet
 		var action model.Action
 		if err := rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
 			&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
@@ -216,6 +216,10 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 		sets = append(sets, &set)
 	}
 	return sets, nil
+}
+
+func (s *set) FindWorkoutSetsByCourseID(courseID int64) ([]*model.WorkoutSet, error) {
+	panic("implement me")
 }
 
 func (s *set) FindStartAudioCountByAudioName(audioName string) (int, error) {

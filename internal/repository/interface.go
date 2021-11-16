@@ -67,9 +67,10 @@ type WorkoutSet interface {
 	CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) ([]int64, error)
 	CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*entity.WorkoutSet) ([]int64, error)
 	CreateRestSetByWorkoutID(workoutID int64) (int64, error)
-	FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error)
-	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error)
-	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error)
+	FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error)
+	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error)
+	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSet, error)
+	FindWorkoutSetsByCourseID(courseID int64) ([]*model.WorkoutSet, error)
 	FindStartAudioCountByAudioName(audioName string) (int, error)
 	FindProgressAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error
