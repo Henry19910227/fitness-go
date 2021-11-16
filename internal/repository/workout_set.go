@@ -219,7 +219,18 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSet, 
 }
 
 func (s *set) FindWorkoutSetsByCourseID(courseID int64) ([]*model.WorkoutSet, error) {
-	panic("implement me")
+	var sets []*model.WorkoutSet
+	if err := s.gorm.DB().
+		Table("workout_sets AS sets").
+		Joins("INNER JOIN workouts ON sets.workout_id = workouts.id").
+		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
+		Joins("INNER JOIN courses ON plans.course_id = courses.id").
+		Where("courses.id = ? AND sets.type = ?", courseID, 1).
+		Preload("Action").
+		Find(&sets).Error; err != nil {
+			return nil, err
+	}
+	return sets, nil
 }
 
 func (s *set) FindStartAudioCountByAudioName(audioName string) (int, error) {

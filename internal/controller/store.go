@@ -13,17 +13,22 @@ type Store struct {
 	Base
 	storeService service.Store
 	courseService service.Course
+	workoutSetService service.WorkoutSet
 }
 
-func NewStore(baseGroup *gin.RouterGroup, storeService service.Store, courseService service.Course, courseMidd midd.Course) {
+func NewStore(baseGroup *gin.RouterGroup, storeService service.Store, courseService service.Course, workoutSetService service.WorkoutSet, courseMidd midd.Course) {
 	store := Store{
 		storeService: storeService,
 		courseService: courseService,
+		workoutSetService: workoutSetService,
 	}
 	baseGroup.GET("/store_home_page",store.GetHomePage)
 	baseGroup.GET("/course_product/:course_id",
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		store.GetCourseProduct)
+	baseGroup.GET("/course_product/:course_id/workout_sets",
+		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
+		store.GetWorkoutSets)
 	baseGroup.GET("/course_products", store.SearchCourseProducts)
 }
 
@@ -122,4 +127,29 @@ func (s *Store) SearchCourseProducts(c *gin.Context) {
 		return
 	}
 	s.JSONSuccessResponse(c, courses, "success!")
+}
+
+// GetWorkoutSets 取得課表內的訓練組列表
+// @Summary  取得課表內的訓練組列表
+// @Description  取得課表內的訓練組列表
+// @Tags Store
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course_product/{course_id}/workout_sets [GET]
+func (s *Store) GetWorkoutSets(c *gin.Context) {
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		s.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	sets, err := s.workoutSetService.GetWorkoutSetsByCourseID(c, uri.CourseID)
+	if err != nil {
+		s.JSONErrorResponse(c, err)
+		return
+	}
+	s.JSONSuccessResponse(c, sets, "success!")
 }

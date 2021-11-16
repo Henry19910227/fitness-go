@@ -113,6 +113,15 @@ func (s *set) GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet
 	return parserWorkoutSets(datas), nil
 }
 
+func (s *set) GetWorkoutSetsByCourseID(c *gin.Context, courseID int64) ([]*dto.WorkoutSet, errcode.Error) {
+	datas, err := s.setRepo.FindWorkoutSetsByCourseID(courseID)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	return parserWorkoutSets(datas), nil
+}
+
 func (s *set) UpdateWorkoutSet(c *gin.Context, setID int64, param *dto.UpdateWorkoutSetParam) (*dto.WorkoutSet, errcode.Error) {
 	if err := s.setRepo.UpdateWorkoutSetByID(setID, &model.UpdateWorkoutSetParam {
 		AutoNext: param.AutoNext,

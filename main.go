@@ -110,6 +110,7 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger()) //加入路由Logger
 	router.Use(gin.CustomRecovery(middleware.Recover(logHandler)))
+	//gin.SetMode(gin.ReleaseMode)
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
 	controller.NewManager(baseGroup)
@@ -123,7 +124,7 @@ func main() {
 	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMidd, courseMidd)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
-	controller.NewStore(baseGroup, storeService, courseService, courseMidd)
+	controller.NewStore(baseGroup, storeService, courseService, workoutSetService, courseMidd)
 	controller.NewReview(baseGroup, courseService, reviewService, userMidd, courseMidd, reviewMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)

@@ -3,7 +3,8 @@ package model
 type WorkoutSet struct {
 	ID int64 `gorm:"column:id"` //訓練組id
 	WorkoutID int64 `gorm:"column:workout_id"` //訓練id
-	Action *Action `gorm:"column:-"` //動作
+	ActionID *int64 `gorm:"column:action_id"` //動作id
+	Action *Action `gorm:"foreignkey:id;references:action_id"` //動作
 	Type int `gorm:"column:type"` //動作類別(1:動作/2:休息)
 	AutoNext string `gorm:"column:auto_next"` //自動下一組(Y:是/N:否)
 	StartAudio string `gorm:"column:start_audio"` //前導語音
