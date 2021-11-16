@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -65,26 +66,26 @@ func (s *set) CreateRestSet(c *gin.Context, workoutID int64) (*dto.WorkoutSet, e
 }
 
 func (s *set) DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*dto.WorkoutSet, errcode.Error) {
-	entity, err := s.setRepo.FindWorkoutSetByID(setID)
+	data, err := s.setRepo.FindWorkoutSetByID(setID)
 	if err != nil {
 		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 		return nil, s.errHandler.SystemError()
 	}
-	sets := make([]*model.WorkoutSet, 0)
+	sets := make([]*entity.WorkoutSet, 0)
 	for i := 0; i < count; i++ {
-		set := model.WorkoutSet{
-			WorkoutID: entity.WorkoutID,
-			ActionID: &entity.Action.ID,
-			Type: entity.Type,
-			AutoNext: entity.AutoNext,
-			StartAudio: entity.StartAudio,
-			ProgressAudio: entity.ProgressAudio,
-			Remark: entity.Remark,
-			Weight: entity.Weight,
-			Reps: entity.Reps,
-			Distance: entity.Distance,
-			Duration: entity.Duration,
-			Incline: entity.Incline,
+		set := entity.WorkoutSet{
+			WorkoutID: data.WorkoutID,
+			ActionID: &data.Action.ID,
+			Type: data.Type,
+			AutoNext: data.AutoNext,
+			StartAudio: data.StartAudio,
+			ProgressAudio: data.ProgressAudio,
+			Remark: data.Remark,
+			Weight: data.Weight,
+			Reps: data.Reps,
+			Distance: data.Distance,
+			Duration: data.Duration,
+			Incline: data.Incline,
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}

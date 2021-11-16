@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -16,10 +17,10 @@ func NewWorkoutSet(gorm tool.Gorm) WorkoutSet {
 }
 
 func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) ([]int64, error) {
-	sets := make([]*model.WorkoutSet, 0)
+	sets := make([]*entity.WorkoutSet, 0)
 	for _, v := range actionIDs {
 		var actionID = v
-		set := model.WorkoutSet{
+		set := entity.WorkoutSet{
 			WorkoutID: workoutID,
 			ActionID: &actionID,
 			Type: 1,
@@ -59,7 +60,7 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 	return workoutIDs, nil
 }
 
-func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model.WorkoutSet) ([]int64, error) {
+func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*entity.WorkoutSet) ([]int64, error) {
 	if len(sets) == 0 {
 		return []int64{}, nil
 	}
@@ -89,7 +90,7 @@ func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model
 }
 
 func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
-	set := model.WorkoutSet{
+	set := entity.WorkoutSet{
 		WorkoutID: workoutID,
 		Type: 2,
 		AutoNext: "N",
@@ -283,7 +284,7 @@ func (s *set) DeleteWorkoutSetByID(setID int64) error {
 		//刪除訓練組
 		if err := tx.
 			Where("id = ?", setID).
-			Delete(&model.WorkoutSet{}).Error; err != nil {
+			Delete(&entity.WorkoutSet{}).Error; err != nil {
 			return err
 		}
 		//查詢訓練數量

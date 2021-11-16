@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -169,9 +170,9 @@ func (w *workout) CreateWorkoutByTemplate(c *gin.Context, planID int64, name str
 	if err != nil {
 		return nil, w.errHandler.Set(c, "WorkoutSet Repo", err)
 	}
-	sets := make([]*model.WorkoutSet, 0)
+	sets := make([]*entity.WorkoutSet, 0)
 	for _, v := range entities {
-		set := model.WorkoutSet{
+		set := entity.WorkoutSet{
 			WorkoutID:     newWorkoutID,
 			Type:          v.Type,
 			AutoNext:      v.AutoNext,
