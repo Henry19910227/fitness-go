@@ -19,13 +19,18 @@ type CourseProduct struct {
 	courseMidd midd.Course
 }
 
-func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, courseMidd midd.Course) {
+func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, courseMidd midd.Course, userMidd midd.User) {
 	course := CourseProduct{
 		courseService: courseService,
+		planService: planService,
 	}
 	baseGroup.GET("/course_product/:course_id",
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		course.GetCourseProduct)
+	baseGroup.GET("/course_product/:course_id/plans",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
+		course.GetPlanProducts)
 	baseGroup.GET("/course_products", course.SearchCourseProducts)
 }
 
@@ -105,4 +110,30 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 		return
 	}
 	p.JSONSuccessResponse(c, courses, "success!")
+}
+
+
+// GetPlanProducts 獲取課表產品計畫列表
+// @Summary 獲取課表產品計畫列表
+// @Description 獲取課表產品計畫列表
+// @Tags CourseProduct
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=[]dto.Plan} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course_product/{course_id}/plans [GET]
+func (p *CourseProduct) GetPlanProducts(c *gin.Context) {
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	plans, err := p.planService.GetPlansByCourseID(c, uri.CourseID)
+	if err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, plans, "success!")
 }
