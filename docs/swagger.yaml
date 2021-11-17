@@ -2403,6 +2403,40 @@ paths:
       summary: 取得計畫內的訓練列表
       tags:
       - Plan
+  /plan_product/{plan_id}/workouts:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訓練列表
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.Workout'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取訓練列表
+      tags:
+      - Store
   /register/email:
     post:
       consumes:

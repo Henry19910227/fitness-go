@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
@@ -11,13 +12,14 @@ import (
 
 type plan struct {
 	planRepo repository.Plan
+	courseRepo repository.Course
 	logger    handler.Logger
 	jwtTool   tool.JWT
 	errHandler errcode.Handler
 }
 
-func NewPlan(planRepo repository.Plan, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Plan {
-	return &plan{planRepo: planRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewPlan(planRepo repository.Plan, courseRepo repository.Course, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Plan {
+	return &plan{planRepo: planRepo, courseRepo: courseRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (p *plan) CreatePlan(c *gin.Context, courseID int64, name string) (*dto.Plan, errcode.Error) {
@@ -71,4 +73,14 @@ func (p *plan) DeletePlan(c *gin.Context, planID int64) (*dto.PlanID, errcode.Er
 		return nil, p.errHandler.SystemError()
 	}
 	return &dto.PlanID{ID: planID}, nil
+}
+
+func (p *plan) GetPlanStatus(c *gin.Context, planID int64) (global.CourseStatus, errcode.Error) {
+	course := struct {
+		CourseStatus int `json:"course_status"`
+	}{}
+	if err := p.courseRepo.FindCourseByPlanID(planID, &course); err != nil {
+		return 0, p.errHandler.Set(c, "course repo", err)
+	}
+	return global.CourseStatus(course.CourseStatus), nil
 }

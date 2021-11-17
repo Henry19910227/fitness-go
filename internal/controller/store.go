@@ -13,19 +13,26 @@ type Store struct {
 	Base
 	storeService service.Store
 	courseService service.Course
+	planService service.Plan
+	workoutService service.Workout
 	workoutSetService service.WorkoutSet
 }
 
-func NewStore(baseGroup *gin.RouterGroup, storeService service.Store, courseService service.Course, workoutSetService service.WorkoutSet, courseMidd midd.Course) {
+func NewStore(baseGroup *gin.RouterGroup, storeService service.Store, courseService service.Course, planService service.Plan, workoutService service.Workout, workoutSetService service.WorkoutSet, courseMidd midd.Course, planMidd midd.Plan) {
 	store := Store{
 		storeService: storeService,
 		courseService: courseService,
+		planService: planService,
+		workoutService: workoutService,
 		workoutSetService: workoutSetService,
 	}
 	baseGroup.GET("/store_home_page",store.GetHomePage)
 	baseGroup.GET("/course_product/:course_id",
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		store.GetCourseProduct)
+	baseGroup.GET("/plan_product/:plan_id/workouts",
+		planMidd.CourseStatusVerify(planService.GetPlanStatus, []global.CourseStatus{global.Sale}),
+		store.GetWorkouts)
 	baseGroup.GET("/course_product/:course_id/workout_sets",
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		store.GetWorkoutSets)
@@ -83,12 +90,22 @@ func (s *Store) GetCourseProduct(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param course_id path int64 true "課表id"
-// @Success 200 {object} model.SuccessResult{data=dto.CourseProduct} "獲取成功!"
+// @Param plan_id path int64 true "計畫id"
+// @Success 200 {object} model.SuccessResult{data=[]dto.Workout} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /plan_product/{plan_id}/workouts [GET]
 func (s *Store) GetWorkouts(c *gin.Context) {
-
+	var uri validator.PlanIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		s.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	workouts, err := s.workoutService.GetWorkoutsByPlanID(c, uri.PlanID)
+	if err != nil {
+		s.JSONErrorResponse(c, err)
+		return
+	}
+	s.JSONSuccessResponse(c, workouts, "success!")
 }
 
 // SearchCourseProducts 獲取課表產品

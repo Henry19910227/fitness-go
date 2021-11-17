@@ -29,6 +29,15 @@ func NewCourseMiddleware(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	return NewCourse(courseRepo, jwtTool, errHandler)
 }
 
+func NewPlanMiddleware(viperTool *viper.Viper, gormTool tool.Gorm) Plan {
+	courseRepo := repository.NewCourse(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	loggerTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(loggerTool, jwtTool))
+	return NewPlan(courseRepo, jwtTool, errHandler)
+}
+
+
 func NewReviewMiddleware(viperTool *viper.Viper, gormTool tool.Gorm) Review {
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	loggerTool, _ := tool.NewLogger(setting.NewLogger(viperTool))

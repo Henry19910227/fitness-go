@@ -76,6 +76,7 @@ var (
 
 	userMidd middleware.User
 	courseMidd middleware.Course
+	planMidd middleware.Plan
 	reviewMidd middleware.Review
 )
 
@@ -95,6 +96,7 @@ func init() {
 
 	userMidd = middleware.NewUserMiddleware(viperTool, gormTool)
 	courseMidd = middleware.NewCourseMiddleware(viperTool, gormTool)
+	planMidd = middleware.NewPlanMiddleware(viperTool, gormTool)
 	reviewMidd = middleware.NewReviewMiddleware(viperTool, gormTool)
 }
 
@@ -124,7 +126,7 @@ func main() {
 	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMidd, courseMidd)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
-	controller.NewStore(baseGroup, storeService, courseService, workoutSetService, courseMidd)
+	controller.NewStore(baseGroup, storeService, courseService, planService, workoutService, workoutSetService, courseMidd, planMidd)
 	controller.NewReview(baseGroup, courseService, reviewService, userMidd, courseMidd, reviewMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
@@ -207,10 +209,10 @@ func setupService() {
 	setupSwagService()
 	setupRegService()
 	setupUserService()
-	setupPlanService()
 	setupWorkoutSetService()
 	setupSaleService()
 	courseService = service.NewCourseService(viperTool, gormTool)
+	planService = service.NewPlanService(viperTool, gormTool)
 	workoutService = service.NewWorkoutService(viperTool, gormTool)
 	trainerService = service.NewTrainerService(viperTool, gormTool)
 	actionService = service.NewActionService(viperTool, gormTool)
@@ -232,11 +234,6 @@ func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
 	userService = service.NewUser(userRepo, trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
-func setupPlanService()  {
-	planRepo := repository.NewPlan(gormTool)
-	planService = service.NewPlan(planRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupWorkoutSetService()  {

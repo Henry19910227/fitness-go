@@ -81,6 +81,7 @@ type Plan interface {
 	UpdatePlan(c *gin.Context, planID int64, name string) (*dto.Plan, errcode.Error)
 	DeletePlan(c *gin.Context, planID int64) (*dto.PlanID, errcode.Error)
 	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*dto.Plan, errcode.Error)
+	GetPlanStatus(c *gin.Context, planID int64) (global.CourseStatus, errcode.Error)
 }
 
 type Workout interface {
