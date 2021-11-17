@@ -939,7 +939,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Store"
+                    "CourseProduct"
                 ],
                 "summary": "獲取課表產品詳細",
                 "parameters": [
@@ -1199,7 +1199,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Store"
+                    "CourseProduct"
                 ],
                 "summary": "獲取課表產品",
                 "parameters": [
