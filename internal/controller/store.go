@@ -107,7 +107,7 @@ func (s *Store) SearchCourseProducts(c *gin.Context) {
 		s.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, err := s.storeService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
+	courses, err := s.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
 		Name: query.Name,
 		OrderType: query.OrderType,
 		Score: query.Score,

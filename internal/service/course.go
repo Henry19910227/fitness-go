@@ -206,6 +206,35 @@ func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*
 	return course, nil
 }
 
+func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error) {
+	var field = string(global.UpdateAt)
+	offset, limit := cs.GetPagingIndex(page, size)
+	datas, err := cs.courseRepo.FindCourseProductSummaries(model.FindCourseProductSummariesParam{
+		Name: param.Name,
+		Score: param.Score,
+		Level: param.Level,
+		Category: param.Category,
+		Suit: param.Suit,
+		Equipment: param.Equipment,
+		Place: param.Place,
+		TrainTarget: param.TrainTarget,
+		BodyTarget: param.BodyTarget,
+		SaleType: param.SaleType,
+		TrainerSex: param.TrainerSex,
+		TrainerSkill: param.TrainerSkill,
+	}, &model.OrderBy{
+		Field:     field,
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: offset,
+		Limit:  limit,
+	})
+	if err != nil {
+		return nil, cs.errHandler.Set(c, "store", err)
+	}
+	return parserCourses(datas), nil
+}
+
 func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := cs.uploader.UploadCourseCover(param.File, param.CoverNamed)

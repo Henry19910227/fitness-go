@@ -36,36 +36,6 @@ func (s *store) GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error) 
 		PopularCourses: latestCourses}, nil
 }
 
-func (s *store) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error) {
-	var field = string(global.UpdateAt)
-	offset, limit := s.GetPagingIndex(page, size)
-	datas, err := s.courseRepo.FindCourseProductSummaries(model.FindCourseProductSummariesParam{
-		Name: param.Name,
-		Score: param.Score,
-		Level: param.Level,
-		Category: param.Category,
-		Suit: param.Suit,
-		Equipment: param.Equipment,
-		Place: param.Place,
-		TrainTarget: param.TrainTarget,
-		BodyTarget: param.BodyTarget,
-		SaleType: param.SaleType,
-		TrainerSex: param.TrainerSex,
-		TrainerSkill: param.TrainerSkill,
-	}, &model.OrderBy{
-		Field:     field,
-		OrderType: global.DESC,
-	}, &model.PagingParam{
-		Offset: offset,
-		Limit:  limit,
-	})
-	if err != nil {
-		return nil, s.errHandler.Set(c, "store", err)
-	}
-	return parserCourses(datas), nil
-}
-
-
 func (s *store) getLatestTrainerSummaries() ([]*dto.TrainerSummary, error) {
 	trainers := make([]*dto.TrainerSummary, 0)
 	var trainerStatus = global.TrainerActivity
