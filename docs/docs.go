@@ -4392,13 +4392,6 @@ var doc = `{
                     "type": "integer",
                     "example": 2
                 },
-                "plans": {
-                    "description": "計畫內容",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.Plan"
-                    }
-                },
                 "restricted": {
                     "description": "是否是限制訪問狀態(0:否/1:是)",
                     "type": "integer",

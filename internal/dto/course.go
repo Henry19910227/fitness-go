@@ -97,7 +97,6 @@ type CourseProduct struct {
 	Notice string                 `json:"notice" gorm:"column:notice" example:"小心不要受傷"`             // 注意事項
 	PlanCount int                 `json:"plan_count" gorm:"column:plan_count" example:"2"`              // 計畫總數
 	WorkoutCount int              `json:"workout_count" gorm:"column:workout_count" example:"10"`       // 訓練總數
-	Plans []*Plan                 `json:"plans"`                                                        // 計畫內容
 	Review ReviewStatistic        `json:"review"`                                                       // 評分統計
 }
 

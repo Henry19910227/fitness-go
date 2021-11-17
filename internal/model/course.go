@@ -90,7 +90,6 @@ type CourseProduct struct {
 	UpdateAt string `gorm:"column:update_at"`                // 更新時間
 	Trainer  *TrainerSummaryEntity `gorm:"foreignkey:user_id;references:user_id"` // 教練簡介
 	Sale     *SaleItem             `gorm:"foreignkey:id;references:sale_id"`             // 銷售項目
-	Plans    []*Plan               `gorm:"foreignkey:course_id;references:id"`            // 計畫內容
 	Review   ReviewStatistic       `gorm:"foreignkey:course_id;references:id"`           // 評分統計
 }
 

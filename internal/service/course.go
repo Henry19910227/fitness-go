@@ -334,17 +334,6 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 		PlanCount:    courseItem.PlanCount,
 		WorkoutCount: courseItem.WorkoutCount,
 	}
-	//配置計畫列表
-	plans := make([]*dto.Plan, 0)
-	for _, item := range courseItem.Plans{
-		plan := dto.Plan{
-			ID: item.ID,
-			Name: item.Name,
-			WorkoutCount: item.WorkoutCount,
-		}
-		plans = append(plans, &plan)
-	}
-	course.Plans = plans
 	//配置教練資訊
 	trainer := &dto.TrainerSummary{
 		UserID:   courseItem.Trainer.UserID,

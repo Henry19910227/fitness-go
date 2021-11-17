@@ -325,7 +325,6 @@ func (c *course) FindCourseProduct(courseID int64) (*model.CourseProduct, error)
 	if err := c.gorm.DB().
 		Preload("Trainer").
 		Preload("Sale").
-		Preload("Plans").
 		Preload("Review").
 		Where("id = ?", courseID).
 		Take(&course).Error; err != nil {
