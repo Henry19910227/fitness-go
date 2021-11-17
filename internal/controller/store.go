@@ -76,6 +76,21 @@ func (s *Store) GetCourseProduct(c *gin.Context) {
 	s.JSONSuccessResponse(c, course, "success!")
 }
 
+// GetWorkouts 獲取訓練列表
+// @Summary 獲取訓練列表
+// @Description 獲取訓練列表
+// @Tags Store
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=dto.CourseProduct} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /plan_product/{plan_id}/workouts [GET]
+func (s *Store) GetWorkouts(c *gin.Context) {
+
+}
+
 // SearchCourseProducts 獲取課表產品
 // @Summary 獲取課表產品
 // @Description 獲取課表產品

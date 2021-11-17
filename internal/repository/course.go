@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
@@ -61,7 +62,7 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 			return err
 		}
 		//創建訓練
-		workout := model.Workout{
+		workout := entity.Workout{
 			PlanID: plan.ID,
 			Name: "單一訓練",
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),

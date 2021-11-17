@@ -55,8 +55,8 @@ type Plan interface {
 
 type Workout interface {
 	CreateWorkout(planID int64, name string) (int64, error)
-	FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error)
-	FindWorkoutByID(workoutID int64, entity interface{}) error
+	FindWorkoutsByPlanID(planID int64) ([]*entity.Workout, error)
+	FindWorkoutByID(workoutID int64, obj interface{}) error
 	FindStartAudioCountByAudioName(audioName string) (int, error)
 	FindEndAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error
