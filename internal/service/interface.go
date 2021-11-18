@@ -95,6 +95,7 @@ type Workout interface {
 	CreateWorkoutByTemplate(c *gin.Context, planID int64, name string, workoutTemplateID int64) (*dto.Workout, errcode.Error)
 	DeleteWorkoutStartAudio(c *gin.Context, workoutID int64) errcode.Error
 	DeleteWorkoutEndAudio(c *gin.Context, workoutID int64) errcode.Error
+    GetWorkoutStatus(c *gin.Context, workoutID int64) (global.CourseStatus, errcode.Error)
 }
 
 type WorkoutSet interface {
@@ -102,6 +103,7 @@ type WorkoutSet interface {
 	CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*dto.WorkoutSet, errcode.Error)
 	DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*dto.WorkoutSet, errcode.Error)
 	GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet, errcode.Error)
+	GetWorkoutSetProductsByWorkoutID(c *gin.Context, workoutID int64) ([]*dto.WorkoutSetProduct, errcode.Error)
 	GetWorkoutSetsByCourseID(c *gin.Context, courseID int64) ([]*dto.WorkoutSet, errcode.Error)
 	UpdateWorkoutSet(c *gin.Context, setID int64, param *dto.UpdateWorkoutSetParam) (*dto.WorkoutSet, errcode.Error)
 	DeleteWorkoutSet(c *gin.Context, setID int64) (*dto.WorkoutSetID, errcode.Error)

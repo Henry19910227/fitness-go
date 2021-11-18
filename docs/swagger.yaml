@@ -49,6 +49,41 @@ definitions:
         example: 1
         type: integer
     type: object
+  dto.ActionProduct:
+    properties:
+      body:
+        description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        example: 8
+        type: integer
+      category:
+        description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        example: 1
+        type: integer
+      cover:
+        description: 封面
+        example: 32as1d5f13e4.png
+        type: string
+      equipment:
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
+      id:
+        description: 動作id
+        example: 1
+        type: integer
+      name:
+        description: 動作名稱
+        example: 槓鈴臥推
+        type: string
+      source:
+        description: 動作來源(1:系統動作/2:教練自創動作)
+        example: 2
+        type: integer
+      type:
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
+        type: integer
+    type: object
   dto.Admin:
     properties:
       email:
@@ -823,6 +858,44 @@ definitions:
         description: 訓練組id
         example: 10
         type: integer
+    type: object
+  dto.WorkoutSetProduct:
+    properties:
+      action:
+        $ref: '#/definitions/dto.ActionProduct'
+        description: 動作
+      auto_next:
+        description: 自動下一組(Y:是/N:否)
+        example: "N"
+        type: string
+      distance:
+        description: 距離(公里)
+        example: 0
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      id:
+        description: 訓練組id
+        example: 10
+        type: integer
+      incline:
+        description: 坡度
+        example: 0
+        type: number
+      reps:
+        description: 次數
+        example: 0
+        type: integer
+      type:
+        description: 動作類別(1:動作/2:休息)
+        example: 2
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 0
+        type: number
     type: object
   model.Data:
     type: object
@@ -3415,6 +3488,40 @@ paths:
       summary: 取得訓練內的訓練組列表
       tags:
       - Workout
+  /workout_product/{workout_id}/workout_sets:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訓練組列表(探索區課表)
+      parameters:
+      - description: 計畫id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.WorkoutSetProduct'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取訓練組列表(探索區課表)
+      tags:
+      - WorkoutProduct
   /workout_set/{workout_set_id}:
     delete:
       consumes:

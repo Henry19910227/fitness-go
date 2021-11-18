@@ -113,6 +113,15 @@ func (s *set) GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet
 	return parserWorkoutSets(datas), nil
 }
 
+func (s *set) GetWorkoutSetProductsByWorkoutID(c *gin.Context, workoutID int64) ([]*dto.WorkoutSetProduct, errcode.Error) {
+	datas, err := s.setRepo.FindWorkoutSetsByWorkoutID(workoutID)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	return parserWorkoutSetProducts(datas), nil
+}
+
 func (s *set) GetWorkoutSetsByCourseID(c *gin.Context, courseID int64) ([]*dto.WorkoutSet, errcode.Error) {
 	datas, err := s.setRepo.FindWorkoutSetsByCourseID(courseID)
 	if err != nil {
@@ -335,6 +344,37 @@ func parserWorkoutSets(datas []*model.WorkoutSet) []*dto.WorkoutSet {
 				Intro: data.Action.Intro,
 				Cover: data.Action.Cover,
 				Video: data.Action.Video,
+			}
+			set.Action = &action
+		}
+		sets = append(sets, &set)
+	}
+	return sets
+}
+
+func parserWorkoutSetProducts(datas []*model.WorkoutSet) []*dto.WorkoutSetProduct {
+	sets := make([]*dto.WorkoutSetProduct, 0)
+	for _, data := range datas {
+		set := dto.WorkoutSetProduct{
+			ID: data.ID,
+			Type: data.Type,
+			AutoNext: data.AutoNext,
+			Weight: data.Weight,
+			Reps: data.Reps,
+			Distance: data.Distance,
+			Duration: data.Duration,
+			Incline: data.Incline,
+		}
+		if data.Action != nil {
+			action := dto.ActionProduct{
+				ID: data.Action.ID,
+				Name: data.Action.Name,
+				Source: data.Action.Source,
+				Type: data.Action.Type,
+				Category: data.Action.Category,
+				Body: data.Action.Body,
+				Equipment: data.Action.Equipment,
+				Cover: data.Action.Cover,
 			}
 			set.Action = &action
 		}

@@ -19,6 +19,18 @@ type WorkoutSet struct {
 	Incline float64          `json:"incline" example:"0"`                      //坡度
 }
 
+type WorkoutSetProduct struct {
+	ID int64                 `json:"id" example:"10"`                          //訓練組id
+	Type int                 `json:"type" example:"2"`                         //動作類別(1:動作/2:休息)
+	Action *ActionProduct    `json:"action"`                                   //動作
+	AutoNext string          `json:"auto_next" example:"N"`                    //自動下一組(Y:是/N:否)
+	Weight float64           `json:"weight" example:"0"`                       //重量(公斤)
+	Reps int                 `json:"reps" example:"0"`                         //次數
+	Distance float64         `json:"distance" example:"0"`                     //距離(公里)
+	Duration int             `json:"duration" example:"30"`                    //時長(秒)
+	Incline float64          `json:"incline" example:"0"`                      //坡度
+}
+
 type UpdateWorkoutSetParam struct {
 	AutoNext *string `gorm:"column:auto_next"` //自動下一組(Y:是/N:否)
 	StartAudio *string `gorm:"column:start_audio"` //前導語音

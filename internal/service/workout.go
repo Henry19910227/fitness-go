@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/entity"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -275,4 +276,14 @@ func (w *workout) DeleteWorkoutEndAudio(c *gin.Context, workoutID int64) errcode
 		return w.errHandler.Set(c, "ResHandler", err)
 	}
 	return nil
+}
+
+func (w *workout) GetWorkoutStatus(c *gin.Context, workoutID int64) (global.CourseStatus, errcode.Error) {
+	course := struct {
+		CourseStatus int `json:"course_status"`
+	}{}
+	if err := w.courseRepo.FindCourseByWorkoutID(workoutID, &course); err != nil {
+		return 0, w.errHandler.Set(c, "course repo", err)
+	}
+	return global.CourseStatus(course.CourseStatus), nil
 }

@@ -44,3 +44,11 @@ func NewReviewMiddleware(viperTool *viper.Viper, gormTool tool.Gorm) Review {
 	errHandler := errcode.NewErrHandler(handler.NewLogger(loggerTool, jwtTool))
 	return NewReview(errHandler)
 }
+
+func NewWorkoutMiddleware(viperTool *viper.Viper, gormTool tool.Gorm) Workout {
+	courseRepo := repository.NewCourse(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	loggerTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(loggerTool, jwtTool))
+	return NewWorkout(courseRepo, jwtTool, errHandler)
+}

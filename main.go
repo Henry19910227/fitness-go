@@ -78,6 +78,7 @@ var (
 	courseMidd middleware.Course
 	planMidd middleware.Plan
 	reviewMidd middleware.Review
+	workoutMidd middleware.Workout
 )
 
 func init() {
@@ -98,6 +99,7 @@ func init() {
 	courseMidd = middleware.NewCourseMiddleware(viperTool, gormTool)
 	planMidd = middleware.NewPlanMiddleware(viperTool, gormTool)
 	reviewMidd = middleware.NewReviewMiddleware(viperTool, gormTool)
+	workoutMidd = middleware.NewWorkoutMiddleware(viperTool, gormTool)
 }
 
 // @title fitness api
@@ -125,6 +127,7 @@ func main() {
 	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
 	controller.NewPlanProduct(baseGroup, planService, workoutService, planMidd, userMidd)
 	controller.NewWorkout(baseGroup, workoutService, workoutSetService, userMidd, courseMidd)
+	controller.NewWorkoutProduct(baseGroup, workoutService, workoutSetService, workoutMidd, userMidd)
 	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMidd, courseMidd)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
