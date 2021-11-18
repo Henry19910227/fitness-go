@@ -50,7 +50,7 @@ func NewReview(baseGroup *gin.RouterGroup,
 
 // CreateReview 創建評論
 // @Summary 創建評論
-// @Description 創建評論
+// @Description 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review
 // @Accept json
 // @Produce json

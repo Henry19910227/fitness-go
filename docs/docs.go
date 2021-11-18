@@ -1044,7 +1044,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "創建評論",
+                "description": "查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}",
                 "consumes": [
                     "application/json"
                 ],
