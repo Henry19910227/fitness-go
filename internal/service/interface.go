@@ -87,6 +87,7 @@ type Plan interface {
 type Workout interface {
 	CreateWorkout(c *gin.Context, planID int64, name string) (*dto.Workout, errcode.Error)
 	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Workout, errcode.Error)
+	GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*dto.WorkoutProduct, errcode.Error)
 	UpdateWorkout(c *gin.Context, workoutID int64, param *dto.UpdateWorkoutParam) (*dto.Workout, errcode.Error)
 	DeleteWorkout(c *gin.Context, workoutID int64) (*dto.WorkoutID, errcode.Error)
 	UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)

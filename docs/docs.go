@@ -2142,7 +2142,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Store"
+                    "PlanProduct"
                 ],
                 "summary": "獲取訓練列表",
                 "parameters": [
@@ -2168,7 +2168,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/dto.Workout"
+                                                "$ref": "#/definitions/dto.WorkoutProduct"
                                             }
                                         }
                                     }
@@ -5057,6 +5057,31 @@ var doc = `{
             "properties": {
                 "workout_id": {
                     "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "dto.WorkoutProduct": {
+            "type": "object",
+            "properties": {
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,7"
+                },
+                "id": {
+                    "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "訓練名稱",
+                    "type": "string",
+                    "example": "第一天胸肌訓練"
+                },
+                "workout_set_count": {
+                    "description": "動作組數",
                     "type": "integer",
                     "example": 1
                 }
