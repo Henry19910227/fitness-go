@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -65,26 +66,26 @@ func (s *set) CreateRestSet(c *gin.Context, workoutID int64) (*dto.WorkoutSet, e
 }
 
 func (s *set) DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*dto.WorkoutSet, errcode.Error) {
-	entity, err := s.setRepo.FindWorkoutSetByID(setID)
+	data, err := s.setRepo.FindWorkoutSetByID(setID)
 	if err != nil {
 		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 		return nil, s.errHandler.SystemError()
 	}
-	sets := make([]*model.WorkoutSet, 0)
+	sets := make([]*entity.WorkoutSet, 0)
 	for i := 0; i < count; i++ {
-		set := model.WorkoutSet{
-			WorkoutID: entity.WorkoutID,
-			ActionID: &entity.Action.ID,
-			Type: entity.Type,
-			AutoNext: entity.AutoNext,
-			StartAudio: entity.StartAudio,
-			ProgressAudio: entity.ProgressAudio,
-			Remark: entity.Remark,
-			Weight: entity.Weight,
-			Reps: entity.Reps,
-			Distance: entity.Distance,
-			Duration: entity.Duration,
-			Incline: entity.Incline,
+		set := entity.WorkoutSet{
+			WorkoutID: data.WorkoutID,
+			ActionID: &data.Action.ID,
+			Type: data.Type,
+			AutoNext: data.AutoNext,
+			StartAudio: data.StartAudio,
+			ProgressAudio: data.ProgressAudio,
+			Remark: data.Remark,
+			Weight: data.Weight,
+			Reps: data.Reps,
+			Distance: data.Distance,
+			Duration: data.Duration,
+			Incline: data.Incline,
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
@@ -105,6 +106,24 @@ func (s *set) DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*d
 
 func (s *set) GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet, errcode.Error) {
 	datas, err := s.setRepo.FindWorkoutSetsByWorkoutID(workoutID)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	return parserWorkoutSets(datas), nil
+}
+
+func (s *set) GetWorkoutSetProductsByWorkoutID(c *gin.Context, workoutID int64) ([]*dto.WorkoutSetProduct, errcode.Error) {
+	datas, err := s.setRepo.FindWorkoutSetsByWorkoutID(workoutID)
+	if err != nil {
+		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
+		return nil, s.errHandler.SystemError()
+	}
+	return parserWorkoutSetProducts(datas), nil
+}
+
+func (s *set) GetWorkoutSetsByCourseID(c *gin.Context, courseID int64) ([]*dto.WorkoutSet, errcode.Error) {
+	datas, err := s.setRepo.FindWorkoutSetsByCourseID(courseID)
 	if err != nil {
 		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 		return nil, s.errHandler.SystemError()
@@ -265,7 +284,7 @@ func (s *set) DeleteWorkoutSetProgressAudio(c *gin.Context, setID int64) errcode
 	return nil
 }
 
-func parserWorkoutSet(data *model.WorkoutSetEntity) *dto.WorkoutSet {
+func parserWorkoutSet(data *model.WorkoutSet) *dto.WorkoutSet {
 	set := dto.WorkoutSet{
 		ID: data.ID,
 		Type: data.Type,
@@ -297,7 +316,7 @@ func parserWorkoutSet(data *model.WorkoutSetEntity) *dto.WorkoutSet {
 	return &set
 }
 
-func parserWorkoutSets(datas []*model.WorkoutSetEntity) []*dto.WorkoutSet {
+func parserWorkoutSets(datas []*model.WorkoutSet) []*dto.WorkoutSet {
 	sets := make([]*dto.WorkoutSet, 0)
 	for _, data := range datas {
 		set := dto.WorkoutSet{
@@ -325,6 +344,37 @@ func parserWorkoutSets(datas []*model.WorkoutSetEntity) []*dto.WorkoutSet {
 				Intro: data.Action.Intro,
 				Cover: data.Action.Cover,
 				Video: data.Action.Video,
+			}
+			set.Action = &action
+		}
+		sets = append(sets, &set)
+	}
+	return sets
+}
+
+func parserWorkoutSetProducts(datas []*model.WorkoutSet) []*dto.WorkoutSetProduct {
+	sets := make([]*dto.WorkoutSetProduct, 0)
+	for _, data := range datas {
+		set := dto.WorkoutSetProduct{
+			ID: data.ID,
+			Type: data.Type,
+			AutoNext: data.AutoNext,
+			Weight: data.Weight,
+			Reps: data.Reps,
+			Distance: data.Distance,
+			Duration: data.Duration,
+			Incline: data.Incline,
+		}
+		if data.Action != nil {
+			action := dto.ActionProduct{
+				ID: data.Action.ID,
+				Name: data.Action.Name,
+				Source: data.Action.Source,
+				Type: data.Action.Type,
+				Category: data.Action.Category,
+				Body: data.Action.Body,
+				Equipment: data.Action.Equipment,
+				Cover: data.Action.Cover,
 			}
 			set.Action = &action
 		}

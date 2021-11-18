@@ -49,6 +49,41 @@ definitions:
         example: 1
         type: integer
     type: object
+  dto.ActionProduct:
+    properties:
+      body:
+        description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        example: 8
+        type: integer
+      category:
+        description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        example: 1
+        type: integer
+      cover:
+        description: 封面
+        example: 32as1d5f13e4.png
+        type: string
+      equipment:
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
+      id:
+        description: 動作id
+        example: 1
+        type: integer
+      name:
+        description: 動作名稱
+        example: 槓鈴臥推
+        type: string
+      source:
+        description: 動作來源(1:系統動作/2:教練自創動作)
+        example: 2
+        type: integer
+      type:
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
+        type: integer
+    type: object
   dto.Admin:
     properties:
       email:
@@ -188,6 +223,10 @@ definitions:
     type: object
   dto.CourseProduct:
     properties:
+      body_target:
+        description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
+        example: 4,5
+        type: string
       category:
         description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
         example: 3
@@ -203,6 +242,10 @@ definitions:
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
+        type: string
+      food:
+        description: 飲食建議
+        example: 佛系飲食
         type: string
       id:
         description: 課表 id
@@ -220,6 +263,10 @@ definitions:
         description: 課表名稱
         example: Henry課表
         type: string
+      notice:
+        description: 注意事項
+        example: 小心不要受傷
+        type: string
       place:
         description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
         example: 1,2
@@ -228,11 +275,6 @@ definitions:
         description: 計畫總數
         example: 2
         type: integer
-      plans:
-        description: 計畫內容
-        items:
-          $ref: '#/definitions/dto.Plan'
-        type: array
       restricted:
         description: 是否是限制訪問狀態(0:否/1:是)
         example: 0
@@ -743,6 +785,25 @@ definitions:
         example: 1
         type: integer
     type: object
+  dto.WorkoutProduct:
+    properties:
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      id:
+        description: 訓練 id
+        example: 1
+        type: integer
+      name:
+        description: 訓練名稱
+        example: 第一天胸肌訓練
+        type: string
+      workout_set_count:
+        description: 動作組數
+        example: 1
+        type: integer
+    type: object
   dto.WorkoutSet:
     properties:
       action:
@@ -797,6 +858,44 @@ definitions:
         description: 訓練組id
         example: 10
         type: integer
+    type: object
+  dto.WorkoutSetProduct:
+    properties:
+      action:
+        $ref: '#/definitions/dto.ActionProduct'
+        description: 動作
+      auto_next:
+        description: 自動下一組(Y:是/N:否)
+        example: "N"
+        type: string
+      distance:
+        description: 距離(公里)
+        example: 0
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      id:
+        description: 訓練組id
+        example: 10
+        type: integer
+      incline:
+        description: 坡度
+        example: 0
+        type: number
+      reps:
+        description: 次數
+        example: 0
+        type: integer
+      type:
+        description: 動作類別(1:動作/2:休息)
+        example: 2
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 0
+        type: number
     type: object
   model.Data:
     type: object
@@ -1185,8 +1284,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
-        查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -1726,12 +1824,46 @@ paths:
       - fitness_token: []
       summary: 獲取課表產品詳細
       tags:
-      - Store
+      - CourseProduct
+  /course_product/{course_id}/plans:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表產品計畫列表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.Plan'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取課表產品計畫列表
+      tags:
+      - CourseProduct
   /course_product/{course_id}/review:
     post:
       consumes:
       - application/json
-      description: 創建評論
+      description: 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
       parameters:
       - description: 課表id
         in: path
@@ -1817,6 +1949,40 @@ paths:
       summary: 獲取評論列表
       tags:
       - Review
+  /course_product/{course_id}/workout_sets:
+    get:
+      consumes:
+      - application/json
+      description: 取得課表內的訓練組列表(單一訓練類型課表適用)
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.WorkoutSet'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得課表內的訓練組列表(單一訓練類型課表適用)
+      tags:
+      - CourseProduct
   /course_products:
     get:
       consumes:
@@ -1907,7 +2073,7 @@ paths:
       - fitness_token: []
       summary: 獲取課表產品
       tags:
-      - Store
+      - CourseProduct
   /courses:
     get:
       consumes:
@@ -2357,6 +2523,40 @@ paths:
       summary: 取得計畫內的訓練列表
       tags:
       - Plan
+  /plan_product/{plan_id}/workouts:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訓練列表
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.WorkoutProduct'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取訓練列表
+      tags:
+      - PlanProduct
   /register/email:
     post:
       consumes:
@@ -2612,12 +2812,7 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -2723,12 +2918,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -3287,6 +3477,40 @@ paths:
       summary: 取得訓練內的訓練組列表
       tags:
       - Workout
+  /workout_product/{workout_id}/workout_sets:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訓練組列表(探索區課表)
+      parameters:
+      - description: 計畫id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.WorkoutSetProduct'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取訓練組列表(探索區課表)
+      tags:
+      - WorkoutProduct
   /workout_set/{workout_set_id}:
     delete:
       consumes:

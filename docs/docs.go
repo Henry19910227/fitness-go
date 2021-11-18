@@ -939,7 +939,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Store"
+                    "CourseProduct"
                 ],
                 "summary": "獲取課表產品詳細",
                 "parameters": [
@@ -979,6 +979,64 @@ var doc = `{
                 }
             }
         },
+        "/course_product/{course_id}/plans": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表產品計畫列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CourseProduct"
+                ],
+                "summary": "獲取課表產品計畫列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.Plan"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course_product/{course_id}/review": {
             "post": {
                 "security": [
@@ -986,7 +1044,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "創建評論",
+                "description": "查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -1126,6 +1184,64 @@ var doc = `{
                 }
             }
         },
+        "/course_product/{course_id}/workout_sets": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得課表內的訓練組列表(單一訓練類型課表適用)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CourseProduct"
+                ],
+                "summary": "取得課表內的訓練組列表(單一訓練類型課表適用)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.WorkoutSet"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course_products": {
             "get": {
                 "security": [
@@ -1141,7 +1257,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Store"
+                    "CourseProduct"
                 ],
                 "summary": "獲取課表產品",
                 "parameters": [
@@ -1995,6 +2111,64 @@ var doc = `{
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/definitions/dto.Workout"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/plan_product/{plan_id}/workouts": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取訓練列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanProduct"
+                ],
+                "summary": "獲取訓練列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.WorkoutProduct"
                                             }
                                         }
                                     }
@@ -3515,6 +3689,64 @@ var doc = `{
                 }
             }
         },
+        "/workout_product/{workout_id}/workout_sets": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取訓練組列表(探索區課表)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutProduct"
+                ],
+                "summary": "獲取訓練組列表(探索區課表)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.WorkoutSetProduct"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/workout_set/{workout_set_id}": {
             "delete": {
                 "security": [
@@ -3972,6 +4204,51 @@ var doc = `{
                 }
             }
         },
+        "dto.ActionProduct": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                    "type": "integer",
+                    "example": 8
+                },
+                "category": {
+                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "cover": {
+                    "description": "封面",
+                    "type": "string",
+                    "example": "32as1d5f13e4.png"
+                },
+                "equipment": {
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "description": "動作id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "動作名稱",
+                    "type": "string",
+                    "example": "槓鈴臥推"
+                },
+                "source": {
+                    "description": "動作來源(1:系統動作/2:教練自創動作)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "type": {
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "dto.Admin": {
             "type": "object",
             "properties": {
@@ -4153,6 +4430,11 @@ var doc = `{
         "dto.CourseProduct": {
             "type": "object",
             "properties": {
+                "body_target": {
+                    "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)",
+                    "type": "string",
+                    "example": "4,5"
+                },
                 "category": {
                     "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
                     "type": "integer",
@@ -4172,6 +4454,11 @@ var doc = `{
                     "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
                     "type": "string",
                     "example": "2,3,6"
+                },
+                "food": {
+                    "description": "飲食建議",
+                    "type": "string",
+                    "example": "佛系飲食"
                 },
                 "id": {
                     "description": "課表 id",
@@ -4193,6 +4480,11 @@ var doc = `{
                     "type": "string",
                     "example": "Henry課表"
                 },
+                "notice": {
+                    "description": "注意事項",
+                    "type": "string",
+                    "example": "小心不要受傷"
+                },
                 "place": {
                     "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
                     "type": "string",
@@ -4202,13 +4494,6 @@ var doc = `{
                     "description": "計畫總數",
                     "type": "integer",
                     "example": 2
-                },
-                "plans": {
-                    "description": "計畫內容",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.Plan"
-                    }
                 },
                 "restricted": {
                     "description": "是否是限制訪問狀態(0:否/1:是)",
@@ -4880,6 +5165,31 @@ var doc = `{
                 }
             }
         },
+        "dto.WorkoutProduct": {
+            "type": "object",
+            "properties": {
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,7"
+                },
+                "id": {
+                    "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "訓練名稱",
+                    "type": "string",
+                    "example": "第一天胸肌訓練"
+                },
+                "workout_set_count": {
+                    "description": "動作組數",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "dto.WorkoutSet": {
             "type": "object",
             "properties": {
@@ -4949,6 +5259,55 @@ var doc = `{
                     "description": "訓練組id",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.WorkoutSetProduct": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "動作",
+                    "$ref": "#/definitions/dto.ActionProduct"
+                },
+                "auto_next": {
+                    "description": "自動下一組(Y:是/N:否)",
+                    "type": "string",
+                    "example": "N"
+                },
+                "distance": {
+                    "description": "距離(公里)",
+                    "type": "number",
+                    "example": 0
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 10
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 0
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 0
+                },
+                "type": {
+                    "description": "動作類別(1:動作/2:休息)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 0
                 }
             }
         },

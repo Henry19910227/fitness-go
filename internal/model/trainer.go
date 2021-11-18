@@ -31,6 +31,10 @@ type TrainerSummaryEntity struct {
 	Skill            string  `gorm:"column:skill"`           // 專長
 }
 
+func (TrainerSummaryEntity) TableName() string {
+	return "trainers"
+}
+
 type CreateTrainerParam struct {
 	Name               string     // 教練本名
 	Nickname           string     // 教練暱稱

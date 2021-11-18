@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ func NewWorkout(gorm tool.Gorm) Workout {
 }
 
 func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
-	workout := model.Workout{
+	workout := entity.Workout{
 		PlanID: planID,
 		Name: name,
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
@@ -74,8 +75,8 @@ func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
 	return workout.ID, nil
 }
 
-func (w *workout) FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error) {
-	workouts := make([]*model.Workout, 0)
+func (w *workout) FindWorkoutsByPlanID(planID int64) ([]*entity.Workout, error) {
+	workouts := make([]*entity.Workout, 0)
 	if err := w.gorm.DB().
 		Table("workouts").
 		Select("*").
@@ -86,11 +87,11 @@ func (w *workout) FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error) {
 	return workouts, nil
 }
 
-func (w *workout) FindWorkoutByID(workoutID int64, entity interface{}) error {
+func (w *workout) FindWorkoutByID(workoutID int64, obj interface{}) error {
 	if err := w.gorm.DB().
-		Model(&model.Workout{}).
+		Model(&entity.Workout{}).
 		Where("id = ?", workoutID).
-		Take(entity).Error; err != nil {
+		Take(obj).Error; err != nil {
 		return err
 	}
 	return nil
@@ -134,7 +135,7 @@ func (w *workout) DeleteWorkoutByID(workoutID int64) error {
 		//刪除訓練
 		if err := tx.
 			Where("id = ?", workoutID).
-			Delete(&model.Workout{}).Error; err != nil {
+			Delete(&entity.Workout{}).Error; err != nil {
 			return err
 		}
 		//查詢關聯計畫的訓練數量

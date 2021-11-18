@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/entity"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -58,6 +60,25 @@ func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Work
 			Equipment: data.Equipment,
 			StartAudio: data.StartAudio,
 			EndAudio: data.EndAudio,
+			WorkoutSetCount: data.WorkoutSetCount,
+		}
+		workouts = append(workouts, &workout)
+	}
+	return workouts, nil
+}
+
+func (w *workout) GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*dto.WorkoutProduct, errcode.Error) {
+	datas, err := w.workoutRepo.FindWorkoutsByPlanID(planID)
+	if err != nil {
+		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
+		return nil, w.errHandler.SystemError()
+	}
+	workouts := make([]*dto.WorkoutProduct, 0)
+	for _, data := range datas {
+		workout := dto.WorkoutProduct{
+			ID: data.ID,
+			Name: data.Name,
+			Equipment: data.Equipment,
 			WorkoutSetCount: data.WorkoutSetCount,
 		}
 		workouts = append(workouts, &workout)
@@ -169,9 +190,9 @@ func (w *workout) CreateWorkoutByTemplate(c *gin.Context, planID int64, name str
 	if err != nil {
 		return nil, w.errHandler.Set(c, "WorkoutSet Repo", err)
 	}
-	sets := make([]*model.WorkoutSet, 0)
+	sets := make([]*entity.WorkoutSet, 0)
 	for _, v := range entities {
-		set := model.WorkoutSet{
+		set := entity.WorkoutSet{
 			WorkoutID:     newWorkoutID,
 			Type:          v.Type,
 			AutoNext:      v.AutoNext,
@@ -255,4 +276,14 @@ func (w *workout) DeleteWorkoutEndAudio(c *gin.Context, workoutID int64) errcode
 		return w.errHandler.Set(c, "ResHandler", err)
 	}
 	return nil
+}
+
+func (w *workout) GetWorkoutStatus(c *gin.Context, workoutID int64) (global.CourseStatus, errcode.Error) {
+	course := struct {
+		CourseStatus int `json:"course_status"`
+	}{}
+	if err := w.courseRepo.FindCourseByWorkoutID(workoutID, &course); err != nil {
+		return 0, w.errHandler.Set(c, "course repo", err)
+	}
+	return global.CourseStatus(course.CourseStatus), nil
 }

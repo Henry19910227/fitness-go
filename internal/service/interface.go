@@ -70,6 +70,7 @@ type Course interface {
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
 	GetCourseProductByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
 	GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
+	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
 	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
     GetCourseStatus(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error)
@@ -80,11 +81,13 @@ type Plan interface {
 	UpdatePlan(c *gin.Context, planID int64, name string) (*dto.Plan, errcode.Error)
 	DeletePlan(c *gin.Context, planID int64) (*dto.PlanID, errcode.Error)
 	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*dto.Plan, errcode.Error)
+	GetPlanStatus(c *gin.Context, planID int64) (global.CourseStatus, errcode.Error)
 }
 
 type Workout interface {
 	CreateWorkout(c *gin.Context, planID int64, name string) (*dto.Workout, errcode.Error)
 	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Workout, errcode.Error)
+	GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*dto.WorkoutProduct, errcode.Error)
 	UpdateWorkout(c *gin.Context, workoutID int64, param *dto.UpdateWorkoutParam) (*dto.Workout, errcode.Error)
 	DeleteWorkout(c *gin.Context, workoutID int64) (*dto.WorkoutID, errcode.Error)
 	UploadWorkoutStartAudio(c *gin.Context, workoutID int64, audioNamed string, file multipart.File) (*dto.WorkoutAudio, errcode.Error)
@@ -92,6 +95,7 @@ type Workout interface {
 	CreateWorkoutByTemplate(c *gin.Context, planID int64, name string, workoutTemplateID int64) (*dto.Workout, errcode.Error)
 	DeleteWorkoutStartAudio(c *gin.Context, workoutID int64) errcode.Error
 	DeleteWorkoutEndAudio(c *gin.Context, workoutID int64) errcode.Error
+    GetWorkoutStatus(c *gin.Context, workoutID int64) (global.CourseStatus, errcode.Error)
 }
 
 type WorkoutSet interface {
@@ -99,6 +103,8 @@ type WorkoutSet interface {
 	CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*dto.WorkoutSet, errcode.Error)
 	DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*dto.WorkoutSet, errcode.Error)
 	GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet, errcode.Error)
+	GetWorkoutSetProductsByWorkoutID(c *gin.Context, workoutID int64) ([]*dto.WorkoutSetProduct, errcode.Error)
+	GetWorkoutSetsByCourseID(c *gin.Context, courseID int64) ([]*dto.WorkoutSet, errcode.Error)
 	UpdateWorkoutSet(c *gin.Context, setID int64, param *dto.UpdateWorkoutSetParam) (*dto.WorkoutSet, errcode.Error)
 	DeleteWorkoutSet(c *gin.Context, setID int64) (*dto.WorkoutSetID, errcode.Error)
 	UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*dto.WorkoutSetOrder) errcode.Error
@@ -122,7 +128,6 @@ type Sale interface {
 
 type Store interface {
 	GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error)
-	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error)
 }
 
 type Review interface {

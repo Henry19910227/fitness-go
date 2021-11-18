@@ -38,6 +38,16 @@ func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	return NewCourse(courseRepo, trainerRepo, planRepo, uploader, resHandler, logger, jwtTool, errHandler)
 }
 
+func NewPlanService(viperTool *viper.Viper, gormTool tool.Gorm) Plan {
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	courseRepo := repository.NewCourse(gormTool)
+	planRepo := repository.NewPlan(gormTool)
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	logger := handler.NewLogger(logTool, jwtTool)
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewPlan(planRepo, courseRepo, logger, jwtTool, errHandler)
+}
+
 func NewWorkoutService(viperTool *viper.Viper, gormTool tool.Gorm) Workout {
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	courseRepo := repository.NewCourse(gormTool)

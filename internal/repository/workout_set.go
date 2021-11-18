@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -16,10 +17,10 @@ func NewWorkoutSet(gorm tool.Gorm) WorkoutSet {
 }
 
 func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) ([]int64, error) {
-	sets := make([]*model.WorkoutSet, 0)
+	sets := make([]*entity.WorkoutSet, 0)
 	for _, v := range actionIDs {
 		var actionID = v
-		set := model.WorkoutSet{
+		set := entity.WorkoutSet{
 			WorkoutID: workoutID,
 			ActionID: &actionID,
 			Type: 1,
@@ -59,7 +60,7 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 	return workoutIDs, nil
 }
 
-func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model.WorkoutSet) ([]int64, error) {
+func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*entity.WorkoutSet) ([]int64, error) {
 	if len(sets) == 0 {
 		return []int64{}, nil
 	}
@@ -89,7 +90,7 @@ func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model
 }
 
 func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
-	set := model.WorkoutSet{
+	set := entity.WorkoutSet{
 		WorkoutID: workoutID,
 		Type: 2,
 		AutoNext: "N",
@@ -112,7 +113,7 @@ func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 	return set.ID, nil
 }
 
-func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
+func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error) {
 	row := s.gorm.DB().
 		Table("workout_sets AS `set`").
 		Select("`set`.id", "`set`.workout_id", "`set`.type",
@@ -125,7 +126,7 @@ func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
 			"IFNULL(actions.video, '')").
 		Joins("LEFT JOIN actions ON set.action_id = actions.id").
 		Where("`set`.id = ?", setID).Row()
-	var set model.WorkoutSetEntity
+	var set model.WorkoutSet
 	var action model.Action
 	if err := row.Scan(&set.ID, &set.WorkoutID, &set.Type,
 		&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
@@ -141,7 +142,7 @@ func (s *set) FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error) {
 	return &set, nil
 }
 
-func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error) {
+func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error) {
 	rows, err := s.gorm.DB().
 		Table("workout_sets AS `set`").
 		Select("`set`.id", "`set`.workout_id", "`set`.type",
@@ -157,9 +158,9 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, e
 	if err != nil {
 		return nil, err
 	}
-	var sets []*model.WorkoutSetEntity
+	var sets []*model.WorkoutSet
 	for rows.Next() {
-		var set model.WorkoutSetEntity
+		var set model.WorkoutSet
 		var action model.Action
 		if err := rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
 			&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
@@ -177,7 +178,7 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, e
 	return sets, nil
 }
 
-func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error) {
+func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSet, error) {
 	rows, err := s.gorm.DB().
 		Table("workout_sets AS `set`").
 		Select("`set`.id", "`set`.workout_id", "`set`.type",
@@ -197,9 +198,9 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 	if err != nil {
 		return nil, err
 	}
-	var sets []*model.WorkoutSetEntity
+	var sets []*model.WorkoutSet
 	for rows.Next() {
-		var set model.WorkoutSetEntity
+		var set model.WorkoutSet
 		var action model.Action
 		if err := rows.Scan(&set.ID, &set.WorkoutID, &set.Type,
 			&set.AutoNext, &set.StartAudio, &set.ProgressAudio,
@@ -213,6 +214,21 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEn
 			set.Action = &action
 		}
 		sets = append(sets, &set)
+	}
+	return sets, nil
+}
+
+func (s *set) FindWorkoutSetsByCourseID(courseID int64) ([]*model.WorkoutSet, error) {
+	var sets []*model.WorkoutSet
+	if err := s.gorm.DB().
+		Table("workout_sets AS sets").
+		Joins("INNER JOIN workouts ON sets.workout_id = workouts.id").
+		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
+		Joins("INNER JOIN courses ON plans.course_id = courses.id").
+		Where("courses.id = ? AND sets.type = ?", courseID, 1).
+		Preload("Action").
+		Find(&sets).Error; err != nil {
+			return nil, err
 	}
 	return sets, nil
 }
@@ -283,7 +299,7 @@ func (s *set) DeleteWorkoutSetByID(setID int64) error {
 		//刪除訓練組
 		if err := tx.
 			Where("id = ?", setID).
-			Delete(&model.WorkoutSet{}).Error; err != nil {
+			Delete(&entity.WorkoutSet{}).Error; err != nil {
 			return err
 		}
 		//查詢訓練數量

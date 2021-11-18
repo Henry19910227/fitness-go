@@ -206,6 +206,35 @@ func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*
 	return course, nil
 }
 
+func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error) {
+	var field = string(global.UpdateAt)
+	offset, limit := cs.GetPagingIndex(page, size)
+	datas, err := cs.courseRepo.FindCourseProductSummaries(model.FindCourseProductSummariesParam{
+		Name: param.Name,
+		Score: param.Score,
+		Level: param.Level,
+		Category: param.Category,
+		Suit: param.Suit,
+		Equipment: param.Equipment,
+		Place: param.Place,
+		TrainTarget: param.TrainTarget,
+		BodyTarget: param.BodyTarget,
+		SaleType: param.SaleType,
+		TrainerSex: param.TrainerSex,
+		TrainerSkill: param.TrainerSkill,
+	}, &model.OrderBy{
+		Field:     field,
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: offset,
+		Limit:  limit,
+	})
+	if err != nil {
+		return nil, cs.errHandler.Set(c, "store", err)
+	}
+	return parserCourses(datas), nil
+}
+
 func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := cs.uploader.UploadCourseCover(param.File, param.CoverNamed)
@@ -282,7 +311,7 @@ func (cs *course) VerifyCourse(course *model.CourseDetailEntity) error {
 
 func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error) {
 	//查詢課表詳情
-	courseItem, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	courseItem, err := cs.courseRepo.FindCourseProduct(courseID)
 	if err != nil {
 		return nil, err
 	}
@@ -294,25 +323,17 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 		Name:         courseItem.Name,
 		Cover:        courseItem.Cover,
 		Intro:        courseItem.Intro,
+		Food:         courseItem.Food,
 		Level:        courseItem.Level,
 		Suit:         courseItem.Suit,
 		Equipment:    courseItem.Equipment,
 		Place:        courseItem.Place,
 		TrainTarget:  courseItem.TrainTarget,
+		BodyTarget:   courseItem.BodyTarget,
+		Notice:       courseItem.Notice,
 		PlanCount:    courseItem.PlanCount,
 		WorkoutCount: courseItem.WorkoutCount,
 	}
-	//查詢計畫
-	planItems, err := cs.planRepo.FindPlansByCourseID(courseID)
-	if err != nil {
-		return nil, err
-	}
-	plans := make([]*dto.Plan, 0)
-	for _, item := range planItems{
-		plan := dto.Plan{ID: item.ID}
-		plans = append(plans, &plan)
-	}
-	course.Plans = plans
 	//配置教練資訊
 	trainer := &dto.TrainerSummary{
 		UserID:   courseItem.Trainer.UserID,
@@ -332,6 +353,17 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 		}
 		course.Sale = sale
 	}
+	review := dto.ReviewStatistic{
+		ScoreTotal: courseItem.Review.ScoreTotal,
+		Amount: courseItem.Review.Amount,
+		FiveTotal: courseItem.Review.FiveTotal,
+		FourTotal: courseItem.Review.FourTotal,
+		ThreeTotal: courseItem.Review.ThreeTotal,
+		TwoTotal: courseItem.Review.TwoTotal,
+		OneTotal: courseItem.Review.OneTotal,
+		UpdateAt: courseItem.Review.UpdateAt,
+	}
+	course.Review = review
 	return &course, nil
 }
 

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 )
@@ -32,6 +33,7 @@ type Course interface {
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummaryEntity, error)
 	FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
+	FindCourseProduct(courseID int64) (*model.CourseProduct, error)
 	FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
 	FindCourseByID(courseID int64, entity interface{}) error
@@ -53,8 +55,8 @@ type Plan interface {
 
 type Workout interface {
 	CreateWorkout(planID int64, name string) (int64, error)
-	FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error)
-	FindWorkoutByID(workoutID int64, entity interface{}) error
+	FindWorkoutsByPlanID(planID int64) ([]*entity.Workout, error)
+	FindWorkoutByID(workoutID int64, obj interface{}) error
 	FindStartAudioCountByAudioName(audioName string) (int, error)
 	FindEndAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error
@@ -64,11 +66,12 @@ type Workout interface {
 
 type WorkoutSet interface {
 	CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) ([]int64, error)
-	CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*model.WorkoutSet) ([]int64, error)
+	CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*entity.WorkoutSet) ([]int64, error)
 	CreateRestSetByWorkoutID(workoutID int64) (int64, error)
-	FindWorkoutSetByID(setID int64) (*model.WorkoutSetEntity, error)
-	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSetEntity, error)
-	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSetEntity, error)
+	FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error)
+	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error)
+	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSet, error)
+	FindWorkoutSetsByCourseID(courseID int64) ([]*model.WorkoutSet, error)
 	FindStartAudioCountByAudioName(audioName string) (int, error)
 	FindProgressAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error

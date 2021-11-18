@@ -76,7 +76,9 @@ var (
 
 	userMidd middleware.User
 	courseMidd middleware.Course
+	planMidd middleware.Plan
 	reviewMidd middleware.Review
+	workoutMidd middleware.Workout
 )
 
 func init() {
@@ -95,7 +97,9 @@ func init() {
 
 	userMidd = middleware.NewUserMiddleware(viperTool, gormTool)
 	courseMidd = middleware.NewCourseMiddleware(viperTool, gormTool)
+	planMidd = middleware.NewPlanMiddleware(viperTool, gormTool)
 	reviewMidd = middleware.NewReviewMiddleware(viperTool, gormTool)
+	workoutMidd = middleware.NewWorkoutMiddleware(viperTool, gormTool)
 }
 
 // @title fitness api
@@ -110,6 +114,7 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger()) //加入路由Logger
 	router.Use(gin.CustomRecovery(middleware.Recover(logHandler)))
+	//gin.SetMode(gin.ReleaseMode)
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
 	controller.NewManager(baseGroup)
@@ -118,12 +123,15 @@ func main() {
 	controller.NewUser(baseGroup, userService, userMiddleware)
 	controller.NewTrainer(baseGroup, trainerService, userMiddleware, userMidd)
 	controller.NewCourse(baseGroup, courseService, planService, actionService, reviewService, userMidd, courseMidd)
+	controller.NewCourseProduct(baseGroup, courseService, planService, workoutSetService, courseMidd, userMidd)
 	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
+	controller.NewPlanProduct(baseGroup, planService, workoutService, planMidd, userMidd)
 	controller.NewWorkout(baseGroup, workoutService, workoutSetService, userMidd, courseMidd)
+	controller.NewWorkoutProduct(baseGroup, workoutService, workoutSetService, workoutMidd, userMidd)
 	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
 	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMidd, courseMidd)
 	controller.NewSale(baseGroup, saleService, userMiddleware)
-	controller.NewStore(baseGroup, storeService, courseService, courseMidd)
+	controller.NewStore(baseGroup, storeService, courseService, planService, workoutService, workoutSetService, courseMidd, planMidd)
 	controller.NewReview(baseGroup, courseService, reviewService, userMidd, courseMidd, reviewMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
@@ -206,10 +214,10 @@ func setupService() {
 	setupSwagService()
 	setupRegService()
 	setupUserService()
-	setupPlanService()
 	setupWorkoutSetService()
 	setupSaleService()
 	courseService = service.NewCourseService(viperTool, gormTool)
+	planService = service.NewPlanService(viperTool, gormTool)
 	workoutService = service.NewWorkoutService(viperTool, gormTool)
 	trainerService = service.NewTrainerService(viperTool, gormTool)
 	actionService = service.NewActionService(viperTool, gormTool)
@@ -231,11 +239,6 @@ func setupUserService()  {
 	userRepo := repository.NewUser(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
 	userService = service.NewUser(userRepo, trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
-func setupPlanService()  {
-	planRepo := repository.NewPlan(gormTool)
-	planService = service.NewPlan(planRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupWorkoutSetService()  {
