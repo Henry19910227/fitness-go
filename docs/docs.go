@@ -1191,7 +1191,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "取得課表內的訓練組列表",
+                "description": "取得課表內的訓練組列表(單一訓練類型課表適用)",
                 "consumes": [
                     "application/json"
                 ],
@@ -1199,9 +1199,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Store"
+                    "CourseProduct"
                 ],
-                "summary": "取得課表內的訓練組列表",
+                "summary": "取得課表內的訓練組列表(單一訓練類型課表適用)",
                 "parameters": [
                     {
                         "type": "integer",

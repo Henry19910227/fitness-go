@@ -13,16 +13,18 @@ type CourseProduct struct {
 	Base
 	courseService service.Course
 	planService   service.Plan
+	workoutSetService service.WorkoutSet
 	actionService service.Action
 	reviewService service.Review
 	userMidd midd.User
 	courseMidd midd.Course
 }
 
-func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, courseMidd midd.Course, userMidd midd.User) {
+func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, workoutSetService service.WorkoutSet, courseMidd midd.Course, userMidd midd.User) {
 	course := CourseProduct{
 		courseService: courseService,
 		planService: planService,
+		workoutSetService: workoutSetService,
 	}
 	baseGroup.GET("/course_product/:course_id",
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
@@ -31,6 +33,10 @@ func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, 
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		course.GetPlanProducts)
+	baseGroup.GET("/course_product/:course_id/workout_sets",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
+		course.GetWorkoutSets)
 	baseGroup.GET("/course_products", course.SearchCourseProducts)
 }
 
@@ -136,4 +142,29 @@ func (p *CourseProduct) GetPlanProducts(c *gin.Context) {
 		return
 	}
 	p.JSONSuccessResponse(c, plans, "success!")
+}
+
+// GetWorkoutSets 取得課表內的訓練組列表(單一訓練類型課表適用)
+// @Summary  取得課表內的訓練組列表(單一訓練類型課表適用)
+// @Description  取得課表內的訓練組列表(單一訓練類型課表適用)
+// @Tags CourseProduct
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course_product/{course_id}/workout_sets [GET]
+func (p *CourseProduct) GetWorkoutSets(c *gin.Context) {
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	sets, err := p.workoutSetService.GetWorkoutSetsByCourseID(c, uri.CourseID)
+	if err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, sets, "success!")
 }
