@@ -4430,6 +4430,11 @@ var doc = `{
         "dto.CourseProduct": {
             "type": "object",
             "properties": {
+                "allow_access": {
+                    "description": "是否允許訪問此課表(0:否/1:是)",
+                    "type": "integer",
+                    "example": 0
+                },
                 "body_target": {
                     "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)",
                     "type": "string",
@@ -4494,11 +4499,6 @@ var doc = `{
                     "description": "計畫總數",
                     "type": "integer",
                     "example": 2
-                },
-                "restricted": {
-                    "description": "是否是限制訪問狀態(0:否/1:是)",
-                    "type": "integer",
-                    "example": 0
                 },
                 "review": {
                     "description": "評分統計",

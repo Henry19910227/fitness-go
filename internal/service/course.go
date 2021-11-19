@@ -193,7 +193,7 @@ func (cs *course) GetCourseProductByCourseID(c *gin.Context, courseID int64) (*d
 	if err != nil {
 		return course, cs.errHandler.Set(c, "course repo", err)
 	}
-	course.Restricted = 1
+	course.AllowAccess = 0
 	return course, nil
 }
 
@@ -202,7 +202,7 @@ func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*
 	if err != nil {
 		return course, cs.errHandler.Set(c, "course repo", err)
 	}
-	course.Restricted = 0
+	course.AllowAccess = 1
 	return course, nil
 }
 

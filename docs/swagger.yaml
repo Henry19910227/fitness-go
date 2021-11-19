@@ -223,6 +223,10 @@ definitions:
     type: object
   dto.CourseProduct:
     properties:
+      allow_access:
+        description: 是否允許訪問此課表(0:否/1:是)
+        example: 0
+        type: integer
       body_target:
         description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
         example: 4,5
@@ -274,10 +278,6 @@ definitions:
       plan_count:
         description: 計畫總數
         example: 2
-        type: integer
-      restricted:
-        description: 是否是限制訪問狀態(0:否/1:是)
-        example: 0
         type: integer
       review:
         $ref: '#/definitions/dto.ReviewStatistic'
@@ -1284,7 +1284,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
+        查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -2812,7 +2813,12 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -2918,7 +2924,12 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData

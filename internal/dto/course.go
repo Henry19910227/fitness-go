@@ -80,7 +80,7 @@ type CourseProduct struct {
 	ID       int64                `json:"id" gorm:"column:id" example:"2"`                       // 課表 id
 	Trainer  *TrainerSummary       `json:"trainer"`                                               // 教練簡介
 	Sale     *SaleItem            `json:"sale"`                                                  // 銷售項目
-	Restricted int                `json:"restricted" example:"0"`                                 // 是否是限制訪問狀態(0:否/1:是)
+	AllowAccess int               `json:"allow_access" example:"0"`                              // 是否允許訪問此課表(0:否/1:是)
 	CourseStatus int              `json:"course_status" gorm:"column:course_status" example:"1"` // 課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int                  `json:"category" gorm:"column:category" example:"3"`           // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
 	ScheduleType int              `json:"schedule_type" gorm:"column:schedule_type" example:"2"` // 排課類別(1:單一訓練/2:多項計畫)
