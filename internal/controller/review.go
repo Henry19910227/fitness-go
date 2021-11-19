@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Review struct {
@@ -24,6 +25,7 @@ func NewReview(baseGroup *gin.RouterGroup,
 
 	review := &Review{courseService: courseService, reviewService: reviewService}
 
+	baseGroup.StaticFS("/resource/course/review", http.Dir("./volumes/storage/course/review"))
 	baseGroup.POST("/course_product/:course_id/review",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
