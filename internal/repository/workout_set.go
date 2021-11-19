@@ -225,7 +225,7 @@ func (s *set) FindWorkoutSetsByCourseID(courseID int64) ([]*model.WorkoutSet, er
 		Joins("INNER JOIN workouts ON sets.workout_id = workouts.id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
 		Joins("INNER JOIN courses ON plans.course_id = courses.id").
-		Where("courses.id = ? AND sets.type = ?", courseID, 1).
+		Where("courses.id = ?", courseID).
 		Preload("Action").
 		Find(&sets).Error; err != nil {
 			return nil, err
