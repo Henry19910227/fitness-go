@@ -25,15 +25,14 @@ func NewPlan(courseRepo repository.Course, jwtTool tool.JWT, errHandler errcode.
 func (p *plan) CourseStatusVerify(currentStatus func(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error), allowStatus []global.CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var planUri validator.PlanIDUri
-		var err error
-		if err = c.ShouldBindUri(&planUri); err != nil {
+		if err := c.ShouldBindUri(&planUri); err != nil {
 			p.JSONErrorResponse(c, p.errHandler.Set(c, "course repo", err))
 			c.Abort()
 			return
 		}
 		current, e := currentStatus(c, planUri.PlanID)
 		if e != nil {
-			p.JSONErrorResponse(c, p.errHandler.Set(c, "course repo", err))
+			p.JSONErrorResponse(c, p.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(e.Code()))))
 			c.Abort()
 			return
 		}

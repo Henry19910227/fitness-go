@@ -148,15 +148,14 @@ func (cm *course) AdminAccessCourseByStatusRange(status []global.CourseStatus) g
 func (cm *course) CourseStatusVerify(currentStatus func(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error), allowStatus []global.CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var courseUri validator.CourseIDUri
-		var err error
-		if err = c.ShouldBindUri(&courseUri); err != nil {
+		if err := c.ShouldBindUri(&courseUri); err != nil {
 			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
 			c.Abort()
 			return
 		}
 		current, e := currentStatus(c, courseUri.CourseID)
 		if e != nil {
-			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", err))
+			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(e.Code()))))
 			c.Abort()
 			return
 		}

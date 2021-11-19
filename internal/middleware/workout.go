@@ -25,15 +25,14 @@ func NewWorkout(courseRepo repository.Course, jwtTool tool.JWT, errHandler errco
 func (w *workout) CourseStatusVerify(currentStatus func(c *gin.Context, workoutID int64) (global.CourseStatus, errcode.Error), allowStatus []global.CourseStatus) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var workoutUri validator.WorkoutIDUri
-		var err error
-		if err = c.ShouldBindUri(&workoutUri); err != nil {
+		if err := c.ShouldBindUri(&workoutUri); err != nil {
 			w.JSONErrorResponse(c, w.errHandler.Set(c, "json repo", err))
 			c.Abort()
 			return
 		}
 		current, e := currentStatus(c, workoutUri.WorkoutID)
 		if e != nil {
-			w.JSONErrorResponse(c, w.errHandler.Set(c, "workout repo", err))
+			w.JSONErrorResponse(c, w.errHandler.Set(c, "workout repo", errors.New(strconv.Itoa(e.Code()))))
 			c.Abort()
 			return
 		}
