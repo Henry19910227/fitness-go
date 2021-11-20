@@ -4695,12 +4695,17 @@ var doc = `{
                 "course_id": {
                     "description": "課表id",
                     "type": "integer",
-                    "example": 1000
+                    "example": 2
                 },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "1000"
+                    "example": "2021-06-01 12:00:00"
+                },
+                "id": {
+                    "description": "評論id",
+                    "type": "integer",
+                    "example": 1
                 },
                 "images": {
                     "description": "評論照片",
@@ -5106,7 +5111,13 @@ var doc = `{
                 },
                 "id": {
                     "description": "用戶id",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
+                },
+                "nickname": {
+                    "description": "用戶暱稱",
+                    "type": "string",
+                    "example": "Henry"
                 }
             }
         },

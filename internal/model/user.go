@@ -27,6 +27,7 @@ func (User) TableName() string {
 
 type UserSummary struct {
 	ID               int64   `gorm:"column:id"`                  // 帳戶id
+	Nickname         string  `gorm:"column:nickname"`            // 暱稱
 	Avatar           string  `gorm:"column:avatar"`              // 用戶大頭貼
 }
 

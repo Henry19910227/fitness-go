@@ -1,12 +1,13 @@
 package dto
 
 type Review struct {
-	CourseID int64 `json:"course_id" gorm:"column:course_id" example:"1000"` //課表id
-	User *UserSummary `json:"user" gorm:"column:user_id"` //用戶id
-	Score int `json:"score" gorm:"column:score" example:"1000"` //評分
-	Body string `json:"body" gorm:"column:body" example:"這個課表很棒!"` //評論內容
-	Images []*ReviewImage `json:"images" gorm:"-"` //評論照片
-	CreateAt string `json:"create_at" gorm:"column:create_at" example:"1000"` //創建時間
+	ID       int64 `json:"id" example:"1"` //評論id
+	CourseID int64 `json:"course_id" example:"2"` //課表id
+	User *UserSummary `json:"user"` //用戶id
+	Score int `json:"score" example:"1000"` //評分
+	Body string `json:"body" example:"這個課表很棒!"` //評論內容
+	Images []*ReviewImage `json:"images"` //評論照片
+	CreateAt string `json:"create_at" example:"2021-06-01 12:00:00"` //創建時間
 }
 
 type ReviewImage struct {

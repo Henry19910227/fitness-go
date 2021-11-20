@@ -32,7 +32,8 @@ type User struct {
 }
 
 type UserSummary struct {
-	ID               int64   `json:"id" gorm:"column:id"`                  // 用戶id
+	ID               int64   `json:"id" example:"1"`                  // 用戶id
+	Nickname         string  `json:"nickname" example:"Henry"`        // 用戶暱稱
 	Avatar           string  `json:"avatar" example:"dkf2se51fsdds.png"`   // 用戶大頭照
 }
 

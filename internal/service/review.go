@@ -111,8 +111,10 @@ func (r *review) GetReviewOwner(c *gin.Context, reviewID int64) (int64, errcode.
 
 func parserReview(item *model.Review) *dto.Review {
 	review := dto.Review{
+		ID: item.ID,
 		User: &dto.UserSummary{
 			ID:     item.User.ID,
+			Nickname: item.User.Nickname,
 			Avatar: item.User.Avatar,
 		},
 		CourseID: item.CourseID,
