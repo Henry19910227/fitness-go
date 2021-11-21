@@ -525,7 +525,7 @@ definitions:
       twd:
         description: 台幣價格
         example: 330
-        type: number
+        type: integer
       type:
         description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
         example: 3

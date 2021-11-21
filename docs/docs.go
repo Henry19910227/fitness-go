@@ -4819,7 +4819,7 @@ var doc = `{
                 },
                 "twd": {
                     "description": "台幣價格",
-                    "type": "number",
+                    "type": "integer",
                     "example": 330
                 },
                 "type": {
