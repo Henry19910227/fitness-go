@@ -1074,8 +1074,7 @@ var doc = `{
                         "type": "string",
                         "description": "評論內文",
                         "name": "body",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "type": "file",
@@ -1119,7 +1118,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取評論列表",
+                "description": "查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -2376,7 +2375,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取評論",
+                "description": "查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -2443,7 +2442,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "課表id",
+                        "description": "評論id",
                         "name": "review_id",
                         "in": "path",
                         "required": true

@@ -59,7 +59,7 @@ func NewReview(baseGroup *gin.RouterGroup,
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Param score formData int true "評分"
-// @Param body formData string true "評論內文"
+// @Param body formData string false "評論內文"
 // @Param review_images formData file false "評論照片(多張)"
 // @Success 200 {object} model.SuccessResult{data=dto.Review} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
@@ -107,7 +107,7 @@ func (r *Review) CreateReview(c *gin.Context) {
 
 // GetReviews 獲取評論列表
 // @Summary 獲取評論列表
-// @Description 獲取評論列表
+// @Description 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review
 // @Accept json
 // @Produce json
@@ -144,7 +144,7 @@ func (r *Review) GetReviews(c *gin.Context) {
 
 // GetReview 獲取評論
 // @Summary 獲取評論
-// @Description 獲取評論
+// @Description 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review
 // @Accept json
 // @Produce json
@@ -174,7 +174,7 @@ func (r *Review) GetReview(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param review_id path int64 true "課表id"
+// @Param review_id path int64 true "評論id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
 // @Router /review/{review_id} [DELETE]

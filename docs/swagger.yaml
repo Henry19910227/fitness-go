@@ -1887,7 +1887,6 @@ paths:
       - description: 評論內文
         in: formData
         name: body
-        required: true
         type: string
       - description: 評論照片(多張)
         in: formData
@@ -1918,7 +1917,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 獲取評論列表
+      description: 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
       parameters:
       - description: 課表id
         in: path
@@ -2686,7 +2685,7 @@ paths:
       - application/json
       description: 刪除評論
       parameters:
-      - description: 課表id
+      - description: 評論id
         in: path
         name: review_id
         required: true
@@ -2710,7 +2709,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 獲取評論
+      description: 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
       parameters:
       - description: 評論id
         in: path
