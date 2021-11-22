@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
+	"strconv"
 	"time"
 )
 
@@ -235,28 +236,28 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	}
 	//加入 suit 篩選條件
 	if len(param.Suit) > 0 {
-		query += "AND courses.suit IN ? "
-		params = append(params, param.Suit)
+		query += "AND courses.suit LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.Suit) + "%")
 	}
 	//加入 Equipment 篩選條件
 	if len(param.Equipment) > 0 {
-		query += "AND courses.equipment IN ? "
-		params = append(params, param.Equipment)
+		query += "AND courses.equipment LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.Equipment) + "%")
 	}
 	//加入 Place 篩選條件
-	if len(param.Equipment) > 0 {
-		query += "AND courses.place IN ? "
-		params = append(params, param.Place)
+	if len(param.Place) > 0 {
+		query += "AND courses.place LIKE ? "
+		params = append(params, "%"+ transformFilterParams(param.Place) + "%")
 	}
 	//加入 TrainTarget 篩選條件
 	if len(param.TrainTarget) > 0 {
-		query += "AND courses.train_target IN ? "
-		params = append(params, param.TrainTarget)
+		query += "AND courses.train_target LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.TrainTarget) + "%")
 	}
 	//加入 BodyTarget 篩選條件
 	if len(param.BodyTarget) > 0 {
-		query += "AND courses.body_target IN ? "
-		params = append(params, param.BodyTarget)
+		query += "AND courses.body_target LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.BodyTarget) + "%")
 	}
 	//加入 SaleType 篩選條件
 	if len(param.SaleType) > 0 {
@@ -270,8 +271,8 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	}
 	//加入 TrainerSkill 篩選條件
 	if len(param.TrainerSkill) > 0 {
-		query += "AND trainers.skill IN ? "
-		params = append(params, param.TrainerSkill)
+		query += "AND trainers.skill LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.TrainerSkill) + "%")
 	}
 	//基本查詢
 	db = c.gorm.DB().
@@ -430,4 +431,15 @@ func (c *course) DeleteCourseByID(courseID int64) error {
 		return err
 	}
 	return nil
+}
+
+func transformFilterParams(params []int) string {
+	var result string
+	for _, param := range params{
+		result += strconv.Itoa(param) + ","
+	}
+	if len(result) > 0 {
+		result = result[:len(result)-1]
+	}
+	return result
 }
