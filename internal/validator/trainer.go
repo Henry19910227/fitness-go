@@ -45,6 +45,11 @@ type TrainerAlbumPhotoIDUri struct {
 	PhotoID int64 `uri:"photo_id" binding:"required" example:"1"`
 }
 
+type TrainerIDUri struct {
+	TrainerID int64 `uri:"user_id" binding:"required" example:"1"`
+}
+
+
 
 func init() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {

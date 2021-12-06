@@ -323,6 +323,9 @@ func (t *trainer) GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.E
 	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
+	if trainer.UserID == 0 {
+		return nil, t.errHandler.Set(c, "trainer repo", errors.New(strconv.Itoa(errcode.DataNotFound)))
+	}
 	if err := t.albumRepo.FindAlbumPhotosByUID(uid, &trainer.TrainerAlbumPhotos); err != nil {
 		return nil, t.errHandler.Set(c, "trainer album repo", err)
 	}

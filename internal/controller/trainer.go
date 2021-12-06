@@ -40,6 +40,10 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing, global.TrainerRevoke}),
 		trainer.GetTrainer)
 
+	baseGroup.GET("/trainer/:user_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		trainer.GetTrainerByUID)
+
 	baseGroup.PATCH("/trainer",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing, global.TrainerRevoke}),
@@ -321,7 +325,30 @@ func (t *Trainer) GetTrainer(c *gin.Context) {
 	t.JSONSuccessResponse(c, trainer, "success!")
 }
 
-
+// GetTrainerByUID 取得指定教練資訊
+// @Summary 取得指定教練資訊
+// @Description 取得指定教練資訊
+// @Tags Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練id"
+// @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /trainer/{user_id} [GET]
+func (t *Trainer) GetTrainerByUID(c *gin.Context) {
+	var uri validator.TrainerIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	trainer, err := t.trainerService.GetTrainer(c, uri.TrainerID)
+	if err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessResponse(c, trainer, "success!")
+}
 
 func (t *Trainer) GetTrainerInfo(c *gin.Context) {
 	var header validator.TokenHeader
