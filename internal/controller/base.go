@@ -44,7 +44,7 @@ func (bc *Base) JSONSuccessResponse(c *gin.Context, data interface{}, msg string
 	c.JSON(http.StatusOK, gin.H{"code": 0, "data": data, "msg": msg})
 }
 
-func (bc *Base) JSONSuccessPagingResponse(c *gin.Context, data interface{}, paging *dto.Paging, msg string) {
+func (bc *Base) JSONSuccessPagingResponse(c *gin.Context, data interface{}, paging *dto.		Paging, msg string) {
 	c.JSON(http.StatusOK, gin.H{"code": 0, "data": data, "paging": paging, "msg": msg})
 }
 

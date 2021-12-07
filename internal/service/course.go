@@ -206,7 +206,7 @@ func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*
 	return course, nil
 }
 
-func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error) {
+func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, *dto.Paging, errcode.Error) {
 	var field = string(global.UpdateAt)
 	offset, limit := cs.GetPagingIndex(page, size)
 	datas, err := cs.courseRepo.FindCourseProductSummaries(model.FindCourseProductSummariesParam{
@@ -230,9 +230,32 @@ func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourse
 		Limit:  limit,
 	})
 	if err != nil {
-		return nil, cs.errHandler.Set(c, "store", err)
+		return nil, nil, cs.errHandler.Set(c, "course repo", err)
 	}
-	return parserCourses(datas), nil
+	totalCount, err := cs.courseRepo.FindCourseProductCount(model.FindCourseProductCountParam{
+		Name: param.Name,
+		Score: param.Score,
+		Level: param.Level,
+		Category: param.Category,
+		Suit: param.Suit,
+		Equipment: param.Equipment,
+		Place: param.Place,
+		TrainTarget: param.TrainTarget,
+		BodyTarget: param.BodyTarget,
+		SaleType: param.SaleType,
+		TrainerSex: param.TrainerSex,
+		TrainerSkill: param.TrainerSkill,
+	})
+	if err != nil {
+		return nil, nil, cs.errHandler.Set(c, "course repo", err)
+	}
+	paging := dto.Paging{
+		TotalCount: totalCount,
+		TotalPage: cs.GetTotalPage(totalCount, size),
+		Page: page,
+		Size: size,
+	}
+	return parserCourses(datas), &paging, nil
 }
 
 func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error) {

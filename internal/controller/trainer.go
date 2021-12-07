@@ -339,7 +339,7 @@ func (t *Trainer) GetTrainer(c *gin.Context) {
 // @Param order_type query string false "排序類型(latest:最新/popular:熱門)"
 // @Param page query int true "頁數"
 // @Param size query int true "每頁筆數"
-// @Success 200 {object} model.SuccessPagingResult{data=[]dto.Trainer} "成功!"
+// @Success 200 {object} model.SuccessPagingResult{data=[]dto.TrainerSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /trainers [GET]
 func (t *Trainer) GetTrainers(c *gin.Context) {

@@ -1248,7 +1248,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取課表產品",
+                "description": "搜尋課表產品列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -1258,7 +1258,7 @@ var doc = `{
                 "tags": [
                     "CourseProduct"
                 ],
-                "summary": "獲取課表產品",
+                "summary": "搜尋課表產品列表",
                 "parameters": [
                     {
                         "type": "string",
@@ -1359,7 +1359,7 @@ var doc = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/model.SuccessResult"
+                                    "$ref": "#/definitions/model.SuccessPagingResult"
                                 },
                                 {
                                     "type": "object",
@@ -3086,7 +3086,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/dto.Trainer"
+                                                "$ref": "#/definitions/dto.TrainerSummary"
                                             }
                                         }
                                     }
@@ -5481,6 +5481,11 @@ var doc = `{
                     "description": "一頁筆數",
                     "type": "integer",
                     "example": 5
+                },
+                "total_count": {
+                    "description": "總筆數",
+                    "type": "integer",
+                    "example": 50
                 },
                 "total_page": {
                     "description": "總頁數",

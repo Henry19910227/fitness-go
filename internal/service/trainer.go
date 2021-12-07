@@ -354,6 +354,7 @@ func (t *trainer) GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummar
 		return nil, nil, t.errHandler.Set(c, "trainer repo", err)
 	}
 	paging := dto.Paging{
+		TotalCount: totalCount,
 		TotalPage: t.GetTotalPage(totalCount, size),
 		Page: page,
 		Size: size,

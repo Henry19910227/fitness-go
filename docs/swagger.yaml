@@ -932,6 +932,10 @@ definitions:
         description: 一頁筆數
         example: 5
         type: integer
+      total_count:
+        description: 總筆數
+        example: 50
+        type: integer
       total_page:
         description: 總頁數
         example: 10
@@ -2027,7 +2031,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 獲取課表產品
+      description: 搜尋課表產品列表
       parameters:
       - description: 課表名稱(1~20字元)
         in: query
@@ -2098,7 +2102,7 @@ paths:
           description: 獲取成功!
           schema:
             allOf:
-            - $ref: '#/definitions/model.SuccessResult'
+            - $ref: '#/definitions/model.SuccessPagingResult'
             - properties:
                 data:
                   items:
@@ -2111,7 +2115,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取課表產品
+      summary: 搜尋課表產品列表
       tags:
       - CourseProduct
   /courses:
@@ -3156,7 +3160,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/dto.Trainer'
+                    $ref: '#/definitions/dto.TrainerSummary'
                   type: array
               type: object
         "400":
