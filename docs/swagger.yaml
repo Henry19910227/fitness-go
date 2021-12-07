@@ -922,6 +922,21 @@ definitions:
         example: system error!
         type: string
     type: object
+  model.Paging:
+    properties:
+      page:
+        description: 當前頁數
+        example: 1
+        type: integer
+      size:
+        description: 一頁筆數
+        example: 5
+        type: integer
+      total_page:
+        description: 總頁數
+        example: 10
+        type: integer
+    type: object
   model.SuccessLoginResult:
     properties:
       code:
@@ -939,6 +954,23 @@ definitions:
         description: Token
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTQ0MDc3NjMsInN1YiI6IjEwMDEzIn0.Z5UeEC8ArCVYej9kI1paXD2f5FMFiTfeLpU6e_CZZw0
         type: string
+    type: object
+  model.SuccessPagingResult:
+    properties:
+      code:
+        description: 狀態碼
+        example: 0
+        type: integer
+      data:
+        $ref: '#/definitions/model.Data'
+        description: 回傳資料
+      msg:
+        description: 成功訊息
+        example: success!
+        type: string
+      paging:
+        $ref: '#/definitions/model.Paging'
+        description: 分頁資訊
     type: object
   model.SuccessResult:
     properties:
@@ -1293,8 +1325,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
-        查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -2821,12 +2852,7 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -2932,12 +2958,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -3102,6 +3123,49 @@ paths:
       security:
       - fitness_token: []
       summary: 取得指定教練資訊
+      tags:
+      - Trainer
+  /trainers:
+    get:
+      consumes:
+      - application/json
+      description: 取得教練列表
+      parameters:
+      - description: 排序類型(latest:最新/popular:熱門)
+        in: query
+        name: order_type
+        type: string
+      - description: 頁數
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每頁筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessPagingResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.Trainer'
+                  type: array
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得教練列表
       tags:
       - Trainer
   /user/avatar:

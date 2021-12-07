@@ -51,6 +51,7 @@ type Trainer interface {
 	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
 	GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
+	GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummariesParam, page, size int) ([]*dto.TrainerSummary, *dto.Paging, errcode.Error)
 	GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error)
 	UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhotoResult, errcode.Error)
 	DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error

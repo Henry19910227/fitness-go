@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/VividCortex/mysqlerr"
 	"github.com/go-sql-driver/mysql"
+	"math"
 )
 
 // Base ...
@@ -35,4 +36,12 @@ func (b *Base) MysqlDuplicateEntry(err error) bool {
 func (b *Base) GetPagingIndex(page int, size int) (int, int) {
 	offset := (page - 1) * size
 	return offset, size
+}
+
+func (b *Base) GetTotalPage(totalCount int, size int) int {
+	totalPage := int(math.Ceil(float64(totalCount)/float64(size)))
+	if totalPage < 0 {
+		return 0
+	}
+	return totalPage
 }

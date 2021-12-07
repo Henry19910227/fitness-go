@@ -1,0 +1,7 @@
+package dto
+
+type Paging struct {
+	TotalPage int `json:"total_page" example:"10"` // 總頁數
+	Page  int `json:"page" example:"1"`   // 當前頁數
+	Size  int `json:"size" example:"5"`   // 一頁筆數
+}

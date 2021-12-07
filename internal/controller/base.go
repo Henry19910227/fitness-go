@@ -3,7 +3,7 @@ package controller
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/model"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -44,7 +44,7 @@ func (bc *Base) JSONSuccessResponse(c *gin.Context, data interface{}, msg string
 	c.JSON(http.StatusOK, gin.H{"code": 0, "data": data, "msg": msg})
 }
 
-func (bc *Base) JSONSuccessPagingResponse(c *gin.Context, data interface{}, paging *model.Paging, msg string) {
+func (bc *Base) JSONSuccessPagingResponse(c *gin.Context, data interface{}, paging *dto.Paging, msg string) {
 	c.JSON(http.StatusOK, gin.H{"code": 0, "data": data, "paging": paging, "msg": msg})
 }
 
