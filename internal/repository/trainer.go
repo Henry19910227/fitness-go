@@ -143,6 +143,19 @@ func (t *trainer) FindTrainers(entity interface{}, status *global.TrainerStatus,
 	return nil
 }
 
+func (t *trainer) FindTrainersCount(status *global.TrainerStatus) (int, error) {
+	var count int64
+	var db *gorm.DB
+	db = t.gorm.DB().Model(&model.Trainer{})
+	if status != nil {
+		db = db.Where("trainer_status = ?", *status)
+	}
+	if err := db.Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}
+
 func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error {
 	if param == nil { return nil }
 	var selects []interface{}

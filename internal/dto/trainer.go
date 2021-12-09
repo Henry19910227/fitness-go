@@ -27,6 +27,11 @@ type TrainerSummary struct {
 	Skill            string  `json:"skill"  example:"d2w3e15d3awe.jpg"`      // 專長
 }
 
+type GetTrainerSummariesParam struct {
+	OrderType *string // 排序類型(latest:最新/popular:熱門)-單選
+}
+
+
 type CreateTrainerParam struct {
 	Name             string  // 教練本名
 	Nickname          string  // 教練暱稱

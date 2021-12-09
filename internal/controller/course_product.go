@@ -65,9 +65,9 @@ func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
 	p.JSONSuccessResponse(c, course, "success!")
 }
 
-// SearchCourseProducts 獲取課表產品
-// @Summary 獲取課表產品
-// @Description 獲取課表產品
+// SearchCourseProducts 搜尋課表產品列表
+// @Summary 搜尋課表產品列表
+// @Description 搜尋課表產品列表
 // @Tags CourseProduct
 // @Accept json
 // @Produce json
@@ -87,7 +87,7 @@ func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
 // @Param trainer_skill query int false "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} model.SuccessResult{data=[]dto.CourseProductSummary} "獲取成功!"
+// @Success 200 {object} model.SuccessPagingResult{data=[]dto.CourseProductSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course_products [GET]
 func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
@@ -96,7 +96,7 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, err := p.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
+	courses, pageing, err := p.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
 		Name: query.Name,
 		OrderType: query.OrderType,
 		Score: query.Score,
@@ -115,7 +115,7 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 		p.JSONErrorResponse(c, err)
 		return
 	}
-	p.JSONSuccessResponse(c, courses, "success!")
+	p.JSONSuccessPagingResponse(c, courses, pageing, "success!")
 }
 
 

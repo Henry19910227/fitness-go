@@ -45,6 +45,15 @@ type TrainerAlbumPhotoIDUri struct {
 	PhotoID int64 `uri:"photo_id" binding:"required" example:"1"`
 }
 
+type TrainerIDUri struct {
+	TrainerID int64 `uri:"user_id" binding:"required" example:"1"`
+}
+
+type GetTrainerSummariesQuery struct {
+	OrderType *string `form:"order_type" binding:"omitempty,oneof=latest popular" example:"latest"` // 排序類型(latest:最新/popular:熱門)-單選
+	Page *int `form:"page" binding:"required,min=1" example:"henry"` // 頁數
+	Size *int `form:"size" binding:"required,min=1" example:"henry"` // 筆數
+}
 
 func init() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {

@@ -24,6 +24,7 @@ type Trainer interface {
 	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
 	FindTrainerByUID(uid int64, entity interface{}) error
 	FindTrainers(entity interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error
+	FindTrainersCount(status *global.TrainerStatus) (int, error)
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
 }
 
@@ -33,6 +34,7 @@ type Course interface {
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
 	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummaryEntity, error)
 	FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
+	FindCourseProductCount(param model.FindCourseProductCountParam) (int, error)
 	FindCourseProduct(courseID int64) (*model.CourseProduct, error)
 	FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
@@ -113,6 +115,6 @@ type Review interface {
 	CreateReview(param *model.CreateReviewParam) (int64, error)
 	DeleteReview(reviewID int64) error
 	FindReviewByID(reviewID int64) (*model.Review, error)
-	FindReviewsByCourseID(courseID int64, uid int64, paging *model.PagingParam) ([]*model.Review, error)
-	FindReviewImages(courseID int64, userID int64) ([]*model.ReviewImageItem, error)
+	FindReviews(uid int64, param *model.FindReviewsParam, paging *model.PagingParam) ([]*model.Review, error)
+	FindReviewsCount(param *model.FindReviewsParam) (int, error)
 }

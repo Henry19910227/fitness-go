@@ -321,6 +321,94 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	return courses, nil
 }
 
+func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam) (int, error) {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 course_status 篩選條件
+	query += "AND courses.course_status = ? "
+	params = append(params, global.Sale)
+	//加入 name 篩選條件
+	if param.Name != nil {
+		query += "AND courses.name LIKE ? "
+		params = append(params, "%" + *param.Name + "%")
+	}
+	//加入 score 篩選條件
+	if param.Score != nil {
+		query += "AND FLOOR(review.score_total / review.amount) >= ? "
+		params = append(params, *param.Score)
+	}
+	//加入 level 篩選條件
+	if len(param.Level) > 0 {
+		query += "AND courses.level IN ? "
+		params = append(params, param.Level)
+	}
+	//加入 category 篩選條件
+	if len(param.Category) > 0 {
+		query += "AND courses.category IN ? "
+		params = append(params, param.Category)
+	}
+	//加入 suit 篩選條件
+	if len(param.Suit) > 0 {
+		query += "AND courses.suit LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.Suit) + "%")
+	}
+	//加入 Equipment 篩選條件
+	if len(param.Equipment) > 0 {
+		query += "AND courses.equipment LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.Equipment) + "%")
+	}
+	//加入 Place 篩選條件
+	if len(param.Place) > 0 {
+		query += "AND courses.place LIKE ? "
+		params = append(params, "%"+ transformFilterParams(param.Place) + "%")
+	}
+	//加入 TrainTarget 篩選條件
+	if len(param.TrainTarget) > 0 {
+		query += "AND courses.train_target LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.TrainTarget) + "%")
+	}
+	//加入 BodyTarget 篩選條件
+	if len(param.BodyTarget) > 0 {
+		query += "AND courses.body_target LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.BodyTarget) + "%")
+	}
+	//加入 SaleType 篩選條件
+	if len(param.SaleType) > 0 {
+		query += "AND sale.type IN ? "
+		params = append(params, param.SaleType)
+	}
+	//加入 TrainerSex 篩選條件
+	if len(param.TrainerSex) > 0 {
+		query += "AND users.sex IN ? "
+		params = append(params, param.TrainerSex)
+	}
+	//加入 TrainerSkill 篩選條件
+	if len(param.TrainerSkill) > 0 {
+		query += "AND trainers.skill LIKE ? "
+		params = append(params, "%" + transformFilterParams(param.TrainerSkill) + "%")
+	}
+	//基本查詢
+	var count int64
+	if err := c.gorm.DB().
+		Table("courses").
+		Select("courses.id", "courses.course_status", "courses.category",
+			"courses.schedule_type", "courses.`name`", "courses.cover",
+			"courses.`level`", "courses.plan_count", "courses.workout_count",
+			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
+			"IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
+			"IFNULL(review.score_total,0)", "IFNULL(review.amount,0)",
+			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
+		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
+		Joins("INNER JOIN users ON courses.user_id = users.id").
+		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
+		Joins("LEFT JOIN review_statistics AS review ON courses.id = review.course_id").
+		Where(query, params...).Count(&count).Error; err != nil {
+			return 0, err
+	}
+	return int(count), nil
+}
+
 func (c *course) FindCourseProduct(courseID int64) (*model.CourseProduct, error) {
 	var course model.CourseProduct
 	if err := c.gorm.DB().

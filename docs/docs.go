@@ -1139,6 +1139,12 @@ var doc = `{
                     },
                     {
                         "type": "integer",
+                        "description": "篩選類型(1:全部/2:有照片)",
+                        "name": "filter_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "description": "頁數(從第一頁開始)",
                         "name": "page",
                         "in": "query",
@@ -1158,7 +1164,7 @@ var doc = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/model.SuccessResult"
+                                    "$ref": "#/definitions/model.SuccessPagingResult"
                                 },
                                 {
                                     "type": "object",
@@ -1248,7 +1254,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取課表產品",
+                "description": "搜尋課表產品列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -1258,7 +1264,7 @@ var doc = `{
                 "tags": [
                     "CourseProduct"
                 ],
-                "summary": "獲取課表產品",
+                "summary": "搜尋課表產品列表",
                 "parameters": [
                     {
                         "type": "string",
@@ -1359,7 +1365,7 @@ var doc = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/model.SuccessResult"
+                                    "$ref": "#/definitions/model.SuccessPagingResult"
                                 },
                                 {
                                     "type": "object",
@@ -2962,6 +2968,132 @@ var doc = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/dto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainer/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得指定教練資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "取得指定教練資訊",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/trainers": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得教練列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "取得教練列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "排序類型(latest:最新/popular:熱門)",
+                        "name": "order_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每頁筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessPagingResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.TrainerSummary"
+                                            }
                                         }
                                     }
                                 }
@@ -5343,6 +5475,31 @@ var doc = `{
                 }
             }
         },
+        "model.Paging": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "當前頁數",
+                    "type": "integer",
+                    "example": 1
+                },
+                "size": {
+                    "description": "一頁筆數",
+                    "type": "integer",
+                    "example": 5
+                },
+                "total_count": {
+                    "description": "總筆數",
+                    "type": "integer",
+                    "example": 50
+                },
+                "total_page": {
+                    "description": "總頁數",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
         "model.SuccessLoginResult": {
             "type": "object",
             "properties": {
@@ -5364,6 +5521,29 @@ var doc = `{
                     "description": "Token",
                     "type": "string",
                     "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTQ0MDc3NjMsInN1YiI6IjEwMDEzIn0.Z5UeEC8ArCVYej9kI1paXD2f5FMFiTfeLpU6e_CZZw0"
+                }
+            }
+        },
+        "model.SuccessPagingResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 0
+                },
+                "data": {
+                    "description": "回傳資料",
+                    "$ref": "#/definitions/model.Data"
+                },
+                "msg": {
+                    "description": "成功訊息",
+                    "type": "string",
+                    "example": "success!"
+                },
+                "paging": {
+                    "description": "分頁資訊",
+                    "$ref": "#/definitions/model.Paging"
                 }
             }
         },

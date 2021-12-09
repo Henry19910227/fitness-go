@@ -51,6 +51,7 @@ type Trainer interface {
 	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
 	GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
+	GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummariesParam, page, size int) ([]*dto.TrainerSummary, *dto.Paging, errcode.Error)
 	GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error)
 	UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhotoResult, errcode.Error)
 	DeleteAlbumPhoto(c *gin.Context, photoID int64) errcode.Error
@@ -70,7 +71,7 @@ type Course interface {
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
 	GetCourseProductByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
 	GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
-	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, errcode.Error)
+	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, *dto.Paging, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
 	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
     GetCourseStatus(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error)
@@ -133,7 +134,7 @@ type Store interface {
 type Review interface {
 	CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dto.Review, errcode.Error)
 	GetReview(c *gin.Context, reviewID int64) (*dto.Review, errcode.Error)
-	GetReviews(c *gin.Context, courseID int64, uid int64, page int, size int) ([]*dto.Review, errcode.Error)
+	GetReviews(c *gin.Context, uid int64, param *dto.GetReviewsParam, page int, size int) ([]*dto.Review, *dto.Paging, errcode.Error)
 	DeleteReview(c *gin.Context, reviewID int64) errcode.Error
 	GetReviewOwner(c *gin.Context, reviewID int64) (int64, errcode.Error)
 }

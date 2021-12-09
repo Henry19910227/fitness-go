@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/entity"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -145,29 +146,37 @@ func (r *review) FindReviewByID(reviewID int64) (*model.Review, error) {
 	return &review, nil
 }
 
-func (r *review) FindReviewsByCourseID(courseID int64, uid int64, paging *model.PagingParam) ([]*model.Review, error) {
+func (r *review) FindReviews(uid int64, param *model.FindReviewsParam, paging *model.PagingParam) ([]*model.Review, error) {
+	if param == nil {
+		return nil, nil
+	}
 	//將查詢會員的ID排在第一個
 	orderQuery := fmt.Sprintf("reviews.user_id <> %v, reviews.create_at ASC", uid)
 	var reviews []*model.Review
-	db := r.gorm.DB().
-		Preload("User").
-		Preload("Images").
-		Order(orderQuery)
+	db := r.gorm.DB().Preload("User").Preload("Images").Order(orderQuery)
+	if param.FilterType == global.PhotoReviewType {
+		db = db.Joins("INNER JOIN review_images ON review_images.review_id = reviews.id").Group("reviews.id")
+	}
 	if paging != nil {
 		db = db.Offset(paging.Offset).Limit(paging.Limit)
 	}
-	if err := db.Find(&reviews, "course_id = ?", courseID).Error; err != nil {
+	if err := db.Find(&reviews, "course_id = ?", param.CourseID).Error; err != nil {
 		return nil, err
 	}
 	return reviews, nil
 }
 
-func (r *review) FindReviewImages(courseID int64, userID int64) ([]*model.ReviewImageItem, error) {
-	var reviewImages []*model.ReviewImageItem
-	if err := r.gorm.DB().Table("review_images").
-		Where("course_id = ? AND user_id = ?",courseID, userID).
-		Find(&reviewImages).Error; err != nil {
-		return nil, err
+func (r *review) FindReviewsCount(param *model.FindReviewsParam) (int, error) {
+	if param == nil {
+		return 0, nil
 	}
-	return reviewImages, nil
+	db := r.gorm.DB().Table("reviews")
+	if param.FilterType == global.PhotoReviewType {
+		db = db.Joins("INNER JOIN review_images ON review_images.review_id = reviews.id").Group("reviews.id")
+	}
+	var count int64
+	if err := db.Where("reviews.course_id = ?", param.CourseID).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
 }

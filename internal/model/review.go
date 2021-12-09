@@ -1,5 +1,7 @@
 package model
 
+import "github.com/Henry19910227/fitness-go/internal/global"
+
 type ReviewStatistic struct {
 	CourseID int64 `gorm:"column:course_id"` //課表id
 	ScoreTotal int `gorm:"column:score_total"` //評分累積
@@ -53,4 +55,9 @@ type CreateReviewParam struct {
 	Score int //評分
 	Body string //內容
 	ImageNames []string //圖片名稱
+}
+
+type FindReviewsParam struct {
+	CourseID int64
+	FilterType global.ReviewFilterType //篩選類型(1:全部/2:有照片)
 }

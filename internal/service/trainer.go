@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
@@ -323,6 +324,9 @@ func (t *trainer) GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.E
 	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
+	if trainer.UserID == 0 {
+		return nil, t.errHandler.Set(c, "trainer repo", errors.New(strconv.Itoa(errcode.DataNotFound)))
+	}
 	if err := t.albumRepo.FindAlbumPhotosByUID(uid, &trainer.TrainerAlbumPhotos); err != nil {
 		return nil, t.errHandler.Set(c, "trainer album repo", err)
 	}
@@ -330,6 +334,32 @@ func (t *trainer) GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.E
 		return nil, t.errHandler.Set(c, "trainer album repo", err)
 	}
 	return &trainer, nil
+}
+
+func (t *trainer) GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummariesParam, page, size int) ([]*dto.TrainerSummary, *dto.Paging, errcode.Error) {
+	offset, limit := t.GetPagingIndex(page, size)
+	trainers := make([]*dto.TrainerSummary, 0)
+	var trainerStatus = global.TrainerActivity
+	if err := t.trainerRepo.FindTrainers(&trainers, &trainerStatus, &model.OrderBy{
+		Field:     "create_at",
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: offset,
+		Limit:  limit,
+	}); err != nil {
+		return nil, nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	totalCount, err := t.trainerRepo.FindTrainersCount(&trainerStatus)
+	if err != nil {
+		return nil, nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	paging := dto.Paging{
+		TotalCount: totalCount,
+		TotalPage: t.GetTotalPage(totalCount, size),
+		Page: page,
+		Size: size,
+	}
+	return trainers, &paging, nil
 }
 
 func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error) {
