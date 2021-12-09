@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/Henry19910227/fitness-go/internal/global"
+
 type Review struct {
 	ID       int64 `json:"id" example:"1"` //評論id
 	CourseID int64 `json:"course_id" example:"2"` //課表id
@@ -37,4 +39,9 @@ type CreateReviewParam struct {
 	Score int //評分
 	Body string //內容
 	Images []*File //圖片
+}
+
+type GetReviewsParam struct {
+	CourseID int64
+	FilterType global.ReviewFilterType //篩選類型(1:全部/2:有照片)
 }

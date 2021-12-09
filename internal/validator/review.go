@@ -8,3 +8,7 @@ type CreateReviewForm struct {
 type ReviewIDUri struct {
 	ReviewID int64 `uri:"review_id" binding:"required" example:"1"`
 }
+
+type GetReviewsQuery struct {
+	FilterType int64 `form:"filter_type" binding:"omitempty" example:"1"`
+}

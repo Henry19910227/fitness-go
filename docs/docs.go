@@ -1139,6 +1139,12 @@ var doc = `{
                     },
                     {
                         "type": "integer",
+                        "description": "篩選類型(1:全部/2:有照片)",
+                        "name": "filter_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "description": "頁數(從第一頁開始)",
                         "name": "page",
                         "in": "query",
@@ -1158,7 +1164,7 @@ var doc = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/model.SuccessResult"
+                                    "$ref": "#/definitions/model.SuccessPagingResult"
                                 },
                                 {
                                     "type": "object",

@@ -113,14 +113,16 @@ func (r *Review) CreateReview(c *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
+// @Param filter_type query int false "篩選類型(1:全部/2:有照片)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} model.SuccessResult{data=[]dto.Review} "獲取成功!"
+// @Success 200 {object} model.SuccessPagingResult{data=[]dto.Review} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course_product/{course_id}/reviews [GET]
 func (r *Review) GetReviews(c *gin.Context) {
 	var uri validator.CourseIDUri
-	var query validator.PagingQuery
+	var reviewQuery validator.GetReviewsQuery
+	var pageQuery validator.PagingQuery
 	uid, e := r.GetUID(c)
 	if e != nil {
 		r.JSONValidatorErrorResponse(c, e.Error())
@@ -130,16 +132,23 @@ func (r *Review) GetReviews(c *gin.Context) {
 		r.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := c.ShouldBind(&query); err != nil {
+	if err := c.ShouldBind(&reviewQuery); err != nil {
 		r.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	reviews, err := r.reviewService.GetReviews(c, uri.CourseID, uid, *query.Page, *query.Size)
+	if err := c.ShouldBind(&pageQuery); err != nil {
+		r.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	reviews, paging, err := r.reviewService.GetReviews(c, uid, &dto.GetReviewsParam{
+		CourseID:   uri.CourseID,
+		FilterType: global.ReviewFilterType(reviewQuery.FilterType),
+	}, *pageQuery.Page, *pageQuery.Size)
 	if err != nil {
 		r.JSONErrorResponse(c, err)
 		return
 	}
-	r.JSONSuccessResponse(c, reviews, "success!")
+	r.JSONSuccessPagingResponse(c, reviews, paging, "success!")
 }
 
 // GetReview 獲取評論

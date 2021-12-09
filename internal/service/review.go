@@ -65,21 +65,35 @@ func (r *review) GetReview(c *gin.Context, reviewID int64) (*dto.Review, errcode
 	return parserReview(item), nil
 }
 
-func (r *review) GetReviews(c *gin.Context, courseID int64, uid int64, page int, size int) ([]*dto.Review, errcode.Error) {
+func (r *review) GetReviews(c *gin.Context, uid int64, param *dto.GetReviewsParam, page int, size int) ([]*dto.Review, *dto.Paging, errcode.Error) {
 	//查詢並回傳創建資料
 	offset, limit := r.GetPagingIndex(page, size)
-	items, err := r.reviewRepo.FindReviewsByCourseID(courseID, uid, &model.PagingParam{
+	findReviewsParam := model.FindReviewsParam{
+		CourseID:   param.CourseID,
+		FilterType: param.FilterType,
+	}
+	items, err := r.reviewRepo.FindReviews(uid, &findReviewsParam, &model.PagingParam{
 		Offset: offset,
 		Limit:  limit,
 	})
 	if err != nil {
-		return nil, r.errHandler.Set(c, "review repo", err)
+		return nil, nil, r.errHandler.Set(c, "review repo", err)
 	}
 	reviews := make([]*dto.Review, 0)
 	for _, item := range items{
 		reviews = append(reviews, parserReview(item))
 	}
-	return reviews, nil
+	totalCount, err := r.reviewRepo.FindReviewsCount(&findReviewsParam)
+	if err != nil {
+		return nil, nil, r.errHandler.Set(c, "review repo", err)
+	}
+	paging := dto.Paging{
+		TotalCount: totalCount,
+		TotalPage: r.GetTotalPage(totalCount, size),
+		Page: page,
+		Size: size,
+	}
+	return reviews, &paging, nil
 }
 
 func (r *review) DeleteReview(c *gin.Context, reviewID int64) errcode.Error {

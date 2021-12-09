@@ -134,7 +134,7 @@ type Store interface {
 type Review interface {
 	CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dto.Review, errcode.Error)
 	GetReview(c *gin.Context, reviewID int64) (*dto.Review, errcode.Error)
-	GetReviews(c *gin.Context, courseID int64, uid int64, page int, size int) ([]*dto.Review, errcode.Error)
+	GetReviews(c *gin.Context, uid int64, param *dto.GetReviewsParam, page int, size int) ([]*dto.Review, *dto.Paging, errcode.Error)
 	DeleteReview(c *gin.Context, reviewID int64) errcode.Error
 	GetReviewOwner(c *gin.Context, reviewID int64) (int64, errcode.Error)
 }

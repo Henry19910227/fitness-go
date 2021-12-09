@@ -115,6 +115,6 @@ type Review interface {
 	CreateReview(param *model.CreateReviewParam) (int64, error)
 	DeleteReview(reviewID int64) error
 	FindReviewByID(reviewID int64) (*model.Review, error)
-	FindReviewsByCourseID(courseID int64, uid int64, paging *model.PagingParam) ([]*model.Review, error)
-	FindReviewImages(courseID int64, userID int64) ([]*model.ReviewImageItem, error)
+	FindReviews(uid int64, param *model.FindReviewsParam, paging *model.PagingParam) ([]*model.Review, error)
+	FindReviewsCount(param *model.FindReviewsParam) (int, error)
 }
