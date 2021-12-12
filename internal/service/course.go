@@ -68,6 +68,7 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *dto.CreateCours
 func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error) {
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		Category: param.Category,
+		SaleType: param.SaleType,
 		SaleID: param.SaleID,
 		Name: param.Name,
 		Intro: param.Intro,
@@ -106,6 +107,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 	for _, entity := range entities {
 		course := dto.CourseSummary{
 			ID:           entity.ID,
+			SaleType:     entity.SaleType,
 			CourseStatus: entity.CourseStatus,
 			Category:     entity.Category,
 			ScheduleType: entity.ScheduleType,
@@ -148,6 +150,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 	}
 	course := dto.Course{
 		ID:           entity.ID,
+		SaleType:     entity.SaleType,
 		CourseStatus: entity.CourseStatus,
 		Category:     entity.Category,
 		ScheduleType: entity.ScheduleType,
@@ -184,7 +187,6 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 		}
 		course.Sale = sale
 	}
-	course.Restricted = 0
 	return &course, nil
 }
 
