@@ -268,6 +268,7 @@ func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourse
 		return nil, nil, cs.errHandler.Set(c, "course repo", err)
 	}
 	totalCount, err := cs.courseRepo.FindCourseProductCount(model.FindCourseProductCountParam{
+		UserID: param.UserID,
 		Name: param.Name,
 		Score: param.Score,
 		Level: param.Level,

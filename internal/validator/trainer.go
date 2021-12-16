@@ -55,10 +55,8 @@ type GetTrainerSummariesQuery struct {
 	Size *int `form:"size" binding:"required,min=1" example:"henry"` // 筆數
 }
 
-type GetTrainerCoursesQuery struct {
-	OrderType *string `form:"order_type" binding:"omitempty,oneof=latest popular" example:"latest"` // 排序類型(latest:最新/popular:熱門)-單選
-	Page *int `form:"page" binding:"required,min=1" example:"henry"` // 頁數
-	Size *int `form:"size" binding:"required,min=1" example:"henry"` // 筆數
+type GetTrainerCourseProductsQuery struct {
+	SaleType *int `form:"sale_type" binding:"omitempty,oneof=1 2 3" example:"2"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 }
 
 func init() {

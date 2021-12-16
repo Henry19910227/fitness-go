@@ -335,6 +335,11 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 	//加入 course_status 篩選條件
 	query += "AND courses.course_status = ? "
 	params = append(params, global.Sale)
+	//加入 教練ID 篩選條件
+	if param.UserID != nil {
+		query += "AND courses.user_id = ? "
+		params = append(params, *param.UserID)
+	}
 	//加入 name 篩選條件
 	if param.Name != nil {
 		query += "AND courses.name LIKE ? "
@@ -382,7 +387,7 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 	}
 	//加入 SaleType 篩選條件
 	if len(param.SaleType) > 0 {
-		query += "AND sale.type IN ? "
+		query += "AND courses.sale_type IN ? "
 		params = append(params, param.SaleType)
 	}
 	//加入 TrainerSex 篩選條件

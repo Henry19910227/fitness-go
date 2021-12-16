@@ -134,6 +134,7 @@ type FindCourseProductSummariesParam struct {
 }
 
 type FindCourseProductCountParam struct {
+	UserID *int64 //教練ID
 	Name *string //課表名稱
 	Score *int // 評價(1~5分)-單選
 	Level []int // 強度(1:初級/2:中級/3:中高級/4:高級)-複選

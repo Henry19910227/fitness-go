@@ -74,8 +74,8 @@ type CourseIDUri struct {
 }
 
 type PagingQuery struct {
-	Page *int `form:"page" binding:"omitempty,min=1" example:"1"`
-	Size *int `form:"size" binding:"omitempty,min=1" example:"5"`
+	Page int `form:"page" binding:"required,min=1" example:"1"`
+	Size int `form:"size" binding:"required,min=1" example:"5"`
 }
 
 func init() {

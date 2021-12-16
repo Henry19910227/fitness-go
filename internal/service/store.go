@@ -70,6 +70,7 @@ func parserCourses(datas []*model.CourseProductSummary) []*dto.CourseProductSumm
 	for _, data := range datas {
 		course := dto.CourseProductSummary{
 			ID: data.ID,
+			SaleType: data.SaleType,
 			CourseStatus: data.CourseStatus,
 			Category: data.Category,
 			ScheduleType: data.ScheduleType,

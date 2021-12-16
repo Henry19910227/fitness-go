@@ -3220,18 +3220,18 @@ paths:
       summary: 取得指定教練資訊
       tags:
       - Trainer
-  /trainer/{user_id}/courses:
+  /trainer/{user_id}/course_products:
     get:
       consumes:
       - application/json
-      description: 取得教練販售的課程列表
+      description: 取得教練的課表產品清單
       parameters:
       - description: 教練ID
         in: path
         name: user_id
         required: true
         type: integer
-      - description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選
+      - description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-單選
         in: query
         name: sale_type
         type: integer
@@ -3265,7 +3265,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 取得教練販售的課程列表
+      summary: 取得教練的課表產品清單
       tags:
       - Trainer
   /trainers:

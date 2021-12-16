@@ -3151,14 +3151,14 @@ var doc = `{
                 }
             }
         },
-        "/trainer/{user_id}/courses": {
+        "/trainer/{user_id}/course_products": {
             "get": {
                 "security": [
                     {
                         "fitness_token": []
                     }
                 ],
-                "description": "取得教練販售的課程列表",
+                "description": "取得教練的課表產品清單",
                 "consumes": [
                     "application/json"
                 ],
@@ -3168,7 +3168,7 @@ var doc = `{
                 "tags": [
                     "Trainer"
                 ],
-                "summary": "取得教練販售的課程列表",
+                "summary": "取得教練的課表產品清單",
                 "parameters": [
                     {
                         "type": "integer",
@@ -3179,7 +3179,7 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選",
+                        "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-單選",
                         "name": "sale_type",
                         "in": "query"
                     },
