@@ -90,7 +90,7 @@ type Action interface {
 }
 
 type Sale interface {
-	FindSaleItems() ([]*model.SaleItem, error)
+	FindSaleItems(saleType *int) ([]*model.SaleItem, error)
 	FindSaleItemByID(saleID int64) (*model.SaleItem, error)
 }
 

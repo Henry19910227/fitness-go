@@ -125,6 +125,7 @@ type Action interface {
 }
 
 type Sale interface {
+	GetCourseSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error)
 	GetSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error)
 }
 
