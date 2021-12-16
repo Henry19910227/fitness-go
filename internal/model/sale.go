@@ -2,7 +2,7 @@ package model
 
 type SaleItem struct {
 	ID   int64 `gorm:"column:id"`  // 銷售id
-	Type int64 `gorm:"column:type"`  // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	Type int `gorm:"column:type"`  // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Name string `gorm:"column:name"` // 銷售名稱
 	Twd  int `gorm:"column:twd"` // 台幣價格
 	Identifier string `gorm:"column:identifier"` // 銷售識別碼
@@ -16,7 +16,7 @@ func (SaleItem) TableName() string {
 
 type SaleItemEntity struct {
 	ID   int64 `gorm:"column:id"`  // 銷售id
-	Type int64 `gorm:"column:type"`  // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	Type int `gorm:"column:type"`  // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Name string `gorm:"column:name"` // 銷售名稱
 	Twd  int `gorm:"column:twd"` // 台幣價格
 	Identifier string `gorm:"column:identifier"` // 銷售識別碼

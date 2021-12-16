@@ -96,7 +96,7 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, pageing, err := p.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
+	courses, paging, err := p.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
 		Name: query.Name,
 		OrderType: query.OrderType,
 		Score: query.Score,
@@ -115,7 +115,7 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 		p.JSONErrorResponse(c, err)
 		return
 	}
-	p.JSONSuccessPagingResponse(c, courses, pageing, "success!")
+	p.JSONSuccessPagingResponse(c, courses, paging, "success!")
 }
 
 

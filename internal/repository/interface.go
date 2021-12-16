@@ -90,7 +90,8 @@ type Action interface {
 }
 
 type Sale interface {
-	FinsSaleItems() ([]*model.SaleItemEntity, error)
+	FindSaleItems() ([]*model.SaleItem, error)
+	FindSaleItemByID(saleID int64) (*model.SaleItem, error)
 }
 
 type TrainerAlbum interface {

@@ -56,6 +56,13 @@ func NewCourse(baseGroup *gin.RouterGroup,
 		courseMidd.AdminAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		course.UpdateCourse)
 
+	baseGroup.PUT("/course/:course_id/sale_type",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
+		courseMidd.CourseCreatorVerify(),
+		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
+		course.UpdateCourseSaleType)
+
 	baseGroup.GET("/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole, global.AdminRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
@@ -178,8 +185,6 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 	}
 	course, err := cc.courseService.UpdateCourse(c, uri.CourseID, &dto.UpdateCourseParam{
 		Category: body.Category,
-		SaleType: body.SaleType,
-		SaleID: body.SaleID,
 		Name: body.Name,
 		Intro: body.Intro,
 		Food: body.Food,
@@ -191,6 +196,37 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 		BodyTarget: body.BodyTarget,
 		Notice: body.Notice,
 	})
+	if err != nil {
+		cc.JSONErrorResponse(c, err)
+		return
+	}
+	cc.JSONSuccessResponse(c, course, "更新成功!")
+}
+
+// UpdateCourseSaleType 更新課表銷售類型
+// @Summary 更新課表銷售類型
+// @Description 更新課表銷售類型
+// @Tags Course
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Param json_body body validator.UpdateCourseSaleTypeBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult{data=dto.Course} "更新成功!"
+// @Failure 400 {object} model.ErrorResult "更新失敗"
+// @Router /course/{course_id}/sale_type [PUT]
+func (cc *Course) UpdateCourseSaleType(c *gin.Context) {
+	var uri validator.CourseIDUri
+	var body validator.UpdateCourseSaleTypeBody
+	if err := c.ShouldBindUri(&uri); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		cc.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	course, err := cc.courseService.UpdateCourseSaleType(c, uri.CourseID, *body.SaleType, body.SaleID)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return

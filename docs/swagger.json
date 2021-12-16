@@ -863,6 +863,70 @@
                 }
             }
         },
+        "/course/{course_id}/sale_type": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新課表銷售類型",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "更新課表銷售類型",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateCourseSaleTypeBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Course"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course/{course_id}/submit": {
             "post": {
                 "security": [
@@ -3020,6 +3084,84 @@
                 }
             }
         },
+        "/trainer/{user_id}/courses": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得教練販售的課程列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Trainer"
+                ],
+                "summary": "取得教練販售的課程列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選",
+                        "name": "sale_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每頁筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessPagingResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.CourseProductSummary"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/trainers": {
             "get": {
                 "security": [
@@ -4480,14 +4622,14 @@
                     "type": "integer",
                     "example": 2
                 },
-                "restricted": {
-                    "description": "是否是限制訪問狀態(0:否/1:是)",
-                    "type": "integer",
-                    "example": 0
-                },
                 "sale": {
                     "description": "銷售資料",
                     "$ref": "#/definitions/dto.SaleItem"
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)",
+                    "type": "integer",
+                    "example": 2
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -4621,6 +4763,11 @@
                     "description": "銷售項目",
                     "$ref": "#/definitions/dto.SaleItem"
                 },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)",
+                    "type": "integer",
+                    "example": 2
+                },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
                     "type": "integer",
@@ -4693,6 +4840,11 @@
                     "description": "銷售項目",
                     "$ref": "#/definitions/dto.SaleItem"
                 },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)",
+                    "type": "integer",
+                    "example": 2
+                },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
                     "type": "integer",
@@ -4750,6 +4902,11 @@
                 "sale": {
                     "description": "銷售資料",
                     "$ref": "#/definitions/dto.SaleItem"
+                },
+                "sale_type": {
+                    "description": "銷售類型",
+                    "type": "integer",
+                    "example": 1
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -5771,11 +5928,6 @@
                     "type": "string",
                     "example": "1,2,3"
                 },
-                "sale_id": {
-                    "description": "銷售ID",
-                    "type": "integer",
-                    "example": 2
-                },
                 "suit": {
                     "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
                     "type": "string",
@@ -5785,6 +5937,24 @@
                     "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
                     "type": "string",
                     "example": "1,2,4"
+                }
+            }
+        },
+        "validator.UpdateCourseSaleTypeBody": {
+            "type": "object",
+            "required": [
+                "sale_type"
+            ],
+            "properties": {
+                "sale_id": {
+                    "description": "銷售ID(當銷售類型為 \"付費課表\" 時，此ID必須帶值)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 2
                 }
             }
         },

@@ -13,14 +13,27 @@ func NewSale(gorm tool.Gorm) Sale {
 	return &sale{gorm: gorm}
 }
 
-func (s *sale) FinsSaleItems() ([]*model.SaleItemEntity, error) {
-	var entities []*model.SaleItemEntity
+func (s *sale) FindSaleItems() ([]*model.SaleItem, error) {
+	var entities []*model.SaleItem
 	if err := s.gorm.DB().
 		Table("sale_items").
 		Select("*").
 		Find(&entities).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
 	return entities, nil
 }
+
+func (s *sale) FindSaleItemByID(saleID int64) (*model.SaleItem, error) {
+	var item model.SaleItem
+	if err := s.gorm.DB().
+		Table("sale_items").
+		Select("*").
+		Where("id = ?", saleID).
+		Take(&item).Error; err != nil {
+		return nil, err
+	}
+	return &item, nil
+}
+
 

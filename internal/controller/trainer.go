@@ -358,6 +358,24 @@ func (t *Trainer) GetTrainers(c *gin.Context) {
 	t.JSONSuccessPagingResponse(c, trainers, page, "success!")
 }
 
+// GetTrainerCourses 取得教練販售的課程列表
+// @Summary 取得教練販售的課程列表
+// @Description 取得教練販售的課程列表
+// @Tags Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練ID"
+// @Param sale_type query int false "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選"
+// @Param page query int true "頁數"
+// @Param size query int true "每頁筆數"
+// @Success 200 {object} model.SuccessPagingResult{data=[]dto.CourseProductSummary} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /trainer/{user_id}/courses [GET]
+func (t *Trainer) GetTrainerCourses(c *gin.Context) {
+
+}
+
 // GetTrainerByUID 取得指定教練資訊
 // @Summary 取得指定教練資訊
 // @Description 取得指定教練資訊

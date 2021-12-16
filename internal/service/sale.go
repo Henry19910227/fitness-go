@@ -21,9 +21,9 @@ func NewSale(saleRepo repository.Sale, logger handler.Logger, jwtTool tool.JWT, 
 }
 
 func (s *sale) GetSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error) {
-	entities, err := s.saleRepo.FinsSaleItems()
+	entities, err := s.saleRepo.FindSaleItems()
 	if err != nil {
-		s.logger.Set(c, handler.Error, "PlanRepo", s.errHandler.SystemError().Code(), err.Error())
+		s.logger.Set(c, handler.Error, "SaleRepo", s.errHandler.SystemError().Code(), err.Error())
 		return nil, s.errHandler.SystemError()
 	}
 	var saleItems []*dto.SaleItem

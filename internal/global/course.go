@@ -8,3 +8,10 @@ const (
 	Reject = 4
 	Remove = 5
 )
+
+type SaleType int
+const (
+	SaleTypeFree SaleType = 1
+	SaleTypeVIP SaleType = 2
+	SaleTypeCharge SaleType = 3
+)
