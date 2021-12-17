@@ -19,6 +19,7 @@ type course struct {
 	courseRepo repository.Course
 	trainerRepo repository.Trainer
 	planRepo  repository.Plan
+	saleRepo  repository.Sale
 	uploader  handler.Uploader
 	resHandler handler.Resource
 	logger    handler.Logger
@@ -29,10 +30,11 @@ type course struct {
 func NewCourse(courseRepo repository.Course,
 	trainerRepo repository.Trainer,
 	planRepo  repository.Plan,
+	saleRepo  repository.Sale,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
-	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, planRepo: planRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, planRepo: planRepo, saleRepo: saleRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *dto.CreateCourseParam) (*dto.Course, errcode.Error) {
@@ -68,6 +70,7 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *dto.CreateCours
 func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error) {
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		Category: param.Category,
+		SaleType: param.SaleType,
 		SaleID: param.SaleID,
 		Name: param.Name,
 		Intro: param.Intro,
@@ -79,6 +82,36 @@ func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *dto.Update
 		TrainTarget: param.TrainTarget,
 		BodyTarget: param.BodyTarget,
 		Notice: param.Notice,
+	}); err != nil {
+		return nil, cs.errHandler.Set(c, "course repo", err)
+	}
+	return cs.GetCourseDetailByCourseID(c, courseID)
+}
+
+func (cs *course) UpdateCourseSaleType(c *gin.Context, courseID int64, saleType int, saleID *int64) (*dto.Course, errcode.Error) {
+	//檢查付費課表需一起帶入銷售id
+	if saleType == int(global.SaleTypeCharge){
+		//檢查付費類型課表需帶入saleID
+		if saleID == nil {
+			return nil, cs.errHandler.Set(c, "course repo", errors.New(strconv.Itoa(errcode.UpdateError)))
+		}
+		//檢查saleID是否為付費課表類型
+		item, err := cs.saleRepo.FindSaleItemByID(*saleID)
+		if err != nil {
+			return nil, cs.errHandler.Set(c, "sale repo", err)
+		}
+		if item.Type != int(global.SaleTypeCharge) {
+			return nil, cs.errHandler.Set(c, "sale repo", errors.New(strconv.Itoa(errcode.UpdateError)))
+		}
+	}
+	//檢查非付費課表銷售id需為空
+	if saleType != int(global.SaleTypeCharge) {
+		saleID = nil
+	}
+	//執行更新d
+	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
+		SaleType: &saleType,
+		SaleID: saleID,
 	}); err != nil {
 		return nil, cs.errHandler.Set(c, "course repo", err)
 	}
@@ -106,6 +139,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 	for _, entity := range entities {
 		course := dto.CourseSummary{
 			ID:           entity.ID,
+			SaleType:     entity.SaleType,
 			CourseStatus: entity.CourseStatus,
 			Category:     entity.Category,
 			ScheduleType: entity.ScheduleType,
@@ -148,6 +182,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 	}
 	course := dto.Course{
 		ID:           entity.ID,
+		SaleType:     entity.SaleType,
 		CourseStatus: entity.CourseStatus,
 		Category:     entity.Category,
 		ScheduleType: entity.ScheduleType,
@@ -184,7 +219,6 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 		}
 		course.Sale = sale
 	}
-	course.Restricted = 0
 	return &course, nil
 }
 
@@ -210,6 +244,7 @@ func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourse
 	var field = string(global.UpdateAt)
 	offset, limit := cs.GetPagingIndex(page, size)
 	datas, err := cs.courseRepo.FindCourseProductSummaries(model.FindCourseProductSummariesParam{
+		UserID: param.UserID,
 		Name: param.Name,
 		Score: param.Score,
 		Level: param.Level,
@@ -233,6 +268,7 @@ func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourse
 		return nil, nil, cs.errHandler.Set(c, "course repo", err)
 	}
 	totalCount, err := cs.courseRepo.FindCourseProductCount(model.FindCourseProductCountParam{
+		UserID: param.UserID,
 		Name: param.Name,
 		Score: param.Score,
 		Level: param.Level,

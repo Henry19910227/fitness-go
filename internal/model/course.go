@@ -3,6 +3,7 @@ package model
 type Course struct {
 	ID       int64  `gorm:"column:id"`                       // 課表 id
 	UserID   int64  `gorm:"column:user_id"`                  // 用戶 id
+	SaleType int   `gorm:"column:sale_type"`                 // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	SaleID *int64 `gorm:"column:sale_id"`                    // 銷售 id
 	CourseStatus int `gorm:"column:course_status"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
@@ -31,6 +32,7 @@ func (Course) TableName() string {
 type CourseSummaryEntity struct {
 	ID       int64  `gorm:"column:id"`                       // 課表 id
 	Trainer  TrainerSummaryEntity                            // 教練簡介
+	SaleType int                                             // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Sale     SaleItemEntity                                  // 銷售項目
 	CourseStatus int `gorm:"column:course_status"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
@@ -45,6 +47,7 @@ type CourseSummaryEntity struct {
 type CourseDetailEntity struct {
 	ID       int64  `gorm:"column:id"`                       // 課表 id
 	Trainer  TrainerSummaryEntity                            // 教練簡介
+	SaleType int                                             // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Sale     SaleItemEntity                                  // 銷售項目
 	CourseStatus int `gorm:"column:course_status"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
@@ -69,6 +72,7 @@ type CourseDetailEntity struct {
 type CourseProduct struct {
 	ID       int64  `gorm:"column:id"`                       // 課表 id
 	UserID   int64  `gorm:"column:user_id"`                  // 用戶 id
+	SaleType int   `gorm:"column:sale_type"`                 // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	SaleID *int64 `gorm:"column:sale_id"`                    // 銷售 id
 	CourseStatus int `gorm:"column:course_status"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
@@ -100,6 +104,7 @@ func (CourseProduct) TableName() string {
 type CourseProductSummary struct {
 	ID       int64  `gorm:"column:id"`                       // 課表 id
 	Trainer  TrainerSummaryEntity                            // 教練簡介
+	SaleType int   `gorm:"sale_type"`                        // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Sale     SaleItemEntity                                  // 銷售項目
 	CourseStatus int `gorm:"column:course_status"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int `gorm:"column:category"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
@@ -113,6 +118,7 @@ type CourseProductSummary struct {
 }
 
 type FindCourseProductSummariesParam struct {
+	UserID *int64 //教練ID
 	Name *string //課表名稱
 	Score *int // 評價(1~5分)-單選
 	Level []int // 強度(1:初級/2:中級/3:中高級/4:高級)-複選
@@ -122,12 +128,13 @@ type FindCourseProductSummariesParam struct {
 	Place []int // 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選
 	TrainTarget []int // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選
 	BodyTarget []int // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選
-	SaleType []int // 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選
+	SaleType []int // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選
 	TrainerSex []string // 教練性別(m:男性/f:女性)-複選
 	TrainerSkill []int // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
 }
 
 type FindCourseProductCountParam struct {
+	UserID *int64 //教練ID
 	Name *string //課表名稱
 	Score *int // 評價(1~5分)-單選
 	Level []int // 強度(1:初級/2:中級/3:中高級/4:高級)-複選
@@ -137,7 +144,7 @@ type FindCourseProductCountParam struct {
 	Place []int // 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選
 	TrainTarget []int // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選
 	BodyTarget []int // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選
-	SaleType []int // 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選
+	SaleType []int // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選
 	TrainerSex []string // 教練性別(m:男性/f:女性)-複選
 	TrainerSkill []int // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
 }
@@ -157,7 +164,8 @@ type UpdateCourseParam struct {
 	CourseStatus *int    `gorm:"column:course_status"` // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category     *int    `gorm:"column:category"`      // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
 	ScheduleType *int    `gorm:"column:schedule_type"` // 排課類別(1:單一訓練/2:多項計畫)
-	SaleID       *int    `gorm:"column:sale_id"`       // 銷售id
+	SaleType     *int    `gorm:"column:sale_type"`        // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	SaleID       *int64    `gorm:"column:sale_id"`       // 銷售id
 	Name         *string `gorm:"column:name"`          // 課表名稱
 	Cover        *string `gorm:"column:cover"`         // 課表封面
 	Intro        *string `gorm:"column:intro"`         // 課表介紹

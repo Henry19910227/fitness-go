@@ -143,7 +143,7 @@ func (r *Review) GetReviews(c *gin.Context) {
 	reviews, paging, err := r.reviewService.GetReviews(c, uid, &dto.GetReviewsParam{
 		CourseID:   uri.CourseID,
 		FilterType: global.ReviewFilterType(reviewQuery.FilterType),
-	}, *pageQuery.Page, *pageQuery.Size)
+	}, pageQuery.Page, pageQuery.Size)
 	if err != nil {
 		r.JSONErrorResponse(c, err)
 		return

@@ -14,16 +14,17 @@ import (
 type Trainer struct {
 	Base
 	trainerService service.Trainer
+	courseService service.Course
 }
 
-func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, userMiddleware gin.HandlerFunc, userMidd midd.User)  {
+func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, courseService service.Course, userMiddleware gin.HandlerFunc, userMidd midd.User)  {
 	baseGroup.StaticFS("/resource/trainer/avatar", http.Dir("./volumes/storage/trainer/avatar"))
 	baseGroup.StaticFS("/resource/trainer/card_front_image", http.Dir("./volumes/storage/trainer/card_front_image"))
 	baseGroup.StaticFS("/resource/trainer/card_back_image", http.Dir("./volumes/storage/trainer/card_back_image"))
 	baseGroup.StaticFS("/resource/trainer/album", http.Dir("./volumes/storage/trainer/album"))
 	baseGroup.StaticFS("/resource/trainer/certificate", http.Dir("./volumes/storage/trainer/certificate"))
 	baseGroup.StaticFS("/resource/trainer/account_image", http.Dir("./volumes/storage/trainer/account_image"))
-	trainer := &Trainer{trainerService: trainerService}
+	trainer := &Trainer{trainerService: trainerService, courseService: courseService}
 	trainerGroup := baseGroup.Group("/trainer")
 	trainerGroup.Use(userMiddleware)
 	trainerGroup.GET("/info", trainer.GetTrainerInfo)
@@ -47,6 +48,10 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, user
 	baseGroup.GET("/trainer/:user_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		trainer.GetTrainerByUID)
+
+	baseGroup.GET("/trainer/:user_id/course_products",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		trainer.GetTrainerCourseProducts)
 
 	baseGroup.PATCH("/trainer",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
@@ -356,6 +361,51 @@ func (t *Trainer) GetTrainers(c *gin.Context) {
 		return
 	}
 	t.JSONSuccessPagingResponse(c, trainers, page, "success!")
+}
+
+// GetTrainerCourseProducts 取得教練的課表產品清單
+// @Summary 取得教練的課表產品清單
+// @Description 取得教練的課表產品清單
+// @Tags Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練ID"
+// @Param sale_type query int false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-單選"
+// @Param page query int true "頁數"
+// @Param size query int true "每頁筆數"
+// @Success 200 {object} model.SuccessPagingResult{data=[]dto.CourseProductSummary} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /trainer/{user_id}/course_products [GET]
+func (t *Trainer) GetTrainerCourseProducts(c *gin.Context) {
+	var uri validator.TrainerIDUri
+	var query validator.GetTrainerCourseProductsQuery
+	var pagingQuery validator.PagingQuery
+	if err := c.ShouldBindUri(&uri); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindQuery(&query); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := c.ShouldBindQuery(&pagingQuery); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	saleTypes := make([]int, 0)
+	if query.SaleType != nil {
+		saleTypes = append(saleTypes, *query.SaleType)
+	}
+	courses, paging, err := t.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
+		UserID: &uri.TrainerID,
+		SaleType: saleTypes,
+	}, pagingQuery.Page, pagingQuery.Size)
+	if err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessPagingResponse(c, courses, paging, "success!")
 }
 
 // GetTrainerByUID 取得指定教練資訊

@@ -108,7 +108,10 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 	if param.CourseStatus != nil { selects = append(selects, "course_status") }
 	if param.Category != nil { selects = append(selects, "category") }
 	if param.ScheduleType != nil { selects = append(selects, "schedule_type") }
-	if param.SaleID != nil { selects = append(selects, "sale_id") }
+	if param.SaleType != nil {
+		selects = append(selects, "sale_type")
+		selects = append(selects, "sale_id")
+	}
 	if param.Name != nil { selects = append(selects, "name") }
 	if param.Cover != nil { selects = append(selects, "cover") }
 	if param.Intro != nil { selects = append(selects, "intro") }
@@ -168,7 +171,7 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 	//基本查詢
 	db = c.gorm.DB().
 		Table("courses").
-		Select("courses.id", "courses.course_status", "courses.category",
+		Select("courses.id", "courses.sale_type", "courses.course_status", "courses.category",
 			"courses.schedule_type", "courses.`name`", "courses.cover",
 			"courses.`level`", "courses.plan_count", "courses.workout_count",
 			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
@@ -194,7 +197,7 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 	courses := make([]*model.CourseSummaryEntity, 0)
 	for rows.Next() {
 		var course model.CourseSummaryEntity
-		if err := rows.Scan(&course.ID, &course.CourseStatus, &course.Category,
+		if err := rows.Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category,
 			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
 			&course.PlanCount, &course.WorkoutCount,
 			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
@@ -214,6 +217,11 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	//加入 course_status 篩選條件
 	query += "AND courses.course_status = ? "
 	params = append(params, global.Sale)
+	//加入 教練ID 篩選條件
+	if param.UserID != nil {
+		query += "AND courses.user_id = ? "
+		params = append(params, *param.UserID)
+	}
 	//加入 name 篩選條件
 	if param.Name != nil {
 		query += "AND courses.name LIKE ? "
@@ -261,7 +269,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	}
 	//加入 SaleType 篩選條件
 	if len(param.SaleType) > 0 {
-		query += "AND sale.type IN ? "
+		query += "AND courses.sale_type IN ? "
 		params = append(params, param.SaleType)
 	}
 	//加入 TrainerSex 篩選條件
@@ -277,7 +285,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	//基本查詢
 	db = c.gorm.DB().
 		Table("courses").
-		Select("courses.id", "courses.course_status", "courses.category",
+		Select("courses.id", "courses.sale_type", "courses.course_status", "courses.category",
 			"courses.schedule_type", "courses.`name`", "courses.cover",
 			"courses.`level`", "courses.plan_count", "courses.workout_count",
 			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
@@ -307,7 +315,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	courses := make([]*model.CourseProductSummary, 0)
 	for rows.Next() {
 		var course model.CourseProductSummary
-		if err := rows.Scan(&course.ID, &course.CourseStatus, &course.Category,
+		if err := rows.Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category,
 			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
 			&course.PlanCount, &course.WorkoutCount,
 			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
@@ -327,6 +335,11 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 	//加入 course_status 篩選條件
 	query += "AND courses.course_status = ? "
 	params = append(params, global.Sale)
+	//加入 教練ID 篩選條件
+	if param.UserID != nil {
+		query += "AND courses.user_id = ? "
+		params = append(params, *param.UserID)
+	}
 	//加入 name 篩選條件
 	if param.Name != nil {
 		query += "AND courses.name LIKE ? "
@@ -374,7 +387,7 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 	}
 	//加入 SaleType 篩選條件
 	if len(param.SaleType) > 0 {
-		query += "AND sale.type IN ? "
+		query += "AND courses.sale_type IN ? "
 		params = append(params, param.SaleType)
 	}
 	//加入 TrainerSex 篩選條件
@@ -426,7 +439,7 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 	var course model.CourseDetailEntity
 	if err := c.gorm.DB().
 		Table("courses").
-		Select("courses.id", "courses.course_status", "courses.category",
+		Select("courses.id", "courses.sale_type", "courses.course_status", "courses.category",
 			"courses.schedule_type", "courses.`name`", "courses.cover", "courses.intro",
 			"courses.food", "courses.level", "courses.suit", "courses.equipment",
 			"courses.place", "courses.train_target", "courses.body_target", "courses.notice",
@@ -439,7 +452,7 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
 		Where("courses.id = ?", courseID).
 		Row().
-		Scan(&course.ID, &course.CourseStatus, &course.Category, &course.ScheduleType, &course.Name,
+		Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category, &course.ScheduleType, &course.Name,
 			&course.Cover, &course.Intro, &course.Food, &course.Level, &course.Suit, &course.Equipment,
 			&course.Place, &course.TrainTarget, &course.BodyTarget, &course.Notice, &course.PlanCount,
 			&course.WorkoutCount, &course.CreateAt, &course.UpdateAt,

@@ -82,7 +82,7 @@ func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
 // @Param place query int false "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選"
 // @Param train_target query int false "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選"
 // @Param body_target query int false "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選"
-// @Param sale_type query int false "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選"
+// @Param sale_type query int false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選"
 // @Param trainer_sex query string false "教練性別(m:男性/f:女性)-複選"
 // @Param trainer_skill query int false "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)"
 // @Param page query int true "頁數(從第一頁開始)"
@@ -96,7 +96,7 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, pageing, err := p.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
+	courses, paging, err := p.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
 		Name: query.Name,
 		OrderType: query.OrderType,
 		Score: query.Score,
@@ -115,7 +115,7 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 		p.JSONErrorResponse(c, err)
 		return
 	}
-	p.JSONSuccessPagingResponse(c, courses, pageing, "success!")
+	p.JSONSuccessPagingResponse(c, courses, paging, "success!")
 }
 
 

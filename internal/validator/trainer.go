@@ -55,6 +55,10 @@ type GetTrainerSummariesQuery struct {
 	Size *int `form:"size" binding:"required,min=1" example:"henry"` // 筆數
 }
 
+type GetTrainerCourseProductsQuery struct {
+	SaleType *int `form:"sale_type" binding:"omitempty,oneof=1 2 3" example:"2"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+}
+
 func init() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		_ = v.RegisterValidation("skills", Skills)
