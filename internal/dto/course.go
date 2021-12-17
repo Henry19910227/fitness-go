@@ -56,7 +56,7 @@ type CourseSummary struct {
 type Course struct {
 	ID       int64           `json:"id" gorm:"column:id" example:"2"`                        // 課表 id
 	Trainer  *TrainerSummary `json:"trainer"`                                                // 教練簡介
-	SaleType int             `json:"sale_type" example:"2"`                                  // 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)
+	SaleType int             `json:"sale_type" example:"2"`                                  // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Sale     *SaleItem       `json:"sale"`                                                   // 銷售資料
 	CourseStatus int         `json:"course_status" gorm:"column:course_status" example:"1"`  // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int             `json:"category" gorm:"column:category" example:"3"`            // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
@@ -81,7 +81,7 @@ type Course struct {
 type CourseProduct struct {
 	ID       int64                `json:"id" gorm:"column:id" example:"2"`                       // 課表 id
 	Trainer  *TrainerSummary      `json:"trainer"`                                               // 教練簡介
-	SaleType int                  `json:"sale_type" example:"2"`                                 // 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)
+	SaleType int                  `json:"sale_type" example:"2"`                                 // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Sale     *SaleItem            `json:"sale"`                                                  // 銷售項目
 	AllowAccess int               `json:"allow_access" example:"0"`                              // 是否允許訪問此課表(0:否/1:是)
 	CourseStatus int              `json:"course_status" gorm:"column:course_status" example:"1"` // 課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
@@ -106,7 +106,7 @@ type CourseProduct struct {
 type CourseProductSummary struct {
 	ID       int64                `json:"id" gorm:"column:id" example:"2"`                                 // 課表 id
 	Trainer  TrainerSummary       `json:"trainer"`                                            // 教練簡介
-	SaleType int                  `json:"sale_type" example:"2"`                                 // 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)
+	SaleType int                  `json:"sale_type" example:"2"`                                 // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Sale     *SaleItem            `json:"sale"`                                                // 銷售項目
 	CourseStatus int              `json:"course_status" gorm:"column:course_status" example:"1"`           // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	Category int                  `json:"category" gorm:"column:category" example:"3"`                    // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
@@ -131,7 +131,7 @@ type GetCourseProductSummariesParam struct {
 	Place []int `form:"place" binding:"omitempty,oneof=1 2 3 4 5" example:"3"` // 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選
 	TrainTarget []int `form:"train_target" binding:"omitempty,oneof=1 2 3 4 5" example:"4"` // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選
 	BodyTarget []int `form:"body_target" binding:"omitempty,oneof=1 2 3 4 5 6 7" example:",6"` // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選
-	SaleType []int `form:"sale_type" binding:"omitempty,oneof=1 2 3" example:"2"` // 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選
+	SaleType []int `form:"sale_type" binding:"omitempty,oneof=1 2 3" example:"2"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選
 	TrainerSex []string `form:"trainer_sex" binding:"omitempty,oneof=m f" example:"m"` // 教練性別(m:男性/f:女性)-複選
 	TrainerSkill  []int  `form:"trainer_skill" binding:"omitempty,oneof=1 2 3 4 5 6 7 8 9 10 11 12 13 14" example:"1"`  // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
 }

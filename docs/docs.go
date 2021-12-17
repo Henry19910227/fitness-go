@@ -1392,7 +1392,7 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選",
+                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選",
                         "name": "sale_type",
                         "in": "query"
                     },
@@ -3179,7 +3179,7 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-單選",
+                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-單選",
                         "name": "sale_type",
                         "in": "query"
                     },
@@ -4694,7 +4694,7 @@ var doc = `{
                     "$ref": "#/definitions/dto.SaleItem"
                 },
                 "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)",
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
                     "type": "integer",
                     "example": 2
                 },
@@ -4831,7 +4831,7 @@ var doc = `{
                     "$ref": "#/definitions/dto.SaleItem"
                 },
                 "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)",
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
                     "type": "integer",
                     "example": 2
                 },
@@ -4908,7 +4908,7 @@ var doc = `{
                     "$ref": "#/definitions/dto.SaleItem"
                 },
                 "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:付費課表/3:訂閱課表)",
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
                     "type": "integer",
                     "example": 2
                 },

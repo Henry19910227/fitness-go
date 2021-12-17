@@ -180,7 +180,7 @@ definitions:
         $ref: '#/definitions/dto.SaleItem'
         description: 銷售資料
       sale_type:
-        description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
         example: 2
         type: integer
       schedule_type:
@@ -286,7 +286,7 @@ definitions:
         $ref: '#/definitions/dto.SaleItem'
         description: 銷售項目
       sale_type:
-        description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
         example: 2
         type: integer
       schedule_type:
@@ -346,7 +346,7 @@ definitions:
         $ref: '#/definitions/dto.SaleItem'
         description: 銷售項目
       sale_type:
-        description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
         example: 2
         type: integer
       schedule_type:
@@ -1350,7 +1350,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
+        查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -2136,7 +2137,7 @@ paths:
         in: query
         name: body_target
         type: integer
-      - description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-複選
+      - description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選
         in: query
         name: sale_type
         type: integer
@@ -2947,7 +2948,12 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -3053,7 +3059,12 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -3231,7 +3242,7 @@ paths:
         name: user_id
         required: true
         type: integer
-      - description: 銷售類型(1:免費課表/2:付費課表/3:訂閱課表)-單選
+      - description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-單選
         in: query
         name: sale_type
         type: integer
