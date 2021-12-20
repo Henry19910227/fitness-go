@@ -96,7 +96,7 @@ func parserCourses(datas []*model.CourseProductSummary) []*dto.CourseProductSumm
 				Type: data.Sale.Type,
 				Name: data.Sale.Name,
 				Twd: data.Sale.Twd,
-				Identifier: data.Sale.Identifier,
+				ProductID: data.Sale.ProductID,
 			}
 			course.Sale = sale
 		}

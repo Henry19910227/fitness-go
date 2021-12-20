@@ -162,7 +162,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 				Type: entity.Sale.Type,
 				Name: entity.Sale.Name,
 				Twd: entity.Sale.Twd,
-				Identifier: entity.Sale.Identifier,
+				ProductID: entity.Sale.ProductID,
 			}
 			course.Sale = sale
 		}
@@ -215,7 +215,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 			Type: entity.Sale.Type,
 			Name: entity.Sale.Name,
 			Twd: entity.Sale.Twd,
-			Identifier: entity.Sale.Identifier,
+			ProductID: entity.Sale.ProductID,
 		}
 		course.Sale = sale
 	}
@@ -408,7 +408,7 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 			Type:       courseItem.Sale.Type,
 			Name:       courseItem.Sale.Name,
 			Twd:        courseItem.Sale.Twd,
-			Identifier: courseItem.Sale.Identifier,
+			ProductID: courseItem.Sale.ProductID,
 		}
 		course.Sale = sale
 	}
