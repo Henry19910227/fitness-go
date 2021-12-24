@@ -526,13 +526,13 @@ definitions:
         description: 銷售id
         example: 1
         type: integer
-      identifier:
-        description: 銷售識別碼
-        example: com.fitness.xxx
-        type: string
       name:
         description: 銷售名稱
         example: 銅級課表
+        type: string
+      product_id:
+        description: 產品ID
+        example: com.fitness.xxx
         type: string
       twd:
         description: 台幣價格

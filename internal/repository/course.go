@@ -175,7 +175,7 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 			"courses.schedule_type", "courses.`name`", "courses.cover",
 			"courses.`level`", "courses.plan_count", "courses.workout_count",
 			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
-			"IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+			"IFNULL(sale.twd,0)", "IFNULL(sale.product_id,'')",
 			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
 			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
@@ -200,7 +200,7 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 		if err := rows.Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category,
 			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
 			&course.PlanCount, &course.WorkoutCount,
-			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
+			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.ProductID,
 			&course.Sale.CreateAt, &course.Sale.UpdateAt,
 			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
 			return nil, err
@@ -289,7 +289,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 			"courses.schedule_type", "courses.`name`", "courses.cover",
 			"courses.`level`", "courses.plan_count", "courses.workout_count",
 			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
-			"IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+			"IFNULL(sale.twd,0)", "IFNULL(sale.product_id,'')",
 			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
 		    "IFNULL(review.score_total,0)", "IFNULL(review.amount,0)",
 			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
@@ -318,7 +318,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 		if err := rows.Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category,
 			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
 			&course.PlanCount, &course.WorkoutCount,
-			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
+			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.ProductID,
 			&course.Sale.CreateAt, &course.Sale.UpdateAt,
 			&course.ReviewStatistic.ScoreTotal, &course.ReviewStatistic.Amount,
 			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
@@ -408,7 +408,7 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 			"courses.schedule_type", "courses.`name`", "courses.cover",
 			"courses.`level`", "courses.plan_count", "courses.workout_count",
 			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
-			"IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+			"IFNULL(sale.twd,0)", "IFNULL(sale.product_id,'')",
 			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
 			"IFNULL(review.score_total,0)", "IFNULL(review.amount,0)",
 			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
@@ -445,7 +445,7 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 			"courses.place", "courses.train_target", "courses.body_target", "courses.notice",
 			"courses.plan_count", "courses.workout_count", "courses.create_at", "courses.update_at",
 		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
-		    "IFNULL(sale.twd,0)", "IFNULL(sale.identifier,'')",
+		    "IFNULL(sale.twd,0)", "IFNULL(sale.product_id,'')",
 		    "IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
 			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
 		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
@@ -456,7 +456,7 @@ func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetail
 			&course.Cover, &course.Intro, &course.Food, &course.Level, &course.Suit, &course.Equipment,
 			&course.Place, &course.TrainTarget, &course.BodyTarget, &course.Notice, &course.PlanCount,
 			&course.WorkoutCount, &course.CreateAt, &course.UpdateAt,
-		    &course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.Identifier,
+		    &course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.ProductID,
 		    &course.Sale.CreateAt, &course.Sale.UpdateAt,
 			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
 			return nil, err

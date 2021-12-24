@@ -5145,15 +5145,15 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
-                "identifier": {
-                    "description": "銷售識別碼",
-                    "type": "string",
-                    "example": "com.fitness.xxx"
-                },
                 "name": {
                     "description": "銷售名稱",
                     "type": "string",
                     "example": "銅級課表"
+                },
+                "product_id": {
+                    "description": "產品ID",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
                 },
                 "twd": {
                     "description": "台幣價格",
