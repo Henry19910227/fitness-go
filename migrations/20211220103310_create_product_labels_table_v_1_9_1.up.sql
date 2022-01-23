@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS product_labels (
+    `id` INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '產品標籤id',
+    `name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '產品名稱',
+    `product_id` varchar(100) NOT NULL DEFAULT '' COMMENT '產品id',
+    `twd` INT(11) NOT NULL DEFAULT '0' COMMENT '台幣價格'
+) ENGINE=InnoDB CHARSET=utf8mb4 AUTO_INCREMENT = 1;
