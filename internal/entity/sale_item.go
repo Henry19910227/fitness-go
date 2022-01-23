@@ -1,11 +1,11 @@
-package model
+package entity
 
 type SaleItem struct {
 	ID   int64 `gorm:"column:id"`  // 銷售id
-	Type int `gorm:"column:type"`  // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	ProductLabelID int `gorm:"column:product_label_id"`  // 產品標籤id
+	Type int `gorm:"column:type"`  // 銷售類型(1:免費課表/3:付費課表)
+	Enable int `gorm:"column:enable"`  // 是否啟用
 	Name string `gorm:"column:name"` // 銷售名稱
-	Twd  int `gorm:"column:twd"` // 台幣價格
-	ProductID string `gorm:"column:product_id"` // 產品ID
 	CreateAt string `gorm:"column:create_at"` //創建時間
 	UpdateAt string `gorm:"column:update_at"` //更新時間
 }

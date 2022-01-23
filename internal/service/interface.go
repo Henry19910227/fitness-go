@@ -70,7 +70,7 @@ type Course interface {
 	DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, errcode.Error)
 	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
-	GetCourseProductByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
+	GetCourseProductByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error)
 	GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
 	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, *dto.Paging, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
@@ -139,4 +139,13 @@ type Review interface {
 	GetReviews(c *gin.Context, uid int64, param *dto.GetReviewsParam, page int, size int) ([]*dto.Review, *dto.Paging, errcode.Error)
 	DeleteReview(c *gin.Context, reviewID int64) errcode.Error
 	GetReviewOwner(c *gin.Context, reviewID int64) (int64, errcode.Error)
+}
+
+type Payment interface {
+	CreateCourseOrder(c *gin.Context, uid int64, courseID int64) (*dto.CourseOrder, errcode.Error)
+	CreateSubscribeOrder(c *gin.Context, uid int64, period global.PeriodType) (*dto.SubscribeOrder, errcode.Error)
+	VerifyFreeCourseOrder(c *gin.Context, uid int64, orderID string) errcode.Error
+	VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
+	HandleAppStoreNotification(c *gin.Context, base64PayloadString string) (*dto.IAPNotificationResponse, errcode.Error)
+	Test(c *gin.Context) (string, errcode.Error)
 }

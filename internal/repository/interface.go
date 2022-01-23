@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
+	"gorm.io/gorm"
 )
 
 type Admin interface {
@@ -32,11 +33,11 @@ type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
-	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummaryEntity, error)
+	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummary, error)
 	FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
 	FindCourseProductCount(param model.FindCourseProductCountParam) (int, error)
 	FindCourseProduct(courseID int64) (*model.CourseProduct, error)
-	FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error)
+	FindCourseByCourseID(courseID int64) (*model.Course, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
 	FindCourseByID(courseID int64, entity interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
@@ -94,6 +95,10 @@ type Sale interface {
 	FindSaleItemByID(saleID int64) (*model.SaleItem, error)
 }
 
+type SubscribePlan interface {
+	FindSubscribePlansByPeriod(period global.PeriodType) ([]*model.SubscribePlan, error)
+}
+
 type TrainerAlbum interface {
 	CreateAlbumPhoto(uid int64, imageNamed string) error
 	FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error)
@@ -118,4 +123,39 @@ type Review interface {
 	FindReviewByID(reviewID int64) (*model.Review, error)
 	FindReviews(uid int64, param *model.FindReviewsParam, paging *model.PagingParam) ([]*model.Review, error)
 	FindReviewsCount(param *model.FindReviewsParam) (int, error)
+}
+
+type Order interface {
+	CreateCourseOrder(param *model.CreateOrderParam) (string, error)
+	CreateSubscribeOrder(param *model.CreateSubscribeOrderParam) (string, error)
+	UpdateOrder(tx *gorm.DB, orderID string, param *model.UpdateOrderParam) error
+	FindOrder(orderID string) (*model.Order, error)
+	FindOrderByUserIDAndCourseID(userID int64, courseID int64) (*model.Order, error)
+}
+
+type Receipt interface {
+	CreateReceipt(tx *gorm.DB, param *model.CreateReceiptParam) (int64, error)
+}
+
+type UserCourseAsset interface {
+	CreateUserCourseAsset(tx *gorm.DB, param *model.CreateUserCourseAssetParam) (int64, error)
+	FindUserCourseAsset(param *model.FindUserCourseAssetParam) (*model.UserCourseAsset, error)
+}
+
+type PurchaseLog interface {
+	CreatePurchaseLog(tx *gorm.DB, param *model.CreatePurchaseLogParam) (int64, error)
+}
+
+type SubscribeLog interface {
+	CreateSubscribeLog(tx *gorm.DB, param *model.CreateSubscribeLogParam) (int64, error)
+}
+
+type UserSubscribeInfo interface {
+	SaveSubscribeInfo(tx *gorm.DB, param *model.SaveUserSubscribeInfoParam) (int64, error)
+	FindSubscribeInfo(uid int64) (*model.UserSubscribeInfo, error)
+}
+
+type Transaction interface {
+	CreateTransaction() *gorm.DB
+	FinishTransaction(tx *gorm.DB)
 }

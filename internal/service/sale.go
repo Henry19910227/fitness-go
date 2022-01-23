@@ -33,9 +33,9 @@ func (s *sale) GetCourseSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Erro
 		saleItem := dto.SaleItem{
 			ID: entity.ID,
 			Type: entity.Type,
-			Name: entity.Name,
-			Twd: entity.Twd,
-			ProductID: entity.ProductID,
+			//Name: entity.ProductLabel.Name,
+			//Twd: entity.ProductLabel.Twd,
+			//ProductID: entity.ProductLabel.ProductID,
 		}
 		saleItems = append(saleItems, &saleItem)
 	}
@@ -53,9 +53,9 @@ func (s *sale) GetSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error) {
 		saleItem := dto.SaleItem{
 			ID: entity.ID,
 			Type: entity.Type,
-			Name: entity.Name,
-			Twd: entity.Twd,
-			ProductID: entity.ProductID,
+			//Name: entity.ProductLabel.Name,
+			//Twd: entity.ProductLabel.Twd,
+			//ProductID: entity.ProductLabel.ProductID,
 		}
 		saleItems = append(saleItems, &saleItem)
 	}

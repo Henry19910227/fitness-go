@@ -10,6 +10,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 	"strings"
 )
@@ -17,6 +18,7 @@ import (
 type course struct {
 	Base
 	courseRepo repository.Course
+	userCourseAssetRepo repository.UserCourseAsset
 	trainerRepo repository.Trainer
 	planRepo  repository.Plan
 	saleRepo  repository.Sale
@@ -28,13 +30,14 @@ type course struct {
 }
 
 func NewCourse(courseRepo repository.Course,
+	userCourseAssetRepo repository.UserCourseAsset,
 	trainerRepo repository.Trainer,
 	planRepo  repository.Plan,
 	saleRepo  repository.Sale,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
-	return &course{courseRepo: courseRepo, trainerRepo: trainerRepo, planRepo: planRepo, saleRepo: saleRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+	return &course{courseRepo: courseRepo, userCourseAssetRepo: userCourseAssetRepo, trainerRepo: trainerRepo, planRepo: planRepo, saleRepo: saleRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (cs *course) CreateCourseByToken(c *gin.Context, token string, param *dto.CreateCourseParam) (*dto.Course, errcode.Error) {
@@ -156,15 +159,17 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 			Skill: entity.Trainer.Skill,
 		}
 		course.Trainer = trainer
-		if entity.Sale.ID != 0 {
+		if entity.Sale != nil {
 			sale := &dto.SaleItem{
 				ID: entity.Sale.ID,
 				Type: entity.Sale.Type,
-				Name: entity.Sale.Name,
-				Twd: entity.Sale.Twd,
-				ProductID: entity.Sale.ProductID,
 			}
 			course.Sale = sale
+			if entity.Sale.ProductLabel != nil {
+				course.Sale.Name = entity.Sale.ProductLabel.Name
+				course.Sale.Twd = entity.Sale.ProductLabel.Twd
+				course.Sale.ProductID = entity.Sale.ProductLabel.ProductID
+			}
 		}
 		courses = append(courses, &course)
 	}
@@ -172,7 +177,7 @@ func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int
 }
 
 func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error) {
-	entity, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	entity, err := cs.courseRepo.FindCourseByCourseID(courseID)
 	if err != nil {
 		if strings.Contains(err.Error(), "no rows in result set") {
 			return nil, cs.errHandler.DataNotFound()
@@ -213,21 +218,35 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 		sale := &dto.SaleItem{
 			ID: entity.Sale.ID,
 			Type: entity.Sale.Type,
-			Name: entity.Sale.Name,
-			Twd: entity.Sale.Twd,
-			ProductID: entity.Sale.ProductID,
 		}
 		course.Sale = sale
+		if entity.Sale.ProductLabel != nil {
+			course.Sale.Name = entity.Sale.ProductLabel.Name
+			course.Sale.Twd = entity.Sale.ProductLabel.Twd
+			course.Sale.ProductID = entity.Sale.ProductLabel.ProductID
+		}
 	}
 	return &course, nil
 }
 
-func (cs *course) GetCourseProductByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error) {
+func (cs *course) GetCourseProductByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error) {
 	course, err := cs.parserCourseProduct(courseID)
 	if err != nil {
 		return course, cs.errHandler.Set(c, "course repo", err)
 	}
+	asset, err := cs.userCourseAssetRepo.FindUserCourseAsset(&model.FindUserCourseAssetParam{
+		UserID: userID,
+		CourseID: courseID,
+	})
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound){
+		return course, cs.errHandler.Set(c, "course repo", err)
+	}
 	course.AllowAccess = 0
+	if asset != nil {
+		if asset.Available == 1 {
+			course.AllowAccess = 1
+		}
+	}
 	return course, nil
 }
 
@@ -331,7 +350,7 @@ func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *d
 
 func (cs *course) CourseSubmit(c *gin.Context, courseID int64) errcode.Error {
 	//驗證課表填寫完整性
-	entity, err := cs.courseRepo.FindCourseDetailByCourseID(courseID)
+	entity, err := cs.courseRepo.FindCourseByCourseID(courseID)
 	if err != nil {
 		return cs.errHandler.Set(c, "course repo", err)
 	}
@@ -339,7 +358,7 @@ func (cs *course) CourseSubmit(c *gin.Context, courseID int64) errcode.Error {
 		return cs.errHandler.Set(c, "verify course", err)
 	}
 	//送審課表(測試暫時將課表狀態改為"銷售中")
-	var courseStatus = global.Sale
+	var courseStatus = int(global.Sale)
 	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
 		CourseStatus: &courseStatus,
 	}); err != nil {
@@ -358,11 +377,11 @@ func (cs *course) GetCourseStatus(c *gin.Context, courseID int64) (global.Course
 	return global.CourseStatus(course.CourseStatus), nil
 }
 
-func (cs *course) VerifyCourse(course *model.CourseDetailEntity) error {
-	if course.Sale.ID == 0 {
+func (cs *course) VerifyCourse(course *model.Course) error {
+	if course.Sale == nil {
 		return errors.New(strconv.Itoa(errcode.UpdateError))
 	}
-	if course.Trainer.UserID == 0 {
+	if course.Trainer == nil {
 		return errors.New(strconv.Itoa(errcode.UpdateError))
 	}
 	return nil
@@ -378,6 +397,7 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 		ID:           courseItem.ID,
 		CourseStatus: courseItem.CourseStatus,
 		Category:     courseItem.Category,
+		SaleType:     courseItem.SaleType,
 		ScheduleType: courseItem.ScheduleType,
 		Name:         courseItem.Name,
 		Cover:        courseItem.Cover,
@@ -402,15 +422,17 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 	}
 	course.Trainer = trainer
 	//配置銷售資訊
-	if courseItem.Sale.ID != 0 {
+	if courseItem.Sale != nil {
 		sale := &dto.SaleItem{
-			ID:         courseItem.Sale.ID,
-			Type:       courseItem.Sale.Type,
-			Name:       courseItem.Sale.Name,
-			Twd:        courseItem.Sale.Twd,
-			ProductID: courseItem.Sale.ProductID,
+			ID: courseItem.Sale.ID,
+			Type: courseItem.Sale.Type,
+			Name: courseItem.Sale.Name,
 		}
 		course.Sale = sale
+		if courseItem.Sale.ProductLabel != nil {
+			course.Sale.Twd = courseItem.Sale.ProductLabel.Twd
+			course.Sale.ProductID = courseItem.Sale.ProductLabel.ProductID
+		}
 	}
 	review := dto.ReviewStatistic{
 		ScoreTotal: courseItem.Review.ScoreTotal,

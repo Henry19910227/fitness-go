@@ -27,6 +27,7 @@ func NewLoginService(viperTool *viper.Viper, gormTool tool.Gorm) Login {
 func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	courseRepo := repository.NewCourse(gormTool)
+	userCourseAsset := repository.NewUserCourseAsset(gormTool)
 	trainerRepo := repository.NewTrainer(gormTool)
 	planRepo := repository.NewPlan(gormTool)
 	saleRepo := repository.NewSale(gormTool)
@@ -36,7 +37,7 @@ func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	logger := handler.NewLogger(logTool, jwtTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewCourse(courseRepo, trainerRepo, planRepo, saleRepo, uploader, resHandler, logger, jwtTool, errHandler)
+	return NewCourse(courseRepo, userCourseAsset, trainerRepo, planRepo, saleRepo, uploader, resHandler, logger, jwtTool, errHandler)
 }
 
 func NewPlanService(viperTool *viper.Viper, gormTool tool.Gorm) Plan {
@@ -111,4 +112,23 @@ func NewReviewService(viperTool *viper.Viper, gormTool tool.Gorm) Review {
 	resHandler := handler.NewResource(resTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewReview(reviewRepo, uploader, resHandler, errHandler)
+}
+
+func NewPaymentService(viperTool *viper.Viper, gormTool tool.Gorm) Payment {
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	reqTool := tool.NewRequest()
+
+	orderRepo := repository.NewOrder(gormTool)
+	saleRepo := repository.NewSale(gormTool)
+	subscribePlanRepo := repository.NewSubscribePlan(gormTool)
+	courseRepo := repository.NewCourse(gormTool)
+	receiptRepo := repository.NewReceipt(gormTool)
+	purchaseRepo := repository.NewUserCourseAsset(gormTool)
+	subscribeLogRepo := repository.NewSubscribeLog(gormTool)
+	purchaseLogRepo := repository.NewPurchaseLog(gormTool)
+	memberRepo := repository.NewSubscribeInfo(gormTool)
+	transactionRepo := repository.NewTransaction(gormTool)
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewPayment(orderRepo, saleRepo, subscribePlanRepo, courseRepo, receiptRepo, purchaseRepo, subscribeLogRepo, purchaseLogRepo, memberRepo, transactionRepo, reqTool, jwtTool, errHandler)
 }

@@ -27,6 +27,7 @@ func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, 
 		workoutSetService: workoutSetService,
 	}
 	baseGroup.GET("/course_product/:course_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		course.GetCourseProduct)
 	baseGroup.GET("/course_product/:course_id/plans",
@@ -52,12 +53,17 @@ func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, 
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course_product/{course_id} [GET]
 func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
+	uid, e := p.GetUID(c)
+	if e != nil {
+		p.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	course, err := p.courseService.GetCourseProductByCourseID(c, uri.CourseID)
+	course, err := p.courseService.GetCourseProductByCourseID(c, uid, uri.CourseID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return

@@ -94,11 +94,13 @@ func parserCourses(datas []*model.CourseProductSummary) []*dto.CourseProductSumm
 			sale := &dto.SaleItem{
 				ID: data.Sale.ID,
 				Type: data.Sale.Type,
-				Name: data.Sale.Name,
-				Twd: data.Sale.Twd,
-				ProductID: data.Sale.ProductID,
 			}
 			course.Sale = sale
+			if data.Sale.ProductLabel != nil {
+				course.Sale.Name = data.Sale.ProductLabel.Name
+				course.Sale.Twd = data.Sale.ProductLabel.Twd
+				course.Sale.ProductID = data.Sale.ProductLabel.ProductID
+			}
 		}
 		courses = append(courses, &course)
 	}

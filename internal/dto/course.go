@@ -119,6 +119,13 @@ type CourseProductSummary struct {
 	Review ReviewStatisticSummary `json:"review"`                                              // 評分統計
 }
 
+type CourseProductItem struct {
+	ID       int64  `json:"id" example:"10001"`                       // 課表 id
+	SaleType int    `json:"sale_type" example:"1"`                           // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	Name string     `json:"name" example:"henry"`                     // 課表名稱
+	Cover string    `json:"cover" example:"f43e5715fe.jpg"`              // 課表封面
+}
+
 type GetCourseProductSummariesParam struct {
 	UserID *int64 `form:"user_id" binding:"omitempty" example:"10001"` //教練ID
 	Name *string `form:"name" binding:"omitempty,min=1,max=20" example:"增肌課表"` //課表名稱(1~20字元)

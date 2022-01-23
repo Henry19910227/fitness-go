@@ -20,7 +20,7 @@ func NewCourse(gorm tool.Gorm) Course {
 }
 
 func (c *course) CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error) {
-	course := model.Course{
+	course := entity.Course{
 		UserID: uid,
 		Name: param.Name,
 		Level: param.Level,
@@ -37,7 +37,7 @@ func (c *course) CreateCourse(uid int64, param *model.CreateCourseParam) (int64,
 }
 
 func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error) {
-	course := model.Course{
+	course := entity.Course{
 		UserID: uid,
 		Name: param.Name,
 		Level: param.Level,
@@ -151,7 +151,7 @@ func (c *course) FindCourseAmountByUserID(uid int64) (int, error) {
 	return amount, nil
 }
 
-func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummaryEntity, error) {
+func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummary, error) {
 	if param == nil {
 		return nil, nil
 	}
@@ -171,16 +171,13 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 	//基本查詢
 	db = c.gorm.DB().
 		Table("courses").
-		Select("courses.id", "courses.sale_type", "courses.course_status", "courses.category",
-			"courses.schedule_type", "courses.`name`", "courses.cover",
-			"courses.`level`", "courses.plan_count", "courses.workout_count",
-			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
-			"IFNULL(sale.twd,0)", "IFNULL(sale.product_id,'')",
-			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
-			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
-		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
-		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
-		Where(query, params...)
+		Select("courses.id AS id", "courses.user_id AS user_id", "courses.sale_id AS sale_id",
+			"courses.sale_type AS sale_type", "courses.course_status AS course_status", "courses.category AS category",
+			"courses.schedule_type AS schedule_type", "courses.name AS name", "courses.cover AS cover",
+			"courses.`level` AS level", "courses.plan_count AS plan_count", "courses.workout_count AS workout_count").
+		Preload("Trainer").
+		Preload("Sale").
+		Preload("Sale.ProductLabel")
 	//排序
 	if orderBy != nil {
 		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
@@ -189,23 +186,9 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 	if paging != nil {
 		db = db.Offset(paging.Offset).Limit(paging.Limit)
 	}
-	//查詢數據
-	rows, err := db.Rows()
-	if err != nil {
+	var courses []*model.CourseSummary
+	if err := db.Where(query, params...).Find(&courses).Error; err != nil {
 		return nil, err
-	}
-	courses := make([]*model.CourseSummaryEntity, 0)
-	for rows.Next() {
-		var course model.CourseSummaryEntity
-		if err := rows.Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category,
-			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
-			&course.PlanCount, &course.WorkoutCount,
-			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.ProductID,
-			&course.Sale.CreateAt, &course.Sale.UpdateAt,
-			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
-			return nil, err
-		}
-		courses = append(courses, &course)
 	}
 	return courses, nil
 }
@@ -318,7 +301,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 		if err := rows.Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category,
 			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
 			&course.PlanCount, &course.WorkoutCount,
-			&course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.ProductID,
+			&course.Sale.ID, &course.Sale.Type,
 			&course.Sale.CreateAt, &course.Sale.UpdateAt,
 			&course.ReviewStatistic.ScoreTotal, &course.ReviewStatistic.Amount,
 			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
@@ -427,6 +410,7 @@ func (c *course) FindCourseProduct(courseID int64) (*model.CourseProduct, error)
 	if err := c.gorm.DB().
 		Preload("Trainer").
 		Preload("Sale").
+		Preload("Sale.ProductLabel").
 		Preload("Review").
 		Where("id = ?", courseID).
 		Take(&course).Error; err != nil {
@@ -435,30 +419,13 @@ func (c *course) FindCourseProduct(courseID int64) (*model.CourseProduct, error)
 	return &course, nil
 }
 
-func (c *course) FindCourseDetailByCourseID(courseID int64) (*model.CourseDetailEntity, error) {
-	var course model.CourseDetailEntity
+func (c *course) FindCourseByCourseID(courseID int64) (*model.Course, error) {
+	var course model.Course
 	if err := c.gorm.DB().
-		Table("courses").
-		Select("courses.id", "courses.sale_type", "courses.course_status", "courses.category",
-			"courses.schedule_type", "courses.`name`", "courses.cover", "courses.intro",
-			"courses.food", "courses.level", "courses.suit", "courses.equipment",
-			"courses.place", "courses.train_target", "courses.body_target", "courses.notice",
-			"courses.plan_count", "courses.workout_count", "courses.create_at", "courses.update_at",
-		    "IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
-		    "IFNULL(sale.twd,0)", "IFNULL(sale.product_id,'')",
-		    "IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
-			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
-		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
-		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
-		Where("courses.id = ?", courseID).
-		Row().
-		Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category, &course.ScheduleType, &course.Name,
-			&course.Cover, &course.Intro, &course.Food, &course.Level, &course.Suit, &course.Equipment,
-			&course.Place, &course.TrainTarget, &course.BodyTarget, &course.Notice, &course.PlanCount,
-			&course.WorkoutCount, &course.CreateAt, &course.UpdateAt,
-		    &course.Sale.ID, &course.Sale.Type, &course.Sale.Name, &course.Sale.Twd, &course.Sale.ProductID,
-		    &course.Sale.CreateAt, &course.Sale.UpdateAt,
-			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
+		Preload("Trainer").
+		Preload("Sale").
+		Preload("Sale.ProductLabel").
+		Take(&course, courseID).Error; err != nil {
 			return nil, err
 	}
 	return &course, nil
@@ -528,7 +495,7 @@ func (c *course) FindCourseByActionID(actionID int64, entity interface{}) error 
 func (c *course) DeleteCourseByID(courseID int64) error {
 	if err := c.gorm.DB().
 		Where("id = ?", courseID).
-		Delete(&model.Course{}).Error; err != nil {
+		Delete(&entity.Course{}).Error; err != nil {
 		return err
 	}
 	return nil

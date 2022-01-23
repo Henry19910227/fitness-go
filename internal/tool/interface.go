@@ -28,6 +28,7 @@ type JWT interface {
 	GenerateUserToken(uid int64) (string, error)
 	GenerateTrainerToken(uid int64) (string, error)
 	GenerateAdminToken(uid int64, lv int) (string, error)
+	GenerateAppleToken() (string, error)
 	VerifyToken(token string) error
 	GetRoleByToken(token string) (int, error)
 	GetIDByToken(token string) (int64, error)
@@ -70,4 +71,8 @@ type OTP interface {
 type Resource interface {
 	SaveFile(file io.Reader, filename string, filepath string) error
 	RemoveFile(filepath string, fileNamed string) error
+}
+
+type HttpRequest interface {
+	SendPostRequestWithJsonBody(url string, param map[string]interface{}) (map[string]interface{}, error)
 }
