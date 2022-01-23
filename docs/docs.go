@@ -988,6 +988,63 @@ var doc = `{
                 }
             }
         },
+        "/course_order": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建課表訂單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "創建課表訂單",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateCourseOrderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.CourseOrder"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course_product/{course_id}": {
             "get": {
                 "security": [
@@ -2303,6 +2360,51 @@ var doc = `{
                 }
             }
         },
+        "/redeem_course": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "兌換免費課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "兌換免費課表",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.RedeemCourseBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/register/email": {
             "post": {
                 "description": "使用信箱註冊",
@@ -2671,6 +2773,63 @@ var doc = `{
                     },
                     "400": {
                         "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscribe_order": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建訂閱訂單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "創建訂閱訂單",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateSubscribeOrderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.SubscribeOrder"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -3449,6 +3608,51 @@ var doc = `{
                     },
                     "400": {
                         "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/verify_apple_receipt": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "驗證apple收據",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "驗證apple收據",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.VerifyReceiptBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -4749,6 +4953,54 @@ var doc = `{
                 }
             }
         },
+        "dto.CourseOrder": {
+            "type": "object",
+            "properties": {
+                "course": {
+                    "description": "訂單課表",
+                    "$ref": "#/definitions/dto.CourseProductItem"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2021-05-28 11:00:00"
+                },
+                "id": {
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "order_status": {
+                    "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "order_type": {
+                    "description": "訂單類型(1:課表購買/2:會員訂閱)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "quantity": {
+                    "description": "數量",
+                    "type": "integer",
+                    "example": 1
+                },
+                "sale_item": {
+                    "description": "銷售項目",
+                    "$ref": "#/definitions/dto.SaleItem"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2021-05-28 11:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
         "dto.CourseProduct": {
             "type": "object",
             "properties": {
@@ -4858,6 +5110,31 @@ var doc = `{
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.CourseProductItem": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "f43e5715fe.jpg"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -5197,6 +5474,80 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/dto.TrainerSummary"
                     }
+                }
+            }
+        },
+        "dto.SubscribeOrder": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2021-05-28 11:00:00"
+                },
+                "id": {
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "order_status": {
+                    "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "order_type": {
+                    "description": "訂單類型(1:課表購買/2:會員訂閱)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "quantity": {
+                    "description": "數量",
+                    "type": "integer",
+                    "example": 1
+                },
+                "sale_item": {
+                    "description": "銷售項目",
+                    "$ref": "#/definitions/dto.SubscribePlan"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2021-05-28 11:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
+        "dto.SubscribePlan": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "銷售id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "銷售名稱",
+                    "type": "string",
+                    "example": "銅級課表"
+                },
+                "period": {
+                    "description": "週期(1:一個月/2:二個月/3:三個月/6:六個月/12:一年/99:永久)",
+                    "type": "integer",
+                    "example": 12
+                },
+                "product_id": {
+                    "description": "產品ID",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
+                },
+                "twd": {
+                    "description": "台幣價格",
+                    "type": "integer",
+                    "example": 330
                 }
             }
         },
@@ -5823,6 +6174,19 @@ var doc = `{
                 }
             }
         },
+        "validator.CreateCourseOrderBody": {
+            "type": "object",
+            "required": [
+                "course_id"
+            ],
+            "properties": {
+                "course_id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "validator.CreatePlanBody": {
             "type": "object",
             "required": [
@@ -5832,6 +6196,19 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "第一週增肌計畫"
+                }
+            }
+        },
+        "validator.CreateSubscribeOrderBody": {
+            "type": "object",
+            "required": [
+                "period"
+            ],
+            "properties": {
+                "period": {
+                    "description": "週期(1:一個月/12:一年)",
+                    "type": "integer",
+                    "example": 12
                 }
             }
         },
@@ -5913,6 +6290,19 @@ var doc = `{
                     "description": "密碼 (6~18字元)",
                     "type": "string",
                     "example": "12345678"
+                }
+            }
+        },
+        "validator.RedeemCourseBody": {
+            "type": "object",
+            "required": [
+                "order_id"
+            ],
+            "properties": {
+                "order_id": {
+                    "description": "訂單 id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 }
             }
         },
@@ -6169,6 +6559,25 @@ var doc = `{
                     "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "validator.VerifyReceiptBody": {
+            "type": "object",
+            "required": [
+                "order_id",
+                "receipt_data"
+            ],
+            "properties": {
+                "order_id": {
+                    "description": "訂單 id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "receipt_data": {
+                    "description": "收據token",
+                    "type": "string",
+                    "example": "MIJOlgYJKoZIhvcN..."
                 }
             }
         },

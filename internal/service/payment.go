@@ -556,8 +556,8 @@ func parserCourseOrder(data *model.Order) *dto.CourseOrder {
 				Type: data.OrderCourse.SaleItem.Type,
 			}
 			if data.OrderCourse.SaleItem.ProductLabel != nil {
+				order.SaleItem.Name = data.OrderCourse.SaleItem.Name
 				order.SaleItem.ProductID = data.OrderCourse.SaleItem.ProductLabel.ProductID
-				order.SaleItem.Name = data.OrderCourse.SaleItem.ProductLabel.Name
 				order.SaleItem.Twd = data.OrderCourse.SaleItem.ProductLabel.Twd
 			}
 		}

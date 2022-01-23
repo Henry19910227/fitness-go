@@ -221,6 +221,43 @@ definitions:
         example: 2
         type: integer
     type: object
+  dto.CourseOrder:
+    properties:
+      course:
+        $ref: '#/definitions/dto.CourseProductItem'
+        description: 訂單課表
+      create_at:
+        description: 創建時間
+        example: "2021-05-28 11:00:00"
+        type: string
+      id:
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
+      order_status:
+        description: 訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)
+        example: 1
+        type: integer
+      order_type:
+        description: 訂單類型(1:課表購買/2:會員訂閱)
+        example: 1
+        type: integer
+      quantity:
+        description: 數量
+        example: 1
+        type: integer
+      sale_item:
+        $ref: '#/definitions/dto.SaleItem'
+        description: 銷售項目
+      update_at:
+        description: 更新時間
+        example: "2021-05-28 11:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 10001
+        type: integer
+    type: object
   dto.CourseProduct:
     properties:
       allow_access:
@@ -307,6 +344,25 @@ definitions:
       workout_count:
         description: 訓練總數
         example: 10
+        type: integer
+    type: object
+  dto.CourseProductItem:
+    properties:
+      cover:
+        description: 課表封面
+        example: f43e5715fe.jpg
+        type: string
+      id:
+        description: 課表 id
+        example: 10001
+        type: integer
+      name:
+        description: 課表名稱
+        example: henry
+        type: string
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 1
         type: integer
     type: object
   dto.CourseProductSummary:
@@ -565,6 +621,63 @@ definitions:
         items:
           $ref: '#/definitions/dto.TrainerSummary'
         type: array
+    type: object
+  dto.SubscribeOrder:
+    properties:
+      create_at:
+        description: 創建時間
+        example: "2021-05-28 11:00:00"
+        type: string
+      id:
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
+      order_status:
+        description: 訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)
+        example: 1
+        type: integer
+      order_type:
+        description: 訂單類型(1:課表購買/2:會員訂閱)
+        example: 1
+        type: integer
+      quantity:
+        description: 數量
+        example: 1
+        type: integer
+      sale_item:
+        $ref: '#/definitions/dto.SubscribePlan'
+        description: 銷售項目
+      update_at:
+        description: 更新時間
+        example: "2021-05-28 11:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 10001
+        type: integer
+    type: object
+  dto.SubscribePlan:
+    properties:
+      id:
+        description: 銷售id
+        example: 1
+        type: integer
+      name:
+        description: 銷售名稱
+        example: 銅級課表
+        type: string
+      period:
+        description: 週期(1:一個月/2:二個月/3:三個月/6:六個月/12:一年/99:永久)
+        example: 12
+        type: integer
+      product_id:
+        description: 產品ID
+        example: com.fitness.xxx
+        type: string
+      twd:
+        description: 台幣價格
+        example: 330
+        type: integer
     type: object
   dto.Trainer:
     properties:
@@ -1040,6 +1153,15 @@ definitions:
     - name
     - schedule_type
     type: object
+  validator.CreateCourseOrderBody:
+    properties:
+      course_id:
+        description: 課表 id
+        example: 1
+        type: integer
+    required:
+    - course_id
+    type: object
   validator.CreatePlanBody:
     properties:
       name:
@@ -1047,6 +1169,15 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  validator.CreateSubscribeOrderBody:
+    properties:
+      period:
+        description: 週期(1:一個月/12:一年)
+        example: 12
+        type: integer
+    required:
+    - period
     type: object
   validator.CreateWorkoutBody:
     properties:
@@ -1104,6 +1235,15 @@ definitions:
     required:
     - email
     - password
+    type: object
+  validator.RedeemCourseBody:
+    properties:
+      order_id:
+        description: 訂單 id
+        example: "202105201300687423"
+        type: string
+    required:
+    - order_id
     type: object
   validator.RegisterForEmailBody:
     properties:
@@ -1297,6 +1437,20 @@ definitions:
     required:
     - nickname
     type: object
+  validator.VerifyReceiptBody:
+    properties:
+      order_id:
+        description: 訂單 id
+        example: "202105201300687423"
+        type: string
+      receipt_data:
+        description: 收據token
+        example: MIJOlgYJKoZIhvcN...
+        type: string
+    required:
+    - order_id
+    - receipt_data
+    type: object
   validator.WorkoutSetOrder:
     properties:
       seq:
@@ -1350,8 +1504,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
-        查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -1898,6 +2051,39 @@ paths:
       summary: 送審課表
       tags:
       - Course
+  /course_order:
+    post:
+      consumes:
+      - application/json
+      description: 創建課表訂單
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateCourseOrderBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CourseOrder'
+              type: object
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 創建課表訂單
+      tags:
+      - Payment
   /course_product/{course_id}:
     get:
       consumes:
@@ -2693,6 +2879,34 @@ paths:
       summary: 獲取訓練列表
       tags:
       - PlanProduct
+  /redeem_course:
+    post:
+      consumes:
+      - application/json
+      description: 兌換免費課表
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.RedeemCourseBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 兌換免費課表
+      tags:
+      - Payment
   /register/email:
     post:
       consumes:
@@ -2919,6 +3133,39 @@ paths:
       summary: 獲取商店首頁資料
       tags:
       - Store
+  /subscribe_order:
+    post:
+      consumes:
+      - application/json
+      description: 創建訂閱訂單
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateSubscribeOrderBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SubscribeOrder'
+              type: object
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 創建訂閱訂單
+      tags:
+      - Payment
   /trainer:
     get:
       consumes:
@@ -2948,12 +3195,7 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -3059,12 +3301,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -3412,6 +3649,34 @@ paths:
       summary: 更新個人資訊
       tags:
       - User
+  /verify_apple_receipt:
+    post:
+      consumes:
+      - application/json
+      description: 驗證apple收據
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.VerifyReceiptBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 驗證apple收據
+      tags:
+      - Payment
   /workout/{workout_id}:
     delete:
       consumes:
