@@ -224,7 +224,7 @@ definitions:
   dto.CourseOrder:
     properties:
       course:
-        $ref: '#/definitions/dto.CourseProductItem'
+        $ref: '#/definitions/dto.CourseProductSummary'
         description: 訂單課表
       create_at:
         description: 創建時間
@@ -344,25 +344,6 @@ definitions:
       workout_count:
         description: 訓練總數
         example: 10
-        type: integer
-    type: object
-  dto.CourseProductItem:
-    properties:
-      cover:
-        description: 課表封面
-        example: f43e5715fe.jpg
-        type: string
-      id:
-        description: 課表 id
-        example: 10001
-        type: integer
-      name:
-        description: 課表名稱
-        example: henry
-        type: string
-      sale_type:
-        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-        example: 1
         type: integer
     type: object
   dto.CourseProductSummary:
@@ -644,7 +625,7 @@ definitions:
         description: 數量
         example: 1
         type: integer
-      sale_item:
+      subscribe_plan:
         $ref: '#/definitions/dto.SubscribePlan'
         description: 銷售項目
       update_at:
@@ -1172,12 +1153,12 @@ definitions:
     type: object
   validator.CreateSubscribeOrderBody:
     properties:
-      period:
-        description: 週期(1:一個月/12:一年)
-        example: 12
+      subscribe_plan_id:
+        description: 訂閱方案 id
+        example: 1
         type: integer
     required:
-    - period
+    - subscribe_plan_id
     type: object
   validator.CreateWorkoutBody:
     properties:
@@ -1504,7 +1485,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名}
+        查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -2368,34 +2350,6 @@ paths:
       summary: 搜尋課表產品列表
       tags:
       - CourseProduct
-  /course_sale_items:
-    get:
-      consumes:
-      - application/json
-      description: 取得付費課表銷售項目清單
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 獲取成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/dto.SaleItem'
-                  type: array
-              type: object
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 取得付費課表銷售項目清單
-      tags:
-      - Sale
   /courses:
     get:
       consumes:
@@ -3166,6 +3120,34 @@ paths:
       summary: 創建訂閱訂單
       tags:
       - Payment
+  /subscribe_plans:
+    get:
+      consumes:
+      - application/json
+      description: 取得訂閱方案清單
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SubscribePlan'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得訂閱方案清單
+      tags:
+      - Sale
   /trainer:
     get:
       consumes:
@@ -3195,7 +3177,12 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -3301,7 +3288,12 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData

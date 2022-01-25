@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS courses (
    `id` INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '課表 id',
    `user_id` INT(11) UNSIGNED NOT NULL COMMENT '用戶 id',
-   `sale_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '銷售類型(1:免費課表/2:訂閱課表/3:付費課表)',
+   `sale_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '銷售類型(0:未指定/1:免費課表/2:訂閱課表/3:付費課表)',
    `sale_id` INT(11) UNSIGNED COMMENT '銷售 id',
    `course_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)',
    `category` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)',

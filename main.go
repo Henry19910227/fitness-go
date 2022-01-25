@@ -217,7 +217,6 @@ func setupService() {
 	setupRegService()
 	setupUserService()
 	setupWorkoutSetService()
-	setupSaleService()
 	courseService = service.NewCourseService(viperTool, gormTool)
 	planService = service.NewPlanService(viperTool, gormTool)
 	workoutService = service.NewWorkoutService(viperTool, gormTool)
@@ -227,6 +226,7 @@ func setupService() {
 	storeService = service.NewStoreService(viperTool, gormTool)
 	reviewService = service.NewReviewService(viperTool, gormTool)
 	paymentService = service.NewPaymentService(viperTool, gormTool)
+	saleService = service.NewSaleService(viperTool, gormTool)
 }
 
 func setupMigrateService()  {
@@ -247,11 +247,6 @@ func setupUserService()  {
 func setupWorkoutSetService()  {
 	workoutSetRepo := repository.NewWorkoutSet(gormTool)
 	workoutSetService = service.NewWorkoutSet(workoutSetRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
-func setupSaleService()  {
-	saleRepo := repository.NewSale(gormTool)
-	saleService = service.NewSale(saleRepo, logHandler, jwtTool, errcode.NewHandler())
 }
 
 func setupSwagService()  {

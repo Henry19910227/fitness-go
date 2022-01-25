@@ -5,7 +5,7 @@ type CreateCourseOrderBody struct {
 }
 
 type CreateSubscribeOrderBody struct {
-	Period int `json:"period" binding:"required,oneof=1 12" example:"12"`   // 週期(1:一個月/12:一年)
+	SubscribePlanID int64 `json:"subscribe_plan_id" binding:"required" example:"1"`   // 訂閱方案 id
 }
 
 type VerifyReceiptBody struct {

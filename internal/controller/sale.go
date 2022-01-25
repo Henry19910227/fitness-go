@@ -4,7 +4,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
-	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,37 +16,13 @@ func NewSale(baseGroup *gin.RouterGroup, saleService service.Sale, userMidd midd
 	sale := Sale{
 		saleService: saleService,
 	}
-	baseGroup.GET("/course_sale_items",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		sale.GetCourseSaleItems)
-
 	baseGroup.GET("/sale_items",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		sale.GetCourseSaleItems)
-}
+		sale.GetSaleItems)
 
-// GetCourseSaleItems 取得付費課表銷售項目清單
-// @Summary  取得付費課表銷售項目清單
-// @Description  取得付費課表銷售項目清單
-// @Tags Sale
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Success 200 {object} model.SuccessResult{data=[]dto.SaleItem} "獲取成功!"
-// @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_sale_items [GET]
-func (s *Sale) GetCourseSaleItems(c *gin.Context) {
-	var header validator.TokenHeader
-	if err := c.ShouldBindHeader(&header); err != nil {
-		s.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	saleItems, err := s.saleService.GetCourseSaleItems(c)
-	if err != nil {
-		s.JSONErrorResponse(c, err)
-		return
-	}
-	s.JSONSuccessResponse(c, saleItems, "get success!")
+	baseGroup.GET("/subscribe_plans",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		sale.GetSubscribePlans)
 }
 
 // GetSaleItems 取得銷售項目清單
@@ -61,15 +36,29 @@ func (s *Sale) GetCourseSaleItems(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /sale_items [GET]
 func (s *Sale) GetSaleItems(c *gin.Context) {
-	var header validator.TokenHeader
-	if err := c.ShouldBindHeader(&header); err != nil {
-		s.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
 	saleItems, err := s.saleService.GetSaleItems(c)
 	if err != nil {
 		s.JSONErrorResponse(c, err)
 		return
 	}
 	s.JSONSuccessResponse(c, saleItems, "get success!")
+}
+
+// GetSubscribePlans 取得訂閱方案清單
+// @Summary  取得訂閱方案清單
+// @Description  取得訂閱方案清單
+// @Tags Sale
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} model.SuccessResult{data=[]dto.SubscribePlan} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /subscribe_plans [GET]
+func (s *Sale) GetSubscribePlans(c *gin.Context) {
+	subscribePlans, err := s.saleService.GetSubscribePlans(c)
+	if err != nil {
+		s.JSONErrorResponse(c, err)
+		return
+	}
+	s.JSONSuccessResponse(c, subscribePlans, "get success!")
 }

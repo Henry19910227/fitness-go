@@ -96,6 +96,8 @@ type Sale interface {
 }
 
 type SubscribePlan interface {
+	FindSubscribePlans() ([]*model.SubscribePlan, error)
+	FinsSubscribePlanByID(subscribePlanID int64) (*model.SubscribePlan, error)
 	FindSubscribePlansByPeriod(period global.PeriodType) ([]*model.SubscribePlan, error)
 }
 
@@ -130,7 +132,8 @@ type Order interface {
 	CreateSubscribeOrder(param *model.CreateSubscribeOrderParam) (string, error)
 	UpdateOrder(tx *gorm.DB, orderID string, param *model.UpdateOrderParam) error
 	FindOrder(orderID string) (*model.Order, error)
-	FindOrderByUserIDAndCourseID(userID int64, courseID int64) (*model.Order, error)
+	FindOrderByCourseID(userID int64, courseID int64) (*model.Order, error)
+	FindOrderBySubscribePlanID(userID int64, subscribePlanID int64) (*model.Order, error)
 }
 
 type Receipt interface {

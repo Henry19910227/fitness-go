@@ -1511,55 +1511,6 @@ var doc = `{
                 }
             }
         },
-        "/course_sale_items": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "取得付費課表銷售項目清單",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Sale"
-                ],
-                "summary": "取得付費課表銷售項目清單",
-                "responses": {
-                    "200": {
-                        "description": "獲取成功!",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/dto.SaleItem"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "獲取失敗",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
         "/courses": {
             "get": {
                 "security": [
@@ -2830,6 +2781,55 @@ var doc = `{
                     },
                     "400": {
                         "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscribe_plans": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得訂閱方案清單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "取得訂閱方案清單",
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.SubscribePlan"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -4958,7 +4958,7 @@ var doc = `{
             "properties": {
                 "course": {
                     "description": "訂單課表",
-                    "$ref": "#/definitions/dto.CourseProductItem"
+                    "$ref": "#/definitions/dto.CourseProductSummary"
                 },
                 "create_at": {
                     "description": "創建時間",
@@ -5110,31 +5110,6 @@ var doc = `{
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
-                }
-            }
-        },
-        "dto.CourseProductItem": {
-            "type": "object",
-            "properties": {
-                "cover": {
-                    "description": "課表封面",
-                    "type": "string",
-                    "example": "f43e5715fe.jpg"
-                },
-                "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 10001
-                },
-                "name": {
-                    "description": "課表名稱",
-                    "type": "string",
-                    "example": "henry"
-                },
-                "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 1
                 }
             }
         },
@@ -5505,7 +5480,7 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
-                "sale_item": {
+                "subscribe_plan": {
                     "description": "銷售項目",
                     "$ref": "#/definitions/dto.SubscribePlan"
                 },
@@ -6202,13 +6177,13 @@ var doc = `{
         "validator.CreateSubscribeOrderBody": {
             "type": "object",
             "required": [
-                "period"
+                "subscribe_plan_id"
             ],
             "properties": {
-                "period": {
-                    "description": "週期(1:一個月/12:一年)",
+                "subscribe_plan_id": {
+                    "description": "訂閱方案 id",
                     "type": "integer",
-                    "example": 12
+                    "example": 1
                 }
             }
         },

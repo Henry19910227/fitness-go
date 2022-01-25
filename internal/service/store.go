@@ -11,10 +11,10 @@ import (
 
 type store struct {
 	Base
-	courseRepo repository.Course
+	courseRepo  repository.Course
 	trainerRepo repository.Trainer
-	reviewRepo repository.Review
-	errHandler errcode.Handler
+	reviewRepo  repository.Review
+	errHandler  errcode.Handler
 }
 
 func NewStore(courseRepo repository.Course, trainerRepo repository.Trainer, reviewRepo repository.Review, errHandler errcode.Handler) Store {
@@ -32,8 +32,8 @@ func (s *store) GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error) 
 	}
 	return &dto.StoreHomePage{LatestTrainers: latestTrainers,
 		PopularTrainers: latestTrainers,
-		LatestCourses: latestCourses,
-		PopularCourses: latestCourses}, nil
+		LatestCourses:   latestCourses,
+		PopularCourses:  latestCourses}, nil
 }
 
 func (s *store) getLatestTrainerSummaries() ([]*dto.TrainerSummary, error) {
@@ -69,35 +69,37 @@ func parserCourses(datas []*model.CourseProductSummary) []*dto.CourseProductSumm
 	courses := make([]*dto.CourseProductSummary, 0)
 	for _, data := range datas {
 		course := dto.CourseProductSummary{
-			ID: data.ID,
-			SaleType: data.SaleType,
+			ID:           data.ID,
+			SaleType:     data.SaleType,
 			CourseStatus: data.CourseStatus,
-			Category: data.Category,
+			Category:     data.Category,
 			ScheduleType: data.ScheduleType,
-			Name: data.Name,
-			Cover: data.Cover,
-			Level: data.Level,
-			PlanCount: data.PlanCount,
+			Name:         data.Name,
+			Cover:        data.Cover,
+			Level:        data.Level,
+			PlanCount:    data.PlanCount,
 			WorkoutCount: data.WorkoutCount,
 		}
-		course.Trainer = dto.TrainerSummary{
-			UserID: data.Trainer.UserID,
-			Nickname: data.Trainer.Nickname,
-			Avatar: data.Trainer.Avatar,
-			Skill: data.Trainer.Skill,
+		if data.Trainer != nil {
+			course.Trainer = &dto.TrainerSummary{
+				UserID:   data.Trainer.UserID,
+				Nickname: data.Trainer.Nickname,
+				Avatar:   data.Trainer.Avatar,
+				Skill:    data.Trainer.Skill,
+			}
 		}
 		course.Review = dto.ReviewStatisticSummary{
-			ScoreTotal: data.ReviewStatistic.ScoreTotal,
-			Amount: data.ReviewStatistic.Amount,
+			ScoreTotal: data.Review.ScoreTotal,
+			Amount:     data.Review.Amount,
 		}
-		if data.Sale.ID != 0 {
+		if data.Sale != nil {
 			sale := &dto.SaleItem{
-				ID: data.Sale.ID,
+				ID:   data.Sale.ID,
 				Type: data.Sale.Type,
+				Name: data.Sale.Name,
 			}
 			course.Sale = sale
 			if data.Sale.ProductLabel != nil {
-				course.Sale.Name = data.Sale.ProductLabel.Name
 				course.Sale.Twd = data.Sale.ProductLabel.Twd
 				course.Sale.ProductID = data.Sale.ProductLabel.ProductID
 			}

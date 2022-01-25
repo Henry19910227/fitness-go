@@ -39,8 +39,8 @@ type payment struct {
 func NewPayment(orderRepo repository.Order, saleRepo repository.Sale, subscribePlanRepo repository.SubscribePlan,
 	courseRepo repository.Course, receiptRepo repository.Receipt,
 	purchaseRepo repository.UserCourseAsset, subscribeLogRepo repository.SubscribeLog,
-	purchaseLogRepo  repository.PurchaseLog, memberRepo repository.UserSubscribeInfo,
-	transactionRepo  repository.Transaction, reqTool tool.HttpRequest,
+	purchaseLogRepo repository.PurchaseLog, memberRepo repository.UserSubscribeInfo,
+	transactionRepo repository.Transaction, reqTool tool.HttpRequest,
 	jwtTool tool.JWT, errHandler errcode.Handler) Payment {
 	return &payment{orderRepo: orderRepo, saleRepo: saleRepo, subscribePlanRepo: subscribePlanRepo,
 		courseRepo: courseRepo, receiptRepo: receiptRepo,
@@ -60,10 +60,10 @@ func (p *payment) Test(c *gin.Context) (string, errcode.Error) {
 func (p *payment) CreateCourseOrder(c *gin.Context, uid int64, courseID int64) (*dto.CourseOrder, errcode.Error) {
 	//檢查是此課表是否已購買
 	courseAsset, err := p.userCourseAssetRepo.FindUserCourseAsset(&model.FindUserCourseAssetParam{
-		UserID: uid,
+		UserID:   uid,
 		CourseID: courseID,
 	})
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound){
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, p.errHandler.Set(c, "order repo", err)
 	}
 	if courseAsset != nil {
@@ -72,8 +72,8 @@ func (p *payment) CreateCourseOrder(c *gin.Context, uid int64, courseID int64) (
 		}
 	}
 	//檢查是否有尚未付款的相同訂單
-	orderData, err := p.orderRepo.FindOrderByUserIDAndCourseID(uid, courseID)
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound){
+	orderData, err := p.orderRepo.FindOrderByCourseID(uid, courseID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, p.errHandler.Set(c, "order repo", err)
 	}
 	if orderData != nil {
@@ -90,14 +90,14 @@ func (p *payment) CreateCourseOrder(c *gin.Context, uid int64, courseID int64) (
 	if course.SaleType != int(global.SaleTypeFree) && course.SaleType != int(global.SaleTypeCharge) {
 		return nil, p.errHandler.Custom(8999, errors.New("商品必須為免費課表或付費課表類型才可創建此訂單"))
 	}
-	if course.SaleID == nil {
-		return nil, p.errHandler.Custom(8999, errors.New("付費訂單的課表必須有 sale id"))
+	if course.SaleType != int(global.SaleTypeFree) && course.SaleID == nil {
+		return nil, p.errHandler.Custom(8999, errors.New("付費課表必須有 sale id"))
 	}
 	// 創建訂單
 	orderID, err := p.orderRepo.CreateCourseOrder(&model.CreateOrderParam{
-		UserID: uid,
-		SaleItemID: *course.SaleID,
-		CourseID: courseID,
+		UserID:     uid,
+		SaleItemID: course.SaleID,
+		CourseID:   courseID,
 	})
 	if err != nil {
 		return nil, p.errHandler.Set(c, "order repo", err)
@@ -110,7 +110,7 @@ func (p *payment) CreateCourseOrder(c *gin.Context, uid int64, courseID int64) (
 	return parserCourseOrder(data), nil
 }
 
-func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, period global.PeriodType) (*dto.SubscribeOrder, errcode.Error) {
+func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanID int64) (*dto.SubscribeOrder, errcode.Error) {
 	//驗證當前訂閱狀態
 	subscribeInfo, err := p.subscribeInfo.FindSubscribeInfo(uid)
 	if err != nil {
@@ -119,19 +119,23 @@ func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, period global.
 	if global.SubscribeStatus(subscribeInfo.Status) == global.ValidSubscribeStatus {
 		return nil, p.errHandler.Custom(8999, errors.New("目前已經是訂閱會員"))
 	}
-	// 查詢訂閱方案
-	plans, err := p.subscribePlanRepo.FindSubscribePlansByPeriod(period)
+	//檢查是否有尚未付款的相同訂單
+	orderData, err := p.orderRepo.FindOrderBySubscribePlanID(uid, subscribePlanID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, p.errHandler.Set(c, "order repo", err)
+	}
+	if orderData != nil {
+		return parserSubscribeOrder(orderData), nil
+	}
+	// 查找是否有此訂閱方案
+	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByID(subscribePlanID)
 	if err != nil {
-		return nil, p.errHandler.Set(c, "sale item repo", err)
+		return nil, p.errHandler.Set(c, "order repo", err)
 	}
-	if len(plans) == 0 {
-		return nil, p.errHandler.Custom(8999, errors.New("無此訂閱方案"))
-	}
-	plan := plans[0]
 	// 創建訂單
 	orderID, err := p.orderRepo.CreateSubscribeOrder(&model.CreateSubscribeOrderParam{
-		UserID:     uid,
-		SubscribePlanID: plan.ID,
+		UserID:          uid,
+		SubscribePlanID: subscribePlan.ID,
 	})
 	if err != nil {
 		return nil, p.errHandler.Set(c, "order repo", err)
@@ -188,8 +192,8 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	}
 	//apple server 正式區驗證收據
 	param := map[string]interface{}{
-		"receipt-data": receiptData,
-		"password": "b3e50e11316943969754106ed24c6a3a",
+		"receipt-data":             receiptData,
+		"password":                 "b3e50e11316943969754106ed24c6a3a",
 		"exclude-old-transactions": 1,
 	}
 	result, err := p.reqTool.SendPostRequestWithJsonBody("https://buy.itunes.apple.com/verifyReceipt", param)
@@ -243,35 +247,33 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 
 	fmt.Printf("Data.Environment: %v \n", response.Data.Environment)
 
-
 	fmt.Printf("SignedRenewalInfo.AutoRenewProductId: %v \n", response.Data.SignedRenewalInfo.AutoRenewProductId)
 	fmt.Printf("SignedRenewalInfo.AutoRenewStatus: %v \n", response.Data.SignedRenewalInfo.AutoRenewStatus)
 	fmt.Printf("SignedRenewalInfo.ExpirationIntent: %v \n", response.Data.SignedRenewalInfo.ExpirationIntent)
-	fmt.Printf("SignedRenewalInfo.GracePeriodExpiresDate: %v \n", parserIAPDate(response.Data.SignedRenewalInfo.GracePeriodExpiresDate / 1000).Format("2006-01-02 15:04:05"))
+	fmt.Printf("SignedRenewalInfo.GracePeriodExpiresDate: %v \n", parserIAPDate(response.Data.SignedRenewalInfo.GracePeriodExpiresDate/1000).Format("2006-01-02 15:04:05"))
 	fmt.Printf("SignedRenewalInfo.IsInBillingRetryPeriod: %v \n", response.Data.SignedRenewalInfo.IsInBillingRetryPeriod)
 	fmt.Printf("SignedRenewalInfo.OfferIdentifier: %v \n", response.Data.SignedRenewalInfo.OfferIdentifier)
 	fmt.Printf("SignedRenewalInfo.OfferType: %v \n", response.Data.SignedRenewalInfo.OfferType)
 	fmt.Printf("SignedRenewalInfo.OriginalTransactionId: %v \n", response.Data.SignedRenewalInfo.OriginalTransactionId)
 	fmt.Printf("SignedRenewalInfo.PriceIncreaseStatus: %v \n", response.Data.SignedRenewalInfo.PriceIncreaseStatus)
 	fmt.Printf("SignedRenewalInfo.ProductId: %v \n", response.Data.SignedRenewalInfo.ProductId)
-	fmt.Printf("SignedRenewalInfo.SignedDate: %v \n", parserIAPDate(response.Data.SignedRenewalInfo.SignedDate / 1000).Format("2006-01-02 15:04:05"))
-
+	fmt.Printf("SignedRenewalInfo.SignedDate: %v \n", parserIAPDate(response.Data.SignedRenewalInfo.SignedDate/1000).Format("2006-01-02 15:04:05"))
 
 	fmt.Printf("SignedTransactionInfo.AppAccountToken: %v \n", response.Data.SignedTransactionInfo.AppAccountToken)
 	fmt.Printf("SignedTransactionInfo.BundleId: %v \n", response.Data.SignedTransactionInfo.BundleId)
-	fmt.Printf("SignedTransactionInfo.ExpiresDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.ExpiresDate / 1000).Format("2006-01-02 15:04:05"))
+	fmt.Printf("SignedTransactionInfo.ExpiresDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.ExpiresDate/1000).Format("2006-01-02 15:04:05"))
 	fmt.Printf("SignedTransactionInfo.InAppOwnershipType: %v \n", response.Data.SignedTransactionInfo.InAppOwnershipType)
 	fmt.Printf("SignedTransactionInfo.IsUpgraded: %v \n", response.Data.SignedTransactionInfo.IsUpgraded)
 	fmt.Printf("SignedTransactionInfo.OfferIdentifier: %v \n", response.Data.SignedTransactionInfo.OfferIdentifier)
 	fmt.Printf("SignedTransactionInfo.OfferType: %v \n", response.Data.SignedTransactionInfo.OfferType)
-	fmt.Printf("SignedTransactionInfo.OriginalPurchaseDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.OriginalPurchaseDate / 1000).Format("2006-01-02 15:04:05"))
+	fmt.Printf("SignedTransactionInfo.OriginalPurchaseDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.OriginalPurchaseDate/1000).Format("2006-01-02 15:04:05"))
 	fmt.Printf("SignedTransactionInfo.OriginalTransactionId: %v \n", response.Data.SignedTransactionInfo.OriginalTransactionId)
 	fmt.Printf("SignedTransactionInfo.ProductId: %v \n", response.Data.SignedTransactionInfo.ProductId)
-	fmt.Printf("SignedTransactionInfo.PurchaseDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.PurchaseDate / 1000).Format("2006-01-02 15:04:05"))
+	fmt.Printf("SignedTransactionInfo.PurchaseDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.PurchaseDate/1000).Format("2006-01-02 15:04:05"))
 	fmt.Printf("SignedTransactionInfo.Quantity: %v \n", response.Data.SignedTransactionInfo.Quantity)
-	fmt.Printf("SignedTransactionInfo.RevocationDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.RevocationDate / 1000).Format("2006-01-02 15:04:05"))
+	fmt.Printf("SignedTransactionInfo.RevocationDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.RevocationDate/1000).Format("2006-01-02 15:04:05"))
 	fmt.Printf("SignedTransactionInfo.RevocationReason: %v \n", response.Data.SignedTransactionInfo.RevocationReason)
-	fmt.Printf("SignedTransactionInfo.SignedDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.SignedDate / 1000).Format("2006-01-02 15:04:05"))
+	fmt.Printf("SignedTransactionInfo.SignedDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.SignedDate/1000).Format("2006-01-02 15:04:05"))
 	fmt.Printf("SignedTransactionInfo.SubscriptionGroupIdentifier: %v \n", response.Data.SignedTransactionInfo.SubscriptionGroupIdentifier)
 	fmt.Printf("SignedTransactionInfo.TransactionId: %v \n", response.Data.SignedTransactionInfo.TransactionId)
 	fmt.Printf("SignedTransactionInfo.Type: %v \n", response.Data.SignedTransactionInfo.Type)
@@ -324,9 +326,9 @@ func (p *payment) handleCourseOrderTrade(c *gin.Context, order *dto.CourseOrder,
 	}
 	//存入購買Log
 	_, err = p.purchaseLogRepo.CreatePurchaseLog(tx, &model.CreatePurchaseLogParam{
-		UserID: order.UserID,
+		UserID:  order.UserID,
 		OrderID: order.ID,
-		Type: global.BuyPurchaseLogType,
+		Type:    global.BuyPurchaseLogType,
 	})
 	if err != nil {
 		tx.Rollback()
@@ -394,22 +396,22 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, order *dto.SubscribeOrder
 	}
 	//存入訂閱紀錄
 	_, err = p.subscribeLogRepo.CreateSubscribeLog(tx, &model.CreateSubscribeLogParam{
-		UserID:  order.UserID,
+		UserID:        order.UserID,
 		TransactionID: item.TransactionID,
-		PurchaseDate: item.PurchaseDate.Format("2006-01-02 15:04:05"),
-		ExpiresDate: item.ExpiresDate.Format("2006-01-02 15:04:05"),
-		Type:    string(global.NormalSubscribeLogType),
-		Msg:     "訂閱成功!",
+		PurchaseDate:  item.PurchaseDate.Format("2006-01-02 15:04:05"),
+		ExpiresDate:   item.ExpiresDate.Format("2006-01-02 15:04:05"),
+		Type:          string(global.NormalSubscribeLogType),
+		Msg:           "訂閱成功!",
 	})
 	if err != nil {
 		tx.Rollback()
-		return  p.errHandler.Set(c, "subscribe log repo", err)
+		return p.errHandler.Set(c, "subscribe log repo", err)
 	}
 	//更新會員資料
 	_, err = p.subscribeInfo.SaveSubscribeInfo(tx, &model.SaveUserSubscribeInfoParam{
-		UserID:       order.UserID,
-		Status: global.ValidSubscribeStatus,
-		StartDate: item.PurchaseDate.Format("2006-01-02 15:04:05"),
+		UserID:      order.UserID,
+		Status:      global.ValidSubscribeStatus,
+		StartDate:   item.PurchaseDate.Format("2006-01-02 15:04:05"),
 		ExpiresDate: item.ExpiresDate.Format("2006-01-02 15:04:05"),
 	})
 	if err != nil {
@@ -519,7 +521,7 @@ func parserAppleReceiptDate(unixMS string) (*time.Time, error) {
 	if err != nil {
 		return nil, err
 	}
-	date, err := time.ParseInLocation("2006-01-02 15:04:05", time.Unix(msTime / 1000, 0).Format("2006-01-02 15:04:05"), location)
+	date, err := time.ParseInLocation("2006-01-02 15:04:05", time.Unix(msTime/1000, 0).Format("2006-01-02 15:04:05"), location)
 	if err != nil {
 		return nil, err
 	}
@@ -539,20 +541,22 @@ func parserIAPDate(unix int64) *time.Time {
 }
 
 func parserCourseOrder(data *model.Order) *dto.CourseOrder {
-	if data == nil { return nil }
+	if data == nil {
+		return nil
+	}
 	order := dto.CourseOrder{
-		ID: data.ID,
-		UserID: data.UserID,
-		Quantity: data.Quantity,
-		OrderType: data.OrderType,
+		ID:          data.ID,
+		UserID:      data.UserID,
+		Quantity:    data.Quantity,
+		OrderType:   data.OrderType,
 		OrderStatus: data.OrderStatus,
-		CreateAt: data.CreateAt,
-		UpdateAt: data.UpdateAt,
+		CreateAt:    data.CreateAt,
+		UpdateAt:    data.UpdateAt,
 	}
 	if data.OrderCourse != nil {
 		if data.OrderCourse.SaleItem != nil {
 			order.SaleItem = &dto.SaleItem{
-				ID: data.OrderCourse.SaleItem.ID,
+				ID:   data.OrderCourse.SaleItem.ID,
 				Type: data.OrderCourse.SaleItem.Type,
 			}
 			if data.OrderCourse.SaleItem.ProductLabel != nil {
@@ -562,11 +566,38 @@ func parserCourseOrder(data *model.Order) *dto.CourseOrder {
 			}
 		}
 		if data.OrderCourse.Course != nil {
-			order.Course = &dto.CourseProductItem{
-				ID: data.OrderCourse.Course.ID,
-				SaleType: data.OrderCourse.Course.SaleType,
-				Name: data.OrderCourse.Course.Name,
-				Cover: data.OrderCourse.Course.Cover,
+			order.Course = &dto.CourseProductSummary{
+				ID:           data.OrderCourse.Course.ID,
+				SaleType:     data.OrderCourse.Course.SaleType,
+				CourseStatus: data.OrderCourse.Course.CourseStatus,
+				Category:     data.OrderCourse.Course.Category,
+				ScheduleType: data.OrderCourse.Course.ScheduleType,
+				Name:         data.OrderCourse.Course.Name,
+				Cover:        data.OrderCourse.Course.Cover,
+				Level:        data.OrderCourse.Course.Level,
+				PlanCount:    data.OrderCourse.Course.PlanCount,
+				WorkoutCount: data.OrderCourse.Course.WorkoutCount,
+			}
+			order.Course.Review.ScoreTotal = data.OrderCourse.Course.Review.ScoreTotal
+			order.Course.Review.Amount = data.OrderCourse.Course.Review.Amount
+			if data.OrderCourse.Course.Trainer != nil {
+				order.Course.Trainer = &dto.TrainerSummary{
+					UserID:   data.OrderCourse.Course.Trainer.UserID,
+					Nickname: data.OrderCourse.Course.Trainer.Nickname,
+					Avatar:   data.OrderCourse.Course.Trainer.Avatar,
+					Skill:    data.OrderCourse.Course.Trainer.Skill,
+				}
+			}
+			if data.OrderCourse.Course.Sale != nil {
+				order.Course.Sale = &dto.SaleItem{
+					ID:   data.OrderCourse.Course.Sale.ID,
+					Type: data.OrderCourse.Course.Sale.Type,
+					Name: data.OrderCourse.Course.Sale.Name,
+				}
+				if data.OrderCourse.Course.Sale.ProductLabel != nil {
+					order.Course.Sale.ProductID = data.OrderCourse.Course.Sale.ProductLabel.ProductID
+					order.Course.Sale.Twd = data.OrderCourse.Course.Sale.ProductLabel.Twd
+				}
 			}
 		}
 	}
@@ -575,18 +606,18 @@ func parserCourseOrder(data *model.Order) *dto.CourseOrder {
 
 func parserSubscribeOrder(data *model.Order) *dto.SubscribeOrder {
 	order := dto.SubscribeOrder{
-		ID: data.ID,
-		UserID: data.UserID,
-		Quantity: data.Quantity,
-		OrderType: data.OrderType,
+		ID:          data.ID,
+		UserID:      data.UserID,
+		Quantity:    data.Quantity,
+		OrderType:   data.OrderType,
 		OrderStatus: data.OrderStatus,
-		CreateAt: data.CreateAt,
-		UpdateAt: data.UpdateAt,
+		CreateAt:    data.CreateAt,
+		UpdateAt:    data.UpdateAt,
 	}
 	if data.OrderSubscribe != nil {
 		if data.OrderSubscribe.SubscribePlan != nil {
 			order.SubscribePlan = &dto.SubscribePlan{
-				ID: data.OrderSubscribe.SubscribePlan.ID,
+				ID:     data.OrderSubscribe.SubscribePlan.ID,
 				Period: data.OrderSubscribe.SubscribePlan.Period,
 			}
 			if data.OrderSubscribe.SubscribePlan.ProductLabel != nil {

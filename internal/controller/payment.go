@@ -101,7 +101,7 @@ func (p *Payment) CreateSubscribeOrder(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	order, e := p.PaymentService.CreateSubscribeOrder(c, uid, global.PeriodType(body.Period))
+	order, e := p.PaymentService.CreateSubscribeOrder(c, uid, body.SubscribePlanID)
 	if e != nil {
 		p.JSONErrorResponse(c, e)
 		return

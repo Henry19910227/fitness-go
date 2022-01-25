@@ -75,7 +75,7 @@ type Course interface {
 	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, *dto.Paging, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
 	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
-    GetCourseStatus(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error)
+	GetCourseStatus(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error)
 }
 
 type Plan interface {
@@ -97,7 +97,7 @@ type Workout interface {
 	CreateWorkoutByTemplate(c *gin.Context, planID int64, name string, workoutTemplateID int64) (*dto.Workout, errcode.Error)
 	DeleteWorkoutStartAudio(c *gin.Context, workoutID int64) errcode.Error
 	DeleteWorkoutEndAudio(c *gin.Context, workoutID int64) errcode.Error
-    GetWorkoutStatus(c *gin.Context, workoutID int64) (global.CourseStatus, errcode.Error)
+	GetWorkoutStatus(c *gin.Context, workoutID int64) (global.CourseStatus, errcode.Error)
 }
 
 type WorkoutSet interface {
@@ -125,8 +125,8 @@ type Action interface {
 }
 
 type Sale interface {
-	GetCourseSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error)
 	GetSaleItems(c *gin.Context) ([]*dto.SaleItem, errcode.Error)
+	GetSubscribePlans(c *gin.Context) ([]*dto.SubscribePlan, errcode.Error)
 }
 
 type Store interface {
@@ -143,7 +143,7 @@ type Review interface {
 
 type Payment interface {
 	CreateCourseOrder(c *gin.Context, uid int64, courseID int64) (*dto.CourseOrder, errcode.Error)
-	CreateSubscribeOrder(c *gin.Context, uid int64, period global.PeriodType) (*dto.SubscribeOrder, errcode.Error)
+	CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanID int64) (*dto.SubscribeOrder, errcode.Error)
 	VerifyFreeCourseOrder(c *gin.Context, uid int64, orderID string) errcode.Error
 	VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
 	HandleAppStoreNotification(c *gin.Context, base64PayloadString string) (*dto.IAPNotificationResponse, errcode.Error)

@@ -45,6 +45,7 @@ func (ReviewImageItem) TableName() string {
 }
 
 type ReviewStatisticSummary struct {
+	CourseID int64 `gorm:"column:course_id"` //課表id
 	ScoreTotal int `gorm:"column:score_total"` //評分累積
 	Amount int `gorm:"column:amount"` //評分筆數
 }

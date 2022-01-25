@@ -6,7 +6,7 @@ import (
 )
 
 type sale struct {
-	gorm  tool.Gorm
+	gorm tool.Gorm
 }
 
 func NewSale(gorm tool.Gorm) Sale {
@@ -23,8 +23,7 @@ func (s *sale) FindSaleItems(saleType *int) ([]*model.SaleItem, error) {
 	}
 	var entities []*model.SaleItem
 	if err := s.gorm.DB().
-		Table("sale_items").
-		Select("*").
+		Preload("ProductLabel").
 		Where(query, params...).
 		Find(&entities).Error; err != nil {
 		return nil, err
@@ -35,13 +34,10 @@ func (s *sale) FindSaleItems(saleType *int) ([]*model.SaleItem, error) {
 func (s *sale) FindSaleItemByID(saleID int64) (*model.SaleItem, error) {
 	var item model.SaleItem
 	if err := s.gorm.DB().
-		Table("sale_items").
-		Select("*").
+		Preload("ProductLabel").
 		Where("id = ?", saleID).
 		Take(&item).Error; err != nil {
 		return nil, err
 	}
 	return &item, nil
 }
-
-

@@ -12,7 +12,7 @@ import (
 )
 
 type course struct {
-	gorm  tool.Gorm
+	gorm tool.Gorm
 }
 
 func NewCourse(gorm tool.Gorm) Course {
@@ -21,14 +21,15 @@ func NewCourse(gorm tool.Gorm) Course {
 
 func (c *course) CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error) {
 	course := entity.Course{
-		UserID: uid,
-		Name: param.Name,
-		Level: param.Level,
-		Category: param.Category,
-		ScheduleType: 2,
-		CourseStatus: 1,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		UserID:       uid,
+		Name:         param.Name,
+		Level:        param.Level,
+		Category:     param.Category,
+		ScheduleType: int(global.MultipleScheduleType),
+		CourseStatus: int(global.Preparing),
+		SaleType:     int(global.SaleTypeNone),
+		CreateAt:     time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:     time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := c.gorm.DB().Create(&course).Error; err != nil {
 		return 0, err
@@ -38,14 +39,15 @@ func (c *course) CreateCourse(uid int64, param *model.CreateCourseParam) (int64,
 
 func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error) {
 	course := entity.Course{
-		UserID: uid,
-		Name: param.Name,
-		Level: param.Level,
-		Category: param.Category,
-		ScheduleType: 1,
-		CourseStatus: 1,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		UserID:       uid,
+		Name:         param.Name,
+		Level:        param.Level,
+		Category:     param.Category,
+		ScheduleType: int(global.SingleScheduleType),
+		CourseStatus: int(global.Preparing),
+		SaleType:     int(global.SaleTypeNone),
+		CreateAt:     time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:     time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := c.gorm.DB().Transaction(func(tx *gorm.DB) error {
 		//創建課表
@@ -55,7 +57,7 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 		//創建計畫
 		plan := model.Plan{
 			CourseID: course.ID,
-			Name: course.Name + "計畫",
+			Name:     course.Name + "計畫",
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
@@ -64,8 +66,8 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 		}
 		//創建訓練
 		workout := entity.Workout{
-			PlanID: plan.ID,
-			Name: "單一訓練",
+			PlanID:   plan.ID,
+			Name:     "單一訓練",
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
@@ -82,10 +84,10 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 		if err := tx.Table("courses").
 			Where("id = ?", course.ID).
 			Updates(map[string]interface{}{
-				"plan_count": plantCountQuery,
+				"plan_count":    plantCountQuery,
 				"workout_count": workoutCountQuery,
-		}).Error; err != nil {
-				return err
+			}).Error; err != nil {
+			return err
 		}
 		//更新計畫的訓練數量
 		if err := tx.Table("plans").
@@ -102,27 +104,54 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 	return course.ID, nil
 }
 
-
 func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error {
 	var selects []interface{}
-	if param.CourseStatus != nil { selects = append(selects, "course_status") }
-	if param.Category != nil { selects = append(selects, "category") }
-	if param.ScheduleType != nil { selects = append(selects, "schedule_type") }
+	if param.CourseStatus != nil {
+		selects = append(selects, "course_status")
+	}
+	if param.Category != nil {
+		selects = append(selects, "category")
+	}
+	if param.ScheduleType != nil {
+		selects = append(selects, "schedule_type")
+	}
 	if param.SaleType != nil {
 		selects = append(selects, "sale_type")
 		selects = append(selects, "sale_id")
 	}
-	if param.Name != nil { selects = append(selects, "name") }
-	if param.Cover != nil { selects = append(selects, "cover") }
-	if param.Intro != nil { selects = append(selects, "intro") }
-	if param.Food != nil { selects = append(selects, "food") }
-	if param.Level != nil { selects = append(selects, "level") }
-	if param.Suit != nil { selects = append(selects, "suit") }
-	if param.Equipment != nil { selects = append(selects, "equipment") }
-	if param.Place != nil { selects = append(selects, "place") }
-	if param.TrainTarget != nil { selects = append(selects, "train_target") }
-	if param.BodyTarget != nil { selects = append(selects, "body_target") }
-	if param.Notice != nil { selects = append(selects, "notice") }
+	if param.Name != nil {
+		selects = append(selects, "name")
+	}
+	if param.Cover != nil {
+		selects = append(selects, "cover")
+	}
+	if param.Intro != nil {
+		selects = append(selects, "intro")
+	}
+	if param.Food != nil {
+		selects = append(selects, "food")
+	}
+	if param.Level != nil {
+		selects = append(selects, "level")
+	}
+	if param.Suit != nil {
+		selects = append(selects, "suit")
+	}
+	if param.Equipment != nil {
+		selects = append(selects, "equipment")
+	}
+	if param.Place != nil {
+		selects = append(selects, "place")
+	}
+	if param.TrainTarget != nil {
+		selects = append(selects, "train_target")
+	}
+	if param.BodyTarget != nil {
+		selects = append(selects, "body_target")
+	}
+	if param.Notice != nil {
+		selects = append(selects, "notice")
+	}
 	//插入更新時間
 	if param != nil {
 		selects = append(selects, "update_at")
@@ -134,7 +163,7 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 		Where("id = ?", courseID).
 		Select("", selects...).
 		Updates(param).Error; err != nil {
-			return err
+		return err
 	}
 	return nil
 }
@@ -208,7 +237,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	//加入 name 篩選條件
 	if param.Name != nil {
 		query += "AND courses.name LIKE ? "
-		params = append(params, "%" + *param.Name + "%")
+		params = append(params, "%"+*param.Name+"%")
 	}
 	//加入 score 篩選條件
 	if param.Score != nil {
@@ -228,27 +257,27 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	//加入 suit 篩選條件
 	if len(param.Suit) > 0 {
 		query += "AND courses.suit LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.Suit) + "%")
+		params = append(params, "%"+transformFilterParams(param.Suit)+"%")
 	}
 	//加入 Equipment 篩選條件
 	if len(param.Equipment) > 0 {
 		query += "AND courses.equipment LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.Equipment) + "%")
+		params = append(params, "%"+transformFilterParams(param.Equipment)+"%")
 	}
 	//加入 Place 篩選條件
 	if len(param.Place) > 0 {
 		query += "AND courses.place LIKE ? "
-		params = append(params, "%"+ transformFilterParams(param.Place) + "%")
+		params = append(params, "%"+transformFilterParams(param.Place)+"%")
 	}
 	//加入 TrainTarget 篩選條件
 	if len(param.TrainTarget) > 0 {
 		query += "AND courses.train_target LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.TrainTarget) + "%")
+		params = append(params, "%"+transformFilterParams(param.TrainTarget)+"%")
 	}
 	//加入 BodyTarget 篩選條件
 	if len(param.BodyTarget) > 0 {
 		query += "AND courses.body_target LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.BodyTarget) + "%")
+		params = append(params, "%"+transformFilterParams(param.BodyTarget)+"%")
 	}
 	//加入 SaleType 篩選條件
 	if len(param.SaleType) > 0 {
@@ -263,25 +292,17 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	//加入 TrainerSkill 篩選條件
 	if len(param.TrainerSkill) > 0 {
 		query += "AND trainers.skill LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.TrainerSkill) + "%")
+		params = append(params, "%"+transformFilterParams(param.TrainerSkill)+"%")
 	}
 	//基本查詢
 	db = c.gorm.DB().
-		Table("courses").
-		Select("courses.id", "courses.sale_type", "courses.course_status", "courses.category",
-			"courses.schedule_type", "courses.`name`", "courses.cover",
-			"courses.`level`", "courses.plan_count", "courses.workout_count",
-			"IFNULL(sale.id,0)", "IFNULL(sale.type,0)", "IFNULL(sale.name,'')",
-			"IFNULL(sale.twd,0)", "IFNULL(sale.product_id,'')",
-			"IFNULL(sale.create_at,'')", "IFNULL(sale.update_at,'')",
-		    "IFNULL(review.score_total,0)", "IFNULL(review.amount,0)",
-			"trainers.user_id", "trainers.nickname", "trainers.avatar", "trainers.skill").
-		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
+		Preload("Trainer").
+		Preload("Sale").
+		Preload("Sale.ProductLabel").
+		Preload("Review").
 		Joins("INNER JOIN users ON courses.user_id = users.id").
-		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
 		Joins("LEFT JOIN review_statistics AS review ON courses.id = review.course_id").
 		Where(query, params...)
-
 	//排序
 	if orderBy != nil {
 		db = db.Order(fmt.Sprintf("courses.%s %s", orderBy.Field, orderBy.OrderType))
@@ -291,23 +312,9 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 		db = db.Offset(paging.Offset).Limit(paging.Limit)
 	}
 	//查詢數據
-	rows, err := db.Rows()
-	if err != nil {
+	var courses []*model.CourseProductSummary
+	if err := db.Find(&courses).Error; err != nil {
 		return nil, err
-	}
-	courses := make([]*model.CourseProductSummary, 0)
-	for rows.Next() {
-		var course model.CourseProductSummary
-		if err := rows.Scan(&course.ID, &course.SaleType, &course.CourseStatus, &course.Category,
-			&course.ScheduleType, &course.Name, &course.Cover, &course.Level,
-			&course.PlanCount, &course.WorkoutCount,
-			&course.Sale.ID, &course.Sale.Type,
-			&course.Sale.CreateAt, &course.Sale.UpdateAt,
-			&course.ReviewStatistic.ScoreTotal, &course.ReviewStatistic.Amount,
-			&course.Trainer.UserID, &course.Trainer.Nickname, &course.Trainer.Avatar, &course.Trainer.Skill); err != nil {
-			return nil, err
-		}
-		courses = append(courses, &course)
 	}
 	return courses, nil
 }
@@ -326,7 +333,7 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 	//加入 name 篩選條件
 	if param.Name != nil {
 		query += "AND courses.name LIKE ? "
-		params = append(params, "%" + *param.Name + "%")
+		params = append(params, "%"+*param.Name+"%")
 	}
 	//加入 score 篩選條件
 	if param.Score != nil {
@@ -346,27 +353,27 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 	//加入 suit 篩選條件
 	if len(param.Suit) > 0 {
 		query += "AND courses.suit LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.Suit) + "%")
+		params = append(params, "%"+transformFilterParams(param.Suit)+"%")
 	}
 	//加入 Equipment 篩選條件
 	if len(param.Equipment) > 0 {
 		query += "AND courses.equipment LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.Equipment) + "%")
+		params = append(params, "%"+transformFilterParams(param.Equipment)+"%")
 	}
 	//加入 Place 篩選條件
 	if len(param.Place) > 0 {
 		query += "AND courses.place LIKE ? "
-		params = append(params, "%"+ transformFilterParams(param.Place) + "%")
+		params = append(params, "%"+transformFilterParams(param.Place)+"%")
 	}
 	//加入 TrainTarget 篩選條件
 	if len(param.TrainTarget) > 0 {
 		query += "AND courses.train_target LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.TrainTarget) + "%")
+		params = append(params, "%"+transformFilterParams(param.TrainTarget)+"%")
 	}
 	//加入 BodyTarget 篩選條件
 	if len(param.BodyTarget) > 0 {
 		query += "AND courses.body_target LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.BodyTarget) + "%")
+		params = append(params, "%"+transformFilterParams(param.BodyTarget)+"%")
 	}
 	//加入 SaleType 篩選條件
 	if len(param.SaleType) > 0 {
@@ -381,7 +388,7 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 	//加入 TrainerSkill 篩選條件
 	if len(param.TrainerSkill) > 0 {
 		query += "AND trainers.skill LIKE ? "
-		params = append(params, "%" + transformFilterParams(param.TrainerSkill) + "%")
+		params = append(params, "%"+transformFilterParams(param.TrainerSkill)+"%")
 	}
 	//基本查詢
 	var count int64
@@ -400,7 +407,7 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 		Joins("LEFT JOIN sale_items AS sale ON courses.sale_id = sale.id").
 		Joins("LEFT JOIN review_statistics AS review ON courses.id = review.course_id").
 		Where(query, params...).Count(&count).Error; err != nil {
-			return 0, err
+		return 0, err
 	}
 	return int(count), nil
 }
@@ -414,7 +421,7 @@ func (c *course) FindCourseProduct(courseID int64) (*model.CourseProduct, error)
 		Preload("Review").
 		Where("id = ?", courseID).
 		Take(&course).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
 	return &course, nil
 }
@@ -426,7 +433,7 @@ func (c *course) FindCourseByCourseID(courseID int64) (*model.Course, error) {
 		Preload("Sale").
 		Preload("Sale.ProductLabel").
 		Take(&course, courseID).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
 	return &course, nil
 }
@@ -448,7 +455,7 @@ func (c *course) FindCourseByPlanID(planID int64, entity interface{}) error {
 		Select("course_id").
 		Where("id = ?", planID).
 		Take(&courseID).Error; err != nil {
-			return err
+		return err
 	}
 	return c.FindCourseByID(courseID, entity)
 }
@@ -503,7 +510,7 @@ func (c *course) DeleteCourseByID(courseID int64) error {
 
 func transformFilterParams(params []int) string {
 	var result string
-	for _, param := range params{
+	for _, param := range params {
 		result += strconv.Itoa(param) + ","
 	}
 	if len(result) > 0 {
