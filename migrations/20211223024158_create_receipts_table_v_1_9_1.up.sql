@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS receipts (
     `quantity` INT(11) NOT NULL DEFAULT '1' COMMENT '數量',
     `create_at`    DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     INDEX(transaction_id),
+    UNIQUE KEY `unique_receipts` (`order_id`,`original_transaction_id`),
     CONSTRAINT fk_receipts_order_id_to_orders_id FOREIGN KEY (order_id) REFERENCES orders(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT = 1;
