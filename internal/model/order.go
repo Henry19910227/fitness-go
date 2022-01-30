@@ -9,7 +9,7 @@ type Order struct {
 	CreateAt       string          `gorm:"column:create_at"`                  // 創建時間
 	UpdateAt       string          `gorm:"column:update_at"`                  // 更新時間
 	OrderCourse    *OrderCourse    `gorm:"foreignKey:order_id;references:id"` // 訂單課表資訊
-	OrderSubscribe *OrderSubscribe `gorm:"foreignKey:order_id;references:id"` // 訂單訂閱資訊
+	OrderSubscribe *OrderSubscribePlan `gorm:"foreignKey:order_id;references:id"` // 訂單訂閱資訊
 }
 
 func (Order) TableName() string {
@@ -28,14 +28,14 @@ func (OrderCourse) TableName() string {
 	return "order_courses"
 }
 
-type OrderSubscribe struct {
+type OrderSubscribePlan struct {
 	OrderID         string         `gorm:"column:order_id"`                            // 訂單id
 	SubscribePlanID int64          `gorm:"column:subscribe_plan_id"`                   // 訂閱方案id
 	SubscribePlan   *SubscribePlan `gorm:"foreignKey:id;references:subscribe_plan_id"` // 課表
 }
 
-func (OrderSubscribe) TableName() string {
-	return "order_subscribes"
+func (OrderSubscribePlan) TableName() string {
+	return "order_subscribe_plans"
 }
 
 type CreateOrderParam struct {

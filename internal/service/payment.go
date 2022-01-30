@@ -119,15 +119,15 @@ func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanI
 	if global.SubscribeStatus(subscribeInfo.Status) == global.ValidSubscribeStatus {
 		return nil, p.errHandler.Custom(8999, errors.New("目前已經是訂閱會員"))
 	}
-	//檢查是否有尚未付款的相同訂單
-	orderData, err := p.orderRepo.FindOrderBySubscribePlanID(uid, subscribePlanID)
+	//檢查是否有已創建過的訂閱訂單
+	orderData, err := p.orderRepo.FindSubscribeOrderByUserID(uid)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, p.errHandler.Set(c, "order repo", err)
 	}
 	if orderData != nil {
 		return parserSubscribeOrder(orderData), nil
 	}
-	// 查找是否有此訂閱方案
+	// 查找訂閱方案
 	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByID(subscribePlanID)
 	if err != nil {
 		return nil, p.errHandler.Set(c, "order repo", err)
@@ -186,10 +186,6 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	if order.UserID != uid {
 		return p.errHandler.Custom(8999, errors.New("無效的收據(此訂單非本人)"))
 	}
-	//驗證訂單狀態
-	if global.OrderStatus(order.OrderStatus) != global.PendingOrderStatus {
-		return p.errHandler.Custom(8999, errors.New("此訂單已失效"))
-	}
 	//apple server 正式區驗證收據
 	param := map[string]interface{}{
 		"receipt-data":             receiptData,
@@ -217,9 +213,7 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	//驗證收據結果
 	if response.Status != 0 {
 		//更新訂單狀態
-		_ = p.orderRepo.UpdateOrder(nil, order.ID, &model.UpdateOrderParam{
-			OrderStatus: int(global.ErrorOrderStatus),
-		})
+		_ = p.orderRepo.UpdateOrderStatus(nil, order.ID, global.ErrorOrderStatus)
 		return p.errHandler.Custom(8999, errors.New("收據驗證錯誤"))
 	}
 	//處理課表購買訂單
@@ -237,10 +231,53 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	return nil
 }
 
-func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString string) (*dto.IAPNotificationResponse, errcode.Error) {
+func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error {
 	response, err := parserIAPNotificationResponse(base64PayloadString)
 	if err != nil {
-		p.errHandler.Set(c, "iap parser", err)
+		return p.errHandler.Set(c, "iap parser", err)
+	}
+	subscribeLogType := parserIAPNotificationType(response.NotificationType, response.Subtype)
+	// 創建訂閱log
+	_, err = p.subscribeLogRepo.CreateSubscribeLog(nil, &model.CreateSubscribeLogParam{
+		OriginalTransactionID: response.Data.SignedTransactionInfo.OriginalTransactionId,
+		TransactionID:         response.Data.SignedTransactionInfo.TransactionId,
+		PurchaseDate:          parserIAPDate(response.Data.SignedTransactionInfo.PurchaseDate / 1000).Format("2006-01-02 15:04:05"),
+		ExpiresDate:           parserIAPDate(response.Data.SignedTransactionInfo.ExpiresDate / 1000).Format("2006-01-02 15:04:05"),
+		Type:                  string(subscribeLogType),
+		Msg:                   fmt.Sprintf("%s %s", response.NotificationType, response.Subtype),
+	})
+	if err != nil {
+		return p.errHandler.Set(c, "subscribe log repo", err)
+	}
+	order, err := p.orderRepo.FindOrderByOriginalTransactionID(response.Data.SignedRenewalInfo.OriginalTransactionId)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return p.errHandler.Set(c, "order repo", err)
+	}
+	if order != nil {
+		//查詢訂閱項目
+		subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(response.Data.SignedTransactionInfo.ProductId)
+		if order.OrderSubscribe == nil {
+			return p.errHandler.Custom(8999, errors.New("查無此訂閱項目"))
+		}
+		//修改訂單訂閱項目
+		if err := p.orderRepo.UpdateOrderSubscribePlan(nil, order.ID, subscribePlan.ID); err != nil {
+			return p.errHandler.Set(c, "order repo", err)
+		}
+		//修改用戶訂閱資訊
+		var subscribeStatus = global.ValidSubscribeStatus
+		if subscribeLogType == global.Expired || subscribeLogType == global.Refund {
+			subscribeStatus = global.NoneSubscribeStatus
+		}
+		_, err = p.subscribeInfo.SaveSubscribeInfo(nil, &model.SaveUserSubscribeInfoParam{
+			UserID: order.UserID,
+			SubscribePlanID: subscribePlan.ID,
+			Status: subscribeStatus,
+			StartDate: parserIAPDate(response.Data.SignedTransactionInfo.PurchaseDate / 1000).Format("2006-01-02 15:04:05"),
+			ExpiresDate: parserIAPDate(response.Data.SignedTransactionInfo.ExpiresDate / 1000).Format("2006-01-02 15:04:05"),
+		})
+		if err != nil {
+			return p.errHandler.Set(c, "subscribe info repo", err)
+		}
 	}
 	fmt.Printf("NotificationType: %v \n", response.NotificationType)
 	fmt.Printf("Subtype: %v \n", response.Subtype)
@@ -279,12 +316,12 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 	fmt.Printf("SignedTransactionInfo.Type: %v \n", response.Data.SignedTransactionInfo.Type)
 	fmt.Printf("SignedTransactionInfo.WebOrderLineItemId: %v \n", response.Data.SignedTransactionInfo.WebOrderLineItemId)
 
-	return response, nil
+	return nil
 }
 
 func (p *payment) handleFreeCourseTrade(c *gin.Context, order *dto.CourseOrder) errcode.Error {
-	if err := p.handleCourseOrderTrade(c, order, global.NonePaymentType, "",
-		"", 1, ""); err != nil {
+	if err := p.handleCourseOrderTrade(order, global.NonePaymentType, "",
+		"", "", 1, ""); err != nil {
 		return p.errHandler.Set(c, "trade error", err)
 	}
 	return nil
@@ -300,24 +337,25 @@ func (p *payment) handleBuyCourseTrade(c *gin.Context, order *dto.CourseOrder, r
 	if err != nil {
 		return p.errHandler.Set(c, "Atoi error", err)
 	}
-	if err := p.handleCourseOrderTrade(c, order, global.ApplePaymentType, item.OriginalTransactionID,
-		item.TransactionID, quantity, receiptData); err != nil {
+	if err := p.handleCourseOrderTrade(order, global.ApplePaymentType, item.OriginalTransactionID,
+		item.TransactionID, item.ProductID, quantity, receiptData); err != nil {
 		return p.errHandler.Set(c, "trade error", err)
 	}
 	return nil
 }
 
-func (p *payment) handleCourseOrderTrade(c *gin.Context, order *dto.CourseOrder, paymentType global.PaymentType,
-	originalTransactionID string, transactionID string, quantity int, receiptData string) error {
+func (p *payment) handleCourseOrderTrade(order *dto.CourseOrder, paymentType global.PaymentType,
+	originalTransactionID string, transactionID string, productID string, quantity int, receiptData string) error {
 	//創建transaction
 	tx := p.transactionRepo.CreateTransaction()
 	//存入收據
-	_, err := p.receiptRepo.CreateReceipt(tx, &model.CreateReceiptParam{
+	_, err := p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
 		OrderID:               order.ID,
 		PaymentType:           int(paymentType),
 		ReceiptToken:          receiptData,
 		OriginalTransactionID: originalTransactionID,
 		TransactionID:         transactionID,
+		ProductID:             productID,
 		Quantity:              quantity,
 	})
 	if err != nil {
@@ -344,9 +382,7 @@ func (p *payment) handleCourseOrderTrade(c *gin.Context, order *dto.CourseOrder,
 		return err
 	}
 	//更新訂單狀態
-	if err := p.orderRepo.UpdateOrder(tx, order.ID, &model.UpdateOrderParam{
-		OrderStatus: int(global.SuccessOrderStatus),
-	}); err != nil {
+	if err := p.orderRepo.UpdateOrderStatus(tx, order.ID, global.SuccessOrderStatus); err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -356,20 +392,9 @@ func (p *payment) handleCourseOrderTrade(c *gin.Context, order *dto.CourseOrder,
 }
 
 func (p *payment) handleSubscribeTrade(c *gin.Context, order *dto.SubscribeOrder, receiptData string, response *dto.AppleReceiptResponse) errcode.Error {
-	if len(response.LatestReceiptInfo) == 0 {
+	//驗證收據格式
+	if len(response.LatestReceiptInfo) == 0 || len(response.PendingRenewalInfo) == 0 {
 		return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
-	}
-	//驗證產品id
-	if order.SubscribePlan.ProductID != response.LatestReceiptInfo[0].ProductID {
-		return p.errHandler.Custom(8999, errors.New("無效的收據(產品ID不匹配)"))
-	}
-	//驗證當前訂閱狀態
-	member, err := p.subscribeInfo.FindSubscribeInfo(order.UserID)
-	if err != nil {
-		return p.errHandler.Set(c, "member repo", err)
-	}
-	if global.SubscribeStatus(member.Status) == global.ValidSubscribeStatus {
-		return p.errHandler.Custom(8999, errors.New("目前已經是訂閱會員"))
 	}
 	//創建transaction
 	tx := p.transactionRepo.CreateTransaction()
@@ -382,35 +407,34 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, order *dto.SubscribeOrder
 	if err != nil {
 		return p.errHandler.Set(c, "Atoi error", err)
 	}
-	_, err = p.receiptRepo.CreateReceipt(tx, &model.CreateReceiptParam{
+	_, err = p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
 		OrderID:               order.ID,
 		PaymentType:           int(global.ApplePaymentType),
 		ReceiptToken:          receiptData,
 		OriginalTransactionID: item.OriginalTransactionID,
 		TransactionID:         item.TransactionID,
+		ProductID:             item.ProductID,
 		Quantity:              quantity,
 	})
 	if err != nil {
 		tx.Rollback()
 		return p.errHandler.Set(c, "receipt repo", err)
 	}
-	//存入訂閱紀錄
-	_, err = p.subscribeLogRepo.CreateSubscribeLog(tx, &model.CreateSubscribeLogParam{
-		UserID:        order.UserID,
-		TransactionID: item.TransactionID,
-		PurchaseDate:  item.PurchaseDate.Format("2006-01-02 15:04:05"),
-		ExpiresDate:   item.ExpiresDate.Format("2006-01-02 15:04:05"),
-		Type:          string(global.NormalSubscribeLogType),
-		Msg:           "訂閱成功!",
-	})
+	//獲取訂閱項目資訊
+	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(item.ProductID)
 	if err != nil {
 		tx.Rollback()
-		return p.errHandler.Set(c, "subscribe log repo", err)
+		return p.errHandler.Set(c, "subscribe plan error", err)
 	}
 	//更新會員資料
+	var subscribeStatus = global.ValidSubscribeStatus
+	if len(response.PendingRenewalInfo[0].ExpirationIntent) > 0 {
+		subscribeStatus = global.NoneSubscribeStatus
+	}
 	_, err = p.subscribeInfo.SaveSubscribeInfo(tx, &model.SaveUserSubscribeInfoParam{
 		UserID:      order.UserID,
-		Status:      global.ValidSubscribeStatus,
+		SubscribePlanID: subscribePlan.ID,
+		Status:      subscribeStatus,
 		StartDate:   item.PurchaseDate.Format("2006-01-02 15:04:05"),
 		ExpiresDate: item.ExpiresDate.Format("2006-01-02 15:04:05"),
 	})
@@ -419,9 +443,7 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, order *dto.SubscribeOrder
 		return p.errHandler.Set(c, "member repo", err)
 	}
 	//更新訂單狀態
-	if err := p.orderRepo.UpdateOrder(tx, order.ID, &model.UpdateOrderParam{
-		OrderStatus: int(global.SuccessOrderStatus),
-	}); err != nil {
+	if err := p.orderRepo.UpdateOrderStatus(tx, order.ID, global.SuccessOrderStatus); err != nil {
 		tx.Rollback()
 		return p.errHandler.Set(c, "order repo", err)
 	}
@@ -470,6 +492,31 @@ func parserIAPNotificationResponse(base64String string) (*dto.IAPNotificationRes
 		return nil, err
 	}
 	return &response, nil
+}
+
+func parserIAPNotificationType(notificationType string, subtype string) global.SubscribeLogType {
+	if notificationType == "SUBSCRIBED" && subtype == "INITIAL_BUY" {
+		return global.InitialBuy
+	} else if notificationType == "SUBSCRIBED" && subtype == "RESUBSCRIBE" {
+		return global.Resubscribe
+	} else if notificationType == "DID_RENEW" {
+		return global.Renew
+	} else if notificationType == "EXPIRED" {
+		return global.Expired
+	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "UPGRADE" {
+		return global.Upgrade
+	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "DOWNGRADE" {
+		return global.Downgrade
+	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "" {
+		return global.DowngradeCancel
+	} else if notificationType == "REFUND" {
+		return global.Refund
+	} else if notificationType == "DID_CHANGE_RENEWAL_STATUS" && subtype == "AUTO_RENEW_ENABLED" {
+		return global.RenewEnable
+	} else if notificationType == "DID_CHANGE_RENEWAL_STATUS" && subtype == "AUTO_RENEW_DISABLED" {
+		return global.RenewDisable
+	}
+	return global.Unknown
 }
 
 func decodeBase64StringToMap(base64String string) (map[string]interface{}, error) {

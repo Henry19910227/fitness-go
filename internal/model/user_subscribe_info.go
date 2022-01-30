@@ -16,7 +16,8 @@ func (UserSubscribeInfo) TableName() string {
 
 type SaveUserSubscribeInfoParam struct {
 	UserID int64 // 用戶id
+	SubscribePlanID int64 // 訂閱方案id
 	Status global.SubscribeStatus // 會員狀態(1:正常/2:到期/3:取消)
-	StartDate string `gorm:"column:start_date"` // 訂閱開始日期
+	StartDate string // 訂閱開始日期
 	ExpiresDate string // 訂閱過期日期
 }

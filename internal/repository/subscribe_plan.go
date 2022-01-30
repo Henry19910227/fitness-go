@@ -37,6 +37,18 @@ func (s *subscribePlan) FinsSubscribePlanByID(subscribePlanID int64) (*model.Sub
 	return item, nil
 }
 
+func (s *subscribePlan) FinsSubscribePlanByProductID(productID string) (*model.SubscribePlan, error) {
+	var item *model.SubscribePlan
+	if err := s.gorm.DB().
+		Preload("ProductLabel").
+		Joins("INNER JOIN product_labels ON subscribe_plans.product_label_id = product_labels.id").
+		Where("product_labels.product_id = ?", productID).
+		Take(&item).Error; err != nil {
+		return nil, err
+	}
+	return item, nil
+}
+
 func (s *subscribePlan) FindSubscribePlansByPeriod(period global.PeriodType) ([]*model.SubscribePlan, error) {
 	var items []*model.SubscribePlan
 	if err := s.gorm.DB().

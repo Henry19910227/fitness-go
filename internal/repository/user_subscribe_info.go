@@ -27,6 +27,7 @@ func (m *userSubscribeInfo) SaveSubscribeInfo(tx *gorm.DB, param *model.SaveUser
 	}
 	member := entity.UserSubscribeInfo{
 		UserID: param.UserID,
+		SubscribePlanID: param.SubscribePlanID,
 		Status: int(param.Status),
 		StartDate: param.StartDate,
 		ExpiresDate: param.ExpiresDate,
@@ -34,7 +35,7 @@ func (m *userSubscribeInfo) SaveSubscribeInfo(tx *gorm.DB, param *model.SaveUser
 	}
 	if err := db.Clauses(clause.OnConflict{
 		Columns: []clause.Column{{Name: "user_id"}},
-		DoUpdates: clause.AssignmentColumns([]string{"member_status", "start_date", "end_date", "update_at"}),
+		DoUpdates: clause.AssignmentColumns([]string{"subscribe_plan_id", "status", "start_date", "expires_date", "update_at"}),
 	}).Create(&member).Error; err != nil {
 		return 0, err
 	}

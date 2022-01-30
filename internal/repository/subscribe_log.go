@@ -9,7 +9,7 @@ import (
 )
 
 type subscribeLog struct {
-	gorm  tool.Gorm
+	gorm tool.Gorm
 }
 
 func NewSubscribeLog(gorm tool.Gorm) SubscribeLog {
@@ -22,13 +22,13 @@ func (s *subscribeLog) CreateSubscribeLog(tx *gorm.DB, param *model.CreateSubscr
 		db = tx
 	}
 	log := entity.SubscribeLog{
-		UserID: param.UserID,
+		OriginalTransactionID: param.OriginalTransactionID,
 		TransactionID: param.TransactionID,
-		PurchaseDate: param.PurchaseDate,
-		ExpiresDate: param.ExpiresDate,
-		Type: param.Type,
-		Msg: param.Msg,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
+		PurchaseDate:  param.PurchaseDate,
+		ExpiresDate:   param.ExpiresDate,
+		Type:          param.Type,
+		Msg:           param.Msg,
+		CreateAt:      time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := db.Create(&log).Error; err != nil {
 		return 0, err
