@@ -59,6 +59,13 @@ JWT:
     Secret: mi
     Issuer: fitness
     Expire: 3600 # Minute
+IAP:
+    Sandbox: https://sandbox.itunes.apple.com/verifyReceipt
+    Product: https://buy.itunes.apple.com/verifyReceipt
+    Debug:
+      Password: b3e50e11316943969754106ed24c6a3a
+    Release:
+      Password: b3e50e11316943969754106ed24c6a3a
 Swagger:
     Debug:
       Protocol: http

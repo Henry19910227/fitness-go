@@ -2,6 +2,8 @@ package tool
 
 import (
 	"database/sql"
+	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 	"io"
@@ -75,4 +77,13 @@ type Resource interface {
 
 type HttpRequest interface {
 	SendPostRequestWithJsonBody(url string, param map[string]interface{}) (map[string]interface{}, error)
+}
+
+type IAP interface {
+	SandboxURL() string
+	ProductURL() string
+	Password() string
+    ParserIAPNotificationResponse(base64String string) (*dto.IAPNotificationResponse, error)
+	ParserIAPNotificationType(notificationType string, subtype string) global.SubscribeLogType
+	ParserAppleReceipt(dict map[string]interface{}, receipt *dto.AppleReceiptResponse) error
 }

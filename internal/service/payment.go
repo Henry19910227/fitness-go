@@ -1,8 +1,6 @@
 package service
 
 import (
-	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/Henry19910227/fitness-go/errcode"
@@ -12,10 +10,8 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
-	"github.com/mitchellh/mapstructure"
 	"gorm.io/gorm"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -33,6 +29,7 @@ type payment struct {
 	transactionRepo     repository.Transaction
 	reqTool             tool.HttpRequest
 	jwtTool             tool.JWT
+	iapTool             tool.IAP
 	errHandler          errcode.Handler
 }
 
@@ -41,12 +38,12 @@ func NewPayment(orderRepo repository.Order, saleRepo repository.Sale, subscribeP
 	purchaseRepo repository.UserCourseAsset, subscribeLogRepo repository.SubscribeLog,
 	purchaseLogRepo repository.PurchaseLog, memberRepo repository.UserSubscribeInfo,
 	transactionRepo repository.Transaction, reqTool tool.HttpRequest,
-	jwtTool tool.JWT, errHandler errcode.Handler) Payment {
+	jwtTool tool.JWT, iapTool tool.IAP, errHandler errcode.Handler) Payment {
 	return &payment{orderRepo: orderRepo, saleRepo: saleRepo, subscribePlanRepo: subscribePlanRepo,
 		courseRepo: courseRepo, receiptRepo: receiptRepo,
 		userCourseAssetRepo: purchaseRepo, subscribeLogRepo: subscribeLogRepo, purchaseLogRepo: purchaseLogRepo,
 		subscribeInfo: memberRepo, transactionRepo: transactionRepo,
-		reqTool: reqTool, jwtTool: jwtTool, errHandler: errHandler}
+		reqTool: reqTool, jwtTool: jwtTool, iapTool: iapTool, errHandler: errHandler}
 }
 
 func (p *payment) Test(c *gin.Context) (string, errcode.Error) {
@@ -189,24 +186,24 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	//apple server 正式區驗證收據
 	param := map[string]interface{}{
 		"receipt-data":             receiptData,
-		"password":                 "b3e50e11316943969754106ed24c6a3a",
+		"password":                 p.iapTool.Password(),
 		"exclude-old-transactions": 1,
 	}
-	result, err := p.reqTool.SendPostRequestWithJsonBody("https://buy.itunes.apple.com/verifyReceipt", param)
+	result, err := p.reqTool.SendPostRequestWithJsonBody(p.iapTool.ProductURL(), param)
 	if err != nil {
 		return p.errHandler.Set(c, "req tool", err)
 	}
 	var response dto.AppleReceiptResponse
-	if err := parserAppleReceipt(result, &response); err != nil {
+	if err := p.iapTool.ParserAppleReceipt(result, &response); err != nil {
 		return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
 	}
 	//apple server 測試區驗證收據
 	if response.Status == 21007 {
-		result, err := p.reqTool.SendPostRequestWithJsonBody("https://sandbox.itunes.apple.com/verifyReceipt", param)
+		result, err := p.reqTool.SendPostRequestWithJsonBody(p.iapTool.SandboxURL(), param)
 		if err != nil {
 			return p.errHandler.Set(c, "req tool", err)
 		}
-		if err := parserAppleReceipt(result, &response); err != nil {
+		if err := p.iapTool.ParserAppleReceipt(result, &response); err != nil {
 			return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
 		}
 	}
@@ -232,11 +229,11 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 }
 
 func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error {
-	response, err := parserIAPNotificationResponse(base64PayloadString)
+	response, err := p.iapTool.ParserIAPNotificationResponse(base64PayloadString)
 	if err != nil {
 		return p.errHandler.Set(c, "iap parser", err)
 	}
-	subscribeLogType := parserIAPNotificationType(response.NotificationType, response.Subtype)
+	subscribeLogType := p.iapTool.ParserIAPNotificationType(response.NotificationType, response.Subtype)
 	// 創建訂閱log
 	_, err = p.subscribeLogRepo.CreateSubscribeLog(nil, &model.CreateSubscribeLogParam{
 		OriginalTransactionID: response.Data.SignedTransactionInfo.OriginalTransactionId,
@@ -450,129 +447,6 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, order *dto.SubscribeOrder
 	//結束transaction
 	p.transactionRepo.FinishTransaction(tx)
 	return nil
-}
-
-func parserIAPNotificationResponse(base64String string) (*dto.IAPNotificationResponse, error) {
-	payloadDict, err := decodeBase64StringToMap(strings.Split(base64String, ".")[1])
-	if err != nil {
-		return nil, err
-	}
-	payloadDataDict, ok := payloadDict["data"].(map[string]interface{})
-	if !ok {
-		return nil, errors.New("格式錯誤")
-	}
-	base64SignedRenewalInfoString, ok := payloadDataDict["signedRenewalInfo"].(string)
-	if !ok {
-		return nil, errors.New("格式錯誤")
-	}
-	base64SignedTransactionInfoString, ok := payloadDataDict["signedTransactionInfo"].(string)
-	if !ok {
-		return nil, errors.New("格式錯誤")
-	}
-	renewalInfoDict, err := decodeBase64StringToMap(strings.Split(base64SignedRenewalInfoString, ".")[1])
-	if err != nil {
-		return nil, err
-	}
-	transactionInfo, err := decodeBase64StringToMap(strings.Split(base64SignedTransactionInfoString, ".")[1])
-	if err != nil {
-		return nil, err
-	}
-	// parser dto
-	var response dto.IAPNotificationResponse
-	if err := mapstructure.Decode(payloadDict, &response); err != nil {
-		return nil, err
-	}
-	if err := mapstructure.Decode(payloadDataDict, &response.Data); err != nil {
-		return nil, err
-	}
-	if err := mapstructure.Decode(renewalInfoDict, &response.Data.SignedRenewalInfo); err != nil {
-		return nil, err
-	}
-	if err := mapstructure.Decode(transactionInfo, &response.Data.SignedTransactionInfo); err != nil {
-		return nil, err
-	}
-	return &response, nil
-}
-
-func parserIAPNotificationType(notificationType string, subtype string) global.SubscribeLogType {
-	if notificationType == "SUBSCRIBED" && subtype == "INITIAL_BUY" {
-		return global.InitialBuy
-	} else if notificationType == "SUBSCRIBED" && subtype == "RESUBSCRIBE" {
-		return global.Resubscribe
-	} else if notificationType == "DID_RENEW" {
-		return global.Renew
-	} else if notificationType == "EXPIRED" {
-		return global.Expired
-	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "UPGRADE" {
-		return global.Upgrade
-	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "DOWNGRADE" {
-		return global.Downgrade
-	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "" {
-		return global.DowngradeCancel
-	} else if notificationType == "REFUND" {
-		return global.Refund
-	} else if notificationType == "DID_CHANGE_RENEWAL_STATUS" && subtype == "AUTO_RENEW_ENABLED" {
-		return global.RenewEnable
-	} else if notificationType == "DID_CHANGE_RENEWAL_STATUS" && subtype == "AUTO_RENEW_DISABLED" {
-		return global.RenewDisable
-	}
-	return global.Unknown
-}
-
-func decodeBase64StringToMap(base64String string) (map[string]interface{}, error) {
-	payloadString, err := base64.RawURLEncoding.DecodeString(base64String)
-	if err != nil {
-		return nil, err
-	}
-	var dict map[string]interface{}
-	if err := json.Unmarshal(payloadString, &dict); err != nil {
-		return nil, err
-	}
-	return dict, nil
-}
-
-func parserAppleReceipt(dict map[string]interface{}, receipt *dto.AppleReceiptResponse) error {
-	if err := mapstructure.Decode(dict, &receipt); err != nil {
-		return err
-	}
-	for _, item := range receipt.Receipt.InApp {
-		parserAppleReceiptInfo(item)
-	}
-	for _, item := range receipt.LatestReceiptInfo {
-		parserAppleReceiptInfo(item)
-	}
-	return nil
-}
-
-func parserAppleReceiptInfo(receiptInfo *dto.ReceiptInfo) {
-	originalPurchaseDate, err := parserAppleReceiptDate(receiptInfo.OriginalPurchaseDateMS)
-	if err == nil {
-		receiptInfo.OriginalPurchaseDate = originalPurchaseDate
-	}
-	purchaseDate, err := parserAppleReceiptDate(receiptInfo.PurchaseDateMS)
-	if err == nil {
-		receiptInfo.PurchaseDate = purchaseDate
-	}
-	expiresDate, err := parserAppleReceiptDate(receiptInfo.ExpiresDateMS)
-	if err == nil {
-		receiptInfo.ExpiresDate = expiresDate
-	}
-}
-
-func parserAppleReceiptDate(unixMS string) (*time.Time, error) {
-	msTime, err := strconv.ParseInt(unixMS, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-	location, err := time.LoadLocation("Asia/Taipei")
-	if err != nil {
-		return nil, err
-	}
-	date, err := time.ParseInLocation("2006-01-02 15:04:05", time.Unix(msTime/1000, 0).Format("2006-01-02 15:04:05"), location)
-	if err != nil {
-		return nil, err
-	}
-	return &date, nil
 }
 
 func parserIAPDate(unix int64) *time.Time {

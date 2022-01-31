@@ -118,6 +118,7 @@ func NewPaymentService(viperTool *viper.Viper, gormTool tool.Gorm) Payment {
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	reqTool := tool.NewRequest()
+	iapTool := tool.NewIAP(setting.NewIAP(viperTool))
 
 	orderRepo := repository.NewOrder(gormTool)
 	saleRepo := repository.NewSale(gormTool)
@@ -130,7 +131,7 @@ func NewPaymentService(viperTool *viper.Viper, gormTool tool.Gorm) Payment {
 	memberRepo := repository.NewSubscribeInfo(gormTool)
 	transactionRepo := repository.NewTransaction(gormTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewPayment(orderRepo, saleRepo, subscribePlanRepo, courseRepo, receiptRepo, purchaseRepo, subscribeLogRepo, purchaseLogRepo, memberRepo, transactionRepo, reqTool, jwtTool, errHandler)
+	return NewPayment(orderRepo, saleRepo, subscribePlanRepo, courseRepo, receiptRepo, purchaseRepo, subscribeLogRepo, purchaseLogRepo, memberRepo, transactionRepo, reqTool, jwtTool, iapTool, errHandler)
 }
 
 func NewSaleService(viperTool *viper.Viper, gormTool tool.Gorm) Sale {

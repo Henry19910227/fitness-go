@@ -56,3 +56,9 @@ type Upload interface {
 	AudioMaxSize() int
 	VideoMaxSize() int
 }
+
+type IAP interface {
+	GetSandboxURL() string
+	GetProductURL() string
+	GetPassword() string
+}
