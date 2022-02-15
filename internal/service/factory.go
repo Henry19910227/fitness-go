@@ -17,11 +17,12 @@ func NewLoginService(viperTool *viper.Viper, gormTool tool.Gorm) Login {
 	trainerRepo := repository.NewTrainer(gormTool)
 	albumRepo := repository.NewTrainerAlbum(gormTool)
 	cerRepo := repository.NewCertificate(gormTool)
+	subscribeInfoRepo := repository.NewSubscribeInfo(gormTool)
 	ssoHandler := handler.NewSSO(jwtTool, redisTool, setting.NewUser(viperTool))
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	logger := handler.NewLogger(logTool, jwtTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewLogin(adminRepo, userRepo, trainerRepo, albumRepo, cerRepo, ssoHandler, logger, jwtTool, errHandler)
+	return NewLogin(adminRepo, userRepo, trainerRepo, albumRepo, cerRepo, subscribeInfoRepo, ssoHandler, logger, jwtTool, errHandler)
 }
 
 func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
@@ -142,4 +143,20 @@ func NewSaleService(viperTool *viper.Viper, gormTool tool.Gorm) Sale {
 	saleRepo := repository.NewSale(gormTool)
 	subscribePlanRepo := repository.NewSubscribePlan(gormTool)
 	return NewSale(saleRepo, subscribePlanRepo, jwtTool, errHandler)
+}
+
+func NewUserService(viperTool *viper.Viper, gormTool tool.Gorm) User {
+	userRepo := repository.NewUser(gormTool)
+	trainerRepo := repository.NewTrainer(gormTool)
+	subscribeInfoRepo := repository.NewSubscribeInfo(gormTool)
+	albumRepo := repository.NewTrainerAlbum(gormTool)
+	cerRepo := repository.NewCertificate(gormTool)
+	resTool := tool.NewResource(setting.NewResource(viperTool))
+	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
+	resHandler := handler.NewResource(resTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	logger := handler.NewLogger(logTool, jwtTool)
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewUser(userRepo, trainerRepo, subscribeInfoRepo, albumRepo, cerRepo, uploader, resHandler, logger, jwtTool, errHandler)
 }

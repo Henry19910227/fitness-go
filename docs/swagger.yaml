@@ -813,6 +813,9 @@ definitions:
         description: 性別 (m:男/f:女)
         example: m
         type: string
+      subscribe_info:
+        $ref: '#/definitions/dto.UserSubscribeInfo'
+        description: 用戶訂閱資訊
       target:
         description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
         example: 3
@@ -843,6 +846,18 @@ definitions:
         description: 用戶大頭照
         example: dkf2se51fsdds.png
         type: string
+    type: object
+  dto.UserSubscribeInfo:
+    properties:
+      expires_date:
+        description: 訂閱過期日期
+        type: string
+      start_date:
+        description: 訂閱開始日期
+        type: string
+      status:
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+        type: integer
     type: object
   dto.UserSummary:
     properties:

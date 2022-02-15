@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	rootPath   string
+	rootPath string
 )
 
 var (
@@ -36,49 +36,49 @@ var (
 )
 
 var (
-	logHandler  handler.Logger
-	ssoHandler  handler.SSO
+	logHandler    handler.Logger
+	ssoHandler    handler.SSO
 	uploadHandler handler.Uploader
-	resHandler handler.Resource
+	resHandler    handler.Resource
 )
 
 var (
-	migrateService  service.Migrate
-	swagService     service.Swagger
-	loginService    service.Login
-	regService      service.Register
-	userService     service.User
-	trainerService  service.Trainer
-	courseService   service.Course
-	planService     service.Plan
-	workoutService  service.Workout
+	migrateService    service.Migrate
+	swagService       service.Swagger
+	loginService      service.Login
+	regService        service.Register
+	userService       service.User
+	trainerService    service.Trainer
+	courseService     service.Course
+	planService       service.Plan
+	workoutService    service.Workout
 	workoutSetService service.WorkoutSet
-	actionService   service.Action
-	saleService     service.Sale
-	storeService    service.Store
-	reviewService   service.Review
-	paymentService  service.Payment
+	actionService     service.Action
+	saleService       service.Sale
+	storeService      service.Store
+	reviewService     service.Review
+	paymentService    service.Payment
 )
 
 var (
-	trainerAccess access.Trainer
-	courseAccess access.Course
-	planAccess access.Plan
-	workoutAccess access.Workout
+	trainerAccess    access.Trainer
+	courseAccess     access.Course
+	planAccess       access.Plan
+	workoutAccess    access.Workout
 	workoutSetAccess access.WorkoutSet
-	actionAccess access.Action
+	actionAccess     access.Action
 )
 
 var (
-	userMiddleware gin.HandlerFunc
-	trainerMiddleware gin.HandlerFunc
-	adminLV1Middleware  gin.HandlerFunc
-	adminLV2Middleware  gin.HandlerFunc
+	userMiddleware     gin.HandlerFunc
+	trainerMiddleware  gin.HandlerFunc
+	adminLV1Middleware gin.HandlerFunc
+	adminLV2Middleware gin.HandlerFunc
 
-	userMidd middleware.User
-	courseMidd middleware.Course
-	planMidd middleware.Plan
-	reviewMidd middleware.Review
+	userMidd    middleware.User
+	courseMidd  middleware.Course
+	planMidd    middleware.Plan
+	reviewMidd  middleware.Review
 	workoutMidd middleware.Workout
 )
 
@@ -110,7 +110,6 @@ func init() {
 // @in header
 // @name Token
 
-
 func main() {
 	router := gin.New()
 	router.Use(gin.Logger()) //加入路由Logger
@@ -138,7 +137,7 @@ func main() {
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
-	router.Run(":"+viperTool.GetString("Server.HttpPort"))
+	router.Run(":" + viperTool.GetString("Server.HttpPort"))
 }
 
 /** Tool */
@@ -185,7 +184,7 @@ func setupMysqlTool() {
 	mysqlTool = tool
 }
 
-func setupGormTool()  {
+func setupGormTool() {
 	setting := setting.NewMysql(viperTool)
 	tool, err := tool.NewGorm(setting)
 	if err != nil {
@@ -194,8 +193,7 @@ func setupGormTool()  {
 	gormTool = tool
 }
 
-
-func setupMigrateTool()  {
+func setupMigrateTool() {
 	mysqlSetting := setting.NewMysql(viperTool)
 	migSetting := setting.NewMigrate(rootPath)
 	migrate := tool.NewMigrate(mysqlSetting, migSetting)
@@ -215,7 +213,6 @@ func setupService() {
 	setupMigrateService()
 	setupSwagService()
 	setupRegService()
-	setupUserService()
 	setupWorkoutSetService()
 	courseService = service.NewCourseService(viperTool, gormTool)
 	planService = service.NewPlanService(viperTool, gormTool)
@@ -227,34 +224,29 @@ func setupService() {
 	reviewService = service.NewReviewService(viperTool, gormTool)
 	paymentService = service.NewPaymentService(viperTool, gormTool)
 	saleService = service.NewSaleService(viperTool, gormTool)
+	userService = service.NewUserService(viperTool, gormTool)
 }
 
-func setupMigrateService()  {
+func setupMigrateService() {
 	migrateService = service.NewMigrate(migrateTool, errcode.NewHandler())
 }
 
-func setupRegService()  {
+func setupRegService() {
 	userRepo := repository.NewUser(gormTool)
 	regService = service.NewRegister(userRepo, logHandler, jwtTool, otpTool, viperTool, errcode.NewHandler())
 }
 
-func setupUserService()  {
-	userRepo := repository.NewUser(gormTool)
-	trainerRepo := repository.NewTrainer(gormTool)
-	userService = service.NewUser(userRepo, trainerRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
-}
-
-func setupWorkoutSetService()  {
+func setupWorkoutSetService() {
 	workoutSetRepo := repository.NewWorkoutSet(gormTool)
 	workoutSetService = service.NewWorkoutSet(workoutSetRepo, uploadHandler, resHandler, logHandler, jwtTool, errcode.NewHandler())
 }
 
-func setupSwagService()  {
+func setupSwagService() {
 	swagService = service.NewSwagger(setting.NewSwagger(viperTool))
 }
 
 /** Access */
-func setupAccess()  {
+func setupAccess() {
 	setupTrainerAccess()
 	setupCourseAccess()
 	setupPlanAccess()
@@ -294,5 +286,3 @@ func setupActionAccess() {
 	courseRepo := repository.NewCourse(gormTool)
 	actionAccess = access.NewAction(courseRepo, logHandler, jwtTool, errcode.NewHandler())
 }
-
-

@@ -5723,6 +5723,10 @@ var doc = `{
                     "type": "string",
                     "example": "m"
                 },
+                "subscribe_info": {
+                    "description": "用戶訂閱資訊",
+                    "$ref": "#/definitions/dto.UserSubscribeInfo"
+                },
                 "target": {
                     "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
                     "type": "integer",
@@ -5761,6 +5765,23 @@ var doc = `{
                     "description": "用戶大頭照",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.UserSubscribeInfo": {
+            "type": "object",
+            "properties": {
+                "expires_date": {
+                    "description": "訂閱過期日期",
+                    "type": "string"
+                },
+                "start_date": {
+                    "description": "訂閱開始日期",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "type": "integer"
                 }
             }
         },
