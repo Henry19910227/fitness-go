@@ -60,5 +60,10 @@ type Upload interface {
 type IAP interface {
 	GetSandboxURL() string
 	GetProductURL() string
+	GetAppServerAPIURL() string
 	GetPassword() string
+	GetKeyPath() string
+	GetKeyID() string
+	GetBundleID() string
+	GetIssuer() string
 }

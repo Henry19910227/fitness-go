@@ -2,8 +2,6 @@ package tool
 
 import (
 	"database/sql"
-	"github.com/Henry19910227/fitness-go/internal/dto"
-	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 	"io"
@@ -30,7 +28,7 @@ type JWT interface {
 	GenerateUserToken(uid int64) (string, error)
 	GenerateTrainerToken(uid int64) (string, error)
 	GenerateAdminToken(uid int64, lv int) (string, error)
-	GenerateAppleToken() (string, error)
+	GenerateAppleStoreServerAPIToken(keyPath string, iss string, bid string, kid string) (string, error)
 	VerifyToken(token string) error
 	GetRoleByToken(token string) (int, error)
 	GetIDByToken(token string) (int64, error)
@@ -82,8 +80,7 @@ type HttpRequest interface {
 type IAP interface {
 	SandboxURL() string
 	ProductURL() string
+	AppServerAPIURL() string
 	Password() string
-    ParserIAPNotificationResponse(base64String string) (*dto.IAPNotificationResponse, error)
-	ParserIAPNotificationType(notificationType string, subtype string) global.SubscribeLogType
-	ParserAppleReceipt(dict map[string]interface{}, receipt *dto.AppleReceiptResponse) error
+	GenerateAppleStoreAPIToken(duration time.Duration) (string, error)
 }

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"crypto/rand"
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
@@ -177,9 +178,8 @@ func (o *order) FindOrderByCourseID(userID int64, courseID int64) (*model.Order,
 	return &order, nil
 }
 
-func (o *order) FindSubscribeOrderByUserID(userID int64) (*model.Order, error) {
-	var order model.Order
-	if err := o.gorm.DB().
+func (o *order) FindOrdersByUserID(userID int64, paymentOrderType global.PaymentOrderType, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Order, error) {
+	db := o.gorm.DB().
 		Preload("OrderCourse").
 		Preload("OrderSubscribe").
 		Preload("OrderCourse.SaleItem").
@@ -187,12 +187,26 @@ func (o *order) FindSubscribeOrderByUserID(userID int64) (*model.Order, error) {
 		Preload("OrderCourse.Course").
 		Preload("OrderSubscribe").
 		Preload("OrderSubscribe.SubscribePlan").
-		Preload("OrderSubscribe.SubscribePlan.ProductLabel").
-		Order("orders.create_at DESC").
-		Take(&order, "orders.user_id = ? AND orders.order_type = ?", userID, int(global.SubscribeOrderType)).Error; err != nil {
-		return nil, err
+		Preload("OrderSubscribe.SubscribePlan.ProductLabel")
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
 	}
-	return &order, nil
+	//頁數
+	if paging != nil {
+		if paging.Offset > 0 {
+			db = db.Offset(paging.Offset)
+		}
+	}
+	//筆數
+	if paging != nil {
+		if paging.Limit > 0 {
+			db = db.Limit(paging.Limit)
+		}
+	}
+	orders := make([]*model.Order, 0)
+	db = db.Find(&orders, "orders.user_id = ? AND orders.order_type = ?", userID, int(paymentOrderType))
+	return orders, nil
 }
 
 func randRange(min int64, max int64) int64 {

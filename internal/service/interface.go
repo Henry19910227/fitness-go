@@ -147,5 +147,5 @@ type Payment interface {
 	VerifyFreeCourseOrder(c *gin.Context, uid int64, orderID string) errcode.Error
 	VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
 	HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error
-	Test(c *gin.Context) (string, errcode.Error)
+	Test(c *gin.Context) (*dto.IAPSubscribeResponse, errcode.Error)
 }

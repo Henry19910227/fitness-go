@@ -2,7 +2,7 @@ package entity
 
 type Order struct {
 	ID          string `gorm:"column:id"`           // 訂單id
-	UserID      int64  `gorm:"column:user_id"`      // 用戶id
+	UserID      int64 `gorm:"column:user_id"`      // 用戶id
 	Quantity    int64  `gorm:"column:quantity"`     // 數量
 	OrderType   int    `gorm:"column:order_type"`   // 訂單類型(1:課表購買/2:會員訂閱)
 	OrderStatus int    `gorm:"column:order_status"` // 訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)

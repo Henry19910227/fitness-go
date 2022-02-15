@@ -2,7 +2,7 @@ package entity
 
 type UserSubscribeInfo struct {
 	UserID int64 `gorm:"column:user_id"` // 用戶id
-	SubscribePlanID int64 `gorm:"column:subscribe_plan_id"` // 訂閱方案id
+	OrderID string `gorm:"column:order_id"` // 訂單id
 	Status int `gorm:"column:status"` // 會員狀態(0:無會員狀態/1:付費會員狀態)
 	StartDate string `gorm:"column:start_date"` // 訂閱開始日期
 	ExpiresDate string `gorm:"column:expires_date"` // 訂閱過期日期

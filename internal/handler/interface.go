@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/dto"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/gin-gonic/gin"
 	"io"
 )
@@ -68,4 +70,14 @@ type Resource interface {
 	DeleteActionVideo(videoNamed string) error
 	DeleteCertificateImage(imageNamed string) error
 	DeleteReviewImage(imageNamed string) error
+}
+
+type IAP interface {
+	SandboxURL() string
+	ProductURL() string
+	Password() string
+	DecodeIAPNotificationResponse(base64String string) (*dto.IAPNotificationResponse, error)
+	ParserIAPNotificationType(notificationType string, subtype string) global.SubscribeLogType
+	ParserAppleReceipt(dict map[string]interface{}, receipt *dto.AppleReceiptResponse) error
+	GetSubscriptionAPI(originalTransactionId string) (*dto.IAPSubscribeResponse, error)
 }
