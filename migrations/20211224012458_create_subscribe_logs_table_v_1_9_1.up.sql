@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS subscribe_logs (
     `expires_date`   DATETIME NOT NULL DEFAULT NOW() COMMENT '訂閱過期日期',
     `type`           VARCHAR(20) NOT NULL DEFAULT '' COMMENT '紀錄類型(初次訂閱:initial_buy/恢復訂閱:resubscribe/續訂:renew/訂閱升級:upgrade/訂閱降級:downgrade/訂閱過期:expired/退費:refund)',
     `msg`            VARCHAR(50) NOT NULL DEFAULT '' COMMENT '紀錄訊息',
-    `create_at`      DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期'
+    `create_at`      DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
+    UNIQUE KEY `unique_subscribe_logs` (`original_transaction_id`,`transaction_id`,`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT = 1;
