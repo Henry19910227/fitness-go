@@ -105,7 +105,6 @@ type WorkoutSet interface {
 	CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*dto.WorkoutSet, errcode.Error)
 	DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*dto.WorkoutSet, errcode.Error)
 	GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet, errcode.Error)
-	GetWorkoutSetProductsByWorkoutID(c *gin.Context, workoutID int64) ([]*dto.WorkoutSetProduct, errcode.Error)
 	GetWorkoutSetsByCourseID(c *gin.Context, courseID int64) ([]*dto.WorkoutSet, errcode.Error)
 	UpdateWorkoutSet(c *gin.Context, setID int64, param *dto.UpdateWorkoutSetParam) (*dto.WorkoutSet, errcode.Error)
 	DeleteWorkoutSet(c *gin.Context, setID int64) (*dto.WorkoutSetID, errcode.Error)

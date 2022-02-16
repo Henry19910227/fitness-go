@@ -10,13 +10,13 @@ import (
 
 type WorkoutProduct struct {
 	Base
-	workoutService service.Workout
+	workoutService    service.Workout
 	workoutSetService service.WorkoutSet
 }
 
 func NewWorkoutProduct(baseGroup *gin.RouterGroup, workoutService service.Workout, workoutSetService service.WorkoutSet, workoutMidd midd.Workout, userMidd midd.User) {
 	workout := WorkoutProduct{
-		workoutService: workoutService,
+		workoutService:    workoutService,
 		workoutSetService: workoutSetService,
 	}
 	baseGroup.GET("/workout_product/:workout_id/workout_sets",
@@ -33,7 +33,7 @@ func NewWorkoutProduct(baseGroup *gin.RouterGroup, workoutService service.Workou
 // @Produce json
 // @Security fitness_token
 // @Param workout_id path int64 true "計畫id"
-// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSetProduct} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /workout_product/{workout_id}/workout_sets [GET]
 func (p *WorkoutProduct) GetWorkoutSets(c *gin.Context) {
@@ -42,7 +42,7 @@ func (p *WorkoutProduct) GetWorkoutSets(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	workouts, err := p.workoutSetService.GetWorkoutSetProductsByWorkoutID(c, uri.WorkoutID)
+	workouts, err := p.workoutSetService.GetWorkoutSets(c, uri.WorkoutID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return
