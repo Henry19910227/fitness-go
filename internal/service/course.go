@@ -22,6 +22,7 @@ type course struct {
 	trainerRepo         repository.Trainer
 	planRepo            repository.Plan
 	saleRepo            repository.Sale
+	subscribeInfoRepo   repository.UserSubscribeInfo
 	uploader            handler.Uploader
 	resHandler          handler.Resource
 	logger              handler.Logger
@@ -34,11 +35,12 @@ func NewCourse(courseRepo repository.Course,
 	trainerRepo repository.Trainer,
 	planRepo repository.Plan,
 	saleRepo repository.Sale,
+	subscribeInfoRepo repository.UserSubscribeInfo,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
 	return &course{courseRepo: courseRepo, userCourseAssetRepo: userCourseAssetRepo,
-		trainerRepo: trainerRepo, planRepo: planRepo, saleRepo: saleRepo,
+		trainerRepo: trainerRepo, planRepo: planRepo, saleRepo: saleRepo, subscribeInfoRepo: subscribeInfoRepo,
 		uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
@@ -236,17 +238,28 @@ func (cs *course) GetCourseProductByCourseID(c *gin.Context, userID int64, cours
 	if err != nil {
 		return course, cs.errHandler.Set(c, "course repo", err)
 	}
-	asset, err := cs.userCourseAssetRepo.FindUserCourseAsset(&model.FindUserCourseAssetParam{
-		UserID:   userID,
-		CourseID: courseID,
-	})
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return course, cs.errHandler.Set(c, "course repo", err)
-	}
 	course.AllowAccess = 0
-	if asset != nil {
-		if asset.Available == 1 {
-			course.AllowAccess = 1
+	if global.SaleType(course.SaleType) == global.SaleTypeSubscribe {
+		subscribeInfo, err := cs.subscribeInfoRepo.FindSubscribeInfo(userID)
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return course, cs.errHandler.Set(c, "subscribe info repo", err)
+		}
+		if subscribeInfo != nil {
+			course.AllowAccess = subscribeInfo.Status
+		}
+	}
+	if global.SaleType(course.SaleType) == global.SaleTypeFree || global.SaleType(course.SaleType) == global.SaleTypeCharge {
+		asset, err := cs.userCourseAssetRepo.FindUserCourseAsset(&model.FindUserCourseAssetParam{
+			UserID:   userID,
+			CourseID: courseID,
+		})
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return course, cs.errHandler.Set(c, "course repo", err)
+		}
+		if asset != nil {
+			if asset.Available == 1 {
+				course.AllowAccess = 1
+			}
 		}
 	}
 	return course, nil

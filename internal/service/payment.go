@@ -18,6 +18,7 @@ import (
 
 type payment struct {
 	Base
+	userRepo            repository.User
 	orderRepo           repository.Order
 	saleRepo            repository.Sale
 	subscribePlanRepo   repository.SubscribePlan
@@ -34,13 +35,13 @@ type payment struct {
 	errHandler          errcode.Handler
 }
 
-func NewPayment(orderRepo repository.Order, saleRepo repository.Sale, subscribePlanRepo repository.SubscribePlan,
+func NewPayment(userRepo repository.User, orderRepo repository.Order, saleRepo repository.Sale, subscribePlanRepo repository.SubscribePlan,
 	courseRepo repository.Course, receiptRepo repository.Receipt,
 	purchaseRepo repository.UserCourseAsset, subscribeLogRepo repository.SubscribeLog,
 	purchaseLogRepo repository.PurchaseLog, memberRepo repository.UserSubscribeInfo,
 	transactionRepo repository.Transaction, iapHandler handler.IAP, reqTool tool.HttpRequest,
 	jwtTool tool.JWT, errHandler errcode.Handler) Payment {
-	return &payment{orderRepo: orderRepo, saleRepo: saleRepo, subscribePlanRepo: subscribePlanRepo,
+	return &payment{userRepo: userRepo, orderRepo: orderRepo, saleRepo: saleRepo, subscribePlanRepo: subscribePlanRepo,
 		courseRepo: courseRepo, receiptRepo: receiptRepo,
 		userCourseAssetRepo: purchaseRepo, subscribeLogRepo: subscribeLogRepo, purchaseLogRepo: purchaseLogRepo,
 		subscribeInfo: memberRepo, transactionRepo: transactionRepo,
@@ -352,6 +353,17 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 		tx.Rollback()
 		return p.errHandler.Set(c, "subscribe info repo", err)
 	}
+	//更新會員類型
+	var userType = global.SubscribeUserType
+	if subscribeLogType == global.Expired || subscribeLogType == global.Refund {
+		userType = global.NormalUserType
+	}
+	ut := int(userType)
+	if err := p.userRepo.UpdateUserByUID(info.UserID, &model.UpdateUserParam{
+		UserType: &ut,
+	}); err != nil {
+		return p.errHandler.Set(c, "user repo", err)
+	}
 	p.transactionRepo.FinishTransaction(tx)
 	fmt.Printf("NotificationType: %v \n", response.NotificationType)
 	fmt.Printf("Subtype: %v \n", response.Subtype)
@@ -558,6 +570,17 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 	if err != nil {
 		tx.Rollback()
 		return p.errHandler.Set(c, "member repo", err)
+	}
+	//更新會員類型
+	var userType = global.SubscribeUserType
+	if len(response.PendingRenewalInfo[0].ExpirationIntent) > 0 {
+		userType = global.NormalUserType
+	}
+	ut := int(userType)
+	if err := p.userRepo.UpdateUserByUID(order.UserID, &model.UpdateUserParam{
+		UserType: &ut,
+	}); err != nil {
+		return p.errHandler.Set(c, "user repo", err)
 	}
 	//更新訂單狀態
 	if err := p.orderRepo.UpdateOrderStatus(tx, currentOrderID, global.SuccessOrderStatus); err != nil {
