@@ -226,7 +226,7 @@ func (cc *Course) UpdateCourseSaleType(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	course, err := cc.courseService.UpdateCourseSaleType(c, uri.CourseID, *body.SaleType, body.SaleID)
+	course, err := cc.courseService.UpdateCourseSaleType(c, uri.CourseID, body.SaleType, body.SaleID)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
