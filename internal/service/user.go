@@ -16,25 +16,32 @@ import (
 
 type user struct {
 	Base
-	userRepo  repository.User
-	trainerRepo repository.Trainer
-	uploader  handler.Uploader
-	resHandler handler.Resource
-	logger    handler.Logger
-	jwtTool   tool.JWT
-	errHandler errcode.Handler
+	userRepo          repository.User
+	trainerRepo       repository.Trainer
+	subscribeInfoRepo repository.UserSubscribeInfo
+	albumRepo         repository.TrainerAlbum
+	certRepo          repository.Certificate
+	uploader          handler.Uploader
+	resHandler        handler.Resource
+	logger            handler.Logger
+	jwtTool           tool.JWT
+	errHandler        errcode.Handler
 }
 
-func NewUser(userRepo repository.User, trainerRepo repository.Trainer,
-	uploader  handler.Uploader, resHandler handler.Resource, logger handler.Logger,
+func NewUser(userRepo repository.User, trainerRepo repository.Trainer, subscribeInfoRepo repository.UserSubscribeInfo,
+	albumRepo repository.TrainerAlbum, certRepo repository.Certificate,
+	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT, errHandler errcode.Handler) User {
 	return &user{userRepo: userRepo,
-		trainerRepo: trainerRepo,
-		uploader: uploader,
-		resHandler: resHandler,
-		logger: logger,
-		jwtTool: jwtTool,
-		errHandler: errHandler}
+		trainerRepo:       trainerRepo,
+		subscribeInfoRepo: subscribeInfoRepo,
+		albumRepo:         albumRepo,
+		certRepo:          certRepo,
+		uploader:          uploader,
+		resHandler:        resHandler,
+		logger:            logger,
+		jwtTool:           jwtTool,
+		errHandler:        errHandler}
 }
 
 func (u *user) UpdateUserByToken(c *gin.Context, token string, param *dto.UpdateUserParam) (*dto.User, errcode.Error) {
@@ -48,13 +55,13 @@ func (u *user) UpdateUserByToken(c *gin.Context, token string, param *dto.Update
 func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *dto.UpdateUserParam) (*dto.User, errcode.Error) {
 	//更新user
 	if err := u.userRepo.UpdateUserByUID(uid, &model.UpdateUserParam{
-		Nickname: param.Nickname,
-		Sex: param.Sex,
-		Birthday: param.Birthday,
-		Height: param.Height,
-		Weight: param.Weight,
+		Nickname:   param.Nickname,
+		Sex:        param.Sex,
+		Birthday:   param.Birthday,
+		Height:     param.Height,
+		Weight:     param.Weight,
 		Experience: param.Experience,
-		Target: param.Target,
+		Target:     param.Target,
 	}); err != nil {
 		//資料已存在
 		if u.MysqlDuplicateEntry(err) {
@@ -91,11 +98,29 @@ func (u *user) GetUserByUID(c *gin.Context, uid int64) (*dto.User, errcode.Error
 	var trainer dto.Trainer
 	err := u.trainerRepo.FindTrainerByUID(user.ID, &trainer)
 	if err != nil {
-		u.logger.Set(c, handler.Error, "TrainerRepo",u.errHandler.SystemError().Code(), err.Error())
+		u.logger.Set(c, handler.Error, "TrainerRepo", u.errHandler.SystemError().Code(), err.Error())
 		return nil, u.errHandler.SystemError()
 	}
 	if trainer.UserID != 0 {
+		if err := u.albumRepo.FindAlbumPhotosByUID(user.ID, &trainer.TrainerAlbumPhotos); err != nil {
+			return nil, u.errHandler.Set(c, "trainer album repo", err)
+		}
+		if err := u.certRepo.FindCertificatesByUID(user.ID, &trainer.Certificates); err != nil {
+			return nil, u.errHandler.Set(c, "cer repo", err)
+		}
 		user.TrainerInfo = &trainer
+	}
+	//獲取訂閱資訊
+	subscribeInfoData, err := u.subscribeInfoRepo.FindSubscribeInfo(uid)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, u.errHandler.Set(c, "user subscribe info repo", err)
+	}
+	if subscribeInfoData != nil {
+		user.SubscribeInfo = &dto.UserSubscribeInfo{
+			Status:      subscribeInfoData.Status,
+			StartDate:   subscribeInfoData.StartDate,
+			ExpiresDate: subscribeInfoData.ExpiresDate,
+		}
 	}
 	return &user, nil
 }
@@ -122,7 +147,9 @@ func (u *user) UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed strin
 		return nil, u.errHandler.SystemError()
 	}
 	//查詢用戶資訊
-	var user struct{ Avatar string `gorm:"column:avatar"`}
+	var user struct {
+		Avatar string `gorm:"column:avatar"`
+	}
 	if err := u.userRepo.FindUserByUID(uid, &user); err != nil {
 		u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())
 		return nil, u.errHandler.SystemError()
@@ -150,5 +177,3 @@ func (u *user) UploadUserAvatarByToken(c *gin.Context, token string, imageNamed 
 	}
 	return u.UploadUserAvatarByUID(c, uid, imageNamed, imageFile)
 }
-
-

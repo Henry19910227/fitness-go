@@ -40,7 +40,7 @@ func (t *jwtTool) GenerateAdminToken(uid int64, lv int) (string, error) {
 	return token, err
 }
 
-func (t *jwtTool) GenerateAppleToken() (string, error) {
+func (t *jwtTool) GenerateAppleStoreServerAPIToken(keyPath string, iss string, bid string, kid string) (string, error) {
 	p8bytes, err := ioutil.ReadFile("./config/SubscriptionKey_Q2N9VXCN4F.p8")
 	if err != nil {
 		return "", err

@@ -15,6 +15,13 @@ const (
 	UserIllegal = 2
 )
 
+// UserType 用戶類型 (1:一般用戶/2:訂閱用戶)
+type UserType int
+const (
+	NormalUserType UserType = 1
+	SubscribeUserType UserType = 2
+)
+
 // Role 角色(1:用戶/2:管理員)
 type Role int
 const (

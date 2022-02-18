@@ -59,6 +59,23 @@ JWT:
     Secret: mi
     Issuer: fitness
     Expire: 3600 # Minute
+IAP:
+    Sandbox: https://sandbox.itunes.apple.com/verifyReceipt
+    Product: https://buy.itunes.apple.com/verifyReceipt
+    Debug:
+      AppStoreServer: https://api.storekit-sandbox.itunes.apple.com
+      Password: b3e50e11316943969754106ed24c6a3a
+      Issuer: 69a6de92-1fe6-47e3-e053-5b8c7c11a4d1 # 發行者 (使用者與存取權限 -> App Store Connect API 頁面)
+      KeyID: Q2N9VXCN4F # 密鑰id (使用者與存取權限 -> App 內購買項目)
+      KeyPath: ./config/SubscriptionKey_Q2N9VXCN4F.p8
+      BundleID: com.henry.PurchaseDemo
+    Release:
+      AppStoreServer: https://api.storekit.itunes.apple.com
+      Password: b3e50e11316943969754106ed24c6a3a
+      Issuer: 69a6de92-1fe6-47e3-e053-5b8c7c11a4d1
+      KeyID: Q2N9VXCN4F
+      KeyPath: ./config/SubscriptionKey_Q2N9VXCN4F.p8
+      BundleID: com.henry.PurchaseDemo
 Swagger:
     Debug:
       Protocol: http

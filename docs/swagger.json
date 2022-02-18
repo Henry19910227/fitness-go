@@ -2276,7 +2276,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/dto.WorkoutProduct"
+                                                "$ref": "#/definitions/dto.Workout"
                                             }
                                         }
                                     }
@@ -4238,7 +4238,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/dto.WorkoutSetProduct"
+                                                "$ref": "#/definitions/dto.WorkoutSet"
                                             }
                                         }
                                     }
@@ -4707,51 +4707,6 @@
             "properties": {
                 "action_id": {
                     "description": "動作id",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
-        "dto.ActionProduct": {
-            "type": "object",
-            "properties": {
-                "body": {
-                    "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
-                    "type": "integer",
-                    "example": 8
-                },
-                "category": {
-                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "cover": {
-                    "description": "封面",
-                    "type": "string",
-                    "example": "32as1d5f13e4.png"
-                },
-                "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "id": {
-                    "description": "動作id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "description": "動作名稱",
-                    "type": "string",
-                    "example": "槓鈴臥推"
-                },
-                "source": {
-                    "description": "動作來源(1:系統動作/2:教練自創動作)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 }
@@ -5705,6 +5660,10 @@
                     "type": "string",
                     "example": "m"
                 },
+                "subscribe_info": {
+                    "description": "用戶訂閱資訊",
+                    "$ref": "#/definitions/dto.UserSubscribeInfo"
+                },
                 "target": {
                     "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
                     "type": "integer",
@@ -5743,6 +5702,23 @@
                     "description": "用戶大頭照",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.UserSubscribeInfo": {
+            "type": "object",
+            "properties": {
+                "expires_date": {
+                    "description": "訂閱過期日期",
+                    "type": "string"
+                },
+                "start_date": {
+                    "description": "訂閱開始日期",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "type": "integer"
                 }
             }
         },
@@ -5821,31 +5797,6 @@
                 }
             }
         },
-        "dto.WorkoutProduct": {
-            "type": "object",
-            "properties": {
-                "equipment": {
-                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "string",
-                    "example": "2,3,7"
-                },
-                "id": {
-                    "description": "訓練 id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "description": "訓練名稱",
-                    "type": "string",
-                    "example": "第一天胸肌訓練"
-                },
-                "workout_set_count": {
-                    "description": "動作組數",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
         "dto.WorkoutSet": {
             "type": "object",
             "properties": {
@@ -5885,7 +5836,8 @@
                 },
                 "remark": {
                     "description": "備註",
-                    "type": "string"
+                    "type": "string",
+                    "example": "ˋ注意姿勢"
                 },
                 "reps": {
                     "description": "次數",
@@ -5894,7 +5846,8 @@
                 },
                 "start_audio": {
                     "description": "前導語音",
-                    "type": "string"
+                    "type": "string",
+                    "example": "1d2w3e51d3w.mp3"
                 },
                 "type": {
                     "description": "動作類別(1:動作/2:休息)",
@@ -5915,55 +5868,6 @@
                     "description": "訓練組id",
                     "type": "integer",
                     "example": 10
-                }
-            }
-        },
-        "dto.WorkoutSetProduct": {
-            "type": "object",
-            "properties": {
-                "action": {
-                    "description": "動作",
-                    "$ref": "#/definitions/dto.ActionProduct"
-                },
-                "auto_next": {
-                    "description": "自動下一組(Y:是/N:否)",
-                    "type": "string",
-                    "example": "N"
-                },
-                "distance": {
-                    "description": "距離(公里)",
-                    "type": "number",
-                    "example": 0
-                },
-                "duration": {
-                    "description": "時長(秒)",
-                    "type": "integer",
-                    "example": 30
-                },
-                "id": {
-                    "description": "訓練組id",
-                    "type": "integer",
-                    "example": 10
-                },
-                "incline": {
-                    "description": "坡度",
-                    "type": "number",
-                    "example": 0
-                },
-                "reps": {
-                    "description": "次數",
-                    "type": "integer",
-                    "example": 0
-                },
-                "type": {
-                    "description": "動作類別(1:動作/2:休息)",
-                    "type": "integer",
-                    "example": 2
-                },
-                "weight": {
-                    "description": "重量(公斤)",
-                    "type": "number",
-                    "example": 0
                 }
             }
         },

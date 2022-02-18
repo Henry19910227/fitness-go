@@ -13,35 +13,38 @@ import (
 
 type login struct {
 	Base
-	adminRepo repository.Admin
-	userRepo  repository.User
-	trainerRepo repository.Trainer
-	albumRepo repository.TrainerAlbum
-	cerRepo repository.Certificate
-	ssoHandler handler.SSO
-	jwtTool   tool.JWT
-	logger handler.Logger
-	errHandler errcode.Handler
+	adminRepo         repository.Admin
+	userRepo          repository.User
+	trainerRepo       repository.Trainer
+	albumRepo         repository.TrainerAlbum
+	cerRepo           repository.Certificate
+	subscribeInfoRepo repository.UserSubscribeInfo
+	ssoHandler        handler.SSO
+	jwtTool           tool.JWT
+	logger            handler.Logger
+	errHandler        errcode.Handler
 }
 
 func NewLogin(adminRepo repository.Admin,
-	userRepo  repository.User,
+	userRepo repository.User,
 	trainerRepo repository.Trainer,
 	albumRepo repository.TrainerAlbum,
-    cerRepo repository.Certificate,
+	cerRepo repository.Certificate,
+	subscribeInfoRepo repository.UserSubscribeInfo,
 	ssoHandler handler.SSO,
 	logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Login {
 	return &login{adminRepo: adminRepo,
-		userRepo: userRepo,
-		trainerRepo: trainerRepo,
-		albumRepo: albumRepo,
-		cerRepo: cerRepo,
-		ssoHandler: ssoHandler,
-		logger: logger,
-		jwtTool: jwtTool,
-		errHandler: errHandler}
+		userRepo:          userRepo,
+		trainerRepo:       trainerRepo,
+		albumRepo:         albumRepo,
+		cerRepo:           cerRepo,
+		subscribeInfoRepo: subscribeInfoRepo,
+		ssoHandler:        ssoHandler,
+		logger:            logger,
+		jwtTool:           jwtTool,
+		errHandler:        errHandler}
 }
 
 func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) (*dto.User, string, errcode.Error) {
@@ -69,6 +72,18 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 			return nil, "", l.errHandler.Set(c, "cer repo", err)
 		}
 		user.TrainerInfo = &trainer
+	}
+	//獲取訂閱資訊
+	subscribeInfoData, err := l.subscribeInfoRepo.FindSubscribeInfo(user.ID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, "", l.errHandler.Set(c, "user subscribe info repo", err)
+	}
+	if subscribeInfoData != nil {
+		user.SubscribeInfo = &dto.UserSubscribeInfo{
+			Status:      subscribeInfoData.Status,
+			StartDate:   subscribeInfoData.StartDate,
+			ExpiresDate: subscribeInfoData.ExpiresDate,
+		}
 	}
 	//生成 user token
 	token, err := l.ssoHandler.GenerateUserToken(user.ID)
@@ -111,7 +126,6 @@ func (l *login) UserLogoutByToken(c *gin.Context, token string) errcode.Error {
 	}
 	return nil
 }
-
 
 func (l *login) AdminLogoutByToken(c *gin.Context, token string) errcode.Error {
 	if err := l.ssoHandler.ResignAdminToken(token); err != nil {

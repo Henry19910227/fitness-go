@@ -98,6 +98,7 @@ type Sale interface {
 type SubscribePlan interface {
 	FindSubscribePlans() ([]*model.SubscribePlan, error)
 	FinsSubscribePlanByID(subscribePlanID int64) (*model.SubscribePlan, error)
+	FinsSubscribePlanByProductID(productID string) (*model.SubscribePlan, error)
 	FindSubscribePlansByPeriod(period global.PeriodType) ([]*model.SubscribePlan, error)
 }
 
@@ -130,14 +131,17 @@ type Review interface {
 type Order interface {
 	CreateCourseOrder(param *model.CreateOrderParam) (string, error)
 	CreateSubscribeOrder(param *model.CreateSubscribeOrderParam) (string, error)
-	UpdateOrder(tx *gorm.DB, orderID string, param *model.UpdateOrderParam) error
+	UpdateOrderStatus(tx *gorm.DB, orderID string, orderStatus global.OrderStatus) error
+	UpdateOrderSubscribePlan(tx *gorm.DB, orderID string, subscribePlanID int64) error
 	FindOrder(orderID string) (*model.Order, error)
+	FindOrderByOriginalTransactionID(originalTransactionID string) (*model.Order, error)
 	FindOrderByCourseID(userID int64, courseID int64) (*model.Order, error)
-	FindOrderBySubscribePlanID(userID int64, subscribePlanID int64) (*model.Order, error)
+	FindOrdersByUserID(userID int64, paymentOrderType global.PaymentOrderType, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Order, error)
 }
 
 type Receipt interface {
-	CreateReceipt(tx *gorm.DB, param *model.CreateReceiptParam) (int64, error)
+	SaveReceipt(tx *gorm.DB, param *model.CreateReceiptParam) (int64, error)
+	FindReceiptsByOrderID(orderID string, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Receipt, error)
 }
 
 type UserCourseAsset interface {
@@ -150,12 +154,13 @@ type PurchaseLog interface {
 }
 
 type SubscribeLog interface {
-	CreateSubscribeLog(tx *gorm.DB, param *model.CreateSubscribeLogParam) (int64, error)
+	SaveSubscribeLog(tx *gorm.DB, param *model.CreateSubscribeLogParam) (int64, error)
 }
 
 type UserSubscribeInfo interface {
 	SaveSubscribeInfo(tx *gorm.DB, param *model.SaveUserSubscribeInfoParam) (int64, error)
 	FindSubscribeInfo(uid int64) (*model.UserSubscribeInfo, error)
+	FindSubscribeInfoByOriginalTransactionID(originalTransactionID string) (*model.UserSubscribeInfo, error)
 }
 
 type Transaction interface {

@@ -29,7 +29,7 @@ type UpdateCourseBody struct {
 }
 
 type UpdateCourseSaleTypeBody struct {
-	SaleType *int `json:"sale_type" binding:"required,oneof=1 2 3" example:"2"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	SaleType int `json:"sale_type" binding:"required,oneof=1 2 3" example:"2"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	SaleID *int64 `json:"sale_id" binding:"omitempty" example:"2"` // 銷售ID(當銷售類型為 "付費課表" 時，此ID必須帶值)
 }
 

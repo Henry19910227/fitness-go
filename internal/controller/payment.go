@@ -11,7 +11,7 @@ import (
 type Payment struct {
 	Base
 	PaymentService service.Payment
-	CourseService service.Course
+	CourseService  service.Course
 }
 
 func NewPayment(baseGroup *gin.RouterGroup,
@@ -77,7 +77,6 @@ func (p *Payment) CreateCourseOrder(c *gin.Context) {
 	}
 	p.JSONSuccessResponse(c, order, "success")
 }
-
 
 // CreateSubscribeOrder 創建訂閱訂單
 // @Summary 創建訂閱訂單
@@ -173,12 +172,12 @@ func (p *Payment) AppStoreNotification(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, err := p.PaymentService.HandleAppStoreNotification(c, body.SignedPayload)
+	err := p.PaymentService.HandleAppStoreNotification(c, body.SignedPayload)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
-	p.JSONSuccessResponse(c, result, "success")
+	p.JSONSuccessResponse(c, nil, "success")
 }
 
 func (p *Payment) PaymentTest(c *gin.Context) {

@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS user_course_assets (
     UNIQUE KEY `unique_user_course` (`user_id`,`course_id`),
     CONSTRAINT fk_purchase_courses_user_id_to_users_id FOREIGN KEY (user_id) REFERENCES users(id),
     CONSTRAINT fk_purchase_courses_course_id_to_courses_id FOREIGN KEY (course_id) REFERENCES courses(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT = 1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;

@@ -28,7 +28,7 @@ type JWT interface {
 	GenerateUserToken(uid int64) (string, error)
 	GenerateTrainerToken(uid int64) (string, error)
 	GenerateAdminToken(uid int64, lv int) (string, error)
-	GenerateAppleToken() (string, error)
+	GenerateAppleStoreServerAPIToken(keyPath string, iss string, bid string, kid string) (string, error)
 	VerifyToken(token string) error
 	GetRoleByToken(token string) (int, error)
 	GetIDByToken(token string) (int64, error)
@@ -75,4 +75,12 @@ type Resource interface {
 
 type HttpRequest interface {
 	SendPostRequestWithJsonBody(url string, param map[string]interface{}) (map[string]interface{}, error)
+}
+
+type IAP interface {
+	SandboxURL() string
+	ProductURL() string
+	AppServerAPIURL() string
+	Password() string
+	GenerateAppleStoreAPIToken(duration time.Duration) (string, error)
 }

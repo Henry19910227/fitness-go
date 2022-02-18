@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS orders (
     `create_at`    DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     `update_at`    DATETIME NOT NULL DEFAULT NOW() COMMENT '修改時間',
     CONSTRAINT fk_orders_user_id_to_users_id FOREIGN KEY (user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
