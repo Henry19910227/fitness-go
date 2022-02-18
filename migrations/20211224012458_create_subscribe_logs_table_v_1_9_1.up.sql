@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS subscribe_logs (
     `msg`            VARCHAR(50) NOT NULL DEFAULT '' COMMENT '紀錄訊息',
     `create_at`      DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     UNIQUE KEY `unique_subscribe_logs` (`original_transaction_id`,`transaction_id`,`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT = 1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;

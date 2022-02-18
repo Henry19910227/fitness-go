@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS purchase_logs (
     `create_at`      DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     CONSTRAINT fk_purchase_logs_user_id_to_users_id FOREIGN KEY (user_id) REFERENCES users(id),
     CONSTRAINT fk_purchase_logs_order_id_to_orders_id FOREIGN KEY (order_id) REFERENCES orders(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT = 1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;

@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS order_courses (
     CONSTRAINT fk_order_courses_order_id_to_orders_id FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_order_courses_item_id_to_sale_items_id FOREIGN KEY (sale_item_id) REFERENCES sale_items(id),
     CONSTRAINT fk_order_courses_course_id_to_courses_id FOREIGN KEY (course_id) REFERENCES courses(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

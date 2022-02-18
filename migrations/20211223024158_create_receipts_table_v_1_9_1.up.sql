@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS receipts (
     INDEX(transaction_id),
     UNIQUE KEY `unique_receipts` (`order_id`,`original_transaction_id`,`transaction_id`),
     CONSTRAINT fk_receipts_order_id_to_orders_id FOREIGN KEY (order_id) REFERENCES orders(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT = 1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;
