@@ -70,12 +70,12 @@ IAP:
       KeyPath: ./config/SubscriptionKey_Q2N9VXCN4F.p8
       BundleID: com.henry.PurchaseDemo
     Release:
-      AppStoreServer: https://api.storekit.itunes.apple.com
-      Password: b3e50e11316943969754106ed24c6a3a
-      Issuer: 69a6de92-1fe6-47e3-e053-5b8c7c11a4d1
-      KeyID: Q2N9VXCN4F
-      KeyPath: ./config/SubscriptionKey_Q2N9VXCN4F.p8
-      BundleID: com.henry.PurchaseDemo
+      AppStoreServer: https://api.storekit-sandbox.itunes.apple.com
+      Password: 0bd3a44a62f14ef9b79f1d16bf195835
+      Issuer: 69a6de88-0ba0-47e3-e053-5b8c7c11a4d1
+      KeyID: Y29YP83F2S
+      KeyPath: ./config/SubscriptionKey_Y29YP83F2S.p8
+      BundleID: com.anniestudio.Fitness
 Swagger:
     Debug:
       Protocol: http

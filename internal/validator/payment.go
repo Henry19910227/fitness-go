@@ -20,3 +20,7 @@ type RedeemCourseBody struct {
 type AppStoreResponseBodyV2 struct {
 	SignedPayload string `json:"signedPayload" example:"MIJOlgYJKoZIhvcN..."`   // The payload in JSON Web Signature (JWS) format, signed by the App Store
 }
+
+type GetSubscriptionsUri struct {
+	OriginalTransactionID string `uri:"original_transaction_id" binding:"required" example:"202105201300687423"`   // 交易 id
+}
