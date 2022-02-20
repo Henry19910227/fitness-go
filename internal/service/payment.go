@@ -48,8 +48,8 @@ func NewPayment(userRepo repository.User, orderRepo repository.Order, saleRepo r
 		reqTool: reqTool, jwtTool: jwtTool, iapHandler: iapHandler, errHandler: errHandler}
 }
 
-func (p *payment) Test(c *gin.Context) (*dto.IAPSubscribeResponse, errcode.Error) {
-	result, err := p.iapHandler.GetSubscriptionAPI("1000000959266569")
+func (p *payment) GetSubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeResponse, errcode.Error) {
+	result, err := p.iapHandler.GetSubscriptionAPI(originalTransactionID)
 	if err != nil {
 		return nil, p.errHandler.Set(c, "iap handler", err)
 	}

@@ -44,8 +44,8 @@ func NewPayment(baseGroup *gin.RouterGroup,
 	baseGroup.POST("/app_store_notification/v2",
 		review.AppStoreNotification)
 
-	baseGroup.POST("/payment_test",
-		review.PaymentTest)
+	baseGroup.GET("/app_store/subscriptions/:original_transaction_id",
+		review.GetSubscriptions)
 }
 
 // CreateCourseOrder 創建課表訂單
@@ -180,8 +180,23 @@ func (p *Payment) AppStoreNotification(c *gin.Context) {
 	p.JSONSuccessResponse(c, nil, "success")
 }
 
-func (p *Payment) PaymentTest(c *gin.Context) {
-	result, err := p.PaymentService.Test(c)
+// GetSubscriptions 獲取訂閱資料(測試用)
+// @Summary 獲取訂閱資料
+// @Description 獲取訂閱資料
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Param original_transaction_id path string true "交易id"
+// @Success 200 {object} model.SuccessResult{data=dto.IAPSubscribeResponse} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /app_store/subscriptions/{original_transaction_id} [GET]
+func (p *Payment) GetSubscriptions(c *gin.Context) {
+	var uri validator.GetSubscriptionsUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, err := p.PaymentService.GetSubscriptions(c, uri.OriginalTransactionID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return

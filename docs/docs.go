@@ -217,6 +217,56 @@ var doc = `{
                 }
             }
         },
+        "/app_store/subscriptions/{original_transaction_id}": {
+            "get": {
+                "description": "獲取訂閱資料",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "獲取訂閱資料",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "交易id",
+                        "name": "original_transaction_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.IAPSubscribeResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course": {
             "post": {
                 "security": [
@@ -5198,6 +5248,25 @@ var doc = `{
                 }
             }
         },
+        "dto.IAPSubscribeResponse": {
+            "type": "object",
+            "properties": {
+                "originalTransactionID": {
+                    "description": "原始購買的交易標識符",
+                    "type": "string"
+                },
+                "signedRenewalInfo": {
+                    "$ref": "#/definitions/dto.SignedRenewalInfo"
+                },
+                "signedTransactionInfo": {
+                    "$ref": "#/definitions/dto.SignedTransactionInfo"
+                },
+                "status": {
+                    "description": "訂閱狀態 (1:訂閱處於活動狀態/2:訂閱已過期/3:訂閱處於計費重試期/4:訂閱處於計費寬限期/5:訂閱被撤銷)",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.Plan": {
             "type": "object",
             "properties": {
@@ -5371,6 +5440,134 @@ var doc = `{
                     "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
                     "type": "integer",
                     "example": 3
+                }
+            }
+        },
+        "dto.SignedRenewalInfo": {
+            "type": "object",
+            "properties": {
+                "autoRenewProductId": {
+                    "description": "在下一個計費周期續訂的產品的產品標識符",
+                    "type": "string"
+                },
+                "autoRenewStatus": {
+                    "description": "自動續訂訂閱的續訂狀態(0:自動續訂已關閉，客戶已關閉訂閱的自動續訂，並且在當前訂閱期結束時不會續訂/1:自動續訂已開啟，訂閱在當前訂閱期結束時續訂)",
+                    "type": "integer"
+                },
+                "expirationIntent": {
+                    "description": "訂閱過期的原因(1:客戶取消了訂閱/2:發生計費錯誤；例如，客戶的付款信息不再有效/3:客戶不同意最近的價格上漲/4:該產品在續訂時無法購買)",
+                    "type": "integer"
+                },
+                "gracePeriodExpiresDate": {
+                    "description": "訂閱續訂的計費寬限期到期的時間",
+                    "type": "integer"
+                },
+                "isInBillingRetryPeriod": {
+                    "description": "一個布爾值，指示 App Store 是否正在嘗試自動續訂過期的訂閱",
+                    "type": "boolean"
+                },
+                "offerIdentifier": {
+                    "description": "包含促銷代碼或促銷優惠標識符的標識符",
+                    "type": "string"
+                },
+                "offerType": {
+                    "description": "促銷優惠的類型",
+                    "type": "string"
+                },
+                "originalTransactionId": {
+                    "description": "購買的原始交易標識符",
+                    "type": "string"
+                },
+                "priceIncreaseStatus": {
+                    "description": "指示客戶是否已批准訂閱價格上漲的狀態",
+                    "type": "integer"
+                },
+                "productId": {
+                    "description": "應用內購買的產品標識符",
+                    "type": "string"
+                },
+                "signedDate": {
+                    "description": "App Store 對 JSON Web 簽名數據進行簽名的 UNIX 時間（以毫秒為單位）",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.SignedTransactionInfo": {
+            "type": "object",
+            "properties": {
+                "appAccountToken": {
+                    "type": "string"
+                },
+                "bundleId": {
+                    "type": "string"
+                },
+                "expiresDate": {
+                    "description": "訂閱到期或續訂的 UNIX 時間（以毫秒為單位）",
+                    "type": "integer"
+                },
+                "inAppOwnershipType": {
+                    "description": "描述交易是由用戶購買還是可通過家庭共享提供給他們的字符串(FAMILY_SHARED:該交易屬於受益於該服務的家庭成員/PURCHASED:交易屬於買方)",
+                    "type": "string"
+                },
+                "isUpgraded": {
+                    "description": "用戶是否升級到另一個訂閱",
+                    "type": "boolean"
+                },
+                "offerIdentifier": {
+                    "description": "包含促銷代碼或促銷優惠標識符的標識符",
+                    "type": "string"
+                },
+                "offerType": {
+                    "description": "促銷優惠的類型(1:介紹性報價/2:促銷優惠/3:帶有訂閱優惠代碼的優惠)",
+                    "type": "integer"
+                },
+                "originalPurchaseDate": {
+                    "description": "UNIX 時間，以毫秒為單位，表示原始交易標識符的購買日期",
+                    "type": "integer"
+                },
+                "originalTransactionId": {
+                    "description": "原始購買的交易標識符",
+                    "type": "string"
+                },
+                "productId": {
+                    "description": "應用內購買的產品標識符",
+                    "type": "string"
+                },
+                "purchaseDate": {
+                    "description": "App Store 向用戶帳戶收取購買、恢復產品、訂閱或訂閱續訂的時間",
+                    "type": "integer"
+                },
+                "quantity": {
+                    "description": "用戶購買的消耗品數量",
+                    "type": "integer"
+                },
+                "revocationDate": {
+                    "description": "App Store 退還交易或從家庭共享中撤銷交易的 UNIX 時間（以毫秒為單位）",
+                    "type": "integer"
+                },
+                "revocationReason": {
+                    "description": "App Store 退還交易或從家庭共享中撤銷交易的原因(0:Apple Support 因其他原因代表客戶退還交易；例如，意外購買/1:由於您的應用程序中存在實際或感知的問題，Apple 支持代表客戶退還了交易)",
+                    "type": "string"
+                },
+                "signedDate": {
+                    "description": "App Store 對 JSON Web 簽名 (JWS) 數據進行簽名的 UNIX 時間（以毫秒為單位)",
+                    "type": "integer"
+                },
+                "subscriptionGroupIdentifier": {
+                    "description": "訂閱所屬訂閱組的標識",
+                    "type": "string"
+                },
+                "transactionId": {
+                    "description": "交易的唯一標識符",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "應用內購買的產品類型(Auto-Renewable Subscription/Non-Consumable/Consumable/Non-Renewing Subscription)",
+                    "type": "string"
+                },
+                "webOrderLineItemId": {
+                    "description": "跨設備訂閱購買事件的唯一標識符，包括訂閱續訂",
+                    "type": "string"
                 }
             }
         },
