@@ -33,13 +33,14 @@ func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	planRepo := repository.NewPlan(gormTool)
 	saleRepo := repository.NewSale(gormTool)
 	subscribeInfoRepo := repository.NewSubscribeInfo(gormTool)
+	userCourseStatisticRepo := repository.NewUserCourseStatistic(gormTool)
 	resTool := tool.NewResource(setting.NewResource(viperTool))
 	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
 	resHandler := handler.NewResource(resTool)
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	logger := handler.NewLogger(logTool, jwtTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewCourse(courseRepo, userCourseAsset, trainerRepo, planRepo, saleRepo, subscribeInfoRepo, uploader, resHandler, logger, jwtTool, errHandler)
+	return NewCourse(courseRepo, userCourseAsset, trainerRepo, planRepo, saleRepo, subscribeInfoRepo, userCourseStatisticRepo, uploader, resHandler, logger, jwtTool, errHandler)
 }
 
 func NewPlanService(viperTool *viper.Viper, gormTool tool.Gorm) Plan {

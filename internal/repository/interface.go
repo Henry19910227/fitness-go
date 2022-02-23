@@ -167,3 +167,7 @@ type Transaction interface {
 	CreateTransaction() *gorm.DB
 	FinishTransaction(tx *gorm.DB)
 }
+type UserCourseStatistic interface {
+	FindUserCourseStatistic(userID int64, courseID int64) (*model.UserCourseStatistic, error)
+	SaveUserCourseStatistic(tx *gorm.DB, param *model.SaveUserCourseStatisticParam) (int64, error)
+}

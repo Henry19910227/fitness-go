@@ -17,8 +17,8 @@ type Course struct {
 	planService   service.Plan
 	actionService service.Action
 	reviewService service.Review
-	userMidd midd.User
-	courseMidd midd.Course
+	userMidd      midd.User
+	courseMidd    midd.Course
 }
 
 func NewCourse(baseGroup *gin.RouterGroup,
@@ -30,11 +30,11 @@ func NewCourse(baseGroup *gin.RouterGroup,
 	courseMidd midd.Course) {
 
 	course := &Course{courseService: courseService,
-		planService: planService,
+		planService:   planService,
 		actionService: actionService,
 		reviewService: reviewService,
-		userMidd: userMidd,
-		courseMidd: courseMidd}
+		userMidd:      userMidd,
+		courseMidd:    courseMidd}
 
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 
@@ -148,9 +148,9 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 		return
 	}
 	result, err := cc.courseService.CreateCourse(c, uid, &dto.CreateCourseParam{
-		Name: body.Name,
-		Level: body.Level,
-		Category: body.Category,
+		Name:         body.Name,
+		Level:        body.Level,
+		Category:     body.Category,
 		ScheduleType: body.ScheduleType,
 	})
 	if err != nil {
@@ -184,17 +184,17 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 		return
 	}
 	course, err := cc.courseService.UpdateCourse(c, uri.CourseID, &dto.UpdateCourseParam{
-		Category: body.Category,
-		Name: body.Name,
-		Intro: body.Intro,
-		Food: body.Food,
-		Level: body.Level,
-		Suit: body.Suit,
-		Equipment: body.Equipment,
-		Place: body.Place,
+		Category:    body.Category,
+		Name:        body.Name,
+		Intro:       body.Intro,
+		Food:        body.Food,
+		Level:       body.Level,
+		Suit:        body.Suit,
+		Equipment:   body.Equipment,
+		Place:       body.Place,
 		TrainTarget: body.TrainTarget,
-		BodyTarget: body.BodyTarget,
-		Notice: body.Notice,
+		BodyTarget:  body.BodyTarget,
+		Notice:      body.Notice,
 	})
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
@@ -301,12 +301,17 @@ func (cc *Course) GetCourse(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course/{course_id}/overview [GET]
 func (cc *Course) GetCourseOverview(c *gin.Context) {
+	uid, e := cc.GetUID(c)
+	if e != nil {
+		cc.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	course, err := cc.courseService.GetCourseOverviewByCourseID(c, uri.CourseID)
+	course, err := cc.courseService.GetCourseOverviewByCourseID(c, uid, uri.CourseID)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
@@ -467,7 +472,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 	}
 	cover := &dto.File{
 		FileNamed: fileHeader.Filename,
-		Data: file,
+		Data:      file,
 	}
 	//獲取動作影片
 	file, fileHeader, err = c.Request.FormFile("video")
@@ -475,7 +480,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 	if file != nil {
 		video = &dto.File{
 			FileNamed: fileHeader.Filename,
-			Data: file,
+			Data:      file,
 		}
 	}
 	action, e := cc.actionService.CreateAction(c, uri.CourseID, &dto.CreateActionParam{
@@ -523,10 +528,10 @@ func (cc *Course) SearchActions(c *gin.Context) {
 		return
 	}
 	actions, err := cc.actionService.SearchActions(c, uri.CourseID, &dto.FindActionsParam{
-		Name: query.Name,
-		Source: query.Source,
-		Category: query.Category,
-		Body: query.Body,
+		Name:      query.Name,
+		Source:    query.Source,
+		Category:  query.Category,
+		Body:      query.Body,
 		Equipment: query.Equipment,
 	})
 	if err != nil {
@@ -547,7 +552,7 @@ func (cc *Course) SearchActions(c *gin.Context) {
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
 // @Router /course/{course_id}/submit [POST]
-func (cc *Course) CourseSubmit(c *gin.Context)  {
+func (cc *Course) CourseSubmit(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())

@@ -5024,6 +5024,10 @@ var doc = `{
                     "type": "integer",
                     "example": 3
                 },
+                "course_statistic": {
+                    "description": "個人課表統計",
+                    "$ref": "#/definitions/dto.UserCourseStatistic"
+                },
                 "course_status": {
                     "description": "課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
                     "type": "integer",
@@ -5177,6 +5181,9 @@ var doc = `{
                 "trainer": {
                     "description": "教練簡介",
                     "$ref": "#/definitions/dto.TrainerSummary"
+                },
+                "user_course_statistic": {
+                    "$ref": "#/definitions/dto.UserCourseStatistic"
                 },
                 "workout_count": {
                     "description": "訓練總數",
@@ -5917,6 +5924,19 @@ var doc = `{
                     "description": "用戶大頭照",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.UserCourseStatistic": {
+            "type": "object",
+            "properties": {
+                "duration": {
+                    "description": "總花費時間(秒)",
+                    "type": "integer"
+                },
+                "workout_count": {
+                    "description": "完成訓練數量(去除重複)",
+                    "type": "integer"
                 }
             }
         },

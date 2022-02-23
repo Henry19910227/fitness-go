@@ -17,17 +17,18 @@ import (
 
 type course struct {
 	Base
-	courseRepo          repository.Course
-	userCourseAssetRepo repository.UserCourseAsset
-	trainerRepo         repository.Trainer
-	planRepo            repository.Plan
-	saleRepo            repository.Sale
-	subscribeInfoRepo   repository.UserSubscribeInfo
-	uploader            handler.Uploader
-	resHandler          handler.Resource
-	logger              handler.Logger
-	jwtTool             tool.JWT
-	errHandler          errcode.Handler
+	courseRepo              repository.Course
+	userCourseAssetRepo     repository.UserCourseAsset
+	trainerRepo             repository.Trainer
+	planRepo                repository.Plan
+	saleRepo                repository.Sale
+	subscribeInfoRepo       repository.UserSubscribeInfo
+	userCourseStatisticRepo repository.UserCourseStatistic
+	uploader                handler.Uploader
+	resHandler              handler.Resource
+	logger                  handler.Logger
+	jwtTool                 tool.JWT
+	errHandler              errcode.Handler
 }
 
 func NewCourse(courseRepo repository.Course,
@@ -36,11 +37,13 @@ func NewCourse(courseRepo repository.Course,
 	planRepo repository.Plan,
 	saleRepo repository.Sale,
 	subscribeInfoRepo repository.UserSubscribeInfo,
+	userCourseStatisticRepo repository.UserCourseStatistic,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
 	return &course{courseRepo: courseRepo, userCourseAssetRepo: userCourseAssetRepo,
-		trainerRepo: trainerRepo, planRepo: planRepo, saleRepo: saleRepo, subscribeInfoRepo: subscribeInfoRepo,
+		trainerRepo: trainerRepo, planRepo: planRepo, saleRepo: saleRepo,
+		subscribeInfoRepo: subscribeInfoRepo, userCourseStatisticRepo: userCourseStatisticRepo,
 		uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
@@ -234,7 +237,7 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 }
 
 func (cs *course) GetCourseProductByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error) {
-	course, err := cs.parserCourseProduct(courseID)
+	course, err := cs.parserCourseProduct(userID, courseID)
 	if err != nil {
 		return course, cs.errHandler.Set(c, "course repo", err)
 	}
@@ -265,8 +268,8 @@ func (cs *course) GetCourseProductByCourseID(c *gin.Context, userID int64, cours
 	return course, nil
 }
 
-func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error) {
-	course, err := cs.parserCourseProduct(courseID)
+func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error) {
+	course, err := cs.parserCourseProduct(userID, courseID)
 	if err != nil {
 		return course, cs.errHandler.Set(c, "course repo", err)
 	}
@@ -407,7 +410,7 @@ func (cs *course) VerifyCourse(course *model.Course) error {
 	return nil
 }
 
-func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error) {
+func (cs *course) parserCourseProduct(userID int64, courseID int64) (*dto.CourseProduct, error) {
 	//查詢課表詳情
 	courseItem, err := cs.courseRepo.FindCourseProduct(courseID)
 	if err != nil {
@@ -454,16 +457,27 @@ func (cs *course) parserCourseProduct(courseID int64) (*dto.CourseProduct, error
 			course.Sale.ProductID = courseItem.Sale.ProductLabel.ProductID
 		}
 	}
-	review := dto.ReviewStatistic{
-		ScoreTotal: courseItem.Review.ScoreTotal,
-		Amount:     courseItem.Review.Amount,
-		FiveTotal:  courseItem.Review.FiveTotal,
-		FourTotal:  courseItem.Review.FourTotal,
-		ThreeTotal: courseItem.Review.ThreeTotal,
-		TwoTotal:   courseItem.Review.TwoTotal,
-		OneTotal:   courseItem.Review.OneTotal,
-		UpdateAt:   courseItem.Review.UpdateAt,
+	//配置評論統計
+	course.Review = &dto.ReviewStatistic{}
+	if courseItem.Review != nil {
+		course.Review.ScoreTotal = courseItem.Review.ScoreTotal
+		course.Review.Amount = courseItem.Review.Amount
+		course.Review.FiveTotal = courseItem.Review.FiveTotal
+		course.Review.FourTotal = courseItem.Review.FourTotal
+		course.Review.ThreeTotal = courseItem.Review.ThreeTotal
+		course.Review.TwoTotal = courseItem.Review.TwoTotal
+		course.Review.OneTotal = courseItem.Review.OneTotal
+		course.Review.UpdateAt = courseItem.Review.UpdateAt
 	}
-	course.Review = review
+	//配置個人課表統計
+	userCourseStatistic, err := cs.userCourseStatisticRepo.FindUserCourseStatistic(userID, courseID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	course.CourseStatistic = &dto.UserCourseStatistic{}
+	if userCourseStatistic != nil {
+		course.CourseStatistic.WorkoutCourt = userCourseStatistic.WorkoutCourt
+		course.CourseStatistic.Duration = userCourseStatistic.Duration
+	}
 	return &course, nil
 }
