@@ -11,19 +11,19 @@ import (
 
 type CourseProduct struct {
 	Base
-	courseService service.Course
-	planService   service.Plan
+	courseService     service.Course
+	planService       service.Plan
 	workoutSetService service.WorkoutSet
-	actionService service.Action
-	reviewService service.Review
-	userMidd midd.User
-	courseMidd midd.Course
+	actionService     service.Action
+	reviewService     service.Review
+	userMidd          midd.User
+	courseMidd        midd.Course
 }
 
 func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, workoutSetService service.WorkoutSet, courseMidd midd.Course, userMidd midd.User) {
 	course := CourseProduct{
-		courseService: courseService,
-		planService: planService,
+		courseService:     courseService,
+		planService:       planService,
 		workoutSetService: workoutSetService,
 	}
 	baseGroup.GET("/course_product/:course_id",
@@ -103,18 +103,18 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 		return
 	}
 	courses, paging, err := p.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
-		Name: query.Name,
-		OrderType: query.OrderType,
-		Score: query.Score,
-		Level: query.Level,
-		Category: query.Category,
-		Suit: query.Suit,
-		Equipment: query.Equipment,
-		Place: query.Place,
-		TrainTarget: query.TrainTarget,
-		BodyTarget: query.BodyTarget,
-		SaleType: query.SaleType,
-		TrainerSex: query.TrainerSex,
+		Name:         query.Name,
+		OrderType:    query.OrderType,
+		Score:        query.Score,
+		Level:        query.Level,
+		Category:     query.Category,
+		Suit:         query.Suit,
+		Equipment:    query.Equipment,
+		Place:        query.Place,
+		TrainTarget:  query.TrainTarget,
+		BodyTarget:   query.BodyTarget,
+		SaleType:     query.SaleType,
+		TrainerSex:   query.TrainerSex,
 		TrainerSkill: query.TrainerSkill,
 	}, query.Page, query.Size)
 	if err != nil {
@@ -124,7 +124,6 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 	p.JSONSuccessPagingResponse(c, courses, paging, "success!")
 }
 
-
 // GetPlanProducts 獲取課表產品計畫列表
 // @Summary 獲取課表產品計畫列表
 // @Description 獲取課表產品計畫列表
@@ -133,16 +132,21 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
-// @Success 200 {object} model.SuccessResult{data=[]dto.Plan} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.PlanProduct} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course_product/{course_id}/plans [GET]
 func (p *CourseProduct) GetPlanProducts(c *gin.Context) {
+	uid, e := p.GetUID(c)
+	if e != nil {
+		p.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	plans, err := p.planService.GetPlansByCourseID(c, uri.CourseID)
+	plans, err := p.planService.GetPlanProductsByCourseID(c, uid, uri.CourseID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return

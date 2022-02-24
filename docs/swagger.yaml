@@ -452,6 +452,25 @@ definitions:
         example: 1
         type: integer
     type: object
+  dto.PlanProduct:
+    properties:
+      finish_workout_count:
+        description: 完成訓練數量
+        example: 5
+        type: integer
+      id:
+        description: 計畫id
+        example: 1
+        type: integer
+      name:
+        description: 計畫名稱
+        example: 第一週增肌計畫
+        type: string
+      workout_count:
+        description: 訓練數量
+        example: 10
+        type: integer
+    type: object
   dto.Review:
     properties:
       body:
@@ -931,7 +950,7 @@ definitions:
       duration:
         description: 總花費時間(秒)
         type: integer
-      workout_count:
+      finish_workout_count:
         description: 完成訓練數量(去除重複)
         type: integer
     type: object
@@ -2198,7 +2217,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/dto.Plan'
+                    $ref: '#/definitions/dto.PlanProduct'
                   type: array
               type: object
         "400":

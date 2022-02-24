@@ -5,21 +5,23 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/handler"
+	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
 )
 
 type plan struct {
-	planRepo repository.Plan
-	courseRepo repository.Course
-	logger    handler.Logger
-	jwtTool   tool.JWT
-	errHandler errcode.Handler
+	planRepo          repository.Plan
+	courseRepo        repository.Course
+	planStatisticRepo repository.UserPlanStatistic
+	logger            handler.Logger
+	jwtTool           tool.JWT
+	errHandler        errcode.Handler
 }
 
-func NewPlan(planRepo repository.Plan, courseRepo repository.Course, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Plan {
-	return &plan{planRepo: planRepo, courseRepo: courseRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewPlan(planRepo repository.Plan, courseRepo repository.Course, planStatisticRepo repository.UserPlanStatistic, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Plan {
+	return &plan{planRepo: planRepo, courseRepo: courseRepo, planStatisticRepo: planStatisticRepo, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (p *plan) CreatePlan(c *gin.Context, courseID int64, name string) (*dto.Plan, errcode.Error) {
@@ -52,15 +54,42 @@ func (p *plan) UpdatePlan(c *gin.Context, planID int64, name string) (*dto.Plan,
 func (p *plan) GetPlansByCourseID(c *gin.Context, courseID int64) ([]*dto.Plan, errcode.Error) {
 	datas, err := p.planRepo.FindPlansByCourseID(courseID)
 	if err != nil {
-		p.logger.Set(c, handler.Error, "PlanRepo", p.errHandler.SystemError().Code(), err.Error())
-		return nil, p.errHandler.SystemError()
+		return nil, p.errHandler.Set(c, "plan repo", err)
 	}
 	plans := make([]*dto.Plan, 0)
 	for _, data := range datas {
 		plan := dto.Plan{
-			ID: data.ID,
-			Name: data.Name,
+			ID:           data.ID,
+			Name:         data.Name,
 			WorkoutCount: data.WorkoutCount,
+		}
+		plans = append(plans, &plan)
+	}
+	return plans, nil
+}
+
+func (p *plan) GetPlanProductsByCourseID(c *gin.Context, userID int64, courseID int64) ([]*dto.PlanProduct, errcode.Error) {
+	planDatas, err := p.planRepo.FindPlansByCourseID(courseID)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "plan repo", err)
+	}
+	statDatas, err := p.planStatisticRepo.FindUserPlanStatistics(userID, courseID)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "plan statistic repo", err)
+	}
+	dict := make(map[int64]*model.UserPlanStatistic)
+	for _, statData := range statDatas {
+		dict[statData.PlanID] = statData
+	}
+	plans := make([]*dto.PlanProduct, 0)
+	for _, planData := range planDatas {
+		plan := dto.PlanProduct{
+			ID:           planData.ID,
+			Name:         planData.Name,
+			WorkoutCount: planData.WorkoutCount,
+		}
+		if _, ok := dict[planData.ID]; ok {
+			plan.FinishWorkoutCount = dict[planData.ID].FinishWorkoutCourt
 		}
 		plans = append(plans, &plan)
 	}

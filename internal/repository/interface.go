@@ -171,3 +171,8 @@ type UserCourseStatistic interface {
 	FindUserCourseStatistic(userID int64, courseID int64) (*model.UserCourseStatistic, error)
 	SaveUserCourseStatistic(tx *gorm.DB, param *model.SaveUserCourseStatisticParam) (int64, error)
 }
+
+type UserPlanStatistic interface {
+	FindUserPlanStatistics(userID int64, planID int64) ([]*model.UserPlanStatistic, error)
+	SaveUserPlanStatistic(tx *gorm.DB, param *model.SaveUserPlanStatisticParam) (int64, error)
+}

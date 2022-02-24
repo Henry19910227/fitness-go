@@ -1191,7 +1191,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/dto.Plan"
+                                                "$ref": "#/definitions/dto.PlanProduct"
                                             }
                                         }
                                     }
@@ -5304,6 +5304,31 @@ var doc = `{
                 }
             }
         },
+        "dto.PlanProduct": {
+            "type": "object",
+            "properties": {
+                "finish_workout_count": {
+                    "description": "完成訓練數量",
+                    "type": "integer",
+                    "example": 5
+                },
+                "id": {
+                    "description": "計畫id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "計畫名稱",
+                    "type": "string",
+                    "example": "第一週增肌計畫"
+                },
+                "workout_count": {
+                    "description": "訓練數量",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
         "dto.Review": {
             "type": "object",
             "properties": {
@@ -5934,7 +5959,7 @@ var doc = `{
                     "description": "總花費時間(秒)",
                     "type": "integer"
                 },
-                "workout_count": {
+                "finish_workout_count": {
                     "description": "完成訓練數量(去除重複)",
                     "type": "integer"
                 }
