@@ -116,6 +116,10 @@ type WorkoutSet interface {
 	DeleteWorkoutSetProgressAudio(c *gin.Context, setID int64) errcode.Error
 }
 
+type WorkoutLog interface {
+	CreateWorkoutLog(c *gin.Context, userID int64, workoutID int64, param *dto.CreateWorkoutLogParam) errcode.Error
+}
+
 type Action interface {
 	CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error)
 	UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateActionParam) (*dto.Action, errcode.Error)

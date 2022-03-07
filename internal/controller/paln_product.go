@@ -33,7 +33,7 @@ func NewPlanProduct(baseGroup *gin.RouterGroup, planService service.Plan, workou
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
-// @Success 200 {object} model.SuccessResult{data=[]dto.Workout} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutProduct} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /plan_product/{plan_id}/workouts [GET]
 func (p *PlanProduct) GetWorkouts(c *gin.Context) {
@@ -42,7 +42,7 @@ func (p *PlanProduct) GetWorkouts(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	workouts, err := p.workoutService.GetWorkoutsByPlanID(c, uri.PlanID)
+	workouts, err := p.workoutService.GetWorkoutProductsByPlanID(c, uri.PlanID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return

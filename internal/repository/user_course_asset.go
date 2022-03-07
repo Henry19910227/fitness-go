@@ -9,7 +9,7 @@ import (
 )
 
 type userCourseAsset struct {
-	gorm  tool.Gorm
+	gorm tool.Gorm
 }
 
 func NewUserCourseAsset(gorm tool.Gorm) UserCourseAsset {
@@ -22,11 +22,11 @@ func (p *userCourseAsset) CreateUserCourseAsset(tx *gorm.DB, param *model.Create
 		db = tx
 	}
 	asset := entity.UserCourseAsset{
-		UserID: param.UserID,
-		CourseID: param.CourseID,
+		UserID:    param.UserID,
+		CourseID:  param.CourseID,
 		Available: 1,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		CreateAt:  time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:  time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := db.Create(&asset).Error; err != nil {
 		return 0, err
@@ -38,13 +38,12 @@ func (p *userCourseAsset) FindUserCourseAsset(param *model.FindUserCourseAssetPa
 	if param == nil {
 		return nil, nil
 	}
-	var asset *model.UserCourseAsset
+	var asset model.UserCourseAsset
 	if err := p.gorm.DB().
 		Table("user_course_assets").
 		Where("user_id = ? AND course_id = ?", param.UserID, param.CourseID).
 		Take(&asset).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
-	return asset, nil
+	return &asset, nil
 }
-

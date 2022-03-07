@@ -949,9 +949,11 @@ definitions:
     properties:
       duration:
         description: 總花費時間(秒)
+        example: 3600
         type: integer
       finish_workout_count:
         description: 完成訓練數量(去除重複)
+        example: 10
         type: integer
     type: object
   dto.UserSubscribeInfo:
@@ -1077,6 +1079,33 @@ definitions:
       workout_set_id:
         description: 訓練組id
         example: 10
+        type: integer
+    type: object
+  dto.WorkoutSetLog:
+    properties:
+      distance:
+        description: 距離(公里)
+        example: 1
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      incline:
+        description: 坡度
+        example: 5
+        type: number
+      reps:
+        description: 次數
+        example: 5
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 10
+        type: number
+      workout_set_id:
+        description: 訓練組id
+        example: 1
         type: integer
     type: object
   model.Data:
@@ -1238,6 +1267,30 @@ definitions:
         type: integer
     required:
     - name
+    type: object
+  validator.CreateWorkoutLogBody:
+    properties:
+      duration:
+        description: 訓練時長(秒)
+        example: 3600
+        type: integer
+      intensity:
+        description: 訓練強度(1:輕鬆/2:適中/3:稍難/4:很累)
+        example: 4
+        type: integer
+      place:
+        description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
+        example: 1
+        type: integer
+      workout_set_logs:
+        description: 訓練組記錄
+        items:
+          $ref: '#/definitions/dto.WorkoutSetLog'
+        type: array
+    required:
+    - duration
+    - intensity
+    - place
     type: object
   validator.CreateWorkoutSetBody:
     properties:
@@ -4100,13 +4153,46 @@ paths:
       summary: 取得訓練內的訓練組列表
       tags:
       - Workout
+  /workout_product/{workout_id}/workout_log:
+    post:
+      consumes:
+      - application/json
+      description: 創建訓練記錄
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateWorkoutLogBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 創建訓練記錄
+      tags:
+      - WorkoutProduct
   /workout_product/{workout_id}/workout_sets:
     get:
       consumes:
       - application/json
       description: 獲取訓練組列表(探索區課表)
       parameters:
-      - description: 計畫id
+      - description: 訓練id
         in: path
         name: workout_id
         required: true

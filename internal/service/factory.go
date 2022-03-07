@@ -59,13 +59,14 @@ func NewWorkoutService(viperTool *viper.Viper, gormTool tool.Gorm) Workout {
 	courseRepo := repository.NewCourse(gormTool)
 	workoutRepo := repository.NewWorkout(gormTool)
 	workoutSetRepo := repository.NewWorkoutSet(gormTool)
+	workoutLogRepo := repository.NewWorkoutLog(gormTool)
 	resTool := tool.NewResource(setting.NewResource(viperTool))
 	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
 	resHandler := handler.NewResource(resTool)
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	logger := handler.NewLogger(logTool, jwtTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewWorkout(courseRepo, workoutRepo, workoutSetRepo, resHandler, uploader, logger, jwtTool, errHandler)
+	return NewWorkout(courseRepo, workoutRepo, workoutSetRepo, workoutLogRepo, resHandler, uploader, logger, jwtTool, errHandler)
 }
 
 func NewTrainerService(viperTool *viper.Viper, gormTool tool.Gorm) Trainer {
@@ -163,4 +164,22 @@ func NewUserService(viperTool *viper.Viper, gormTool tool.Gorm) User {
 	logger := handler.NewLogger(logTool, jwtTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewUser(userRepo, trainerRepo, subscribeInfoRepo, albumRepo, cerRepo, uploader, resHandler, logger, jwtTool, errHandler)
+}
+
+func NewWorkoutLogService(viperTool *viper.Viper, gormTool tool.Gorm) WorkoutLog {
+	workoutLogRepo := repository.NewWorkoutLog(gormTool)
+	workoutSetLogRepo := repository.NewWorkoutSetLog(gormTool)
+	transactionRepo := repository.NewTransaction(gormTool)
+	workoutSetRepo := repository.NewWorkoutSet(gormTool)
+	courseAssetRepo := repository.NewUserCourseAsset(gormTool)
+	courseRepo := repository.NewCourse(gormTool)
+	subscribeInfoRepo := repository.NewSubscribeInfo(gormTool)
+	courseStatisticRepo := repository.NewUserCourseStatistic(gormTool)
+	planStatisticRepo := repository.NewUserPlanStatistic(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewWorkoutLog(workoutLogRepo, workoutSetLogRepo, workoutSetRepo, courseRepo,
+		courseAssetRepo, subscribeInfoRepo, courseStatisticRepo,
+		planStatisticRepo, transactionRepo, errHandler)
 }

@@ -476,7 +476,7 @@ func (cs *course) parserCourseProduct(userID int64, courseID int64) (*dto.Course
 	}
 	course.CourseStatistic = &dto.UserCourseStatistic{}
 	if userCourseStatistic != nil {
-		course.CourseStatistic.WorkoutCourt = userCourseStatistic.WorkoutCourt
+		course.CourseStatistic.FinishWorkoutCourt = userCourseStatistic.FinishWorkoutCount
 		course.CourseStatistic.Duration = userCourseStatistic.Duration
 	}
 	return &course, nil

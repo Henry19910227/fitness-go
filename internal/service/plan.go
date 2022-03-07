@@ -89,7 +89,7 @@ func (p *plan) GetPlanProductsByCourseID(c *gin.Context, userID int64, courseID 
 			WorkoutCount: planData.WorkoutCount,
 		}
 		if _, ok := dict[planData.ID]; ok {
-			plan.FinishWorkoutCount = dict[planData.ID].FinishWorkoutCourt
+			plan.FinishWorkoutCount = dict[planData.ID].FinishWorkoutCount
 		}
 		plans = append(plans, &plan)
 	}

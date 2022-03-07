@@ -18,18 +18,19 @@ import (
 )
 
 type workout struct {
-	courseRepo repository.Course
-	workoutRepo repository.Workout
+	courseRepo     repository.Course
+	workoutRepo    repository.Workout
 	workoutSetRepo repository.WorkoutSet
-	resHandler handler.Resource
-	uploader handler.Uploader
-	logger    handler.Logger
-	jwtTool   tool.JWT
-	errHandler errcode.Handler
+	workoutLogRepo repository.WorkoutLog
+	resHandler     handler.Resource
+	uploader       handler.Uploader
+	logger         handler.Logger
+	jwtTool        tool.JWT
+	errHandler     errcode.Handler
 }
 
-func NewWorkout(courseRepo repository.Course, workoutRepo repository.Workout, workoutSetRepo repository.WorkoutSet, resHandler handler.Resource, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
-	return &workout{courseRepo: courseRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo, resHandler: resHandler, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewWorkout(courseRepo repository.Course, workoutRepo repository.Workout, workoutSetRepo repository.WorkoutSet, workoutLogRepo repository.WorkoutLog, resHandler handler.Resource, uploader handler.Uploader, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Workout {
+	return &workout{courseRepo: courseRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo, workoutLogRepo: workoutLogRepo, resHandler: resHandler, uploader: uploader, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*dto.Workout, errcode.Error) {
@@ -55,11 +56,11 @@ func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Work
 	workouts := make([]*dto.Workout, 0)
 	for _, data := range datas {
 		workout := dto.Workout{
-			ID: data.ID,
-			Name: data.Name,
-			Equipment: data.Equipment,
-			StartAudio: data.StartAudio,
-			EndAudio: data.EndAudio,
+			ID:              data.ID,
+			Name:            data.Name,
+			Equipment:       data.Equipment,
+			StartAudio:      data.StartAudio,
+			EndAudio:        data.EndAudio,
 			WorkoutSetCount: data.WorkoutSetCount,
 		}
 		workouts = append(workouts, &workout)
@@ -68,6 +69,15 @@ func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Work
 }
 
 func (w *workout) GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*dto.WorkoutProduct, errcode.Error) {
+	workoutLogs, err := w.workoutLogRepo.FindWorkoutLogsByPlanID(planID)
+	if err != nil {
+		w.logger.Set(c, handler.Error, "workout log repo", w.errHandler.SystemError().Code(), err.Error())
+		return nil, w.errHandler.SystemError()
+	}
+	logDict := make(map[int64]int64)
+	for _, log := range workoutLogs {
+		logDict[log.WorkoutID] = log.WorkoutID
+	}
 	datas, err := w.workoutRepo.FindWorkoutsByPlanID(planID)
 	if err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
@@ -76,10 +86,13 @@ func (w *workout) GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*d
 	workouts := make([]*dto.WorkoutProduct, 0)
 	for _, data := range datas {
 		workout := dto.WorkoutProduct{
-			ID: data.ID,
-			Name: data.Name,
-			Equipment: data.Equipment,
+			ID:              data.ID,
+			Name:            data.Name,
+			Equipment:       data.Equipment,
 			WorkoutSetCount: data.WorkoutSetCount,
+		}
+		if _, ok := logDict[data.ID]; ok {
+			workout.Finish = 1
 		}
 		workouts = append(workouts, &workout)
 	}
@@ -88,7 +101,7 @@ func (w *workout) GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*d
 
 func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *dto.UpdateWorkoutParam) (*dto.Workout, errcode.Error) {
 	if err := w.workoutRepo.UpdateWorkoutByID(workoutID, &model.UpdateWorkoutParam{
-		Name: param.Name,
+		Name:      param.Name,
 		Equipment: param.Equipment,
 	}); err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
@@ -179,9 +192,9 @@ func (w *workout) CreateWorkoutByTemplate(c *gin.Context, planID int64, name str
 		return nil, w.errHandler.Set(c, "Workout Repo", err)
 	}
 	if err := w.workoutRepo.UpdateWorkoutByID(newWorkoutID, &model.UpdateWorkoutParam{
-		Equipment: &template.Equipment,
+		Equipment:  &template.Equipment,
 		StartAudio: &template.StartAudio,
-		EndAudio: &template.EndAudio,
+		EndAudio:   &template.EndAudio,
 	}); err != nil {
 		return nil, w.errHandler.Set(c, "Workout Repo", err)
 	}

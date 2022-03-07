@@ -122,8 +122,8 @@ type CourseProductSummary struct {
 }
 
 type UserCourseStatistic struct {
-	WorkoutCourt int64 `json:"workout_count"` // 完成訓練數量(去除重複)
-	Duration     int64 `json:"duration"`      // 總花費時間(秒)
+	FinishWorkoutCourt int `json:"finish_workout_count" example:"10"` // 完成訓練數量(去除重複)
+	Duration           int `json:"duration" example:"3600"`           // 總花費時間(秒)
 }
 
 type CourseProductItem struct {

@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"time"
 )
 
@@ -35,10 +36,13 @@ func (p *userPlanStatistic) SaveUserPlanStatistic(tx *gorm.DB, param *model.Save
 		UserID:             param.UserID,
 		PlanID:             param.PlanID,
 		Duration:           param.Duration,
-		FinishWorkoutCourt: param.FinishWorkoutCourt,
+		FinishWorkoutCourt: param.FinishWorkoutCount,
 		UpdateAt:           time.Now().Format("2006-01-02 15:04:05"),
 	}
-	if err := db.Create(&planStatistic).Error; err != nil {
+	if err := db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "user_id"}, {Name: "plan_id"}},
+		DoUpdates: clause.AssignmentColumns([]string{"finish_workout_count", "duration", "update_at"}),
+	}).Create(&planStatistic).Error; err != nil {
 		return 0, err
 	}
 	return planStatistic.ID, nil

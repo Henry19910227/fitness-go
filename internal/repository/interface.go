@@ -75,6 +75,7 @@ type WorkoutSet interface {
 	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error)
 	FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSet, error)
 	FindWorkoutSetsByCourseID(courseID int64) ([]*model.WorkoutSet, error)
+	FindWorkoutSetIDsByWorkoutID(workoutID int64) ([]int64, error)
 	FindStartAudioCountByAudioName(audioName string) (int, error)
 	FindProgressAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error
@@ -167,8 +168,23 @@ type Transaction interface {
 	CreateTransaction() *gorm.DB
 	FinishTransaction(tx *gorm.DB)
 }
+
+type WorkoutLog interface {
+	FindWorkoutLog(workoutLogID int64) (*model.WorkoutLog, error)
+	FindWorkoutLogsByPlanID(planID int64) ([]*model.WorkoutLog, error)
+	CalculateUserCourseStatistic(userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error)
+	CalculateUserPlanStatistic(userID int64, workoutID int64) (*model.WorkoutLogPlanStatistic, error)
+	CreateWorkoutLog(tx *gorm.DB, param *model.CreateWorkoutLogParam) (int64, error)
+}
+
+type WorkoutSetLog interface {
+	FindWorkoutSetLogsByWorkoutLogID(workoutLogID int64) ([]*model.WorkoutSetLog, error)
+	CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLog) error
+}
+
 type UserCourseStatistic interface {
 	FindUserCourseStatistic(userID int64, courseID int64) (*model.UserCourseStatistic, error)
+	FindUserCourseStatisticByWorkoutID(workoutID int64, userID int64) (*model.UserCourseStatistic, error)
 	SaveUserCourseStatistic(tx *gorm.DB, param *model.SaveUserCourseStatisticParam) (int64, error)
 }
 

@@ -4265,6 +4265,58 @@ var doc = `{
                 }
             }
         },
+        "/workout_product/{workout_id}/workout_log": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建訓練記錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "WorkoutProduct"
+                ],
+                "summary": "創建訓練記錄",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateWorkoutLogBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/workout_product/{workout_id}/workout_sets": {
             "get": {
                 "security": [
@@ -4286,7 +4338,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "計畫id",
+                        "description": "訓練id",
                         "name": "workout_id",
                         "in": "path",
                         "required": true
@@ -5957,11 +6009,13 @@ var doc = `{
             "properties": {
                 "duration": {
                     "description": "總花費時間(秒)",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3600
                 },
                 "finish_workout_count": {
                     "description": "完成訓練數量(去除重複)",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
@@ -6128,6 +6182,41 @@ var doc = `{
                     "description": "訓練組id",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.WorkoutSetLog": {
+            "type": "object",
+            "properties": {
+                "distance": {
+                    "description": "距離(公里)",
+                    "type": "number",
+                    "example": 1
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 5
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 5
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 10
+                },
+                "workout_set_id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -6347,6 +6436,38 @@ var doc = `{
                     "description": "訓練模板ID",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "validator.CreateWorkoutLogBody": {
+            "type": "object",
+            "required": [
+                "duration",
+                "intensity",
+                "place"
+            ],
+            "properties": {
+                "duration": {
+                    "description": "訓練時長(秒)",
+                    "type": "integer",
+                    "example": 3600
+                },
+                "intensity": {
+                    "description": "訓練強度(1:輕鬆/2:適中/3:稍難/4:很累)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "place": {
+                    "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "workout_set_logs": {
+                    "description": "訓練組記錄",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.WorkoutSetLog"
+                    }
                 }
             }
         },
