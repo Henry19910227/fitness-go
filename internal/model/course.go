@@ -133,6 +133,51 @@ func (CourseProductSummary) TableName() string {
 	return "courses"
 }
 
+type CourseAsset struct {
+	ID                 int64           `gorm:"column:id"`                             // 課表 id
+	UserID             int64           `gorm:"column:user_id"`                        // 課表 id
+	SaleID             *int            `gorm:"column:sale_id"`                        // 銷售項目 id
+	SaleType           int             `gorm:"sale_type"`                             // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	CourseStatus       int             `gorm:"column:course_status"`                  // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+	Category           int             `gorm:"column:category"`                       // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+	ScheduleType       int             `gorm:"column:schedule_type"`                  // 排課類別(1:單一訓練/2:多項計畫)
+	Name               string          `gorm:"column:name"`                           // 課表名稱
+	Cover              string          `gorm:"column:cover"`                          // 課表封面
+	Level              int             `gorm:"column:level"`                          // 強度(1:初級/2:中級/3:中高級/4:高級)
+	PlanCount          int             `gorm:"column:plan_count"`                     // 計畫總數
+	WorkoutCount       int             `gorm:"column:workout_count"`                  // 訓練總數
+	FinishWorkoutCourt int             `gorm:"column:finish_workout_count"`           // 完成訓練數量(去除重複)
+	Duration           int             `gorm:"column:duration"`                       // 總花費時間(秒)
+	Trainer            *TrainerSummary `gorm:"foreignkey:user_id;references:user_id"` // 教練簡介
+	Sale               *SaleItem       `gorm:"foreignkey:id;references:sale_id"`      // 銷售項目
+}
+
+func (CourseAsset) TableName() string {
+	return "courses"
+}
+
+type CourseAssetSummary struct {
+	ID           int64            `gorm:"column:id"`                             // 課表 id
+	UserID       int64            `gorm:"column:user_id"`                        // 課表 id
+	SaleID       *int             `gorm:"column:sale_id"`                        // 銷售項目 id
+	SaleType     int              `gorm:"sale_type"`                             // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	CourseStatus int              `gorm:"column:course_status"`                  // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+	Category     int              `gorm:"column:category"`                       // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+	ScheduleType int              `gorm:"column:schedule_type"`                  // 排課類別(1:單一訓練/2:多項計畫)
+	Name         string           `gorm:"column:name"`                           // 課表名稱
+	Cover        string           `gorm:"column:cover"`                          // 課表封面
+	Level        int              `gorm:"column:level"`                          // 強度(1:初級/2:中級/3:中高級/4:高級)
+	PlanCount    int              `gorm:"column:plan_count"`                     // 計畫總數
+	WorkoutCount int              `gorm:"column:workout_count"`                  // 訓練總數
+	Trainer      *TrainerSummary  `gorm:"foreignkey:user_id;references:user_id"` // 教練簡介
+	Sale         *SaleItem        `gorm:"foreignkey:id;references:sale_id"`      // 銷售項目
+	Review       *ReviewStatistic `gorm:"foreignkey:course_id;references:id"`    // 評分統計
+}
+
+func (CourseAssetSummary) TableName() string {
+	return "courses"
+}
+
 type CourseProductItem struct {
 	ID       int64  `gorm:"column:id"`       // 課表 id
 	SaleType int    `gorm:"sale_type"`       // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)

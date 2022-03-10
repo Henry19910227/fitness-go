@@ -62,10 +62,10 @@ func (s *store) getLatestCourseSummaries() ([]*dto.CourseProductSummary, error) 
 	if err != nil {
 		return nil, err
 	}
-	return parserCourses(entities), nil
+	return parserCourseProductSummaries(entities), nil
 }
 
-func parserCourses(datas []*model.CourseProductSummary) []*dto.CourseProductSummary {
+func parserCourseProductSummaries(datas []*model.CourseProductSummary) []*dto.CourseProductSummary {
 	courses := make([]*dto.CourseProductSummary, 0)
 	for _, data := range datas {
 		course := dto.CourseProductSummary{

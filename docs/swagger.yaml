@@ -172,6 +172,114 @@ definitions:
         example: 10
         type: integer
     type: object
+  dto.CourseAsset:
+    properties:
+      allow_access:
+        description: 是否允許訪問此課表(0:否/1:是)
+        example: 0
+        type: integer
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
+      sale:
+        $ref: '#/definitions/dto.SaleItem'
+        description: 銷售項目
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 2
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      trainer:
+        $ref: '#/definitions/dto.TrainerSummary'
+        description: 教練簡介
+      user_course_statistic:
+        $ref: '#/definitions/dto.UserCourseStatistic'
+        description: 課表統計
+      workout_count:
+        description: 訓練總數
+        example: 10
+        type: integer
+    type: object
+  dto.CourseAssetSummary:
+    properties:
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
+      review:
+        $ref: '#/definitions/dto.ReviewStatisticSummary'
+        description: 評分統計
+      sale:
+        $ref: '#/definitions/dto.SaleItem'
+        description: 銷售項目
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 2
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      trainer:
+        $ref: '#/definitions/dto.TrainerSummary'
+        description: 教練簡介
+      workout_count:
+        description: 訓練總數
+        example: 10
+        type: integer
+    type: object
   dto.CourseCover:
     properties:
       cover:
@@ -1021,6 +1129,29 @@ definitions:
     properties:
       workout_id:
         description: 訓練 id
+        example: 1
+        type: integer
+    type: object
+  dto.WorkoutProduct:
+    properties:
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      finish:
+        description: 是否完成(0:未完成/2:已完成)
+        example: 1
+        type: integer
+      id:
+        description: 訓練 id
+        example: 1
+        type: integer
+      name:
+        description: 訓練名稱
+        example: 第一天胸肌訓練
+        type: string
+      workout_set_count:
+        description: 動作組數
         example: 1
         type: integer
     type: object
@@ -2183,6 +2314,82 @@ paths:
       summary: 送審課表
       tags:
       - Course
+  /course_asset/{course_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表資源詳細
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CourseAsset'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取課表資源詳細
+      tags:
+      - CourseAsset
+  /course_assets:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表資源
+      parameters:
+      - description: 搜尋類別(1:進行中課表/2:付費課表)
+        in: query
+        name: type
+        required: true
+        type: integer
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.CourseAssetSummary'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取課表資源
+      tags:
+      - CourseAsset
   /course_order:
     post:
       consumes:
@@ -2971,7 +3178,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/dto.Workout'
+                    $ref: '#/definitions/dto.WorkoutProduct'
                   type: array
               type: object
         "400":

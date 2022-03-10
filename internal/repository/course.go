@@ -412,6 +412,77 @@ func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam)
 	return int(count), nil
 }
 
+func (c *course) FindProgressCourseAssetSummaries(userID int64, paging *model.PagingParam) ([]*model.CourseAssetSummary, error) {
+	var courses []*model.CourseAssetSummary
+	db := c.gorm.DB().
+		//Select("courses.id AS id", "courses.user_id AS user_id", "courses.sale_id AS sale_id",
+		//	"courses.sale_type AS sale_type", "courses.course_status AS course_status", "courses.category AS category",
+		//	"courses.schedule_type AS schedule_type", "courses.name AS name", "courses.cover AS cover", "courses.level AS level",
+		//	"courses.plan_count AS plan_count", "courses.workout_count AS workout_count", "stat.finish_workout_count AS finish_workout_count",
+		//	"stat.duration AS duration").
+		Preload("Trainer").
+		Preload("Sale").
+		Preload("Sale.ProductLabel").
+		Preload("Review").
+		Joins("INNER JOIN users ON courses.user_id = users.id").
+		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND users.id = stat.user_id").
+		Order("stat.update_at DESC").
+		Where("stat.user_id = ?", userID)
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	if err := db.Find(&courses).Error; err != nil {
+		return nil, err
+	}
+	return courses, nil
+}
+
+func (c *course) FindChargeCourseAssetSummaries(userID int64, paging *model.PagingParam) ([]*model.CourseAssetSummary, error) {
+	var courses []*model.CourseAssetSummary
+	db := c.gorm.DB().
+		Preload("Trainer").
+		Preload("Sale").
+		Preload("Sale.ProductLabel").
+		Preload("Review").
+		Joins("INNER JOIN users ON courses.user_id = users.id").
+		Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND users.id = asset.user_id").
+		Order("asset.create_at DESC").
+		Where("asset.user_id = ? AND asset.available = ?", userID, 1)
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	if err := db.Find(&courses).Error; err != nil {
+		return nil, err
+	}
+	return courses, nil
+}
+
+func (c *course) FindProgressCourseAssetCount(userID int64) (int, error) {
+	var count int64
+	if err := c.gorm.DB().
+		Table("courses").
+		Joins("INNER JOIN users ON courses.user_id = users.id").
+		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND users.id = stat.user_id").
+		Where("stat.user_id = ?", userID).
+		Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}
+
+func (c *course) FindChargeCourseAssetCount(userID int64) (int, error) {
+	var count int64
+	if err := c.gorm.DB().
+		Joins("INNER JOIN users ON courses.user_id = users.id").
+		Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND users.id = asset.user_id").
+		Order("asset.create_at DESC").
+		Where("asset.user_id = ? AND asset.available = ?", userID, 1).
+		Count(&count).Error; err != nil {
+		return 0, nil
+	}
+	return int(count), nil
+}
+
 func (c *course) FindCourseProduct(courseID int64) (*model.CourseProduct, error) {
 	var course model.CourseProduct
 	if err := c.gorm.DB().
@@ -420,6 +491,26 @@ func (c *course) FindCourseProduct(courseID int64) (*model.CourseProduct, error)
 		Preload("Sale.ProductLabel").
 		Preload("Review").
 		Where("id = ?", courseID).
+		Take(&course).Error; err != nil {
+		return nil, err
+	}
+	return &course, nil
+}
+
+func (c *course) FindCourseAsset(courseID int64, userID int64) (*model.CourseAsset, error) {
+	var course model.CourseAsset
+	if err := c.gorm.DB().
+		Select("courses.id AS id", "courses.user_id AS user_id", "courses.sale_id AS sale_id",
+			"courses.sale_type AS sale_type", "courses.course_status AS course_status", "courses.category AS category",
+			"courses.schedule_type AS schedule_type", "courses.name AS name", "courses.cover AS cover", "courses.level AS level",
+			"courses.plan_count AS plan_count", "courses.workout_count AS workout_count",
+			"IFNULL(stat.finish_workout_count, 0) AS finish_workout_count", "IFNULL(stat.duration, 0) AS duration").
+		Preload("Trainer").
+		Preload("Sale").
+		Preload("Sale.ProductLabel").
+		Joins("INNER JOIN users ON courses.user_id = users.id").
+		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND users.id = stat.user_id").
+		Where("courses.id = ? AND users.id = ?", courseID, userID).
 		Take(&course).Error; err != nil {
 		return nil, err
 	}
