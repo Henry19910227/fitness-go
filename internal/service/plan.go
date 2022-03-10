@@ -96,6 +96,24 @@ func (p *plan) GetPlanProductsByCourseID(c *gin.Context, userID int64, courseID 
 	return plans, nil
 }
 
+func (p *plan) GetPlanAssets(c *gin.Context, userID int64, courseID int64) ([]*dto.PlanAsset, errcode.Error) {
+	planDatas, err := p.planRepo.FindPlanAssets(userID, courseID)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "plan repo", err)
+	}
+	plans := make([]*dto.PlanAsset, 0)
+	for _, planData := range planDatas {
+		plan := dto.PlanAsset{
+			ID:                 planData.ID,
+			Name:               planData.Name,
+			WorkoutCount:       planData.WorkoutCount,
+			FinishWorkoutCount: planData.FinishWorkoutCount,
+		}
+		plans = append(plans, &plan)
+	}
+	return plans, nil
+}
+
 func (p *plan) DeletePlan(c *gin.Context, planID int64) (*dto.PlanID, errcode.Error) {
 	if err := p.planRepo.DeletePlanByID(planID); err != nil {
 		p.logger.Set(c, handler.Error, "PlanRepo", p.errHandler.SystemError().Code(), err.Error())

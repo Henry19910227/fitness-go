@@ -56,6 +56,7 @@ type Plan interface {
 	CreatePlan(courseID int64, name string) (int64, error)
 	FindPlanByID(planID int64, entity interface{}) error
 	FindPlansByCourseID(courseID int64) ([]*model.Plan, error)
+	FindPlanAssets(userID int64, courseID int64) ([]*model.PlanAsset, error)
 	UpdatePlanByID(planID int64, name string) error
 	DeletePlanByID(planID int64) error
 	FindPlanOwnerByID(planID int64) (int64, error)

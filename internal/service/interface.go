@@ -87,6 +87,7 @@ type Plan interface {
 	DeletePlan(c *gin.Context, planID int64) (*dto.PlanID, errcode.Error)
 	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*dto.Plan, errcode.Error)
 	GetPlanProductsByCourseID(c *gin.Context, userID int64, courseID int64) ([]*dto.PlanProduct, errcode.Error)
+	GetPlanAssets(c *gin.Context, userID int64, courseID int64) ([]*dto.PlanAsset, errcode.Error)
 	GetPlanStatus(c *gin.Context, planID int64) (global.CourseStatus, errcode.Error)
 }
 

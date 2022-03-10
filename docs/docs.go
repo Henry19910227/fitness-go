@@ -1093,6 +1093,64 @@ var doc = `{
                 }
             }
         },
+        "/course_asset/{course_id}/plans": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表資源計畫列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CourseAsset"
+                ],
+                "summary": "獲取課表資源計畫列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.PlanAsset"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/course_assets": {
             "get": {
                 "security": [
@@ -5607,6 +5665,31 @@ var doc = `{
                 },
                 "workout_count": {
                     "description": "包含訓練數量",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "dto.PlanAsset": {
+            "type": "object",
+            "properties": {
+                "finish_workout_count": {
+                    "description": "完成訓練數量",
+                    "type": "integer",
+                    "example": 5
+                },
+                "id": {
+                    "description": "計畫id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "計畫名稱",
+                    "type": "string",
+                    "example": "第一週增肌計畫"
+                },
+                "workout_count": {
+                    "description": "訓練數量",
                     "type": "integer",
                     "example": 10
                 }

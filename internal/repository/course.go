@@ -508,9 +508,8 @@ func (c *course) FindCourseAsset(courseID int64, userID int64) (*model.CourseAss
 		Preload("Trainer").
 		Preload("Sale").
 		Preload("Sale.ProductLabel").
-		Joins("INNER JOIN users ON courses.user_id = users.id").
-		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND users.id = stat.user_id").
-		Where("courses.id = ? AND users.id = ?", courseID, userID).
+		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND stat.user_id = ?", userID).
+		Where("courses.id = ?", courseID).
 		Take(&course).Error; err != nil {
 		return nil, err
 	}

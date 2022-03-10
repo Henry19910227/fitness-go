@@ -11,13 +11,15 @@ import (
 type CourseAsset struct {
 	Base
 	courseService service.Course
+	planService   service.Plan
 	userMidd      midd.User
 	courseMidd    midd.Course
 }
 
-func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, userMidd midd.User, courseMidd midd.Course) {
+func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, userMidd midd.User, courseMidd midd.Course) {
 	course := CourseAsset{
 		courseService: courseService,
+		planService:   planService,
 		userMidd:      userMidd,
 		courseMidd:    courseMidd,
 	}
@@ -27,6 +29,9 @@ func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, us
 	baseGroup.GET("/course_assets",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		course.GetCourseAssets)
+	baseGroup.GET("/course_asset/:course_id/plans",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		course.GetPlanAssets)
 }
 
 // GetCourseAsset 獲取課表資源詳細
@@ -98,4 +103,34 @@ func (a *CourseAsset) GetCourseAssets(c *gin.Context) {
 		return
 	}
 	a.JSONSuccessPagingResponse(c, courses, paging, "success!")
+}
+
+// GetPlanAssets 獲取課表資源計畫列表
+// @Summary 獲取課表資源計畫列表
+// @Description 獲取課表資源計畫列表
+// @Tags CourseAsset
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=[]dto.PlanAsset} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course_asset/{course_id}/plans [GET]
+func (a *CourseAsset) GetPlanAssets(c *gin.Context) {
+	uid, e := a.GetUID(c)
+	if e != nil {
+		a.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	plans, err := a.planService.GetPlanAssets(c, uid, uri.CourseID)
+	if err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	a.JSONSuccessResponse(c, plans, "success!")
 }
