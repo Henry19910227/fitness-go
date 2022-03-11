@@ -18,8 +18,8 @@ func NewWorkout(gorm tool.Gorm) Workout {
 
 func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
 	workout := entity.Workout{
-		PlanID: planID,
-		Name: name,
+		PlanID:   planID,
+		Name:     name,
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
@@ -47,9 +47,9 @@ func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
 		//查詢關聯課表當前包含的訓練總量
 		var courseWorkoutCount int
 		if err := tx.
-			Raw("SELECT COUNT(*) FROM plans " +
-				"INNER JOIN courses ON courses.id = plans.course_id " +
-				"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+			Raw("SELECT COUNT(*) FROM plans "+
+				"INNER JOIN courses ON courses.id = plans.course_id "+
+				"INNER JOIN workouts ON plans.id = workouts.plan_id "+
 				"WHERE courses.id = ? FOR UPDATE", courseID).
 			Scan(&courseWorkoutCount).Error; err != nil {
 			return err
@@ -87,6 +87,24 @@ func (w *workout) FindWorkoutsByPlanID(planID int64) ([]*entity.Workout, error) 
 	return workouts, nil
 }
 
+func (w *workout) FindWorkoutAssets(userID int64, planID int64) ([]*model.WorkoutAsset, error) {
+	workouts := make([]*model.WorkoutAsset, 0)
+	if err := w.gorm.DB().
+		Table("workouts").
+		Select("DISTINCT(workouts.id) AS id", "workouts.plan_id AS plan_id",
+			"workouts.name AS name", "workouts.equipment AS equipment",
+			"workouts.start_audio AS start_audio", "workouts.end_audio AS end_audio",
+			"workouts.workout_set_count AS workout_set_count", "IF(log.duration > 0,1,0) AS finish",
+			"workouts.create_at AS create_at", "workouts.update_at AS update_at").
+		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
+		Joins("LEFT JOIN workout_logs AS log ON workouts.id = log.workout_id AND log.user_id = ?", userID).
+		Where("plan_id = ?", planID).
+		Find(&workouts).Error; err != nil {
+		return nil, err
+	}
+	return workouts, nil
+}
+
 func (w *workout) FindWorkoutByID(workoutID int64, obj interface{}) error {
 	if err := w.gorm.DB().
 		Model(&entity.Workout{}).
@@ -99,11 +117,21 @@ func (w *workout) FindWorkoutByID(workoutID int64, obj interface{}) error {
 
 func (w *workout) UpdateWorkoutByID(workoutID int64, param *model.UpdateWorkoutParam) error {
 	var selects []interface{}
-	if param.Name != nil { selects = append(selects, "name") }
-	if param.Equipment != nil { selects = append(selects, "equipment") }
-	if param.StartAudio != nil { selects = append(selects, "start_audio") }
-	if param.EndAudio != nil { selects = append(selects, "end_audio") }
-	if param == nil || len(selects) == 0 { return nil }
+	if param.Name != nil {
+		selects = append(selects, "name")
+	}
+	if param.Equipment != nil {
+		selects = append(selects, "equipment")
+	}
+	if param.StartAudio != nil {
+		selects = append(selects, "start_audio")
+	}
+	if param.EndAudio != nil {
+		selects = append(selects, "end_audio")
+	}
+	if param == nil || len(selects) == 0 {
+		return nil
+	}
 	//插入更新時間
 	selects = append(selects, "update_at")
 	var updateAt = time.Now().Format("2006-01-02 15:04:05")
@@ -130,7 +158,7 @@ func (w *workout) DeleteWorkoutByID(workoutID int64) error {
 			Where("workouts.id = ?", workoutID).
 			Row().
 			Scan(&planID, &courseID); err != nil {
-				return err
+			return err
 		}
 		//刪除訓練
 		if err := tx.
@@ -148,9 +176,9 @@ func (w *workout) DeleteWorkoutByID(workoutID int64) error {
 		//查詢關聯課表的目前總訓練數量
 		var courseWorkoutCount int
 		if err := tx.
-			Raw("SELECT COUNT(*) FROM courses " +
-				"INNER JOIN plans ON courses.id = plans.course_id " +
-				"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+			Raw("SELECT COUNT(*) FROM courses "+
+				"INNER JOIN plans ON courses.id = plans.course_id "+
+				"INNER JOIN workouts ON plans.id = workouts.plan_id "+
 				"WHERE courses.id = ? FOR UPDATE", courseID).
 			Scan(&courseWorkoutCount).Error; err != nil {
 			return err

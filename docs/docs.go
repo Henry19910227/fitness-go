@@ -2488,6 +2488,64 @@ var doc = `{
                 }
             }
         },
+        "/plan_asset/{plan_id}/workouts": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取訓練列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanAsset"
+                ],
+                "summary": "獲取訓練列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.WorkoutAsset"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/plan_product/{plan_id}/workouts": {
             "get": {
                 "security": [
@@ -6432,6 +6490,36 @@ var doc = `{
                     "description": "前導語音",
                     "type": "string",
                     "example": "e6d2131w5q.mp3"
+                },
+                "workout_set_count": {
+                    "description": "動作組數",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "dto.WorkoutAsset": {
+            "type": "object",
+            "properties": {
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,7"
+                },
+                "finish": {
+                    "description": "是否完成(0:未完成/2:已完成)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "訓練名稱",
+                    "type": "string",
+                    "example": "第一天胸肌訓練"
                 },
                 "workout_set_count": {
                     "description": "動作組數",

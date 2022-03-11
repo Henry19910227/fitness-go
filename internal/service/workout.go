@@ -99,6 +99,25 @@ func (w *workout) GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*d
 	return workouts, nil
 }
 
+func (w *workout) GetWorkoutAssets(c *gin.Context, userID int64, planID int64) ([]*dto.WorkoutAsset, errcode.Error) {
+	workoutDatas, err := w.workoutRepo.FindWorkoutAssets(userID, planID)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout repo", err)
+	}
+	workouts := make([]*dto.WorkoutAsset, 0)
+	for _, workoutData := range workoutDatas {
+		asset := dto.WorkoutAsset{
+			ID:              workoutData.ID,
+			Name:            workoutData.Name,
+			Equipment:       workoutData.Equipment,
+			WorkoutSetCount: workoutData.WorkoutSetCount,
+			Finish:          workoutData.Finish,
+		}
+		workouts = append(workouts, &asset)
+	}
+	return workouts, nil
+}
+
 func (w *workout) UpdateWorkout(c *gin.Context, workoutID int64, param *dto.UpdateWorkoutParam) (*dto.Workout, errcode.Error) {
 	if err := w.workoutRepo.UpdateWorkoutByID(workoutID, &model.UpdateWorkoutParam{
 		Name:      param.Name,

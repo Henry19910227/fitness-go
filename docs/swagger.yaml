@@ -1137,6 +1137,29 @@ definitions:
         example: 1
         type: integer
     type: object
+  dto.WorkoutAsset:
+    properties:
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      finish:
+        description: 是否完成(0:未完成/2:已完成)
+        example: 1
+        type: integer
+      id:
+        description: 訓練 id
+        example: 1
+        type: integer
+      name:
+        description: 訓練名稱
+        example: 第一天胸肌訓練
+        type: string
+      workout_set_count:
+        description: 動作組數
+        example: 1
+        type: integer
+    type: object
   dto.WorkoutAudio:
     properties:
       audio:
@@ -3209,6 +3232,40 @@ paths:
       summary: 取得計畫內的訓練列表
       tags:
       - Plan
+  /plan_asset/{plan_id}/workouts:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訓練列表
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.WorkoutAsset'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取訓練列表
+      tags:
+      - PlanAsset
   /plan_product/{plan_id}/workouts:
     get:
       consumes:
