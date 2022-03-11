@@ -14,7 +14,6 @@ type WorkoutProduct struct {
 	Name            string `json:"name" example:"第一天胸肌訓練"`        // 訓練名稱
 	Equipment       string `json:"equipment" example:"2,3,7"`     // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
 	WorkoutSetCount int    `json:"workout_set_count" example:"1"` // 動作組數
-	Finish          int    `json:"finish" example:"1"`            // 是否完成(0:未完成/2:已完成)
 }
 
 type WorkoutAsset struct {

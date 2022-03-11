@@ -5,7 +5,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/handler"
-	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
@@ -73,23 +72,12 @@ func (p *plan) GetPlanProductsByCourseID(c *gin.Context, userID int64, courseID 
 	if err != nil {
 		return nil, p.errHandler.Set(c, "plan repo", err)
 	}
-	statDatas, err := p.planStatisticRepo.FindUserPlanStatistics(userID, courseID)
-	if err != nil {
-		return nil, p.errHandler.Set(c, "plan statistic repo", err)
-	}
-	dict := make(map[int64]*model.UserPlanStatistic)
-	for _, statData := range statDatas {
-		dict[statData.PlanID] = statData
-	}
 	plans := make([]*dto.PlanProduct, 0)
 	for _, planData := range planDatas {
 		plan := dto.PlanProduct{
 			ID:           planData.ID,
 			Name:         planData.Name,
 			WorkoutCount: planData.WorkoutCount,
-		}
-		if _, ok := dict[planData.ID]; ok {
-			plan.FinishWorkoutCount = dict[planData.ID].FinishWorkoutCount
 		}
 		plans = append(plans, &plan)
 	}

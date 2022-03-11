@@ -545,16 +545,6 @@ func (cs *course) parserCourseProduct(userID int64, courseID int64) (*dto.Course
 		course.Review.OneTotal = courseItem.Review.OneTotal
 		course.Review.UpdateAt = courseItem.Review.UpdateAt
 	}
-	//配置個人課表統計
-	userCourseStatistic, err := cs.userCourseStatisticRepo.FindUserCourseStatistic(userID, courseID)
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err
-	}
-	course.CourseStatistic = &dto.UserCourseStatistic{}
-	if userCourseStatistic != nil {
-		course.CourseStatistic.FinishWorkoutCourt = userCourseStatistic.FinishWorkoutCount
-		course.CourseStatistic.Duration = userCourseStatistic.Duration
-	}
 	return &course, nil
 }
 

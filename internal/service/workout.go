@@ -69,15 +69,6 @@ func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Work
 }
 
 func (w *workout) GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*dto.WorkoutProduct, errcode.Error) {
-	workoutLogs, err := w.workoutLogRepo.FindWorkoutLogsByPlanID(planID)
-	if err != nil {
-		w.logger.Set(c, handler.Error, "workout log repo", w.errHandler.SystemError().Code(), err.Error())
-		return nil, w.errHandler.SystemError()
-	}
-	logDict := make(map[int64]int64)
-	for _, log := range workoutLogs {
-		logDict[log.WorkoutID] = log.WorkoutID
-	}
 	datas, err := w.workoutRepo.FindWorkoutsByPlanID(planID)
 	if err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
@@ -90,9 +81,6 @@ func (w *workout) GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*d
 			Name:            data.Name,
 			Equipment:       data.Equipment,
 			WorkoutSetCount: data.WorkoutSetCount,
-		}
-		if _, ok := logDict[data.ID]; ok {
-			workout.Finish = 1
 		}
 		workouts = append(workouts, &workout)
 	}

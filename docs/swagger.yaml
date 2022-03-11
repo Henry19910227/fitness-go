@@ -345,9 +345,6 @@ definitions:
         description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
         example: 3
         type: integer
-      course_statistic:
-        $ref: '#/definitions/dto.UserCourseStatistic'
-        description: 個人課表統計
       course_status:
         description: 課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
         example: 1
@@ -469,8 +466,6 @@ definitions:
       trainer:
         $ref: '#/definitions/dto.TrainerSummary'
         description: 教練簡介
-      user_course_statistic:
-        $ref: '#/definitions/dto.UserCourseStatistic'
       workout_count:
         description: 訓練總數
         example: 10
@@ -581,10 +576,6 @@ definitions:
     type: object
   dto.PlanProduct:
     properties:
-      finish_workout_count:
-        description: 完成訓練數量
-        example: 5
-        type: integer
       id:
         description: 計畫id
         example: 1
@@ -1180,10 +1171,6 @@ definitions:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,7
         type: string
-      finish:
-        description: 是否完成(0:未完成/2:已完成)
-        example: 1
-        type: integer
       id:
         description: 訓練 id
         example: 1

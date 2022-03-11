@@ -5458,10 +5458,6 @@ var doc = `{
                     "type": "integer",
                     "example": 3
                 },
-                "course_statistic": {
-                    "description": "個人課表統計",
-                    "$ref": "#/definitions/dto.UserCourseStatistic"
-                },
                 "course_status": {
                     "description": "課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
                     "type": "integer",
@@ -5616,9 +5612,6 @@ var doc = `{
                     "description": "教練簡介",
                     "$ref": "#/definitions/dto.TrainerSummary"
                 },
-                "user_course_statistic": {
-                    "$ref": "#/definitions/dto.UserCourseStatistic"
-                },
                 "workout_count": {
                     "description": "訓練總數",
                     "type": "integer",
@@ -5766,11 +5759,6 @@ var doc = `{
         "dto.PlanProduct": {
             "type": "object",
             "properties": {
-                "finish_workout_count": {
-                    "description": "完成訓練數量",
-                    "type": "integer",
-                    "example": 5
-                },
                 "id": {
                     "description": "計畫id",
                     "type": "integer",
@@ -6555,11 +6543,6 @@ var doc = `{
                     "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
                     "type": "string",
                     "example": "2,3,7"
-                },
-                "finish": {
-                    "description": "是否完成(0:未完成/2:已完成)",
-                    "type": "integer",
-                    "example": 1
                 },
                 "id": {
                     "description": "訓練 id",
