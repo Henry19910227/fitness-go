@@ -359,9 +359,10 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 		userType = global.NormalUserType
 	}
 	ut := int(userType)
-	if err := p.userRepo.UpdateUserByUID(info.UserID, &model.UpdateUserParam{
+	if err := p.userRepo.UpdateUserByUID(tx, info.UserID, &model.UpdateUserParam{
 		UserType: &ut,
 	}); err != nil {
+		tx.Rollback()
 		return p.errHandler.Set(c, "user repo", err)
 	}
 	p.transactionRepo.FinishTransaction(tx)
@@ -577,9 +578,10 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 		userType = global.NormalUserType
 	}
 	ut := int(userType)
-	if err := p.userRepo.UpdateUserByUID(order.UserID, &model.UpdateUserParam{
+	if err := p.userRepo.UpdateUserByUID(tx, order.UserID, &model.UpdateUserParam{
 		UserType: &ut,
 	}); err != nil {
+		tx.Rollback()
 		return p.errHandler.Set(c, "user repo", err)
 	}
 	//更新訂單狀態

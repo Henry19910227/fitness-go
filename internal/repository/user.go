@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -37,7 +38,7 @@ func (u *user) CreateUser(accountType int, account string, nickname string, pass
 	return user.ID, nil
 }
 
-func (u *user) UpdateUserByUID(uid int64, param *model.UpdateUserParam) error {
+func (u *user) UpdateUserByUID(tx *gorm.DB, uid int64, param *model.UpdateUserParam) error {
 	var selects []interface{}
 	if param.AccountType != nil { selects = append(selects, "account_type") }
 	if param.Account != nil { selects = append(selects, "account") }
@@ -60,7 +61,11 @@ func (u *user) UpdateUserByUID(uid int64, param *model.UpdateUserParam) error {
 		var updateAt = time.Now().Format("2006-01-02 15:04:05")
 		param.UpdateAt = &updateAt
 	}
-	if err := u.gorm.DB().
+	db := u.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	if err := db.
 		Table("users").
 		Where("id = ?", uid).
 		Select("", selects...).

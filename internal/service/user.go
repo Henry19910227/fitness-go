@@ -54,7 +54,7 @@ func (u *user) UpdateUserByToken(c *gin.Context, token string, param *dto.Update
 
 func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *dto.UpdateUserParam) (*dto.User, errcode.Error) {
 	//更新user
-	if err := u.userRepo.UpdateUserByUID(uid, &model.UpdateUserParam{
+	if err := u.userRepo.UpdateUserByUID(nil, uid, &model.UpdateUserParam{
 		Nickname:   param.Nickname,
 		Sex:        param.Sex,
 		Birthday:   param.Birthday,
@@ -155,7 +155,7 @@ func (u *user) UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed strin
 		return nil, u.errHandler.SystemError()
 	}
 	//修改教練資訊
-	if err := u.userRepo.UpdateUserByUID(uid, &model.UpdateUserParam{
+	if err := u.userRepo.UpdateUserByUID(nil, uid, &model.UpdateUserParam{
 		Avatar: &newImageNamed,
 	}); err != nil {
 		u.logger.Set(c, handler.Error, "UserRepo", u.errHandler.SystemError().Code(), err.Error())

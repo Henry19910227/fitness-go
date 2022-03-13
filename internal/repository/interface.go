@@ -14,7 +14,7 @@ type Admin interface {
 
 type User interface {
 	CreateUser(accountType int, account string, nickname string, password string) (int64, error)
-	UpdateUserByUID(uid int64, param *model.UpdateUserParam) error
+	UpdateUserByUID(tx *gorm.DB, uid int64, param *model.UpdateUserParam) error
 	FindUserByUID(uid int64, entity interface{}) error
 	FindUserByAccountAndPassword(account string, password string, entity interface{}) error
 	FindUserIDByNickname(nickname string) (int64, error)
