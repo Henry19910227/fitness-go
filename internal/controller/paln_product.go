@@ -28,7 +28,7 @@ func NewPlanProduct(baseGroup *gin.RouterGroup, planService service.Plan, workou
 // GetWorkouts 獲取訓練列表
 // @Summary 獲取訓練列表
 // @Description 獲取訓練列表
-// @Tags PlanProduct
+// @Tags Explore
 // @Accept json
 // @Produce json
 // @Security fitness_token

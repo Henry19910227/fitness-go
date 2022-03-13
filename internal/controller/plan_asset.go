@@ -28,7 +28,7 @@ func NewPlanAsset(baseGroup *gin.RouterGroup, planService service.Plan, workoutS
 // GetWorkouts 獲取訓練列表
 // @Summary 獲取訓練列表
 // @Description 獲取訓練列表
-// @Tags PlanAsset
+// @Tags Exercise
 // @Accept json
 // @Produce json
 // @Security fitness_token

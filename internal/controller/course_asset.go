@@ -37,7 +37,7 @@ func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, pl
 // GetCourseAsset 獲取課表資源詳細
 // @Summary 獲取課表資源詳細
 // @Description 獲取課表資源詳細
-// @Tags CourseAsset
+// @Tags Exercise
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -67,7 +67,7 @@ func (a *CourseAsset) GetCourseAsset(c *gin.Context) {
 // GetCourseAssets 獲取課表資源
 // @Summary 獲取課表資源
 // @Description 獲取課表資源
-// @Tags CourseAsset
+// @Tags Exercise
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -108,7 +108,7 @@ func (a *CourseAsset) GetCourseAssets(c *gin.Context) {
 // GetPlanAssets 獲取課表資源計畫列表
 // @Summary 獲取課表資源計畫列表
 // @Description 獲取課表資源計畫列表
-// @Tags CourseAsset
+// @Tags Exercise
 // @Accept json
 // @Produce json
 // @Security fitness_token

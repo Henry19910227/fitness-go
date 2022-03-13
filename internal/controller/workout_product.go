@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/service"
@@ -26,17 +25,12 @@ func NewWorkoutProduct(baseGroup *gin.RouterGroup, workoutService service.Workou
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		workoutMidd.CourseStatusVerify(workoutService.GetWorkoutStatus, []global.CourseStatus{global.Sale}),
 		workout.GetWorkoutSets)
-
-	baseGroup.POST("/workout_product/:workout_id/workout_log",
-		userMidd.TokenPermission([]global.Role{global.UserRole}),
-		workoutMidd.CourseStatusVerify(workoutService.GetWorkoutStatus, []global.CourseStatus{global.Sale}),
-		workout.CreateWorkoutLog)
 }
 
 // GetWorkoutSets 獲取訓練組列表(探索區課表)
 // @Summary 獲取訓練組列表(探索區課表)
 // @Description 獲取訓練組列表(探索區課表)
-// @Tags WorkoutProduct
+// @Tags Explore
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -56,45 +50,4 @@ func (p *WorkoutProduct) GetWorkoutSets(c *gin.Context) {
 		return
 	}
 	p.JSONSuccessResponse(c, workouts, "success!")
-}
-
-// CreateWorkoutLog 創建訓練記錄
-// @Summary 創建訓練記錄
-// @Description 創建訓練記錄
-// @Tags WorkoutProduct
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Param workout_id path int64 true "訓練id"
-// @Param json_body body validator.CreateWorkoutLogBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult "獲取成功!"
-// @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /workout_product/{workout_id}/workout_log [POST]
-func (p *WorkoutProduct) CreateWorkoutLog(c *gin.Context) {
-	uid, err := p.GetUID(c)
-	if err != nil {
-		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	var body validator.CreateWorkoutLogBody
-	if err := c.ShouldBindJSON(&body); err != nil {
-		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	var uri validator.WorkoutIDUri
-	if err := c.ShouldBindUri(&uri); err != nil {
-		p.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	e := p.workoutLogService.CreateWorkoutLog(c, uid, uri.WorkoutID, &dto.CreateWorkoutLogParam{
-		Duration:       body.Duration,
-		Intensity:      body.Intensity,
-		Place:          body.Place,
-		WorkoutSetLogs: body.WorkoutSetLogs,
-	})
-	if e != nil {
-		p.JSONErrorResponse(c, e)
-		return
-	}
-	p.JSONSuccessResponse(c, nil, "success!")
 }

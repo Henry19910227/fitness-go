@@ -44,7 +44,7 @@ func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, 
 // GetCourseProduct 獲取課表產品詳細
 // @Summary 獲取課表產品詳細
 // @Description 獲取課表產品詳細
-// @Tags CourseProduct
+// @Tags Explore
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -74,7 +74,7 @@ func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
 // SearchCourseProducts 搜尋課表產品列表
 // @Summary 搜尋課表產品列表
 // @Description 搜尋課表產品列表
-// @Tags CourseProduct
+// @Tags Explore
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -127,7 +127,7 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 // GetPlanProducts 獲取課表產品計畫列表
 // @Summary 獲取課表產品計畫列表
 // @Description 獲取課表產品計畫列表
-// @Tags CourseProduct
+// @Tags Explore
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -157,7 +157,7 @@ func (p *CourseProduct) GetPlanProducts(c *gin.Context) {
 // GetWorkoutSets 取得課表內的訓練組列表(單一訓練類型課表適用)
 // @Summary  取得課表內的訓練組列表(單一訓練類型課表適用)
 // @Description  取得課表內的訓練組列表(單一訓練類型課表適用)
-// @Tags CourseProduct
+// @Tags Explore
 // @Accept json
 // @Produce json
 // @Security fitness_token

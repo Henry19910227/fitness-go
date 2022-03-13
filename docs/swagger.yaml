@@ -2374,7 +2374,7 @@ paths:
       - fitness_token: []
       summary: 獲取課表資源詳細
       tags:
-      - CourseAsset
+      - Exercise
   /course_asset/{course_id}/plans:
     get:
       consumes:
@@ -2408,7 +2408,7 @@ paths:
       - fitness_token: []
       summary: 獲取課表資源計畫列表
       tags:
-      - CourseAsset
+      - Exercise
   /course_assets:
     get:
       consumes:
@@ -2452,7 +2452,7 @@ paths:
       - fitness_token: []
       summary: 獲取課表資源
       tags:
-      - CourseAsset
+      - Exercise
   /course_order:
     post:
       consumes:
@@ -2517,7 +2517,7 @@ paths:
       - fitness_token: []
       summary: 獲取課表產品詳細
       tags:
-      - CourseProduct
+      - Explore
   /course_product/{course_id}/plans:
     get:
       consumes:
@@ -2551,7 +2551,7 @@ paths:
       - fitness_token: []
       summary: 獲取課表產品計畫列表
       tags:
-      - CourseProduct
+      - Explore
   /course_product/{course_id}/review:
     post:
       consumes:
@@ -2678,7 +2678,7 @@ paths:
       - fitness_token: []
       summary: 取得課表內的訓練組列表(單一訓練類型課表適用)
       tags:
-      - CourseProduct
+      - Explore
   /course_products:
     get:
       consumes:
@@ -2769,7 +2769,7 @@ paths:
       - fitness_token: []
       summary: 搜尋課表產品列表
       tags:
-      - CourseProduct
+      - Explore
   /courses:
     get:
       consumes:
@@ -3252,7 +3252,7 @@ paths:
       - fitness_token: []
       summary: 獲取訓練列表
       tags:
-      - PlanAsset
+      - Exercise
   /plan_product/{plan_id}/workouts:
     get:
       consumes:
@@ -3286,7 +3286,7 @@ paths:
       - fitness_token: []
       summary: 獲取訓練列表
       tags:
-      - PlanProduct
+      - Explore
   /redeem_course:
     post:
       consumes:
@@ -4457,7 +4457,7 @@ paths:
       summary: 取得訓練內的訓練組列表
       tags:
       - Workout
-  /workout_product/{workout_id}/workout_log:
+  /workout_asset/{workout_id}/workout_log:
     post:
       consumes:
       - application/json
@@ -4489,7 +4489,41 @@ paths:
       - fitness_token: []
       summary: 創建訓練記錄
       tags:
-      - WorkoutProduct
+      - Exercise
+  /workout_asset/{workout_id}/workout_sets:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訓練組列表(探索區課表)
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.WorkoutSet'
+                  type: array
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取訓練組列表(探索區課表)
+      tags:
+      - Exercise
   /workout_product/{workout_id}/workout_sets:
     get:
       consumes:
@@ -4523,7 +4557,7 @@ paths:
       - fitness_token: []
       summary: 獲取訓練組列表(探索區課表)
       tags:
-      - WorkoutProduct
+      - Explore
   /workout_set/{workout_set_id}:
     delete:
       consumes:
