@@ -311,7 +311,7 @@ func (cc *Course) GetCourseOverview(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	course, err := cc.courseService.GetCourseOverviewByCourseID(c, uid, uri.CourseID)
+	course, err := cc.courseService.GetCourseOverviewByCourseID(c, uri.CourseID)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return

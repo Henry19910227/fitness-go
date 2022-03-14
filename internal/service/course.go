@@ -237,44 +237,48 @@ func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dt
 }
 
 func (cs *course) GetCourseProductByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error) {
-	course, err := cs.parserCourseProduct(userID, courseID)
+	//查詢課表詳情
+	data, err := cs.courseRepo.FindCourseProduct(courseID)
 	if err != nil {
-		return course, cs.errHandler.Set(c, "course repo", err)
+		return nil, cs.errHandler.Set(c, "course repo", err)
 	}
-	course.AllowAccess = 0
-	if global.SaleType(course.SaleType) == global.SaleTypeSubscribe {
+	courseDto := dto.NewCourseProduct(data)
+	courseDto.AllowAccess = 0
+	if global.SaleType(courseDto.SaleType) == global.SaleTypeSubscribe {
 		subscribeInfo, err := cs.subscribeInfoRepo.FindSubscribeInfo(userID)
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-			return course, cs.errHandler.Set(c, "subscribe info repo", err)
+			return nil, cs.errHandler.Set(c, "subscribe info repo", err)
 		}
 		if subscribeInfo != nil {
-			course.AllowAccess = subscribeInfo.Status
+			courseDto.AllowAccess = subscribeInfo.Status
 		}
 	}
-	if global.SaleType(course.SaleType) == global.SaleTypeFree || global.SaleType(course.SaleType) == global.SaleTypeCharge {
+	if global.SaleType(courseDto.SaleType) == global.SaleTypeFree || global.SaleType(courseDto.SaleType) == global.SaleTypeCharge {
 		asset, err := cs.userCourseAssetRepo.FindUserCourseAsset(&model.FindUserCourseAssetParam{
 			UserID:   userID,
 			CourseID: courseID,
 		})
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-			return course, cs.errHandler.Set(c, "course repo", err)
+			return nil, cs.errHandler.Set(c, "course repo", err)
 		}
 		if asset != nil {
 			if asset.Available == 1 {
-				course.AllowAccess = 1
+				courseDto.AllowAccess = 1
 			}
 		}
 	}
-	return course, nil
+	return &courseDto, nil
 }
 
-func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error) {
-	course, err := cs.parserCourseProduct(userID, courseID)
+func (cs *course) GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error) {
+	//查詢課表詳情
+	data, err := cs.courseRepo.FindCourseProduct(courseID)
 	if err != nil {
-		return course, cs.errHandler.Set(c, "course repo", err)
+		return nil, cs.errHandler.Set(c, "course repo", err)
 	}
-	course.AllowAccess = 1
-	return course, nil
+	courseDto := dto.NewCourseProduct(data)
+	courseDto.AllowAccess = 1
+	return &courseDto, nil
 }
 
 func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, *dto.Paging, errcode.Error) {
@@ -350,7 +354,12 @@ func (cs *course) GetProgressCourseAssetSummaries(c *gin.Context, userID int64, 
 		Page:       page,
 		Size:       size,
 	}
-	return parserCourseAssetSummaries(datas), &paging, nil
+	courses := make([]*dto.CourseAssetSummary, 0)
+	for _, data := range datas {
+		course := dto.NewCourseAssetSummary(data)
+		courses = append(courses, &course)
+	}
+	return courses, &paging, nil
 }
 
 func (cs *course) GetChargeCourseAssetSummaries(c *gin.Context, userID int64, page int, size int) ([]*dto.CourseAssetSummary, *dto.Paging, errcode.Error) {
@@ -372,39 +381,49 @@ func (cs *course) GetChargeCourseAssetSummaries(c *gin.Context, userID int64, pa
 		Page:       page,
 		Size:       size,
 	}
-	return parserCourseAssetSummaries(datas), &paging, nil
+	courses := make([]*dto.CourseAssetSummary, 0)
+	for _, data := range datas {
+		course := dto.NewCourseAssetSummary(data)
+		courses = append(courses, &course)
+	}
+	return courses, &paging, nil
 }
 
 func (cs *course) GetCourseAsset(c *gin.Context, userID int64, courseID int64) (*dto.CourseAsset, errcode.Error) {
-	course, err := cs.parserCourseAsset(userID, courseID)
+	//查詢課表詳情
+	courseData, err := cs.courseRepo.FindCourseAsset(courseID, userID)
 	if err != nil {
-		return course, cs.errHandler.Set(c, "course repo", err)
+		return nil, cs.errHandler.Set(c, "course repo", err)
 	}
-	course.AllowAccess = 0
-	if global.SaleType(course.SaleType) == global.SaleTypeSubscribe {
+	courseDto := dto.NewCourseAsset(courseData)
+	courseDto.AllowAccess = 0
+	if global.SaleType(courseDto.SaleType) == global.SaleTypeSubscribe {
 		subscribeInfo, err := cs.subscribeInfoRepo.FindSubscribeInfo(userID)
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-			return course, cs.errHandler.Set(c, "subscribe info repo", err)
+			return nil, cs.errHandler.Set(c, "subscribe info repo", err)
 		}
 		if subscribeInfo != nil {
-			course.AllowAccess = subscribeInfo.Status
+			courseDto.AllowAccess = subscribeInfo.Status
 		}
 	}
-	if global.SaleType(course.SaleType) == global.SaleTypeFree || global.SaleType(course.SaleType) == global.SaleTypeCharge {
+	if global.SaleType(courseDto.SaleType) == global.SaleTypeFree || global.SaleType(courseDto.SaleType) == global.SaleTypeCharge {
 		asset, err := cs.userCourseAssetRepo.FindUserCourseAsset(&model.FindUserCourseAssetParam{
 			UserID:   userID,
 			CourseID: courseID,
 		})
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-			return course, cs.errHandler.Set(c, "course repo", err)
+			return nil, cs.errHandler.Set(c, "course repo", err)
 		}
 		if asset != nil {
 			if asset.Available == 1 {
-				course.AllowAccess = 1
+				courseDto.AllowAccess = 1
 			}
 		}
 	}
-	return course, nil
+	return &courseDto, nil
+}
+
+	panic("implement me")
 }
 
 func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error) {
@@ -483,163 +502,5 @@ func (cs *course) VerifyCourse(course *model.Course) error {
 	if course.Trainer == nil {
 		return errors.New(strconv.Itoa(errcode.UpdateError))
 	}
-	return nil
-}
-
-func (cs *course) parserCourseProduct(userID int64, courseID int64) (*dto.CourseProduct, error) {
-	//查詢課表詳情
-	courseItem, err := cs.courseRepo.FindCourseProduct(courseID)
-	if err != nil {
-		return nil, err
-	}
-	course := dto.CourseProduct{
-		ID:           courseItem.ID,
-		CourseStatus: courseItem.CourseStatus,
-		Category:     courseItem.Category,
-		SaleType:     courseItem.SaleType,
-		ScheduleType: courseItem.ScheduleType,
-		Name:         courseItem.Name,
-		Cover:        courseItem.Cover,
-		Intro:        courseItem.Intro,
-		Food:         courseItem.Food,
-		Level:        courseItem.Level,
-		Suit:         courseItem.Suit,
-		Equipment:    courseItem.Equipment,
-		Place:        courseItem.Place,
-		TrainTarget:  courseItem.TrainTarget,
-		BodyTarget:   courseItem.BodyTarget,
-		Notice:       courseItem.Notice,
-		PlanCount:    courseItem.PlanCount,
-		WorkoutCount: courseItem.WorkoutCount,
-	}
-	//配置教練資訊
-	trainer := &dto.TrainerSummary{
-		UserID:   courseItem.Trainer.UserID,
-		Nickname: courseItem.Trainer.Nickname,
-		Avatar:   courseItem.Trainer.Avatar,
-		Skill:    courseItem.Trainer.Skill,
-	}
-	course.Trainer = trainer
-	//配置銷售資訊
-	if courseItem.Sale != nil {
-		sale := &dto.SaleItem{
-			ID:   courseItem.Sale.ID,
-			Type: courseItem.Sale.Type,
-			Name: courseItem.Sale.Name,
-		}
-		course.Sale = sale
-		if courseItem.Sale.ProductLabel != nil {
-			course.Sale.Twd = courseItem.Sale.ProductLabel.Twd
-			course.Sale.ProductID = courseItem.Sale.ProductLabel.ProductID
-		}
-	}
-	//配置評論統計
-	course.Review = &dto.ReviewStatistic{}
-	if courseItem.Review != nil {
-		course.Review.ScoreTotal = courseItem.Review.ScoreTotal
-		course.Review.Amount = courseItem.Review.Amount
-		course.Review.FiveTotal = courseItem.Review.FiveTotal
-		course.Review.FourTotal = courseItem.Review.FourTotal
-		course.Review.ThreeTotal = courseItem.Review.ThreeTotal
-		course.Review.TwoTotal = courseItem.Review.TwoTotal
-		course.Review.OneTotal = courseItem.Review.OneTotal
-		course.Review.UpdateAt = courseItem.Review.UpdateAt
-	}
-	return &course, nil
-}
-
-func (cs *course) parserCourseAsset(userID int64, courseID int64) (*dto.CourseAsset, error) {
-	//查詢課表詳情
-	courseItem, err := cs.courseRepo.FindCourseAsset(courseID, userID)
-	if err != nil {
-		return nil, err
-	}
-	course := dto.CourseAsset{
-		ID:           courseItem.ID,
-		CourseStatus: courseItem.CourseStatus,
-		Category:     courseItem.Category,
-		SaleType:     courseItem.SaleType,
-		ScheduleType: courseItem.ScheduleType,
-		Name:         courseItem.Name,
-		Cover:        courseItem.Cover,
-		Level:        courseItem.Level,
-		PlanCount:    courseItem.PlanCount,
-		WorkoutCount: courseItem.WorkoutCount,
-	}
-	//配置教練資訊
-	trainer := &dto.TrainerSummary{
-		UserID:   courseItem.Trainer.UserID,
-		Nickname: courseItem.Trainer.Nickname,
-		Avatar:   courseItem.Trainer.Avatar,
-		Skill:    courseItem.Trainer.Skill,
-	}
-	course.Trainer = trainer
-	//配置銷售資訊
-	if courseItem.Sale != nil {
-		sale := &dto.SaleItem{
-			ID:   courseItem.Sale.ID,
-			Type: courseItem.Sale.Type,
-			Name: courseItem.Sale.Name,
-		}
-		course.Sale = sale
-		if courseItem.Sale.ProductLabel != nil {
-			course.Sale.Twd = courseItem.Sale.ProductLabel.Twd
-			course.Sale.ProductID = courseItem.Sale.ProductLabel.ProductID
-		}
-	}
-	//配置個人課表統計
-	course.CourseStatistic = &dto.UserCourseStatistic{
-		FinishWorkoutCourt: courseItem.FinishWorkoutCourt,
-		Duration:           courseItem.Duration,
-	}
-	return &course, nil
-}
-
-func parserCourseAssetSummaries(datas []*model.CourseAssetSummary) []*dto.CourseAssetSummary {
-	courses := make([]*dto.CourseAssetSummary, 0)
-	for _, data := range datas {
-		course := dto.CourseAssetSummary{
-			ID:           data.ID,
-			SaleType:     data.SaleType,
-			CourseStatus: data.CourseStatus,
-			Category:     data.Category,
-			ScheduleType: data.ScheduleType,
-			Name:         data.Name,
-			Cover:        data.Cover,
-			Level:        data.Level,
-			PlanCount:    data.PlanCount,
-			WorkoutCount: data.WorkoutCount,
-		}
-		if data.Trainer != nil {
-			course.Trainer = &dto.TrainerSummary{
-				UserID:   data.Trainer.UserID,
-				Nickname: data.Trainer.Nickname,
-				Avatar:   data.Trainer.Avatar,
-				Skill:    data.Trainer.Skill,
-			}
-		}
-		course.Review = &dto.ReviewStatisticSummary{}
-		if data.Review != nil {
-			course.Review.Amount = data.Review.Amount
-			course.Review.ScoreTotal = data.Review.ScoreTotal
-		}
-		if data.Sale != nil {
-			sale := &dto.SaleItem{
-				ID:   data.Sale.ID,
-				Type: data.Sale.Type,
-				Name: data.Sale.Name,
-			}
-			course.Sale = sale
-			if data.Sale.ProductLabel != nil {
-				course.Sale.Twd = data.Sale.ProductLabel.Twd
-				course.Sale.ProductID = data.Sale.ProductLabel.ProductID
-			}
-		}
-		courses = append(courses, &course)
-	}
-	return courses
-}
-
-func parserCourseAsset(data []*model.CourseAsset) *dto.CourseAsset {
 	return nil
 }
