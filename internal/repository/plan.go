@@ -78,7 +78,7 @@ func (p *plan) FindPlanAssets(userID int64, courseID int64) ([]*model.PlanAsset,
 			"plans.name AS name", "plans.workout_count AS workout_count",
 			"IFNULL(stat.finish_workout_count, 0) AS finish_workout_count",
 			"plans.create_at", "plans.update_at").
-		Joins("INNER JOIN user_plan_statistics AS stat ON plans.id = stat.plan_id AND stat.user_id = ?", userID).
+		Joins("LEFT JOIN user_plan_statistics AS stat ON plans.id = stat.plan_id AND stat.user_id = ?", userID).
 		Where("plans.course_id = ?", courseID).
 		Find(&plans).Error; err != nil {
 		return nil, err
