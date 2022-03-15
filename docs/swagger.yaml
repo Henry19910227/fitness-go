@@ -2917,40 +2917,6 @@ paths:
       summary: 獲取評論列表
       tags:
       - Review
-  /course_product/{course_id}/workout_sets:
-    get:
-      consumes:
-      - application/json
-      description: 取得課表內的訓練組列表(單一訓練類型課表適用)
-      parameters:
-      - description: 課表id
-        in: path
-        name: course_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 獲取成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/dto.WorkoutSet'
-                  type: array
-              type: object
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 取得課表內的訓練組列表(單一訓練類型課表適用)
-      tags:
-      - Explore
   /course_product_structure/{course_id}:
     get:
       consumes:
