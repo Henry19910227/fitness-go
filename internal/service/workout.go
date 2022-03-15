@@ -47,7 +47,7 @@ func (w *workout) CreateWorkout(c *gin.Context, planID int64, name string) (*dto
 	return &workout, nil
 }
 
-func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Workout, errcode.Error) {
+func (w *workout) GetWorkouts(c *gin.Context, planID int64) ([]*dto.Workout, errcode.Error) {
 	datas, err := w.workoutRepo.FindWorkoutsByPlanID(planID)
 	if err != nil {
 		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
@@ -68,25 +68,6 @@ func (w *workout) GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Work
 	return workouts, nil
 }
 
-func (w *workout) GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*dto.WorkoutProduct, errcode.Error) {
-	datas, err := w.workoutRepo.FindWorkoutsByPlanID(planID)
-	if err != nil {
-		w.logger.Set(c, handler.Error, "WorkoutRepo", w.errHandler.SystemError().Code(), err.Error())
-		return nil, w.errHandler.SystemError()
-	}
-	workouts := make([]*dto.WorkoutProduct, 0)
-	for _, data := range datas {
-		workout := dto.WorkoutProduct{
-			ID:              data.ID,
-			Name:            data.Name,
-			Equipment:       data.Equipment,
-			WorkoutSetCount: data.WorkoutSetCount,
-		}
-		workouts = append(workouts, &workout)
-	}
-	return workouts, nil
-}
-
 func (w *workout) GetWorkoutAssets(c *gin.Context, userID int64, planID int64) ([]*dto.WorkoutAsset, errcode.Error) {
 	workoutDatas, err := w.workoutRepo.FindWorkoutAssets(userID, planID)
 	if err != nil {
@@ -94,13 +75,7 @@ func (w *workout) GetWorkoutAssets(c *gin.Context, userID int64, planID int64) (
 	}
 	workouts := make([]*dto.WorkoutAsset, 0)
 	for _, workoutData := range workoutDatas {
-		asset := dto.WorkoutAsset{
-			ID:              workoutData.ID,
-			Name:            workoutData.Name,
-			Equipment:       workoutData.Equipment,
-			WorkoutSetCount: workoutData.WorkoutSetCount,
-			Finish:          workoutData.Finish,
-		}
+		asset := dto.NewWorkoutAsset(workoutData)
 		workouts = append(workouts, &asset)
 	}
 	return workouts, nil

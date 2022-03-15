@@ -228,6 +228,67 @@ definitions:
         example: 10
         type: integer
     type: object
+  dto.CourseAssetStructure:
+    properties:
+      allow_access:
+        description: 是否允許訪問此課表(0:否/1:是)
+        example: 0
+        type: integer
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
+      plans:
+        description: 計畫列表
+        items:
+          $ref: '#/definitions/dto.PlanAssetStructure'
+        type: array
+      sale:
+        $ref: '#/definitions/dto.SaleItem'
+        description: 銷售項目
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 2
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      trainer:
+        $ref: '#/definitions/dto.TrainerSummary'
+        description: 教練簡介
+      user_course_statistic:
+        $ref: '#/definitions/dto.UserCourseStatistic'
+        description: 課表統計
+      workout_count:
+        description: 訓練總數
+        example: 10
+        type: integer
+    type: object
   dto.CourseAssetSummary:
     properties:
       category:
@@ -419,6 +480,99 @@ definitions:
         example: 10
         type: integer
     type: object
+  dto.CourseProductStructure:
+    properties:
+      allow_access:
+        description: 是否允許訪問此課表(0:否/1:是)
+        example: 0
+        type: integer
+      body_target:
+        description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
+        example: 4,5
+        type: string
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 3
+        type: integer
+      course_status:
+        description: 課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 1
+        type: integer
+      cover:
+        description: 課表封面
+        example: d2w3e15d3awe.jpg
+        type: string
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
+      food:
+        description: 飲食建議
+        example: 佛系飲食
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      intro:
+        description: 課表介紹
+        example: 佛系課表
+        type: string
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 3
+        type: integer
+      name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      notice:
+        description: 注意事項
+        example: 小心不要受傷
+        type: string
+      place:
+        description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
+        example: 1,2
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 2
+        type: integer
+      plans:
+        description: 計畫列表
+        items:
+          $ref: '#/definitions/dto.PlanStructure'
+        type: array
+      review:
+        $ref: '#/definitions/dto.ReviewStatistic'
+        description: 評分統計
+      sale:
+        $ref: '#/definitions/dto.SaleItem'
+        description: 銷售項目
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 2
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      suit:
+        description: 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)
+        example: 2,5,7
+        type: string
+      train_target:
+        description: 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
+        example: 2,3,4
+        type: string
+      trainer:
+        $ref: '#/definitions/dto.TrainerSummary'
+        description: 教練簡介
+      workout_count:
+        description: 訓練總數
+        example: 10
+        type: integer
+    type: object
   dto.CourseProductSummary:
     properties:
       category:
@@ -567,6 +721,30 @@ definitions:
         example: 10
         type: integer
     type: object
+  dto.PlanAssetStructure:
+    properties:
+      finish_workout_count:
+        description: 完成訓練數量
+        example: 5
+        type: integer
+      id:
+        description: 計畫id
+        example: 1
+        type: integer
+      name:
+        description: 計畫名稱
+        example: 第一週增肌計畫
+        type: string
+      workout_count:
+        description: 訓練數量
+        example: 10
+        type: integer
+      workouts:
+        description: 訓練列表
+        items:
+          $ref: '#/definitions/dto.WorkoutAssetStructure'
+        type: array
+    type: object
   dto.PlanID:
     properties:
       plan_id:
@@ -574,7 +752,7 @@ definitions:
         example: 1
         type: integer
     type: object
-  dto.PlanProduct:
+  dto.PlanStructure:
     properties:
       id:
         description: 計畫id
@@ -588,6 +766,11 @@ definitions:
         description: 訓練數量
         example: 10
         type: integer
+      workouts:
+        description: 訓練列表
+        items:
+          $ref: '#/definitions/dto.WorkoutStructure'
+        type: array
     type: object
   dto.Review:
     properties:
@@ -1130,6 +1313,10 @@ definitions:
     type: object
   dto.WorkoutAsset:
     properties:
+      end_audio:
+        description: 結束語音
+        example: d2e15qwe42dw.mp3
+        type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,7
@@ -1146,10 +1333,50 @@ definitions:
         description: 訓練名稱
         example: 第一天胸肌訓練
         type: string
+      start_audio:
+        description: 前導語音
+        example: e6d2131w5q.mp3
+        type: string
       workout_set_count:
         description: 動作組數
         example: 1
         type: integer
+    type: object
+  dto.WorkoutAssetStructure:
+    properties:
+      end_audio:
+        description: 結束語音
+        example: d2e15qwe42dw.mp3
+        type: string
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      finish:
+        description: 是否完成(0:未完成/2:已完成)
+        example: 1
+        type: integer
+      id:
+        description: 訓練 id
+        example: 1
+        type: integer
+      name:
+        description: 訓練名稱
+        example: 第一天胸肌訓練
+        type: string
+      start_audio:
+        description: 前導語音
+        example: e6d2131w5q.mp3
+        type: string
+      workout_set_count:
+        description: 動作組數
+        example: 1
+        type: integer
+      workout_sets:
+        description: 訓練組列表
+        items:
+          $ref: '#/definitions/dto.WorkoutSet'
+        type: array
     type: object
   dto.WorkoutAudio:
     properties:
@@ -1162,25 +1389,6 @@ definitions:
     properties:
       workout_id:
         description: 訓練 id
-        example: 1
-        type: integer
-    type: object
-  dto.WorkoutProduct:
-    properties:
-      equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,7
-        type: string
-      id:
-        description: 訓練 id
-        example: 1
-        type: integer
-      name:
-        description: 訓練名稱
-        example: 第一天胸肌訓練
-        type: string
-      workout_set_count:
-        description: 動作組數
         example: 1
         type: integer
     type: object
@@ -1267,6 +1475,38 @@ definitions:
         description: 訓練組id
         example: 1
         type: integer
+    type: object
+  dto.WorkoutStructure:
+    properties:
+      end_audio:
+        description: 結束語音
+        example: d2e15qwe42dw.mp3
+        type: string
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,7
+        type: string
+      id:
+        description: 訓練 id
+        example: 1
+        type: integer
+      name:
+        description: 訓練名稱
+        example: 第一天胸肌訓練
+        type: string
+      start_audio:
+        description: 前導語音
+        example: e6d2131w5q.mp3
+        type: string
+      workout_set_count:
+        description: 動作組數
+        example: 1
+        type: integer
+      workout_sets:
+        description: 訓練組列表
+        items:
+          $ref: '#/definitions/dto.WorkoutSet'
+        type: array
     type: object
   model.Data:
     type: object
@@ -2347,7 +2587,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 獲取課表資源詳細
+      description: 獲取課表詳細
       parameters:
       - description: 課表id
         in: path
@@ -2372,14 +2612,14 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取課表資源詳細
+      summary: 獲取課表詳細
       tags:
       - Exercise
   /course_asset/{course_id}/plans:
     get:
       consumes:
       - application/json
-      description: 獲取課表資源計畫列表
+      description: 獲取課表計畫列表
       parameters:
       - description: 課表id
         in: path
@@ -2406,14 +2646,46 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取課表資源計畫列表
+      summary: 獲取課表計畫列表
+      tags:
+      - Exercise
+  /course_asset_structure/{course_id}:
+    get:
+      consumes:
+      - application/json
+      description: 單一訓練的課表使用
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CourseAssetStructure'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取課表結構
       tags:
       - Exercise
   /course_assets:
     get:
       consumes:
       - application/json
-      description: 獲取課表資源
+      description: 獲取課表
       parameters:
       - description: 搜尋類別(1:進行中課表/2:付費課表)
         in: query
@@ -2450,7 +2722,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取課表資源
+      summary: 獲取課表
       tags:
       - Exercise
   /course_order:
@@ -2540,7 +2812,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/dto.PlanProduct'
+                    $ref: '#/definitions/dto.Plan'
                   type: array
               type: object
         "400":
@@ -2677,6 +2949,38 @@ paths:
       security:
       - fitness_token: []
       summary: 取得課表內的訓練組列表(單一訓練類型課表適用)
+      tags:
+      - Explore
+  /course_product_structure/{course_id}:
+    get:
+      consumes:
+      - application/json
+      description: 只限單一訓練的課表使用
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CourseProductStructure'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取課表結構(只限單一訓練課表)
       tags:
       - Explore
   /course_products:
@@ -3275,7 +3579,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/dto.WorkoutProduct'
+                    $ref: '#/definitions/dto.Workout'
                   type: array
               type: object
         "400":
@@ -4494,7 +4798,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 獲取訓練組列表(探索區課表)
+      description: 獲取訓練組列表
       parameters:
       - description: 訓練id
         in: path
@@ -4521,7 +4825,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取訓練組列表(探索區課表)
+      summary: 獲取訓練組列表
       tags:
       - Exercise
   /workout_product/{workout_id}/workout_sets:

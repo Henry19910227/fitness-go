@@ -301,11 +301,6 @@ func (cc *Course) GetCourse(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course/{course_id}/overview [GET]
 func (cc *Course) GetCourseOverview(c *gin.Context) {
-	uid, e := cc.GetUID(c)
-	if e != nil {
-		cc.JSONValidatorErrorResponse(c, e.Error())
-		return
-	}
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		cc.JSONValidatorErrorResponse(c, err.Error())

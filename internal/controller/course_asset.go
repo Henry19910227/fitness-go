@@ -26,6 +26,9 @@ func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, pl
 	baseGroup.GET("/course_asset/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		course.GetCourseAsset)
+	baseGroup.GET("/course_asset_structure/:course_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		course.GetCourseAssetStructure)
 	baseGroup.GET("/course_assets",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		course.GetCourseAssets)
@@ -34,9 +37,9 @@ func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, pl
 		course.GetPlanAssets)
 }
 
-// GetCourseAsset 獲取課表資源詳細
-// @Summary 獲取課表資源詳細
-// @Description 獲取課表資源詳細
+// GetCourseAsset 獲取課表詳細
+// @Summary 獲取課表詳細
+// @Description 獲取課表詳細
 // @Tags Exercise
 // @Accept json
 // @Produce json
@@ -64,9 +67,39 @@ func (a *CourseAsset) GetCourseAsset(c *gin.Context) {
 	a.JSONSuccessResponse(c, course, "success!")
 }
 
-// GetCourseAssets 獲取課表資源
-// @Summary 獲取課表資源
-// @Description 獲取課表資源
+// GetCourseAssetStructure 獲取課表結構(只限單一訓練課表)
+// @Summary 獲取課表結構
+// @Description 單一訓練的課表使用
+// @Tags Exercise
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=dto.CourseAssetStructure} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course_asset_structure/{course_id} [GET]
+func (a *CourseAsset) GetCourseAssetStructure(c *gin.Context) {
+	uid, e := a.GetUID(c)
+	if e != nil {
+		a.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	course, err := a.courseService.GetCourseAssetStructure(c, uid, uri.CourseID)
+	if err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	a.JSONSuccessResponse(c, course, "success!")
+}
+
+// GetCourseAssets 獲取課表列表
+// @Summary 獲取課表
+// @Description 獲取課表
 // @Tags Exercise
 // @Accept json
 // @Produce json
@@ -105,9 +138,9 @@ func (a *CourseAsset) GetCourseAssets(c *gin.Context) {
 	a.JSONSuccessPagingResponse(c, courses, paging, "success!")
 }
 
-// GetPlanAssets 獲取課表資源計畫列表
-// @Summary 獲取課表資源計畫列表
-// @Description 獲取課表資源計畫列表
+// GetPlanAssets 獲取課表計畫列表
+// @Summary 獲取課表計畫列表
+// @Description 獲取課表計畫列表
 // @Tags Exercise
 // @Accept json
 // @Produce json

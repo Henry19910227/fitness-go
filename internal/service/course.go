@@ -21,6 +21,8 @@ type course struct {
 	userCourseAssetRepo     repository.UserCourseAsset
 	trainerRepo             repository.Trainer
 	planRepo                repository.Plan
+	workoutRepo             repository.Workout
+	workoutSetRepo          repository.WorkoutSet
 	saleRepo                repository.Sale
 	subscribeInfoRepo       repository.UserSubscribeInfo
 	userCourseStatisticRepo repository.UserCourseStatistic
@@ -35,6 +37,8 @@ func NewCourse(courseRepo repository.Course,
 	userCourseAssetRepo repository.UserCourseAsset,
 	trainerRepo repository.Trainer,
 	planRepo repository.Plan,
+	workoutRepo repository.Workout,
+	workoutSetRepo repository.WorkoutSet,
 	saleRepo repository.Sale,
 	subscribeInfoRepo repository.UserSubscribeInfo,
 	userCourseStatisticRepo repository.UserCourseStatistic,
@@ -42,8 +46,8 @@ func NewCourse(courseRepo repository.Course,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
 	return &course{courseRepo: courseRepo, userCourseAssetRepo: userCourseAssetRepo,
-		trainerRepo: trainerRepo, planRepo: planRepo, saleRepo: saleRepo,
-		subscribeInfoRepo: subscribeInfoRepo, userCourseStatisticRepo: userCourseStatisticRepo,
+		trainerRepo: trainerRepo, planRepo: planRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo,
+		saleRepo: saleRepo, subscribeInfoRepo: subscribeInfoRepo, userCourseStatisticRepo: userCourseStatisticRepo,
 		uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
@@ -423,7 +427,76 @@ func (cs *course) GetCourseAsset(c *gin.Context, userID int64, courseID int64) (
 	return &courseDto, nil
 }
 
-	panic("implement me")
+func (cs *course) GetCourseAssetStructure(c *gin.Context, userID int64, courseID int64) (*dto.CourseAssetStructure, errcode.Error) {
+	courseData, err := cs.courseRepo.FindCourseAsset(courseID, userID)
+	if err != nil {
+		return nil, cs.errHandler.Set(c, "course repo", err)
+	}
+	if global.ScheduleType(courseData.ScheduleType) != global.SingleScheduleType {
+		return nil, cs.errHandler.Custom(8999, errors.New("此查詢只支援單一訓練課表"))
+	}
+	courseDto := dto.NewCourseAssetStructure(courseData)
+	planDatas, err := cs.planRepo.FindPlanAssets(userID, courseID)
+	if err != nil {
+		return nil, cs.errHandler.Set(c, "plan repo", err)
+	}
+	for _, planData := range planDatas {
+		plan := dto.NewPlanAssetStructure(planData)
+		workoutDatas, err := cs.workoutRepo.FindWorkoutAssets(userID, planData.ID)
+		if err != nil {
+			return nil, cs.errHandler.Set(c, "workout repo", err)
+		}
+		for _, workoutData := range workoutDatas {
+			workout := dto.NewWorkoutAssetStructure(workoutData)
+			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID)
+			if err != nil {
+				return nil, cs.errHandler.Set(c, "workout set repo", err)
+			}
+			for _, workoutSetData := range workoutSetDatas {
+				workoutSet := dto.NewWorkoutSet(workoutSetData)
+				workout.WorkoutSets = append(workout.WorkoutSets, &workoutSet)
+			}
+			plan.Workouts = append(plan.Workouts, &workout)
+		}
+		courseDto.Plans = append(courseDto.Plans, &plan)
+	}
+	return &courseDto, nil
+}
+
+func (cs *course) GetCourseProductStructure(c *gin.Context, courseID int64) (*dto.CourseProductStructure, errcode.Error) {
+	courseData, err := cs.courseRepo.FindCourseProduct(courseID)
+	if err != nil {
+		return nil, cs.errHandler.Set(c, "course repo", err)
+	}
+	if global.ScheduleType(courseData.ScheduleType) != global.SingleScheduleType {
+		return nil, cs.errHandler.Custom(8999, errors.New("此查詢只支援單一訓練課表"))
+	}
+	courseDto := dto.NewCourseProductStructure(courseData)
+	planDatas, err := cs.planRepo.FindPlansByCourseID(courseID)
+	if err != nil {
+		return nil, cs.errHandler.Set(c, "plan repo", err)
+	}
+	for _, planData := range planDatas {
+		plan := dto.NewPlanStructure(planData)
+		workoutDatas, err := cs.workoutRepo.FindWorkoutsByPlanID(planData.ID)
+		if err != nil {
+			return nil, cs.errHandler.Set(c, "workout repo", err)
+		}
+		for _, workoutData := range workoutDatas {
+			workout := dto.NewWorkoutStructure(workoutData)
+			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID)
+			if err != nil {
+				return nil, cs.errHandler.Set(c, "workout set repo", err)
+			}
+			for _, workoutSetData := range workoutSetDatas {
+				workoutSet := dto.NewWorkoutSet(workoutSetData)
+				workout.WorkoutSets = append(workout.WorkoutSets, &workoutSet)
+			}
+			plan.Workouts = append(plan.Workouts, &workout)
+		}
+		courseDto.Plans = append(courseDto.Plans, &plan)
+	}
+	return &courseDto, nil
 }
 
 func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error) {

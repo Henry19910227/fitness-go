@@ -11,8 +11,8 @@ import (
 
 type Plan struct {
 	Base
-	planService    service.Plan
-	workoutService service.Workout
+	planService      service.Plan
+	workoutService   service.Workout
 	workoutSetAccess access.WorkoutSet
 }
 
@@ -23,7 +23,7 @@ func NewPlan(baseGroup *gin.RouterGroup,
 	userMidd midd.User,
 	courseMidd midd.Course) {
 	plan := Plan{planService: planService,
-		workoutService: workoutService,
+		workoutService:   workoutService,
 		workoutSetAccess: workoutSetAccess}
 
 	baseGroup.PATCH("/plan/:plan_id",
@@ -99,7 +99,7 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 // @Success 200 {object} model.SuccessResult{data=dto.PlanID} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /plan/{plan_id} [DELETE]
-func (p *Plan) DeletePlan(c *gin.Context)  {
+func (p *Plan) DeletePlan(c *gin.Context) {
 	var uri validator.PlanIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
@@ -181,7 +181,7 @@ func (p *Plan) GetWorkouts(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	workouts, err := p.workoutService.GetWorkoutsByPlanID(c, uri.PlanID)
+	workouts, err := p.workoutService.GetWorkouts(c, uri.PlanID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return

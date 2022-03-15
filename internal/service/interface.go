@@ -76,6 +76,8 @@ type Course interface {
 	GetProgressCourseAssetSummaries(c *gin.Context, userID int64, page int, size int) ([]*dto.CourseAssetSummary, *dto.Paging, errcode.Error)
 	GetChargeCourseAssetSummaries(c *gin.Context, userID int64, page int, size int) ([]*dto.CourseAssetSummary, *dto.Paging, errcode.Error)
 	GetCourseAsset(c *gin.Context, userID int64, courseID int64) (*dto.CourseAsset, errcode.Error)
+	GetCourseAssetStructure(c *gin.Context, userID int64, courseID int64) (*dto.CourseAssetStructure, errcode.Error)
+	GetCourseProductStructure(c *gin.Context, courseID int64) (*dto.CourseProductStructure, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
 	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
 	GetCourseStatus(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error)
@@ -86,15 +88,13 @@ type Plan interface {
 	UpdatePlan(c *gin.Context, planID int64, name string) (*dto.Plan, errcode.Error)
 	DeletePlan(c *gin.Context, planID int64) (*dto.PlanID, errcode.Error)
 	GetPlansByCourseID(c *gin.Context, courseID int64) ([]*dto.Plan, errcode.Error)
-	GetPlanProductsByCourseID(c *gin.Context, userID int64, courseID int64) ([]*dto.PlanProduct, errcode.Error)
 	GetPlanAssets(c *gin.Context, userID int64, courseID int64) ([]*dto.PlanAsset, errcode.Error)
 	GetPlanStatus(c *gin.Context, planID int64) (global.CourseStatus, errcode.Error)
 }
 
 type Workout interface {
 	CreateWorkout(c *gin.Context, planID int64, name string) (*dto.Workout, errcode.Error)
-	GetWorkoutsByPlanID(c *gin.Context, planID int64) ([]*dto.Workout, errcode.Error)
-	GetWorkoutProductsByPlanID(c *gin.Context, planID int64) ([]*dto.WorkoutProduct, errcode.Error)
+	GetWorkouts(c *gin.Context, planID int64) ([]*dto.Workout, errcode.Error)
 	GetWorkoutAssets(c *gin.Context, userID int64, planID int64) ([]*dto.WorkoutAsset, errcode.Error)
 	UpdateWorkout(c *gin.Context, workoutID int64, param *dto.UpdateWorkoutParam) (*dto.Workout, errcode.Error)
 	DeleteWorkout(c *gin.Context, workoutID int64) (*dto.WorkoutID, errcode.Error)

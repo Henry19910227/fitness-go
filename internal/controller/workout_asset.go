@@ -33,9 +33,9 @@ func NewWorkoutAsset(baseGroup *gin.RouterGroup, workoutService service.Workout,
 		workout.CreateWorkoutLog)
 }
 
-// GetWorkoutSets 獲取訓練組列表(探索區課表)
-// @Summary 獲取訓練組列表(探索區課表)
-// @Description 獲取訓練組列表(探索區課表)
+// GetWorkoutSets 獲取訓練組列表
+// @Summary 獲取訓練組列表
+// @Description 獲取訓練組列表
 // @Tags Exercise
 // @Accept json
 // @Produce json

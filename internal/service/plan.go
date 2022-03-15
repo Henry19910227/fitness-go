@@ -67,23 +67,6 @@ func (p *plan) GetPlansByCourseID(c *gin.Context, courseID int64) ([]*dto.Plan, 
 	return plans, nil
 }
 
-func (p *plan) GetPlanProductsByCourseID(c *gin.Context, userID int64, courseID int64) ([]*dto.PlanProduct, errcode.Error) {
-	planDatas, err := p.planRepo.FindPlansByCourseID(courseID)
-	if err != nil {
-		return nil, p.errHandler.Set(c, "plan repo", err)
-	}
-	plans := make([]*dto.PlanProduct, 0)
-	for _, planData := range planDatas {
-		plan := dto.PlanProduct{
-			ID:           planData.ID,
-			Name:         planData.Name,
-			WorkoutCount: planData.WorkoutCount,
-		}
-		plans = append(plans, &plan)
-	}
-	return plans, nil
-}
-
 func (p *plan) GetPlanAssets(c *gin.Context, userID int64, courseID int64) ([]*dto.PlanAsset, errcode.Error) {
 	planDatas, err := p.planRepo.FindPlanAssets(userID, courseID)
 	if err != nil {

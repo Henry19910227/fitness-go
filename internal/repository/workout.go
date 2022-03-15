@@ -75,8 +75,8 @@ func (w *workout) CreateWorkout(planID int64, name string) (int64, error) {
 	return workout.ID, nil
 }
 
-func (w *workout) FindWorkoutsByPlanID(planID int64) ([]*entity.Workout, error) {
-	workouts := make([]*entity.Workout, 0)
+func (w *workout) FindWorkoutsByPlanID(planID int64) ([]*model.Workout, error) {
+	workouts := make([]*model.Workout, 0)
 	if err := w.gorm.DB().
 		Table("workouts").
 		Select("*").

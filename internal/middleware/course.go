@@ -14,12 +14,12 @@ import (
 type course struct {
 	Base
 	courseRepo repository.Course
-	jwtTool tool.JWT
+	jwtTool    tool.JWT
 	errHandler errcode.Handler
 }
 
 func NewCourse(courseRepo repository.Course, jwtTool tool.JWT, errHandler errcode.Handler) Course {
-	return &course{courseRepo:courseRepo, jwtTool:jwtTool, errHandler: errHandler}
+	return &course{courseRepo: courseRepo, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (cm *course) WorkoutSetStatusAccessRange(status []global.CourseStatus, ext []global.CourseStatus) gin.HandlerFunc {
@@ -47,7 +47,7 @@ func (cm *course) WorkoutSetStatusAccessRange(status []global.CourseStatus, ext 
 			return
 		}
 		s := status
-		if global.Role(role.(int)) == global.AdminRole && ext != nil{
+		if global.Role(role.(int)) == global.AdminRole && ext != nil {
 			s = ext
 		}
 		if !containCourseStatus(s, global.CourseStatus(course.Status)) {
@@ -160,7 +160,7 @@ func (cm *course) CourseStatusVerify(currentStatus func(c *gin.Context, courseID
 			return
 		}
 		if !containCourseStatus(allowStatus, current) {
-			cm.JSONErrorResponse(c, cm.errHandler.Set(c, "permission", errors.New(strconv.Itoa(errcode.PermissionDenied))))
+			cm.JSONErrorResponse(c, cm.errHandler.Custom(8999, errors.New("此課表尚未販售")))
 			c.Abort()
 			return
 		}
