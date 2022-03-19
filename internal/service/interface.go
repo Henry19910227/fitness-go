@@ -155,6 +155,7 @@ type Payment interface {
 	CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanID int64) (*dto.SubscribeOrder, errcode.Error)
 	VerifyFreeCourseOrder(c *gin.Context, uid int64, orderID string) errcode.Error
 	VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
+	VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
 	HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error
 	GetSubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeResponse, errcode.Error)
 }

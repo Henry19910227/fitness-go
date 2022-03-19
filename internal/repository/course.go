@@ -424,8 +424,7 @@ func (c *course) FindProgressCourseAssetSummaries(userID int64, paging *model.Pa
 		Preload("Sale").
 		Preload("Sale.ProductLabel").
 		Preload("Review").
-		Joins("INNER JOIN users ON courses.user_id = users.id").
-		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND users.id = stat.user_id").
+		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND stat.user_id = ?", userID).
 		Order("stat.update_at DESC").
 		Where("stat.user_id = ?", userID)
 	if paging != nil {
@@ -444,8 +443,7 @@ func (c *course) FindChargeCourseAssetSummaries(userID int64, paging *model.Pagi
 		Preload("Sale").
 		Preload("Sale.ProductLabel").
 		Preload("Review").
-		Joins("INNER JOIN users ON courses.user_id = users.id").
-		Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND users.id = asset.user_id").
+		Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND asset.user_id = ?", userID).
 		Order("asset.create_at DESC").
 		Where("asset.user_id = ? AND asset.available = ?", userID, 1)
 	if paging != nil {
@@ -461,8 +459,7 @@ func (c *course) FindProgressCourseAssetCount(userID int64) (int, error) {
 	var count int64
 	if err := c.gorm.DB().
 		Table("courses").
-		Joins("INNER JOIN users ON courses.user_id = users.id").
-		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND users.id = stat.user_id").
+		Joins("LEFT JOIN user_course_statistics AS stat ON courses.id = stat.course_id AND stat.user_id = ?", userID).
 		Where("stat.user_id = ?", userID).
 		Count(&count).Error; err != nil {
 		return 0, err
@@ -473,8 +470,7 @@ func (c *course) FindProgressCourseAssetCount(userID int64) (int, error) {
 func (c *course) FindChargeCourseAssetCount(userID int64) (int, error) {
 	var count int64
 	if err := c.gorm.DB().
-		Joins("INNER JOIN users ON courses.user_id = users.id").
-		Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND users.id = asset.user_id").
+		Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND asset.user_id = ?", userID).
 		Order("asset.create_at DESC").
 		Where("asset.user_id = ? AND asset.available = ?", userID, 1).
 		Count(&count).Error; err != nil {
