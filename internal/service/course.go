@@ -375,7 +375,7 @@ func (cs *course) GetChargeCourseAssetSummaries(c *gin.Context, userID int64, pa
 	if err != nil {
 		return nil, nil, cs.errHandler.Set(c, "course repo", err)
 	}
-	totalCount, err := cs.courseRepo.FindProgressCourseAssetCount(userID)
+	totalCount, err := cs.courseRepo.FindChargeCourseAssetCount(userID)
 	if err != nil {
 		return nil, nil, cs.errHandler.Set(c, "course repo", err)
 	}
