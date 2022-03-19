@@ -36,6 +36,11 @@ func NewPayment(baseGroup *gin.RouterGroup,
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
 		review.VerifyAppleReceipt)
 
+	baseGroup.POST("/verify_google_receipt",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
+		review.VerifyGoogleReceipt)
+
 	baseGroup.POST("/redeem_course",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
@@ -131,6 +136,35 @@ func (p *Payment) VerifyAppleReceipt(c *gin.Context) {
 		return
 	}
 	if err := p.PaymentService.VerifyAppleReceipt(c, uid, body.OrderID, body.ReceiptData); err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, nil, "success")
+}
+
+// VerifyGoogleReceipt 驗證Android收據
+// @Summary 驗證Android收據
+// @Description 驗證Android收據
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body validator.VerifyReceiptBody true "輸入參數"
+// @Success 200 {object} model.SuccessResult "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /verify_google_receipt [POST]
+func (p *Payment) VerifyGoogleReceipt(c *gin.Context) {
+	uid, err := p.GetUID(c)
+	if err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var body validator.VerifyReceiptBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := p.PaymentService.VerifyGoogleReceipt(c, uid, body.OrderID, body.ReceiptData); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}

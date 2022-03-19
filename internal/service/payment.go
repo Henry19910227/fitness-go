@@ -1,6 +1,7 @@
 package service
 
 import (
+	"crypto/rand"
 	"errors"
 	"fmt"
 	"github.com/Henry19910227/fitness-go/errcode"
@@ -12,6 +13,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"math/big"
 	"strconv"
 	"time"
 )
@@ -266,6 +268,33 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	return nil
 }
 
+func (p *payment) VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error {
+	//取得訂單資訊
+	order, err := p.orderRepo.FindOrder(orderID)
+	if err != nil {
+		return p.errHandler.Set(c, "order repo", err)
+	}
+	if order.UserID != uid {
+		return p.errHandler.Custom(8999, errors.New("無效的收據(此訂單非本人)"))
+	}
+	response := dto.GoogleReceiptResponse{
+		OrderID: "TEST-" + time.Now().Format("20060102150405") + strconv.Itoa(int(randRange(100, 999))),
+	}
+	//處理課表購買訂單
+	if order.OrderType == int(global.BuyCourseOrderType) {
+		if err := p.handleBuyCourseTradeForGoogle(c, parserCourseOrder(order), receiptData, &response); err != nil {
+			return err
+		}
+	}
+	//處理會員訂閱訂單
+	if order.OrderType == int(global.SubscribeOrderType) {
+		if err := p.handleSubscribeTradeForGoogle(c, uid, parserSubscribeOrder(order), receiptData, &response); err != nil {
+			return err
+		}
+	}
+	panic("implement me")
+}
+
 func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error {
 	// 解析字串
 	response, err := p.iapHandler.DecodeIAPNotificationResponse(base64PayloadString)
@@ -426,6 +455,14 @@ func (p *payment) handleBuyCourseTrade(c *gin.Context, order *dto.CourseOrder, r
 	}
 	if err := p.handleCourseOrderTrade(order, global.ApplePaymentType, item.OriginalTransactionID,
 		item.TransactionID, item.ProductID, quantity, receiptData); err != nil {
+		return p.errHandler.Set(c, "trade error", err)
+	}
+	return nil
+}
+
+func (p *payment) handleBuyCourseTradeForGoogle(c *gin.Context, order *dto.CourseOrder, receiptData string, response *dto.GoogleReceiptResponse) errcode.Error {
+	if err := p.handleCourseOrderTrade(order, global.GooglePaymentType, response.OrderID,
+		response.OrderID, order.SaleItem.ProductID, 1, receiptData); err != nil {
 		return p.errHandler.Set(c, "trade error", err)
 	}
 	return nil
@@ -594,6 +631,89 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 	return nil
 }
 
+func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.GoogleReceiptResponse) errcode.Error {
+	//初始化當前訂單id
+	currentOrderID := order.ID
+	//查詢用戶訂閱資訊
+	subscribeInfo, err := p.subscribeInfo.FindSubscribeInfo(uid)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return p.errHandler.Set(c, "user subscribe repo", err)
+	}
+	if subscribeInfo != nil {
+		if subscribeInfo.OrderID != nil {
+			currentOrderID = *subscribeInfo.OrderID
+		}
+	}
+	//驗證訂單初始交易id
+	receipts, err := p.receiptRepo.FindReceiptsByOrderID(currentOrderID, &model.OrderBy{
+		Field:     "create_at",
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: 0,
+		Limit:  1,
+	})
+	if err != nil {
+		return p.errHandler.Set(c, "receipt repo", err)
+	}
+	if len(receipts) > 0 {
+		return nil
+	}
+	//創建transaction
+	tx := p.transactionRepo.CreateTransaction()
+	//存入收據
+	if err != nil {
+		return p.errHandler.Set(c, "Atoi error", err)
+	}
+	_, err = p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
+		OrderID:               currentOrderID,
+		PaymentType:           int(global.ApplePaymentType),
+		ReceiptToken:          receiptData,
+		OriginalTransactionID: response.OrderID,
+		TransactionID:         response.OrderID,
+		ProductID:             order.SubscribePlan.ProductID,
+		Quantity:              1,
+	})
+	if err != nil {
+		tx.Rollback()
+		return p.errHandler.Set(c, "receipt repo", err)
+	}
+	//獲取訂閱項目資訊
+	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(order.SubscribePlan.ProductID)
+	if err != nil {
+		tx.Rollback()
+		return p.errHandler.Set(c, "subscribe plan error", err)
+	}
+	//綁定訂單與會員關係
+	_, err = p.subscribeInfo.SaveSubscribeInfo(tx, &model.SaveUserSubscribeInfoParam{
+		UserID:          order.UserID,
+		OrderID:         currentOrderID,
+		SubscribePlanID: subscribePlan.ID,
+		Status:          global.ValidSubscribeStatus,
+		StartDate:       time.Now().Format("2006-01-02 15:04:05"),
+		ExpiresDate:     time.Now().Format("2006-01-02 15:04:05"),
+	})
+	if err != nil {
+		tx.Rollback()
+		return p.errHandler.Set(c, "member repo", err)
+	}
+	//更新會員類型
+	ut := int(global.SubscribeUserType)
+	if err := p.userRepo.UpdateUserByUID(tx, order.UserID, &model.UpdateUserParam{
+		UserType: &ut,
+	}); err != nil {
+		tx.Rollback()
+		return p.errHandler.Set(c, "user repo", err)
+	}
+	//更新訂單狀態
+	if err := p.orderRepo.UpdateOrderStatus(tx, currentOrderID, global.SuccessOrderStatus); err != nil {
+		tx.Rollback()
+		return p.errHandler.Set(c, "order repo", err)
+	}
+	//結束transaction
+	p.transactionRepo.FinishTransaction(tx)
+	return nil
+}
+
 func parserIAPDate(unix int64) *time.Time {
 	location, err := time.LoadLocation("Asia/Taipei")
 	if err != nil {
@@ -694,4 +814,12 @@ func parserSubscribeOrder(data *model.Order) *dto.SubscribeOrder {
 		}
 	}
 	return &order
+}
+
+func randRange(min int64, max int64) int64 {
+	if min > max || min < 0 {
+		return 0
+	}
+	result, _ := rand.Int(rand.Reader, big.NewInt(max-min+1))
+	return min + result.Int64()
 }
