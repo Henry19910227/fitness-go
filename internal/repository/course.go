@@ -445,7 +445,7 @@ func (c *course) FindChargeCourseAssetSummaries(userID int64, paging *model.Pagi
 		Preload("Review").
 		Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND asset.user_id = ?", userID).
 		Order("asset.create_at DESC").
-		Where("asset.user_id = ? AND asset.available = ?", userID, 1)
+		Where("asset.user_id = ? AND asset.available = ? AND courses.sale_type = ?", userID, 1, global.SaleTypeCharge)
 	if paging != nil {
 		db = db.Offset(paging.Offset).Limit(paging.Limit)
 	}
@@ -470,9 +470,10 @@ func (c *course) FindProgressCourseAssetCount(userID int64) (int, error) {
 func (c *course) FindChargeCourseAssetCount(userID int64) (int, error) {
 	var count int64
 	if err := c.gorm.DB().
+		Table("courses").
 		Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND asset.user_id = ?", userID).
 		Order("asset.create_at DESC").
-		Where("asset.user_id = ? AND asset.available = ?", userID, 1).
+		Where("asset.user_id = ? AND asset.available = ? AND courses.sale_type = ?", userID, 1, global.SaleTypeCharge).
 		Count(&count).Error; err != nil {
 		return 0, nil
 	}
