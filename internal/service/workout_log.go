@@ -76,12 +76,20 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	}
 	//創建訓練記錄
 	tx := w.transactionRepo.CreateTransaction()
+	var intensity int
+	if param.Intensity != nil {
+		intensity = *param.Intensity
+	}
+	var place int
+	if param.Place != nil {
+		place = *param.Place
+	}
 	workoutLogID, err := w.workoutLogRepo.CreateWorkoutLog(tx, &model.CreateWorkoutLogParam{
 		UserID:    userID,
 		WorkoutID: workoutID,
 		Duration:  param.Duration,
-		Intensity: param.Intensity,
-		Place:     param.Place,
+		Intensity: intensity,
+		Place:     place,
 	})
 	if err != nil {
 		tx.Rollback()

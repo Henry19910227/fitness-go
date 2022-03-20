@@ -10,7 +10,7 @@ type WorkoutLogResponse struct {
 
 type CreateWorkoutLogParam struct {
 	Duration       int
-	Intensity      int
-	Place          int
+	Intensity      *int
+	Place          *int
 	WorkoutSetLogs []*WorkoutSetLog
 }

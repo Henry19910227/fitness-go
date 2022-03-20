@@ -13,8 +13,8 @@ type CreateWorkoutBody struct {
 
 type CreateWorkoutLogBody struct {
 	Duration       int                  `json:"duration" binding:"required" example:"3600"`                 // 訓練時長(秒)
-	Intensity      int                  `json:"intensity" binding:"required,oneof=1 2 3 4 5 6" example:"4"` // 訓練強度(1:輕鬆/2:適中/3:稍難/4:很累)
-	Place          int                  `json:"place" binding:"required,oneof=1 2 3 4 5" example:"1"`       // 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
+	Intensity      *int                  `json:"intensity" binding:"omitempty,oneof=0 1 2 3 4 5 6" example:"4"` // 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
+	Place          *int                  `json:"place" binding:"omitempty,oneof=0 1 2 3 4 5" example:"1"`       // 適合場地(0:未指定/1:健身房/2:居家/3:空地/4:戶外/5:其他)
 	WorkoutSetLogs []*dto.WorkoutSetLog `json:"workout_set_logs"`                                           // 訓練組記錄
 }
 
