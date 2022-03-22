@@ -61,66 +61,74 @@ func (w *workoutLog) FindWorkoutLogsByPlanID(planID int64) ([]*model.WorkoutLog,
 }
 
 func (w *workoutLog) CalculateUserCourseStatistic(userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error) {
-	courseIDQuery := w.gorm.DB().Table("workout_logs").
+	var courseID int64
+	if err := w.gorm.DB().Table("workout_logs").
 		Select("courses.id").
 		Joins("INNER JOIN workouts ON workout_logs.workout_id = workouts.id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
 		Joins("INNER JOIN courses ON plans.course_id = courses.id").
-		Where("workouts.id = ?", workoutID).Limit(1)
+		Where("workouts.id = ?", workoutID).Take(&courseID).Error; err != nil {
+			return nil, err
+	}
 	finishWorkoutCountQuery := w.gorm.DB().Table("workout_logs").
 		Select("COUNT(DISTINCT workout_id)").
 		Joins("INNER JOIN workouts ON workout_logs.workout_id = workouts.id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
 		Joins("INNER JOIN courses ON plans.course_id = courses.id").
-		Where("courses.id = course_id AND workout_logs.user_id = ?", userID)
+		Where("courses.id = ? AND workout_logs.user_id = ?", courseID, userID)
 	totalFinishWorkoutCountQuery := w.gorm.DB().Table("workout_logs").
 		Select("COUNT(*)").
 		Joins("INNER JOIN workouts ON workout_logs.workout_id = workouts.id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
 		Joins("INNER JOIN courses ON plans.course_id = courses.id").
-		Where("courses.id = course_id AND workout_logs.user_id = ?", userID)
+		Where("courses.id = ? AND workout_logs.user_id = ?", courseID, userID)
 	durationQuery := w.gorm.DB().Table("workout_logs").
 		Select("SUM(duration)").
 		Joins("INNER JOIN workouts ON workout_logs.workout_id = workouts.id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
 		Joins("INNER JOIN courses ON plans.course_id = courses.id").
-		Where("courses.id = course_id AND workout_logs.user_id = ?", userID)
-	var result model.WorkoutLogCourseStatistic
-	if err := w.gorm.DB().Raw("SELECT (?) AS course_id, (?) AS finish_workout_count, (?) AS total_finish_workout_count, (?) AS duration",
-		courseIDQuery,
+		Where("courses.id = ? AND workout_logs.user_id = ?", courseID, userID)
+	result := model.WorkoutLogCourseStatistic {
+		CourseID: courseID,
+	}
+	if err := w.gorm.DB().Raw("SELECT (?) AS finish_workout_count, (?) AS total_finish_workout_count, (?) AS duration",
 		finishWorkoutCountQuery,
 		totalFinishWorkoutCountQuery,
 		durationQuery).
 		Row().
-		Scan(&result.CourseID, &result.FinishWorkoutCount, &result.TotalFinishWorkoutCount, &result.Duration); err != nil {
+		Scan(&result.FinishWorkoutCount, &result.TotalFinishWorkoutCount, &result.Duration); err != nil {
 		return nil, err
 	}
 	return &result, nil
 }
 
 func (w *workoutLog) CalculateUserPlanStatistic(userID int64, workoutID int64) (*model.WorkoutLogPlanStatistic, error) {
-	planIDQuery := w.gorm.DB().Table("workout_logs").
+	var planID int64
+	if err := w.gorm.DB().Table("workout_logs").
 		Select("plans.id").
 		Joins("INNER JOIN workouts ON workout_logs.workout_id = workouts.id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
-		Where("workouts.id = ?", workoutID).Limit(1)
+		Where("workouts.id = ?", workoutID).Take(&planID).Error; err != nil {
+			return nil, err
+	}
 	finishWorkoutCountQuery := w.gorm.DB().Table("workout_logs").
 		Select("COUNT(DISTINCT workout_id)").
 		Joins("INNER JOIN workouts ON workout_logs.workout_id = workouts.id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
-		Where("plans.id = plan_id AND workout_logs.user_id = ?", userID)
+		Where("plans.id = ? AND workout_logs.user_id = ?", planID, userID)
 	durationQuery := w.gorm.DB().Table("workout_logs").
 		Select("SUM(duration)").
 		Joins("INNER JOIN workouts ON workout_logs.workout_id = workouts.id").
 		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
-		Where("plans.id = plan_id AND workout_logs.user_id = ?", userID)
-	var result model.WorkoutLogPlanStatistic
-	if err := w.gorm.DB().Raw("SELECT (?) AS course_id, (?) AS finish_workout_count, (?) AS duration",
-		planIDQuery,
+		Where("plans.id = ? AND workout_logs.user_id = ?", planID, userID)
+	result := model.WorkoutLogPlanStatistic {
+		PlanID: planID,
+	}
+	if err := w.gorm.DB().Raw("SELECT (?) AS finish_workout_count, (?) AS duration",
 		finishWorkoutCountQuery,
 		durationQuery).
 		Row().
-		Scan(&result.PlanID, &result.FinishWorkoutCount, &result.Duration); err != nil {
+		Scan(&result.FinishWorkoutCount, &result.Duration); err != nil {
 		return nil, err
 	}
 	return &result, nil
