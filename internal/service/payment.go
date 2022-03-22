@@ -176,7 +176,7 @@ func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanI
 		return nil, p.errHandler.Custom(8999, errors.New("目前已經是訂閱會員"))
 	}
 	if global.PaymentType(receipts[0].PaymentType) == global.GooglePaymentType {
-		return nil, p.errHandler.Custom(8999, errors.New("尚未支援"))
+		return nil, p.errHandler.Custom(8999, errors.New("目前已經是訂閱會員"))
 	}
 	return nil, p.errHandler.Custom(8999, errors.New("創建訂單失敗"))
 }
@@ -221,7 +221,7 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 		return p.errHandler.Set(c, "order repo", err)
 	}
 	if order.UserID != uid {
-		return p.errHandler.Custom(8999, errors.New("無效的收據(此訂單非本人)"))
+		return p.errHandler.Custom(8999, errors.New("無效的訂單(此訂單非本人)"))
 	}
 	//apple server 正式區驗證收據
 	param := map[string]interface{}{
@@ -278,7 +278,7 @@ func (p *payment) VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string,
 		return p.errHandler.Custom(8999, errors.New("無效的收據(此訂單非本人)"))
 	}
 	response := dto.GoogleReceiptResponse{
-		OrderID: "TEST-" + time.Now().Format("20060102150405") + strconv.Itoa(int(randRange(100, 999))),
+		OrderID: time.Now().Format("20060102150405") + strconv.Itoa(int(randRange(100, 999))),
 	}
 	//處理課表購買訂單
 	if order.OrderType == int(global.BuyCourseOrderType) {
@@ -292,7 +292,7 @@ func (p *payment) VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string,
 			return err
 		}
 	}
-	panic("implement me")
+	return nil
 }
 
 func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error {
@@ -516,36 +516,31 @@ func (p *payment) handleCourseOrderTrade(order *dto.CourseOrder, paymentType glo
 }
 
 func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.AppleReceiptResponse) errcode.Error {
-	//初始化當前訂單id
-	currentOrderID := order.ID
+	var currentOrderID string
 	//驗證收據格式
 	if len(response.LatestReceiptInfo) == 0 || len(response.PendingRenewalInfo) == 0 {
 		return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
 	}
-	//查詢用戶訂閱資訊
-	subscribeInfo, err := p.subscribeInfo.FindSubscribeInfo(uid)
+	//查找匹配TransactionID的訂單
+	oldOrder, err := p.orderRepo.FindOrderByOriginalTransactionID(response.LatestReceiptInfo[0].OriginalTransactionID)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return p.errHandler.Set(c, "user subscribe repo", err)
-	}
-	if subscribeInfo != nil {
-		if subscribeInfo.OrderID != nil {
-			currentOrderID = *subscribeInfo.OrderID
-		}
-	}
-	//驗證訂單初始交易id
-	receipts, err := p.receiptRepo.FindReceiptsByOrderID(currentOrderID, &model.OrderBy{
-		Field:     "create_at",
-		OrderType: global.DESC,
-	}, &model.PagingParam{
-		Offset: 0,
-		Limit:  1,
-	})
-	if err != nil {
 		return p.errHandler.Set(c, "receipt repo", err)
 	}
-	if len(receipts) > 0 {
-		//驗證是否是相同的初始id訂單
-		if response.LatestReceiptInfo[0].OriginalTransactionID != receipts[0].OriginalTransactionID {
+	if oldOrder != nil {
+		//有匹配TransactionID的訂單
+		if oldOrder.UserID != uid {
+			return p.errHandler.Custom(8999, errors.New("無效的收據(此收據非本人)"))
+		}
+		currentOrderID = oldOrder.ID
+	} else {
+		//無匹配TransactionID的訂單，選擇支付當前帶入的訂單 or 創建新的訂單
+		orderModel, err := p.orderRepo.FindOrder(order.ID)
+		if err != nil {
+			return p.errHandler.Set(c, "order repo", err)
+		}
+		if global.OrderStatus(orderModel.OrderStatus) == global.PendingOrderStatus {
+			currentOrderID = order.ID
+		} else {
 			// 查找訂閱方案
 			subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(response.LatestReceiptInfo[0].ProductID)
 			if err != nil {
@@ -598,7 +593,7 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 		subscribeStatus = global.NoneSubscribeStatus
 	}
 	_, err = p.subscribeInfo.SaveSubscribeInfo(tx, &model.SaveUserSubscribeInfoParam{
-		UserID:          order.UserID,
+		UserID:          uid,
 		OrderID:         currentOrderID,
 		SubscribePlanID: subscribePlan.ID,
 		Status:          subscribeStatus,
@@ -632,40 +627,11 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 }
 
 func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.GoogleReceiptResponse) errcode.Error {
-	//初始化當前訂單id
-	currentOrderID := order.ID
-	//查詢用戶訂閱資訊
-	subscribeInfo, err := p.subscribeInfo.FindSubscribeInfo(uid)
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return p.errHandler.Set(c, "user subscribe repo", err)
-	}
-	if subscribeInfo != nil {
-		if subscribeInfo.OrderID != nil {
-			currentOrderID = *subscribeInfo.OrderID
-		}
-	}
-	//驗證訂單初始交易id
-	receipts, err := p.receiptRepo.FindReceiptsByOrderID(currentOrderID, &model.OrderBy{
-		Field:     "create_at",
-		OrderType: global.DESC,
-	}, &model.PagingParam{
-		Offset: 0,
-		Limit:  1,
-	})
-	if err != nil {
-		return p.errHandler.Set(c, "receipt repo", err)
-	}
-	if len(receipts) > 0 {
-		return nil
-	}
 	//創建transaction
 	tx := p.transactionRepo.CreateTransaction()
 	//存入收據
-	if err != nil {
-		return p.errHandler.Set(c, "Atoi error", err)
-	}
-	_, err = p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
-		OrderID:               currentOrderID,
+	_, err := p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
+		OrderID:               order.ID,
 		PaymentType:           int(global.ApplePaymentType),
 		ReceiptToken:          receiptData,
 		OriginalTransactionID: response.OrderID,
@@ -685,8 +651,8 @@ func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order
 	}
 	//綁定訂單與會員關係
 	_, err = p.subscribeInfo.SaveSubscribeInfo(tx, &model.SaveUserSubscribeInfoParam{
-		UserID:          order.UserID,
-		OrderID:         currentOrderID,
+		UserID:          uid,
+		OrderID:         order.ID,
 		SubscribePlanID: subscribePlan.ID,
 		Status:          global.ValidSubscribeStatus,
 		StartDate:       time.Now().Format("2006-01-02 15:04:05"),
@@ -705,7 +671,7 @@ func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order
 		return p.errHandler.Set(c, "user repo", err)
 	}
 	//更新訂單狀態
-	if err := p.orderRepo.UpdateOrderStatus(tx, currentOrderID, global.SuccessOrderStatus); err != nil {
+	if err := p.orderRepo.UpdateOrderStatus(tx, order.ID, global.SuccessOrderStatus); err != nil {
 		tx.Rollback()
 		return p.errHandler.Set(c, "order repo", err)
 	}

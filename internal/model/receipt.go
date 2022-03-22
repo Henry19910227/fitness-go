@@ -12,6 +12,10 @@ type Receipt struct {
 	CreateAt              string `gorm:"column:create_at"`               // 創建日期
 }
 
+func (Receipt) TableName() string {
+	return "receipts"
+}
+
 type CreateReceiptParam struct {
 	OrderID               string `gorm:"column:order_id"`                // 訂單id
 	PaymentType           int    `gorm:"column:payment_type"`            // 支付方式(1:apple內購/2:google內購)
