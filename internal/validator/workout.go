@@ -6,6 +6,10 @@ type WorkoutIDUri struct {
 	WorkoutID int64 `uri:"workout_id" binding:"required" example:"1"`
 }
 
+type WorkoutLogIDUri struct {
+	WorkoutLogID int64 `uri:"workout_log_id" binding:"required" example:"1"`
+}
+
 type CreateWorkoutBody struct {
 	Name              string `json:"name" binding:"required,min=1,max=20" example:"胸肌訓練"`
 	WorkoutTemplateID *int64 `json:"workout_template_id" binding:"omitempty" example:"1"` // 訓練模板ID

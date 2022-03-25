@@ -1392,6 +1392,37 @@ definitions:
         example: 1
         type: integer
     type: object
+  dto.WorkoutLog:
+    properties:
+      create_at:
+        description: 創建時間
+        example: "2021-05-28 11:00:00"
+        type: string
+      duration:
+        description: 訓練時長
+        example: 1
+        type: integer
+      id:
+        description: 紀錄id
+        example: 1
+        type: integer
+      intensity:
+        description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
+        example: 1
+        type: integer
+      place:
+        description: 地點(0:未指定/1:住家/2:健身房/3:戶外)
+        example: 1
+        type: integer
+      workout:
+        $ref: '#/definitions/dto.Workout'
+        description: 訓練
+      workout_set_logs:
+        description: 訓練組
+        items:
+          $ref: '#/definitions/dto.WorkoutSetLog'
+        type: array
+    type: object
   dto.WorkoutLogSummary:
     properties:
       create_at:
@@ -1474,6 +1505,35 @@ definitions:
         description: 訓練組id
         example: 10
         type: integer
+    type: object
+  dto.WorkoutSetLog:
+    properties:
+      distance:
+        description: 距離(公里)
+        example: 1
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      id:
+        description: 訓練組紀錄id
+        type: integer
+      incline:
+        description: 坡度
+        example: 5
+        type: number
+      name:
+        description: 訓練名稱
+        type: string
+      reps:
+        description: 次數
+        example: 5
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 10
+        type: number
     type: object
   dto.WorkoutSetLogParam:
     properties:
@@ -4846,6 +4906,38 @@ paths:
       summary: 獲取訓練組列表
       tags:
       - Exercise
+  /workout_log/{workout_log_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訓練紀錄詳細
+      parameters:
+      - description: 訓練記錄id
+        in: path
+        name: workout_log_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.WorkoutLog'
+              type: object
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取訓練紀錄詳細
+      tags:
+      - History
   /workout_logs:
     get:
       consumes:

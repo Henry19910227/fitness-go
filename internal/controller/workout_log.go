@@ -22,6 +22,34 @@ func NewWorkoutLog(baseGroup *gin.RouterGroup, workoutLogService service.Workout
 	baseGroup.GET("/workout_logs",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		workout.GetWorkoutLogSummaries)
+	baseGroup.GET("/workout_log/:workout_log_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		workout.GetWorkoutLog)
+}
+
+// GetWorkoutLog 獲取訓練紀錄詳細
+// @Summary 獲取訓練紀錄詳細
+// @Description 獲取訓練紀錄詳細
+// @Tags History
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_log_id path int64 true "訓練記錄id"
+// @Success 200 {object} model.SuccessResult{data=dto.WorkoutLog} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /workout_log/{workout_log_id} [GET]
+func (p *WorkoutLog) GetWorkoutLog(c *gin.Context) {
+	var uri validator.WorkoutLogIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	workoutLog, e := p.workoutLogService.GetWorkoutLog(c, uri.WorkoutLogID)
+	if e != nil {
+		p.JSONErrorResponse(c, e)
+		return
+	}
+	p.JSONSuccessResponse(c, workoutLog, "success!")
 }
 
 // GetWorkoutLogSummaries 以日期區間獲取訓練記錄

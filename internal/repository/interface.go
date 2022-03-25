@@ -187,7 +187,7 @@ type WorkoutLog interface {
 
 type WorkoutSetLog interface {
 	FindWorkoutSetLogsByWorkoutLogID(workoutLogID int64) ([]*model.WorkoutSetLog, error)
-	CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLog) error
+	CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLogParam) error
 }
 
 type UserCourseStatistic interface {

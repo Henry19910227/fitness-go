@@ -105,14 +105,14 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	for _, setID := range setIDs {
 		setIDMap[setID] = setID
 	}
-	workoutSetLogs := make([]*model.WorkoutSetLog, 0)
+	workoutSetLogs := make([]*model.WorkoutSetLogParam, 0)
 	for _, workoutSetLogDto := range param.WorkoutSetLogs {
 		//檢查加入的setID是否在此workout底下
 		if _, ok := setIDMap[workoutSetLogDto.WorkoutSetID]; !ok {
 			tx.Rollback()
 			return w.errHandler.Custom(8999, errors.New("加入了不合法的 workout set id"))
 		}
-		workoutSetLog := model.WorkoutSetLog{
+		workoutSetLog := model.WorkoutSetLogParam{
 			WorkoutLogID: workoutLogID,
 			WorkoutSetID: workoutSetLogDto.WorkoutSetID,
 			Weight:       workoutSetLogDto.Weight,
@@ -160,6 +160,19 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	}
 	w.transactionRepo.FinishTransaction(tx)
 	return nil
+}
+
+func (w *workoutLog) GetWorkoutLog(c *gin.Context, workoutLogID int64) (*dto.WorkoutLog, errcode.Error) {
+	log, err := w.workoutLogRepo.FindWorkoutLog(workoutLogID)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout log repo", err)
+	}
+	logSets, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(log.ID)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout log set repo", err)
+	}
+	workoutLog := dto.NewWorkoutLog(log, logSets)
+	return &workoutLog, nil
 }
 
 func (w *workoutLog) GetWorkoutLogSummaries(c *gin.Context, userID int64, startDate string, endDate string) ([]*dto.WorkoutLogSummary, errcode.Error) {

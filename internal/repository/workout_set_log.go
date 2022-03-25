@@ -18,13 +18,15 @@ func NewWorkoutSetLog(gorm tool.Gorm) WorkoutSetLog {
 
 func (w *workoutSetLog) FindWorkoutSetLogsByWorkoutLogID(workoutLogID int64) ([]*model.WorkoutSetLog, error) {
 	workoutSetLogs := make([]*model.WorkoutSetLog, 0)
-	if err := w.gorm.DB().Find(&workoutSetLogs, "workout_log_id = ?", workoutLogID).Error; err != nil {
+	if err := w.gorm.DB().
+		Preload("WorkoutSet.Action").
+		Find(&workoutSetLogs, "workout_log_id = ?", workoutLogID).Error; err != nil {
 		return nil, err
 	}
 	return workoutSetLogs, nil
 }
 
-func (w *workoutSetLog) CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLog) error {
+func (w *workoutSetLog) CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLogParam) error {
 	db := w.gorm.DB()
 	if tx != nil {
 		db = tx
