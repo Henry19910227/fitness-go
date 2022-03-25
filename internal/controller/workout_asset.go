@@ -86,7 +86,7 @@ func (p *WorkoutAsset) CreateWorkoutLog(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	e := p.workoutLogService.CreateWorkoutLog(c, uid, uri.WorkoutID, &dto.CreateWorkoutLogParam{
+	e := p.workoutLogService.CreateWorkoutLog(c, uid, uri.WorkoutID, &dto.WorkoutLogParam{
 		Duration:       body.Duration,
 		Intensity:      body.Intensity,
 		Place:          body.Place,

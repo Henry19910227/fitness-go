@@ -4715,6 +4715,71 @@ var doc = `{
                 }
             }
         },
+        "/workout_logs": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "以日期區間獲取訓練記錄，用於獲取歷史首頁資料",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "History"
+                ],
+                "summary": "以日期區間獲取訓練記錄",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "區間開始日期 YYYY-MM-DD",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "區間結束日期 YYYY-MM-DD",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "date": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.WorkoutLogSummary"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/workout_product/{workout_id}/workout_sets": {
             "get": {
                 "security": [
@@ -6985,6 +7050,40 @@ var doc = `{
                 }
             }
         },
+        "dto.WorkoutLogSummary": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2021-05-28 11:00:00"
+                },
+                "duration": {
+                    "description": "訓練時長",
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "description": "紀錄id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "intensity": {
+                    "description": "訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "place": {
+                    "description": "地點(0:未指定/1:住家/2:健身房/3:戶外)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "workout": {
+                    "description": "訓練",
+                    "$ref": "#/definitions/dto.Workout"
+                }
+            }
+        },
         "dto.WorkoutSet": {
             "type": "object",
             "properties": {
@@ -7059,7 +7158,7 @@ var doc = `{
                 }
             }
         },
-        "dto.WorkoutSetLog": {
+        "dto.WorkoutSetLogParam": {
             "type": "object",
             "properties": {
                 "distance": {
@@ -7380,7 +7479,7 @@ var doc = `{
                     "description": "訓練組記錄",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.WorkoutSetLog"
+                        "$ref": "#/definitions/dto.WorkoutSetLogParam"
                     }
                 }
             }

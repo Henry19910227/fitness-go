@@ -178,6 +178,7 @@ type Transaction interface {
 
 type WorkoutLog interface {
 	FindWorkoutLog(workoutLogID int64) (*model.WorkoutLog, error)
+	FindWorkoutLogsByDate(userID int64, startDate string, endDate string) ([]*model.WorkoutLog, error)
 	FindWorkoutLogsByPlanID(planID int64) ([]*model.WorkoutLog, error)
 	CalculateUserCourseStatistic(userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error)
 	CalculateUserPlanStatistic(userID int64, workoutID int64) (*model.WorkoutLogPlanStatistic, error)

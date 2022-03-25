@@ -122,7 +122,8 @@ type WorkoutSet interface {
 }
 
 type WorkoutLog interface {
-	CreateWorkoutLog(c *gin.Context, userID int64, workoutID int64, param *dto.CreateWorkoutLogParam) errcode.Error
+	CreateWorkoutLog(c *gin.Context, userID int64, workoutID int64, param *dto.WorkoutLogParam) errcode.Error
+	GetWorkoutLogSummaries(c *gin.Context, userID int64, startDate string, endDate string) ([]*dto.WorkoutLogSummary, errcode.Error)
 }
 
 type Action interface {

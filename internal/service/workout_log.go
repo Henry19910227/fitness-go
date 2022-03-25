@@ -34,7 +34,7 @@ func NewWorkoutLog(workoutLogRepo repository.WorkoutLog, workoutSetLogRepo repos
 		transactionRepo: transactionRepo, courseStatisticRepo: courseStatisticRepo, errHandler: errHandler}
 }
 
-func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID int64, param *dto.CreateWorkoutLogParam) errcode.Error {
+func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID int64, param *dto.WorkoutLogParam) errcode.Error {
 	if param == nil {
 		return nil
 	}
@@ -160,4 +160,17 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	}
 	w.transactionRepo.FinishTransaction(tx)
 	return nil
+}
+
+func (w *workoutLog) GetWorkoutLogSummaries(c *gin.Context, userID int64, startDate string, endDate string) ([]*dto.WorkoutLogSummary, errcode.Error) {
+	datas, err := w.workoutLogRepo.FindWorkoutLogsByDate(userID, startDate, endDate)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout log repo", err)
+	}
+	workoutLogs := make([]*dto.WorkoutLogSummary, 0)
+	for _, data := range datas {
+		workoutLog := dto.NewWorkoutLogSummary(data)
+		workoutLogs = append(workoutLogs, &workoutLog)
+	}
+	return workoutLogs, nil
 }
