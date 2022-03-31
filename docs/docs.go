@@ -4645,7 +4645,22 @@ var doc = `{
                     "200": {
                         "description": "獲取成功!",
                         "schema": {
-                            "$ref": "#/definitions/model.SuccessResult"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.WorkoutSetLogTag"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -7257,6 +7272,10 @@ var doc = `{
         "dto.WorkoutSetLog": {
             "type": "object",
             "properties": {
+                "action": {
+                    "description": "動作",
+                    "$ref": "#/definitions/dto.Action"
+                },
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
@@ -7324,6 +7343,49 @@ var doc = `{
                     "description": "訓練組id",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "dto.WorkoutSetLogTag": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "動作",
+                    "$ref": "#/definitions/dto.Action"
+                },
+                "distance": {
+                    "description": "距離(公里)",
+                    "type": "number",
+                    "example": 1
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "訓練組紀錄id",
+                    "type": "integer"
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 5
+                },
+                "new_record": {
+                    "description": "是否是新紀錄(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 5
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 10
                 }
             }
         },

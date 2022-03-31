@@ -98,6 +98,11 @@ type Action interface {
 	DeleteActionByID(actionID int64) error
 }
 
+type ActionPR interface {
+	FindActionPRs(userID int64, actionIDs []int64) ([]*model.ActionPR, error)
+	SaveActionPRs(tx *gorm.DB, userID int64, params []*model.CreateActionPRParam) error
+}
+
 type Sale interface {
 	FindSaleItems(saleType *int) ([]*model.SaleItem, error)
 	FindSaleItemByID(saleID int64) (*model.SaleItem, error)
@@ -187,7 +192,9 @@ type WorkoutLog interface {
 
 type WorkoutSetLog interface {
 	FindWorkoutSetLogsByWorkoutLogID(workoutLogID int64) ([]*model.WorkoutSetLog, error)
+	FindWorkoutSetLogsByWorkoutSetIDs(userID int64, workoutSetIDs []int64) ([]*model.WorkoutSetLog, error)
 	CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLogParam) error
+	CalculateBestWorkoutSetLog(userID int64, actionIDs []int64) ([]*model.BestActionSetLog, error)
 }
 
 type UserCourseStatistic interface {

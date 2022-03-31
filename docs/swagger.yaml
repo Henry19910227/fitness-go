@@ -1508,6 +1508,9 @@ definitions:
     type: object
   dto.WorkoutSetLog:
     properties:
+      action:
+        $ref: '#/definitions/dto.Action'
+        description: 動作
       distance:
         description: 距離(公里)
         example: 1
@@ -1561,6 +1564,39 @@ definitions:
         description: 訓練組id
         example: 1
         type: integer
+    type: object
+  dto.WorkoutSetLogTag:
+    properties:
+      action:
+        $ref: '#/definitions/dto.Action'
+        description: 動作
+      distance:
+        description: 距離(公里)
+        example: 1
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      id:
+        description: 訓練組紀錄id
+        type: integer
+      incline:
+        description: 坡度
+        example: 5
+        type: number
+      new_record:
+        description: 是否是新紀錄(0:否/1:是)
+        example: 1
+        type: integer
+      reps:
+        description: 次數
+        example: 5
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 10
+        type: number
     type: object
   dto.WorkoutStructure:
     properties:
@@ -4862,7 +4898,14 @@ paths:
         "200":
           description: 獲取成功!
           schema:
-            $ref: '#/definitions/model.SuccessResult'
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.WorkoutSetLogTag'
+                  type: array
+              type: object
         "400":
           description: 獲取失敗
           schema:
