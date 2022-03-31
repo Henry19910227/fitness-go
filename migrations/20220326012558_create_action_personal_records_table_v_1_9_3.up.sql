@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS action_personal_records (
     `id`             INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '課表報表id',
     `user_id`        INT(11) UNSIGNED COMMENT '用戶id',
-    `action_id`        INT(11) UNSIGNED COMMENT '動作id',
+    `action_id`      INT(11) UNSIGNED COMMENT '動作id',
     `weight`         FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '重量(公斤)',
     `reps`           INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '次數',
     `distance`       FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '距離(公里)',
