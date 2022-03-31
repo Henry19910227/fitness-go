@@ -67,7 +67,7 @@ func (p *WorkoutAsset) GetWorkoutSets(c *gin.Context) {
 // @Security fitness_token
 // @Param workout_id path int64 true "訓練id"
 // @Param json_body body validator.CreateWorkoutLogBody true "輸入參數"
-// @Success 200 {object} model.SuccessResult "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSetLogTag} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /workout_asset/{workout_id}/workout_log [POST]
 func (p *WorkoutAsset) CreateWorkoutLog(c *gin.Context) {
@@ -86,7 +86,7 @@ func (p *WorkoutAsset) CreateWorkoutLog(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	e := p.workoutLogService.CreateWorkoutLog(c, uid, uri.WorkoutID, &dto.CreateWorkoutLogParam{
+	workoutSetLogTags, e := p.workoutLogService.CreateWorkoutLog(c, uid, uri.WorkoutID, &dto.WorkoutLogParam{
 		Duration:       body.Duration,
 		Intensity:      body.Intensity,
 		Place:          body.Place,
@@ -96,5 +96,5 @@ func (p *WorkoutAsset) CreateWorkoutLog(c *gin.Context) {
 		p.JSONErrorResponse(c, e)
 		return
 	}
-	p.JSONSuccessResponse(c, nil, "success!")
+	p.JSONSuccessResponse(c, workoutSetLogTags, "success!")
 }

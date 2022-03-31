@@ -15,6 +15,7 @@ type workoutLog struct {
 	workoutLogRepo      repository.WorkoutLog
 	workoutSetLogRepo   repository.WorkoutSetLog
 	workoutSetRepo      repository.WorkoutSet
+	actionPRRepo        repository.ActionPR
 	courseRepo          repository.Course
 	courseAssetRepo     repository.UserCourseAsset
 	subscribeInfoRepo   repository.UserSubscribeInfo
@@ -25,18 +26,18 @@ type workoutLog struct {
 }
 
 func NewWorkoutLog(workoutLogRepo repository.WorkoutLog, workoutSetLogRepo repository.WorkoutSetLog,
-	workoutSetRepo repository.WorkoutSet, courseRepo repository.Course,
+	workoutSetRepo repository.WorkoutSet, actionPRRepo repository.ActionPR, courseRepo repository.Course,
 	courseAssetRepo repository.UserCourseAsset, subscribeInfoRepo repository.UserSubscribeInfo, courseStatisticRepo repository.UserCourseStatistic,
 	planStatisticRepo repository.UserPlanStatistic, transactionRepo repository.Transaction, errHandler errcode.Handler) WorkoutLog {
 	return &workoutLog{workoutLogRepo: workoutLogRepo, workoutSetLogRepo: workoutSetLogRepo,
-		workoutSetRepo: workoutSetRepo, courseRepo: courseRepo,
+		workoutSetRepo: workoutSetRepo, actionPRRepo: actionPRRepo, courseRepo: courseRepo,
 		courseAssetRepo: courseAssetRepo, subscribeInfoRepo: subscribeInfoRepo, planStatisticRepo: planStatisticRepo,
 		transactionRepo: transactionRepo, courseStatisticRepo: courseStatisticRepo, errHandler: errHandler}
 }
 
-func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID int64, param *dto.CreateWorkoutLogParam) errcode.Error {
+func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID int64, param *dto.WorkoutLogParam) ([]*dto.WorkoutSetLogTag, errcode.Error) {
 	if param == nil {
-		return nil
+		return nil, nil
 	}
 	//驗證課表是否購買或訂閱
 	course := struct {
@@ -45,18 +46,18 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		SaleType int   `gorm:"column:sale_type"`
 	}{}
 	if err := w.courseRepo.FindCourseByWorkoutID(workoutID, &course); err != nil {
-		return w.errHandler.Set(c, "course repo", err)
+		return nil, w.errHandler.Set(c, "course repo", err)
 	}
 	if global.SaleType(course.SaleType) == global.SaleTypeSubscribe {
 		subscribeInfo, err := w.subscribeInfoRepo.FindSubscribeInfo(userID)
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-			return w.errHandler.Set(c, "subscribe info repo", err)
+			return nil, w.errHandler.Set(c, "subscribe info repo", err)
 		}
 		if subscribeInfo == nil {
-			return w.errHandler.Custom(8999, errors.New("尚未訂閱"))
+			return nil, w.errHandler.Custom(8999, errors.New("尚未訂閱"))
 		}
 		if subscribeInfo.Status == 0 {
-			return w.errHandler.Custom(8999, errors.New("訂閱過期"))
+			return nil, w.errHandler.Custom(8999, errors.New("訂閱過期"))
 		}
 	}
 	if global.SaleType(course.SaleType) == global.SaleTypeFree || global.SaleType(course.SaleType) == global.SaleTypeCharge {
@@ -65,16 +66,15 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 			CourseID: course.ID,
 		})
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-			return w.errHandler.Set(c, "course asset repo", err)
+			return nil, w.errHandler.Set(c, "course asset repo", err)
 		}
 		if courseAsset == nil {
-			return w.errHandler.Custom(8999, errors.New("尚未購買此課表"))
+			return nil, w.errHandler.Custom(8999, errors.New("尚未購買此課表"))
 		}
 		if courseAsset.Available == 0 {
-			return w.errHandler.Custom(8999, errors.New("此課表無法使用"))
+			return nil, w.errHandler.Custom(8999, errors.New("此課表無法使用"))
 		}
 	}
-	//創建訓練記錄
 	tx := w.transactionRepo.CreateTransaction()
 	var intensity int
 	if param.Intensity != nil {
@@ -84,6 +84,24 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	if param.Place != nil {
 		place = *param.Place
 	}
+	//驗證是否添加此訓練範圍內的訓練組
+	setIDs, err := w.workoutSetRepo.FindWorkoutSetIDsByWorkoutID(workoutID)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "workout set repo", err)
+	}
+	setIDMap := make(map[int64]int64)
+	for _, setID := range setIDs {
+		setIDMap[setID] = setID
+	}
+	for _, workoutSetLogDto := range param.WorkoutSetLogs {
+		//檢查加入的setID是否在此workout底下
+		if _, ok := setIDMap[workoutSetLogDto.WorkoutSetID]; !ok {
+			tx.Rollback()
+			return nil, w.errHandler.Custom(8999, errors.New("加入了不合法的 workout set id"))
+		}
+	}
+	//創建訓練記錄
 	workoutLogID, err := w.workoutLogRepo.CreateWorkoutLog(tx, &model.CreateWorkoutLogParam{
 		UserID:    userID,
 		WorkoutID: workoutID,
@@ -93,26 +111,12 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	})
 	if err != nil {
 		tx.Rollback()
-		return w.errHandler.Set(c, "workout_log repo", err)
+		return nil, w.errHandler.Set(c, "workout_log repo", err)
 	}
-	//查找此訓練底下的set id
-	setIDs, err := w.workoutSetRepo.FindWorkoutSetIDsByWorkoutID(workoutID)
-	if err != nil {
-		tx.Rollback()
-		return w.errHandler.Set(c, "workout set repo", err)
-	}
-	setIDMap := make(map[int64]int64)
-	for _, setID := range setIDs {
-		setIDMap[setID] = setID
-	}
-	workoutSetLogs := make([]*model.WorkoutSetLog, 0)
+	//創建訓練組記錄
+	workoutSetLogParams := make([]*model.WorkoutSetLogParam, 0)
 	for _, workoutSetLogDto := range param.WorkoutSetLogs {
-		//檢查加入的setID是否在此workout底下
-		if _, ok := setIDMap[workoutSetLogDto.WorkoutSetID]; !ok {
-			tx.Rollback()
-			return w.errHandler.Custom(8999, errors.New("加入了不合法的 workout set id"))
-		}
-		workoutSetLog := model.WorkoutSetLog{
+		workoutSetLogParam := model.WorkoutSetLogParam{
 			WorkoutLogID: workoutLogID,
 			WorkoutSetID: workoutSetLogDto.WorkoutSetID,
 			Weight:       workoutSetLogDto.Weight,
@@ -121,22 +125,65 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 			Duration:     workoutSetLogDto.Duration,
 			Incline:      workoutSetLogDto.Incline,
 		}
-		workoutSetLogs = append(workoutSetLogs, &workoutSetLog)
+		workoutSetLogParams = append(workoutSetLogParams, &workoutSetLogParam)
 	}
-	if err := w.workoutSetLogRepo.CreateWorkoutSetLogs(tx, workoutSetLogs); err != nil {
+	//創建訓練組紀錄
+	if err := w.workoutSetLogRepo.CreateWorkoutSetLogs(tx, workoutSetLogParams); err != nil {
 		tx.Rollback()
-		return w.errHandler.Set(c, "workout_set_log repo", err)
+		return nil, w.errHandler.Set(c, "workout_set_log repo", err)
 	}
 	w.transactionRepo.FinishTransaction(tx)
-
-	//重新刷新訓練統計
+	//計算課表統計
 	userCourseStatisticModel, err := w.workoutLogRepo.CalculateUserCourseStatistic(userID, workoutID)
 	if err != nil {
-		return w.errHandler.Set(c, "workout_log repo", err)
+		return nil, w.errHandler.Set(c, "workout_log repo", err)
 	}
+	//計算計畫統計
 	userPlanStatisticModel, err := w.workoutLogRepo.CalculateUserPlanStatistic(userID, workoutID)
 	if err != nil {
-		return w.errHandler.Set(c, "workout_log repo", err)
+		return nil, w.errHandler.Set(c, "workout_log repo", err)
+	}
+	//獲取 workout set log model
+	workoutSetLogModels, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(workoutLogID)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout_set_log repo", err)
+	}
+	actionIDs := make([]int64, 0)
+	for _, setLogModel := range workoutSetLogModels {
+		if setLogModel.WorkoutSet != nil {
+			if setLogModel.WorkoutSet.Action != nil {
+				actionIDs = append(actionIDs, setLogModel.WorkoutSet.Action.ID)
+			}
+		}
+	}
+	//比對最佳紀錄
+	actionPRs, err := w.actionPRRepo.FindActionPRs(userID, actionIDs)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	actionPRDict := make(map[int64]*model.ActionPR)
+	for _, actionPR := range actionPRs {
+		actionPRDict[actionPR.ActionID] = actionPR
+	}
+	//比對突破最佳紀錄組
+	workoutSetLogTags := make([]*dto.WorkoutSetLogTag, 0)
+	for _, setLogModel := range workoutSetLogModels {
+		if pr, ok := actionPRDict[setLogModel.WorkoutSet.Action.ID]; ok {
+			workoutSetLogTag := dto.NewWorkoutSetLogTag(setLogModel)
+			if setLogModel.Duration > pr.Duration ||
+				setLogModel.Distance > pr.Distance ||
+				setLogModel.Weight > pr.Weight ||
+				setLogModel.Reps > pr.Reps ||
+				setLogModel.Incline > pr.Incline {
+				workoutSetLogTag.NewRecord = 1
+			}
+			workoutSetLogTags = append(workoutSetLogTags, &workoutSetLogTag)
+		}
+	}
+	//計算最佳新的紀錄
+	bestActionSetLogs, err := w.workoutSetLogRepo.CalculateBestWorkoutSetLog(userID, actionIDs)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout set log repo", err)
 	}
 	tx = w.transactionRepo.CreateTransaction()
 	if _, err := w.courseStatisticRepo.SaveUserCourseStatistic(tx, &model.SaveUserCourseStatisticParam{
@@ -147,7 +194,7 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		Duration:                userCourseStatisticModel.Duration,
 	}); err != nil {
 		tx.Rollback()
-		return w.errHandler.Set(c, "course_statistic repo", err)
+		return nil, w.errHandler.Set(c, "course_statistic repo", err)
 	}
 	if _, err := w.planStatisticRepo.SaveUserPlanStatistic(tx, &model.SaveUserPlanStatisticParam{
 		UserID:             userID,
@@ -156,8 +203,51 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		Duration:           userPlanStatisticModel.Duration,
 	}); err != nil {
 		tx.Rollback()
-		return w.errHandler.Set(c, "plan_statistic repo", err)
+		return nil, w.errHandler.Set(c, "plan_statistic repo", err)
+	}
+	actionPRParams := make([]*model.CreateActionPRParam, 0)
+	for _, setLog := range bestActionSetLogs {
+		pr := model.CreateActionPRParam{
+			ActionID: setLog.ActionID,
+			Weight:   setLog.Weight,
+			Reps:     setLog.Reps,
+			Distance: setLog.Distance,
+			Duration: setLog.Duration,
+			Incline:  setLog.Incline,
+		}
+		actionPRParams = append(actionPRParams, &pr)
+	}
+	//更新最佳紀錄
+	if err := w.actionPRRepo.SaveActionPRs(tx, userID, actionPRParams); err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action personal record repo", err)
 	}
 	w.transactionRepo.FinishTransaction(tx)
-	return nil
+	return workoutSetLogTags, nil
+}
+
+func (w *workoutLog) GetWorkoutLog(c *gin.Context, workoutLogID int64) (*dto.WorkoutLog, errcode.Error) {
+	log, err := w.workoutLogRepo.FindWorkoutLog(workoutLogID)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout log repo", err)
+	}
+	logSets, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(log.ID)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout log set repo", err)
+	}
+	workoutLog := dto.NewWorkoutLog(log, logSets)
+	return &workoutLog, nil
+}
+
+func (w *workoutLog) GetWorkoutLogSummaries(c *gin.Context, userID int64, startDate string, endDate string) ([]*dto.WorkoutLogSummary, errcode.Error) {
+	datas, err := w.workoutLogRepo.FindWorkoutLogsByDate(userID, startDate, endDate)
+	if err != nil {
+		return nil, w.errHandler.Set(c, "workout log repo", err)
+	}
+	workoutLogs := make([]*dto.WorkoutLogSummary, 0)
+	for _, data := range datas {
+		workoutLog := dto.NewWorkoutLogSummary(data)
+		workoutLogs = append(workoutLogs, &workoutLog)
+	}
+	return workoutLogs, nil
 }

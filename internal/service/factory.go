@@ -171,6 +171,7 @@ func NewUserService(viperTool *viper.Viper, gormTool tool.Gorm) User {
 func NewWorkoutLogService(viperTool *viper.Viper, gormTool tool.Gorm) WorkoutLog {
 	workoutLogRepo := repository.NewWorkoutLog(gormTool)
 	workoutSetLogRepo := repository.NewWorkoutSetLog(gormTool)
+	actionPRRepo := repository.NewActionPR(gormTool)
 	transactionRepo := repository.NewTransaction(gormTool)
 	workoutSetRepo := repository.NewWorkoutSet(gormTool)
 	courseAssetRepo := repository.NewUserCourseAsset(gormTool)
@@ -181,7 +182,7 @@ func NewWorkoutLogService(viperTool *viper.Viper, gormTool tool.Gorm) WorkoutLog
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewWorkoutLog(workoutLogRepo, workoutSetLogRepo, workoutSetRepo, courseRepo,
+	return NewWorkoutLog(workoutLogRepo, workoutSetLogRepo, workoutSetRepo, actionPRRepo, courseRepo,
 		courseAssetRepo, subscribeInfoRepo, courseStatisticRepo,
 		planStatisticRepo, transactionRepo, errHandler)
 }
