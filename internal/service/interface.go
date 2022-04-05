@@ -161,3 +161,7 @@ type Payment interface {
 	HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error
 	GetSubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeResponse, errcode.Error)
 }
+
+type Favorite interface {
+	CreateFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error
+}

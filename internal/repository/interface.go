@@ -207,3 +207,7 @@ type UserPlanStatistic interface {
 	FindUserPlanStatistics(userID int64, planID int64) ([]*model.UserPlanStatistic, error)
 	SaveUserPlanStatistic(tx *gorm.DB, param *model.SaveUserPlanStatisticParam) (int64, error)
 }
+
+type Favorite interface {
+	CreateFavoriteCourse(userID int64, courseID int64) error
+}
