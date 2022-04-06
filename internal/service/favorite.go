@@ -7,8 +7,8 @@ import (
 )
 
 type favorite struct {
-	favoriteRepo  repository.Favorite
-	errHandler errcode.Handler
+	favoriteRepo repository.Favorite
+	errHandler   errcode.Handler
 }
 
 func NewFavorite(favoriteRepo repository.Favorite,
@@ -18,6 +18,13 @@ func NewFavorite(favoriteRepo repository.Favorite,
 
 func (f *favorite) CreateFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error {
 	if err := f.favoriteRepo.CreateFavoriteCourse(userID, courseID); err != nil {
+		return f.errHandler.Set(c, "favorite repo", err)
+	}
+	return nil
+}
+
+func (f *favorite) DeleteFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error {
+	if err := f.favoriteRepo.DeleteFavoriteCourse(userID, courseID); err != nil {
 		return f.errHandler.Set(c, "favorite repo", err)
 	}
 	return nil

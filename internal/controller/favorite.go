@@ -11,7 +11,7 @@ import (
 type Favorite struct {
 	Base
 	favoriteService service.Favorite
-	courseService service.Course
+	courseService   service.Course
 }
 
 func NewFavorite(baseGroup *gin.RouterGroup, favoriteService service.Favorite, courseService service.Course, userMidd midd.User, courseMidd midd.Course) {
@@ -20,6 +20,10 @@ func NewFavorite(baseGroup *gin.RouterGroup, favoriteService service.Favorite, c
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		favorite.CreateFavoriteCourse)
+	baseGroup.DELETE("/favorite/course/:course_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
+		favorite.DeleteFavoriteCourse)
 }
 
 // CreateFavoriteCourse 新增收藏課表
@@ -45,6 +49,35 @@ func (f *Favorite) CreateFavoriteCourse(c *gin.Context) {
 		return
 	}
 	if err := f.favoriteService.CreateFavoriteCourse(c, uid, uri.CourseID); err != nil {
+		f.JSONErrorResponse(c, err)
+		return
+	}
+	f.JSONSuccessResponse(c, nil, "success!")
+}
+
+// DeleteFavoriteCourse 刪除收藏課表
+// @Summary 刪除收藏課表
+// @Description 刪除收藏課表
+// @Tags Favorite
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /favorite/course/{course_id} [DELETE]
+func (f *Favorite) DeleteFavoriteCourse(c *gin.Context) {
+	uid, e := f.GetUID(c)
+	if e != nil {
+		f.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		f.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := f.favoriteService.DeleteFavoriteCourse(c, uid, uri.CourseID); err != nil {
 		f.JSONErrorResponse(c, err)
 		return
 	}

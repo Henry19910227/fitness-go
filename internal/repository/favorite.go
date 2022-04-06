@@ -36,3 +36,11 @@ func (f *favorite) FindFavoriteCourse(userID int64, courseID int64) (*model.Favo
 	}
 	return &course, nil
 }
+
+func (f *favorite) DeleteFavoriteCourse(userID int64, courseID int64) error {
+	if err := f.gorm.DB().
+		Delete(&entity.FavoriteCourse{}, "user_id = ? AND course_id = ?", userID, courseID).Error; err != nil {
+		return err
+	}
+	return nil
+}
