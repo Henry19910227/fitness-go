@@ -1102,6 +1102,10 @@ definitions:
         description: 臉書連結
         example: www.facebook.com
         type: string
+      favorite:
+        description: 是否收藏(0:否/1:是)
+        example: 1
+        type: integer
       instagram_url:
         description: ig連結
         example: www.instagram.com

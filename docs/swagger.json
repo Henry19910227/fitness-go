@@ -6848,6 +6848,11 @@
                     "type": "string",
                     "example": "www.facebook.com"
                 },
+                "favorite": {
+                    "description": "是否收藏(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "instagram_url": {
                     "description": "ig連結",
                     "type": "string",
