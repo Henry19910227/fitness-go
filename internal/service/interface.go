@@ -77,7 +77,7 @@ type Course interface {
 	GetChargeCourseAssetSummaries(c *gin.Context, userID int64, page int, size int) ([]*dto.CourseAssetSummary, *dto.Paging, errcode.Error)
 	GetCourseAsset(c *gin.Context, userID int64, courseID int64) (*dto.CourseAsset, errcode.Error)
 	GetCourseAssetStructure(c *gin.Context, userID int64, courseID int64) (*dto.CourseAssetStructure, errcode.Error)
-	GetCourseProductStructure(c *gin.Context, courseID int64) (*dto.CourseProductStructure, errcode.Error)
+	GetCourseProductStructure(c *gin.Context, userID int64, courseID int64) (*dto.CourseProductStructure, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
 	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
 	GetCourseStatus(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error)

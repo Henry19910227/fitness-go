@@ -210,4 +210,5 @@ type UserPlanStatistic interface {
 
 type Favorite interface {
 	CreateFavoriteCourse(userID int64, courseID int64) error
+	FindFavoriteCourse(userID int64, courseID int64) (*model.FavoriteCourse, error)
 }
