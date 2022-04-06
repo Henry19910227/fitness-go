@@ -214,4 +214,5 @@ type Favorite interface {
 	FindFavoriteCourse(userID int64, courseID int64) (*model.FavoriteCourse, error)
 	FindFavoriteTrainer(userID int64, trainerID int64) (*model.FavoriteTrainer, error)
 	DeleteFavoriteCourse(userID int64, courseID int64) error
+	DeleteFavoriteTrainer(userID int64, trainerID int64) error
 }

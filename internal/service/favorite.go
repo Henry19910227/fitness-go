@@ -36,3 +36,10 @@ func (f *favorite) DeleteFavoriteCourse(c *gin.Context, userID int64, courseID i
 	}
 	return nil
 }
+
+func (f *favorite) DeleteFavoriteTrainer(c *gin.Context, userID int64, trainerID int64) errcode.Error {
+	if err := f.favoriteRepo.DeleteFavoriteTrainer(userID, trainerID); err != nil {
+		return f.errHandler.Set(c, "favorite repo", err)
+	}
+	return nil
+}

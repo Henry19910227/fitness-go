@@ -66,3 +66,11 @@ func (f *favorite) DeleteFavoriteCourse(userID int64, courseID int64) error {
 	}
 	return nil
 }
+
+func (f *favorite) DeleteFavoriteTrainer(userID int64, trainerID int64) error {
+	if err := f.gorm.DB().
+		Delete(&entity.FavoriteTrainer{}, "user_id = ? AND trainer_id = ?", userID, trainerID).Error; err != nil {
+		return err
+	}
+	return nil
+}

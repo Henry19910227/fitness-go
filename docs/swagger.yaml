@@ -3267,6 +3267,32 @@ paths:
       tags:
       - Favorite
   /favorite/trainer/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除收藏教練
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除收藏教練
+      tags:
+      - Favorite
     post:
       consumes:
       - application/json
