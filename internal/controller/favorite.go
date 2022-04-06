@@ -20,6 +20,9 @@ func NewFavorite(baseGroup *gin.RouterGroup, favoriteService service.Favorite, c
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
 		favorite.CreateFavoriteCourse)
+	baseGroup.POST("/favorite/trainer/:user_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		favorite.CreateFavoriteTrainer)
 	baseGroup.DELETE("/favorite/course/:course_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		courseMidd.CourseStatusVerify(courseService.GetCourseStatus, []global.CourseStatus{global.Sale}),
@@ -49,6 +52,35 @@ func (f *Favorite) CreateFavoriteCourse(c *gin.Context) {
 		return
 	}
 	if err := f.favoriteService.CreateFavoriteCourse(c, uid, uri.CourseID); err != nil {
+		f.JSONErrorResponse(c, err)
+		return
+	}
+	f.JSONSuccessResponse(c, nil, "success!")
+}
+
+// CreateFavoriteTrainer 收藏教練
+// @Summary 收藏教練
+// @Description 收藏教練
+// @Tags Favorite
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練id"
+// @Success 200 {object} model.SuccessResult "新增成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /favorite/trainer/{user_id} [POST]
+func (f *Favorite) CreateFavoriteTrainer(c *gin.Context) {
+	uid, e := f.GetUID(c)
+	if e != nil {
+		f.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.TrainerIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		f.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := f.favoriteService.CreateFavoriteTrainer(c, uid, uri.TrainerID); err != nil {
 		f.JSONErrorResponse(c, err)
 		return
 	}

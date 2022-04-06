@@ -27,6 +27,18 @@ func (f *favorite) CreateFavoriteCourse(userID int64, courseID int64) error {
 	return nil
 }
 
+func (f *favorite) CreateFavoriteTrainer(userID int64, trainerID int64) error {
+	trainer := entity.FavoriteTrainer{
+		UserID:    userID,
+		TrainerID: trainerID,
+		CreateAt:  time.Now().Format("2006-01-02 15:04:05"),
+	}
+	if err := f.gorm.DB().Create(&trainer).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (f *favorite) FindFavoriteCourse(userID int64, courseID int64) (*model.FavoriteCourse, error) {
 	var course model.FavoriteCourse
 	if err := f.gorm.DB().

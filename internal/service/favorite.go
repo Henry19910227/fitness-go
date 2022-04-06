@@ -23,6 +23,13 @@ func (f *favorite) CreateFavoriteCourse(c *gin.Context, userID int64, courseID i
 	return nil
 }
 
+func (f *favorite) CreateFavoriteTrainer(c *gin.Context, userID int64, trainerID int64) errcode.Error {
+	if err := f.favoriteRepo.CreateFavoriteTrainer(userID, trainerID); err != nil {
+		return f.errHandler.Set(c, "favorite repo", err)
+	}
+	return nil
+}
+
 func (f *favorite) DeleteFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error {
 	if err := f.favoriteRepo.DeleteFavoriteCourse(userID, courseID); err != nil {
 		return f.errHandler.Set(c, "favorite repo", err)

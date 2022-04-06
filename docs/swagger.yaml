@@ -3262,6 +3262,33 @@ paths:
       summary: 新增收藏課表
       tags:
       - Favorite
+  /favorite/trainer/{user_id}:
+    post:
+      consumes:
+      - application/json
+      description: 收藏教練
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 新增成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 收藏教練
+      tags:
+      - Favorite
   /login/admin/email:
     post:
       consumes:
