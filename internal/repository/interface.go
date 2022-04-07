@@ -211,6 +211,7 @@ type UserPlanStatistic interface {
 type Favorite interface {
 	CreateFavoriteCourse(userID int64, courseID int64) error
 	CreateFavoriteTrainer(userID int64, trainerID int64) error
+	CreateFavoriteAction(userID int64, actionID int64) error
 	FindFavoriteCourse(userID int64, courseID int64) (*model.FavoriteCourse, error)
 	FindFavoriteTrainer(userID int64, trainerID int64) (*model.FavoriteTrainer, error)
 	DeleteFavoriteCourse(userID int64, courseID int64) error

@@ -3213,6 +3213,33 @@ paths:
       summary: 獲取我的課表列表
       tags:
       - Course
+  /favorite/action/{action_id}:
+    post:
+      consumes:
+      - application/json
+      description: 收藏動作
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 新增成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 收藏動作
+      tags:
+      - Favorite
   /favorite/course/{course_id}:
     delete:
       consumes:

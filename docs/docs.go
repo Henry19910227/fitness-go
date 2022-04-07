@@ -1855,6 +1855,49 @@ var doc = `{
                 }
             }
         },
+        "/favorite/action/{action_id}": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "收藏動作",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "收藏動作",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "新增成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/favorite/course/{course_id}": {
             "post": {
                 "security": [

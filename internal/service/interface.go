@@ -165,6 +165,7 @@ type Payment interface {
 type Favorite interface {
 	CreateFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error
 	CreateFavoriteTrainer(c *gin.Context, userID int64, trainerID int64) errcode.Error
+	CreateFavoriteAction(c *gin.Context, userID int64, actionID int64) errcode.Error
 	DeleteFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error
 	DeleteFavoriteTrainer(c *gin.Context, userID int64, trainerID int64) errcode.Error
 }
