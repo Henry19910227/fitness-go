@@ -29,6 +29,10 @@ type Trainer interface {
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
 }
 
+type TrainerStatistic interface {
+	SaveTrainerStatistic(tx *gorm.DB, userID int64, param *model.SaveTrainerStatisticParam) error
+}
+
 type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
