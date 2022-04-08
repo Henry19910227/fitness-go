@@ -167,4 +167,5 @@ type Favorite interface {
 	CreateFavoriteAction(c *gin.Context, userID int64, actionID int64) errcode.Error
 	DeleteFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error
 	DeleteFavoriteTrainer(c *gin.Context, userID int64, trainerID int64) errcode.Error
+	DeleteFavoriteAction(c *gin.Context, userID int64, actionID int64) errcode.Error
 }

@@ -50,3 +50,10 @@ func (f *favorite) DeleteFavoriteTrainer(c *gin.Context, userID int64, trainerID
 	}
 	return nil
 }
+
+func (f *favorite) DeleteFavoriteAction(c *gin.Context, userID int64, actionID int64) errcode.Error {
+	if err := f.favoriteRepo.DeleteFavoriteAction(userID, actionID); err != nil {
+		return f.errHandler.Set(c, "favorite repo", err)
+	}
+	return nil
+}

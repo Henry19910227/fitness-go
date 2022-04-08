@@ -17,6 +17,10 @@ definitions:
         description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 1
         type: integer
+      favorite:
+        description: 是否收藏(0:否/1:是)
+        example: 1
+        type: integer
       id:
         description: 動作id
         example: 1
@@ -3214,6 +3218,32 @@ paths:
       tags:
       - Course
   /favorite/action/{action_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除收藏動作
+      parameters:
+      - description: 教練id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除收藏動作
+      tags:
+      - Favorite
     post:
       consumes:
       - application/json

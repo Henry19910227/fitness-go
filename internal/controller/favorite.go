@@ -33,6 +33,9 @@ func NewFavorite(baseGroup *gin.RouterGroup, favoriteService service.Favorite, c
 	baseGroup.DELETE("/favorite/trainer/:user_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		favorite.DeleteFavoriteTrainer)
+	baseGroup.DELETE("/favorite/action/:action_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		favorite.DeleteFavoriteAction)
 }
 
 // CreateFavoriteCourse 新增收藏課表
@@ -174,6 +177,35 @@ func (f *Favorite) DeleteFavoriteTrainer(c *gin.Context) {
 		return
 	}
 	if err := f.favoriteService.DeleteFavoriteTrainer(c, uid, uri.TrainerID); err != nil {
+		f.JSONErrorResponse(c, err)
+		return
+	}
+	f.JSONSuccessResponse(c, nil, "success!")
+}
+
+// DeleteFavoriteAction 刪除收藏動作
+// @Summary 刪除收藏動作
+// @Description 刪除收藏動作
+// @Tags Favorite
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作id"
+// @Success 200 {object} model.SuccessResult "刪除成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /favorite/action/{action_id} [DELETE]
+func (f *Favorite) DeleteFavoriteAction(c *gin.Context) {
+	uid, e := f.GetUID(c)
+	if e != nil {
+		f.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.ActionIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		f.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := f.favoriteService.DeleteFavoriteAction(c, uid, uri.ActionID); err != nil {
 		f.JSONErrorResponse(c, err)
 		return
 	}
