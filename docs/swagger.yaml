@@ -1143,6 +1143,10 @@ definitions:
         items:
           $ref: '#/definitions/dto.TrainerAlbumPhoto'
         type: array
+      trainer_level:
+        description: 教練評鑑等級
+        example: 1
+        type: integer
       trainer_status:
         description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
         example: 1
@@ -3223,7 +3227,7 @@ paths:
       - application/json
       description: 刪除收藏動作
       parameters:
-      - description: 教練id
+      - description: 動作id
         in: path
         name: action_id
         required: true

@@ -7,6 +7,7 @@ type Trainer struct {
 	Skill              string               `json:"skill" gorm:"column:skill" example:"1,3,5"`                             // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
 	Avatar             string               `json:"avatar" gorm:"column:avatar" example:"ld3ae0faf5we.png"`                // 教練大頭照
 	TrainerStatus      int                  `json:"trainer_status" gorm:"column:trainer_status" example:"1"`               // 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+	TrainerLevel       int                  `json:"trainer_level" gorm:"column:trainer_level" example:"1"`                 // 教練評鑑等級
 	Email              string               `json:"email" gorm:"column:email" example:"henry@gmail.com"`                   // 信箱
 	Phone              string               `json:"phone" gorm:"column:phone" example:"0978820789"`                        // 電話
 	Address            string               `json:"address" gorm:"column:address" example:"台北市信義區信義路五段五號"`                 // 住址

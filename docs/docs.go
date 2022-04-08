@@ -1917,7 +1917,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "教練id",
+                        "description": "動作id",
                         "name": "action_id",
                         "in": "path",
                         "required": true
@@ -7042,6 +7042,11 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/dto.TrainerAlbumPhoto"
                     }
+                },
+                "trainer_level": {
+                    "description": "教練評鑑等級",
+                    "type": "integer",
+                    "example": 1
                 },
                 "trainer_status": {
                     "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
