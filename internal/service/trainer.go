@@ -17,20 +17,22 @@ import (
 
 type trainer struct {
 	Base
-	trainerRepo repository.Trainer
-	albumRepo repository.TrainerAlbum
-	cerRepo repository.Certificate
-	uploader  handler.Uploader
-	resHandler handler.Resource
-	logger    handler.Logger
-	jwtTool   tool.JWT
-	errHandler errcode.Handler
+	trainerRepo  repository.Trainer
+	albumRepo    repository.TrainerAlbum
+	cerRepo      repository.Certificate
+	favoriteRepo repository.Favorite
+	uploader     handler.Uploader
+	resHandler   handler.Resource
+	logger       handler.Logger
+	jwtTool      tool.JWT
+	errHandler   errcode.Handler
 }
 
-func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, cerRepo repository.Certificate, uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
-	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, cerRepo: cerRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, cerRepo repository.Certificate,
+	favoriteRepo repository.Favorite, uploader handler.Uploader, resHandler handler.Resource,
+	logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
+	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, cerRepo: cerRepo, favoriteRepo: favoriteRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
-
 
 func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error) {
 	//檢查教練身份是否存在
@@ -72,7 +74,7 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrai
 	//生成教練相簿照片名稱
 	var albumPhotoNames []string
 	for _, file := range param.TrainerAlbumPhotos {
-		albumPhotoName, err := t.uploader.GenerateNewImageName(file.FileNamed);
+		albumPhotoName, err := t.uploader.GenerateNewImageName(file.FileNamed)
 		if err != nil {
 			return nil, t.errHandler.Set(c, "uploader", err)
 		}
@@ -82,7 +84,7 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrai
 	//生成證照圖片名稱
 	var cerImageNames []string
 	for _, file := range param.CertificateImages {
-		cerImageName, err := t.uploader.GenerateNewImageName(file.FileNamed);
+		cerImageName, err := t.uploader.GenerateNewImageName(file.FileNamed)
 		if err != nil {
 			return nil, t.errHandler.Set(c, "uploader", err)
 		}
@@ -173,7 +175,7 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	//生成教練相簿照片名稱
 	var createAlbumPhotoNames []string
 	for _, file := range param.CreateAlbumPhotos {
-		albumPhotoName, err := t.uploader.GenerateNewImageName(file.FileNamed);
+		albumPhotoName, err := t.uploader.GenerateNewImageName(file.FileNamed)
 		if err != nil {
 			return nil, t.errHandler.Set(c, "uploader", err)
 		}
@@ -183,7 +185,7 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	//生成待更新證照照片名稱
 	var updateCerImageNames []string
 	for _, file := range param.UpdateCerImages {
-		cerImageName, err := t.uploader.GenerateNewImageName(file.FileNamed);
+		cerImageName, err := t.uploader.GenerateNewImageName(file.FileNamed)
 		if err != nil {
 			return nil, t.errHandler.Set(c, "uploader", err)
 		}
@@ -193,7 +195,7 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	//生成待新增證照照片名稱
 	var createCerImageNames []string
 	for _, file := range param.CreateCerImages {
-		cerImageName, err := t.uploader.GenerateNewImageName(file.FileNamed);
+		cerImageName, err := t.uploader.GenerateNewImageName(file.FileNamed)
 		if err != nil {
 			return nil, t.errHandler.Set(c, "uploader", err)
 		}
@@ -204,7 +206,9 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	var skill = transformSkills(param.Skill)
 
 	//查詢更新前的教練大頭照
-	var oldTrainer struct{ Avatar string `gorm:"column:avatar"`}
+	var oldTrainer struct {
+		Avatar string `gorm:"column:avatar"`
+	}
 	if err := t.trainerRepo.FindTrainerByUID(uid, &oldTrainer); err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
@@ -240,28 +244,28 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	}
 	//修改資料
 	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
-		Nickname:              param.Nickname,
-		Skill:                 &skill,
-		Intro:                 param.Intro,
-		Experience:            param.Experience,
-		Motto:                 param.Motto,
-		FacebookURL:           param.FacebookURL,
-		InstagramURL:          param.InstagramURL,
-		YoutubeURL:            param.YoutubeURL,
-		Avatar:                avatar,
-		DeleteAlbumPhotosIDs:  param.DeleteAlbumPhotosIDs,
-		CreateAlbumPhotos:     createAlbumPhotoNames,
-		DeleteCerIDs:          param.DeleteCerIDs,
-		UpdateCerIDs:          param.UpdateCerIDs,
-		UpdateCerImages:       updateCerImageNames,
-		UpdateCerNames:        param.UpdateCerNames,
-		CreateCerImages:       createCerImageNames,
-		CreateCerNames:        param.CreateCerNames,
+		Nickname:             param.Nickname,
+		Skill:                &skill,
+		Intro:                param.Intro,
+		Experience:           param.Experience,
+		Motto:                param.Motto,
+		FacebookURL:          param.FacebookURL,
+		InstagramURL:         param.InstagramURL,
+		YoutubeURL:           param.YoutubeURL,
+		Avatar:               avatar,
+		DeleteAlbumPhotosIDs: param.DeleteAlbumPhotosIDs,
+		CreateAlbumPhotos:    createAlbumPhotoNames,
+		DeleteCerIDs:         param.DeleteCerIDs,
+		UpdateCerIDs:         param.UpdateCerIDs,
+		UpdateCerImages:      updateCerImageNames,
+		UpdateCerNames:       param.UpdateCerNames,
+		CreateCerImages:      createCerImageNames,
+		CreateCerNames:       param.CreateCerNames,
 	}); err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
 	//教練大頭照更新(刪除舊的 + 上傳新的)
-	if param.Avatar != nil && avatar != nil{
+	if param.Avatar != nil && avatar != nil {
 		if err := t.resHandler.DeleteTrainerAvatar(oldTrainer.Avatar); err != nil {
 			t.errHandler.Set(c, "res handler", err)
 		}
@@ -319,19 +323,30 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	return &trainer, nil
 }
 
-func (t *trainer) GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error) {
+func (t *trainer) GetTrainer(c *gin.Context, uid *int64, trainerID int64) (*dto.Trainer, errcode.Error) {
 	var trainer dto.Trainer
-	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+	if err := t.trainerRepo.FindTrainerByUID(trainerID, &trainer); err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
 	if trainer.UserID == 0 {
 		return nil, t.errHandler.Set(c, "trainer repo", errors.New(strconv.Itoa(errcode.DataNotFound)))
 	}
-	if err := t.albumRepo.FindAlbumPhotosByUID(uid, &trainer.TrainerAlbumPhotos); err != nil {
+	if err := t.albumRepo.FindAlbumPhotosByUID(trainerID, &trainer.TrainerAlbumPhotos); err != nil {
 		return nil, t.errHandler.Set(c, "trainer album repo", err)
 	}
-	if err := t.cerRepo.FindCertificatesByUID(uid, &trainer.Certificates); err != nil {
+	if err := t.cerRepo.FindCertificatesByUID(trainerID, &trainer.Certificates); err != nil {
 		return nil, t.errHandler.Set(c, "trainer album repo", err)
+	}
+	//查詢教練收藏狀態
+	trainer.Favorite = 0
+	if uid != nil {
+		favorite, err := t.favoriteRepo.FindFavoriteTrainer(*uid, trainerID)
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, t.errHandler.Set(c, "favorite repo", err)
+		}
+		if favorite.TrainerID > 0 {
+			trainer.Favorite = 1
+		}
 	}
 	return &trainer, nil
 }
@@ -355,9 +370,9 @@ func (t *trainer) GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummar
 	}
 	paging := dto.Paging{
 		TotalCount: totalCount,
-		TotalPage: t.GetTotalPage(totalCount, size),
-		Page: page,
-		Size: size,
+		TotalPage:  t.GetTotalPage(totalCount, size),
+		Page:       page,
+		Size:       size,
 	}
 	return trainers, &paging, nil
 }
@@ -392,7 +407,9 @@ func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed
 		return nil, t.errHandler.Set(c, "uploader", err)
 	}
 	//查詢教練資訊
-	var trainer struct{ Avatar string `gorm:"column:avatar"`}
+	var trainer struct {
+		Avatar string `gorm:"column:avatar"`
+	}
 	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
 		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
 		return nil, t.errHandler.SystemError()
@@ -538,11 +555,11 @@ func (t *trainer) GetCertificateCount(c *gin.Context, uid int64) (int, errcode.E
 }
 
 func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Error) {
-	var trainer struct{
-		UserID int64 `gorm:"column:user_id"`
-		TrainerStatus int `gorm:"column:trainer_status"`
+	var trainer struct {
+		UserID        int64 `gorm:"column:user_id"`
+		TrainerStatus int   `gorm:"column:trainer_status"`
 	}
-	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil{
+	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
 		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
 		return false, t.errHandler.SystemError()
 	}
@@ -556,7 +573,7 @@ func transformSkills(skills []int) string {
 	var value string
 	for i, skill := range skills {
 		value += strconv.Itoa(skill)
-		if i != len(skills) - 1 {
+		if i != len(skills)-1 {
 			value += ","
 		}
 	}

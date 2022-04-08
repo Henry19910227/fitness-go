@@ -14,10 +14,10 @@ import (
 type Trainer struct {
 	Base
 	trainerService service.Trainer
-	courseService service.Course
+	courseService  service.Course
 }
 
-func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, courseService service.Course, userMiddleware gin.HandlerFunc, userMidd midd.User)  {
+func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, courseService service.Course, userMiddleware gin.HandlerFunc, userMidd midd.User) {
 	baseGroup.StaticFS("/resource/trainer/avatar", http.Dir("./volumes/storage/trainer/avatar"))
 	baseGroup.StaticFS("/resource/trainer/card_front_image", http.Dir("./volumes/storage/trainer/card_front_image"))
 	baseGroup.StaticFS("/resource/trainer/card_back_image", http.Dir("./volumes/storage/trainer/card_back_image"))
@@ -94,7 +94,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, cour
 // @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /trainer [POST]
-func (t *Trainer) CreateTrainer(c *gin.Context)  {
+func (t *Trainer) CreateTrainer(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
 		t.JSONValidatorErrorResponse(c, e.Error())
@@ -113,7 +113,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 	}
 	cardFrontImage := &dto.File{
 		FileNamed: fileHeader.Filename,
-		Data: file,
+		Data:      file,
 	}
 	//獲取身分證背面照
 	file, fileHeader, err = c.Request.FormFile("card_back_image")
@@ -123,7 +123,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 	}
 	cardBackImage := &dto.File{
 		FileNamed: fileHeader.Filename,
-		Data: file,
+		Data:      file,
 	}
 	//獲取形象照
 	file, fileHeader, err = c.Request.FormFile("avatar")
@@ -133,7 +133,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 	}
 	avatar := &dto.File{
 		FileNamed: fileHeader.Filename,
-		Data: file,
+		Data:      file,
 	}
 	//獲取教練相簿照片
 	files := c.Request.MultipartForm.File["trainer_album_photos"]
@@ -142,7 +142,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 		data, _ := f.Open()
 		file := &dto.File{
 			FileNamed: f.Filename,
-			Data: data,
+			Data:      data,
 		}
 		trainerAlbumPhotos = append(trainerAlbumPhotos, file)
 	}
@@ -153,7 +153,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 		data, _ := f.Open()
 		file := &dto.File{
 			FileNamed: f.Filename,
-			Data: data,
+			Data:      data,
 		}
 		certificateImages = append(certificateImages, file)
 	}
@@ -169,7 +169,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context)  {
 	}
 	accountImage := &dto.File{
 		FileNamed: fileHeader.Filename,
-		Data: file,
+		Data:      file,
 	}
 	//創建教練
 	result, errs := t.trainerService.CreateTrainer(c, uid, &dto.CreateTrainerParam{
@@ -248,7 +248,7 @@ func (t *Trainer) UpdateTrainer(c *gin.Context) {
 	if file != nil {
 		avatar = &dto.File{
 			FileNamed: fileHeader.Filename,
-			Data: file,
+			Data:      file,
 		}
 	}
 	//獲取教練相簿照片
@@ -258,7 +258,7 @@ func (t *Trainer) UpdateTrainer(c *gin.Context) {
 		data, _ := f.Open()
 		file := &dto.File{
 			FileNamed: f.Filename,
-			Data: data,
+			Data:      data,
 		}
 		createAlbumPhotos = append(createAlbumPhotos, file)
 	}
@@ -269,7 +269,7 @@ func (t *Trainer) UpdateTrainer(c *gin.Context) {
 		data, _ := f.Open()
 		file := &dto.File{
 			FileNamed: f.Filename,
-			Data: data,
+			Data:      data,
 		}
 		updateCerImages = append(updateCerImages, file)
 	}
@@ -280,28 +280,28 @@ func (t *Trainer) UpdateTrainer(c *gin.Context) {
 		data, _ := f.Open()
 		file := &dto.File{
 			FileNamed: f.Filename,
-			Data: data,
+			Data:      data,
 		}
 		createCerImages = append(createCerImages, file)
 	}
 	result, errs := t.trainerService.UpdateTrainer(c, uid, &dto.UpdateTrainerParam{
-		Nickname: form.Nickname,
-		Skill: form.Skill,
-		Intro: form.Intro,
-		Experience: form.Experience,
-		Motto: form.Motto,
-		FacebookURL: form.FacebookURL,
-		InstagramURL: form.InstagramURL,
-		YoutubeURL: form.YoutubeURL,
-		Avatar: avatar,
+		Nickname:             form.Nickname,
+		Skill:                form.Skill,
+		Intro:                form.Intro,
+		Experience:           form.Experience,
+		Motto:                form.Motto,
+		FacebookURL:          form.FacebookURL,
+		InstagramURL:         form.InstagramURL,
+		YoutubeURL:           form.YoutubeURL,
+		Avatar:               avatar,
 		DeleteAlbumPhotosIDs: form.DeleteAlbumPhotosIDs,
-		CreateAlbumPhotos: createAlbumPhotos,
-		DeleteCerIDs: form.DeleteCerIDs,
-		UpdateCerIDs: form.UpdateCerIDs,
-		UpdateCerImages: updateCerImages,
-		UpdateCerNames: form.UpdateCerNames,
-		CreateCerNames: form.CreateCerNames,
-		CreateCerImages: createCerImages,
+		CreateAlbumPhotos:    createAlbumPhotos,
+		DeleteCerIDs:         form.DeleteCerIDs,
+		UpdateCerIDs:         form.UpdateCerIDs,
+		UpdateCerImages:      updateCerImages,
+		UpdateCerNames:       form.UpdateCerNames,
+		CreateCerNames:       form.CreateCerNames,
+		CreateCerImages:      createCerImages,
 	})
 	if errs != nil {
 		t.JSONErrorResponse(c, errs)
@@ -326,7 +326,7 @@ func (t *Trainer) GetTrainer(c *gin.Context) {
 		t.JSONValidatorErrorResponse(c, e.Error())
 		return
 	}
-	trainer, err := t.trainerService.GetTrainer(c, uid)
+	trainer, err := t.trainerService.GetTrainer(c, nil, uid)
 	if err != nil {
 		t.JSONErrorResponse(c, err)
 		return
@@ -398,7 +398,7 @@ func (t *Trainer) GetTrainerCourseProducts(c *gin.Context) {
 		saleTypes = append(saleTypes, *query.SaleType)
 	}
 	courses, paging, err := t.courseService.GetCourseProductSummaries(c, &dto.GetCourseProductSummariesParam{
-		UserID: &uri.TrainerID,
+		UserID:   &uri.TrainerID,
 		SaleType: saleTypes,
 	}, pagingQuery.Page, pagingQuery.Size)
 	if err != nil {
@@ -420,12 +420,17 @@ func (t *Trainer) GetTrainerCourseProducts(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /trainer/{user_id} [GET]
 func (t *Trainer) GetTrainerByUID(c *gin.Context) {
+	uid, e := t.GetUID(c)
+	if e != nil {
+		t.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
 	var uri validator.TrainerIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		t.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	trainer, err := t.trainerService.GetTrainer(c, uri.TrainerID)
+	trainer, err := t.trainerService.GetTrainer(c, &uid, uri.TrainerID)
 	if err != nil {
 		t.JSONErrorResponse(c, err)
 		return

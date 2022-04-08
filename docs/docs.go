@@ -1855,6 +1855,258 @@ var doc = `{
                 }
             }
         },
+        "/favorite/action/{action_id}": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "收藏動作",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "收藏動作",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "新增成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除收藏動作",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "刪除收藏動作",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/favorite/course/{course_id}": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "新增收藏課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "新增收藏課表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "新增成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除收藏課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "刪除收藏課表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/favorite/trainer/{user_id}": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "收藏教練",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "收藏教練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "新增成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除收藏教練",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorite"
+                ],
+                "summary": "刪除收藏教練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/login/admin/email": {
             "post": {
                 "description": "管理者使用信箱登入",
@@ -5323,6 +5575,11 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
+                "favorite": {
+                    "description": "是否收藏(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "id": {
                     "description": "動作id",
                     "type": "integer",
@@ -5546,6 +5803,11 @@ var doc = `{
                     "type": "string",
                     "example": "d2w3e15d3awe.jpg"
                 },
+                "favorite": {
+                    "description": "是否收藏(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "id": {
                     "description": "課表 id",
                     "type": "integer",
@@ -5617,6 +5879,11 @@ var doc = `{
                     "description": "課表封面",
                     "type": "string",
                     "example": "d2w3e15d3awe.jpg"
+                },
+                "favorite": {
+                    "description": "是否收藏(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
                 },
                 "id": {
                     "description": "課表 id",
@@ -5842,6 +6109,11 @@ var doc = `{
                     "type": "string",
                     "example": "2,3,6"
                 },
+                "favorite": {
+                    "description": "是否收藏(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "food": {
                     "description": "飲食建議",
                     "type": "string",
@@ -5953,6 +6225,11 @@ var doc = `{
                     "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
                     "type": "string",
                     "example": "2,3,6"
+                },
+                "favorite": {
+                    "description": "是否收藏(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
                 },
                 "food": {
                     "description": "飲食建議",
@@ -6719,6 +6996,11 @@ var doc = `{
                     "type": "string",
                     "example": "www.facebook.com"
                 },
+                "favorite": {
+                    "description": "是否收藏(0:否/1:是)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "instagram_url": {
                     "description": "ig連結",
                     "type": "string",
@@ -6760,6 +7042,11 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/dto.TrainerAlbumPhoto"
                     }
+                },
+                "trainer_level": {
+                    "description": "教練評鑑等級",
+                    "type": "integer",
+                    "example": 1
                 },
                 "trainer_status": {
                     "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",

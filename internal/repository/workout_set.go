@@ -22,16 +22,16 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 		var actionID = v
 		set := entity.WorkoutSet{
 			WorkoutID: workoutID,
-			ActionID: &actionID,
-			Type: 1,
-			AutoNext: "N",
-			Weight: 10,
-			Reps: 10,
-			Distance: 1,
-			Duration: 60,
-			Incline: 1,
-			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+			ActionID:  &actionID,
+			Type:      1,
+			AutoNext:  "N",
+			Weight:    10,
+			Reps:      10,
+			Distance:  1,
+			Duration:  60,
+			Incline:   1,
+			CreateAt:  time.Now().Format("2006-01-02 15:04:05"),
+			UpdateAt:  time.Now().Format("2006-01-02 15:04:05"),
 		}
 		sets = append(sets, &set)
 	}
@@ -47,14 +47,14 @@ func (s *set) CreateWorkoutSetsByWorkoutID(workoutID int64, actionIDs []int64) (
 		if err := tx.Table("workouts").
 			Where("id = ?", workoutID).
 			Update("workout_set_count", countQuery).Error; err != nil {
-				return err
+			return err
 		}
 		return nil
 	}); err != nil {
 		return nil, err
 	}
 	workoutIDs := make([]int64, 0)
-	for _, set := range sets{
+	for _, set := range sets {
 		workoutIDs = append(workoutIDs, set.ID)
 	}
 	return workoutIDs, nil
@@ -83,7 +83,7 @@ func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*entit
 		return nil, err
 	}
 	setIDs := make([]int64, 0)
-	for _, set := range sets{
+	for _, set := range sets {
 		setIDs = append(setIDs, set.ID)
 	}
 	return setIDs, nil
@@ -92,11 +92,11 @@ func (s *set) CreateWorkoutSetsByWorkoutIDAndSets(workoutID int64, sets []*entit
 func (s *set) CreateRestSetByWorkoutID(workoutID int64) (int64, error) {
 	set := entity.WorkoutSet{
 		WorkoutID: workoutID,
-		Type: 2,
-		AutoNext: "N",
-		Duration: 30,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		Type:      2,
+		AutoNext:  "N",
+		Duration:  30,
+		CreateAt:  time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:  time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := s.gorm.DB().Create(&set).Error; err != nil {
 		return 0, err
@@ -149,10 +149,10 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error) 
 			"`set`.auto_next", "`set`.start_audio", "`set`.progress_audio",
 			"`set`.remark", "`set`.weight", "`set`.reps",
 			"`set`.distance", "`set`.duration", "`set`.incline",
-		    "IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
-		    "IFNULL(actions.type, 0)", "IFNULL(actions.category, 0)", "IFNULL(actions.body, 0)",
-		    "IFNULL(actions.equipment, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
-		    "IFNULL(actions.video, '')").
+			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
+			"IFNULL(actions.type, 0)", "IFNULL(actions.category, 0)", "IFNULL(actions.body, 0)",
+			"IFNULL(actions.equipment, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
+			"IFNULL(actions.video, '')").
 		Joins("LEFT JOIN actions ON set.action_id = actions.id").
 		Where("`set`.id IN (?)", setIDs).Rows()
 	if err != nil {
@@ -178,19 +178,24 @@ func (s *set) FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error) 
 	return sets, nil
 }
 
-func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSet, error) {
+func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64, userID *int64) ([]*model.WorkoutSet, error) {
+	var uid int64
+	if userID != nil {
+		uid = *userID
+	}
 	rows, err := s.gorm.DB().
 		Table("workout_sets AS `set`").
 		Select("`set`.id", "`set`.workout_id", "`set`.type",
 			"`set`.auto_next", "`set`.start_audio", "`set`.progress_audio",
 			"`set`.remark", "`set`.weight", "`set`.reps",
 			"`set`.distance", "`set`.duration", "`set`.incline",
-		    "IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
-		    "IFNULL(actions.type, 0)", "IFNULL(actions.category, 0)", "IFNULL(actions.body, 0)",
-		    "IFNULL(actions.equipment, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
-		    "IFNULL(actions.video, '')").
+			"IFNULL(actions.id, 0)", "IFNULL(actions.name, '')", "IFNULL(actions.source, 0)",
+			"IFNULL(actions.type, 0)", "IFNULL(actions.category, 0)", "IFNULL(actions.body, 0)",
+			"IFNULL(actions.equipment, 0)", "IFNULL(actions.intro, '')", "IFNULL(actions.cover, '')",
+			"IFNULL(actions.video, '')", "IF(favorite_actions.action_id IS NULL, 0, 1)").
 		Joins("LEFT JOIN actions ON `set`.action_id = actions.id").
 		Joins("LEFT JOIN workout_set_orders AS orders ON orders.workout_set_id = `set`.id").
+		Joins("LEFT JOIN favorite_actions ON favorite_actions.action_id = actions.id AND favorite_actions.user_id = ?", uid).
 		Where("`set`.workout_id = ?", workoutID).
 		// ORDER BY orders.seq IS NULL 表示 seq 不為空則為0，空則為1，使用ASC排序之後，1的會被排後面，達到將null值的資料放到最後的需求
 		Order("orders.seq IS NULL ASC, orders.seq ASC, `set`.create_at ASC").
@@ -207,7 +212,7 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64) ([]*model.WorkoutSet, 
 			&set.Remark, &set.Weight, &set.Reps,
 			&set.Distance, &set.Duration, &set.Incline,
 			&action.ID, &action.Name, &action.Source, &action.Type, &action.Category, &action.Equipment,
-			&action.Body, &action.Intro, &action.Cover, &action.Video); err != nil {
+			&action.Body, &action.Intro, &action.Cover, &action.Video, &action.Favorite); err != nil {
 			return nil, err
 		}
 		if action.ID != 0 {
@@ -225,24 +230,9 @@ func (s *set) FindWorkoutSetIDsByWorkoutID(workoutID int64) ([]int64, error) {
 		Select("id").
 		Where("workout_id = ? AND type = ?", workoutID, 1).
 		Find(&setIDs).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
 	return setIDs, nil
-}
-
-func (s *set) FindWorkoutSetsByCourseID(courseID int64) ([]*model.WorkoutSet, error) {
-	var sets []*model.WorkoutSet
-	if err := s.gorm.DB().
-		Table("workout_sets AS sets").
-		Joins("INNER JOIN workouts ON sets.workout_id = workouts.id").
-		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
-		Joins("INNER JOIN courses ON plans.course_id = courses.id").
-		Where("courses.id = ?", courseID).
-		Preload("Action").
-		Find(&sets).Error; err != nil {
-			return nil, err
-	}
-	return sets, nil
 }
 
 func (s *set) FindStartAudioCountByAudioName(audioName string) (int, error) {
@@ -252,7 +242,7 @@ func (s *set) FindStartAudioCountByAudioName(audioName string) (int, error) {
 		Select("COUNT(*)").
 		Where("start_audio = ?", audioName).
 		Take(&startAudioCount).Error; err != nil {
-			return 0, err
+		return 0, err
 	}
 	return startAudioCount, nil
 }
@@ -271,15 +261,33 @@ func (s *set) FindProgressAudioCountByAudioName(audioName string) (int, error) {
 
 func (s *set) UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error {
 	var selects []interface{}
-	if param.AutoNext != nil { selects = append(selects, "auto_next") }
-	if param.StartAudio != nil { selects = append(selects, "start_audio") }
-	if param.ProgressAudio != nil { selects = append(selects, "progress_audio") }
-	if param.Remark != nil { selects = append(selects, "remark") }
-	if param.Weight != nil { selects = append(selects, "weight") }
-	if param.Reps != nil { selects = append(selects, "reps") }
-	if param.Distance != nil { selects = append(selects, "distance") }
-	if param.Duration != nil { selects = append(selects, "duration") }
-	if param.Incline != nil { selects = append(selects, "incline") }
+	if param.AutoNext != nil {
+		selects = append(selects, "auto_next")
+	}
+	if param.StartAudio != nil {
+		selects = append(selects, "start_audio")
+	}
+	if param.ProgressAudio != nil {
+		selects = append(selects, "progress_audio")
+	}
+	if param.Remark != nil {
+		selects = append(selects, "remark")
+	}
+	if param.Weight != nil {
+		selects = append(selects, "weight")
+	}
+	if param.Reps != nil {
+		selects = append(selects, "reps")
+	}
+	if param.Distance != nil {
+		selects = append(selects, "distance")
+	}
+	if param.Duration != nil {
+		selects = append(selects, "duration")
+	}
+	if param.Incline != nil {
+		selects = append(selects, "incline")
+	}
 	//插入更新時間
 	if param != nil {
 		selects = append(selects, "update_at")

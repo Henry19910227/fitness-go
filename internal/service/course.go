@@ -26,6 +26,7 @@ type course struct {
 	saleRepo                repository.Sale
 	subscribeInfoRepo       repository.UserSubscribeInfo
 	userCourseStatisticRepo repository.UserCourseStatistic
+	favoriteRepo            repository.Favorite
 	uploader                handler.Uploader
 	resHandler              handler.Resource
 	logger                  handler.Logger
@@ -42,12 +43,13 @@ func NewCourse(courseRepo repository.Course,
 	saleRepo repository.Sale,
 	subscribeInfoRepo repository.UserSubscribeInfo,
 	userCourseStatisticRepo repository.UserCourseStatistic,
+	favoriteRepo repository.Favorite,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
 	return &course{courseRepo: courseRepo, userCourseAssetRepo: userCourseAssetRepo,
 		trainerRepo: trainerRepo, planRepo: planRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo,
-		saleRepo: saleRepo, subscribeInfoRepo: subscribeInfoRepo, userCourseStatisticRepo: userCourseStatisticRepo,
+		saleRepo: saleRepo, subscribeInfoRepo: subscribeInfoRepo, userCourseStatisticRepo: userCourseStatisticRepo, favoriteRepo: favoriteRepo,
 		uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
@@ -271,6 +273,15 @@ func (cs *course) GetCourseProductByCourseID(c *gin.Context, userID int64, cours
 			}
 		}
 	}
+	//查詢課表收藏狀態
+	courseDto.Favorite = 0
+	favoriteCourse, err := cs.favoriteRepo.FindFavoriteCourse(userID, courseID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, cs.errHandler.Set(c, "favorite repo", err)
+	}
+	if favoriteCourse.CourseID > 0 {
+		courseDto.Favorite = 1
+	}
 	return &courseDto, nil
 }
 
@@ -400,6 +411,7 @@ func (cs *course) GetCourseAsset(c *gin.Context, userID int64, courseID int64) (
 		return nil, cs.errHandler.Set(c, "course repo", err)
 	}
 	courseDto := dto.NewCourseAsset(courseData)
+	//查詢課表購買狀態
 	courseDto.AllowAccess = 0
 	if global.SaleType(courseDto.SaleType) == global.SaleTypeSubscribe {
 		subscribeInfo, err := cs.subscribeInfoRepo.FindSubscribeInfo(userID)
@@ -423,6 +435,15 @@ func (cs *course) GetCourseAsset(c *gin.Context, userID int64, courseID int64) (
 				courseDto.AllowAccess = 1
 			}
 		}
+	}
+	//查詢課表收藏狀態
+	courseDto.Favorite = 0
+	favoriteCourse, err := cs.favoriteRepo.FindFavoriteCourse(userID, courseID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, cs.errHandler.Set(c, "favorite repo", err)
+	}
+	if favoriteCourse.CourseID > 0 {
+		courseDto.Favorite = 1
 	}
 	return &courseDto, nil
 }
@@ -448,7 +469,7 @@ func (cs *course) GetCourseAssetStructure(c *gin.Context, userID int64, courseID
 		}
 		for _, workoutData := range workoutDatas {
 			workout := dto.NewWorkoutAssetStructure(workoutData)
-			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID)
+			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID, &userID)
 			if err != nil {
 				return nil, cs.errHandler.Set(c, "workout set repo", err)
 			}
@@ -460,10 +481,44 @@ func (cs *course) GetCourseAssetStructure(c *gin.Context, userID int64, courseID
 		}
 		courseDto.Plans = append(courseDto.Plans, &plan)
 	}
+	//查詢課表購買狀態
+	courseDto.AllowAccess = 0
+	if global.SaleType(courseDto.SaleType) == global.SaleTypeSubscribe {
+		subscribeInfo, err := cs.subscribeInfoRepo.FindSubscribeInfo(userID)
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, cs.errHandler.Set(c, "subscribe info repo", err)
+		}
+		if subscribeInfo != nil {
+			courseDto.AllowAccess = subscribeInfo.Status
+		}
+	}
+	if global.SaleType(courseDto.SaleType) == global.SaleTypeFree || global.SaleType(courseDto.SaleType) == global.SaleTypeCharge {
+		asset, err := cs.userCourseAssetRepo.FindUserCourseAsset(&model.FindUserCourseAssetParam{
+			UserID:   userID,
+			CourseID: courseID,
+		})
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, cs.errHandler.Set(c, "course repo", err)
+		}
+		if asset != nil {
+			if asset.Available == 1 {
+				courseDto.AllowAccess = 1
+			}
+		}
+	}
+	//查詢課表收藏狀態
+	courseDto.Favorite = 0
+	favoriteCourse, err := cs.favoriteRepo.FindFavoriteCourse(userID, courseID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, cs.errHandler.Set(c, "favorite repo", err)
+	}
+	if favoriteCourse.CourseID > 0 {
+		courseDto.Favorite = 1
+	}
 	return &courseDto, nil
 }
 
-func (cs *course) GetCourseProductStructure(c *gin.Context, courseID int64) (*dto.CourseProductStructure, errcode.Error) {
+func (cs *course) GetCourseProductStructure(c *gin.Context, userID int64, courseID int64) (*dto.CourseProductStructure, errcode.Error) {
 	courseData, err := cs.courseRepo.FindCourseProduct(courseID)
 	if err != nil {
 		return nil, cs.errHandler.Set(c, "course repo", err)
@@ -484,7 +539,7 @@ func (cs *course) GetCourseProductStructure(c *gin.Context, courseID int64) (*dt
 		}
 		for _, workoutData := range workoutDatas {
 			workout := dto.NewWorkoutStructure(workoutData)
-			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID)
+			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID, &userID)
 			if err != nil {
 				return nil, cs.errHandler.Set(c, "workout set repo", err)
 			}
@@ -495,6 +550,40 @@ func (cs *course) GetCourseProductStructure(c *gin.Context, courseID int64) (*dt
 			plan.Workouts = append(plan.Workouts, &workout)
 		}
 		courseDto.Plans = append(courseDto.Plans, &plan)
+	}
+	//查詢課表購買狀態
+	courseDto.AllowAccess = 0
+	if global.SaleType(courseDto.SaleType) == global.SaleTypeSubscribe {
+		subscribeInfo, err := cs.subscribeInfoRepo.FindSubscribeInfo(userID)
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, cs.errHandler.Set(c, "subscribe info repo", err)
+		}
+		if subscribeInfo != nil {
+			courseDto.AllowAccess = subscribeInfo.Status
+		}
+	}
+	if global.SaleType(courseDto.SaleType) == global.SaleTypeFree || global.SaleType(courseDto.SaleType) == global.SaleTypeCharge {
+		asset, err := cs.userCourseAssetRepo.FindUserCourseAsset(&model.FindUserCourseAssetParam{
+			UserID:   userID,
+			CourseID: courseID,
+		})
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, cs.errHandler.Set(c, "course repo", err)
+		}
+		if asset != nil {
+			if asset.Available == 1 {
+				courseDto.AllowAccess = 1
+			}
+		}
+	}
+	//查詢課表收藏狀態
+	courseDto.Favorite = 0
+	favoriteCourse, err := cs.favoriteRepo.FindFavoriteCourse(userID, courseID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, cs.errHandler.Set(c, "favorite repo", err)
+	}
+	if favoriteCourse.CourseID > 0 {
+		courseDto.Favorite = 1
 	}
 	return &courseDto, nil
 }

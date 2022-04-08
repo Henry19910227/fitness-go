@@ -83,12 +83,17 @@ func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /course_product_structure/{course_id} [GET]
 func (p *CourseProduct) GetCourseProductStructure(c *gin.Context) {
+	uid, e := p.GetUID(c)
+	if e != nil {
+		p.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	course, err := p.courseService.GetCourseProductStructure(c, uri.CourseID)
+	course, err := p.courseService.GetCourseProductStructure(c, uid, uri.CourseID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return

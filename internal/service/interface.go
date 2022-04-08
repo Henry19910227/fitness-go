@@ -49,7 +49,7 @@ type User interface {
 type Trainer interface {
 	CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error)
 	UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrainerParam) (*dto.Trainer, errcode.Error)
-	GetTrainer(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
+	GetTrainer(c *gin.Context, uid *int64, trainerID int64) (*dto.Trainer, errcode.Error)
 	GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error)
 	GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummariesParam, page, size int) ([]*dto.TrainerSummary, *dto.Paging, errcode.Error)
 	GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error)
@@ -77,7 +77,7 @@ type Course interface {
 	GetChargeCourseAssetSummaries(c *gin.Context, userID int64, page int, size int) ([]*dto.CourseAssetSummary, *dto.Paging, errcode.Error)
 	GetCourseAsset(c *gin.Context, userID int64, courseID int64) (*dto.CourseAsset, errcode.Error)
 	GetCourseAssetStructure(c *gin.Context, userID int64, courseID int64) (*dto.CourseAssetStructure, errcode.Error)
-	GetCourseProductStructure(c *gin.Context, courseID int64) (*dto.CourseProductStructure, errcode.Error)
+	GetCourseProductStructure(c *gin.Context, userID int64, courseID int64) (*dto.CourseProductStructure, errcode.Error)
 	UploadCourseCoverByID(c *gin.Context, courseID int64, param *dto.UploadCourseCoverParam) (*dto.CourseCover, errcode.Error)
 	CourseSubmit(c *gin.Context, courseID int64) errcode.Error
 	GetCourseStatus(c *gin.Context, courseID int64) (global.CourseStatus, errcode.Error)
@@ -110,8 +110,7 @@ type WorkoutSet interface {
 	CreateRestSet(c *gin.Context, workoutID int64) (*dto.WorkoutSet, errcode.Error)
 	CreateWorkoutSets(c *gin.Context, workoutID int64, actionIDs []int64) ([]*dto.WorkoutSet, errcode.Error)
 	DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*dto.WorkoutSet, errcode.Error)
-	GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet, errcode.Error)
-	GetWorkoutSetsByCourseID(c *gin.Context, courseID int64) ([]*dto.WorkoutSet, errcode.Error)
+	GetWorkoutSets(c *gin.Context, workoutID int64, userID *int64) ([]*dto.WorkoutSet, errcode.Error)
 	UpdateWorkoutSet(c *gin.Context, setID int64, param *dto.UpdateWorkoutSetParam) (*dto.WorkoutSet, errcode.Error)
 	DeleteWorkoutSet(c *gin.Context, setID int64) (*dto.WorkoutSetID, errcode.Error)
 	UpdateWorkoutSetOrders(c *gin.Context, workoutID int64, params []*dto.WorkoutSetOrder) errcode.Error
@@ -160,4 +159,13 @@ type Payment interface {
 	VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
 	HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error
 	GetSubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeResponse, errcode.Error)
+}
+
+type Favorite interface {
+	CreateFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error
+	CreateFavoriteTrainer(c *gin.Context, userID int64, trainerID int64) errcode.Error
+	CreateFavoriteAction(c *gin.Context, userID int64, actionID int64) errcode.Error
+	DeleteFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error
+	DeleteFavoriteTrainer(c *gin.Context, userID int64, trainerID int64) errcode.Error
+	DeleteFavoriteAction(c *gin.Context, userID int64, actionID int64) errcode.Error
 }

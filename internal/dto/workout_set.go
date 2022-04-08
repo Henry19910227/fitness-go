@@ -47,6 +47,7 @@ func NewWorkoutSet(data *model.WorkoutSet) WorkoutSet {
 			Intro:     data.Action.Intro,
 			Cover:     data.Action.Cover,
 			Video:     data.Action.Video,
+			Favorite:  data.Action.Favorite,
 		}
 		set.Action = &action
 	}

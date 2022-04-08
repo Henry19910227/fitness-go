@@ -17,16 +17,16 @@ func NewAction(gorm tool.Gorm) Action {
 
 func (a *action) CreateAction(courseID int64, param *model.CreateActionParam) (int64, error) {
 	action := model.Action{
-		CourseID: courseID,
-		Name: param.Name,
-		Source: 2,
-		Type: param.Type,
-		Category: param.Category,
-		Body: param.Body,
+		CourseID:  courseID,
+		Name:      param.Name,
+		Source:    2,
+		Type:      param.Type,
+		Category:  param.Category,
+		Body:      param.Body,
 		Equipment: param.Equipment,
-		Intro: param.Intro,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		Intro:     param.Intro,
+		CreateAt:  time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:  time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if param.Cover != nil {
 		action.Cover = *param.Cover
@@ -40,26 +40,43 @@ func (a *action) CreateAction(courseID int64, param *model.CreateActionParam) (i
 	return action.ID, nil
 }
 
-func (a *action) FindActionByID(actionID int64, entity interface{}) error {
+func (a *action) FindActionByID(actionID int64) (*model.Action, error) {
+	var action model.Action
 	if err := a.gorm.DB().
 		Model(&model.Action{}).
 		Where("id = ?", actionID).
-		Take(entity).Error; err != nil{
-			return err
+		Take(&action).Error; err != nil {
+		return nil, err
 	}
-	return nil
+	return &action, nil
 }
 
 func (a *action) UpdateActionByID(actionID int64, param *model.UpdateActionParam) error {
 	var selects []interface{}
-	if param.Name != nil { selects = append(selects, "name") }
-	if param.Category != nil { selects = append(selects, "category") }
-	if param.Body != nil { selects = append(selects, "body") }
-	if param.Equipment != nil { selects = append(selects, "equipment") }
-	if param.Intro != nil { selects = append(selects, "intro") }
-	if param.Cover != nil { selects = append(selects, "cover") }
-	if param.Video != nil { selects = append(selects, "video") }
-	if param == nil || len(selects) == 0 { return nil }
+	if param.Name != nil {
+		selects = append(selects, "name")
+	}
+	if param.Category != nil {
+		selects = append(selects, "category")
+	}
+	if param.Body != nil {
+		selects = append(selects, "body")
+	}
+	if param.Equipment != nil {
+		selects = append(selects, "equipment")
+	}
+	if param.Intro != nil {
+		selects = append(selects, "intro")
+	}
+	if param.Cover != nil {
+		selects = append(selects, "cover")
+	}
+	if param.Video != nil {
+		selects = append(selects, "video")
+	}
+	if param == nil || len(selects) == 0 {
+		return nil
+	}
 	//插入更新時間
 	selects = append(selects, "update_at")
 	var updateAt = time.Now().Format("2006-01-02 15:04:05")
@@ -74,7 +91,7 @@ func (a *action) UpdateActionByID(actionID int64, param *model.UpdateActionParam
 	return nil
 }
 
-func (a *action) FindActionsByParam(courseID int64, param *model.FindActionsParam, entity interface{}) error {
+func (a *action) FindActionsByParam(courseID int64, param *model.FindActionsParam) ([]*model.Action, error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 course_id 篩選條件
@@ -103,15 +120,16 @@ func (a *action) FindActionsByParam(courseID int64, param *model.FindActionsPara
 	//加入 name 篩選條件
 	if param.Name != nil {
 		query += "AND name LIKE ? "
-		params = append(params, "%" + *param.Name + "%")
+		params = append(params, "%"+*param.Name+"%")
 	}
+	actions := make([]*model.Action, 0)
 	if err := a.gorm.DB().
 		Model(&model.Action{}).
 		Where(query, params...).
-		Find(entity).Error; err != nil {
-		return err
+		Find(&actions).Error; err != nil {
+		return nil, err
 	}
-	return nil
+	return actions, nil
 }
 
 func (a *action) DeleteActionByID(actionID int64) error {

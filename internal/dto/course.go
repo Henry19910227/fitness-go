@@ -99,6 +99,7 @@ type CourseProduct struct {
 	TrainTarget  string           `json:"train_target" gorm:"column:train_target" example:"2,3,4"` // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
 	BodyTarget   string           `json:"body_target" gorm:"column:body_target" example:"4,5"`     // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
 	Notice       string           `json:"notice" gorm:"column:notice" example:"小心不要受傷"`            // 注意事項
+	Favorite     int              `json:"favorite" gorm:"column:favorite" example:"1"`             //  是否收藏(0:否/1:是)
 	PlanCount    int              `json:"plan_count" gorm:"column:plan_count" example:"2"`         // 計畫總數
 	WorkoutCount int              `json:"workout_count" gorm:"column:workout_count" example:"10"`  // 訓練總數
 	Review       *ReviewStatistic `json:"review"`                                                  // 評分統計
@@ -124,6 +125,7 @@ type CourseProductStructure struct {
 	TrainTarget  string           `json:"train_target" gorm:"column:train_target" example:"2,3,4"` // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
 	BodyTarget   string           `json:"body_target" gorm:"column:body_target" example:"4,5"`     // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
 	Notice       string           `json:"notice" gorm:"column:notice" example:"小心不要受傷"`            // 注意事項
+	Favorite     int              `json:"favorite" gorm:"column:favorite" example:"1"`             //  是否收藏(0:否/1:是)
 	PlanCount    int              `json:"plan_count" gorm:"column:plan_count" example:"2"`         // 計畫總數
 	WorkoutCount int              `json:"workout_count" gorm:"column:workout_count" example:"10"`  // 訓練總數
 	Review       *ReviewStatistic `json:"review"`                                                  // 評分統計
@@ -158,6 +160,7 @@ type CourseAsset struct {
 	Name            string               `json:"name" gorm:"column:name" example:"Henry課表"`              // 課表名稱
 	Cover           string               `json:"cover" gorm:"column:cover" example:"d2w3e15d3awe.jpg"`   // 課表封面
 	Level           int                  `json:"level" gorm:"column:level" example:"3"`                  // 強度(1:初級/2:中級/3:中高級/4:高級)
+	Favorite        int                  `json:"favorite" gorm:"column:favorite" example:"1"`            //  是否收藏(0:否/1:是)
 	PlanCount       int                  `json:"plan_count" gorm:"column:plan_count" example:"2"`        // 計畫總數
 	WorkoutCount    int                  `json:"workout_count" gorm:"column:workout_count" example:"10"` // 訓練總數
 	CourseStatistic *UserCourseStatistic `json:"user_course_statistic"`                                  // 課表統計
@@ -175,6 +178,7 @@ type CourseAssetStructure struct {
 	Name            string                `json:"name" gorm:"column:name" example:"Henry課表"`              // 課表名稱
 	Cover           string                `json:"cover" gorm:"column:cover" example:"d2w3e15d3awe.jpg"`   // 課表封面
 	Level           int                   `json:"level" gorm:"column:level" example:"3"`                  // 強度(1:初級/2:中級/3:中高級/4:高級)
+	Favorite        int                   `json:"favorite" gorm:"column:favorite" example:"1"`            //  是否收藏(0:否/1:是)
 	PlanCount       int                   `json:"plan_count" gorm:"column:plan_count" example:"2"`        // 計畫總數
 	WorkoutCount    int                   `json:"workout_count" gorm:"column:workout_count" example:"10"` // 訓練總數
 	CourseStatistic *UserCourseStatistic  `json:"user_course_statistic"`                                  // 課表統計

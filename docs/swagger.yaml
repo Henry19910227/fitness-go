@@ -17,6 +17,10 @@ definitions:
         description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 1
         type: integer
+      favorite:
+        description: 是否收藏(0:否/1:是)
+        example: 1
+        type: integer
       id:
         description: 動作id
         example: 1
@@ -190,6 +194,10 @@ definitions:
         description: 課表封面
         example: d2w3e15d3awe.jpg
         type: string
+      favorite:
+        description: 是否收藏(0:否/1:是)
+        example: 1
+        type: integer
       id:
         description: 課表 id
         example: 2
@@ -246,6 +254,10 @@ definitions:
         description: 課表封面
         example: d2w3e15d3awe.jpg
         type: string
+      favorite:
+        description: 是否收藏(0:否/1:是)
+        example: 1
+        type: integer
       id:
         description: 課表 id
         example: 2
@@ -418,6 +430,10 @@ definitions:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
+      favorite:
+        description: 是否收藏(0:否/1:是)
+        example: 1
+        type: integer
       food:
         description: 飲食建議
         example: 佛系飲食
@@ -506,6 +522,10 @@ definitions:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
+      favorite:
+        description: 是否收藏(0:否/1:是)
+        example: 1
+        type: integer
       food:
         description: 飲食建議
         example: 佛系飲食
@@ -1086,6 +1106,10 @@ definitions:
         description: 臉書連結
         example: www.facebook.com
         type: string
+      favorite:
+        description: 是否收藏(0:否/1:是)
+        example: 1
+        type: integer
       instagram_url:
         description: ig連結
         example: www.instagram.com
@@ -1119,6 +1143,10 @@ definitions:
         items:
           $ref: '#/definitions/dto.TrainerAlbumPhoto'
         type: array
+      trainer_level:
+        description: 教練評鑑等級
+        example: 1
+        type: integer
       trainer_status:
         description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
         example: 1
@@ -3193,6 +3221,165 @@ paths:
       summary: 獲取我的課表列表
       tags:
       - Course
+  /favorite/action/{action_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除收藏動作
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除收藏動作
+      tags:
+      - Favorite
+    post:
+      consumes:
+      - application/json
+      description: 收藏動作
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 新增成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 收藏動作
+      tags:
+      - Favorite
+  /favorite/course/{course_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除收藏課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除收藏課表
+      tags:
+      - Favorite
+    post:
+      consumes:
+      - application/json
+      description: 新增收藏課表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 新增成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 新增收藏課表
+      tags:
+      - Favorite
+  /favorite/trainer/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除收藏教練
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除收藏教練
+      tags:
+      - Favorite
+    post:
+      consumes:
+      - application/json
+      description: 收藏教練
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 新增成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 收藏教練
+      tags:
+      - Favorite
   /login/admin/email:
     post:
       consumes:

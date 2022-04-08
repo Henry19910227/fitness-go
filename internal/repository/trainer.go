@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
@@ -10,29 +11,30 @@ import (
 )
 
 type trainer struct {
-	gorm  tool.Gorm
+	gorm tool.Gorm
 }
 
-func NewTrainer(gormTool  tool.Gorm) Trainer {
+func NewTrainer(gormTool tool.Gorm) Trainer {
 	return &trainer{gorm: gormTool}
 }
 
 func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) error {
 	// 創建 Trainer model
-	trainer := model.Trainer{
-		UserID: uid,
-		Name: param.Name,
-		Nickname: param.Nickname,
-		Skill: param.Skill,
-		Avatar: param.Avatar,
-		Email: param.Email,
-		Phone: param.Phone,
-		Address: param.Address,
-		Intro: param.Intro,
-		Experience: param.Experience,
+	trainer := entity.Trainer{
+		UserID:        uid,
+		Name:          param.Name,
+		Nickname:      param.Nickname,
+		Skill:         param.Skill,
+		Avatar:        param.Avatar,
+		Email:         param.Email,
+		Phone:         param.Phone,
+		Address:       param.Address,
+		Intro:         param.Intro,
+		Experience:    param.Experience,
 		TrainerStatus: 2,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		TrainerLevel:  1,
+		CreateAt:      time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:      time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if param.Motto != nil {
 		trainer.Motto = *param.Motto
@@ -48,29 +50,29 @@ func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) erro
 	}
 	// 創建 card model
 	card := model.Card{
-		UserID: uid,
+		UserID:     uid,
 		FrontImage: param.CardFrontImage,
-		BackImage: param.CardBackImage,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		BackImage:  param.CardBackImage,
+		CreateAt:   time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:   time.Now().Format("2006-01-02 15:04:05"),
 	}
 	// 創建相簿照片model
 	var albumPhotos []*model.TrainerAlbumPhoto
 	for _, photoName := range param.TrainerAlbumPhotos {
-		 photo := model.TrainerAlbumPhoto{
-		 	UserID: uid,
-			Photo: photoName,
+		photo := model.TrainerAlbumPhoto{
+			UserID:   uid,
+			Photo:    photoName,
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		 }
+		}
 		albumPhotos = append(albumPhotos, &photo)
 	}
 	// 創建證照model
 	var certificates []*model.Certificate
 	for i, image := range param.CertificateImages {
 		certificate := model.Certificate{
-			UserID: uid,
-			Name: param.CertificateNames[i],
-			Image: image,
+			UserID:   uid,
+			Name:     param.CertificateNames[i],
+			Image:    image,
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
@@ -157,18 +159,40 @@ func (t *trainer) FindTrainersCount(status *global.TrainerStatus) (int, error) {
 }
 
 func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error {
-	if param == nil { return nil }
+	if param == nil {
+		return nil
+	}
 	var selects []interface{}
-	if param.Nickname != nil { selects = append(selects, "nickname") }
-	if param.Avatar != nil { selects = append(selects, "avatar") }
-	if param.TrainerStatus != nil { selects = append(selects, "trainer_status") }
-	if param.Intro != nil { selects = append(selects, "intro") }
-	if param.Experience != nil { selects = append(selects, "experience") }
-	if param.Skill != nil { selects = append(selects, "skill") }
-	if param.Motto != nil { selects = append(selects, "motto") }
-	if param.FacebookURL != nil { selects = append(selects, "facebook_url") }
-	if param.InstagramURL != nil { selects = append(selects, "instagram_url") }
-	if param.YoutubeURL != nil { selects = append(selects, "youtube_url") }
+	if param.Nickname != nil {
+		selects = append(selects, "nickname")
+	}
+	if param.Avatar != nil {
+		selects = append(selects, "avatar")
+	}
+	if param.TrainerStatus != nil {
+		selects = append(selects, "trainer_status")
+	}
+	if param.Intro != nil {
+		selects = append(selects, "intro")
+	}
+	if param.Experience != nil {
+		selects = append(selects, "experience")
+	}
+	if param.Skill != nil {
+		selects = append(selects, "skill")
+	}
+	if param.Motto != nil {
+		selects = append(selects, "motto")
+	}
+	if param.FacebookURL != nil {
+		selects = append(selects, "facebook_url")
+	}
+	if param.InstagramURL != nil {
+		selects = append(selects, "instagram_url")
+	}
+	if param.YoutubeURL != nil {
+		selects = append(selects, "youtube_url")
+	}
 	// 插入更新時間
 	selects = append(selects, "update_at")
 	var updateAt = time.Now().Format("2006-01-02 15:04:05")
@@ -178,8 +202,8 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	var createAlbumPhotos []*model.TrainerAlbumPhoto
 	for _, photoName := range param.CreateAlbumPhotos {
 		photo := model.TrainerAlbumPhoto{
-			UserID: uid,
-			Photo: photoName,
+			UserID:   uid,
+			Photo:    photoName,
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
 		createAlbumPhotos = append(createAlbumPhotos, &photo)
@@ -188,10 +212,10 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	var updateCertificates []*model.Certificate
 	for i, cerID := range param.UpdateCerIDs {
 		certificate := model.Certificate{
-			ID: cerID,
-			UserID: uid,
-			Name: param.UpdateCerNames[i],
-			Image: param.UpdateCerImages[i],
+			ID:       cerID,
+			UserID:   uid,
+			Name:     param.UpdateCerNames[i],
+			Image:    param.UpdateCerImages[i],
 			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
 		updateCertificates = append(updateCertificates, &certificate)
@@ -200,9 +224,9 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	var createCertificates []*model.Certificate
 	for i, image := range param.CreateCerImages {
 		certificate := model.Certificate{
-			UserID: uid,
-			Name: param.CreateCerNames[i],
-			Image: image,
+			UserID:   uid,
+			Name:     param.CreateCerNames[i],
+			Image:    image,
 			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
 		createCertificates = append(createCertificates, &certificate)
@@ -240,7 +264,7 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 				Where("user_id = ?", uid).
 				Select("name", "image", "update_at").
 				Updates(item).Error; err != nil {
-					return err
+				return err
 			}
 		}
 		//新增指定證照照片
