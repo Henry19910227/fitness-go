@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/Henry19910227/fitness-go/internal/model"
+
 type Action struct {
 	ID        int64  `json:"id" example:"1"`                                     //動作id
 	Name      string `json:"name" example:"槓鈴臥推"`                                //動作名稱
@@ -11,6 +13,23 @@ type Action struct {
 	Intro     string `json:"intro" example:"槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"` //動作介紹
 	Cover     string `json:"cover" example:"32as1d5f13e4.png"`                   //封面
 	Video     string `json:"video" example:"11d547we1d4f8e.mp4"`                 //動作影片
+	Favorite  int    `json:"favorite" example:"1"`                               //是否收藏(0:否/1:是)
+}
+
+func NewAction(data *model.Action) Action {
+	return Action{
+		ID:        data.ID,
+		Name:      data.Name,
+		Source:    data.Source,
+		Type:      data.Type,
+		Category:  data.Category,
+		Body:      data.Body,
+		Equipment: data.Equipment,
+		Intro:     data.Intro,
+		Cover:     data.Cover,
+		Video:     data.Video,
+		Favorite:  data.Favorite,
+	}
 }
 
 type CreateActionParam struct {

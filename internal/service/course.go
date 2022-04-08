@@ -469,7 +469,7 @@ func (cs *course) GetCourseAssetStructure(c *gin.Context, userID int64, courseID
 		}
 		for _, workoutData := range workoutDatas {
 			workout := dto.NewWorkoutAssetStructure(workoutData)
-			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID)
+			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID, &userID)
 			if err != nil {
 				return nil, cs.errHandler.Set(c, "workout set repo", err)
 			}
@@ -539,7 +539,7 @@ func (cs *course) GetCourseProductStructure(c *gin.Context, userID int64, course
 		}
 		for _, workoutData := range workoutDatas {
 			workout := dto.NewWorkoutStructure(workoutData)
-			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID)
+			workoutSetDatas, err := cs.workoutSetRepo.FindWorkoutSetsByWorkoutID(workout.ID, &userID)
 			if err != nil {
 				return nil, cs.errHandler.Set(c, "workout set repo", err)
 			}

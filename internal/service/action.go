@@ -15,7 +15,7 @@ type action struct {
 	Base
 	actionRepo repository.Action
 	courseRepo repository.Course
-	uploader  handler.Uploader
+	uploader   handler.Uploader
 	resHandler handler.Resource
 	errHandler errcode.Handler
 }
@@ -51,16 +51,16 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateA
 		param.Video.FileNamed = videoNamed
 	}
 	//創建動作
-	 actionID, err := a.actionRepo.CreateAction(courseID, &model.CreateActionParam{
-		 Name:      param.Name,
-		 Type:      param.Type,
-		 Category:  param.Category,
-		 Body:      param.Body,
-		 Equipment: param.Equipment,
-		 Intro:     param.Intro,
-		 Video:     video,
-		 Cover:     cover,
-	 })
+	actionID, err := a.actionRepo.CreateAction(courseID, &model.CreateActionParam{
+		Name:      param.Name,
+		Type:      param.Type,
+		Category:  param.Category,
+		Body:      param.Body,
+		Equipment: param.Equipment,
+		Intro:     param.Intro,
+		Video:     video,
+		Cover:     cover,
+	})
 	if err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
 	}
@@ -78,10 +78,11 @@ func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateA
 			a.errHandler.Set(c, "uploader", err)
 		}
 	}
-	var action dto.Action
-	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
+	data, err := a.actionRepo.FindActionByID(actionID)
+	if err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
 	}
+	action := dto.NewAction(data)
 	return &action, nil
 }
 
@@ -107,19 +108,20 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateA
 		param.Video.FileNamed = videoNamed
 	}
 	//查詢更新前的動作資料
-	var oldAction dto.Action
-	if err := a.actionRepo.FindActionByID(actionID, &oldAction); err != nil {
+	data, err := a.actionRepo.FindActionByID(actionID)
+	if err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
 	}
+	oldAction := dto.NewAction(data)
 	//更新動作
 	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
-		Name: param.Name,
-		Category: param.Category,
-		Body: param.Body,
+		Name:      param.Name,
+		Category:  param.Category,
+		Body:      param.Body,
 		Equipment: param.Equipment,
-		Intro: param.Intro,
-		Cover: cover,
-		Video: video,
+		Intro:     param.Intro,
+		Cover:     cover,
+		Video:     video,
 	}); err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
 	}
@@ -149,10 +151,11 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateA
 			a.errHandler.Set(c, "uploader", err)
 		}
 	}
-	var action dto.Action
-	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
+	data, err = a.actionRepo.FindActionByID(actionID)
+	if err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
 	}
+	action := dto.NewAction(data)
 	return &action, nil
 }
 
@@ -201,16 +204,20 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 			equipmentOpt = append(equipmentOpt, opt)
 		}
 	}
-
-	var actions []*dto.Action
-	if err := a.actionRepo.FindActionsByParam(courseID, &model.FindActionsParam{
-		Name: param.Name,
-		SourceOpt: &sourceOpt,
-		CategoryOpt: &categoryOpt,
-		BodyOpt: &bodyOpt,
+	datas, err := a.actionRepo.FindActionsByParam(courseID, &model.FindActionsParam{
+		Name:         param.Name,
+		SourceOpt:    &sourceOpt,
+		CategoryOpt:  &categoryOpt,
+		BodyOpt:      &bodyOpt,
 		EquipmentOpt: &equipmentOpt,
-	}, &actions); err != nil {
+	})
+	if err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
+	}
+	var actions []*dto.Action
+	for _, data := range datas {
+		action := dto.NewAction(data)
+		actions = append(actions, &action)
 	}
 	return actions, nil
 }
@@ -223,10 +230,11 @@ func (a *action) DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, er
 }
 
 func (a *action) DeleteActionVideo(c *gin.Context, actionID int64) errcode.Error {
-	var action dto.Action
-	if err := a.actionRepo.FindActionByID(actionID, &action); err != nil {
+	data, err := a.actionRepo.FindActionByID(actionID)
+	if err != nil {
 		return a.errHandler.Set(c, "action repo", err)
 	}
+	action := dto.NewAction(data)
 	var video = ""
 	if err := a.actionRepo.UpdateActionByID(actionID, &model.UpdateActionParam{
 		Video: &video,

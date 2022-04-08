@@ -181,7 +181,7 @@ func (w *workout) CreateWorkoutByTemplate(c *gin.Context, planID int64, name str
 		return nil, w.errHandler.Set(c, "Workout Repo", err)
 	}
 	//複製workout底下的sets
-	entities, err := w.workoutSetRepo.FindWorkoutSetsByWorkoutID(workoutTemplateID)
+	entities, err := w.workoutSetRepo.FindWorkoutSetsByWorkoutID(workoutTemplateID, nil)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "WorkoutSet Repo", err)
 	}

@@ -119,8 +119,8 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-    workout, err := w.workoutService.UpdateWorkout(c, uri.WorkoutID, &dto.UpdateWorkoutParam{
-		Name: body.Name,
+	workout, err := w.workoutService.UpdateWorkout(c, uri.WorkoutID, &dto.UpdateWorkoutParam{
+		Name:      body.Name,
 		Equipment: body.Equipment,
 	})
 	if err != nil {
@@ -343,7 +343,7 @@ func (w *workout) GetWorkoutSets(c *gin.Context) {
 		w.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	sets, err := w.workoutSetService.GetWorkoutSets(c, uri.WorkoutID)
+	sets, err := w.workoutSetService.GetWorkoutSets(c, uri.WorkoutID, nil)
 	if err != nil {
 		w.JSONErrorResponse(c, err)
 		return
@@ -378,7 +378,7 @@ func (w *workout) UpdateWorkoutSetOrders(c *gin.Context) {
 	for _, data := range body.Orders {
 		order := dto.WorkoutSetOrder{
 			WorkoutSetID: data.WorkoutSetID,
-			Seq: data.Seq,
+			Seq:          data.Seq,
 		}
 		orders = append(orders, &order)
 	}

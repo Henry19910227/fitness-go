@@ -45,14 +45,19 @@ func NewWorkoutAsset(baseGroup *gin.RouterGroup, workoutService service.Workout,
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /workout_asset/{workout_id}/workout_sets [GET]
 func (p *WorkoutAsset) GetWorkoutSets(c *gin.Context) {
+	uid, err := p.GetUID(c)
+	if err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
 	var uri validator.WorkoutIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	workouts, err := p.workoutSetService.GetWorkoutSets(c, uri.WorkoutID)
+	workouts, e := p.workoutSetService.GetWorkoutSets(c, uri.WorkoutID, &uid)
 	if err != nil {
-		p.JSONErrorResponse(c, err)
+		p.JSONErrorResponse(c, e)
 		return
 	}
 	p.JSONSuccessResponse(c, workouts, "success!")

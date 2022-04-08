@@ -104,17 +104,8 @@ func (s *set) DuplicateWorkoutSets(c *gin.Context, setID int64, count int) ([]*d
 	return parserWorkoutSets(entities), nil
 }
 
-func (s *set) GetWorkoutSets(c *gin.Context, workoutID int64) ([]*dto.WorkoutSet, errcode.Error) {
-	datas, err := s.setRepo.FindWorkoutSetsByWorkoutID(workoutID)
-	if err != nil {
-		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
-		return nil, s.errHandler.SystemError()
-	}
-	return parserWorkoutSets(datas), nil
-}
-
-func (s *set) GetWorkoutSetsByCourseID(c *gin.Context, courseID int64) ([]*dto.WorkoutSet, errcode.Error) {
-	datas, err := s.setRepo.FindWorkoutSetsByCourseID(courseID)
+func (s *set) GetWorkoutSets(c *gin.Context, workoutID int64, userID *int64) ([]*dto.WorkoutSet, errcode.Error) {
+	datas, err := s.setRepo.FindWorkoutSetsByWorkoutID(workoutID, userID)
 	if err != nil {
 		s.logger.Set(c, handler.Error, "WorkoutSetRepo", s.errHandler.SystemError().Code(), err.Error())
 		return nil, s.errHandler.SystemError()
@@ -310,34 +301,7 @@ func parserWorkoutSet(data *model.WorkoutSet) *dto.WorkoutSet {
 func parserWorkoutSets(datas []*model.WorkoutSet) []*dto.WorkoutSet {
 	sets := make([]*dto.WorkoutSet, 0)
 	for _, data := range datas {
-		set := dto.WorkoutSet{
-			ID:            data.ID,
-			Type:          data.Type,
-			AutoNext:      data.AutoNext,
-			StartAudio:    data.StartAudio,
-			ProgressAudio: data.ProgressAudio,
-			Remark:        data.Remark,
-			Weight:        data.Weight,
-			Reps:          data.Reps,
-			Distance:      data.Distance,
-			Duration:      data.Duration,
-			Incline:       data.Incline,
-		}
-		if data.Action != nil {
-			action := dto.Action{
-				ID:        data.Action.ID,
-				Name:      data.Action.Name,
-				Source:    data.Action.Source,
-				Type:      data.Action.Type,
-				Category:  data.Action.Category,
-				Body:      data.Action.Body,
-				Equipment: data.Action.Equipment,
-				Intro:     data.Action.Intro,
-				Cover:     data.Action.Cover,
-				Video:     data.Action.Video,
-			}
-			set.Action = &action
-		}
+		set := dto.NewWorkoutSet(data)
 		sets = append(sets, &set)
 	}
 	return sets
