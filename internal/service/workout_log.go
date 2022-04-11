@@ -12,26 +12,29 @@ import (
 )
 
 type workoutLog struct {
-	workoutLogRepo      repository.WorkoutLog
-	workoutSetLogRepo   repository.WorkoutSetLog
-	workoutSetRepo      repository.WorkoutSet
-	actionPRRepo        repository.ActionPR
-	courseRepo          repository.Course
-	courseAssetRepo     repository.UserCourseAsset
-	subscribeInfoRepo   repository.UserSubscribeInfo
-	courseStatisticRepo repository.UserCourseStatistic
-	planStatisticRepo   repository.UserPlanStatistic
-	transactionRepo     repository.Transaction
-	errHandler          errcode.Handler
+	workoutLogRepo       repository.WorkoutLog
+	workoutSetLogRepo    repository.WorkoutSetLog
+	workoutSetRepo       repository.WorkoutSet
+	actionPRRepo         repository.ActionPR
+	courseRepo           repository.Course
+	courseAssetRepo      repository.UserCourseAsset
+	subscribeInfoRepo    repository.UserSubscribeInfo
+	courseStatisticRepo  repository.UserCourseStatistic
+	planStatisticRepo    repository.UserPlanStatistic
+	trainerStatisticRepo repository.TrainerStatistic
+	transactionRepo      repository.Transaction
+	errHandler           errcode.Handler
 }
 
 func NewWorkoutLog(workoutLogRepo repository.WorkoutLog, workoutSetLogRepo repository.WorkoutSetLog,
 	workoutSetRepo repository.WorkoutSet, actionPRRepo repository.ActionPR, courseRepo repository.Course,
 	courseAssetRepo repository.UserCourseAsset, subscribeInfoRepo repository.UserSubscribeInfo, courseStatisticRepo repository.UserCourseStatistic,
-	planStatisticRepo repository.UserPlanStatistic, transactionRepo repository.Transaction, errHandler errcode.Handler) WorkoutLog {
+	planStatisticRepo repository.UserPlanStatistic, trainerStatisticRepo repository.TrainerStatistic,
+	transactionRepo repository.Transaction, errHandler errcode.Handler) WorkoutLog {
 	return &workoutLog{workoutLogRepo: workoutLogRepo, workoutSetLogRepo: workoutSetLogRepo,
 		workoutSetRepo: workoutSetRepo, actionPRRepo: actionPRRepo, courseRepo: courseRepo,
-		courseAssetRepo: courseAssetRepo, subscribeInfoRepo: subscribeInfoRepo, planStatisticRepo: planStatisticRepo,
+		courseAssetRepo: courseAssetRepo, subscribeInfoRepo: subscribeInfoRepo,
+		planStatisticRepo: planStatisticRepo, trainerStatisticRepo: trainerStatisticRepo,
 		transactionRepo: transactionRepo, courseStatisticRepo: courseStatisticRepo, errHandler: errHandler}
 }
 
@@ -85,7 +88,7 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		place = *param.Place
 	}
 	//驗證是否添加此訓練範圍內的訓練組
-	setIDs, err := w.workoutSetRepo.FindWorkoutSetIDsByWorkoutID(workoutID)
+	setIDs, err := w.workoutSetRepo.FindWorkoutSetIDsByWorkoutID(tx, workoutID)
 	if err != nil {
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "workout set repo", err)
@@ -132,19 +135,18 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "workout_set_log repo", err)
 	}
-	w.transactionRepo.FinishTransaction(tx)
 	//計算課表統計
-	userCourseStatisticModel, err := w.workoutLogRepo.CalculateUserCourseStatistic(userID, workoutID)
+	userCourseStatisticModel, err := w.workoutLogRepo.CalculateUserCourseStatistic(tx, userID, workoutID)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "workout_log repo", err)
 	}
 	//計算計畫統計
-	userPlanStatisticModel, err := w.workoutLogRepo.CalculateUserPlanStatistic(userID, workoutID)
+	userPlanStatisticModel, err := w.workoutLogRepo.CalculateUserPlanStatistic(tx, userID, workoutID)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "workout_log repo", err)
 	}
 	//獲取 workout set log model
-	workoutSetLogModels, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(workoutLogID)
+	workoutSetLogModels, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(tx, workoutLogID)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "workout_set_log repo", err)
 	}
@@ -157,7 +159,7 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		}
 	}
 	//比對最佳紀錄
-	actionPRs, err := w.actionPRRepo.FindActionPRs(userID, actionIDs)
+	actionPRs, err := w.actionPRRepo.FindActionPRs(tx, userID, actionIDs)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "action pr repo", err)
 	}
@@ -181,11 +183,10 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		}
 	}
 	//計算最佳新的紀錄
-	bestActionSetLogs, err := w.workoutSetLogRepo.CalculateBestWorkoutSetLog(userID, actionIDs)
+	bestActionSetLogs, err := w.workoutSetLogRepo.CalculateBestWorkoutSetLog(tx, userID, actionIDs)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "workout set log repo", err)
 	}
-	tx = w.transactionRepo.CreateTransaction()
 	if _, err := w.courseStatisticRepo.SaveUserCourseStatistic(tx, &model.SaveUserCourseStatisticParam{
 		UserID:                  userID,
 		CourseID:                userCourseStatisticModel.CourseID,
@@ -222,6 +223,19 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "action personal record repo", err)
 	}
+	//計算教練學員數量
+	studentCount, err := w.trainerStatisticRepo.CalculateTrainerStudentCount(tx, course.UserID)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "trainer statistic repo", err)
+	}
+	//更新教練學員數量
+	if err := w.trainerStatisticRepo.SaveTrainerStatistic(tx, course.UserID, &model.SaveTrainerStatisticParam{
+		StudentCount: &studentCount,
+	}); err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "trainer statistic repo", err)
+	}
 	w.transactionRepo.FinishTransaction(tx)
 	return workoutSetLogTags, nil
 }
@@ -231,7 +245,7 @@ func (w *workoutLog) GetWorkoutLog(c *gin.Context, workoutLogID int64) (*dto.Wor
 	if err != nil {
 		return nil, w.errHandler.Set(c, "workout log repo", err)
 	}
-	logSets, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(log.ID)
+	logSets, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(nil, log.ID)
 	if err != nil {
 		return nil, w.errHandler.Set(c, "workout log set repo", err)
 	}

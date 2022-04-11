@@ -181,12 +181,13 @@ func NewWorkoutLogService(viperTool *viper.Viper, gormTool tool.Gorm) WorkoutLog
 	subscribeInfoRepo := repository.NewSubscribeInfo(gormTool)
 	courseStatisticRepo := repository.NewUserCourseStatistic(gormTool)
 	planStatisticRepo := repository.NewUserPlanStatistic(gormTool)
+	trainerStatisticRepo := repository.NewTrainerStatistic(gormTool)
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewWorkoutLog(workoutLogRepo, workoutSetLogRepo, workoutSetRepo, actionPRRepo, courseRepo,
 		courseAssetRepo, subscribeInfoRepo, courseStatisticRepo,
-		planStatisticRepo, transactionRepo, errHandler)
+		planStatisticRepo, trainerStatisticRepo, transactionRepo, errHandler)
 }
 
 func NewFavoriteService(viperTool *viper.Viper, gormTool tool.Gorm) Favorite {

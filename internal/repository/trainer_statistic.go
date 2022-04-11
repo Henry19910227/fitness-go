@@ -56,3 +56,21 @@ func (t *trainerStatistic) SaveTrainerStatistic(tx *gorm.DB, userID int64, param
 	}
 	return nil
 }
+
+func (t *trainerStatistic) CalculateTrainerStudentCount(tx *gorm.DB, userID int64) (int, error) {
+	db := t.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	var studentCount int
+	if err := db.Table("workout_logs").
+		Select("COUNT(DISTINCT workout_logs.user_id)").
+		Joins("INNER JOIN workouts ON workout_logs.workout_id = workouts.id").
+		Joins("INNER JOIN plans ON workouts.plan_id = plans.id").
+		Joins("INNER JOIN courses ON plans.course_id = courses.id").
+		Where("courses.user_id = ?", userID).
+		Take(&studentCount).Error; err != nil {
+		return 0, err
+	}
+	return studentCount, nil
+}

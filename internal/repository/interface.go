@@ -31,6 +31,7 @@ type Trainer interface {
 
 type TrainerStatistic interface {
 	SaveTrainerStatistic(tx *gorm.DB, userID int64, param *model.SaveTrainerStatisticParam) error
+	CalculateTrainerStudentCount(tx *gorm.DB, userID int64) (int, error)
 }
 
 type Course interface {
@@ -85,7 +86,7 @@ type WorkoutSet interface {
 	FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error)
 	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error)
 	FindWorkoutSetsByWorkoutID(workoutID int64, userID *int64) ([]*model.WorkoutSet, error)
-	FindWorkoutSetIDsByWorkoutID(workoutID int64) ([]int64, error)
+	FindWorkoutSetIDsByWorkoutID(tx *gorm.DB, workoutID int64) ([]int64, error)
 	FindStartAudioCountByAudioName(audioName string) (int, error)
 	FindProgressAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error
@@ -102,7 +103,7 @@ type Action interface {
 }
 
 type ActionPR interface {
-	FindActionPRs(userID int64, actionIDs []int64) ([]*model.ActionPR, error)
+	FindActionPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionPR, error)
 	SaveActionPRs(tx *gorm.DB, userID int64, params []*model.CreateActionPRParam) error
 }
 
@@ -188,16 +189,16 @@ type WorkoutLog interface {
 	FindWorkoutLog(workoutLogID int64) (*model.WorkoutLog, error)
 	FindWorkoutLogsByDate(userID int64, startDate string, endDate string) ([]*model.WorkoutLog, error)
 	FindWorkoutLogsByPlanID(planID int64) ([]*model.WorkoutLog, error)
-	CalculateUserCourseStatistic(userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error)
-	CalculateUserPlanStatistic(userID int64, workoutID int64) (*model.WorkoutLogPlanStatistic, error)
+	CalculateUserCourseStatistic(tx *gorm.DB, userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error)
+	CalculateUserPlanStatistic(tx *gorm.DB, userID int64, workoutID int64) (*model.WorkoutLogPlanStatistic, error)
 	CreateWorkoutLog(tx *gorm.DB, param *model.CreateWorkoutLogParam) (int64, error)
 }
 
 type WorkoutSetLog interface {
-	FindWorkoutSetLogsByWorkoutLogID(workoutLogID int64) ([]*model.WorkoutSetLog, error)
+	FindWorkoutSetLogsByWorkoutLogID(tx *gorm.DB, workoutLogID int64) ([]*model.WorkoutSetLog, error)
 	FindWorkoutSetLogsByWorkoutSetIDs(userID int64, workoutSetIDs []int64) ([]*model.WorkoutSetLog, error)
 	CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLogParam) error
-	CalculateBestWorkoutSetLog(userID int64, actionIDs []int64) ([]*model.BestActionSetLog, error)
+	CalculateBestWorkoutSetLog(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.BestActionSetLog, error)
 }
 
 type UserCourseStatistic interface {
