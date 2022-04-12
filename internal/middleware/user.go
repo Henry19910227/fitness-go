@@ -133,7 +133,7 @@ func (u *user) TrainerStatusPermission(status []global.TrainerStatus) gin.Handle
 			UserID int64 `gorm:"column:user_id"`
 			TrainerStatus int `gorm:"column:trainer_status"`
 		}{}
-		if err := u.trainerRepo.FindTrainerByUID(uid.(int64), &trainer); err != nil {
+		if err := u.trainerRepo.FindTrainerEntity(uid.(int64), &trainer); err != nil {
 			u.JSONErrorResponse(c, u.errHandler.Set(c, "jwt", err))
 			c.Abort()
 			return

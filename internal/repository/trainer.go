@@ -117,19 +117,31 @@ func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) erro
 	return nil
 }
 
-func (t *trainer) FindTrainerByUID(uid int64, entity interface{}) error {
+func (t *trainer) FindTrainer(uid int64) (*model.Trainer, error) {
+	var trainer model.Trainer
 	if err := t.gorm.DB().
-		Model(&model.Trainer{}).
+		Table("trainers").
+		Preload("TrainerStatistic").
+		Joins("LEFT JOIN trainer_statistics AS ts ON ts.user_id = trainers.user_id").
+		Take(&trainer, "trainers.user_id = ?", uid).Error; err != nil {
+		return nil, err
+	}
+	return &trainer, nil
+}
+
+func (t *trainer) FindTrainerEntity(uid int64, input interface{}) error {
+	if err := t.gorm.DB().
+		Model(&entity.Trainer{}).
 		Where("user_id = ?", uid).
-		Find(entity).Error; err != nil {
+		Find(input).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *trainer) FindTrainers(entity interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error {
+func (t *trainer) FindTrainerEntities(input interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error {
 	var db *gorm.DB
-	db = t.gorm.DB().Model(&model.Trainer{})
+	db = t.gorm.DB().Model(&entity.Trainer{})
 	if status != nil {
 		db = db.Where("trainer_status = ?", *status)
 	}
@@ -139,7 +151,7 @@ func (t *trainer) FindTrainers(entity interface{}, status *global.TrainerStatus,
 	if paging != nil {
 		db = db.Offset(paging.Offset).Limit(paging.Limit)
 	}
-	if err := db.Find(entity).Error; err != nil {
+	if err := db.Find(input).Error; err != nil {
 		return err
 	}
 	return nil

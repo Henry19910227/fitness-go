@@ -27,7 +27,6 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, cour
 	trainer := &Trainer{trainerService: trainerService, courseService: courseService}
 	trainerGroup := baseGroup.Group("/trainer")
 	trainerGroup.Use(userMiddleware)
-	trainerGroup.GET("/info", trainer.GetTrainerInfo)
 
 	baseGroup.POST("/trainer",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
@@ -436,20 +435,6 @@ func (t *Trainer) GetTrainerByUID(c *gin.Context) {
 		return
 	}
 	t.JSONSuccessResponse(c, trainer, "success!")
-}
-
-func (t *Trainer) GetTrainerInfo(c *gin.Context) {
-	var header validator.TokenHeader
-	if err := c.ShouldBindHeader(&header); err != nil {
-		t.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	result, err := t.trainerService.GetTrainerInfoByToken(c, header.Token)
-	if err != nil {
-		t.JSONErrorResponse(c, err)
-		return
-	}
-	t.JSONSuccessResponse(c, result, "success!")
 }
 
 func (t *Trainer) GetTrainerAlbumPhotoCount(c *gin.Context) int {

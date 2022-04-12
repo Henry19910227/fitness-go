@@ -28,7 +28,7 @@ func (t *trainer) StatusVerify(c *gin.Context, token string) errcode.Error {
 		UserID int64 `gorm:"column:user_id"`
 		TrainerStatus int `gorm:"column:trainer_status"`
 	}
-	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil{
+	if err := t.trainerRepo.FindTrainerEntity(uid, &trainer); err != nil{
 		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
 		return t.errHandler.SystemError()
 	}

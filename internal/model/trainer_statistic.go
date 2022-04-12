@@ -9,7 +9,7 @@ type TrainerStatistic struct {
 }
 
 func (TrainerStatistic) TableName() string {
-	return "trainer_statistic"
+	return "trainer_statistics"
 }
 
 type SaveTrainerStatisticParam struct {

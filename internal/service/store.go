@@ -39,7 +39,7 @@ func (s *store) GetHomePage(c *gin.Context) (*dto.StoreHomePage, errcode.Error) 
 func (s *store) getLatestTrainerSummaries() ([]*dto.TrainerSummary, error) {
 	trainers := make([]*dto.TrainerSummary, 0)
 	var trainerStatus = global.TrainerActivity
-	if err := s.trainerRepo.FindTrainers(&trainers, &trainerStatus, &model.OrderBy{
+	if err := s.trainerRepo.FindTrainerEntities(&trainers, &trainerStatus, &model.OrderBy{
 		Field:     "create_at",
 		OrderType: global.DESC,
 	}, &model.PagingParam{

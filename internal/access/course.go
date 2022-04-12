@@ -38,7 +38,7 @@ func (p *course) CreateVerify(c *gin.Context, token string) errcode.Error {
 		UserID int64 `gorm:"column:user_id"`
 		TrainerStatus int `gorm:"column:trainer_status"`
 	}
-	if err := p.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil{
+	if err := p.trainerRepo.FindTrainerEntity(uid, &trainer); err != nil{
 		p.logger.Set(c, handler.Error, "TrainerRepo", p.errHandler.SystemError().Code(), err.Error())
 		return p.errHandler.SystemError()
 	}
