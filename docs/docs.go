@@ -7048,6 +7048,10 @@ var doc = `{
                     "type": "integer",
                     "example": 1
                 },
+                "trainer_statistic": {
+                    "description": "教練統計",
+                    "$ref": "#/definitions/dto.TrainerStatistic"
+                },
                 "trainer_status": {
                     "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
                     "type": "integer",
@@ -7077,6 +7081,26 @@ var doc = `{
                     "description": "教練相簿照片",
                     "type": "string",
                     "example": "dkf2se51fsdds.png"
+                }
+            }
+        },
+        "dto.TrainerStatistic": {
+            "type": "object",
+            "properties": {
+                "course_count": {
+                    "description": "課表總數",
+                    "type": "integer",
+                    "example": 15
+                },
+                "review_score": {
+                    "description": "課表總評分",
+                    "type": "number",
+                    "example": 4.5
+                },
+                "student_count": {
+                    "description": "學生總數",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
@@ -7559,10 +7583,6 @@ var doc = `{
         "dto.WorkoutSetLog": {
             "type": "object",
             "properties": {
-                "action": {
-                    "description": "動作",
-                    "$ref": "#/definitions/dto.Action"
-                },
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
@@ -7595,6 +7615,10 @@ var doc = `{
                     "description": "重量(公斤)",
                     "type": "number",
                     "example": 10
+                },
+                "workout_set": {
+                    "description": "訓練組",
+                    "$ref": "#/definitions/dto.WorkoutSet"
                 }
             }
         },
@@ -7636,10 +7660,6 @@ var doc = `{
         "dto.WorkoutSetLogTag": {
             "type": "object",
             "properties": {
-                "action": {
-                    "description": "動作",
-                    "$ref": "#/definitions/dto.Action"
-                },
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
@@ -7673,6 +7693,10 @@ var doc = `{
                     "description": "重量(公斤)",
                     "type": "number",
                     "example": 10
+                },
+                "workout_set": {
+                    "description": "訓練組",
+                    "$ref": "#/definitions/dto.WorkoutSet"
                 }
             }
         },

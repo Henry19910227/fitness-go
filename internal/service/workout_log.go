@@ -170,8 +170,12 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	//比對突破最佳紀錄組
 	workoutSetLogTags := make([]*dto.WorkoutSetLogTag, 0)
 	for _, setLogModel := range workoutSetLogModels {
-		if pr, ok := actionPRDict[setLogModel.WorkoutSet.Action.ID]; ok {
-			workoutSetLogTag := dto.NewWorkoutSetLogTag(setLogModel)
+		workoutSetLogTag := dto.NewWorkoutSetLogTag(setLogModel)
+		workoutSetLogTag.NewRecord = 0
+		pr, ok := actionPRDict[setLogModel.WorkoutSet.Action.ID]
+		if !ok {
+			workoutSetLogTag.NewRecord = 1
+		} else {
 			if setLogModel.Duration > pr.Duration ||
 				setLogModel.Distance > pr.Distance ||
 				setLogModel.Weight > pr.Weight ||
@@ -179,8 +183,8 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 				setLogModel.Incline > pr.Incline {
 				workoutSetLogTag.NewRecord = 1
 			}
-			workoutSetLogTags = append(workoutSetLogTags, &workoutSetLogTag)
 		}
+		workoutSetLogTags = append(workoutSetLogTags, &workoutSetLogTag)
 	}
 	//計算最佳新的紀錄
 	bestActionSetLogs, err := w.workoutSetLogRepo.CalculateBestWorkoutSetLog(tx, userID, actionIDs)
