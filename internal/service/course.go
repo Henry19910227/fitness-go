@@ -605,7 +605,7 @@ func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *d
 	var course struct {
 		Cover string `gorm:"column:cover"`
 	}
-	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
+	if err := cs.courseRepo.FindCourseByID(nil, courseID, &course); err != nil {
 		cs.logger.Set(c, handler.Error, "Course Repo", cs.errHandler.SystemError().Code(), err.Error())
 		return nil, cs.errHandler.SystemError()
 	}
@@ -648,7 +648,7 @@ func (cs *course) GetCourseStatus(c *gin.Context, courseID int64) (global.Course
 	course := struct {
 		CourseStatus int `json:"course_status"`
 	}{}
-	if err := cs.courseRepo.FindCourseByID(courseID, &course); err != nil {
+	if err := cs.courseRepo.FindCourseByID(nil, courseID, &course); err != nil {
 		return 0, cs.errHandler.Set(c, "course repo", err)
 	}
 	return global.CourseStatus(course.CourseStatus), nil

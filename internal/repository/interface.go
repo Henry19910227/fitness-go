@@ -33,6 +33,7 @@ type Trainer interface {
 type TrainerStatistic interface {
 	SaveTrainerStatistic(tx *gorm.DB, userID int64, param *model.SaveTrainerStatisticParam) error
 	CalculateTrainerStudentCount(tx *gorm.DB, userID int64) (int, error)
+	CalculateTrainerReviewScore(tx *gorm.DB, userID int64) (float64, error)
 }
 
 type Course interface {
@@ -50,7 +51,7 @@ type Course interface {
 	FindCourseAsset(courseID int64, userID int64) (*model.CourseAsset, error)
 	FindCourseByCourseID(courseID int64) (*model.Course, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
-	FindCourseByID(courseID int64, entity interface{}) error
+	FindCourseByID(tx *gorm.DB, courseID int64, entity interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
 	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
 	FindCourseByWorkoutSetID(setID int64, entity interface{}) error
@@ -139,11 +140,20 @@ type Certificate interface {
 }
 
 type Review interface {
-	CreateReview(param *model.CreateReviewParam) (int64, error)
+	CreateReview(tx *gorm.DB, param *model.CreateReviewParam) (int64, error)
 	DeleteReview(reviewID int64) error
-	FindReviewByID(reviewID int64) (*model.Review, error)
+	FindReviewByID(tx *gorm.DB, reviewID int64) (*model.Review, error)
 	FindReviews(uid int64, param *model.FindReviewsParam, paging *model.PagingParam) ([]*model.Review, error)
 	FindReviewsCount(param *model.FindReviewsParam) (int, error)
+}
+
+type ReviewImage interface {
+	CreateReviewImages(tx *gorm.DB, reviewID int64, imageNames []string) error
+}
+
+type ReviewStatistic interface {
+	CalculateReviewStatistic(tx *gorm.DB, courseID int64) (*model.ReviewStatistic, error)
+	SaveReviewStatistic(tx *gorm.DB, courseID int64, param *model.SaveReviewStatisticParam) error
 }
 
 type Order interface {

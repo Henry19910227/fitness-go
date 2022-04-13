@@ -116,11 +116,16 @@ func NewReviewService(viperTool *viper.Viper, gormTool tool.Gorm) Review {
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 
 	reviewRepo := repository.NewReview(gormTool)
+	reviewImageRepo := repository.NewReviewImage(gormTool)
+	reviewStatRepo := repository.NewReviewStatistic(gormTool)
+	courseRepo := repository.NewCourse(gormTool)
+	trainerStatisticRepo := repository.NewTrainerStatistic(gormTool)
+	transactionRepo := repository.NewTransaction(gormTool)
 	resTool := tool.NewResource(setting.NewResource(viperTool))
 	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
 	resHandler := handler.NewResource(resTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewReview(reviewRepo, uploader, resHandler, errHandler)
+	return NewReview(reviewRepo, reviewImageRepo, reviewStatRepo, courseRepo, trainerStatisticRepo, transactionRepo, uploader, resHandler, errHandler)
 }
 
 func NewPaymentService(viperTool *viper.Viper, gormTool tool.Gorm) Payment {

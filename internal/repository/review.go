@@ -19,74 +19,83 @@ func NewReview(gorm tool.Gorm) Review {
 	return &review{gorm: gorm}
 }
 
-func (r *review) CreateReview(param *model.CreateReviewParam) (int64, error) {
+func (r *review) CreateReview(tx *gorm.DB, param *model.CreateReviewParam) (int64, error) {
+	db := r.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
 	review := entity.Review{
 		CourseID: param.CourseID,
-		UserID: param.UserID,
-		Score: param.Score,
-		Body: param.Body,
+		UserID:   param.UserID,
+		Score:    param.Score,
+		Body:     param.Body,
 		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 	}
-	if err := r.gorm.DB().Transaction(func(tx *gorm.DB) error {
-		//創建一筆評論
-		if err := tx.Create(&review).Error; err != nil {
-			return err
-		}
-		//創建評論照片
-		var reviewImages []*entity.ReviewImage
-		for _, imageName := range param.ImageNames {
-			reviewImage := entity.ReviewImage{
-				ReviewID: review.ID,
-				Image: imageName,
-				CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-			}
-			reviewImages = append(reviewImages, &reviewImage)
-		}
-		if reviewImages != nil {
-			if err := tx.Create(reviewImages).Error; err != nil {
-				return err
-			}
-		}
-		//查詢並修改當前評論統計狀態
-		var reviewStat *model.ReviewStatistic
-		if err := tx.Table("review_statistics").
-			Where("course_id = ? FOR UPDATE", param.CourseID).
-			Find(&reviewStat).Error; err != nil {
-				return err
-		}
-		reviewStat.CourseID = param.CourseID
-		reviewStat.ScoreTotal += param.Score
-		reviewStat.Amount += 1
-		reviewStat.UpdateAt = time.Now().Format("2006-01-02 15:04:05")
-		switch param.Score {
-		case 1:
-			reviewStat.OneTotal += 1
-		case 2:
-			reviewStat.TwoTotal += 1
-		case 3:
-			reviewStat.ThreeTotal += 1
-		case 4:
-			reviewStat.FourTotal += 1
-		case 5:
-			reviewStat.FiveTotal += 1
-		}
-		//沒有有評論統計紀錄
-		if reviewStat.CourseID == 0 {
-			reviewStat.CourseID = param.CourseID
-			if err := tx.Create(&reviewStat).Error; err != nil {
-				return err
-			}
-			return nil
-		}
-		//已經有評論統計紀錄
-		if err := tx.Where("course_id = ?", reviewStat.CourseID).Save(&reviewStat).Error; err != nil {
-			return err
-		}
-		return nil
-	}); err != nil {
+	//創建一筆評論
+	if err := db.Create(&review).Error; err != nil {
 		return 0, err
 	}
 	return review.ID, nil
+	//if err := r.gorm.DB().Transaction(func(tx *gorm.DB) error {
+	//	//創建一筆評論
+	//	if err := db.Create(&review).Error; err != nil {
+	//		return err
+	//	}
+	//	//創建評論照片
+	//	var reviewImages []*entity.ReviewImage
+	//	for _, imageName := range param.ImageNames {
+	//		reviewImage := entity.ReviewImage{
+	//			ReviewID: review.ID,
+	//			Image:    imageName,
+	//			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
+	//		}
+	//		reviewImages = append(reviewImages, &reviewImage)
+	//	}
+	//	if reviewImages != nil {
+	//		if err := tx.Create(reviewImages).Error; err != nil {
+	//			return err
+	//		}
+	//	}
+	//	//查詢並修改當前評論統計狀態
+	//	var reviewStat *model.ReviewStatistic
+	//	if err := tx.Table("review_statistics").
+	//		Where("course_id = ? FOR UPDATE", param.CourseID).
+	//		Find(&reviewStat).Error; err != nil {
+	//		return err
+	//	}
+	//	reviewStat.CourseID = param.CourseID
+	//	reviewStat.ScoreTotal += param.Score
+	//	reviewStat.Amount += 1
+	//	reviewStat.UpdateAt = time.Now().Format("2006-01-02 15:04:05")
+	//	switch param.Score {
+	//	case 1:
+	//		reviewStat.OneTotal += 1
+	//	case 2:
+	//		reviewStat.TwoTotal += 1
+	//	case 3:
+	//		reviewStat.ThreeTotal += 1
+	//	case 4:
+	//		reviewStat.FourTotal += 1
+	//	case 5:
+	//		reviewStat.FiveTotal += 1
+	//	}
+	//	//沒有有評論統計紀錄
+	//	if reviewStat.CourseID == 0 {
+	//		reviewStat.CourseID = param.CourseID
+	//		if err := tx.Create(&reviewStat).Error; err != nil {
+	//			return err
+	//		}
+	//		return nil
+	//	}
+	//	//已經有評論統計紀錄
+	//	if err := tx.Where("course_id = ?", reviewStat.CourseID).Save(&reviewStat).Error; err != nil {
+	//		return err
+	//	}
+	//	return nil
+	//}); err != nil {
+	//	return 0, err
+	//}
+	//return review.ID, nil
 }
 
 func (r *review) DeleteReview(reviewID int64) error {
@@ -96,7 +105,7 @@ func (r *review) DeleteReview(reviewID int64) error {
 		if err := tx.Table("reviews").
 			Where("id = ?", reviewID).
 			Find(&review).Error; err != nil {
-				return err
+			return err
 		}
 		//刪除該評論
 		if err := tx.Delete(&review).Error; err != nil {
@@ -135,13 +144,17 @@ func (r *review) DeleteReview(reviewID int64) error {
 	return nil
 }
 
-func (r *review) FindReviewByID(reviewID int64) (*model.Review, error) {
+func (r *review) FindReviewByID(tx *gorm.DB, reviewID int64) (*model.Review, error) {
+	db := r.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
 	var review model.Review
-	if err := r.gorm.DB().
+	if err := db.
 		Preload("User").
 		Preload("Images").
 		Take(&review, reviewID).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
 	return &review, nil
 }

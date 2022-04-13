@@ -10,11 +10,11 @@ import (
 )
 
 type course struct {
-	courseRepo repository.Course
+	courseRepo  repository.Course
 	trainerRepo repository.Trainer
-	logger    handler.Logger
-	jwtTool   tool.JWT
-	errHandler errcode.Handler
+	logger      handler.Logger
+	jwtTool     tool.JWT
+	errHandler  errcode.Handler
 }
 
 func NewCourse(courseRepo repository.Course,
@@ -24,9 +24,9 @@ func NewCourse(courseRepo repository.Course,
 	errHandler errcode.Handler) Course {
 	return &course{courseRepo: courseRepo,
 		trainerRepo: trainerRepo,
-		logger: logger,
-		jwtTool: jwtTool,
-		errHandler: errHandler}
+		logger:      logger,
+		jwtTool:     jwtTool,
+		errHandler:  errHandler}
 }
 
 func (p *course) CreateVerify(c *gin.Context, token string) errcode.Error {
@@ -34,11 +34,11 @@ func (p *course) CreateVerify(c *gin.Context, token string) errcode.Error {
 	if err != nil {
 		return p.errHandler.InvalidToken()
 	}
-	var trainer struct{
-		UserID int64 `gorm:"column:user_id"`
-		TrainerStatus int `gorm:"column:trainer_status"`
+	var trainer struct {
+		UserID        int64 `gorm:"column:user_id"`
+		TrainerStatus int   `gorm:"column:trainer_status"`
 	}
-	if err := p.trainerRepo.FindTrainerEntity(uid, &trainer); err != nil{
+	if err := p.trainerRepo.FindTrainerEntity(uid, &trainer); err != nil {
 		p.logger.Set(c, handler.Error, "TrainerRepo", p.errHandler.SystemError().Code(), err.Error())
 		return p.errHandler.SystemError()
 	}
@@ -70,9 +70,9 @@ func (p *course) UpdateVerifyByCourseID(c *gin.Context, token string, courseID i
 	}
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
-		Status int `gorm:"column:course_status"`
+		Status int   `gorm:"column:course_status"`
 	}{}
-	if err := p.courseRepo.FindCourseByID(courseID, &course); err != nil {
+	if err := p.courseRepo.FindCourseByID(nil, courseID, &course); err != nil {
 		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
 		return p.errHandler.SystemError()
 	}
@@ -92,9 +92,9 @@ func (p *course) OwnVerifyByTokenAndCourseID(c *gin.Context, token string, cours
 	}
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
-		Status int `gorm:"column:course_status"`
+		Status int   `gorm:"column:course_status"`
 	}{}
-	if err := p.courseRepo.FindCourseByID(courseID, &course); err != nil {
+	if err := p.courseRepo.FindCourseByID(nil, courseID, &course); err != nil {
 		if strings.Contains(err.Error(), "no rows in result set") {
 			return p.errHandler.DataNotFound()
 		}

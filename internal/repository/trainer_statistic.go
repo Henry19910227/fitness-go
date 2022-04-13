@@ -1,11 +1,13 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"strconv"
 	"time"
 )
 
@@ -73,4 +75,27 @@ func (t *trainerStatistic) CalculateTrainerStudentCount(tx *gorm.DB, userID int6
 		return 0, err
 	}
 	return studentCount, nil
+}
+
+func (t *trainerStatistic) CalculateTrainerReviewScore(tx *gorm.DB, userID int64) (float64, error) {
+	db := t.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	var scoreTotal float64
+	var amount float64
+	if err := db.Table("review_statistics AS rs").
+		Select("SUM(rs.score_total) AS score_total, SUM(rs.amount) AS amount").
+		Joins("INNER JOIN courses ON rs.course_id = courses.id").
+		Where("courses.user_id = ?", userID).
+		Row().
+		Scan(&scoreTotal, &amount); err != nil {
+		return 0, err
+	}
+	scoreAvg := scoreTotal / amount
+	reviewScore, err := strconv.ParseFloat(fmt.Sprintf("%.1f", scoreAvg), 64)
+	if err != nil {
+		return 0, err
+	}
+	return reviewScore, nil
 }

@@ -525,8 +525,12 @@ func (c *course) FindCourseByCourseID(courseID int64) (*model.Course, error) {
 	return &course, nil
 }
 
-func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
-	if err := c.gorm.DB().
+func (c *course) FindCourseByID(tx *gorm.DB, courseID int64, entity interface{}) error {
+	db := c.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	if err := db.
 		Model(&model.Course{}).
 		Where("id = ?", courseID).
 		Take(entity).Error; err != nil {
@@ -544,7 +548,7 @@ func (c *course) FindCourseByPlanID(planID int64, entity interface{}) error {
 		Take(&courseID).Error; err != nil {
 		return err
 	}
-	return c.FindCourseByID(courseID, entity)
+	return c.FindCourseByID(nil, courseID, entity)
 }
 
 func (c *course) FindCourseByWorkoutID(workoutID int64, entity interface{}) error {
@@ -557,7 +561,7 @@ func (c *course) FindCourseByWorkoutID(workoutID int64, entity interface{}) erro
 		Take(&courseID).Error; err != nil {
 		return err
 	}
-	return c.FindCourseByID(courseID, entity)
+	return c.FindCourseByID(nil, courseID, entity)
 }
 
 func (c *course) FindCourseByWorkoutSetID(setID int64, entity interface{}) error {
@@ -571,7 +575,7 @@ func (c *course) FindCourseByWorkoutSetID(setID int64, entity interface{}) error
 		Take(&courseID).Error; err != nil {
 		return err
 	}
-	return c.FindCourseByID(courseID, entity)
+	return c.FindCourseByID(nil, courseID, entity)
 }
 
 func (c *course) FindCourseByActionID(actionID int64, entity interface{}) error {
@@ -583,7 +587,7 @@ func (c *course) FindCourseByActionID(actionID int64, entity interface{}) error 
 		Take(&courseID).Error; err != nil {
 		return err
 	}
-	return c.FindCourseByID(courseID, entity)
+	return c.FindCourseByID(nil, courseID, entity)
 }
 
 func (c *course) DeleteCourseByID(courseID int64) error {
