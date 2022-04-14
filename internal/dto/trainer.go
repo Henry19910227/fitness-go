@@ -113,13 +113,11 @@ func NewTrainer(data *model.Trainer) Trainer {
 		InstagramURL:  data.InstagramURL,
 		YoutubeURL:    data.YoutubeURL,
 	}
+	trainer.TrainerStatistic = &TrainerStatistic{}
 	if data.TrainerStatistic != nil {
-		trainerStatistic := TrainerStatistic{
-			ReviewScore:  data.TrainerStatistic.ReviewScore,
-			StudentCount: data.TrainerStatistic.StudentCount,
-			CourseCount:  data.TrainerStatistic.CourseCount,
-		}
-		trainer.TrainerStatistic = &trainerStatistic
+		trainer.TrainerStatistic.ReviewScore = data.TrainerStatistic.ReviewScore
+		trainer.TrainerStatistic.StudentCount = data.TrainerStatistic.StudentCount
+		trainer.TrainerStatistic.CourseCount = data.TrainerStatistic.CourseCount
 	}
 	return trainer
 }
