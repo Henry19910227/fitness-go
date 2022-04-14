@@ -34,12 +34,13 @@ type TrainerStatistic interface {
 	SaveTrainerStatistic(tx *gorm.DB, userID int64, param *model.SaveTrainerStatisticParam) error
 	CalculateTrainerStudentCount(tx *gorm.DB, userID int64) (int, error)
 	CalculateTrainerReviewScore(tx *gorm.DB, userID int64) (float64, error)
+	CalculateTrainerCourseCount(tx *gorm.DB, userID int64) (int, error)
 }
 
 type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
-	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
+	UpdateCourseByID(tx *gorm.DB, courseID int64, param *model.UpdateCourseParam) error
 	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummary, error)
 	FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
 	FindCourseProductCount(param model.FindCourseProductCountParam) (int, error)

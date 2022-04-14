@@ -104,7 +104,7 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 	return course.ID, nil
 }
 
-func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error {
+func (c *course) UpdateCourseByID(tx *gorm.DB, courseID int64, param *model.UpdateCourseParam) error {
 	var selects []interface{}
 	if param.CourseStatus != nil {
 		selects = append(selects, "course_status")
@@ -158,7 +158,11 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 		var updateAt = time.Now().Format("2006-01-02 15:04:05")
 		param.UpdateAt = &updateAt
 	}
-	if err := c.gorm.DB().
+	db := c.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	if err := db.
 		Table("courses").
 		Where("id = ?", courseID).
 		Select("", selects...).

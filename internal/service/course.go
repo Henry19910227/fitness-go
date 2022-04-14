@@ -20,6 +20,7 @@ type course struct {
 	courseRepo              repository.Course
 	userCourseAssetRepo     repository.UserCourseAsset
 	trainerRepo             repository.Trainer
+	trainerStatRepo         repository.TrainerStatistic
 	planRepo                repository.Plan
 	workoutRepo             repository.Workout
 	workoutSetRepo          repository.WorkoutSet
@@ -27,6 +28,7 @@ type course struct {
 	subscribeInfoRepo       repository.UserSubscribeInfo
 	userCourseStatisticRepo repository.UserCourseStatistic
 	favoriteRepo            repository.Favorite
+	transactionRepo         repository.Transaction
 	uploader                handler.Uploader
 	resHandler              handler.Resource
 	logger                  handler.Logger
@@ -37,6 +39,7 @@ type course struct {
 func NewCourse(courseRepo repository.Course,
 	userCourseAssetRepo repository.UserCourseAsset,
 	trainerRepo repository.Trainer,
+	trainerStatRepo repository.TrainerStatistic,
 	planRepo repository.Plan,
 	workoutRepo repository.Workout,
 	workoutSetRepo repository.WorkoutSet,
@@ -44,12 +47,14 @@ func NewCourse(courseRepo repository.Course,
 	subscribeInfoRepo repository.UserSubscribeInfo,
 	userCourseStatisticRepo repository.UserCourseStatistic,
 	favoriteRepo repository.Favorite,
+	transactionRepo repository.Transaction,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
 	errHandler errcode.Handler) Course {
 	return &course{courseRepo: courseRepo, userCourseAssetRepo: userCourseAssetRepo,
-		trainerRepo: trainerRepo, planRepo: planRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo,
-		saleRepo: saleRepo, subscribeInfoRepo: subscribeInfoRepo, userCourseStatisticRepo: userCourseStatisticRepo, favoriteRepo: favoriteRepo,
+		trainerRepo: trainerRepo, trainerStatRepo: trainerStatRepo, planRepo: planRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo,
+		saleRepo: saleRepo, subscribeInfoRepo: subscribeInfoRepo, userCourseStatisticRepo: userCourseStatisticRepo,
+		favoriteRepo: favoriteRepo, transactionRepo: transactionRepo,
 		uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
@@ -84,7 +89,7 @@ func (cs *course) CreateCourse(c *gin.Context, uid int64, param *dto.CreateCours
 }
 
 func (cs *course) UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error) {
-	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
+	if err := cs.courseRepo.UpdateCourseByID(nil, courseID, &model.UpdateCourseParam{
 		Category:    param.Category,
 		SaleType:    param.SaleType,
 		SaleID:      param.SaleID,
@@ -125,7 +130,7 @@ func (cs *course) UpdateCourseSaleType(c *gin.Context, courseID int64, saleType 
 		saleID = nil
 	}
 	//執行更新d
-	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
+	if err := cs.courseRepo.UpdateCourseByID(nil, courseID, &model.UpdateCourseParam{
 		SaleType: &saleType,
 		SaleID:   saleID,
 	}); err != nil {
@@ -610,7 +615,7 @@ func (cs *course) UploadCourseCoverByID(c *gin.Context, courseID int64, param *d
 		return nil, cs.errHandler.SystemError()
 	}
 	//修改課表資訊
-	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
+	if err := cs.courseRepo.UpdateCourseByID(nil, courseID, &model.UpdateCourseParam{
 		Cover: &newImageNamed,
 	}); err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
@@ -634,13 +639,27 @@ func (cs *course) CourseSubmit(c *gin.Context, courseID int64) errcode.Error {
 	if err := cs.VerifyCourse(entity); err != nil {
 		return cs.errHandler.Set(c, "verify course", err)
 	}
+	tx := cs.transactionRepo.CreateTransaction()
 	//送審課表(測試暫時將課表狀態改為"銷售中")
 	var courseStatus = int(global.Sale)
-	if err := cs.courseRepo.UpdateCourseByID(courseID, &model.UpdateCourseParam{
+	if err := cs.courseRepo.UpdateCourseByID(tx, courseID, &model.UpdateCourseParam{
 		CourseStatus: &courseStatus,
 	}); err != nil {
+		tx.Rollback()
 		return cs.errHandler.Set(c, "course repo", err)
 	}
+	courseCount, err := cs.trainerStatRepo.CalculateTrainerCourseCount(tx, entity.UserID)
+	if err != nil {
+		tx.Rollback()
+		return cs.errHandler.Set(c, "trainer stat repo", err)
+	}
+	if err := cs.trainerStatRepo.SaveTrainerStatistic(tx, entity.UserID, &model.SaveTrainerStatisticParam{
+		CourseCount: &courseCount,
+	}); err != nil {
+		tx.Rollback()
+		return cs.errHandler.Set(c, "trainer stat repo", err)
+	}
+	cs.transactionRepo.FinishTransaction(tx)
 	return nil
 }
 

@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/entity"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -98,4 +99,19 @@ func (t *trainerStatistic) CalculateTrainerReviewScore(tx *gorm.DB, userID int64
 		return 0, err
 	}
 	return reviewScore, nil
+}
+
+func (t *trainerStatistic) CalculateTrainerCourseCount(tx *gorm.DB, userID int64) (int, error) {
+	db := t.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	var courseCount int
+	if err := db.Table("courses").
+		Select("COUNT(*)").
+		Where("user_id = ? AND course_status = ?", userID, global.Sale).
+		Take(&courseCount).Error; err != nil {
+		return 0, err
+	}
+	return courseCount, nil
 }
