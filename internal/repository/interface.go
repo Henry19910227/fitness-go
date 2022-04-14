@@ -141,7 +141,7 @@ type Certificate interface {
 
 type Review interface {
 	CreateReview(tx *gorm.DB, param *model.CreateReviewParam) (int64, error)
-	DeleteReview(reviewID int64) error
+	DeleteReview(tx *gorm.DB, reviewID int64) error
 	FindReviewByID(tx *gorm.DB, reviewID int64) (*model.Review, error)
 	FindReviews(uid int64, param *model.FindReviewsParam, paging *model.PagingParam) ([]*model.Review, error)
 	FindReviewsCount(param *model.FindReviewsParam) (int, error)

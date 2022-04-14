@@ -60,12 +60,6 @@ func (r *review) CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dt
 		tx.Rollback()
 		return nil, r.errHandler.Set(c, "review image repo", err)
 	}
-	//儲存評論照片
-	for _, file := range param.Images {
-		if err := r.uploader.UploadReviewImage(file.Data, file.FileNamed); err != nil {
-			r.errHandler.Set(c, "uploader", err)
-		}
-	}
 	//計算評論統計
 	reviewStat, err := r.reviewStatRepo.CalculateReviewStatistic(tx, param.CourseID)
 	if err != nil {
@@ -99,6 +93,7 @@ func (r *review) CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dt
 		tx.Rollback()
 		return nil, r.errHandler.Set(c, "trainer statistic repo", err)
 	}
+	//儲存教練評論平均分數
 	if err := r.trainerStatisticRepo.SaveTrainerStatistic(tx, course.UserID, &model.SaveTrainerStatisticParam{
 		ReviewScore: &reviewScore,
 	}); err != nil {
@@ -112,6 +107,12 @@ func (r *review) CreateReview(c *gin.Context, param *dto.CreateReviewParam) (*dt
 		return nil, r.errHandler.Set(c, "review repo", err)
 	}
 	r.transactionRepo.FinishTransaction(tx)
+	//儲存評論照片
+	for _, file := range param.Images {
+		if err := r.uploader.UploadReviewImage(file.Data, file.FileNamed); err != nil {
+			r.errHandler.Set(c, "uploader", err)
+		}
+	}
 	return parserReview(item), nil
 }
 
@@ -155,15 +156,59 @@ func (r *review) GetReviews(c *gin.Context, uid int64, param *dto.GetReviewsPara
 }
 
 func (r *review) DeleteReview(c *gin.Context, reviewID int64) errcode.Error {
+	tx := r.transactionRepo.CreateTransaction()
 	// 查詢當前 review 狀態
-	review, err := r.reviewRepo.FindReviewByID(nil, reviewID)
+	review, err := r.reviewRepo.FindReviewByID(tx, reviewID)
 	if err != nil {
+		tx.Rollback()
 		return r.errHandler.Set(c, "review repo", err)
 	}
 	// 刪除 review
-	if err := r.reviewRepo.DeleteReview(review.ID); err != nil {
+	if err := r.reviewRepo.DeleteReview(tx, review.ID); err != nil {
+		tx.Rollback()
 		return r.errHandler.Set(c, "review repo", err)
 	}
+	//計算評論統計
+	reviewStat, err := r.reviewStatRepo.CalculateReviewStatistic(tx, review.CourseID)
+	if err != nil {
+		tx.Rollback()
+		return r.errHandler.Set(c, "review statistic repo", err)
+	}
+	//儲存評論統計
+	if err := r.reviewStatRepo.SaveReviewStatistic(tx, review.CourseID, &model.SaveReviewStatisticParam{
+		ScoreTotal: reviewStat.ScoreTotal,
+		Amount:     reviewStat.Amount,
+		FiveTotal:  reviewStat.FiveTotal,
+		FourTotal:  reviewStat.FourTotal,
+		ThreeTotal: reviewStat.ThreeTotal,
+		TwoTotal:   reviewStat.TwoTotal,
+		OneTotal:   reviewStat.OneTotal,
+	}); err != nil {
+		tx.Rollback()
+		return r.errHandler.Set(c, "review statistic repo", err)
+	}
+	//查詢該課表教練id
+	course := struct {
+		UserID int64 `gorm:"column:user_id"`
+	}{}
+	if err := r.courseRepo.FindCourseByID(tx, review.CourseID, &course); err != nil {
+		tx.Rollback()
+		return r.errHandler.Set(c, "course repo", err)
+	}
+	//計算教練評論平均分數
+	reviewScore, err := r.trainerStatisticRepo.CalculateTrainerReviewScore(tx, course.UserID)
+	if err != nil {
+		tx.Rollback()
+		return r.errHandler.Set(c, "trainer statistic repo", err)
+	}
+	//儲存教練評論平均分數
+	if err := r.trainerStatisticRepo.SaveTrainerStatistic(tx, course.UserID, &model.SaveTrainerStatisticParam{
+		ReviewScore: &reviewScore,
+	}); err != nil {
+		tx.Rollback()
+		return r.errHandler.Set(c, "trainer statistic repo", err)
+	}
+	r.transactionRepo.FinishTransaction(tx)
 	// 刪除該 review 底下的圖片檔
 	for _, image := range review.Images {
 		if err := r.resHandler.DeleteReviewImage(image.Image); err != nil {
