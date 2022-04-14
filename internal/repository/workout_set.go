@@ -223,9 +223,13 @@ func (s *set) FindWorkoutSetsByWorkoutID(workoutID int64, userID *int64) ([]*mod
 	return sets, nil
 }
 
-func (s *set) FindWorkoutSetIDsByWorkoutID(workoutID int64) ([]int64, error) {
+func (s *set) FindWorkoutSetIDsByWorkoutID(tx *gorm.DB, workoutID int64) ([]int64, error) {
+	db := s.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
 	setIDs := make([]int64, 0)
-	if err := s.gorm.DB().
+	if err := db.
 		Table("workout_sets").
 		Select("id").
 		Where("workout_id = ? AND type = ?", workoutID, 1).

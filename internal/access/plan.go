@@ -10,8 +10,8 @@ import (
 
 type plan struct {
 	courseRepo repository.Course
-	logger    handler.Logger
-	jwtTool   tool.JWT
+	logger     handler.Logger
+	jwtTool    tool.JWT
 	errHandler errcode.Handler
 }
 
@@ -28,11 +28,11 @@ func (p *plan) CreateVerifyByCourseID(c *gin.Context, token string, courseID int
 		return p.errHandler.InvalidToken()
 	}
 	course := struct {
-		UserID int64 `gorm:"column:user_id"`
-		Status int `gorm:"column:course_status"`
-		ScheduleType int `gorm:"column:schedule_type"`
+		UserID       int64 `gorm:"column:user_id"`
+		Status       int   `gorm:"column:course_status"`
+		ScheduleType int   `gorm:"column:schedule_type"`
 	}{}
-	if err := p.courseRepo.FindCourseByID(courseID, &course); err != nil {
+	if err := p.courseRepo.FindCourseByID(nil, courseID, &course); err != nil {
 		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())
 		return p.errHandler.SystemError()
 	}
@@ -55,7 +55,7 @@ func (p *plan) UpdateVerifyByPlanID(c *gin.Context, token string, planID int64) 
 	}
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
-		Status int `gorm:"column:course_status"`
+		Status int   `gorm:"column:course_status"`
 	}{}
 	if err := p.courseRepo.FindCourseByPlanID(planID, &course); err != nil {
 		p.logger.Set(c, handler.Error, "CourseRepo", p.errHandler.SystemError().Code(), err.Error())

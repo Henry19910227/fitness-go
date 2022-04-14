@@ -149,10 +149,11 @@ func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrai
 		}
 	}
 	//查詢並返回結果
-	var trainer dto.Trainer
-	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+	data, err := t.trainerRepo.FindTrainer(uid)
+	if err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
+	trainer := dto.NewTrainer(data)
 	if err := t.albumRepo.FindAlbumPhotosByUID(uid, &trainer.TrainerAlbumPhotos); err != nil {
 		return nil, t.errHandler.Set(c, "trainer album repo", err)
 	}
@@ -209,7 +210,7 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	var oldTrainer struct {
 		Avatar string `gorm:"column:avatar"`
 	}
-	if err := t.trainerRepo.FindTrainerByUID(uid, &oldTrainer); err != nil {
+	if err := t.trainerRepo.FindTrainerEntity(uid, &oldTrainer); err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
 	//查詢待刪除的教練相簿照片資料
@@ -310,10 +311,11 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 		}
 	}
 	//查詢更新完成資訊
-	var trainer dto.Trainer
-	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+	data, err := t.trainerRepo.FindTrainer(uid)
+	if err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
+	trainer := dto.NewTrainer(data)
 	if err := t.albumRepo.FindAlbumPhotosByUID(uid, &trainer.TrainerAlbumPhotos); err != nil {
 		return nil, t.errHandler.Set(c, "trainer album repo", err)
 	}
@@ -324,13 +326,11 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 }
 
 func (t *trainer) GetTrainer(c *gin.Context, uid *int64, trainerID int64) (*dto.Trainer, errcode.Error) {
-	var trainer dto.Trainer
-	if err := t.trainerRepo.FindTrainerByUID(trainerID, &trainer); err != nil {
+	data, err := t.trainerRepo.FindTrainer(trainerID)
+	if err != nil {
 		return nil, t.errHandler.Set(c, "trainer repo", err)
 	}
-	if trainer.UserID == 0 {
-		return nil, t.errHandler.Set(c, "trainer repo", errors.New(strconv.Itoa(errcode.DataNotFound)))
-	}
+	trainer := dto.NewTrainer(data)
 	if err := t.albumRepo.FindAlbumPhotosByUID(trainerID, &trainer.TrainerAlbumPhotos); err != nil {
 		return nil, t.errHandler.Set(c, "trainer album repo", err)
 	}
@@ -355,7 +355,7 @@ func (t *trainer) GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummar
 	offset, limit := t.GetPagingIndex(page, size)
 	trainers := make([]*dto.TrainerSummary, 0)
 	var trainerStatus = global.TrainerActivity
-	if err := t.trainerRepo.FindTrainers(&trainers, &trainerStatus, &model.OrderBy{
+	if err := t.trainerRepo.FindTrainerEntities(&trainers, &trainerStatus, &model.OrderBy{
 		Field:     "create_at",
 		OrderType: global.DESC,
 	}, &model.PagingParam{
@@ -375,64 +375,6 @@ func (t *trainer) GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummar
 		Size:       size,
 	}
 	return trainers, &paging, nil
-}
-
-func (t *trainer) GetTrainerInfo(c *gin.Context, uid int64) (*dto.Trainer, errcode.Error) {
-	//獲取trainer資訊
-	var result dto.Trainer
-	if err := t.trainerRepo.FindTrainerByUID(uid, &result); err != nil {
-		//查無此資料
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, t.errHandler.DataNotFound()
-		}
-		//不明原因錯誤
-		t.logger.Set(c, handler.Error, "UserRepo", t.errHandler.SystemError().Code(), err.Error())
-		return nil, t.errHandler.SystemError()
-	}
-	return &result, nil
-}
-
-func (t *trainer) GetTrainerInfoByToken(c *gin.Context, token string) (*dto.Trainer, errcode.Error) {
-	uid, err := t.jwtTool.GetIDByToken(token)
-	if err != nil {
-		return nil, t.errHandler.InvalidToken()
-	}
-	return t.GetTrainerInfo(c, uid)
-}
-
-func (t *trainer) UploadTrainerAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAvatar, errcode.Error) {
-	//生成Avatar名稱
-	avatarImageNamed, err := t.uploader.GenerateNewImageName(imageNamed)
-	if err != nil {
-		return nil, t.errHandler.Set(c, "uploader", err)
-	}
-	//查詢教練資訊
-	var trainer struct {
-		Avatar string `gorm:"column:avatar"`
-	}
-	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
-		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
-		return nil, t.errHandler.SystemError()
-	}
-	//修改教練資訊
-	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
-		Avatar: &avatarImageNamed,
-	}); err != nil {
-		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
-		return nil, t.errHandler.SystemError()
-	}
-	//上傳教練形象照
-	err = t.uploader.UploadTrainerAvatar(imageFile, avatarImageNamed)
-	if err != nil {
-		t.errHandler.Set(c, "uploader", err)
-	}
-	//刪除舊照片
-	if len(trainer.Avatar) > 0 {
-		if err := t.resHandler.DeleteTrainerAvatar(trainer.Avatar); err != nil {
-			t.logger.Set(c, handler.Error, "ResHandler", t.errHandler.SystemError().Code(), err.Error())
-		}
-	}
-	return &dto.TrainerAvatar{Avatar: avatarImageNamed}, nil
 }
 
 func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhotoResult, errcode.Error) {
@@ -559,7 +501,7 @@ func (t *trainer) trainerIsExists(c *gin.Context, uid int64) (bool, errcode.Erro
 		UserID        int64 `gorm:"column:user_id"`
 		TrainerStatus int   `gorm:"column:trainer_status"`
 	}
-	if err := t.trainerRepo.FindTrainerByUID(uid, &trainer); err != nil {
+	if err := t.trainerRepo.FindTrainerEntity(uid, &trainer); err != nil {
 		t.logger.Set(c, handler.Error, "TrainerRepo", t.errHandler.SystemError().Code(), err.Error())
 		return false, t.errHandler.SystemError()
 	}

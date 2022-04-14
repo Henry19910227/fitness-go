@@ -1147,6 +1147,9 @@ definitions:
         description: 教練評鑑等級
         example: 1
         type: integer
+      trainer_statistic:
+        $ref: '#/definitions/dto.TrainerStatistic'
+        description: 教練統計
       trainer_status:
         description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
         example: 1
@@ -1170,6 +1173,21 @@ definitions:
         description: 教練相簿照片
         example: dkf2se51fsdds.png
         type: string
+    type: object
+  dto.TrainerStatistic:
+    properties:
+      course_count:
+        description: 課表總數
+        example: 15
+        type: integer
+      review_score:
+        description: 課表總評分
+        example: 4.5
+        type: number
+      student_count:
+        description: 學生總數
+        example: 10
+        type: integer
     type: object
   dto.TrainerSummary:
     properties:
@@ -1536,9 +1554,6 @@ definitions:
     type: object
   dto.WorkoutSetLog:
     properties:
-      action:
-        $ref: '#/definitions/dto.Action'
-        description: 動作
       distance:
         description: 距離(公里)
         example: 1
@@ -1565,6 +1580,9 @@ definitions:
         description: 重量(公斤)
         example: 10
         type: number
+      workout_set:
+        $ref: '#/definitions/dto.WorkoutSet'
+        description: 訓練組
     type: object
   dto.WorkoutSetLogParam:
     properties:
@@ -1595,9 +1613,6 @@ definitions:
     type: object
   dto.WorkoutSetLogTag:
     properties:
-      action:
-        $ref: '#/definitions/dto.Action'
-        description: 動作
       distance:
         description: 距離(公里)
         example: 1
@@ -1625,6 +1640,9 @@ definitions:
         description: 重量(公斤)
         example: 10
         type: number
+      workout_set:
+        $ref: '#/definitions/dto.WorkoutSet'
+        description: 訓練組
     type: object
   dto.WorkoutStructure:
     properties:

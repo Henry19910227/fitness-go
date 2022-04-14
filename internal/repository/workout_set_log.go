@@ -16,9 +16,13 @@ func NewWorkoutSetLog(gorm tool.Gorm) WorkoutSetLog {
 	return &workoutSetLog{gorm: gorm}
 }
 
-func (w *workoutSetLog) FindWorkoutSetLogsByWorkoutLogID(workoutLogID int64) ([]*model.WorkoutSetLog, error) {
+func (w *workoutSetLog) FindWorkoutSetLogsByWorkoutLogID(tx *gorm.DB, workoutLogID int64) ([]*model.WorkoutSetLog, error) {
+	db := w.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
 	workoutSetLogs := make([]*model.WorkoutSetLog, 0)
-	if err := w.gorm.DB().
+	if err := db.
 		Preload("WorkoutSet.Action").
 		Find(&workoutSetLogs, "workout_log_id = ?", workoutLogID).Error; err != nil {
 		return nil, err
@@ -63,9 +67,13 @@ func (w *workoutSetLog) CreateWorkoutSetLogs(tx *gorm.DB, params []*model.Workou
 	return nil
 }
 
-func (w *workoutSetLog) CalculateBestWorkoutSetLog(userID int64, actionIDs []int64) ([]*model.BestActionSetLog, error) {
+func (w *workoutSetLog) CalculateBestWorkoutSetLog(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.BestActionSetLog, error) {
+	db := w.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
 	var logs []*model.BestActionSetLog
-	if err := w.gorm.DB().
+	if err := db.
 		Table("actions").
 		Select("MAX(actions.id) AS action_id",
 			"MAX(workout_set_logs.weight) AS weight", "MAX(workout_set_logs.reps) AS reps",

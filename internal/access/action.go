@@ -10,8 +10,8 @@ import (
 
 type action struct {
 	courseRepo repository.Course
-	logger    handler.Logger
-	jwtTool   tool.JWT
+	logger     handler.Logger
+	jwtTool    tool.JWT
 	errHandler errcode.Handler
 }
 
@@ -29,9 +29,9 @@ func (a *action) CreateVerifyByCourseID(c *gin.Context, token string, courseID i
 	}
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
-		Status int `gorm:"column:course_status"`
+		Status int   `gorm:"column:course_status"`
 	}{}
-	if err := a.courseRepo.FindCourseByID(courseID, &course); err != nil {
+	if err := a.courseRepo.FindCourseByID(nil, courseID, &course); err != nil {
 		a.logger.Set(c, handler.Error, "CourseRepo", a.errHandler.SystemError().Code(), err.Error())
 		return a.errHandler.SystemError()
 	}
@@ -51,7 +51,7 @@ func (a *action) UpdateVerifyByActionID(c *gin.Context, token string, actionID i
 	}
 	course := struct {
 		UserID int64 `gorm:"column:user_id"`
-		Status int `gorm:"column:course_status"`
+		Status int   `gorm:"column:course_status"`
 	}{}
 	if err := a.courseRepo.FindCourseByActionID(actionID, &course); err != nil {
 		a.logger.Set(c, handler.Error, "CourseRepo", a.errHandler.SystemError().Code(), err.Error())

@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/Henry19910227/fitness-go/internal/model"
+
 type Trainer struct {
 	UserID             int64                `json:"user_id" gorm:"column:user_id" example:"1001"`                          // 用戶id
 	Name               string               `json:"name" gorm:"column:name" example:"王小明"`                                 // 教練本名
@@ -18,6 +20,7 @@ type Trainer struct {
 	InstagramURL       string               `json:"instagram_url" gorm:"column:instagram_url" example:"www.instagram.com"` // ig連結
 	YoutubeURL         string               `json:"youtube_url" gorm:"column:youtube_url" example:"www.youtube.com"`       // youtube連結
 	Favorite           int                  `json:"favorite" gorm:"-" example:"1"`                                         // 是否收藏(0:否/1:是)
+	TrainerStatistic   *TrainerStatistic    `json:"trainer_statistic" gorm:"-"`                                            // 教練統計
 	TrainerAlbumPhotos []*TrainerAlbumPhoto `json:"trainer_album_photos" gorm:"-"`                                         // 教練相簿
 	Certificates       []*Certificate       `json:"certificates" gorm:"-"`                                                 // 教練證照
 }
@@ -89,4 +92,34 @@ type TrainerCardFront struct {
 
 type TrainerCardBack struct {
 	Image string `json:"card_back_image" example:"dkf2se51fsdds.png"` // 身分證背面
+}
+
+func NewTrainer(data *model.Trainer) Trainer {
+	trainer := Trainer{
+		UserID:        data.UserID,
+		Name:          data.Name,
+		Nickname:      data.Nickname,
+		Skill:         data.Skill,
+		Avatar:        data.Avatar,
+		TrainerStatus: data.TrainerStatus,
+		TrainerLevel:  data.TrainerLevel,
+		Email:         data.Email,
+		Phone:         data.Phone,
+		Address:       data.Address,
+		Intro:         data.Intro,
+		Experience:    data.Experience,
+		Motto:         data.Motto,
+		FacebookURL:   data.FacebookURL,
+		InstagramURL:  data.InstagramURL,
+		YoutubeURL:    data.YoutubeURL,
+	}
+	if data.TrainerStatistic != nil {
+		trainerStatistic := TrainerStatistic{
+			ReviewScore:  data.TrainerStatistic.ReviewScore,
+			StudentCount: data.TrainerStatistic.StudentCount,
+			CourseCount:  data.TrainerStatistic.CourseCount,
+		}
+		trainer.TrainerStatistic = &trainerStatistic
+	}
+	return trainer
 }

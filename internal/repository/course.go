@@ -104,7 +104,7 @@ func (c *course) CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseP
 	return course.ID, nil
 }
 
-func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error {
+func (c *course) UpdateCourseByID(tx *gorm.DB, courseID int64, param *model.UpdateCourseParam) error {
 	var selects []interface{}
 	if param.CourseStatus != nil {
 		selects = append(selects, "course_status")
@@ -158,7 +158,11 @@ func (c *course) UpdateCourseByID(courseID int64, param *model.UpdateCourseParam
 		var updateAt = time.Now().Format("2006-01-02 15:04:05")
 		param.UpdateAt = &updateAt
 	}
-	if err := c.gorm.DB().
+	db := c.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	if err := db.
 		Table("courses").
 		Where("id = ?", courseID).
 		Select("", selects...).
@@ -525,8 +529,12 @@ func (c *course) FindCourseByCourseID(courseID int64) (*model.Course, error) {
 	return &course, nil
 }
 
-func (c *course) FindCourseByID(courseID int64, entity interface{}) error {
-	if err := c.gorm.DB().
+func (c *course) FindCourseByID(tx *gorm.DB, courseID int64, entity interface{}) error {
+	db := c.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	if err := db.
 		Model(&model.Course{}).
 		Where("id = ?", courseID).
 		Take(entity).Error; err != nil {
@@ -544,7 +552,7 @@ func (c *course) FindCourseByPlanID(planID int64, entity interface{}) error {
 		Take(&courseID).Error; err != nil {
 		return err
 	}
-	return c.FindCourseByID(courseID, entity)
+	return c.FindCourseByID(nil, courseID, entity)
 }
 
 func (c *course) FindCourseByWorkoutID(workoutID int64, entity interface{}) error {
@@ -557,7 +565,7 @@ func (c *course) FindCourseByWorkoutID(workoutID int64, entity interface{}) erro
 		Take(&courseID).Error; err != nil {
 		return err
 	}
-	return c.FindCourseByID(courseID, entity)
+	return c.FindCourseByID(nil, courseID, entity)
 }
 
 func (c *course) FindCourseByWorkoutSetID(setID int64, entity interface{}) error {
@@ -571,7 +579,7 @@ func (c *course) FindCourseByWorkoutSetID(setID int64, entity interface{}) error
 		Take(&courseID).Error; err != nil {
 		return err
 	}
-	return c.FindCourseByID(courseID, entity)
+	return c.FindCourseByID(nil, courseID, entity)
 }
 
 func (c *course) FindCourseByActionID(actionID int64, entity interface{}) error {
@@ -583,7 +591,7 @@ func (c *course) FindCourseByActionID(actionID int64, entity interface{}) error 
 		Take(&courseID).Error; err != nil {
 		return err
 	}
-	return c.FindCourseByID(courseID, entity)
+	return c.FindCourseByID(nil, courseID, entity)
 }
 
 func (c *course) DeleteCourseByID(courseID int64) error {

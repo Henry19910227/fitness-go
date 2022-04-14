@@ -23,16 +23,24 @@ type User interface {
 
 type Trainer interface {
 	CreateTrainer(uid int64, param *model.CreateTrainerParam) error
-	FindTrainerByUID(uid int64, entity interface{}) error
-	FindTrainers(entity interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error
+	FindTrainer(uid int64) (*model.Trainer, error)
+	FindTrainerEntity(uid int64, input interface{}) error
+	FindTrainerEntities(input interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error
 	FindTrainersCount(status *global.TrainerStatus) (int, error)
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
+}
+
+type TrainerStatistic interface {
+	SaveTrainerStatistic(tx *gorm.DB, userID int64, param *model.SaveTrainerStatisticParam) error
+	CalculateTrainerStudentCount(tx *gorm.DB, userID int64) (int, error)
+	CalculateTrainerReviewScore(tx *gorm.DB, userID int64) (float64, error)
+	CalculateTrainerCourseCount(tx *gorm.DB, userID int64) (int, error)
 }
 
 type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
-	UpdateCourseByID(courseID int64, param *model.UpdateCourseParam) error
+	UpdateCourseByID(tx *gorm.DB, courseID int64, param *model.UpdateCourseParam) error
 	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummary, error)
 	FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
 	FindCourseProductCount(param model.FindCourseProductCountParam) (int, error)
@@ -44,7 +52,7 @@ type Course interface {
 	FindCourseAsset(courseID int64, userID int64) (*model.CourseAsset, error)
 	FindCourseByCourseID(courseID int64) (*model.Course, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
-	FindCourseByID(courseID int64, entity interface{}) error
+	FindCourseByID(tx *gorm.DB, courseID int64, entity interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
 	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
 	FindCourseByWorkoutSetID(setID int64, entity interface{}) error
@@ -81,7 +89,7 @@ type WorkoutSet interface {
 	FindWorkoutSetByID(setID int64) (*model.WorkoutSet, error)
 	FindWorkoutSetsByIDs(setIDs []int64) ([]*model.WorkoutSet, error)
 	FindWorkoutSetsByWorkoutID(workoutID int64, userID *int64) ([]*model.WorkoutSet, error)
-	FindWorkoutSetIDsByWorkoutID(workoutID int64) ([]int64, error)
+	FindWorkoutSetIDsByWorkoutID(tx *gorm.DB, workoutID int64) ([]int64, error)
 	FindStartAudioCountByAudioName(audioName string) (int, error)
 	FindProgressAudioCountByAudioName(audioName string) (int, error)
 	UpdateWorkoutSetByID(setID int64, param *model.UpdateWorkoutSetParam) error
@@ -98,7 +106,7 @@ type Action interface {
 }
 
 type ActionPR interface {
-	FindActionPRs(userID int64, actionIDs []int64) ([]*model.ActionPR, error)
+	FindActionPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionPR, error)
 	SaveActionPRs(tx *gorm.DB, userID int64, params []*model.CreateActionPRParam) error
 }
 
@@ -133,11 +141,20 @@ type Certificate interface {
 }
 
 type Review interface {
-	CreateReview(param *model.CreateReviewParam) (int64, error)
-	DeleteReview(reviewID int64) error
-	FindReviewByID(reviewID int64) (*model.Review, error)
+	CreateReview(tx *gorm.DB, param *model.CreateReviewParam) (int64, error)
+	DeleteReview(tx *gorm.DB, reviewID int64) error
+	FindReviewByID(tx *gorm.DB, reviewID int64) (*model.Review, error)
 	FindReviews(uid int64, param *model.FindReviewsParam, paging *model.PagingParam) ([]*model.Review, error)
 	FindReviewsCount(param *model.FindReviewsParam) (int, error)
+}
+
+type ReviewImage interface {
+	CreateReviewImages(tx *gorm.DB, reviewID int64, imageNames []string) error
+}
+
+type ReviewStatistic interface {
+	CalculateReviewStatistic(tx *gorm.DB, courseID int64) (*model.ReviewStatistic, error)
+	SaveReviewStatistic(tx *gorm.DB, courseID int64, param *model.SaveReviewStatisticParam) error
 }
 
 type Order interface {
@@ -184,16 +201,16 @@ type WorkoutLog interface {
 	FindWorkoutLog(workoutLogID int64) (*model.WorkoutLog, error)
 	FindWorkoutLogsByDate(userID int64, startDate string, endDate string) ([]*model.WorkoutLog, error)
 	FindWorkoutLogsByPlanID(planID int64) ([]*model.WorkoutLog, error)
-	CalculateUserCourseStatistic(userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error)
-	CalculateUserPlanStatistic(userID int64, workoutID int64) (*model.WorkoutLogPlanStatistic, error)
+	CalculateUserCourseStatistic(tx *gorm.DB, userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error)
+	CalculateUserPlanStatistic(tx *gorm.DB, userID int64, workoutID int64) (*model.WorkoutLogPlanStatistic, error)
 	CreateWorkoutLog(tx *gorm.DB, param *model.CreateWorkoutLogParam) (int64, error)
 }
 
 type WorkoutSetLog interface {
-	FindWorkoutSetLogsByWorkoutLogID(workoutLogID int64) ([]*model.WorkoutSetLog, error)
+	FindWorkoutSetLogsByWorkoutLogID(tx *gorm.DB, workoutLogID int64) ([]*model.WorkoutSetLog, error)
 	FindWorkoutSetLogsByWorkoutSetIDs(userID int64, workoutSetIDs []int64) ([]*model.WorkoutSetLog, error)
 	CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLogParam) error
-	CalculateBestWorkoutSetLog(userID int64, actionIDs []int64) ([]*model.BestActionSetLog, error)
+	CalculateBestWorkoutSetLog(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.BestActionSetLog, error)
 }
 
 type UserCourseStatistic interface {
