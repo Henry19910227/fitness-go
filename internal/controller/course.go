@@ -512,6 +512,11 @@ func (cc *Course) CreateAction(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "查詢失敗"
 // @Router /course/{course_id}/actions [GET]
 func (cc *Course) SearchActions(c *gin.Context) {
+	uid, e := cc.GetUID(c)
+	if e != nil {
+		cc.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
 	var uri validator.CourseIDUri
 	var query validator.SearchActionsQuery
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -522,7 +527,8 @@ func (cc *Course) SearchActions(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	actions, err := cc.actionService.SearchActions(c, uri.CourseID, &dto.FindActionsParam{
+	actions, err := cc.actionService.SearchActions(c, uid, &dto.FindActionsParam{
+		CourseID:  &uri.CourseID,
 		Name:      query.Name,
 		Source:    query.Source,
 		Category:  query.Category,

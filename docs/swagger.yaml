@@ -2255,6 +2255,51 @@ paths:
       summary: 刪除動作影片
       tags:
       - Action
+  /actions:
+    get:
+      consumes:
+      - application/json
+      description: 搜尋動作庫的動作列表
+      parameters:
+      - description: 動作名稱
+        in: query
+        name: name
+        type: string
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: query
+        name: category
+        type: string
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: query
+        name: body
+        type: string
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        in: query
+        name: equipment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查詢成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.Action'
+                  type: array
+              type: object
+        "400":
+          description: 查詢失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 搜尋動作庫的動作列表
+      tags:
+      - Action
   /app_store/subscriptions/{original_transaction_id}:
     get:
       consumes:

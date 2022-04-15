@@ -24,7 +24,6 @@ func NewAction(actionRepo repository.Action,
 	courseRepo repository.Course,
 	uploader handler.Uploader,
 	resHandler handler.Resource,
-
 	errHandler errcode.Handler) Action {
 	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, resHandler: resHandler, errHandler: errHandler}
 }
@@ -159,7 +158,7 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateA
 	return &action, nil
 }
 
-func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindActionsParam) ([]*dto.Action, errcode.Error) {
+func (a *action) SearchActions(c *gin.Context, userID int64, param *dto.FindActionsParam) ([]*dto.Action, errcode.Error) {
 
 	var sourceOpt []int
 	if param.Source != nil {
@@ -204,7 +203,8 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 			equipmentOpt = append(equipmentOpt, opt)
 		}
 	}
-	datas, err := a.actionRepo.FindActionsByParam(courseID, &model.FindActionsParam{
+	datas, err := a.actionRepo.FindActionsByParam(userID, &model.FindActionsParam{
+		CourseID:     param.CourseID,
 		Name:         param.Name,
 		SourceOpt:    &sourceOpt,
 		CategoryOpt:  &categoryOpt,
@@ -214,7 +214,7 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 	if err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
 	}
-	var actions []*dto.Action
+	actions := make([]*dto.Action, 0)
 	for _, data := range datas {
 		action := dto.NewAction(data)
 		actions = append(actions, &action)

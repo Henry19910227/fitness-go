@@ -91,40 +91,44 @@ func (a *action) UpdateActionByID(actionID int64, param *model.UpdateActionParam
 	return nil
 }
 
-func (a *action) FindActionsByParam(courseID int64, param *model.FindActionsParam) ([]*model.Action, error) {
+func (a *action) FindActionsByParam(userID int64, param *model.FindActionsParam) ([]*model.Action, error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 course_id 篩選條件
-	query += "AND (course_id = ? OR course_id IS NULL) "
-	params = append(params, courseID)
+	if param.CourseID != nil {
+		query += "AND (actions.course_id = ? OR actions.course_id IS NULL) "
+		params = append(params, *param.CourseID)
+	}
 	//加入 source 篩選條件
 	if len(*param.SourceOpt) > 0 {
-		query += "AND source IN ? "
+		query += "AND actions.source IN ? "
 		params = append(params, *param.SourceOpt)
 	}
 	//加入 body 篩選條件
 	if len(*param.BodyOpt) > 0 {
-		query += "AND body IN ? "
+		query += "AND actions.body IN ? "
 		params = append(params, *param.BodyOpt)
 	}
 	//加入 category 篩選條件
 	if len(*param.CategoryOpt) > 0 {
-		query += "AND category IN ? "
+		query += "AND actions.category IN ? "
 		params = append(params, *param.CategoryOpt)
 	}
 	//加入 equipment 篩選條件
 	if len(*param.EquipmentOpt) > 0 {
-		query += "AND equipment IN ? "
+		query += "AND actions.equipment IN ? "
 		params = append(params, *param.EquipmentOpt)
 	}
 	//加入 name 篩選條件
 	if param.Name != nil {
-		query += "AND name LIKE ? "
+		query += "AND actions.name LIKE ? "
 		params = append(params, "%"+*param.Name+"%")
 	}
 	actions := make([]*model.Action, 0)
 	if err := a.gorm.DB().
-		Model(&model.Action{}).
+		Table("actions").
+		Select("actions.*", "IF(favorite_actions.action_id IS NULL, 0, 1) AS favorite").
+		Joins("LEFT JOIN favorite_actions ON favorite_actions.action_id = actions.id AND favorite_actions.user_id = ?", userID).
 		Where(query, params...).
 		Find(&actions).Error; err != nil {
 		return nil, err

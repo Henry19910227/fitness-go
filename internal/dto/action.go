@@ -54,6 +54,7 @@ type UpdateActionParam struct {
 }
 
 type FindActionsParam struct {
+	CourseID  *int64  //課表id
 	Name      *string //課表名稱
 	Source    *string //動作來源(1:平台動作/2:教練動作)
 	Category  *string //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)

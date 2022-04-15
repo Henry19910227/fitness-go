@@ -100,7 +100,7 @@ type WorkoutSet interface {
 type Action interface {
 	CreateAction(courseID int64, param *model.CreateActionParam) (int64, error)
 	FindActionByID(actionID int64) (*model.Action, error)
-	FindActionsByParam(courseID int64, param *model.FindActionsParam) ([]*model.Action, error)
+	FindActionsByParam(userID int64, param *model.FindActionsParam) ([]*model.Action, error)
 	UpdateActionByID(actionID int64, param *model.UpdateActionParam) error
 	DeleteActionByID(actionID int64) error
 }

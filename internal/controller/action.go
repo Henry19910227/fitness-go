@@ -20,7 +20,7 @@ type Action struct {
 
 func NewAction(baseGroup *gin.RouterGroup,
 	actionService service.Action,
-	actionAccess  access.Action,
+	actionAccess access.Action,
 	trainerAccess access.Trainer,
 	userMidd midd.User,
 	courseMidd midd.Course) {
@@ -48,6 +48,10 @@ func NewAction(baseGroup *gin.RouterGroup,
 		courseMidd.CourseCreatorVerify(),
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		action.DeleteActionVideo)
+
+	baseGroup.GET("/actions",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		action.SearchActions)
 }
 
 // UpdateAction 修改動作
@@ -85,7 +89,7 @@ func (a *Action) UpdateAction(c *gin.Context) {
 	if file != nil {
 		cover = &dto.File{
 			FileNamed: fileHeader.Filename,
-			Data: file,
+			Data:      file,
 		}
 	}
 	//獲取動作影片
@@ -94,17 +98,17 @@ func (a *Action) UpdateAction(c *gin.Context) {
 	if file != nil {
 		video = &dto.File{
 			FileNamed: fileHeader.Filename,
-			Data: file,
+			Data:      file,
 		}
 	}
 	action, err := a.actionService.UpdateAction(c, uri.ActionID, &dto.UpdateActionParam{
-		Name: form.Name,
-		Category: form.Category,
-		Body: form.Body,
+		Name:      form.Name,
+		Category:  form.Category,
+		Body:      form.Body,
 		Equipment: form.Equipment,
-		Intro: form.Intro,
-		Cover: cover,
-		Video: video,
+		Intro:     form.Intro,
+		Cover:     cover,
+		Video:     video,
 	})
 	if err != nil {
 		a.JSONErrorResponse(c, err)
@@ -138,7 +142,6 @@ func (a *Action) DeleteAction(c *gin.Context) {
 	a.JSONSuccessResponse(c, result, "delete success!")
 }
 
-
 // DeleteActionVideo 刪除動作影片
 // @Summary 刪除動作影片
 // @Description 刪除動作影片
@@ -161,4 +164,44 @@ func (a *Action) DeleteActionVideo(c *gin.Context) {
 		return
 	}
 	a.JSONSuccessResponse(c, nil, "delete success")
+}
+
+// SearchActions 搜尋動作庫的動作列表
+// @Summary 搜尋動作庫的動作列表
+// @Description 搜尋動作庫的動作列表
+// @Tags Action
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param name query string false "動作名稱"
+// @Param category query string false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"
+// @Param body query string false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"
+// @Param equipment query string false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"
+// @Success 200 {object} model.SuccessResult{data=[]dto.Action} "查詢成功!"
+// @Failure 400 {object} model.ErrorResult "查詢失敗"
+// @Router /actions [GET]
+func (a *Action) SearchActions(c *gin.Context) {
+	uid, e := a.GetUID(c)
+	if e != nil {
+		a.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var query validator.SearchActionsQuery
+	if err := c.ShouldBindQuery(&query); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var source = "1" //只選定平台動作
+	actions, err := a.actionService.SearchActions(c, uid, &dto.FindActionsParam{
+		Name:      query.Name,
+		Source:    &source,
+		Category:  query.Category,
+		Body:      query.Body,
+		Equipment: query.Equipment,
+	})
+	if err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	a.JSONSuccessResponse(c, actions, "success!")
 }
