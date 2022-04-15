@@ -35,6 +35,10 @@ func NewAction(baseGroup *gin.RouterGroup,
 		courseMidd.UserRoleAccessCourseByStatusRange([]global.CourseStatus{global.Preparing, global.Reject}),
 		action.UpdateAction)
 
+	baseGroup.GET("/action/:action_id/best_personal_record",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		action.GetActionBestPR)
+
 	baseGroup.DELETE("/action/:action_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.TrainerStatusPermission([]global.TrainerStatus{global.TrainerActivity, global.TrainerReviewing}),
@@ -204,4 +208,34 @@ func (a *Action) SearchActions(c *gin.Context) {
 		return
 	}
 	a.JSONSuccessResponse(c, actions, "success!")
+}
+
+// GetActionBestPR 獲取動作個人最佳紀錄
+// @Summary 獲取動作個人最佳紀錄
+// @Description 獲取動作個人最佳紀錄
+// @Tags Action
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作id"
+// @Success 200 {object} model.SuccessResult{data=dto.ActionPR} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /action/{action_id}/best_personal_record [GET]
+func (a *Action) GetActionBestPR(c *gin.Context) {
+	uid, e := a.GetUID(c)
+	if e != nil {
+		a.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.ActionIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	pr, err := a.actionService.FindActionPR(c, uid, uri.ActionID)
+	if err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	a.JSONSuccessResponse(c, pr, "success!")
 }

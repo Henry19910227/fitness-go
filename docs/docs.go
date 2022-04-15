@@ -174,6 +174,61 @@ var doc = `{
                 }
             }
         },
+        "/action/{action_id}/best_personal_record": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取動作個人最佳紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "獲取動作個人最佳紀錄",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.ActionPR"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/action/{action_id}/video": {
             "delete": {
                 "security": [
@@ -5694,6 +5749,40 @@ var doc = `{
                     "description": "動作id",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "dto.ActionPR": {
+            "type": "object",
+            "properties": {
+                "action_id": {
+                    "type": "integer",
+                    "example": 12
+                },
+                "distance": {
+                    "description": "距離(公里)",
+                    "type": "number",
+                    "example": 5
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 60
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 7
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 10
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 100
                 }
             }
         },

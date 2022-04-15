@@ -53,6 +53,32 @@ definitions:
         example: 1
         type: integer
     type: object
+  dto.ActionPR:
+    properties:
+      action_id:
+        example: 12
+        type: integer
+      distance:
+        description: 距離(公里)
+        example: 5
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 60
+        type: integer
+      incline:
+        description: 坡度
+        example: 7
+        type: number
+      reps:
+        description: 次數
+        example: 10
+        type: integer
+      weight:
+        description: 重量(公斤)
+        example: 100
+        type: number
+    type: object
   dto.Admin:
     properties:
       email:
@@ -2226,6 +2252,38 @@ paths:
       security:
       - fitness_token: []
       summary: 修改動作
+      tags:
+      - Action
+  /action/{action_id}/best_personal_record:
+    get:
+      consumes:
+      - application/json
+      description: 獲取動作個人最佳紀錄
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.ActionPR'
+              type: object
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取動作個人最佳紀錄
       tags:
       - Action
   /action/{action_id}/video:

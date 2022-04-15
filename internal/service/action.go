@@ -1,31 +1,35 @@
 package service
 
 import (
+	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 	"strings"
 )
 
 type action struct {
 	Base
-	actionRepo repository.Action
-	courseRepo repository.Course
-	uploader   handler.Uploader
-	resHandler handler.Resource
-	errHandler errcode.Handler
+	actionRepo   repository.Action
+	actionPRRepo repository.ActionPR
+	courseRepo   repository.Course
+	uploader     handler.Uploader
+	resHandler   handler.Resource
+	errHandler   errcode.Handler
 }
 
 func NewAction(actionRepo repository.Action,
+	actionPRRepo repository.ActionPR,
 	courseRepo repository.Course,
 	uploader handler.Uploader,
 	resHandler handler.Resource,
 	errHandler errcode.Handler) Action {
-	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, resHandler: resHandler, errHandler: errHandler}
+	return &action{actionRepo: actionRepo, actionPRRepo: actionPRRepo, courseRepo: courseRepo, uploader: uploader, resHandler: resHandler, errHandler: errHandler}
 }
 
 func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error) {
@@ -220,6 +224,15 @@ func (a *action) SearchActions(c *gin.Context, userID int64, param *dto.FindActi
 		actions = append(actions, &action)
 	}
 	return actions, nil
+}
+
+func (a *action) FindActionPR(c *gin.Context, userID int64, actionID int64) (*dto.ActionPR, errcode.Error) {
+	data, err := a.actionPRRepo.FindActionPR(nil, userID, actionID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, a.errHandler.Set(c, "action pr repo", err)
+	}
+	pr := dto.NewActionPR(data)
+	return &pr, nil
 }
 
 func (a *action) DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, errcode.Error) {

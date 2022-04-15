@@ -106,6 +106,7 @@ type Action interface {
 }
 
 type ActionPR interface {
+	FindActionPR(tx *gorm.DB, userID int64, actionID int64) (*model.ActionPR, error)
 	FindActionPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionPR, error)
 	SaveActionPRs(tx *gorm.DB, userID int64, params []*model.CreateActionPRParam) error
 }

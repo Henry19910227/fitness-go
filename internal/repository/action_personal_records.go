@@ -17,6 +17,21 @@ func NewActionPR(gorm tool.Gorm) ActionPR {
 	return &actionPR{gorm: gorm}
 }
 
+func (a *actionPR) FindActionPR(tx *gorm.DB, userID int64, actionID int64) (*model.ActionPR, error) {
+	db := a.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	var actionPR model.ActionPR
+	if err := db.
+		Table("action_personal_records").
+		Where("user_id = ? AND action_id = ?", userID, actionID).
+		Take(&actionPR).Error; err != nil {
+		return nil, err
+	}
+	return &actionPR, nil
+}
+
 func (a *actionPR) FindActionPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionPR, error) {
 	db := a.gorm.DB()
 	if tx != nil {
