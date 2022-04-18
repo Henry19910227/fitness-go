@@ -61,17 +61,19 @@ func (l *login) UserLoginByEmail(c *gin.Context, email string, password string) 
 	}
 	//獲取教練資訊
 	data, err := l.trainerRepo.FindTrainer(user.ID)
-	if err != nil {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, "", l.errHandler.Set(c, "trainer repo", err)
 	}
-	trainer := dto.NewTrainer(data)
-	if err := l.albumRepo.FindAlbumPhotosByUID(user.ID, &trainer.TrainerAlbumPhotos); err != nil {
-		return nil, "", l.errHandler.Set(c, "trainer album repo", err)
+	if data != nil {
+		trainer := dto.NewTrainer(data)
+		if err := l.albumRepo.FindAlbumPhotosByUID(user.ID, &trainer.TrainerAlbumPhotos); err != nil {
+			return nil, "", l.errHandler.Set(c, "trainer album repo", err)
+		}
+		if err := l.cerRepo.FindCertificatesByUID(user.ID, &trainer.Certificates); err != nil {
+			return nil, "", l.errHandler.Set(c, "cer repo", err)
+		}
+		user.TrainerInfo = &trainer
 	}
-	if err := l.cerRepo.FindCertificatesByUID(user.ID, &trainer.Certificates); err != nil {
-		return nil, "", l.errHandler.Set(c, "cer repo", err)
-	}
-	user.TrainerInfo = &trainer
 	//獲取訂閱資訊
 	subscribeInfoData, err := l.subscribeInfoRepo.FindSubscribeInfo(user.ID)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {

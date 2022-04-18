@@ -96,18 +96,20 @@ func (u *user) GetUserByUID(c *gin.Context, uid int64) (*dto.User, errcode.Error
 	}
 	//獲取教練資訊
 	data, err := u.trainerRepo.FindTrainer(uid)
-	if err != nil {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		u.logger.Set(c, handler.Error, "TrainerRepo", u.errHandler.SystemError().Code(), err.Error())
 		return nil, u.errHandler.SystemError()
 	}
-	trainer := dto.NewTrainer(data)
-	if err := u.albumRepo.FindAlbumPhotosByUID(user.ID, &trainer.TrainerAlbumPhotos); err != nil {
-		return nil, u.errHandler.Set(c, "trainer album repo", err)
+	if data != nil {
+		trainer := dto.NewTrainer(data)
+		if err := u.albumRepo.FindAlbumPhotosByUID(user.ID, &trainer.TrainerAlbumPhotos); err != nil {
+			return nil, u.errHandler.Set(c, "trainer album repo", err)
+		}
+		if err := u.certRepo.FindCertificatesByUID(user.ID, &trainer.Certificates); err != nil {
+			return nil, u.errHandler.Set(c, "cer repo", err)
+		}
+		user.TrainerInfo = &trainer
 	}
-	if err := u.certRepo.FindCertificatesByUID(user.ID, &trainer.Certificates); err != nil {
-		return nil, u.errHandler.Set(c, "cer repo", err)
-	}
-	user.TrainerInfo = &trainer
 	//獲取訂閱資訊
 	subscribeInfoData, err := u.subscribeInfoRepo.FindSubscribeInfo(uid)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
