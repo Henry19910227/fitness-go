@@ -108,7 +108,18 @@ type Action interface {
 type ActionPR interface {
 	FindActionPR(tx *gorm.DB, userID int64, actionID int64) (*model.ActionPR, error)
 	FindActionPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionPR, error)
+	FindActionBestPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionBestPR, error)
 	SaveActionPRs(tx *gorm.DB, userID int64, params []*model.CreateActionPRParam) error
+	SaveMaxRMRecords(tx *gorm.DB, params []*model.SaveMaxRmRecord) error
+	SaveMaxRepsRecords(tx *gorm.DB, params []*model.SaveMaxRepsRecord) error
+	SaveMaxWeightRecords(tx *gorm.DB, params []*model.SaveMaxWeightRecord) error
+	SaveMinDurationRecords(tx *gorm.DB, params []*model.SaveMinDurationRecord) error
+	SaveMaxSpeedRecords(tx *gorm.DB, params []*model.SaveMaxSpeedRecord) error
+	CalculateMaxRM(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxRmRecord, error)
+	CalculateMaxReps(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxRepsRecord, error)
+	CalculateMaxWeight(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxWeightRecord, error)
+	CalculateMinDuration(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MinDurationRecord, error)
+	CalculateMaxSpeed(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxSpeedRecord, error)
 }
 
 type Sale interface {

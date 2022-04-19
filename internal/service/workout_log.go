@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
@@ -9,6 +10,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type workoutLog struct {
@@ -130,7 +132,6 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		}
 		workoutSetLogParams = append(workoutSetLogParams, &workoutSetLogParam)
 	}
-	//創建訓練組紀錄
 	if err := w.workoutSetLogRepo.CreateWorkoutSetLogs(tx, workoutSetLogParams); err != nil {
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "workout_set_log repo", err)
@@ -138,58 +139,8 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	//計算課表統計
 	userCourseStatisticModel, err := w.workoutLogRepo.CalculateUserCourseStatistic(tx, userID, workoutID)
 	if err != nil {
+		tx.Rollback()
 		return nil, w.errHandler.Set(c, "workout_log repo", err)
-	}
-	//計算計畫統計
-	userPlanStatisticModel, err := w.workoutLogRepo.CalculateUserPlanStatistic(tx, userID, workoutID)
-	if err != nil {
-		return nil, w.errHandler.Set(c, "workout_log repo", err)
-	}
-	//獲取 workout set log model
-	workoutSetLogModels, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(tx, workoutLogID)
-	if err != nil {
-		return nil, w.errHandler.Set(c, "workout_set_log repo", err)
-	}
-	actionIDs := make([]int64, 0)
-	for _, setLogModel := range workoutSetLogModels {
-		if setLogModel.WorkoutSet != nil {
-			if setLogModel.WorkoutSet.Action != nil {
-				actionIDs = append(actionIDs, setLogModel.WorkoutSet.Action.ID)
-			}
-		}
-	}
-	//比對最佳紀錄
-	actionPRs, err := w.actionPRRepo.FindActionPRs(tx, userID, actionIDs)
-	if err != nil {
-		return nil, w.errHandler.Set(c, "action pr repo", err)
-	}
-	actionPRDict := make(map[int64]*model.ActionPR)
-	for _, actionPR := range actionPRs {
-		actionPRDict[actionPR.ActionID] = actionPR
-	}
-	//比對突破最佳紀錄組
-	workoutSetLogTags := make([]*dto.WorkoutSetLogTag, 0)
-	for _, setLogModel := range workoutSetLogModels {
-		workoutSetLogTag := dto.NewWorkoutSetLogTag(setLogModel)
-		workoutSetLogTag.NewRecord = 0
-		pr, ok := actionPRDict[setLogModel.WorkoutSet.Action.ID]
-		if !ok {
-			workoutSetLogTag.NewRecord = 1
-		} else {
-			if setLogModel.Duration > pr.Duration ||
-				setLogModel.Distance > pr.Distance ||
-				setLogModel.Weight > pr.Weight ||
-				setLogModel.Reps > pr.Reps ||
-				setLogModel.Incline > pr.Incline {
-				workoutSetLogTag.NewRecord = 1
-			}
-		}
-		workoutSetLogTags = append(workoutSetLogTags, &workoutSetLogTag)
-	}
-	//計算最佳新的紀錄
-	bestActionSetLogs, err := w.workoutSetLogRepo.CalculateBestWorkoutSetLog(tx, userID, actionIDs)
-	if err != nil {
-		return nil, w.errHandler.Set(c, "workout set log repo", err)
 	}
 	if _, err := w.courseStatisticRepo.SaveUserCourseStatistic(tx, &model.SaveUserCourseStatisticParam{
 		UserID:                  userID,
@@ -201,6 +152,12 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "course_statistic repo", err)
 	}
+	//計算計畫統計
+	userPlanStatisticModel, err := w.workoutLogRepo.CalculateUserPlanStatistic(tx, userID, workoutID)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "workout_log repo", err)
+	}
 	if _, err := w.planStatisticRepo.SaveUserPlanStatistic(tx, &model.SaveUserPlanStatisticParam{
 		UserID:             userID,
 		PlanID:             userPlanStatisticModel.PlanID,
@@ -210,35 +167,187 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "plan_statistic repo", err)
 	}
-	actionPRParams := make([]*model.CreateActionPRParam, 0)
-	for _, setLog := range bestActionSetLogs {
-		pr := model.CreateActionPRParam{
-			ActionID: setLog.ActionID,
-			Weight:   setLog.Weight,
-			Reps:     setLog.Reps,
-			Distance: setLog.Distance,
-			Duration: setLog.Duration,
-			Incline:  setLog.Incline,
-		}
-		actionPRParams = append(actionPRParams, &pr)
-	}
-	//更新最佳紀錄
-	if err := w.actionPRRepo.SaveActionPRs(tx, userID, actionPRParams); err != nil {
-		tx.Rollback()
-		return nil, w.errHandler.Set(c, "action personal record repo", err)
-	}
-	//計算教練學員數量
+	//計算並更新教練學員數量
 	studentCount, err := w.trainerStatisticRepo.CalculateTrainerStudentCount(tx, course.UserID)
 	if err != nil {
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "trainer statistic repo", err)
 	}
-	//更新教練學員數量
 	if err := w.trainerStatisticRepo.SaveTrainerStatistic(tx, course.UserID, &model.SaveTrainerStatisticParam{
 		StudentCount: &studentCount,
 	}); err != nil {
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "trainer statistic repo", err)
+	}
+	//將 WorkoutSetLogModel 轉換為 WorkoutSetLogTag
+	workoutSetLogModels, err := w.workoutSetLogRepo.FindWorkoutSetLogsByWorkoutLogID(tx, workoutLogID)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "workout_set_log repo", err)
+	}
+	workoutSetLogTags := make([]*dto.WorkoutSetLogTag, 0)
+	for _, setLogModel := range workoutSetLogModels {
+		workoutSetLogTag := dto.NewWorkoutSetLogTag(setLogModel)
+		workoutSetLogTags = append(workoutSetLogTags, &workoutSetLogTag)
+	}
+	//蒐集每個組的動作ID
+	actionIDs := make([]int64, 0)
+	for _, setLogModel := range workoutSetLogModels {
+		if setLogModel.WorkoutSet != nil {
+			if setLogModel.WorkoutSet.Action != nil {
+				actionIDs = append(actionIDs, setLogModel.WorkoutSet.Action.ID)
+			}
+		}
+	}
+	//取得各個動作最佳紀錄
+	actionPRs, err := w.actionPRRepo.FindActionBestPRs(tx, userID, actionIDs)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	actionPRDict := make(map[int64]*model.ActionBestPR)
+	for _, actionPR := range actionPRs {
+		actionPRDict[actionPR.ActionID] = actionPR
+	}
+	//比較最佳紀錄並更新最大reps
+	updateMaxRepsActionIDs := make([]int64, 0)
+	updateMaxRmActionIDs := make([]int64, 0)
+	updateMaxWeightActionIDs := make([]int64, 0)
+	updateMinDurationActionIDs := make([]int64, 0)
+	updateMaxSpeedActionIDs := make([]int64, 0)
+	for _, setLogTag := range workoutSetLogTags {
+		pr, ok := actionPRDict[setLogTag.WorkoutSet.Action.ID]
+		if ok {
+			if setLogTag.Reps > pr.MaxReps {
+				setLogTag.NewRecord = 1
+				updateMaxRepsActionIDs = append(updateMaxRepsActionIDs, setLogTag.WorkoutSet.Action.ID)
+			}
+			rm, err := strconv.ParseFloat(fmt.Sprintf("%.1f", setLogTag.Weight*(1+0.0333*float64(setLogTag.Reps))), 64)
+			if err != nil {
+				tx.Rollback()
+				return nil, w.errHandler.Set(c, "parser error", err)
+			}
+			if rm > pr.MaxRM {
+				setLogTag.NewRecord = 1
+				updateMaxRmActionIDs = append(updateMaxRmActionIDs, setLogTag.WorkoutSet.Action.ID)
+			}
+			if setLogTag.Weight > pr.MaxWeight {
+				setLogTag.NewRecord = 1
+				updateMaxWeightActionIDs = append(updateMaxWeightActionIDs, setLogTag.WorkoutSet.Action.ID)
+			}
+			if pr.MinDuration == 0 {
+				setLogTag.NewRecord = 1
+				updateMinDurationActionIDs = append(updateMinDurationActionIDs, setLogTag.WorkoutSet.Action.ID)
+			}
+			if pr.MinDuration > 0 && setLogTag.Duration < pr.MinDuration {
+				setLogTag.NewRecord = 1
+				updateMinDurationActionIDs = append(updateMinDurationActionIDs, setLogTag.WorkoutSet.Action.ID)
+			}
+			speed, err := strconv.ParseFloat(fmt.Sprintf("%.1f", setLogTag.Distance*1000/float64(setLogTag.Duration)*3600/1000), 64)
+			if err != nil {
+				tx.Rollback()
+				return nil, w.errHandler.Set(c, "parser error", err)
+			}
+			if speed > pr.MaxSpeed {
+				setLogTag.NewRecord = 1
+				updateMaxSpeedActionIDs = append(updateMaxSpeedActionIDs, setLogTag.WorkoutSet.Action.ID)
+			}
+		}
+	}
+	//計算最佳reps並更新
+	maxRepsRecords, err := w.actionPRRepo.CalculateMaxReps(tx, userID, updateMaxRepsActionIDs)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	saveMaxRepsRecords := make([]*model.SaveMaxRepsRecord, 0)
+	for _, record := range maxRepsRecords {
+		param := model.SaveMaxRepsRecord{
+			UserID:   userID,
+			ActionID: record.ActionID,
+			Reps:     record.Reps,
+		}
+		saveMaxRepsRecords = append(saveMaxRepsRecords, &param)
+	}
+	if err := w.actionPRRepo.SaveMaxRepsRecords(tx, saveMaxRepsRecords); err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	//計算最佳rm並更新
+	maxRmRecords, err := w.actionPRRepo.CalculateMaxRM(tx, userID, updateMaxRmActionIDs)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	saveMaxRmRecords := make([]*model.SaveMaxRmRecord, 0)
+	for _, record := range maxRmRecords {
+		param := model.SaveMaxRmRecord{
+			UserID:   userID,
+			ActionID: record.ActionID,
+			RM:       record.RM,
+		}
+		saveMaxRmRecords = append(saveMaxRmRecords, &param)
+	}
+	if err := w.actionPRRepo.SaveMaxRMRecords(tx, saveMaxRmRecords); err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	//計算最佳weight並更新
+	maxWeightRecords, err := w.actionPRRepo.CalculateMaxWeight(tx, userID, updateMaxWeightActionIDs)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	saveMaxWeightRecords := make([]*model.SaveMaxWeightRecord, 0)
+	for _, record := range maxWeightRecords {
+		param := model.SaveMaxWeightRecord{
+			UserID:   userID,
+			ActionID: record.ActionID,
+			Weight:   record.Weight,
+		}
+		saveMaxWeightRecords = append(saveMaxWeightRecords, &param)
+	}
+	if err := w.actionPRRepo.SaveMaxWeightRecords(tx, saveMaxWeightRecords); err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	//計算最佳duration並更新
+	minDurationRecords, err := w.actionPRRepo.CalculateMinDuration(tx, userID, updateMinDurationActionIDs)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	saveMinDurationRecords := make([]*model.SaveMinDurationRecord, 0)
+	for _, record := range minDurationRecords {
+		param := model.SaveMinDurationRecord{
+			UserID:   userID,
+			ActionID: record.ActionID,
+			Duration: record.Duration,
+		}
+		saveMinDurationRecords = append(saveMinDurationRecords, &param)
+	}
+	if err := w.actionPRRepo.SaveMinDurationRecords(tx, saveMinDurationRecords); err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	//計算最佳speed並更新
+	maxSpeedRecords, err := w.actionPRRepo.CalculateMaxSpeed(tx, userID, updateMaxSpeedActionIDs)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	saveMaxSpeedRecords := make([]*model.SaveMaxSpeedRecord, 0)
+	for _, record := range maxSpeedRecords {
+		param := model.SaveMaxSpeedRecord{
+			UserID:   userID,
+			ActionID: record.ActionID,
+			Speed:    record.Speed,
+		}
+		saveMaxSpeedRecords = append(saveMaxSpeedRecords, &param)
+	}
+	if err := w.actionPRRepo.SaveMaxSpeedRecords(tx, saveMaxSpeedRecords); err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
 	}
 	w.transactionRepo.FinishTransaction(tx)
 	return workoutSetLogTags, nil
