@@ -46,38 +46,78 @@ definitions:
         example: 11d547we1d4f8e.mp4
         type: string
     type: object
+  dto.ActionBestPR:
+    properties:
+      action_id:
+        example: 12
+        type: integer
+      max_reps:
+        description: 最多次數
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最多次數
+            example: 100
+            type: integer
+        type: object
+      max_rm:
+        description: 最大反覆重量(公斤)
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最大反覆重量(公斤)
+            example: 100
+            type: number
+        type: object
+      max_speed:
+        description: 最高速率
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最高速率
+            example: 100
+            type: number
+        type: object
+      max_weight:
+        description: 最大重量(公斤)
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最大重量(公斤)
+            example: 100
+            type: number
+        type: object
+      min_duration:
+        description: 最短時長
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最短時長
+            example: 100
+            type: integer
+        type: object
+    type: object
   dto.ActionID:
     properties:
       action_id:
         description: 動作id
         example: 1
         type: integer
-    type: object
-  dto.ActionPR:
-    properties:
-      action_id:
-        example: 12
-        type: integer
-      distance:
-        description: 距離(公里)
-        example: 5
-        type: number
-      duration:
-        description: 時長(秒)
-        example: 60
-        type: integer
-      incline:
-        description: 坡度
-        example: 7
-        type: number
-      reps:
-        description: 次數
-        example: 10
-        type: integer
-      weight:
-        description: 重量(公斤)
-        example: 100
-        type: number
     type: object
   dto.Admin:
     properties:
@@ -2275,7 +2315,7 @@ paths:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.ActionPR'
+                  $ref: '#/definitions/dto.ActionBestPR'
               type: object
         "400":
           description: 失敗

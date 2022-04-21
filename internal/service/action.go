@@ -226,12 +226,12 @@ func (a *action) SearchActions(c *gin.Context, userID int64, param *dto.FindActi
 	return actions, nil
 }
 
-func (a *action) FindActionPR(c *gin.Context, userID int64, actionID int64) (*dto.ActionPR, errcode.Error) {
-	data, err := a.actionPRRepo.FindActionPR(nil, userID, actionID)
+func (a *action) FindActionBestPR(c *gin.Context, userID int64, actionID int64) (*dto.ActionBestPR, errcode.Error) {
+	data, err := a.actionPRRepo.FindActionBestPR(nil, userID, actionID)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, a.errHandler.Set(c, "action pr repo", err)
 	}
-	pr := dto.NewActionPR(data)
+	pr := dto.NewActionBestPR(data)
 	return &pr, nil
 }
 

@@ -195,7 +195,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.ActionPR"
+                                            "$ref": "#/definitions/dto.ActionBestPR"
                                         }
                                     }
                                 }
@@ -5724,6 +5724,95 @@
                 }
             }
         },
+        "dto.ActionBestPR": {
+            "type": "object",
+            "properties": {
+                "action_id": {
+                    "type": "integer",
+                    "example": 12
+                },
+                "max_reps": {
+                    "description": "最多次數",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最多次數",
+                            "type": "integer",
+                            "example": 100
+                        }
+                    }
+                },
+                "max_rm": {
+                    "description": "最大反覆重量(公斤)",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最大反覆重量(公斤)",
+                            "type": "number",
+                            "example": 100
+                        }
+                    }
+                },
+                "max_speed": {
+                    "description": "最高速率",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最高速率",
+                            "type": "number",
+                            "example": 100
+                        }
+                    }
+                },
+                "max_weight": {
+                    "description": "最大重量(公斤)",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最大重量(公斤)",
+                            "type": "number",
+                            "example": 100
+                        }
+                    }
+                },
+                "min_duration": {
+                    "description": "最短時長",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最短時長",
+                            "type": "integer",
+                            "example": 100
+                        }
+                    }
+                }
+            }
+        },
         "dto.ActionID": {
             "type": "object",
             "properties": {
@@ -5731,40 +5820,6 @@
                     "description": "動作id",
                     "type": "integer",
                     "example": 1
-                }
-            }
-        },
-        "dto.ActionPR": {
-            "type": "object",
-            "properties": {
-                "action_id": {
-                    "type": "integer",
-                    "example": 12
-                },
-                "distance": {
-                    "description": "距離(公里)",
-                    "type": "number",
-                    "example": 5
-                },
-                "duration": {
-                    "description": "時長(秒)",
-                    "type": "integer",
-                    "example": 60
-                },
-                "incline": {
-                    "description": "坡度",
-                    "type": "number",
-                    "example": 7
-                },
-                "reps": {
-                    "description": "次數",
-                    "type": "integer",
-                    "example": 10
-                },
-                "weight": {
-                    "description": "重量(公斤)",
-                    "type": "number",
-                    "example": 100
                 }
             }
         },

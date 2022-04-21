@@ -106,10 +106,8 @@ type Action interface {
 }
 
 type ActionPR interface {
-	FindActionPR(tx *gorm.DB, userID int64, actionID int64) (*model.ActionPR, error)
-	FindActionPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionPR, error)
+	FindActionBestPR(tx *gorm.DB, userID int64, actionID int64) (*model.ActionBestPR, error)
 	FindActionBestPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionBestPR, error)
-	SaveActionPRs(tx *gorm.DB, userID int64, params []*model.CreateActionPRParam) error
 	SaveMaxRMRecords(tx *gorm.DB, params []*model.SaveMaxRmRecord) error
 	SaveMaxRepsRecords(tx *gorm.DB, params []*model.SaveMaxRepsRecord) error
 	SaveMaxWeightRecords(tx *gorm.DB, params []*model.SaveMaxWeightRecord) error

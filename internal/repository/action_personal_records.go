@@ -17,34 +17,35 @@ func NewActionPR(gorm tool.Gorm) ActionPR {
 	return &actionPR{gorm: gorm}
 }
 
-func (a *actionPR) FindActionPR(tx *gorm.DB, userID int64, actionID int64) (*model.ActionPR, error) {
+func (a *actionPR) FindActionBestPR(tx *gorm.DB, userID int64, actionID int64) (*model.ActionBestPR, error) {
 	db := a.gorm.DB()
 	if tx != nil {
 		db = tx
 	}
-	var actionPR model.ActionPR
+	var actionPR model.ActionBestPR
 	if err := db.
-		Table("action_personal_records").
-		Where("user_id = ? AND action_id = ?", userID, actionID).
-		Take(&actionPR).Error; err != nil {
+		Table("actions").
+		Select("IFNULL(actions.id,0) AS action_id",
+			"IFNULL(max_rm_records.rm,0) AS max_rm",
+			"IFNULL(max_reps_records.reps,0) AS max_reps",
+			"IFNULL(max_speed_records.speed,0) AS max_speed",
+			"IFNULL(max_weight_records.weight,0) AS max_weight",
+			"IFNULL(min_duration_records.duration,0)AS min_duration",
+			"IFNULL(max_rm_records.update_at,'') AS max_rm_update_at",
+			"IFNULL(max_reps_records.update_at,'') AS max_reps_update_at",
+			"IFNULL(max_speed_records.update_at,'') AS max_speed_update_at",
+			"IFNULL(max_weight_records.update_at,'') AS max_weight_update_at",
+			"IFNULL(min_duration_records.update_at,'')AS min_duration_update_at").
+		Joins("LEFT JOIN max_rm_records ON actions.id = max_rm_records.action_id AND max_rm_records.user_id = ?", userID).
+		Joins("LEFT JOIN max_reps_records ON actions.id = max_reps_records.action_id AND max_reps_records.user_id = ?", userID).
+		Joins("LEFT JOIN max_speed_records ON actions.id = max_speed_records.action_id AND max_speed_records.user_id = ?", userID).
+		Joins("LEFT JOIN max_weight_records ON actions.id = max_weight_records.action_id AND max_weight_records.user_id = ?", userID).
+		Joins("LEFT JOIN min_duration_records ON actions.id = min_duration_records.action_id AND min_duration_records.user_id = ?", userID).
+		Where("actions.id = ?", actionID).
+		Find(&actionPR).Error; err != nil {
 		return nil, err
 	}
 	return &actionPR, nil
-}
-
-func (a *actionPR) FindActionPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionPR, error) {
-	db := a.gorm.DB()
-	if tx != nil {
-		db = tx
-	}
-	actionPRs := make([]*model.ActionPR, 0)
-	if err := db.
-		Table("action_personal_records").
-		Where("user_id = ? AND action_id IN (?)", userID, actionIDs).
-		Find(&actionPRs).Error; err != nil {
-		return nil, err
-	}
-	return actionPRs, nil
 }
 
 func (a *actionPR) FindActionBestPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionBestPR, error) {
@@ -71,37 +72,6 @@ func (a *actionPR) FindActionBestPRs(tx *gorm.DB, userID int64, actionIDs []int6
 		return nil, err
 	}
 	return actionPRs, nil
-}
-
-func (a *actionPR) SaveActionPRs(tx *gorm.DB, userID int64, params []*model.CreateActionPRParam) error {
-	if len(params) == 0 {
-		return nil
-	}
-	db := a.gorm.DB()
-	if tx != nil {
-		db = tx
-	}
-	actionPRs := make([]*entity.ActionPR, 0)
-	for _, param := range params {
-		actionPR := entity.ActionPR{
-			UserID:   userID,
-			ActionID: param.ActionID,
-			Weight:   param.Weight,
-			Reps:     param.Reps,
-			Distance: param.Distance,
-			Duration: param.Duration,
-			Incline:  param.Incline,
-			UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
-		}
-		actionPRs = append(actionPRs, &actionPR)
-	}
-	if err := db.Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "user_id"}, {Name: "action_id"}},
-		DoUpdates: clause.AssignmentColumns([]string{"weight", "reps", "distance", "duration", "incline", "update_at"}),
-	}).Create(&actionPRs).Error; err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *actionPR) SaveMaxRMRecords(tx *gorm.DB, params []*model.SaveMaxRmRecord) error {

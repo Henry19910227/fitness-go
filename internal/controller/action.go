@@ -218,7 +218,7 @@ func (a *Action) SearchActions(c *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
-// @Success 200 {object} model.SuccessResult{data=dto.ActionPR} "成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.ActionBestPR} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
 // @Router /action/{action_id}/best_personal_record [GET]
 func (a *Action) GetActionBestPR(c *gin.Context) {
@@ -232,7 +232,7 @@ func (a *Action) GetActionBestPR(c *gin.Context) {
 		a.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	pr, err := a.actionService.FindActionPR(c, uid, uri.ActionID)
+	pr, err := a.actionService.FindActionBestPR(c, uid, uri.ActionID)
 	if err != nil {
 		a.JSONErrorResponse(c, err)
 		return
