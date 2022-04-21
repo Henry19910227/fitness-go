@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ func NewAction(gorm tool.Gorm) Action {
 }
 
 func (a *action) CreateAction(courseID int64, param *model.CreateActionParam) (int64, error) {
-	action := model.Action{
+	action := entity.Action{
 		CourseID:  courseID,
 		Name:      param.Name,
 		Source:    2,
