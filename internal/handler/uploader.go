@@ -148,7 +148,6 @@ func (u *uploader) UploadWorkoutSetProgressAudio(file io.Reader, audioNamed stri
 	return newAudioNamed, nil
 }
 
-
 func (u *uploader) UploadActionVideo(file io.Reader, videoNamed string) error {
 	if !u.checkVideoMaxSize(file) {
 		return errors.New("9008-上傳檔案大小超過限制")
@@ -251,8 +250,8 @@ func (u *uploader) checkUploadVideoAllowExt(ext string) bool {
 
 func (u *uploader) checkImageMaxSize(file io.Reader) bool {
 	if sizeValue, ok := file.(Size); ok {
-		 size := int(sizeValue.Size())
-		 return size < u.uploadSetting.ImageMaxSize() * 1024 * 1024
+		size := int(sizeValue.Size())
+		return size < u.uploadSetting.ImageMaxSize()*1024*1024
 	}
 	return false
 }
@@ -260,7 +259,7 @@ func (u *uploader) checkImageMaxSize(file io.Reader) bool {
 func (u *uploader) checkAudioMaxSize(file io.Reader) bool {
 	if sizeValue, ok := file.(Size); ok {
 		size := int(sizeValue.Size())
-		return size < u.uploadSetting.AudioMaxSize() * 1024 * 1024
+		return size < u.uploadSetting.AudioMaxSize()*1024*1024
 	}
 	return false
 }
@@ -268,9 +267,9 @@ func (u *uploader) checkAudioMaxSize(file io.Reader) bool {
 func (u *uploader) checkVideoMaxSize(file io.Reader) bool {
 	if sizeValue, ok := file.(Size); ok {
 		size := int(sizeValue.Size())
-		return size < u.uploadSetting.VideoMaxSize() * 1024 * 1024
+		return size < u.uploadSetting.VideoMaxSize()*1024*1024
 	}
-	return false
+	return true
 }
 
 // 舊的上傳判斷法
@@ -278,7 +277,7 @@ func (u *uploader) checkUploadImageMaxSize(file io.Reader) (io.Reader, bool) {
 	content, _ := ioutil.ReadAll(file)
 	//因ReadAll讀取完後第二次會讀取不到，必須使用NopCloser將資料寫回
 	data := ioutil.NopCloser(bytes.NewBuffer(content))
-	return data, len(content) <= u.uploadSetting.ImageMaxSize() * 1024 * 1024
+	return data, len(content) <= u.uploadSetting.ImageMaxSize()*1024*1024
 }
 
 func generateFileName(ext string) string {
