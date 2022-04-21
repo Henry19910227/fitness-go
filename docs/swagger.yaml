@@ -46,6 +46,72 @@ definitions:
         example: 11d547we1d4f8e.mp4
         type: string
     type: object
+  dto.ActionBestPR:
+    properties:
+      action_id:
+        example: 12
+        type: integer
+      max_reps:
+        description: 最多次數
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最多次數
+            example: 100
+            type: integer
+        type: object
+      max_rm:
+        description: 最大反覆重量(公斤)
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最大反覆重量(公斤)
+            example: 100
+            type: number
+        type: object
+      max_speed:
+        description: 最高速率
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最高速率
+            example: 100
+            type: number
+        type: object
+      max_weight:
+        description: 最大重量(公斤)
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最大重量(公斤)
+            example: 100
+            type: number
+        type: object
+      min_duration:
+        description: 最短時長
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最短時長
+            example: 100
+            type: integer
+        type: object
+    type: object
   dto.ActionID:
     properties:
       action_id:
@@ -2228,6 +2294,38 @@ paths:
       summary: 修改動作
       tags:
       - Action
+  /action/{action_id}/best_personal_record:
+    get:
+      consumes:
+      - application/json
+      description: 獲取動作個人最佳紀錄
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.ActionBestPR'
+              type: object
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取動作個人最佳紀錄
+      tags:
+      - Action
   /action/{action_id}/video:
     delete:
       consumes:
@@ -2253,6 +2351,51 @@ paths:
       security:
       - fitness_token: []
       summary: 刪除動作影片
+      tags:
+      - Action
+  /actions:
+    get:
+      consumes:
+      - application/json
+      description: 搜尋動作庫的動作列表
+      parameters:
+      - description: 動作名稱
+        in: query
+        name: name
+        type: string
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: query
+        name: category
+        type: string
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: query
+        name: body
+        type: string
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        in: query
+        name: equipment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查詢成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.Action'
+                  type: array
+              type: object
+        "400":
+          description: 查詢失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 搜尋動作庫的動作列表
       tags:
       - Action
   /app_store/subscriptions/{original_transaction_id}:

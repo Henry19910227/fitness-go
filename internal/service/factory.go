@@ -92,13 +92,14 @@ func NewTrainerService(viperTool *viper.Viper, gormTool tool.Gorm) Trainer {
 func NewActionService(viperTool *viper.Viper, gormTool tool.Gorm) Action {
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	actionRepo := repository.NewAction(gormTool)
+	actionPRRepo := repository.NewActionPR(gormTool)
 	courseRepo := repository.NewCourse(gormTool)
 	resTool := tool.NewResource(setting.NewResource(viperTool))
 	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
 	resHandler := handler.NewResource(resTool)
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewAction(actionRepo, courseRepo, uploader, resHandler, errHandler)
+	return NewAction(actionRepo, actionPRRepo, courseRepo, uploader, resHandler, errHandler)
 }
 
 func NewStoreService(viperTool *viper.Viper, gormTool tool.Gorm) Store {

@@ -118,25 +118,12 @@ func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanI
 		return nil, p.errHandler.Set(c, "user subscribe repo", err)
 	}
 	if subscribeInfo == nil {
-		// 查找訂閱方案
-		subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByID(subscribePlanID)
-		if err != nil {
-			return nil, p.errHandler.Set(c, "order repo", err)
-		}
 		//創建新的訂單
-		orderID, err := p.orderRepo.CreateSubscribeOrder(&model.CreateSubscribeOrderParam{
-			UserID:          uid,
-			SubscribePlanID: subscribePlan.ID,
-		})
+		subscribeOrder, err := p.newSubscribeOrder(uid, subscribePlanID)
 		if err != nil {
 			return nil, p.errHandler.Set(c, "order repo", err)
 		}
-		// 查找剛創建的訂單
-		data, err := p.orderRepo.FindOrder(orderID)
-		if err != nil {
-			return nil, p.errHandler.Set(c, "order repo", err)
-		}
-		return parserSubscribeOrder(data), nil
+		return subscribeOrder, nil
 	}
 	if subscribeInfo.OrderID == nil {
 		return nil, p.errHandler.Custom(8999, errors.New("格式錯誤"))
@@ -164,6 +151,14 @@ func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanI
 		response, err := p.iapHandler.GetSubscriptionAPI(receipts[0].OriginalTransactionID)
 		if err != nil {
 			return nil, p.errHandler.Set(c, "iap handler", err)
+		}
+		if response == nil { // 當前訂閱紀錄已清除
+			//創建新的訂單
+			subscribeOrder, err := p.newSubscribeOrder(uid, subscribePlanID)
+			if err != nil {
+				return nil, p.errHandler.Set(c, "order repo", err)
+			}
+			return subscribeOrder, nil
 		}
 		if response.Status == 2 { // 當前訂閱已過期
 			// 查找剛創建的訂單
@@ -433,6 +428,27 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 	fmt.Printf("SignedTransactionInfo.WebOrderLineItemId: %v \n", response.Data.SignedTransactionInfo.WebOrderLineItemId)
 
 	return nil
+}
+
+func (p *payment) newSubscribeOrder(userID int64, subscribePlanID int64) (*dto.SubscribeOrder, error) {
+	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByID(subscribePlanID)
+	if err != nil {
+		return nil, err
+	}
+	//創建新的訂單
+	orderID, err := p.orderRepo.CreateSubscribeOrder(&model.CreateSubscribeOrderParam{
+		UserID:          userID,
+		SubscribePlanID: subscribePlan.ID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	// 查找剛創建的訂單
+	data, err := p.orderRepo.FindOrder(orderID)
+	if err != nil {
+		return nil, err
+	}
+	return parserSubscribeOrder(data), nil
 }
 
 func (p *payment) handleFreeCourseTrade(c *gin.Context, order *dto.CourseOrder) errcode.Error {

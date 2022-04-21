@@ -100,14 +100,24 @@ type WorkoutSet interface {
 type Action interface {
 	CreateAction(courseID int64, param *model.CreateActionParam) (int64, error)
 	FindActionByID(actionID int64) (*model.Action, error)
-	FindActionsByParam(courseID int64, param *model.FindActionsParam) ([]*model.Action, error)
+	FindActionsByParam(userID int64, param *model.FindActionsParam) ([]*model.Action, error)
 	UpdateActionByID(actionID int64, param *model.UpdateActionParam) error
 	DeleteActionByID(actionID int64) error
 }
 
 type ActionPR interface {
-	FindActionPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionPR, error)
-	SaveActionPRs(tx *gorm.DB, userID int64, params []*model.CreateActionPRParam) error
+	FindActionBestPR(tx *gorm.DB, userID int64, actionID int64) (*model.ActionBestPR, error)
+	FindActionBestPRs(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.ActionBestPR, error)
+	SaveMaxRMRecords(tx *gorm.DB, params []*model.SaveMaxRmRecord) error
+	SaveMaxRepsRecords(tx *gorm.DB, params []*model.SaveMaxRepsRecord) error
+	SaveMaxWeightRecords(tx *gorm.DB, params []*model.SaveMaxWeightRecord) error
+	SaveMinDurationRecords(tx *gorm.DB, params []*model.SaveMinDurationRecord) error
+	SaveMaxSpeedRecords(tx *gorm.DB, params []*model.SaveMaxSpeedRecord) error
+	CalculateMaxRM(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxRmRecord, error)
+	CalculateMaxReps(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxRepsRecord, error)
+	CalculateMaxWeight(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxWeightRecord, error)
+	CalculateMinDuration(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MinDurationRecord, error)
+	CalculateMaxSpeed(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxSpeedRecord, error)
 }
 
 type Sale interface {

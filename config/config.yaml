@@ -13,7 +13,7 @@ Resource:
 Upload:
     UploadImageMaxSize: 5 #MB
     UploadAudioMaxSize: 10 #MB
-    UploadVideoMaxSize: 60 #MB
+    UploadVideoMaxSize: 150 #MB
     UploadImageAllowExt:
       - .jpg
       - .png

@@ -1,32 +1,35 @@
 package service
 
 import (
+	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 	"strings"
 )
 
 type action struct {
 	Base
-	actionRepo repository.Action
-	courseRepo repository.Course
-	uploader   handler.Uploader
-	resHandler handler.Resource
-	errHandler errcode.Handler
+	actionRepo   repository.Action
+	actionPRRepo repository.ActionPR
+	courseRepo   repository.Course
+	uploader     handler.Uploader
+	resHandler   handler.Resource
+	errHandler   errcode.Handler
 }
 
 func NewAction(actionRepo repository.Action,
+	actionPRRepo repository.ActionPR,
 	courseRepo repository.Course,
 	uploader handler.Uploader,
 	resHandler handler.Resource,
-
 	errHandler errcode.Handler) Action {
-	return &action{actionRepo: actionRepo, courseRepo: courseRepo, uploader: uploader, resHandler: resHandler, errHandler: errHandler}
+	return &action{actionRepo: actionRepo, actionPRRepo: actionPRRepo, courseRepo: courseRepo, uploader: uploader, resHandler: resHandler, errHandler: errHandler}
 }
 
 func (a *action) CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error) {
@@ -159,7 +162,7 @@ func (a *action) UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateA
 	return &action, nil
 }
 
-func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindActionsParam) ([]*dto.Action, errcode.Error) {
+func (a *action) SearchActions(c *gin.Context, userID int64, param *dto.FindActionsParam) ([]*dto.Action, errcode.Error) {
 
 	var sourceOpt []int
 	if param.Source != nil {
@@ -204,7 +207,8 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 			equipmentOpt = append(equipmentOpt, opt)
 		}
 	}
-	datas, err := a.actionRepo.FindActionsByParam(courseID, &model.FindActionsParam{
+	datas, err := a.actionRepo.FindActionsByParam(userID, &model.FindActionsParam{
+		CourseID:     param.CourseID,
 		Name:         param.Name,
 		SourceOpt:    &sourceOpt,
 		CategoryOpt:  &categoryOpt,
@@ -214,12 +218,21 @@ func (a *action) SearchActions(c *gin.Context, courseID int64, param *dto.FindAc
 	if err != nil {
 		return nil, a.errHandler.Set(c, "action repo", err)
 	}
-	var actions []*dto.Action
+	actions := make([]*dto.Action, 0)
 	for _, data := range datas {
 		action := dto.NewAction(data)
 		actions = append(actions, &action)
 	}
 	return actions, nil
+}
+
+func (a *action) FindActionBestPR(c *gin.Context, userID int64, actionID int64) (*dto.ActionBestPR, errcode.Error) {
+	data, err := a.actionPRRepo.FindActionBestPR(nil, userID, actionID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, a.errHandler.Set(c, "action pr repo", err)
+	}
+	pr := dto.NewActionBestPR(data)
+	return &pr, nil
 }
 
 func (a *action) DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, errcode.Error) {

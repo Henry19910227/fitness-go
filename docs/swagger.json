@@ -156,6 +156,61 @@
                 }
             }
         },
+        "/action/{action_id}/best_personal_record": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取動作個人最佳紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "獲取動作個人最佳紀錄",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.ActionBestPR"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/action/{action_id}/video": {
             "delete": {
                 "security": [
@@ -192,6 +247,81 @@
                     },
                     "400": {
                         "description": "刪除失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/actions": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "搜尋動作庫的動作列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "搜尋動作庫的動作列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "動作名稱",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                        "name": "body",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                        "name": "equipment",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查詢成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.Action"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "查詢失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -5591,6 +5721,95 @@
                     "description": "動作影片",
                     "type": "string",
                     "example": "11d547we1d4f8e.mp4"
+                }
+            }
+        },
+        "dto.ActionBestPR": {
+            "type": "object",
+            "properties": {
+                "action_id": {
+                    "type": "integer",
+                    "example": 12
+                },
+                "max_reps": {
+                    "description": "最多次數",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最多次數",
+                            "type": "integer",
+                            "example": 100
+                        }
+                    }
+                },
+                "max_rm": {
+                    "description": "最大反覆重量(公斤)",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最大反覆重量(公斤)",
+                            "type": "number",
+                            "example": 100
+                        }
+                    }
+                },
+                "max_speed": {
+                    "description": "最高速率",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最高速率",
+                            "type": "number",
+                            "example": 100
+                        }
+                    }
+                },
+                "max_weight": {
+                    "description": "最大重量(公斤)",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最大重量(公斤)",
+                            "type": "number",
+                            "example": 100
+                        }
+                    }
+                },
+                "min_duration": {
+                    "description": "最短時長",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最短時長",
+                            "type": "integer",
+                            "example": 100
+                        }
+                    }
                 }
             }
         },

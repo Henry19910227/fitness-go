@@ -17,7 +17,7 @@ import (
 )
 
 type iap struct {
-	iapTool tool.IAP
+	iapTool    tool.IAP
 	tokenCache map[string]string
 }
 
@@ -118,7 +118,7 @@ func (i *iap) ParserAppleReceipt(dict map[string]interface{}, receipt *dto.Apple
 }
 
 func (i *iap) GetSubscriptionAPI(originalTransactionId string) (*dto.IAPSubscribeResponse, error) {
-	url := fmt.Sprintf("%s%s%s",i.iapTool.AppServerAPIURL(), "/inApps/v1/subscriptions/", originalTransactionId)
+	url := fmt.Sprintf("%s%s%s", i.iapTool.AppServerAPIURL(), "/inApps/v1/subscriptions/", originalTransactionId)
 	token, err := i.iapTool.GenerateAppleStoreAPIToken(time.Hour)
 	if err != nil {
 		return nil, err
@@ -182,7 +182,7 @@ func parserSubscriptionAPIRequest(data map[string]interface{}) (*dto.IAPSubscrib
 		return nil, errors.New("格式錯誤")
 	}
 	if len(dataArray) == 0 {
-		return nil, errors.New("格式錯誤")
+		return nil, nil
 	}
 	dataItem, ok := dataArray[0].(map[string]interface{})
 	if !ok {

@@ -127,7 +127,8 @@ type WorkoutLog interface {
 type Action interface {
 	CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error)
 	UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateActionParam) (*dto.Action, errcode.Error)
-	SearchActions(c *gin.Context, courseID int64, param *dto.FindActionsParam) ([]*dto.Action, errcode.Error)
+	SearchActions(c *gin.Context, userID int64, param *dto.FindActionsParam) ([]*dto.Action, errcode.Error)
+	FindActionBestPR(c *gin.Context, userID int64, actionID int64) (*dto.ActionBestPR, errcode.Error)
 	DeleteAction(c *gin.Context, actionID int64) (*dto.ActionID, errcode.Error)
 	DeleteActionVideo(c *gin.Context, actionID int64) errcode.Error
 }
