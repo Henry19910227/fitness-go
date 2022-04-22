@@ -17,40 +17,42 @@ type Payment struct {
 func NewPayment(baseGroup *gin.RouterGroup,
 	PaymentService service.Payment,
 	CourseService service.Course,
-	userMidd midd.User,
-	courseMidd midd.Course) {
+	userMidd midd.User) {
 
-	review := &Payment{PaymentService: PaymentService, CourseService: CourseService}
+	payment := &Payment{PaymentService: PaymentService, CourseService: CourseService}
 	baseGroup.POST("/course_order",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		review.CreateCourseOrder)
+		payment.CreateCourseOrder)
 
 	baseGroup.POST("/subscribe_order",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		review.CreateSubscribeOrder)
+		payment.CreateSubscribeOrder)
 
 	baseGroup.POST("/verify_apple_receipt",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		review.VerifyAppleReceipt)
+		payment.VerifyAppleReceipt)
 
 	baseGroup.POST("/verify_google_receipt",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		review.VerifyGoogleReceipt)
+		payment.VerifyGoogleReceipt)
 
 	baseGroup.POST("/redeem_course",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		userMidd.UserStatusPermission([]global.UserStatus{global.UserActivity}),
-		review.RedeemCourse)
+		payment.RedeemCourse)
 
 	baseGroup.POST("/app_store_notification/v2",
-		review.AppStoreNotification)
+		payment.AppStoreNotification)
 
 	baseGroup.GET("/app_store/subscriptions/:original_transaction_id",
-		review.GetSubscriptions)
+		payment.GetSubscriptions)
+
+	baseGroup.GET("/google_play_api/access_token",
+		payment.GetGooglePlayAPIAccessToken)
 }
 
 // CreateCourseOrder 創建課表訂單
@@ -236,4 +238,22 @@ func (p *Payment) GetSubscriptions(c *gin.Context) {
 		return
 	}
 	p.JSONSuccessResponse(c, result, "success")
+}
+
+// GetGooglePlayAPIAccessToken 取得 google play api access token
+// @Summary 取得 google play api access token
+// @Description 取得 google play api access token
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.SuccessResult "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /google_play_api/access_token [GET]
+func (p *Payment) GetGooglePlayAPIAccessToken(c *gin.Context) {
+	accessToken, err := p.PaymentService.GetGooglePlayApiAccessToken(c)
+	if err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, accessToken, "success")
 }

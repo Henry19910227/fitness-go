@@ -32,6 +32,7 @@ type payment struct {
 	subscribeInfo       repository.UserSubscribeInfo
 	transactionRepo     repository.Transaction
 	iapHandler          handler.IAP
+	iabHandler          handler.IAB
 	reqTool             tool.HttpRequest
 	jwtTool             tool.JWT
 	errHandler          errcode.Handler
@@ -41,13 +42,21 @@ func NewPayment(userRepo repository.User, orderRepo repository.Order, saleRepo r
 	courseRepo repository.Course, receiptRepo repository.Receipt,
 	purchaseRepo repository.UserCourseAsset, subscribeLogRepo repository.SubscribeLog,
 	purchaseLogRepo repository.PurchaseLog, memberRepo repository.UserSubscribeInfo,
-	transactionRepo repository.Transaction, iapHandler handler.IAP, reqTool tool.HttpRequest,
+	transactionRepo repository.Transaction, iapHandler handler.IAP, iabHandler handler.IAB, reqTool tool.HttpRequest,
 	jwtTool tool.JWT, errHandler errcode.Handler) Payment {
 	return &payment{userRepo: userRepo, orderRepo: orderRepo, saleRepo: saleRepo, subscribePlanRepo: subscribePlanRepo,
 		courseRepo: courseRepo, receiptRepo: receiptRepo,
 		userCourseAssetRepo: purchaseRepo, subscribeLogRepo: subscribeLogRepo, purchaseLogRepo: purchaseLogRepo,
 		subscribeInfo: memberRepo, transactionRepo: transactionRepo,
-		reqTool: reqTool, jwtTool: jwtTool, iapHandler: iapHandler, errHandler: errHandler}
+		reqTool: reqTool, jwtTool: jwtTool, iapHandler: iapHandler, iabHandler: iabHandler, errHandler: errHandler}
+}
+
+func (p *payment) GetGooglePlayApiAccessToken(c *gin.Context) (string, errcode.Error) {
+	accessToken, err := p.iabHandler.GetGooglePlayApiAccessToken()
+	if err != nil {
+		return "", p.errHandler.Set(c, "iab handler", err)
+	}
+	return accessToken, nil
 }
 
 func (p *payment) GetSubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeResponse, errcode.Error) {

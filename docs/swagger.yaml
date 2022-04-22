@@ -3541,6 +3541,25 @@ paths:
       summary: 收藏教練
       tags:
       - Favorite
+  /google_play_api/access_token:
+    get:
+      consumes:
+      - application/json
+      description: 取得 google play api access token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 取得 google play api access token
+      tags:
+      - Payment
   /login/admin/email:
     post:
       consumes:

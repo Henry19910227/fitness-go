@@ -81,3 +81,7 @@ type IAP interface {
 	ParserAppleReceipt(dict map[string]interface{}, receipt *dto.AppleReceiptResponse) error
 	GetSubscriptionAPI(originalTransactionId string) (*dto.IAPSubscribeResponse, error)
 }
+
+type IAB interface {
+	GetGooglePlayApiAccessToken() (string, error)
+}

@@ -84,3 +84,8 @@ type IAP interface {
 	Password() string
 	GenerateAppleStoreAPIToken(duration time.Duration) (string, error)
 }
+
+type IAB interface {
+	GenerateGoogleOAuth2Token(duration time.Duration) (string, error)
+	GenerateGooglePlayAPIAccessToken(duration time.Duration) (string, error)
+}

@@ -158,6 +158,7 @@ type Payment interface {
 	VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
 	HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error
 	GetSubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeResponse, errcode.Error)
+	GetGooglePlayApiAccessToken(c *gin.Context) (string, errcode.Error)
 }
 
 type Favorite interface {
