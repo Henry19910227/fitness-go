@@ -153,12 +153,14 @@ type Review interface {
 type Payment interface {
 	CreateCourseOrder(c *gin.Context, uid int64, courseID int64) (*dto.CourseOrder, errcode.Error)
 	CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanID int64) (*dto.SubscribeOrder, errcode.Error)
+	CheckUserSubscribeStatus(c *gin.Context, uid int64) (global.SubscribeStatus, errcode.Error)
 	VerifyFreeCourseOrder(c *gin.Context, uid int64, orderID string) errcode.Error
 	VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
 	VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string, receiptData string) errcode.Error
 	HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error
 	GetSubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeResponse, errcode.Error)
 	GetGooglePlayApiAccessToken(c *gin.Context) (string, errcode.Error)
+	GetAppleStoreApiAccessToken(c *gin.Context) (string, errcode.Error)
 }
 
 type Favorite interface {

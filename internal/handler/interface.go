@@ -79,6 +79,7 @@ type IAP interface {
 	DecodeIAPNotificationResponse(base64String string) (*dto.IAPNotificationResponse, error)
 	ParserIAPNotificationType(notificationType string, subtype string) global.SubscribeLogType
 	ParserAppleReceipt(dict map[string]interface{}, receipt *dto.AppleReceiptResponse) error
+	GetAppleStoreAPIAccessToken() (string, error)
 	GetSubscriptionAPI(originalTransactionId string) (*dto.IAPSubscribeResponse, error)
 }
 

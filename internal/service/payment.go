@@ -21,8 +21,9 @@ import (
 type payment struct {
 	Base
 	userRepo            repository.User
-	orderRepo           repository.Order
-	saleRepo            repository.Sale
+	orderRepo   repository.Order
+	orderSPRepo repository.OrderSubscribePlan
+	saleRepo    repository.Sale
 	subscribePlanRepo   repository.SubscribePlan
 	courseRepo          repository.Course
 	receiptRepo         repository.Receipt
@@ -38,17 +39,28 @@ type payment struct {
 	errHandler          errcode.Handler
 }
 
-func NewPayment(userRepo repository.User, orderRepo repository.Order, saleRepo repository.Sale, subscribePlanRepo repository.SubscribePlan,
+func NewPayment(userRepo repository.User, orderRepo repository.Order,
+	orderSPRepo repository.OrderSubscribePlan,
+	saleRepo repository.Sale, subscribePlanRepo repository.SubscribePlan,
 	courseRepo repository.Course, receiptRepo repository.Receipt,
 	purchaseRepo repository.UserCourseAsset, subscribeLogRepo repository.SubscribeLog,
 	purchaseLogRepo repository.PurchaseLog, memberRepo repository.UserSubscribeInfo,
 	transactionRepo repository.Transaction, iapHandler handler.IAP, iabHandler handler.IAB, reqTool tool.HttpRequest,
 	jwtTool tool.JWT, errHandler errcode.Handler) Payment {
-	return &payment{userRepo: userRepo, orderRepo: orderRepo, saleRepo: saleRepo, subscribePlanRepo: subscribePlanRepo,
+	return &payment{userRepo: userRepo, orderRepo: orderRepo, orderSPRepo: orderSPRepo,
+		saleRepo: saleRepo, subscribePlanRepo: subscribePlanRepo,
 		courseRepo: courseRepo, receiptRepo: receiptRepo,
 		userCourseAssetRepo: purchaseRepo, subscribeLogRepo: subscribeLogRepo, purchaseLogRepo: purchaseLogRepo,
 		subscribeInfo: memberRepo, transactionRepo: transactionRepo,
 		reqTool: reqTool, jwtTool: jwtTool, iapHandler: iapHandler, iabHandler: iabHandler, errHandler: errHandler}
+}
+
+func (p *payment) GetAppleStoreApiAccessToken(c *gin.Context) (string, errcode.Error) {
+	accessToken, err := p.iapHandler.GetAppleStoreAPIAccessToken()
+	if err != nil {
+		return "", p.errHandler.Set(c, "iap handler", err)
+	}
+	return accessToken, nil
 }
 
 func (p *payment) GetGooglePlayApiAccessToken(c *gin.Context) (string, errcode.Error) {
@@ -121,24 +133,25 @@ func (p *payment) CreateCourseOrder(c *gin.Context, uid int64, courseID int64) (
 }
 
 func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanID int64) (*dto.SubscribeOrder, errcode.Error) {
-	// 查詢用戶訂閱資訊
-	subscribeInfo, err := p.subscribeInfo.FindSubscribeInfo(uid)
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, p.errHandler.Set(c, "user subscribe repo", err)
+	//驗證該用戶訂閱狀態
+	subscribeStatus, e := p.CheckUserSubscribeStatus(c, uid)
+	if e != nil {
+		return nil, e
 	}
-	if subscribeInfo == nil {
-		//創建新的訂單
-		subscribeOrder, err := p.newSubscribeOrder(uid, subscribePlanID)
-		if err != nil {
-			return nil, p.errHandler.Set(c, "order repo", err)
-		}
-		return subscribeOrder, nil
+	if subscribeStatus == global.ValidSubscribeStatus {
+		return nil, p.errHandler.Custom(8999, errors.New("目前已是訂閱會員"))
 	}
-	if subscribeInfo.OrderID == nil {
-		return nil, p.errHandler.Custom(8999, errors.New("格式錯誤"))
+	//查詢當前訂閱項目
+	subscribePlanData, err := p.subscribePlanRepo.FinsSubscribePlanByID(subscribePlanID)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "subscribe plan repo", err)
 	}
-	//查詢訂單收據
-	receipts, err := p.receiptRepo.FindReceiptsByOrderID(*subscribeInfo.OrderID, &model.OrderBy{
+	subscribePlan := dto.NewSubscribePlan(subscribePlanData)
+	//查找該用戶是否創建過訂閱訂單
+	var paymentOrderType = global.SubscribeOrderType
+	orders, err := p.orderRepo.FindOrders(uid, &model.FindOrdersParam{
+		PaymentOrderType: &paymentOrderType,
+	}, &model.OrderBy{
 		Field:     "create_at",
 		OrderType: global.DESC,
 	}, &model.PagingParam{
@@ -146,47 +159,64 @@ func (p *payment) CreateSubscribeOrder(c *gin.Context, uid int64, subscribePlanI
 		Limit:  1,
 	})
 	if err != nil {
-		return nil, p.errHandler.Set(c, "receipt repo", err)
+		return nil, p.errHandler.Set(c, "order repo", err)
 	}
-	if len(receipts) == 0 {
-		// 有訂單但無收據的情況下返回最新創建的訂單
-		data, err := p.orderRepo.FindOrder(*subscribeInfo.OrderID)
-		if err != nil {
-			return nil, p.errHandler.Set(c, "order repo", err)
-		}
-		return parserSubscribeOrder(data), nil
+	if len(orders) > 0 {
+		order := dto.NewSubscribeOrder(orders[0])
+		order.SubscribePlan = &subscribePlan
+		return &order, nil
 	}
-	if global.PaymentType(receipts[0].PaymentType) == global.ApplePaymentType {
-		response, err := p.iapHandler.GetSubscriptionAPI(receipts[0].OriginalTransactionID)
-		if err != nil {
-			return nil, p.errHandler.Set(c, "iap handler", err)
-		}
-		if response == nil { // 當前訂閱紀錄已清除
-			//創建新的訂單
-			subscribeOrder, err := p.newSubscribeOrder(uid, subscribePlanID)
-			if err != nil {
-				return nil, p.errHandler.Set(c, "order repo", err)
-			}
-			return subscribeOrder, nil
-		}
-		if response.Status == 2 { // 當前訂閱已過期
-			// 查找剛創建的訂單
-			data, err := p.orderRepo.FindOrder(*subscribeInfo.OrderID)
-			if err != nil {
-				return nil, p.errHandler.Set(c, "order repo", err)
-			}
-			return parserSubscribeOrder(data), nil
-		}
-		return nil, p.errHandler.Custom(8999, errors.New("目前已經是訂閱會員"))
+	//創建新的訂單
+	orderID, err := p.orderRepo.CreateSubscribeOrder(uid)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "order repo", err)
 	}
-	if global.PaymentType(receipts[0].PaymentType) == global.GooglePaymentType {
-		return nil, p.errHandler.Custom(8999, errors.New("目前已經是訂閱會員"))
+	orderData, err := p.orderRepo.FindOrder(orderID)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "order repo", err)
 	}
-	return nil, p.errHandler.Custom(8999, errors.New("創建訂單失敗"))
+	order := dto.NewSubscribeOrder(orderData)
+	order.SubscribePlan = &subscribePlan
+	return &order, nil
 }
 
-func (p *payment) CheckSubscribeStatus(c *gin.Context, uid int64, orderID string) bool {
-	return false
+func (p *payment) CheckUserSubscribeStatus(c *gin.Context, uid int64) (global.SubscribeStatus, errcode.Error) {
+	//查詢該用戶最新Apple收據
+	appleReceipts, err := p.receiptRepo.FindReceiptsByPaymentType(uid, global.ApplePaymentType, &model.OrderBy{
+		Field:     "create_at",
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: 0,
+		Limit:  1,
+	})
+	if err != nil {
+		return global.NoneSubscribeStatus, p.errHandler.Set(c, "receipt repo", err)
+	}
+	//驗證該apple收據訂閱狀態
+	if len(appleReceipts) > 0 {
+		response, _ := p.iapHandler.GetSubscriptionAPI(appleReceipts[0].OriginalTransactionID)
+		if response != nil {
+			if response.Status == 1 || response.Status == 3 || response.Status == 4 || response.Status == 5 { // 當前訂閱尚未過期
+				return global.ValidSubscribeStatus, nil
+			}
+		}
+	}
+	//查詢該用戶最新google收據
+	googleReceipts, err := p.receiptRepo.FindReceiptsByPaymentType(uid, global.GooglePaymentType, &model.OrderBy{
+		Field:     "create_at",
+		OrderType: global.DESC,
+	}, &model.PagingParam{
+		Offset: 0,
+		Limit:  1,
+	})
+	if err != nil {
+		return global.NoneSubscribeStatus, p.errHandler.Set(c, "receipt repo", err)
+	}
+	//驗證該google收據訂閱狀態
+	if len(googleReceipts) > 0 {
+		return global.ValidSubscribeStatus, nil
+	}
+	return global.NoneSubscribeStatus, nil
 }
 
 func (p *payment) VerifyFreeCourseOrder(c *gin.Context, uid int64, orderID string) errcode.Error {
@@ -265,7 +295,7 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	}
 	//處理會員訂閱訂單
 	if order.OrderType == int(global.SubscribeOrderType) {
-		if err := p.handleSubscribeTrade(c, uid, parserSubscribeOrder(order), receiptData, &response); err != nil {
+		if err := p.handleSubscribeTradeForApple(c, uid, parserSubscribeOrder(order), receiptData, &response); err != nil {
 			return err
 		}
 	}
@@ -300,13 +330,13 @@ func (p *payment) VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string,
 }
 
 func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error {
-	// 解析字串
+	//解析字串
 	response, err := p.iapHandler.DecodeIAPNotificationResponse(base64PayloadString)
 	if err != nil {
 		return p.errHandler.Set(c, "iap parser", err)
 	}
 	subscribeLogType := p.iapHandler.ParserIAPNotificationType(response.NotificationType, response.Subtype)
-	// 存取log
+	//存取 subscribe log
 	_, err = p.subscribeLogRepo.SaveSubscribeLog(nil, &model.CreateSubscribeLogParam{
 		OriginalTransactionID: response.Data.SignedTransactionInfo.OriginalTransactionId,
 		TransactionID:         response.Data.SignedTransactionInfo.TransactionId,
@@ -318,35 +348,20 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 	if err != nil {
 		return p.errHandler.Set(c, "subscribe log repo", err)
 	}
-	// 查詢用戶訂閱資料
-	info, err := p.subscribeInfo.FindSubscribeInfoByOriginalTransactionID(response.Data.SignedTransactionInfo.OriginalTransactionId)
-	if err != nil {
-		return p.errHandler.Set(c, "subscribe info repo", err)
-	}
-	if info.OrderID == nil {
-		return p.errHandler.Custom(8999, errors.New("缺少 order id 資訊"))
-	}
-	// 驗證訂單初始交易id
-	receipts, err := p.receiptRepo.FindReceiptsByOrderID(*info.OrderID, &model.OrderBy{
-		Field:     "create_at",
-		OrderType: global.DESC,
-	}, &model.PagingParam{
-		Offset: 0,
-		Limit:  1,
-	})
+	// 查詢當前訂閱項目
+	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(response.Data.SignedTransactionInfo.ProductId)
 	if err != nil {
 		return p.errHandler.Set(c, "receipt repo", err)
 	}
-	if len(receipts) == 0 {
-		return p.errHandler.Custom(8999, errors.New("訂單缺少收據資訊"))
-	}
-	if receipts[0].OriginalTransactionID != response.Data.SignedTransactionInfo.OriginalTransactionId {
-		return p.errHandler.Custom(8999, errors.New("訂單初始交易id不一致"))
+	//以 OriginalTransactionId 查詢訂單
+	order, err := p.orderRepo.FindOrderByOriginalTransactionID(response.Data.SignedTransactionInfo.OriginalTransactionId)
+	if err != nil {
+		return p.errHandler.Set(c, "order repo", err)
 	}
 	tx := p.transactionRepo.CreateTransaction()
-	// 存取收據
+	//1.存取收據
 	_, err = p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
-		OrderID:               *info.OrderID,
+		OrderID:               order.ID,
 		PaymentType:           int(global.ApplePaymentType),
 		ReceiptToken:          "",
 		OriginalTransactionID: response.Data.SignedTransactionInfo.OriginalTransactionId,
@@ -358,25 +373,19 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 		tx.Rollback()
 		return p.errHandler.Set(c, "receipt repo", err)
 	}
-	// 查詢當前訂閱項目
-	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(response.Data.SignedTransactionInfo.ProductId)
-	if err != nil {
+	//2.修改訂單訂閱項目(升級or降級狀態)
+	if err := p.orderSPRepo.SaveOrderSubscribePlan(tx, order.ID, subscribePlan.ID); err != nil {
 		tx.Rollback()
-		return p.errHandler.Set(c, "receipt repo", err)
+		return nil
 	}
-	// 修改訂單訂閱項目(升級or降級狀態)
-	if err := p.orderRepo.UpdateOrderSubscribePlan(tx, *info.OrderID, subscribePlan.ID); err != nil {
-		tx.Rollback()
-		return p.errHandler.Set(c, "order repo", err)
-	}
-	// 修改用戶訂閱資訊
+	//3.修改用戶訂閱狀態
 	var subscribeStatus = global.ValidSubscribeStatus
 	if subscribeLogType == global.Expired || subscribeLogType == global.Refund {
 		subscribeStatus = global.NoneSubscribeStatus
 	}
 	_, err = p.subscribeInfo.SaveSubscribeInfo(tx, &model.SaveUserSubscribeInfoParam{
-		UserID:          info.UserID,
-		OrderID:         *info.OrderID,
+		UserID:          order.UserID,
+		OrderID:         order.ID,
 		SubscribePlanID: subscribePlan.ID,
 		Status:          subscribeStatus,
 		StartDate:       parserIAPDate(response.Data.SignedTransactionInfo.PurchaseDate / 1000).Format("2006-01-02 15:04:05"),
@@ -386,17 +395,22 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 		tx.Rollback()
 		return p.errHandler.Set(c, "subscribe info repo", err)
 	}
-	//更新會員類型
+	//4.更新會員類型
 	var userType = global.SubscribeUserType
 	if subscribeLogType == global.Expired || subscribeLogType == global.Refund {
 		userType = global.NormalUserType
 	}
 	ut := int(userType)
-	if err := p.userRepo.UpdateUserByUID(tx, info.UserID, &model.UpdateUserParam{
+	if err := p.userRepo.UpdateUserByUID(tx, order.UserID, &model.UpdateUserParam{
 		UserType: &ut,
 	}); err != nil {
 		tx.Rollback()
 		return p.errHandler.Set(c, "user repo", err)
+	}
+	//5.更新訂單狀態
+	if err := p.orderRepo.UpdateOrderStatus(tx, order.ID, global.SuccessOrderStatus); err != nil {
+		tx.Rollback()
+		return p.errHandler.Set(c, "order repo", err)
 	}
 	p.transactionRepo.FinishTransaction(tx)
 	fmt.Printf("NotificationType: %v \n", response.NotificationType)
@@ -440,24 +454,24 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 }
 
 func (p *payment) newSubscribeOrder(userID int64, subscribePlanID int64) (*dto.SubscribeOrder, error) {
-	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByID(subscribePlanID)
+	subscribePlanData, err := p.subscribePlanRepo.FinsSubscribePlanByID(subscribePlanID)
 	if err != nil {
 		return nil, err
 	}
 	//創建新的訂單
-	orderID, err := p.orderRepo.CreateSubscribeOrder(&model.CreateSubscribeOrderParam{
-		UserID:          userID,
-		SubscribePlanID: subscribePlan.ID,
-	})
+	orderID, err := p.orderRepo.CreateSubscribeOrder(userID)
 	if err != nil {
 		return nil, err
 	}
 	// 查找剛創建的訂單
-	data, err := p.orderRepo.FindOrder(orderID)
+	orderData, err := p.orderRepo.FindOrder(orderID)
 	if err != nil {
 		return nil, err
 	}
-	return parserSubscribeOrder(data), nil
+	order := dto.NewSubscribeOrder(orderData)
+	subscribePlan := dto.NewSubscribePlan(subscribePlanData)
+	order.SubscribePlan = &subscribePlan
+	return parserSubscribeOrder(orderData), nil
 }
 
 func (p *payment) handleFreeCourseTrade(c *gin.Context, order *dto.CourseOrder) errcode.Error {
@@ -540,61 +554,32 @@ func (p *payment) handleCourseOrderTrade(order *dto.CourseOrder, paymentType glo
 	return nil
 }
 
-func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.AppleReceiptResponse) errcode.Error {
-	var currentOrderID string
+func (p *payment) handleSubscribeTradeForApple(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.AppleReceiptResponse) errcode.Error {
 	//驗證收據格式
 	if len(response.LatestReceiptInfo) == 0 || len(response.PendingRenewalInfo) == 0 {
 		return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
 	}
-	//查找匹配TransactionID的訂單
-	oldOrder, err := p.orderRepo.FindOrderByOriginalTransactionID(response.LatestReceiptInfo[0].OriginalTransactionID)
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return p.errHandler.Set(c, "receipt repo", err)
-	}
-	if oldOrder != nil {
-		//有匹配TransactionID的訂單
-		if oldOrder.UserID != uid {
-			return p.errHandler.Custom(8999, errors.New("無效的收據(此收據非本人)"))
-		}
-		currentOrderID = oldOrder.ID
-	} else {
-		//無匹配TransactionID的訂單，選擇支付當前帶入的訂單 or 創建新的訂單
-		orderModel, err := p.orderRepo.FindOrder(order.ID)
-		if err != nil {
-			return p.errHandler.Set(c, "order repo", err)
-		}
-		if global.OrderStatus(orderModel.OrderStatus) == global.PendingOrderStatus {
-			currentOrderID = order.ID
-		} else {
-			// 查找訂閱方案
-			subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(response.LatestReceiptInfo[0].ProductID)
-			if err != nil {
-				return p.errHandler.Set(c, "order repo", err)
-			}
-			//創建新的訂單
-			newOrderID, err := p.orderRepo.CreateSubscribeOrder(&model.CreateSubscribeOrderParam{
-				UserID:          uid,
-				SubscribePlanID: subscribePlan.ID,
-			})
-			if err != nil {
-				return p.errHandler.Set(c, "order repo", err)
-			}
-			currentOrderID = newOrderID
-		}
-	}
-	//創建transaction
-	tx := p.transactionRepo.CreateTransaction()
-	//存入收據
 	item := response.LatestReceiptInfo[0]
-	if item.ExpiresDate == nil {
+	if response.LatestReceiptInfo[0].ExpiresDate == nil {
 		return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
 	}
+	//驗證訂單合法性
+	if order.UserID != uid {
+		return p.errHandler.Custom(8999, errors.New("此收據與該用戶不符"))
+	}
+	//獲取訂閱項目資訊
+	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(item.ProductID)
+	if err != nil {
+		return p.errHandler.Set(c, "subscribe plan error", err)
+	}
+	tx := p.transactionRepo.CreateTransaction()
+	//1.存入收據
 	quantity, err := strconv.Atoi(item.Quantity)
 	if err != nil {
 		return p.errHandler.Set(c, "Atoi error", err)
 	}
 	_, err = p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
-		OrderID:               currentOrderID,
+		OrderID:               order.ID,
 		PaymentType:           int(global.ApplePaymentType),
 		ReceiptToken:          receiptData,
 		OriginalTransactionID: item.OriginalTransactionID,
@@ -606,20 +591,19 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 		tx.Rollback()
 		return p.errHandler.Set(c, "receipt repo", err)
 	}
-	//獲取訂閱項目資訊
-	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(item.ProductID)
-	if err != nil {
+	//2.修改訂單訂閱項目(升級or降級狀態)
+	if err := p.orderSPRepo.SaveOrderSubscribePlan(tx, order.ID, subscribePlan.ID); err != nil {
 		tx.Rollback()
-		return p.errHandler.Set(c, "subscribe plan error", err)
+		return nil
 	}
-	//綁定訂單與會員關係
+	//3.更新用戶訂閱狀態
 	var subscribeStatus = global.ValidSubscribeStatus
 	if len(response.PendingRenewalInfo[0].ExpirationIntent) > 0 {
 		subscribeStatus = global.NoneSubscribeStatus
 	}
 	_, err = p.subscribeInfo.SaveSubscribeInfo(tx, &model.SaveUserSubscribeInfoParam{
 		UserID:          uid,
-		OrderID:         currentOrderID,
+		OrderID:         order.ID,
 		SubscribePlanID: subscribePlan.ID,
 		Status:          subscribeStatus,
 		StartDate:       item.PurchaseDate.Format("2006-01-02 15:04:05"),
@@ -629,7 +613,7 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 		tx.Rollback()
 		return p.errHandler.Set(c, "member repo", err)
 	}
-	//更新會員類型
+	//4.更新用戶類型
 	var userType = global.SubscribeUserType
 	if len(response.PendingRenewalInfo[0].ExpirationIntent) > 0 {
 		userType = global.NormalUserType
@@ -641,8 +625,8 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 		tx.Rollback()
 		return p.errHandler.Set(c, "user repo", err)
 	}
-	//更新訂單狀態
-	if err := p.orderRepo.UpdateOrderStatus(tx, currentOrderID, global.SuccessOrderStatus); err != nil {
+	//5.更新訂單狀態
+	if err := p.orderRepo.UpdateOrderStatus(tx, order.ID, global.SuccessOrderStatus); err != nil {
 		tx.Rollback()
 		return p.errHandler.Set(c, "order repo", err)
 	}
@@ -652,10 +636,15 @@ func (p *payment) handleSubscribeTrade(c *gin.Context, uid int64, order *dto.Sub
 }
 
 func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.GoogleReceiptResponse) errcode.Error {
+	//獲取訂閱項目資訊
+	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(order.SubscribePlan.ProductID)
+	if err != nil {
+		return p.errHandler.Set(c, "subscribe plan error", err)
+	}
 	//創建transaction
 	tx := p.transactionRepo.CreateTransaction()
-	//存入收據
-	_, err := p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
+	//1.存入收據
+	_, err = p.receiptRepo.SaveReceipt(tx, &model.CreateReceiptParam{
 		OrderID:               order.ID,
 		PaymentType:           int(global.ApplePaymentType),
 		ReceiptToken:          receiptData,
@@ -668,13 +657,12 @@ func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order
 		tx.Rollback()
 		return p.errHandler.Set(c, "receipt repo", err)
 	}
-	//獲取訂閱項目資訊
-	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(order.SubscribePlan.ProductID)
-	if err != nil {
+	//2.修改訂單訂閱項目(升級or降級狀態)
+	if err := p.orderSPRepo.SaveOrderSubscribePlan(tx, order.ID, subscribePlan.ID); err != nil {
 		tx.Rollback()
-		return p.errHandler.Set(c, "subscribe plan error", err)
+		return nil
 	}
-	//綁定訂單與會員關係
+	//3.更新用戶訂閱狀態
 	_, err = p.subscribeInfo.SaveSubscribeInfo(tx, &model.SaveUserSubscribeInfoParam{
 		UserID:          uid,
 		OrderID:         order.ID,
@@ -687,7 +675,7 @@ func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order
 		tx.Rollback()
 		return p.errHandler.Set(c, "member repo", err)
 	}
-	//更新會員類型
+	//4.更新用戶類型
 	ut := int(global.SubscribeUserType)
 	if err := p.userRepo.UpdateUserByUID(tx, order.UserID, &model.UpdateUserParam{
 		UserType: &ut,
@@ -695,7 +683,7 @@ func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order
 		tx.Rollback()
 		return p.errHandler.Set(c, "user repo", err)
 	}
-	//更新訂單狀態
+	//5.更新訂單狀態
 	if err := p.orderRepo.UpdateOrderStatus(tx, order.ID, global.SuccessOrderStatus); err != nil {
 		tx.Rollback()
 		return p.errHandler.Set(c, "order repo", err)

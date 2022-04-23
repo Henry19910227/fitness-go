@@ -54,33 +54,18 @@ func (o *order) CreateCourseOrder(param *model.CreateOrderParam) (string, error)
 	return order.ID, nil
 }
 
-func (o *order) CreateSubscribeOrder(param *model.CreateSubscribeOrderParam) (string, error) {
-	if param == nil {
-		return "", nil
-	}
+func (o *order) CreateSubscribeOrder(userID int64) (string, error) {
 	random := randRange(100000, 999999)
 	order := entity.Order{
 		ID:          time.Now().Format("20060102150405") + strconv.Itoa(int(random)),
-		UserID:      param.UserID,
+		UserID:      userID,
 		Quantity:    1,
 		OrderType:   int(global.SubscribeOrderType),
 		OrderStatus: int(global.PendingOrderStatus),
 		CreateAt:    time.Now().Format("2006-01-02 15:04:05"),
 		UpdateAt:    time.Now().Format("2006-01-02 15:04:05"),
 	}
-	if err := o.gorm.DB().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(&order).Error; err != nil {
-			return err
-		}
-		orderSubscribe := entity.OrderSubscribePlan{
-			OrderID:         order.ID,
-			SubscribePlanID: param.SubscribePlanID,
-		}
-		if err := tx.Create(&orderSubscribe).Error; err != nil {
-			return err
-		}
-		return nil
-	}); err != nil {
+	if err := o.gorm.DB().Create(&order).Error; err != nil {
 		return "", err
 	}
 	return order.ID, nil
@@ -178,8 +163,9 @@ func (o *order) FindOrderByCourseID(userID int64, courseID int64) (*model.Order,
 	return &order, nil
 }
 
-func (o *order) FindOrdersByUserID(userID int64, paymentOrderType global.PaymentOrderType, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Order, error) {
+func (o *order) FindOrders(userID int64, param *model.FindOrdersParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Order, error) {
 	db := o.gorm.DB().
+		Table("orders").
 		Preload("OrderCourse").
 		Preload("OrderSubscribe").
 		Preload("OrderCourse.SaleItem").
@@ -187,7 +173,28 @@ func (o *order) FindOrdersByUserID(userID int64, paymentOrderType global.Payment
 		Preload("OrderCourse.Course").
 		Preload("OrderSubscribe").
 		Preload("OrderSubscribe.SubscribePlan").
-		Preload("OrderSubscribe.SubscribePlan.ProductLabel")
+		Preload("OrderSubscribe.SubscribePlan.ProductLabel").
+		Joins("LEFT JOIN order_subscribe_plans ON orders.id = order_subscribe_plans.order_id").
+		Joins("LEFT JOIN order_courses ON orders.id = order_courses.order_id")
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	query += "AND orders.user_id = ? "
+	params = append(params, userID)
+	//加入 order type 篩選條件
+	if param.PaymentOrderType != nil {
+		query += "AND orders.order_type = ? "
+		params = append(params, *param.PaymentOrderType)
+	}
+	//加入 order status 篩選條件
+	if param.OrderStatus != nil {
+		query += "AND orders.order_status = ? "
+		params = append(params, *param.OrderStatus)
+	}
+	//加入 subscribe plan id 篩選條件
+	if param.SubscribePlanID != nil {
+		query += "AND order_subscribe_plans.subscribe_plan_id = ? "
+		params = append(params, *param.SubscribePlanID)
+	}
 	//排序
 	if orderBy != nil {
 		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
@@ -205,7 +212,7 @@ func (o *order) FindOrdersByUserID(userID int64, paymentOrderType global.Payment
 		}
 	}
 	orders := make([]*model.Order, 0)
-	db = db.Find(&orders, "orders.user_id = ? AND orders.order_type = ?", userID, int(paymentOrderType))
+	db = db.Where(query, params...).Find(&orders)
 	return orders, nil
 }
 

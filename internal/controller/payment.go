@@ -53,6 +53,9 @@ func NewPayment(baseGroup *gin.RouterGroup,
 
 	baseGroup.GET("/google_play_api/access_token",
 		payment.GetGooglePlayAPIAccessToken)
+
+	baseGroup.GET("/apple_store_api/access_token",
+		payment.GetAppleStoreAPIAccessToken)
 }
 
 // CreateCourseOrder 創建課表訂單
@@ -238,6 +241,24 @@ func (p *Payment) GetSubscriptions(c *gin.Context) {
 		return
 	}
 	p.JSONSuccessResponse(c, result, "success")
+}
+
+// GetAppleStoreAPIAccessToken 取得 Apple Store api access token
+// @Summary 取得 Apple Store api access token
+// @Description 取得 Apple Store api access token
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.SuccessResult "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /apple_store_api/access_token [GET]
+func (p *Payment) GetAppleStoreAPIAccessToken(c *gin.Context) {
+	accessToken, err := p.PaymentService.GetAppleStoreApiAccessToken(c)
+	if err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, accessToken, "success")
 }
 
 // GetGooglePlayAPIAccessToken 取得 google play api access token

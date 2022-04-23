@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/entity"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"gorm.io/gorm"
@@ -38,6 +39,33 @@ func (r *receipt) FindReceiptsByOrderID(orderID string, orderBy *model.OrderBy, 
 		}
 	}
 	if err := db.Where("order_id = ?", orderID).Find(&receipts).Error; err != nil {
+		return nil, err
+	}
+	return receipts, nil
+}
+
+func (r *receipt) FindReceiptsByPaymentType(userID int64, paymentType global.PaymentType, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Receipt, error) {
+	var receipts []*model.Receipt
+	db := r.gorm.DB().
+		Table("receipts").
+		Joins("INNER JOIN orders ON receipts.order_id = orders.id")
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	//頁數
+	if paging != nil {
+		if paging.Offset > 0 {
+			db = db.Offset(paging.Offset)
+		}
+	}
+	//筆數
+	if paging != nil {
+		if paging.Limit > 0 {
+			db = db.Limit(paging.Limit)
+		}
+	}
+	if err := db.Where("orders.user_id = ? AND receipts.payment_type = ?", userID, paymentType).Find(&receipts).Error; err != nil {
 		return nil, err
 	}
 	return receipts, nil
