@@ -760,7 +760,121 @@ definitions:
         example: 10
         type: integer
     type: object
-  dto.IAPSubscribeResponse:
+  dto.IABProductAPIResponse:
+    properties:
+      acknowledgementState:
+        type: integer
+      consumptionState:
+        type: integer
+      developerPayload:
+        type: string
+      kind:
+        type: string
+      obfuscatedExternalAccountId:
+        type: string
+      obfuscatedExternalProfileId:
+        type: string
+      orderId:
+        type: string
+      productId:
+        type: string
+      purchaseState:
+        type: integer
+      purchaseTimeMillis:
+        type: string
+      purchaseToken:
+        type: string
+      purchaseType:
+        type: integer
+      quantity:
+        type: integer
+      regionCode:
+        type: string
+    type: object
+  dto.IABSubscriptionAPIResponse:
+    properties:
+      acknowledgementState:
+        type: integer
+      autoRenewing:
+        type: boolean
+      autoResumeTimeMillis:
+        type: string
+      cancelReason:
+        type: integer
+      cancelSurveyResult:
+        $ref: '#/definitions/dto.SubscriptionCancelSurveyResult'
+      countryCode:
+        type: string
+      developerPayload:
+        type: string
+      emailAddress:
+        type: string
+      expiryTimeMillis:
+        type: string
+      externalAccountId:
+        type: string
+      familyName:
+        type: string
+      givenName:
+        type: string
+      introductoryPriceInfo:
+        $ref: '#/definitions/dto.IntroductoryPriceInfo'
+      kind:
+        type: string
+      linkedPurchaseToken:
+        type: string
+      obfuscatedExternalAccountId:
+        type: string
+      obfuscatedExternalProfileId:
+        type: string
+      orderId:
+        type: string
+      priceAmountMicros:
+        type: string
+      priceChange:
+        $ref: '#/definitions/dto.SubscriptionPriceChange'
+      priceCurrencyCode:
+        type: string
+      profileId:
+        type: string
+      profileName:
+        type: string
+      promotionCode:
+        type: string
+      promotionType:
+        type: integer
+      purchaseType:
+        type: integer
+      startTimeMillis:
+        type: string
+      userCancellationTimeMillis:
+        type: string
+    type: object
+  dto.IAPSubscribeAPIResponse:
+    properties:
+      appAppleId:
+        type: integer
+      bundleId:
+        type: string
+      data:
+        items:
+          $ref: '#/definitions/dto.SubscriptionGroupIdentifierItem'
+        type: array
+      environment:
+        type: string
+    type: object
+  dto.IntroductoryPriceInfo:
+    properties:
+      introductoryPriceAmountMicros:
+        type: string
+      introductoryPriceCurrencyCode:
+        type: string
+      introductoryPriceCycles:
+        type: integer
+      introductoryPricePeriod:
+        type: string
+    type: object
+  dto.LastTransactionsItem:
     properties:
       originalTransactionID:
         description: 原始購買的交易標識符
@@ -857,6 +971,13 @@ definitions:
         items:
           $ref: '#/definitions/dto.WorkoutStructure'
         type: array
+    type: object
+  dto.Price:
+    properties:
+      currency:
+        type: string
+      priceMicros:
+        type: string
     type: object
   dto.Review:
     properties:
@@ -971,6 +1092,9 @@ definitions:
     type: object
   dto.SignedRenewalInfo:
     properties:
+      appAccountToken:
+        description: 應用內購買的產品標識符
+        type: string
       autoRenewProductId:
         description: 在下一個計費周期續訂的產品的產品標識符
         type: string
@@ -998,9 +1122,6 @@ definitions:
       priceIncreaseStatus:
         description: 指示客戶是否已批准訂閱價格上漲的狀態
         type: integer
-      productId:
-        description: 應用內購買的產品標識符
-        type: string
       signedDate:
         description: App Store 對 JSON Web 簽名數據進行簽名的 UNIX 時間（以毫秒為單位）
         type: integer
@@ -1143,6 +1264,29 @@ definitions:
       twd:
         description: 台幣價格
         example: 330
+        type: integer
+    type: object
+  dto.SubscriptionCancelSurveyResult:
+    properties:
+      cancelSurveyReason:
+        type: integer
+      userInputCancelReason:
+        type: string
+    type: object
+  dto.SubscriptionGroupIdentifierItem:
+    properties:
+      lastTransactions:
+        items:
+          $ref: '#/definitions/dto.LastTransactionsItem'
+        type: array
+      subscriptionGroupIdentifier:
+        type: string
+    type: object
+  dto.SubscriptionPriceChange:
+    properties:
+      newPrice:
+        $ref: '#/definitions/dto.Price'
+      state:
         type: integer
     type: object
   dto.Trainer:
@@ -1840,6 +1984,14 @@ definitions:
         example: 10001
         type: integer
     type: object
+  validator.AppStoreResponseBodyV2:
+    properties:
+      signedPayload:
+        description: The payload in JSON Web Signature (JWS) format, signed by the
+          App Store
+        example: MIJOlgYJKoZIhvcN...
+        type: string
+    type: object
   validator.CreateCourseBody:
     properties:
       category:
@@ -2398,37 +2550,7 @@ paths:
       summary: 搜尋動作庫的動作列表
       tags:
       - Action
-  /app_store/subscriptions/{original_transaction_id}:
-    get:
-      consumes:
-      - application/json
-      description: 獲取訂閱資料
-      parameters:
-      - description: 交易id
-        in: path
-        name: original_transaction_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 獲取成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.IAPSubscribeResponse'
-              type: object
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      summary: 獲取訂閱資料
-      tags:
-      - Payment
-  /apple_store_api/access_token:
+  /app_store/access_token:
     get:
       consumes:
       - application/json
@@ -2445,6 +2567,94 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       summary: 取得 Apple Store api access token
+      tags:
+      - Payment
+  /app_store/history/{original_transaction_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取交易歷史資料(測試用)
+      parameters:
+      - description: 交易id
+        in: path
+        name: original_transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.IAPSubscribeAPIResponse'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 獲取交易歷史資料(測試用)
+      tags:
+      - Payment
+  /app_store/subscriptions/{original_transaction_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訂閱資料(測試用)
+      parameters:
+      - description: 交易id
+        in: path
+        name: original_transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.IAPSubscribeAPIResponse'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 獲取訂閱資料(測試用)
+      tags:
+      - Payment
+  /app_store_notification/v2:
+    post:
+      consumes:
+      - application/json
+      description: 接收 apple real time notification
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.AppStoreResponseBodyV2'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 接收 apple real time notification
       tags:
       - Payment
   /course:
@@ -3560,7 +3770,7 @@ paths:
       summary: 收藏教練
       tags:
       - Favorite
-  /google_play_api/access_token:
+  /google_play/access_token:
     get:
       consumes:
       - application/json
@@ -3577,6 +3787,76 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       summary: 取得 google play api access token
+      tags:
+      - Payment
+  /google_play/product/{product_id}:
+    get:
+      consumes:
+      - application/json
+      description: 取得 google play developer api product(測試用)
+      parameters:
+      - description: 產品id
+        in: path
+        name: product_id
+        required: true
+        type: string
+      - description: 收據token
+        in: query
+        name: purchase_token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.IABProductAPIResponse'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 取得 google play developer api product(測試用)
+      tags:
+      - Payment
+  /google_play/subscription/{product_id}:
+    get:
+      consumes:
+      - application/json
+      description: 取得 google play developer api subscription(測試用)
+      parameters:
+      - description: 產品id
+        in: path
+        name: product_id
+        required: true
+        type: string
+      - description: 收據token
+        in: query
+        name: purchase_token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.IABSubscriptionAPIResponse'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 取得 google play developer api subscription(測試用)
       tags:
       - Payment
   /login/admin/email:

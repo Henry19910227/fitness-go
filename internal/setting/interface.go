@@ -68,5 +68,8 @@ type IAP interface {
 }
 
 type IAB interface {
+	GetURL() string
+	GetScope() string
 	GetJsonFilePath() string
+	GetPackageName() string
 }

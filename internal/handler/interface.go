@@ -76,13 +76,17 @@ type IAP interface {
 	SandboxURL() string
 	ProductURL() string
 	Password() string
-	DecodeIAPNotificationResponse(base64String string) (*dto.IAPNotificationResponse, error)
 	ParserIAPNotificationType(notificationType string, subtype string) global.SubscribeLogType
-	ParserAppleReceipt(dict map[string]interface{}, receipt *dto.AppleReceiptResponse) error
+	ParserAppleReceipt(dict map[string]interface{}, receipt *dto.IAPVerifyReceiptResponse) error
 	GetAppleStoreAPIAccessToken() (string, error)
-	GetSubscriptionAPI(originalTransactionId string) (*dto.IAPSubscribeResponse, error)
+	VerifyAppleReceiptAPI(receiptData string) (*dto.IAPVerifyReceiptResponse, error)
+	GetSubscribeAPI(originalTransactionId string) (*dto.IAPSubscribeAPIResponse, error)
+	GetHistoryAPI(originalTransactionId string) (*dto.IAPHistoryAPIResponse, error)
 }
 
 type IAB interface {
 	GetGooglePlayApiAccessToken() (string, error)
+	GetProductsAPI(productID string, purchaseToken string) (*dto.IABProductAPIResponse, error)
+	GetSubscriptionAPI(productID string, purchaseToken string) (*dto.IABSubscriptionAPIResponse, error)
+	DecodeIAPNotificationResponse(base64String string) (map[string]interface{}, error)
 }

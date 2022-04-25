@@ -15,15 +15,16 @@ import (
 	"gorm.io/gorm"
 	"math/big"
 	"strconv"
+	"strings"
 	"time"
 )
 
 type payment struct {
 	Base
 	userRepo            repository.User
-	orderRepo   repository.Order
-	orderSPRepo repository.OrderSubscribePlan
-	saleRepo    repository.Sale
+	orderRepo           repository.Order
+	orderSPRepo         repository.OrderSubscribePlan
+	saleRepo            repository.Sale
 	subscribePlanRepo   repository.SubscribePlan
 	courseRepo          repository.Course
 	receiptRepo         repository.Receipt
@@ -71,8 +72,32 @@ func (p *payment) GetGooglePlayApiAccessToken(c *gin.Context) (string, errcode.E
 	return accessToken, nil
 }
 
-func (p *payment) GetSubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeResponse, errcode.Error) {
-	result, err := p.iapHandler.GetSubscriptionAPI(originalTransactionID)
+func (p *payment) GetAppStoreAPISubscriptions(c *gin.Context, originalTransactionID string) (*dto.IAPSubscribeAPIResponse, errcode.Error) {
+	result, err := p.iapHandler.GetSubscribeAPI(originalTransactionID)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "iap handler", err)
+	}
+	return result, nil
+}
+
+func (p *payment) GetAppStoreAPIHistory(c *gin.Context, originalTransactionID string) (*dto.IAPHistoryAPIResponse, errcode.Error) {
+	result, err := p.iapHandler.GetHistoryAPI(originalTransactionID)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "iap handler", err)
+	}
+	return result, nil
+}
+
+func (p *payment) GetGooglePlayAPIProduct(c *gin.Context, productID string, purchaseToken string) (*dto.IABProductAPIResponse, errcode.Error) {
+	result, err := p.iabHandler.GetProductsAPI(productID, purchaseToken)
+	if err != nil {
+		return nil, p.errHandler.Set(c, "get products api error", err)
+	}
+	return result, nil
+}
+
+func (p *payment) GetGooglePlayAPISubscription(c *gin.Context, productID string, purchaseToken string) (*dto.IABSubscriptionAPIResponse, errcode.Error) {
+	result, err := p.iabHandler.GetSubscriptionAPI(productID, purchaseToken)
 	if err != nil {
 		return nil, p.errHandler.Set(c, "iap handler", err)
 	}
@@ -194,10 +219,18 @@ func (p *payment) CheckUserSubscribeStatus(c *gin.Context, uid int64) (global.Su
 	}
 	//驗證該apple收據訂閱狀態
 	if len(appleReceipts) > 0 {
-		response, _ := p.iapHandler.GetSubscriptionAPI(appleReceipts[0].OriginalTransactionID)
+		response, err := p.iapHandler.GetSubscribeAPI(appleReceipts[0].OriginalTransactionID)
+		if err != nil {
+			return global.NoneSubscribeStatus, p.errHandler.Set(c, "iap handler", err)
+		}
 		if response != nil {
-			if response.Status == 1 || response.Status == 3 || response.Status == 4 || response.Status == 5 { // 當前訂閱尚未過期
-				return global.ValidSubscribeStatus, nil
+			if len(response.Data) > 0 {
+				if len(response.Data[0].LastTransactions) > 0 {
+					status := response.Data[0].LastTransactions[0].Status
+					if status == 1 || status == 3 || status == 4 || status == 5 { // 當前訂閱尚未過期
+						return global.ValidSubscribeStatus, nil
+					}
+				}
 			}
 		}
 	}
@@ -257,29 +290,10 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	if order.UserID != uid {
 		return p.errHandler.Custom(8999, errors.New("無效的訂單(此訂單非本人)"))
 	}
-	//apple server 正式區驗證收據
-	param := map[string]interface{}{
-		"receipt-data":             receiptData,
-		"password":                 p.iapHandler.Password(),
-		"exclude-old-transactions": 1,
-	}
-	result, err := p.reqTool.SendPostRequestWithJsonBody(p.iapHandler.ProductURL(), param)
+	//驗證收據API
+	response, err := p.iapHandler.VerifyAppleReceiptAPI(receiptData)
 	if err != nil {
-		return p.errHandler.Set(c, "req tool", err)
-	}
-	var response dto.AppleReceiptResponse
-	if err := p.iapHandler.ParserAppleReceipt(result, &response); err != nil {
-		return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
-	}
-	//apple server 測試區驗證收據
-	if response.Status == 21007 {
-		result, err := p.reqTool.SendPostRequestWithJsonBody(p.iapHandler.SandboxURL(), param)
-		if err != nil {
-			return p.errHandler.Set(c, "req tool", err)
-		}
-		if err := p.iapHandler.ParserAppleReceipt(result, &response); err != nil {
-			return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
-		}
+		return p.errHandler.Set(c, "iap handler", err)
 	}
 	//驗證收據結果
 	if response.Status != 0 {
@@ -289,13 +303,13 @@ func (p *payment) VerifyAppleReceipt(c *gin.Context, uid int64, orderID string, 
 	}
 	//處理課表購買訂單
 	if order.OrderType == int(global.BuyCourseOrderType) {
-		if err := p.handleBuyCourseTrade(c, parserCourseOrder(order), receiptData, &response); err != nil {
+		if err := p.handleBuyCourseTrade(c, parserCourseOrder(order), receiptData, response); err != nil {
 			return err
 		}
 	}
 	//處理會員訂閱訂單
 	if order.OrderType == int(global.SubscribeOrderType) {
-		if err := p.handleSubscribeTradeForApple(c, uid, parserSubscribeOrder(order), receiptData, &response); err != nil {
+		if err := p.handleSubscribeTradeForApple(c, uid, parserSubscribeOrder(order), receiptData, response); err != nil {
 			return err
 		}
 	}
@@ -311,8 +325,8 @@ func (p *payment) VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string,
 	if order.UserID != uid {
 		return p.errHandler.Custom(8999, errors.New("無效的收據(此訂單非本人)"))
 	}
-	response := dto.GoogleReceiptResponse{
-		OrderID: time.Now().Format("20060102150405") + strconv.Itoa(int(randRange(100, 999))),
+	response := dto.IABProductAPIResponse{
+		OrderId: time.Now().Format("20060102150405") + strconv.Itoa(int(randRange(100, 999))),
 	}
 	//處理課表購買訂單
 	if order.OrderType == int(global.BuyCourseOrderType) {
@@ -331,13 +345,16 @@ func (p *payment) VerifyGoogleReceipt(c *gin.Context, uid int64, orderID string,
 
 func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString string) errcode.Error {
 	//解析字串
-	response, err := p.iapHandler.DecodeIAPNotificationResponse(base64PayloadString)
-	if err != nil {
-		return p.errHandler.Set(c, "iap parser", err)
-	}
+	response := dto.NewIAPNotificationResponse(strings.Split(base64PayloadString, ".")[1])
 	subscribeLogType := p.iapHandler.ParserIAPNotificationType(response.NotificationType, response.Subtype)
 	//存取 subscribe log
-	_, err = p.subscribeLogRepo.SaveSubscribeLog(nil, &model.CreateSubscribeLogParam{
+	if response.Data == nil {
+		return p.errHandler.Custom(8999, errors.New("error parser notification"))
+	}
+	if response.Data.SignedTransactionInfo == nil || response.Data.SignedRenewalInfo == nil {
+		return p.errHandler.Custom(8999, errors.New("error parser notification"))
+	}
+	_, err := p.subscribeLogRepo.SaveSubscribeLog(nil, &model.CreateSubscribeLogParam{
 		OriginalTransactionID: response.Data.SignedTransactionInfo.OriginalTransactionId,
 		TransactionID:         response.Data.SignedTransactionInfo.TransactionId,
 		PurchaseDate:          parserIAPDate(response.Data.SignedTransactionInfo.PurchaseDate / 1000).Format("2006-01-02 15:04:05"),
@@ -413,43 +430,15 @@ func (p *payment) HandleAppStoreNotification(c *gin.Context, base64PayloadString
 		return p.errHandler.Set(c, "order repo", err)
 	}
 	p.transactionRepo.FinishTransaction(tx)
-	fmt.Printf("NotificationType: %v \n", response.NotificationType)
-	fmt.Printf("Subtype: %v \n", response.Subtype)
+	return nil
+}
 
-	fmt.Printf("Data.Environment: %v \n", response.Data.Environment)
-
-	fmt.Printf("SignedRenewalInfo.AutoRenewProductId: %v \n", response.Data.SignedRenewalInfo.AutoRenewProductId)
-	fmt.Printf("SignedRenewalInfo.AutoRenewStatus: %v \n", response.Data.SignedRenewalInfo.AutoRenewStatus)
-	fmt.Printf("SignedRenewalInfo.ExpirationIntent: %v \n", response.Data.SignedRenewalInfo.ExpirationIntent)
-	fmt.Printf("SignedRenewalInfo.GracePeriodExpiresDate: %v \n", parserIAPDate(response.Data.SignedRenewalInfo.GracePeriodExpiresDate/1000).Format("2006-01-02 15:04:05"))
-	fmt.Printf("SignedRenewalInfo.IsInBillingRetryPeriod: %v \n", response.Data.SignedRenewalInfo.IsInBillingRetryPeriod)
-	fmt.Printf("SignedRenewalInfo.OfferIdentifier: %v \n", response.Data.SignedRenewalInfo.OfferIdentifier)
-	fmt.Printf("SignedRenewalInfo.OfferType: %v \n", response.Data.SignedRenewalInfo.OfferType)
-	fmt.Printf("SignedRenewalInfo.OriginalTransactionId: %v \n", response.Data.SignedRenewalInfo.OriginalTransactionId)
-	fmt.Printf("SignedRenewalInfo.PriceIncreaseStatus: %v \n", response.Data.SignedRenewalInfo.PriceIncreaseStatus)
-	fmt.Printf("SignedRenewalInfo.ProductId: %v \n", response.Data.SignedRenewalInfo.ProductId)
-	fmt.Printf("SignedRenewalInfo.SignedDate: %v \n", parserIAPDate(response.Data.SignedRenewalInfo.SignedDate/1000).Format("2006-01-02 15:04:05"))
-
-	fmt.Printf("SignedTransactionInfo.AppAccountToken: %v \n", response.Data.SignedTransactionInfo.AppAccountToken)
-	fmt.Printf("SignedTransactionInfo.BundleId: %v \n", response.Data.SignedTransactionInfo.BundleId)
-	fmt.Printf("SignedTransactionInfo.ExpiresDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.ExpiresDate/1000).Format("2006-01-02 15:04:05"))
-	fmt.Printf("SignedTransactionInfo.InAppOwnershipType: %v \n", response.Data.SignedTransactionInfo.InAppOwnershipType)
-	fmt.Printf("SignedTransactionInfo.IsUpgraded: %v \n", response.Data.SignedTransactionInfo.IsUpgraded)
-	fmt.Printf("SignedTransactionInfo.OfferIdentifier: %v \n", response.Data.SignedTransactionInfo.OfferIdentifier)
-	fmt.Printf("SignedTransactionInfo.OfferType: %v \n", response.Data.SignedTransactionInfo.OfferType)
-	fmt.Printf("SignedTransactionInfo.OriginalPurchaseDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.OriginalPurchaseDate/1000).Format("2006-01-02 15:04:05"))
-	fmt.Printf("SignedTransactionInfo.OriginalTransactionId: %v \n", response.Data.SignedTransactionInfo.OriginalTransactionId)
-	fmt.Printf("SignedTransactionInfo.ProductId: %v \n", response.Data.SignedTransactionInfo.ProductId)
-	fmt.Printf("SignedTransactionInfo.PurchaseDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.PurchaseDate/1000).Format("2006-01-02 15:04:05"))
-	fmt.Printf("SignedTransactionInfo.Quantity: %v \n", response.Data.SignedTransactionInfo.Quantity)
-	fmt.Printf("SignedTransactionInfo.RevocationDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.RevocationDate/1000).Format("2006-01-02 15:04:05"))
-	fmt.Printf("SignedTransactionInfo.RevocationReason: %v \n", response.Data.SignedTransactionInfo.RevocationReason)
-	fmt.Printf("SignedTransactionInfo.SignedDate: %v \n", parserIAPDate(response.Data.SignedTransactionInfo.SignedDate/1000).Format("2006-01-02 15:04:05"))
-	fmt.Printf("SignedTransactionInfo.SubscriptionGroupIdentifier: %v \n", response.Data.SignedTransactionInfo.SubscriptionGroupIdentifier)
-	fmt.Printf("SignedTransactionInfo.TransactionId: %v \n", response.Data.SignedTransactionInfo.TransactionId)
-	fmt.Printf("SignedTransactionInfo.Type: %v \n", response.Data.SignedTransactionInfo.Type)
-	fmt.Printf("SignedTransactionInfo.WebOrderLineItemId: %v \n", response.Data.SignedTransactionInfo.WebOrderLineItemId)
-
+func (p *payment) HandleGooglePlayNotification(c *gin.Context, base64PayloadString string) errcode.Error {
+	dict, err := p.iabHandler.DecodeIAPNotificationResponse(base64PayloadString)
+	if err != nil {
+		return p.errHandler.Set(c, "iap handler error", err)
+	}
+	fmt.Println(dict)
 	return nil
 }
 
@@ -482,7 +471,7 @@ func (p *payment) handleFreeCourseTrade(c *gin.Context, order *dto.CourseOrder) 
 	return nil
 }
 
-func (p *payment) handleBuyCourseTrade(c *gin.Context, order *dto.CourseOrder, receiptData string, response *dto.AppleReceiptResponse) errcode.Error {
+func (p *payment) handleBuyCourseTrade(c *gin.Context, order *dto.CourseOrder, receiptData string, response *dto.IAPVerifyReceiptResponse) errcode.Error {
 	//驗證產品id
 	if order.SaleItem.ProductID != response.Receipt.InApp[0].ProductID {
 		return p.errHandler.Custom(8999, errors.New("無效的收據(產品ID不匹配)"))
@@ -499,9 +488,9 @@ func (p *payment) handleBuyCourseTrade(c *gin.Context, order *dto.CourseOrder, r
 	return nil
 }
 
-func (p *payment) handleBuyCourseTradeForGoogle(c *gin.Context, order *dto.CourseOrder, receiptData string, response *dto.GoogleReceiptResponse) errcode.Error {
-	if err := p.handleCourseOrderTrade(order, global.GooglePaymentType, response.OrderID,
-		response.OrderID, order.SaleItem.ProductID, 1, receiptData); err != nil {
+func (p *payment) handleBuyCourseTradeForGoogle(c *gin.Context, order *dto.CourseOrder, receiptData string, response *dto.IABProductAPIResponse) errcode.Error {
+	if err := p.handleCourseOrderTrade(order, global.GooglePaymentType, response.OrderId,
+		response.OrderId, order.SaleItem.ProductID, 1, receiptData); err != nil {
 		return p.errHandler.Set(c, "trade error", err)
 	}
 	return nil
@@ -554,7 +543,7 @@ func (p *payment) handleCourseOrderTrade(order *dto.CourseOrder, paymentType glo
 	return nil
 }
 
-func (p *payment) handleSubscribeTradeForApple(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.AppleReceiptResponse) errcode.Error {
+func (p *payment) handleSubscribeTradeForApple(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.IAPVerifyReceiptResponse) errcode.Error {
 	//驗證收據格式
 	if len(response.LatestReceiptInfo) == 0 || len(response.PendingRenewalInfo) == 0 {
 		return p.errHandler.Custom(8999, errors.New("收據格式錯誤"))
@@ -635,7 +624,7 @@ func (p *payment) handleSubscribeTradeForApple(c *gin.Context, uid int64, order 
 	return nil
 }
 
-func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.GoogleReceiptResponse) errcode.Error {
+func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order *dto.SubscribeOrder, receiptData string, response *dto.IABProductAPIResponse) errcode.Error {
 	//獲取訂閱項目資訊
 	subscribePlan, err := p.subscribePlanRepo.FinsSubscribePlanByProductID(order.SubscribePlan.ProductID)
 	if err != nil {
@@ -648,8 +637,8 @@ func (p *payment) handleSubscribeTradeForGoogle(c *gin.Context, uid int64, order
 		OrderID:               order.ID,
 		PaymentType:           int(global.ApplePaymentType),
 		ReceiptToken:          receiptData,
-		OriginalTransactionID: response.OrderID,
-		TransactionID:         response.OrderID,
+		OriginalTransactionID: response.OrderId,
+		TransactionID:         response.OrderId,
 		ProductID:             order.SubscribePlan.ProductID,
 		Quantity:              1,
 	})

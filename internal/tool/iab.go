@@ -16,6 +16,34 @@ func NewIAB(setting setting.IAB) IAB {
 	return &iab{setting}
 }
 
+func (i *iab) TokenURI() string {
+	jsonData, err := ioutil.ReadFile(i.setting.GetJsonFilePath())
+	if err != nil {
+		return ""
+	}
+	var dict map[string]string
+	if err := json.Unmarshal(jsonData, &dict); err != nil {
+		return ""
+	}
+	uri, ok := dict["token_uri"]
+	if !ok {
+		return ""
+	}
+	return uri
+}
+
+func (i *iab) URL() string {
+	return i.setting.GetURL()
+}
+
+func (i *iab) Scope() string {
+	return i.setting.GetScope()
+}
+
+func (i *iab) PackageName() string {
+	return i.setting.GetPackageName()
+}
+
 func (i *iab) GenerateGoogleOAuth2Token(duration time.Duration) (string, error) {
 	jsonData, err := ioutil.ReadFile(i.setting.GetJsonFilePath())
 	if err != nil {
@@ -35,7 +63,7 @@ func (i *iab) GenerateGoogleOAuth2Token(duration time.Duration) (string, error) 
 		"aud":   dict["token_uri"],
 		"iat":   time.Now().Unix(),
 		"exp":   time.Now().Add(duration).Unix(),
-		"scope": "https://www.googleapis.com/auth/androidpublisher",
+		"scope": i.setting.GetScope(),
 	})
 	token.Header["alg"] = "RS256"
 	token.Header["typ"] = "JWT"
@@ -45,9 +73,4 @@ func (i *iab) GenerateGoogleOAuth2Token(duration time.Duration) (string, error) 
 		return "", err
 	}
 	return tokenString, nil
-}
-
-func (i *iab) GenerateGooglePlayAPIAccessToken(duration time.Duration) (string, error) {
-	//TODO implement me
-	panic("implement me")
 }

@@ -48,14 +48,26 @@ func NewPayment(baseGroup *gin.RouterGroup,
 	baseGroup.POST("/app_store_notification/v2",
 		payment.AppStoreNotification)
 
+	baseGroup.POST("/google_play_notification",
+		payment.GooglePlayNotification)
+
 	baseGroup.GET("/app_store/subscriptions/:original_transaction_id",
 		payment.GetSubscriptions)
 
-	baseGroup.GET("/google_play_api/access_token",
-		payment.GetGooglePlayAPIAccessToken)
+	baseGroup.GET("/app_store/history/:original_transaction_id",
+		payment.GetHistory)
 
-	baseGroup.GET("/apple_store_api/access_token",
-		payment.GetAppleStoreAPIAccessToken)
+	baseGroup.GET("/google_play/access_token",
+		payment.GetGooglePlayDeveloperAPIAccessToken)
+
+	baseGroup.GET("/google_play/product/:product_id",
+		payment.GetGooglePlayDeveloperAPIProduct)
+
+	baseGroup.GET("/google_play/subscription/:product_id",
+		payment.GetGooglePlayDeveloperAPISubscription)
+
+	baseGroup.GET("/app_store/access_token",
+		payment.GetAppStoreServerAPIAccessToken)
 }
 
 // CreateCourseOrder 創建課表訂單
@@ -205,6 +217,17 @@ func (p *Payment) RedeemCourse(c *gin.Context) {
 	p.JSONSuccessResponse(c, nil, "success")
 }
 
+// AppStoreNotification 接收 apple real time notification
+// @Summary 接收 apple real time notification
+// @Description 接收 apple real time notification
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body validator.AppStoreResponseBodyV2 true "輸入參數"
+// @Success 200 {object} model.SuccessResult "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /app_store_notification/v2 [POST]
 func (p *Payment) AppStoreNotification(c *gin.Context) {
 	var body validator.AppStoreResponseBodyV2
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -219,14 +242,28 @@ func (p *Payment) AppStoreNotification(c *gin.Context) {
 	p.JSONSuccessResponse(c, nil, "success")
 }
 
+func (p *Payment) GooglePlayNotification(c *gin.Context) {
+	var body validator.GooglePlayResponseBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	err := p.PaymentService.HandleGooglePlayNotification(c, body.Message.Data)
+	if err != nil {
+		p.JSONSuccessResponse(c, nil, "success")
+		return
+	}
+	p.JSONSuccessResponse(c, nil, "success")
+}
+
 // GetSubscriptions 獲取訂閱資料(測試用)
-// @Summary 獲取訂閱資料
-// @Description 獲取訂閱資料
+// @Summary 獲取訂閱資料(測試用)
+// @Description 獲取訂閱資料(測試用)
 // @Tags Payment
 // @Accept json
 // @Produce json
 // @Param original_transaction_id path string true "交易id"
-// @Success 200 {object} model.SuccessResult{data=dto.IAPSubscribeResponse} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=dto.IAPSubscribeAPIResponse} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /app_store/subscriptions/{original_transaction_id} [GET]
 func (p *Payment) GetSubscriptions(c *gin.Context) {
@@ -235,7 +272,7 @@ func (p *Payment) GetSubscriptions(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	result, err := p.PaymentService.GetSubscriptions(c, uri.OriginalTransactionID)
+	result, err := p.PaymentService.GetAppStoreAPISubscriptions(c, uri.OriginalTransactionID)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return
@@ -243,7 +280,31 @@ func (p *Payment) GetSubscriptions(c *gin.Context) {
 	p.JSONSuccessResponse(c, result, "success")
 }
 
-// GetAppleStoreAPIAccessToken 取得 Apple Store api access token
+// GetHistory 獲取交易歷史資料(測試用)
+// @Summary 獲取交易歷史資料(測試用)
+// @Description 獲取交易歷史資料(測試用)
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Param original_transaction_id path string true "交易id"
+// @Success 200 {object} model.SuccessResult{data=dto.IAPSubscribeAPIResponse} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /app_store/history/{original_transaction_id} [GET]
+func (p *Payment) GetHistory(c *gin.Context) {
+	var uri validator.GetSubscriptionsUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, err := p.PaymentService.GetAppStoreAPIHistory(c, uri.OriginalTransactionID)
+	if err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, result, "success")
+}
+
+// GetAppStoreServerAPIAccessToken 取得 App Store Server api access token
 // @Summary 取得 Apple Store api access token
 // @Description 取得 Apple Store api access token
 // @Tags Payment
@@ -251,8 +312,8 @@ func (p *Payment) GetSubscriptions(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} model.SuccessResult "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /apple_store_api/access_token [GET]
-func (p *Payment) GetAppleStoreAPIAccessToken(c *gin.Context) {
+// @Router /app_store/access_token [GET]
+func (p *Payment) GetAppStoreServerAPIAccessToken(c *gin.Context) {
 	accessToken, err := p.PaymentService.GetAppleStoreApiAccessToken(c)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
@@ -261,7 +322,7 @@ func (p *Payment) GetAppleStoreAPIAccessToken(c *gin.Context) {
 	p.JSONSuccessResponse(c, accessToken, "success")
 }
 
-// GetGooglePlayAPIAccessToken 取得 google play api access token
+// GetGooglePlayDeveloperAPIAccessToken 取得 google play developer api access token
 // @Summary 取得 google play api access token
 // @Description 取得 google play api access token
 // @Tags Payment
@@ -269,12 +330,72 @@ func (p *Payment) GetAppleStoreAPIAccessToken(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} model.SuccessResult "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /google_play_api/access_token [GET]
-func (p *Payment) GetGooglePlayAPIAccessToken(c *gin.Context) {
+// @Router /google_play/access_token [GET]
+func (p *Payment) GetGooglePlayDeveloperAPIAccessToken(c *gin.Context) {
 	accessToken, err := p.PaymentService.GetGooglePlayApiAccessToken(c)
 	if err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
 	p.JSONSuccessResponse(c, accessToken, "success")
+}
+
+// GetGooglePlayDeveloperAPIProduct 取得 google play developer api product(測試用)
+// @Summary 取得 google play developer api product(測試用)
+// @Description 取得 google play developer api product(測試用)
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Param product_id path string true "產品id"
+// @Param purchase_token query string true "收據token"
+// @Success 200 {object} model.SuccessResult{data=dto.IABProductAPIResponse} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /google_play/product/{product_id} [GET]
+func (p *Payment) GetGooglePlayDeveloperAPIProduct(c *gin.Context) {
+	var uri validator.ProductIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var query validator.GooglePlayAPIGetProductQuery
+	if err := c.ShouldBindQuery(&query); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, err := p.PaymentService.GetGooglePlayAPIProduct(c, uri.ProductID, query.PurchaseToken)
+	if err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, result, "success")
+}
+
+// GetGooglePlayDeveloperAPISubscription 取得 google play developer api subscription(測試用)
+// @Summary 取得 google play developer api subscription(測試用)
+// @Description 取得 google play developer api subscription(測試用)
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Param product_id path string true "產品id"
+// @Param purchase_token query string true "收據token"
+// @Success 200 {object} model.SuccessResult{data=dto.IABSubscriptionAPIResponse} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /google_play/subscription/{product_id} [GET]
+func (p *Payment) GetGooglePlayDeveloperAPISubscription(c *gin.Context) {
+	var uri validator.ProductIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var query validator.GooglePlayAPIGetProductQuery
+	if err := c.ShouldBindQuery(&query); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	result, err := p.PaymentService.GetGooglePlayAPISubscription(c, uri.ProductID, query.PurchaseToken)
+	if err != nil {
+		p.JSONErrorResponse(c, err)
+		return
+	}
+	p.JSONSuccessResponse(c, result, "success")
 }
