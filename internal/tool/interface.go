@@ -74,7 +74,7 @@ type Resource interface {
 }
 
 type HttpRequest interface {
-	SendPostRequestWithJsonBody(url string, param map[string]interface{}) (map[string]interface{}, error)
+	SendRequest(method string, url string, header map[string]string, body map[string]interface{}) (map[string]interface{}, error)
 }
 
 type IAP interface {
@@ -83,4 +83,12 @@ type IAP interface {
 	AppServerAPIURL() string
 	Password() string
 	GenerateAppleStoreAPIToken(duration time.Duration) (string, error)
+}
+
+type IAB interface {
+	PackageName() string
+	TokenURI() string
+	URL() string
+	Scope() string
+	GenerateGoogleOAuth2Token(duration time.Duration) (string, error)
 }

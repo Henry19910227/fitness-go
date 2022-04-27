@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pc-api-6046046985659927532-582",
+  "private_key_id": "1878f3776f5cd705ab47d65ef4887898ea280ac6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCrhP62HpS1bYVC\n+sEMc5C+cjpUaT5A7kQAy38cd/TqKJsfU95o1MdgrD3j6HLcqPApDHIGpodGrwsP\ndhuWGAXTaCOnnBi1PWhMkQhcYIZMuGlcQhkoU1X+sIR9p/Z+QVF6IXspy3U9jnZs\n652SJ/xnR6qng8SBREDF7kZqBvo+4oA1SIFw5PjcVwSWMpJO7BYaLYlPO1srbPvp\nWvQOtBtF4r+XH4jpEzXNlsoqOLoYd0HmYa94DvfotEvUo2BnPBccokSDnXGEGGRQ\n/E+vEKVjJEFSX2oMobme9Icyq12DbXQ3gOdg5u2A1lV1ZDeS+T1wOzO0EinwAuS3\nhiEup08FAgMBAAECggEADZW9UeHmr98Cjs1LFIgjtv3Xol9qk5x7jN+RTAkxQAmi\nza6oHz/5Ia5KwZ4j2NfVm761WlL+xGmxU9JsOW1iKr4lEs2xhEteky/qjFyFzpZN\nnAXNNc0x8rf66nPu+U2FnUmBFoybltpNhW98/bpGisyZluaAHifwhGzMrXGriObo\nqZ2xsLYpB3OyNt4MbUEKV55n6eGUkWzs2G2Ai69Kytx6OOZnuNBGigsOhie+94dF\njmCp4v9e57Rq9v618fnahl48yCfYM9RtjybYNM29Kn4sQqSeyaCW3Yi+GNJgYP/e\n6uT3jsDJI0VzezRSYDA3tEwbOIWxbUddJNZR/UL0YQKBgQDyh3W0pXQ0N0V0eTt5\nCJE5YeYFOlphzYbX02NCq2XnTFBmpai7jw/3oiIwQ3OVgOSvni2p2hOtYxqm706/\n1W3+sJXA7cnBW999V4wb9dcQaU6x5wjFZfYC2K6uzk7nz0PjcxXLid26TkvxKUGZ\nU869uZlU+OqxUrHFPVUj6UbSZQKBgQC1C9gJjCKfmd/g8WqWkN1OC8BCJBG3MYM+\nd1Rs4zu8AATisiIBXAjr9vnRx/tmS6KL40+2rMbbpnFUiR74vefdQOtT3NCNEhvb\n73fnGZVqG1EtSNiWqDSo0tf+gxaBAPnXc8aomLFYLvkTH7JXM/Qq4oXU4ryNGG0a\nSfjS+fJwIQKBgCQl3H1YS8Gcm1WI3Dxl8n9DAC23TNFW+MoiT6EYOtAGp9Uky8lo\nwVB/cekPpKKb23nxcYznXBdztf07ndkpzoMvfqKKzo9rShw8eD2SnsNrbrdFYCFL\n2ScDdMXJKimS0uOLu6vimJG0Kc2AAK8BtsbAawInN5PGZ4imY5I+qrehAoGAOtdi\nm5fEGQM11DIiZlUm2BrRna2DZHrfIQo/kjQ4Ud3fuJ4Ul0SGUcqvXxMUDic+6SAz\n5Dc7WmA6LTNzsXxnQ226DkOSNIdSLqUh3yZdfWLre0BVxIFevA/qy3lncv4SNYgX\nZOxbl0GNCj4fBGCKVvXQcWRPy7vImea4zDkYJoECgYBJvEWSoRnsZCL4X8LfPFYl\n5aXsS5SRmIq782LHCttvli1VPfYJpAGINaYvGOUFkr5DpWWj0TRqlJyQSBxyJEbW\n7trwsci419kK8MN2iv69ye+It3anXxithfCr32SEW2QYExnHWTdLPF70UTfum6E4\nh2y3wAilXhIuMOXLDM4nmA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "fitness-iab-test@pc-api-6046046985659927532-582.iam.gserviceaccount.com",
+  "client_id": "105791818933094575998",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/fitness-iab-test%40pc-api-6046046985659927532-582.iam.gserviceaccount.com"
+}

@@ -169,18 +169,22 @@ type ReviewStatistic interface {
 
 type Order interface {
 	CreateCourseOrder(param *model.CreateOrderParam) (string, error)
-	CreateSubscribeOrder(param *model.CreateSubscribeOrderParam) (string, error)
+	CreateSubscribeOrder(userID int64) (string, error)
 	UpdateOrderStatus(tx *gorm.DB, orderID string, orderStatus global.OrderStatus) error
-	UpdateOrderSubscribePlan(tx *gorm.DB, orderID string, subscribePlanID int64) error
 	FindOrder(orderID string) (*model.Order, error)
 	FindOrderByOriginalTransactionID(originalTransactionID string) (*model.Order, error)
 	FindOrderByCourseID(userID int64, courseID int64) (*model.Order, error)
-	FindOrdersByUserID(userID int64, paymentOrderType global.PaymentOrderType, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Order, error)
+	FindOrders(userID int64, param *model.FindOrdersParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Order, error)
+}
+
+type OrderSubscribePlan interface {
+	SaveOrderSubscribePlan(tx *gorm.DB, orderID string, subscribePlanID int64) error
 }
 
 type Receipt interface {
 	SaveReceipt(tx *gorm.DB, param *model.CreateReceiptParam) (int64, error)
 	FindReceiptsByOrderID(orderID string, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Receipt, error)
+	FindReceiptsByPaymentType(userID int64, paymentType global.PaymentType, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Receipt, error)
 }
 
 type UserCourseAsset interface {

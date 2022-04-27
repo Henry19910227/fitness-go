@@ -1,5 +1,7 @@
 package model
 
+import "github.com/Henry19910227/fitness-go/internal/global"
+
 type Order struct {
 	ID             string              `gorm:"column:id"`                         // 訂單id
 	UserID         int64               `gorm:"column:user_id"`                    // 用戶id
@@ -46,9 +48,15 @@ type CreateOrderParam struct {
 
 type CreateSubscribeOrderParam struct {
 	UserID          int64 // 用戶id
-	SubscribePlanID int64  // 銷售項目id
+	SubscribePlanID int64 // 銷售項目id
 }
 
 type UpdateOrderParam struct {
 	OrderStatus int `gorm:"column:order_status"` // 訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)
+}
+
+type FindOrdersParam struct {
+	PaymentOrderType *global.PaymentOrderType //訂單類型(1:課表購買/2:會員訂閱)
+	OrderStatus      *global.OrderStatus      //訂單狀態(1:等待付款/2:已付款/3:錯誤/4:退費/5:取消)
+	SubscribePlanID  *int64                   // 訂閱項目id
 }

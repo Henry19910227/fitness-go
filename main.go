@@ -59,7 +59,7 @@ var (
 	reviewService     service.Review
 	paymentService    service.Payment
 	workoutLogService service.WorkoutLog
-	favoriteService service.Favorite
+	favoriteService   service.Favorite
 )
 
 var (
@@ -139,7 +139,7 @@ func main() {
 	controller.NewSale(baseGroup, saleService, userMidd)
 	controller.NewStore(baseGroup, storeService, courseService, planService, workoutService, workoutSetService, courseMidd, planMidd)
 	controller.NewReview(baseGroup, courseService, reviewService, userMidd, courseMidd, reviewMidd)
-	controller.NewPayment(baseGroup, paymentService, courseService, userMidd, courseMidd)
+	controller.NewPayment(baseGroup, paymentService, courseService, userMidd)
 	controller.NewFavorite(baseGroup, favoriteService, courseService, userMidd, courseMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)

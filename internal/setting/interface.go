@@ -32,7 +32,6 @@ type Redis interface {
 }
 
 type User interface {
-
 }
 
 type Logger interface {
@@ -66,4 +65,11 @@ type IAP interface {
 	GetKeyID() string
 	GetBundleID() string
 	GetIssuer() string
+}
+
+type IAB interface {
+	GetURL() string
+	GetScope() string
+	GetJsonFilePath() string
+	GetPackageName() string
 }

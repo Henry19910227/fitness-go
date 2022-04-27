@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/Henry19910227/fitness-go/internal/model"
+
 type CourseOrder struct {
 	ID          string                `json:"id" example:"202105201300687423"`         // 訂單id
 	UserID      int64                 `json:"user_id" example:"10001"`                 // 用戶id
@@ -21,6 +23,32 @@ type SubscribeOrder struct {
 	SubscribePlan *SubscribePlan `json:"subscribe_plan"`                          // 銷售項目
 	CreateAt      string         `json:"create_at" example:"2021-05-28 11:00:00"` // 創建時間
 	UpdateAt      string         `json:"update_at" example:"2021-05-28 11:00:00"` // 更新時間
+}
+
+func NewSubscribeOrder(data *model.Order) SubscribeOrder {
+	order := SubscribeOrder{
+		ID:          data.ID,
+		UserID:      data.UserID,
+		Quantity:    data.Quantity,
+		OrderType:   data.OrderType,
+		OrderStatus: data.OrderStatus,
+		CreateAt:    data.CreateAt,
+		UpdateAt:    data.UpdateAt,
+	}
+	if data.OrderSubscribe != nil {
+		if data.OrderSubscribe.SubscribePlan != nil {
+			order.SubscribePlan = &SubscribePlan{
+				ID:     data.OrderSubscribe.SubscribePlan.ID,
+				Period: data.OrderSubscribe.SubscribePlan.Period,
+			}
+			if data.OrderSubscribe.SubscribePlan.ProductLabel != nil {
+				order.SubscribePlan.ProductID = data.OrderSubscribe.SubscribePlan.ProductLabel.ProductID
+				order.SubscribePlan.Name = data.OrderSubscribe.SubscribePlan.ProductLabel.Name
+				order.SubscribePlan.Twd = data.OrderSubscribe.SubscribePlan.ProductLabel.Twd
+			}
+		}
+	}
+	return order
 }
 
 type CreateOrderParam struct {

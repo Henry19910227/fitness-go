@@ -347,9 +347,9 @@ var doc = `{
                 }
             }
         },
-        "/app_store/subscriptions/{original_transaction_id}": {
+        "/app_store/access_token": {
             "get": {
-                "description": "獲取訂閱資料",
+                "description": "取得 Apple Store api access token",
                 "consumes": [
                     "application/json"
                 ],
@@ -359,7 +359,36 @@ var doc = `{
                 "tags": [
                     "Payment"
                 ],
-                "summary": "獲取訂閱資料",
+                "summary": "取得 Apple Store api access token",
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/app_store/history/{original_transaction_id}": {
+            "get": {
+                "description": "獲取交易歷史資料(測試用)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "獲取交易歷史資料(測試用)",
                 "parameters": [
                     {
                         "type": "string",
@@ -381,7 +410,57 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.IAPSubscribeResponse"
+                                            "$ref": "#/definitions/dto.IAPSubscribeAPIResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/app_store/subscriptions/{original_transaction_id}": {
+            "get": {
+                "description": "獲取訂閱資料(測試用)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "獲取訂閱資料(測試用)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "交易id",
+                        "name": "original_transaction_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.IAPSubscribeAPIResponse"
                                         }
                                     }
                                 }
@@ -2226,6 +2305,149 @@ var doc = `{
                         "description": "刪除成功!",
                         "schema": {
                             "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/google_play/access_token": {
+            "get": {
+                "description": "取得 google play api access token(測試用)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "取得 google play api access token(測試用)",
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/google_play/product/{product_id}": {
+            "get": {
+                "description": "取得 google play developer api product(測試用)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "取得 google play developer api product(測試用)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "產品id",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "收據token",
+                        "name": "purchase_token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.IABProductAPIResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/google_play/subscription/{product_id}": {
+            "get": {
+                "description": "取得 google play developer api subscription(測試用)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "取得 google play developer api subscription(測試用)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "產品id",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "收據token",
+                        "name": "purchase_token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "獲取成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.IABSubscriptionAPIResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -4394,7 +4616,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "驗證Android收據",
+                "description": "驗證google收據",
                 "consumes": [
                     "application/json"
                 ],
@@ -4404,7 +4626,7 @@ var doc = `{
                 "tags": [
                     "Payment"
                 ],
-                "summary": "驗證Android收據",
+                "summary": "驗證google收據",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -4412,7 +4634,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/validator.VerifyReceiptBody"
+                            "$ref": "#/definitions/validator.VerifyGoogleReceiptBody"
                         }
                     }
                 ],
@@ -6666,7 +6888,184 @@ var doc = `{
                 }
             }
         },
-        "dto.IAPSubscribeResponse": {
+        "dto.IABProductAPIResponse": {
+            "type": "object",
+            "properties": {
+                "acknowledgementState": {
+                    "type": "integer"
+                },
+                "consumptionState": {
+                    "type": "integer"
+                },
+                "developerPayload": {
+                    "type": "string"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "obfuscatedExternalAccountId": {
+                    "type": "string"
+                },
+                "obfuscatedExternalProfileId": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": "string"
+                },
+                "productId": {
+                    "type": "string"
+                },
+                "purchaseState": {
+                    "type": "integer"
+                },
+                "purchaseTimeMillis": {
+                    "type": "string"
+                },
+                "purchaseToken": {
+                    "type": "string"
+                },
+                "purchaseType": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "regionCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.IABSubscriptionAPIResponse": {
+            "type": "object",
+            "properties": {
+                "acknowledgementState": {
+                    "type": "integer"
+                },
+                "autoRenewing": {
+                    "type": "boolean"
+                },
+                "autoResumeTimeMillis": {
+                    "type": "string"
+                },
+                "cancelReason": {
+                    "type": "integer"
+                },
+                "cancelSurveyResult": {
+                    "$ref": "#/definitions/dto.SubscriptionCancelSurveyResult"
+                },
+                "countryCode": {
+                    "type": "string"
+                },
+                "developerPayload": {
+                    "type": "string"
+                },
+                "emailAddress": {
+                    "type": "string"
+                },
+                "expiryTimeMillis": {
+                    "type": "string"
+                },
+                "externalAccountId": {
+                    "type": "string"
+                },
+                "familyName": {
+                    "type": "string"
+                },
+                "givenName": {
+                    "type": "string"
+                },
+                "introductoryPriceInfo": {
+                    "$ref": "#/definitions/dto.IntroductoryPriceInfo"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "linkedPurchaseToken": {
+                    "type": "string"
+                },
+                "obfuscatedExternalAccountId": {
+                    "type": "string"
+                },
+                "obfuscatedExternalProfileId": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": "string"
+                },
+                "paymentState": {
+                    "description": "0. Payment pending 1. Payment received 2. Free trial 3. Pending deferred upgrade/downgrade",
+                    "type": "integer"
+                },
+                "priceAmountMicros": {
+                    "type": "string"
+                },
+                "priceChange": {
+                    "$ref": "#/definitions/dto.SubscriptionPriceChange"
+                },
+                "priceCurrencyCode": {
+                    "type": "string"
+                },
+                "profileId": {
+                    "type": "string"
+                },
+                "profileName": {
+                    "type": "string"
+                },
+                "promotionCode": {
+                    "type": "string"
+                },
+                "promotionType": {
+                    "type": "integer"
+                },
+                "purchaseType": {
+                    "type": "integer"
+                },
+                "startTimeMillis": {
+                    "type": "string"
+                },
+                "userCancellationTimeMillis": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.IAPSubscribeAPIResponse": {
+            "type": "object",
+            "properties": {
+                "appAppleId": {
+                    "type": "integer"
+                },
+                "bundleId": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.SubscriptionGroupIdentifierItem"
+                    }
+                },
+                "environment": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.IntroductoryPriceInfo": {
+            "type": "object",
+            "properties": {
+                "introductoryPriceAmountMicros": {
+                    "type": "string"
+                },
+                "introductoryPriceCurrencyCode": {
+                    "type": "string"
+                },
+                "introductoryPriceCycles": {
+                    "type": "integer"
+                },
+                "introductoryPricePeriod": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LastTransactionsItem": {
             "type": "object",
             "properties": {
                 "originalTransactionID": {
@@ -6796,6 +7195,17 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/dto.WorkoutStructure"
                     }
+                }
+            }
+        },
+        "dto.Price": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "type": "string"
+                },
+                "priceMicros": {
+                    "type": "string"
                 }
             }
         },
@@ -6948,6 +7358,10 @@ var doc = `{
         "dto.SignedRenewalInfo": {
             "type": "object",
             "properties": {
+                "appAccountToken": {
+                    "description": "應用內購買的產品標識符",
+                    "type": "string"
+                },
                 "autoRenewProductId": {
                     "description": "在下一個計費周期續訂的產品的產品標識符",
                     "type": "string"
@@ -6983,10 +7397,6 @@ var doc = `{
                 "priceIncreaseStatus": {
                     "description": "指示客戶是否已批准訂閱價格上漲的狀態",
                     "type": "integer"
-                },
-                "productId": {
-                    "description": "應用內購買的產品標識符",
-                    "type": "string"
                 },
                 "signedDate": {
                     "description": "App Store 對 JSON Web 簽名數據進行簽名的 UNIX 時間（以毫秒為單位）",
@@ -7177,6 +7587,42 @@ var doc = `{
                     "description": "台幣價格",
                     "type": "integer",
                     "example": 330
+                }
+            }
+        },
+        "dto.SubscriptionCancelSurveyResult": {
+            "type": "object",
+            "properties": {
+                "cancelSurveyReason": {
+                    "type": "integer"
+                },
+                "userInputCancelReason": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SubscriptionGroupIdentifierItem": {
+            "type": "object",
+            "properties": {
+                "lastTransactions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.LastTransactionsItem"
+                    }
+                },
+                "subscriptionGroupIdentifier": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SubscriptionPriceChange": {
+            "type": "object",
+            "properties": {
+                "newPrice": {
+                    "$ref": "#/definitions/dto.Price"
+                },
+                "state": {
+                    "type": "integer"
                 }
             }
         },
@@ -8540,6 +8986,31 @@ var doc = `{
                     "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "validator.VerifyGoogleReceiptBody": {
+            "type": "object",
+            "required": [
+                "order_id",
+                "product_id",
+                "receipt_data"
+            ],
+            "properties": {
+                "order_id": {
+                    "description": "訂單 id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "product_id": {
+                    "description": "產品 id",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
+                },
+                "receipt_data": {
+                    "description": "收據token",
+                    "type": "string",
+                    "example": "MIJOlgYJKoZIhvcN..."
                 }
             }
         },

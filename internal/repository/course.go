@@ -193,7 +193,7 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 	//加入 user_id 篩選條件
 	if param.UID != nil {
 		query += "AND courses.user_id = ? "
-		params = append(params, param.UID)
+		params = append(params, *param.UID)
 	}
 	//加入 status 篩選條件
 	if param.Status != nil {
