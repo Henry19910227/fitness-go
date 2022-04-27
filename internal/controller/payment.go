@@ -159,14 +159,14 @@ func (p *Payment) VerifyAppleReceipt(c *gin.Context) {
 	p.JSONSuccessResponse(c, nil, "success")
 }
 
-// VerifyGoogleReceipt 驗證Android收據
-// @Summary 驗證Android收據
-// @Description 驗證Android收據
+// VerifyGoogleReceipt 驗證google收據
+// @Summary 驗證google收據
+// @Description 驗證google收據
 // @Tags Payment
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param json_body body validator.VerifyReceiptBody true "輸入參數"
+// @Param json_body body validator.VerifyGoogleReceiptBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
 // @Router /verify_google_receipt [POST]
@@ -176,12 +176,12 @@ func (p *Payment) VerifyGoogleReceipt(c *gin.Context) {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	var body validator.VerifyReceiptBody
+	var body validator.VerifyGoogleReceiptBody
 	if err := c.ShouldBindJSON(&body); err != nil {
 		p.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	if err := p.PaymentService.VerifyGoogleReceipt(c, uid, body.OrderID, body.ReceiptData); err != nil {
+	if err := p.PaymentService.VerifyGoogleReceipt(c, uid, body.OrderID, body.ProductID, body.ReceiptData); err != nil {
 		p.JSONErrorResponse(c, err)
 		return
 	}
@@ -217,17 +217,6 @@ func (p *Payment) RedeemCourse(c *gin.Context) {
 	p.JSONSuccessResponse(c, nil, "success")
 }
 
-// AppStoreNotification 接收 apple real time notification
-// @Summary 接收 apple real time notification
-// @Description 接收 apple real time notification
-// @Tags Payment
-// @Accept json
-// @Produce json
-// @Security fitness_token
-// @Param json_body body validator.AppStoreResponseBodyV2 true "輸入參數"
-// @Success 200 {object} model.SuccessResult "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /app_store_notification/v2 [POST]
 func (p *Payment) AppStoreNotification(c *gin.Context) {
 	var body validator.AppStoreResponseBodyV2
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -250,7 +239,7 @@ func (p *Payment) GooglePlayNotification(c *gin.Context) {
 	}
 	err := p.PaymentService.HandleGooglePlayNotification(c, body.Message.Data)
 	if err != nil {
-		p.JSONSuccessResponse(c, nil, "success")
+		p.JSONErrorResponse(c, err)
 		return
 	}
 	p.JSONSuccessResponse(c, nil, "success")
@@ -322,9 +311,9 @@ func (p *Payment) GetAppStoreServerAPIAccessToken(c *gin.Context) {
 	p.JSONSuccessResponse(c, accessToken, "success")
 }
 
-// GetGooglePlayDeveloperAPIAccessToken 取得 google play developer api access token
-// @Summary 取得 google play api access token
-// @Description 取得 google play api access token
+// GetGooglePlayDeveloperAPIAccessToken 取得 google play developer api access token(測試用)
+// @Summary 取得 google play api access token(測試用)
+// @Description 取得 google play api access token(測試用)
 // @Tags Payment
 // @Accept json
 // @Produce json

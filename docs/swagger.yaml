@@ -829,6 +829,10 @@ definitions:
         type: string
       orderId:
         type: string
+      paymentState:
+        description: 0. Payment pending 1. Payment received 2. Free trial 3. Pending
+          deferred upgrade/downgrade
+        type: integer
       priceAmountMicros:
         type: string
       priceChange:
@@ -1984,14 +1988,6 @@ definitions:
         example: 10001
         type: integer
     type: object
-  validator.AppStoreResponseBodyV2:
-    properties:
-      signedPayload:
-        description: The payload in JSON Web Signature (JWS) format, signed by the
-          App Store
-        example: MIJOlgYJKoZIhvcN...
-        type: string
-    type: object
   validator.CreateCourseBody:
     properties:
       category:
@@ -2322,6 +2318,25 @@ definitions:
     required:
     - nickname
     type: object
+  validator.VerifyGoogleReceiptBody:
+    properties:
+      order_id:
+        description: 訂單 id
+        example: "202105201300687423"
+        type: string
+      product_id:
+        description: 產品 id
+        example: com.fitness.xxx
+        type: string
+      receipt_data:
+        description: 收據token
+        example: MIJOlgYJKoZIhvcN...
+        type: string
+    required:
+    - order_id
+    - product_id
+    - receipt_data
+    type: object
   validator.VerifyReceiptBody:
     properties:
       order_id:
@@ -2627,34 +2642,6 @@ paths:
           schema:
             $ref: '#/definitions/model.ErrorResult'
       summary: 獲取訂閱資料(測試用)
-      tags:
-      - Payment
-  /app_store_notification/v2:
-    post:
-      consumes:
-      - application/json
-      description: 接收 apple real time notification
-      parameters:
-      - description: 輸入參數
-        in: body
-        name: json_body
-        required: true
-        schema:
-          $ref: '#/definitions/validator.AppStoreResponseBodyV2'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            $ref: '#/definitions/model.SuccessResult'
-        "400":
-          description: 失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 接收 apple real time notification
       tags:
       - Payment
   /course:
@@ -3774,7 +3761,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 取得 google play api access token
+      description: 取得 google play api access token(測試用)
       produces:
       - application/json
       responses:
@@ -3786,7 +3773,7 @@ paths:
           description: 獲取失敗
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 取得 google play api access token
+      summary: 取得 google play api access token(測試用)
       tags:
       - Payment
   /google_play/product/{product_id}:
@@ -5183,14 +5170,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: 驗證Android收據
+      description: 驗證google收據
       parameters:
       - description: 輸入參數
         in: body
         name: json_body
         required: true
         schema:
-          $ref: '#/definitions/validator.VerifyReceiptBody'
+          $ref: '#/definitions/validator.VerifyGoogleReceiptBody'
       produces:
       - application/json
       responses:
@@ -5204,7 +5191,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 驗證Android收據
+      summary: 驗證google收據
       tags:
       - Payment
   /workout/{workout_id}:

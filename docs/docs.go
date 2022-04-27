@@ -476,51 +476,6 @@ var doc = `{
                 }
             }
         },
-        "/app_store_notification/v2": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "接收 apple real time notification",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Payment"
-                ],
-                "summary": "接收 apple real time notification",
-                "parameters": [
-                    {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.AppStoreResponseBodyV2"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/model.SuccessResult"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
         "/course": {
             "post": {
                 "security": [
@@ -2363,7 +2318,7 @@ var doc = `{
         },
         "/google_play/access_token": {
             "get": {
-                "description": "取得 google play api access token",
+                "description": "取得 google play api access token(測試用)",
                 "consumes": [
                     "application/json"
                 ],
@@ -2373,7 +2328,7 @@ var doc = `{
                 "tags": [
                     "Payment"
                 ],
-                "summary": "取得 google play api access token",
+                "summary": "取得 google play api access token(測試用)",
                 "responses": {
                     "200": {
                         "description": "獲取成功!",
@@ -4661,7 +4616,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "驗證Android收據",
+                "description": "驗證google收據",
                 "consumes": [
                     "application/json"
                 ],
@@ -4671,7 +4626,7 @@ var doc = `{
                 "tags": [
                     "Payment"
                 ],
-                "summary": "驗證Android收據",
+                "summary": "驗證google收據",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -4679,7 +4634,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/validator.VerifyReceiptBody"
+                            "$ref": "#/definitions/validator.VerifyGoogleReceiptBody"
                         }
                     }
                 ],
@@ -7037,6 +6992,10 @@ var doc = `{
                 "orderId": {
                     "type": "string"
                 },
+                "paymentState": {
+                    "description": "0. Payment pending 1. Payment received 2. Free trial 3. Pending deferred upgrade/downgrade",
+                    "type": "integer"
+                },
                 "priceAmountMicros": {
                     "type": "string"
                 },
@@ -8581,16 +8540,6 @@ var doc = `{
                 }
             }
         },
-        "validator.AppStoreResponseBodyV2": {
-            "type": "object",
-            "properties": {
-                "signedPayload": {
-                    "description": "The payload in JSON Web Signature (JWS) format, signed by the App Store",
-                    "type": "string",
-                    "example": "MIJOlgYJKoZIhvcN..."
-                }
-            }
-        },
         "validator.CreateCourseBody": {
             "type": "object",
             "required": [
@@ -9037,6 +8986,31 @@ var doc = `{
                     "description": "暱稱 (1~20字元)",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "validator.VerifyGoogleReceiptBody": {
+            "type": "object",
+            "required": [
+                "order_id",
+                "product_id",
+                "receipt_data"
+            ],
+            "properties": {
+                "order_id": {
+                    "description": "訂單 id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "product_id": {
+                    "description": "產品 id",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
+                },
+                "receipt_data": {
+                    "description": "收據token",
+                    "type": "string",
+                    "example": "MIJOlgYJKoZIhvcN..."
                 }
             }
         },

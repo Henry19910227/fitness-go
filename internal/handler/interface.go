@@ -85,8 +85,9 @@ type IAP interface {
 }
 
 type IAB interface {
+	ParserIABNotificationType(notificationType int) global.SubscribeLogType
+	ParserIABNotificationMsg(notificationType int) string
 	GetGooglePlayApiAccessToken() (string, error)
 	GetProductsAPI(productID string, purchaseToken string) (*dto.IABProductAPIResponse, error)
 	GetSubscriptionAPI(productID string, purchaseToken string) (*dto.IABSubscriptionAPIResponse, error)
-	DecodeIAPNotificationResponse(base64String string) (map[string]interface{}, error)
 }

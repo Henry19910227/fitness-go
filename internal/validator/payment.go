@@ -13,6 +13,12 @@ type VerifyReceiptBody struct {
 	OrderID     string `json:"order_id" binding:"required" example:"202105201300687423"`      // 訂單 id
 }
 
+type VerifyGoogleReceiptBody struct {
+	ReceiptData string `json:"receipt_data" binding:"required" example:"MIJOlgYJKoZIhvcN..."` // 收據token
+	ProductID   string `json:"product_id" binding:"required" example:"com.fitness.xxx"`       // 產品 id
+	OrderID     string `json:"order_id" binding:"required" example:"202105201300687423"`      // 訂單 id
+}
+
 type RedeemCourseBody struct {
 	OrderID string `json:"order_id" binding:"required" example:"202105201300687423"` // 訂單 id
 }
