@@ -5971,6 +5971,22 @@ var doc = `{
                     "type": "integer",
                     "example": 12
                 },
+                "max_distance": {
+                    "description": "最高速率",
+                    "type": "object",
+                    "properties": {
+                        "update_at": {
+                            "description": "紀錄更新時間",
+                            "type": "string",
+                            "example": "2021-05-28 11:00:00"
+                        },
+                        "value": {
+                            "description": "最長距離(公里)",
+                            "type": "number",
+                            "example": 15
+                        }
+                    }
+                },
                 "max_reps": {
                     "description": "最多次數",
                     "type": "object",
@@ -5983,7 +5999,7 @@ var doc = `{
                         "value": {
                             "description": "最多次數",
                             "type": "integer",
-                            "example": 100
+                            "example": 10
                         }
                     }
                 },
@@ -6015,7 +6031,7 @@ var doc = `{
                         "value": {
                             "description": "最高速率",
                             "type": "number",
-                            "example": 100
+                            "example": 90
                         }
                     }
                 },
@@ -6045,9 +6061,9 @@ var doc = `{
                             "example": "2021-05-28 11:00:00"
                         },
                         "value": {
-                            "description": "最短時長",
+                            "description": "最短時長(秒)",
                             "type": "integer",
-                            "example": 100
+                            "example": 3600
                         }
                     }
                 }
