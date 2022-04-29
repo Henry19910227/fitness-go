@@ -209,19 +209,22 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 	for _, actionPR := range actionPRs {
 		actionPRDict[actionPR.ActionID] = actionPR
 	}
-	//比較最佳紀錄並更新最大reps
+	//比較最佳紀錄並打上tag(皇冠標籤)
 	updateMaxRepsActionIDs := make([]int64, 0)
 	updateMaxRmActionIDs := make([]int64, 0)
 	updateMaxWeightActionIDs := make([]int64, 0)
 	updateMinDurationActionIDs := make([]int64, 0)
 	updateMaxSpeedActionIDs := make([]int64, 0)
+	updateMaxDistanceActionIDs := make([]int64, 0)
 	for _, setLogTag := range workoutSetLogTags {
 		pr, ok := actionPRDict[setLogTag.WorkoutSet.Action.ID]
 		if ok {
+			//比較最多reps
 			if setLogTag.Reps > pr.MaxReps {
 				setLogTag.NewRecord = 1
 				updateMaxRepsActionIDs = append(updateMaxRepsActionIDs, setLogTag.WorkoutSet.Action.ID)
 			}
+			//比較最大rm
 			rm, err := strconv.ParseFloat(fmt.Sprintf("%.1f", setLogTag.Weight*(1+0.0333*float64(setLogTag.Reps))), 64)
 			if err != nil {
 				tx.Rollback()
@@ -231,10 +234,12 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 				setLogTag.NewRecord = 1
 				updateMaxRmActionIDs = append(updateMaxRmActionIDs, setLogTag.WorkoutSet.Action.ID)
 			}
+			//比較最大重量
 			if setLogTag.Weight > pr.MaxWeight {
 				setLogTag.NewRecord = 1
 				updateMaxWeightActionIDs = append(updateMaxWeightActionIDs, setLogTag.WorkoutSet.Action.ID)
 			}
+			//比較最短時間
 			if pr.MinDuration == 0 {
 				setLogTag.NewRecord = 1
 				updateMinDurationActionIDs = append(updateMinDurationActionIDs, setLogTag.WorkoutSet.Action.ID)
@@ -243,6 +248,7 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 				setLogTag.NewRecord = 1
 				updateMinDurationActionIDs = append(updateMinDurationActionIDs, setLogTag.WorkoutSet.Action.ID)
 			}
+			//比較最大速率
 			speed, err := strconv.ParseFloat(fmt.Sprintf("%.1f", setLogTag.Distance*1000/float64(setLogTag.Duration)*3600/1000), 64)
 			if err != nil {
 				tx.Rollback()
@@ -251,6 +257,11 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 			if speed > pr.MaxSpeed {
 				setLogTag.NewRecord = 1
 				updateMaxSpeedActionIDs = append(updateMaxSpeedActionIDs, setLogTag.WorkoutSet.Action.ID)
+			}
+			//比較最長距離
+			if setLogTag.Distance > pr.MaxDistance {
+				setLogTag.NewRecord = 1
+				updateMaxDistanceActionIDs = append(updateMaxDistanceActionIDs, setLogTag.WorkoutSet.Action.ID)
 			}
 		}
 	}
@@ -346,6 +357,25 @@ func (w *workoutLog) CreateWorkoutLog(c *gin.Context, userID int64, workoutID in
 		saveMaxSpeedRecords = append(saveMaxSpeedRecords, &param)
 	}
 	if err := w.actionPRRepo.SaveMaxSpeedRecords(tx, saveMaxSpeedRecords); err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	//計算最佳distance並更新
+	maxDistanceRecords, err := w.actionPRRepo.CalculateMaxDistance(tx, userID, updateMaxDistanceActionIDs)
+	if err != nil {
+		tx.Rollback()
+		return nil, w.errHandler.Set(c, "action pr repo", err)
+	}
+	saveMaxDistanceRecords := make([]*model.SaveMaxDistanceRecord, 0)
+	for _, record := range maxDistanceRecords {
+		param := model.SaveMaxDistanceRecord{
+			UserID:   userID,
+			ActionID: record.ActionID,
+			Distance: record.Distance,
+		}
+		saveMaxDistanceRecords = append(saveMaxDistanceRecords, &param)
+	}
+	if err := w.actionPRRepo.SaveMaxDistanceRecords(tx, saveMaxDistanceRecords); err != nil {
 		tx.Rollback()
 		return nil, w.errHandler.Set(c, "action pr repo", err)
 	}

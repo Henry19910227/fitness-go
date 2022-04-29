@@ -113,11 +113,13 @@ type ActionPR interface {
 	SaveMaxWeightRecords(tx *gorm.DB, params []*model.SaveMaxWeightRecord) error
 	SaveMinDurationRecords(tx *gorm.DB, params []*model.SaveMinDurationRecord) error
 	SaveMaxSpeedRecords(tx *gorm.DB, params []*model.SaveMaxSpeedRecord) error
+	SaveMaxDistanceRecords(tx *gorm.DB, params []*model.SaveMaxDistanceRecord) error
 	CalculateMaxRM(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxRmRecord, error)
 	CalculateMaxReps(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxRepsRecord, error)
 	CalculateMaxWeight(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxWeightRecord, error)
 	CalculateMinDuration(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MinDurationRecord, error)
 	CalculateMaxSpeed(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxSpeedRecord, error)
+	CalculateMaxDistance(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.MaxDistanceRecord, error)
 }
 
 type Sale interface {

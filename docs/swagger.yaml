@@ -51,6 +51,18 @@ definitions:
       action_id:
         example: 12
         type: integer
+      max_distance:
+        description: 最高速率
+        properties:
+          update_at:
+            description: 紀錄更新時間
+            example: "2021-05-28 11:00:00"
+            type: string
+          value:
+            description: 最長距離(公里)
+            example: 15
+            type: number
+        type: object
       max_reps:
         description: 最多次數
         properties:
@@ -60,7 +72,7 @@ definitions:
             type: string
           value:
             description: 最多次數
-            example: 100
+            example: 10
             type: integer
         type: object
       max_rm:
@@ -84,7 +96,7 @@ definitions:
             type: string
           value:
             description: 最高速率
-            example: 100
+            example: 90
             type: number
         type: object
       max_weight:
@@ -107,8 +119,8 @@ definitions:
             example: "2021-05-28 11:00:00"
             type: string
           value:
-            description: 最短時長
-            example: 100
+            description: 最短時長(秒)
+            example: 3600
             type: integer
         type: object
     type: object
