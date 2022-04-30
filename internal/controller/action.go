@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/access"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	midd "github.com/Henry19910227/fitness-go/internal/middleware"
@@ -14,19 +13,17 @@ import (
 type Action struct {
 	Base
 	actionService service.Action
-	actionAccess  access.Action
-	trainerAccess access.Trainer
+	workoutSetLogService service.WorkoutSetLog
 }
 
 func NewAction(baseGroup *gin.RouterGroup,
 	actionService service.Action,
-	actionAccess access.Action,
-	trainerAccess access.Trainer,
+	workoutSetLogService service.WorkoutSetLog,
 	userMidd midd.User,
 	courseMidd midd.Course) {
 	baseGroup.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
 	baseGroup.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
-	action := &Action{actionService: actionService, actionAccess: actionAccess, trainerAccess: trainerAccess}
+	action := &Action{actionService: actionService, workoutSetLogService: workoutSetLogService}
 
 	baseGroup.PATCH("/action/:action_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
@@ -56,6 +53,10 @@ func NewAction(baseGroup *gin.RouterGroup,
 	baseGroup.GET("/actions",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		action.SearchActions)
+
+	baseGroup.GET("/action/:action_id/workout_set_logs",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		action.GetWorkoutSetLogs)
 }
 
 // UpdateAction 修改動作
@@ -238,4 +239,41 @@ func (a *Action) GetActionBestPR(c *gin.Context) {
 		return
 	}
 	a.JSONSuccessResponse(c, pr, "success!")
+}
+
+// GetWorkoutSetLogs 以日期獲取動作訓練組紀錄
+// @Summary 以日期獲取動作訓練組紀錄
+// @Description 以日期獲取動作訓練組紀錄
+// @Tags Action
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作id"
+// @Param start_date query string true "區間開始日期 YYYY-MM-DD"
+// @Param end_date query string true "區間結束日期 YYYY-MM-DD"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSetLogSummary} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /action/{action_id}/workout_set_logs [GET]
+func (a *Action) GetWorkoutSetLogs(c *gin.Context) {
+	uid, e := a.GetUID(c)
+	if e != nil {
+		a.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.ActionIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var query validator.GetWorkoutSetLogsQuery
+	if err := c.ShouldBindQuery(&query); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	logs, err := a.workoutSetLogService.GetWorkoutSetLogSummaries(c, uid, uri.ActionID, query.StartDate, query.EndDate)
+	if err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	a.JSONSuccessResponse(c, logs, "success!")
 }

@@ -42,6 +42,18 @@ func (w *workoutSetLog) FindWorkoutSetLogsByWorkoutSetIDs(userID int64, workoutS
 	return workoutSetLogs, nil
 }
 
+func (w *workoutSetLog) FindWorkoutSetLogsByDate(userID int64, actionID int64, startDate string, endDate string) ([]*model.WorkoutSetLogSummary, error) {
+	workoutSetLogs := make([]*model.WorkoutSetLogSummary, 0)
+	if err := w.gorm.DB().Table("workout_set_logs").
+		Joins("INNER JOIN workout_logs ON workout_set_logs.workout_log_id = workout_logs.id").
+		Joins("INNER JOIN workout_sets ON workout_set_logs.workout_set_id = workout_sets.id").
+		Where("workout_logs.user_id = ? AND workout_sets.action_id = ? AND workout_set_logs.create_at BETWEEN ? AND ?", userID, actionID, startDate, endDate).
+		Find(&workoutSetLogs).Error; err != nil {
+		return nil, err
+	}
+	return workoutSetLogs, nil
+}
+
 func (w *workoutSetLog) CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLogParam) error {
 	db := w.gorm.DB()
 	if tx != nil {
