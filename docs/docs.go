@@ -272,6 +272,78 @@ var doc = `{
                 }
             }
         },
+        "/action/{action_id}/workout_set_logs": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "以日期獲取動作訓練組紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Action"
+                ],
+                "summary": "以日期獲取動作訓練組紀錄",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "區間開始日期 YYYY-MM-DD",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "區間結束日期 YYYY-MM-DD",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.WorkoutSetLogSummary"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/actions": {
             "get": {
                 "security": [
@@ -8335,6 +8407,56 @@ var doc = `{
                     "description": "訓練組id",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "dto.WorkoutSetLogSummary": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "新增日期",
+                    "type": "string",
+                    "example": "2021-05-28 11:00:00"
+                },
+                "distance": {
+                    "description": "距離(公里)",
+                    "type": "number",
+                    "example": 1
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "訓練組紀錄id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 5
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 5
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 10
+                },
+                "workout_log_id": {
+                    "description": "訓練歷史id",
+                    "type": "integer",
+                    "example": 5
+                },
+                "workout_set_id": {
+                    "description": "訓練組id",
+                    "type": "integer",
+                    "example": 15
                 }
             }
         },

@@ -60,6 +60,7 @@ var (
 	paymentService    service.Payment
 	workoutLogService service.WorkoutLog
 	favoriteService   service.Favorite
+	workoutSetLogService service.WorkoutSetLog
 )
 
 var (
@@ -135,7 +136,7 @@ func main() {
 	controller.NewWorkoutAsset(baseGroup, workoutService, workoutSetService, workoutLogService, workoutMidd, userMidd)
 	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
 	controller.NewWorkoutLog(baseGroup, workoutLogService, userMidd)
-	controller.NewAction(baseGroup, actionService, actionAccess, trainerAccess, userMidd, courseMidd)
+	controller.NewAction(baseGroup, actionService, workoutSetLogService, userMidd, courseMidd)
 	controller.NewSale(baseGroup, saleService, userMidd)
 	controller.NewStore(baseGroup, storeService, courseService, planService, workoutService, workoutSetService, courseMidd, planMidd)
 	controller.NewReview(baseGroup, courseService, reviewService, userMidd, courseMidd, reviewMidd)
@@ -234,6 +235,7 @@ func setupService() {
 	userService = service.NewUserService(viperTool, gormTool)
 	workoutLogService = service.NewWorkoutLogService(viperTool, gormTool)
 	favoriteService = service.NewFavoriteService(viperTool, gormTool)
+	workoutSetLogService = service.NewWorkoutSetLogService(viperTool, gormTool)
 }
 
 func setupMigrateService() {

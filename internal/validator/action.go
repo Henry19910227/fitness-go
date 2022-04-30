@@ -36,6 +36,11 @@ type SearchActionsQuery struct {
 	Equipment *string `form:"equipment" binding:"omitempty,action_equipment" example:"1,3,5"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
 }
 
+type GetWorkoutSetLogsQuery struct {
+	StartDate string `form:"start_date" binding:"required,datetime=2006-01-02" example:"區間開始日期"` //區間開始日期
+	EndDate string `form:"end_date" binding:"required,datetime=2006-01-02" example:"區間結束日期"` //區間開始日期)
+}
+
 func init() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		_ = v.RegisterValidation("action_source", ActionSource)

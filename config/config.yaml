@@ -64,18 +64,18 @@ IAP:
     Product: https://buy.itunes.apple.com/verifyReceipt
     Debug:
       AppStoreServer: https://api.storekit-sandbox.itunes.apple.com
-      Password: b3e50e11316943969754106ed24c6a3a
-      Issuer: 69a6de92-1fe6-47e3-e053-5b8c7c11a4d1 # 發行者 (使用者與存取權限 -> App Store Connect API 頁面)
-      KeyID: Q2N9VXCN4F # 密鑰id (使用者與存取權限 -> App 內購買項目)
-      KeyPath: ./config/SubscriptionKey_Q2N9VXCN4F.p8
+      Password: b3e50e11316943969754106ed24c6a3a # App 專用共享密鑰-用於驗證收據 (App Store Connect -> App 內購買項目 -> App 專用共享密鑰)
+      Issuer: 69a6de92-1fe6-47e3-e053-5b8c7c11a4d1 # 發行者-用於產生查詢訂閱API Token (使用者與存取權限 -> App Store Connect API 頁面)
+      KeyID: Q2N9VXCN4F # 密鑰id-用於產生查詢訂閱API Token (使用者與存取權限 -> App 內購買項目)
+      KeyPath: ./config/SubscriptionKey_Q2N9VXCN4F.p8 # 密鑰-用於產生查詢訂閱API Token
       BundleID: com.henry.PurchaseDemo
     Release:
       AppStoreServer: https://api.storekit-sandbox.itunes.apple.com
-      Password: 0bd3a44a62f14ef9b79f1d16bf195835
-      Issuer: 69a6de88-0ba0-47e3-e053-5b8c7c11a4d1
-      KeyID: Y29YP83F2S
-      KeyPath: ./config/SubscriptionKey_Y29YP83F2S.p8
-      BundleID: com.anniestudio.Fitness
+      Password: f7e5fb26e7cf4de3b8eff69950b6d747
+      Issuer: 18f6ec13-f472-4dbc-8620-9a790c5d48e2
+      KeyID: Q7648PT9MF
+      KeyPath: ./config/SubscriptionKey_Q7648PT9MF.p8
+      BundleID: com.fitopia.hub
 IAB:
     URL: https://androidpublisher.googleapis.com
     Scope: https://www.googleapis.com/auth/androidpublisher

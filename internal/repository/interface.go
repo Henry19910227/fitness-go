@@ -225,6 +225,7 @@ type WorkoutLog interface {
 type WorkoutSetLog interface {
 	FindWorkoutSetLogsByWorkoutLogID(tx *gorm.DB, workoutLogID int64) ([]*model.WorkoutSetLog, error)
 	FindWorkoutSetLogsByWorkoutSetIDs(userID int64, workoutSetIDs []int64) ([]*model.WorkoutSetLog, error)
+	FindWorkoutSetLogsByDate(userID int64, actionID int64, startDate string, endDate string) ([]*model.WorkoutSetLogSummary, error)
 	CreateWorkoutSetLogs(tx *gorm.DB, params []*model.WorkoutSetLogParam) error
 	CalculateBestWorkoutSetLog(tx *gorm.DB, userID int64, actionIDs []int64) ([]*model.BestActionSetLog, error)
 }

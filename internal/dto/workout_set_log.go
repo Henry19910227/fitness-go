@@ -24,6 +24,18 @@ type WorkoutSetLogTag struct {
 	NewRecord  int         `json:"new_record" example:"1"` //是否是新紀錄(0:否/1:是)
 }
 
+type WorkoutSetLogSummary struct {
+	ID           int64   `json:"id" example:"1"`                          //訓練組紀錄id
+	WorkoutLogID int64   `json:"workout_log_id" example:"5"`              // 訓練歷史id
+	WorkoutSetID int64   `json:"workout_set_id" example:"15"`             // 訓練組id
+	Weight       float64 `json:"weight" example:"10"`                     //重量(公斤)
+	Reps         int     `json:"reps" example:"5"`                        //次數
+	Distance     float64 `json:"distance" example:"1"`                    //距離(公里)
+	Duration     int     `json:"duration" example:"30"`                   //時長(秒)
+	Incline      float64 `json:"incline" example:"5"`                     //坡度
+	CreateAt     string  `json:"create_at" example:"2021-05-28 11:00:00"` // 新增日期
+}
+
 func NewWorkoutSetLog(data *model.WorkoutSetLog) WorkoutSetLog {
 	if data == nil {
 		return WorkoutSetLog{}
@@ -110,6 +122,21 @@ func NewWorkoutSetLogTag(data *model.WorkoutSetLog) WorkoutSetLogTag {
 		}
 	}
 	return workoutSetLog
+}
+
+func NewWorkoutSetLogSummary(data *model.WorkoutSetLogSummary) *WorkoutSetLogSummary {
+	w := WorkoutSetLogSummary{
+		ID:           data.ID,
+		WorkoutLogID: data.WorkoutLogID,
+		WorkoutSetID: data.WorkoutSetID,
+		Weight:       data.Weight,
+		Reps:         data.Reps,
+		Distance:     data.Distance,
+		Duration:     data.Duration,
+		Incline:      data.Incline,
+		CreateAt:     data.CreateAt,
+	}
+	return &w
 }
 
 type WorkoutSetLogParam struct {

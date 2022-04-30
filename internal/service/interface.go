@@ -124,6 +124,10 @@ type WorkoutLog interface {
 	GetWorkoutLog(c *gin.Context, workoutLogID int64) (*dto.WorkoutLog, errcode.Error)
 }
 
+type WorkoutSetLog interface {
+	GetWorkoutSetLogSummaries(c *gin.Context, userID int64, actionID int64, startDate string, endDate string) ([]*dto.WorkoutSetLogSummary, errcode.Error)
+}
+
 type Action interface {
 	CreateAction(c *gin.Context, courseID int64, param *dto.CreateActionParam) (*dto.Action, errcode.Error)
 	UpdateAction(c *gin.Context, actionID int64, param *dto.UpdateActionParam) (*dto.Action, errcode.Error)

@@ -211,3 +211,11 @@ func NewFavoriteService(viperTool *viper.Viper, gormTool tool.Gorm) Favorite {
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewFavorite(favoriteRepo, errHandler)
 }
+
+func NewWorkoutSetLogService(viperTool *viper.Viper, gormTool tool.Gorm) WorkoutSetLog {
+	workoutSetLogRepo := repository.NewWorkoutSetLog(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewWorkoutSetLog(workoutSetLogRepo, errHandler)
+}
