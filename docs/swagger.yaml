@@ -5684,6 +5684,32 @@ paths:
       tags:
       - Exercise
   /workout_log/{workout_log_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 用於歷史頁面刪除訓練紀錄
+      parameters:
+      - description: 訓練記錄id
+        in: path
+        name: workout_log_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除訓練紀錄
+      tags:
+      - History
     get:
       consumes:
       - application/json
