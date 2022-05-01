@@ -72,6 +72,17 @@ func (w *workoutLog) FindWorkoutLogsByPlanID(planID int64) ([]*model.WorkoutLog,
 	return workoutLogs, nil
 }
 
+func (w *workoutLog) DeleteWorkoutLog(tx *gorm.DB, workoutLogID int64) error {
+	db := w.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	if err := db.Where("id = ?", workoutLogID).Delete(&model.WorkoutLog{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (w *workoutLog) CalculateUserCourseStatistic(tx *gorm.DB, userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error) {
 	db := w.gorm.DB()
 	if tx != nil {

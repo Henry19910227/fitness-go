@@ -217,6 +217,7 @@ type WorkoutLog interface {
 	FindWorkoutLog(workoutLogID int64) (*model.WorkoutLog, error)
 	FindWorkoutLogsByDate(userID int64, startDate string, endDate string) ([]*model.WorkoutLog, error)
 	FindWorkoutLogsByPlanID(planID int64) ([]*model.WorkoutLog, error)
+	DeleteWorkoutLog(tx *gorm.DB, workoutLogID int64) error
 	CalculateUserCourseStatistic(tx *gorm.DB, userID int64, workoutID int64) (*model.WorkoutLogCourseStatistic, error)
 	CalculateUserPlanStatistic(tx *gorm.DB, userID int64, workoutID int64) (*model.WorkoutLogPlanStatistic, error)
 	CreateWorkoutLog(tx *gorm.DB, param *model.CreateWorkoutLogParam) (int64, error)

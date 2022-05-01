@@ -25,6 +25,9 @@ func NewWorkoutLog(baseGroup *gin.RouterGroup, workoutLogService service.Workout
 	baseGroup.GET("/workout_log/:workout_log_id",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		workout.GetWorkoutLog)
+	baseGroup.DELETE("/workout_log/:workout_log_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		workout.DeleteWorkoutLog)
 }
 
 // GetWorkoutLog 獲取訓練紀錄詳細
@@ -81,4 +84,34 @@ func (p *WorkoutLog) GetWorkoutLogSummaries(c *gin.Context) {
 		return
 	}
 	p.JSONSuccessResponse(c, workoutLogs, "success!")
+}
+
+// DeleteWorkoutLog 刪除訓練紀錄
+// @Summary 刪除訓練紀錄
+// @Description 用於歷史頁面刪除訓練紀錄
+// @Tags History
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_log_id path int64 true "訓練記錄id"
+// @Success 200 {object} model.SuccessResult "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗"
+// @Router /workout_log/{workout_log_id} [DELETE]
+func (p *WorkoutLog) DeleteWorkoutLog(c *gin.Context) {
+	uid, err := p.GetUID(c)
+	if err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var uri validator.WorkoutLogIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		p.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	e := p.workoutLogService.DeleteWorkoutLog(c, uid, uri.WorkoutLogID)
+	if e != nil {
+		p.JSONErrorResponse(c, e)
+		return
+	}
+	p.JSONSuccessResponse(c, nil, "success!")
 }
