@@ -26,9 +26,7 @@ type Migrate interface {
 
 type JWT interface {
 	GenerateUserToken(uid int64) (string, error)
-	GenerateTrainerToken(uid int64) (string, error)
 	GenerateAdminToken(uid int64, lv int) (string, error)
-	GenerateAppleStoreServerAPIToken(keyPath string, iss string, bid string, kid string) (string, error)
 	VerifyToken(token string) error
 	GetRoleByToken(token string) (int, error)
 	GetIDByToken(token string) (int64, error)
