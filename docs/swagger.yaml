@@ -2735,6 +2735,58 @@ paths:
       summary: 獲取訂閱資料(測試用)
       tags:
       - Payment
+  /cms/login:
+    post:
+      consumes:
+      - application/json
+      description: 管理者登入
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.LoginByEmailBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登入成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessLoginResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Admin'
+              type: object
+        "400":
+          description: 登入失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 管理者登入
+      tags:
+      - CMS/Login
+  /cms/logout:
+    post:
+      consumes:
+      - application/json
+      description: 管理者登出
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登出成功
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 登出失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 管理者登出
+      tags:
+      - CMS/Login
   /course:
     post:
       consumes:

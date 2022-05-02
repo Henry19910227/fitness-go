@@ -142,6 +142,7 @@ func main() {
 	controller.NewReview(baseGroup, courseService, reviewService, userMidd, courseMidd, reviewMidd)
 	controller.NewPayment(baseGroup, paymentService, courseService, userMidd)
 	controller.NewFavorite(baseGroup, favoriteService, courseService, userMidd, courseMidd)
+	controller.NewCMSLogin(baseGroup, loginService, userMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 

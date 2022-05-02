@@ -1,13 +1,8 @@
 package tool
 
 import (
-	"crypto/ecdsa"
-	"crypto/x509"
-	"encoding/pem"
 	"errors"
 	"github.com/Henry19910227/fitness-go/internal/setting"
-	"github.com/google/uuid"
-	"io/ioutil"
 	"strconv"
 	"time"
 
@@ -28,48 +23,10 @@ func (t *jwtTool) GenerateUserToken(uid int64) (string, error) {
 	return token, err
 }
 
-func (t *jwtTool) GenerateTrainerToken(uid int64) (string, error) {
-	claims := jwt.MapClaims{"uid": strconv.Itoa(int(uid)), "role": "2"}
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(t.setting.GetTokenSecret()))
-	return token, err
-}
-
 func (t *jwtTool) GenerateAdminToken(uid int64, lv int) (string, error) {
-	claims := jwt.MapClaims{"uid": strconv.Itoa(int(uid)), "lv": strconv.Itoa(lv)}
+	claims := jwt.MapClaims{"uid": strconv.Itoa(int(uid)), "role": "2", "lv": strconv.Itoa(lv)}
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(t.setting.GetTokenSecret()))
 	return token, err
-}
-
-func (t *jwtTool) GenerateAppleStoreServerAPIToken(keyPath string, iss string, bid string, kid string) (string, error) {
-	p8bytes, err := ioutil.ReadFile("./config/SubscriptionKey_Q2N9VXCN4F.p8")
-	if err != nil {
-		return "", err
-	}
-	block, _ := pem.Decode(p8bytes)
-	if block == nil || block.Type != "PRIVATE KEY" {
-		return "", errors.New("generate apple token error")
-	}
-	parsedKey, err := x509.ParsePKCS8PrivateKey(block.Bytes)
-	if err != nil {
-		return "", err
-	}
-	ecdsaPrivateKey, ok := parsedKey.(*ecdsa.PrivateKey)
-	if !ok {
-		return "", err
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.MapClaims{
-		"iss": "69a6de92-1fe6-47e3-e053-5b8c7c11a4d1",
-		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Hour).Unix(),
-		"aud": "appstoreconnect-v1",
-		"nonce": uuid.New().String(),
-		"bid": "com.henry.PurchaseDemo"})
-	token.Header["kid"] = "Q2N9VXCN4F"
-	tokenString, err := token.SignedString(ecdsaPrivateKey)
-	if err != nil {
-		return "", err
-	}
-	return tokenString, nil
 }
 
 func (t *jwtTool) VerifyToken(tokenString string) error {
