@@ -28,12 +28,12 @@ func NewCMSLogin(baseGroup *gin.RouterGroup, loginService service.Login, userMid
 // @Tags CMS/Login
 // @Accept json
 // @Produce json
-// @Param json_body body validator.LoginByEmailBody true "輸入參數"
+// @Param json_body body validator.CMSLoginByEmailBody true "輸入參數"
 // @Success 200 {object} model.SuccessLoginResult{data=dto.Admin} "登入成功"
 // @Failure 400 {object} model.ErrorResult "登入失敗"
 // @Router /cms/login [POST]
 func (l *CMSLogin) Login(c *gin.Context)  {
-	var body validator.LoginByEmailBody
+	var body validator.CMSLoginByEmailBody
 	if err := c.ShouldBindJSON(&body); err != nil {
 		l.JSONValidatorErrorResponse(c, err.Error())
 		return

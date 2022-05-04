@@ -550,7 +550,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/validator.LoginByEmailBody"
+                            "$ref": "#/definitions/validator.CMSLoginByEmailBody"
                         }
                     }
                 ],
@@ -609,6 +609,113 @@
                     },
                     "400": {
                         "description": "登出失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/cms/users": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取用戶資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/User"
+                ],
+                "summary": "獲取用戶資訊",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用戶ID",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用戶名稱(1~40字元)",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用戶Email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                        "name": "user_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用戶類型 (1:一般用戶/2:訂閱用戶)",
+                        "name": "user_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_column",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.CMSUser"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -6285,6 +6392,96 @@
                 }
             }
         },
+        "dto.CMSUser": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帳號",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "account_type": {
+                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "avatar": {
+                    "description": "用戶大頭貼",
+                    "type": "string",
+                    "example": "d2fe5w321a.png"
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "device_token": {
+                    "description": "推播 Token",
+                    "type": "string",
+                    "example": "f144b48d9695..."
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_type": {
+                    "description": "用戶狀態 (1:一般用戶/2:訂閱用戶)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 72.5
+                }
+            }
+        },
         "dto.Certificate": {
             "type": "object",
             "properties": {
@@ -8784,6 +8981,25 @@
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "validator.CMSLoginByEmailBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "password": {
+                    "description": "密碼 (6~18字元)",
+                    "type": "string",
+                    "example": "12345678"
                 }
             }
         },
