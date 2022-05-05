@@ -43,23 +43,23 @@ var (
 )
 
 var (
-	migrateService    service.Migrate
-	swagService       service.Swagger
-	loginService      service.Login
-	regService        service.Register
-	userService       service.User
-	trainerService    service.Trainer
-	courseService     service.Course
-	planService       service.Plan
-	workoutService    service.Workout
-	workoutSetService service.WorkoutSet
-	actionService     service.Action
-	saleService       service.Sale
-	storeService      service.Store
-	reviewService     service.Review
-	paymentService    service.Payment
-	workoutLogService service.WorkoutLog
-	favoriteService   service.Favorite
+	migrateService       service.Migrate
+	swagService          service.Swagger
+	loginService         service.Login
+	regService           service.Register
+	userService          service.User
+	trainerService       service.Trainer
+	courseService        service.Course
+	planService          service.Plan
+	workoutService       service.Workout
+	workoutSetService    service.WorkoutSet
+	actionService        service.Action
+	saleService          service.Sale
+	storeService         service.Store
+	reviewService        service.Review
+	paymentService       service.Payment
+	workoutLogService    service.WorkoutLog
+	favoriteService      service.Favorite
 	workoutSetLogService service.WorkoutSetLog
 )
 
@@ -144,6 +144,7 @@ func main() {
 	controller.NewFavorite(baseGroup, favoriteService, courseService, userMidd, courseMidd)
 	controller.NewCMSLogin(baseGroup, loginService, userMidd)
 	controller.NewCMSUser(baseGroup, userService, userMidd)
+	controller.NewCMSTrainer(baseGroup, trainerService, userMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 

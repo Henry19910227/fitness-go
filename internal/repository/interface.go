@@ -29,6 +29,7 @@ type Trainer interface {
 	FindTrainerEntities(input interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error
 	FindTrainersCount(status *global.TrainerStatus) (int, error)
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
+	FindTrainers(result interface{}, totalCount *int64, param *model.FinsTrainersParam, orderBy *model.OrderBy, paging *model.PagingParam) error
 }
 
 type TrainerStatistic interface {

@@ -291,3 +291,53 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	}
 	return nil
 }
+
+func (t *trainer) FindTrainers(result interface{}, totalCount *int64, param *model.FinsTrainersParam, orderBy *model.OrderBy, paging *model.PagingParam) error {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 userID 篩選條件
+	if param.UserID != nil {
+		query += "AND user_id = ? "
+		params = append(params, *param.UserID)
+	}
+	//加入 nickname 篩選條件
+	if param.NickName != nil {
+		query += "AND nickname LIKE ? "
+		params = append(params, "%"+*param.NickName+"%")
+	}
+	//加入 email 篩選條件
+	if param.Email != nil {
+		query += "AND email = ? "
+		params = append(params, *param.Email)
+	}
+	//加入 trainer_status 篩選條件
+	if param.TrainerStatus != nil {
+		query += "AND trainer_status = ? "
+		params = append(params, *param.TrainerStatus)
+	}
+	var db *gorm.DB
+	db = t.gorm.DB().Model(&entity.Trainer{}).Where(query, params...)
+
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	//分頁
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	//查詢數據
+	if err := db.Find(result).Error; err != nil {
+		return nil
+	}
+	//查詢資料數量
+	if totalCount != nil {
+		if err := t.gorm.DB().
+			Table("trainers").
+			Where(query, params...).
+			Count(totalCount).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}

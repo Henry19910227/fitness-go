@@ -84,3 +84,10 @@ type UpdateTrainerParam struct {
 	CreateCerNames       []string // 待新增的證照名稱
 	UpdateAt             *string  // 修改日期
 }
+
+type FinsTrainersParam struct {
+	UserID        *int64  // 用戶ID
+	NickName      *string // 教練暱稱(1~40字元)
+	Email         *string // 用戶Email
+	TrainerStatus *int    // 教練狀態 教練狀態(1:正常/2:審核中/3:停權/4:未啟用)
+}

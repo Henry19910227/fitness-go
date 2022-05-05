@@ -377,6 +377,43 @@ func (t *trainer) GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummar
 	return trainers, &paging, nil
 }
 
+func (t *trainer) GetCMSTrainers(c *gin.Context, param *dto.FinsCMSTrainersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSTrainerSummary, *dto.Paging, errcode.Error) {
+	var orderType = global.DESC
+	var orderField = "create_at"
+	if orderByParam != nil {
+		if orderByParam.OrderType != nil {
+			orderType = global.OrderType(*orderByParam.OrderType)
+		}
+		if orderByParam.OrderField != nil {
+			orderField = *orderByParam.OrderField
+		}
+	}
+	offset, limit := t.GetPagingIndex(pagingParam.Page, pagingParam.Size)
+	trainers := make([]*dto.CMSTrainerSummary, 0)
+	var totalCount int64
+	if err := t.trainerRepo.FindTrainers(&trainers, &totalCount, &model.FinsTrainersParam{
+		UserID:        param.UserID,
+		NickName:      param.NickName,
+		Email:         param.Email,
+		TrainerStatus: param.TrainerStatus,
+	}, &model.OrderBy{
+		Field:     orderField,
+		OrderType: orderType,
+	}, &model.PagingParam{
+		Offset: offset,
+		Limit:  limit,
+	}); err != nil {
+		return nil, nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	paging := dto.Paging{
+		TotalCount: int(totalCount),
+		TotalPage:  t.GetTotalPage(int(totalCount), pagingParam.Size),
+		Page:       pagingParam.Page,
+		Size:       pagingParam.Size,
+	}
+	return trainers, &paging, nil
+}
+
 func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhotoResult, errcode.Error) {
 	newImageNamed, err := t.uploader.GenerateNewImageName(imageNamed)
 	if err != nil {

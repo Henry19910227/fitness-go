@@ -150,6 +150,33 @@ definitions:
         example: henry
         type: string
     type: object
+  dto.CMSTrainerSummary:
+    properties:
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 1001
+        type: integer
+    type: object
   dto.CMSUser:
     properties:
       account:
@@ -2876,6 +2903,69 @@ paths:
       summary: 管理者登出
       tags:
       - CMS/Login
+  /cms/trainers:
+    get:
+      consumes:
+      - application/json
+      description: 獲取教練列表
+      parameters:
+      - description: 用戶ID
+        in: query
+        name: user_id
+        type: integer
+      - description: 教練名稱(1~40字元)
+        in: query
+        name: nickname
+        type: string
+      - description: 教練Email
+        in: query
+        name: email
+        type: string
+      - description: 教練狀態(1:正常/2:審核中/3:停權/4:未啟用)
+        in: query
+        name: trainer_status
+        type: string
+      - description: 排序欄位 (create_at:創建時間)
+        in: query
+        name: order_column
+        type: string
+      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
+        in: query
+        name: order_type
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.CMSTrainerSummary'
+                  type: array
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取教練列表
+      tags:
+      - CMS/Trainer
   /cms/users:
     get:
       consumes:
@@ -2904,7 +2994,7 @@ paths:
         type: string
       - description: 排序欄位 (create_at:創建時間)
         in: query
-        name: order_column
+        name: order_field
         type: string
       - description: 排序類型 (ASC:由低到高/DESC:由高到低)
         in: query
