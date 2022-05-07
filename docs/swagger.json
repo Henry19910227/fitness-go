@@ -616,6 +616,61 @@
                 }
             }
         },
+        "/cms/trainer/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得教練詳細資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Trainer"
+                ],
+                "summary": "取得教練詳細資訊",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.CMSTrainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/cms/trainers": {
             "get": {
                 "security": [
@@ -6493,6 +6548,156 @@
                 }
             }
         },
+        "dto.BankAccount": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "銀行帳戶",
+                    "type": "string",
+                    "example": "8441236"
+                },
+                "account_image": {
+                    "description": "帳戶照片",
+                    "type": "string",
+                    "example": "sd2lkd1e23w54dw3e.png"
+                },
+                "account_name": {
+                    "description": "戶名",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "bank_code": {
+                    "description": "銀行代號",
+                    "type": "string",
+                    "example": "009"
+                },
+                "branch": {
+                    "description": "分行",
+                    "type": "string",
+                    "example": "南京分行"
+                }
+            }
+        },
+        "dto.CMSTrainer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區信義路五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "ld3ae0faf5we.png"
+                },
+                "bank_account": {
+                    "description": "銀行資訊",
+                    "$ref": "#/definitions/dto.BankAccount"
+                },
+                "cards": {
+                    "description": "身分證",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Card"
+                    }
+                },
+                "certificates": {
+                    "description": "教練證照",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Certificate"
+                    }
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "年資",
+                    "type": "integer",
+                    "example": 10
+                },
+                "facebook_url": {
+                    "description": "臉書連結",
+                    "type": "string",
+                    "example": "www.facebook.com"
+                },
+                "instagram_url": {
+                    "description": "ig連結",
+                    "type": "string",
+                    "example": "www.instagram.com"
+                },
+                "intro": {
+                    "description": "個人介紹",
+                    "type": "string",
+                    "example": "我叫戰車老師"
+                },
+                "motto": {
+                    "description": "座右銘",
+                    "type": "string",
+                    "example": "我不會煎一塊牛排，因為我都煎兩塊"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "戰車老師"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0955321456"
+                },
+                "skill": {
+                    "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                    "type": "string",
+                    "example": "1,3,5"
+                },
+                "trainer_album_photos": {
+                    "description": "教練相簿",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TrainerAlbumPhoto"
+                    }
+                },
+                "trainer_level": {
+                    "description": "教練評鑑等級",
+                    "type": "integer",
+                    "example": 1
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "youtube_url": {
+                    "description": "youtube連結",
+                    "type": "string",
+                    "example": "www.youtube.com"
+                }
+            }
+        },
         "dto.CMSTrainerSummary": {
             "type": "object",
             "properties": {
@@ -6615,6 +6820,21 @@
                     "description": "體重",
                     "type": "number",
                     "example": 72.5
+                }
+            }
+        },
+        "dto.Card": {
+            "type": "object",
+            "properties": {
+                "back_image": {
+                    "description": "身分證背面照",
+                    "type": "string",
+                    "example": "sd2lkd1e23w54dw3e.png"
+                },
+                "front_image": {
+                    "description": "身分證正面照",
+                    "type": "string",
+                    "example": "sd2lkd1e23w54dw3e.png"
                 }
             }
         },

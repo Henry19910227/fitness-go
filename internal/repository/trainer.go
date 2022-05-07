@@ -83,7 +83,7 @@ func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) erro
 		UserID:       uid,
 		AccountName:  param.AccountName,
 		AccountImage: param.AccountImage,
-		BackCode:     param.BankCode,
+		BankCode:     param.BankCode,
 		Account:      param.Account,
 		Branch:       param.Branch,
 		CreateAt:     time.Now().Format("2006-01-02 15:04:05"),
@@ -338,6 +338,20 @@ func (t *trainer) FindTrainers(result interface{}, totalCount *int64, param *mod
 			Count(totalCount).Error; err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func (t *trainer) FindTrainerDetail(userID int64, result interface{}) error {
+	if err := t.gorm.DB().
+		Model(&model.TrainerDetail{}).
+		Preload("BankAccount").
+		Preload("TrainerAlbumPhotos").
+		Preload("Certificates").
+		Preload("Cards").
+		Where("user_id = ?", userID).
+		Take(result).Error; err != nil {
+		return err
 	}
 	return nil
 }

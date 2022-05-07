@@ -60,6 +60,7 @@ type Trainer interface {
 	GetTrainerAlbumPhotoCount(c *gin.Context, uid int64) (int, errcode.Error)
 	GetCertificateCount(c *gin.Context, uid int64) (int, errcode.Error)
 	GetCMSTrainers(c *gin.Context, param *dto.FinsCMSTrainersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSTrainerSummary, *dto.Paging, errcode.Error)
+	GetCMSTrainer(c *gin.Context, userID int64) (*dto.CMSTrainer, errcode.Error)
 }
 
 type Course interface {

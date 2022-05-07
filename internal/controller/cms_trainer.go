@@ -19,6 +19,10 @@ func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, u
 	baseGroup.GET("/cms/trainers",
 		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
 		cms.GetTrainers)
+
+	baseGroup.GET("/cms/trainer/:user_id",
+		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
+		cms.GetTrainer)
 }
 
 // GetTrainers 獲取教練列表
@@ -39,23 +43,23 @@ func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, u
 // @Success 200 {object} model.SuccessResult{data=[]dto.CMSTrainerSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /cms/trainers [GET]
-func (u *CMSTrainer) GetTrainers(c *gin.Context) {
+func (t *CMSTrainer) GetTrainers(c *gin.Context) {
 	var form validator.CMSGetTrainersQuery
 	if err := c.ShouldBind(&form); err != nil {
-		u.JSONValidatorErrorResponse(c, err.Error())
+		t.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	var orderByQuery validator.OrderByQuery
 	if err := c.ShouldBind(&orderByQuery); err != nil {
-		u.JSONValidatorErrorResponse(c, err.Error())
+		t.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
 	var pagingQuery validator.PagingQuery
 	if err := c.ShouldBind(&pagingQuery); err != nil {
-		u.JSONValidatorErrorResponse(c, err.Error())
+		t.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	users, paging, err := u.trainerService.GetCMSTrainers(c, &dto.FinsCMSTrainersParam{
+	users, paging, err := t.trainerService.GetCMSTrainers(c, &dto.FinsCMSTrainersParam{
 		UserID:        form.UserID,
 		NickName:      form.Nickname,
 		Email:         form.Email,
@@ -68,8 +72,33 @@ func (u *CMSTrainer) GetTrainers(c *gin.Context) {
 		Size: pagingQuery.Size,
 	})
 	if err != nil {
-		u.JSONErrorResponse(c, err)
+		t.JSONErrorResponse(c, err)
 		return
 	}
-	u.JSONSuccessPagingResponse(c, users, paging, "success!")
+	t.JSONSuccessPagingResponse(c, users, paging, "success!")
+}
+
+// GetTrainer 取得教練詳細資訊
+// @Summary 取得教練詳細資訊
+// @Description 取得教練詳細資訊
+// @Tags CMS/Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練id"
+// @Success 200 {object} model.SuccessResult{data=dto.CMSTrainer} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /cms/trainer/{user_id} [GET]
+func (t *CMSTrainer) GetTrainer(c *gin.Context) {
+	var uri validator.TrainerIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	trainer, err := t.trainerService.GetCMSTrainer(c, uri.TrainerID)
+	if err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessResponse(c, trainer, "success!")
 }

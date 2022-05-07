@@ -21,6 +21,8 @@ type trainer struct {
 	albumRepo    repository.TrainerAlbum
 	cerRepo      repository.Certificate
 	favoriteRepo repository.Favorite
+	cardRepo     repository.Card
+	bankRepo     repository.BankAccount
 	uploader     handler.Uploader
 	resHandler   handler.Resource
 	logger       handler.Logger
@@ -29,9 +31,9 @@ type trainer struct {
 }
 
 func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, cerRepo repository.Certificate,
-	favoriteRepo repository.Favorite, uploader handler.Uploader, resHandler handler.Resource,
+	favoriteRepo repository.Favorite, cardRepo repository.Card, bankRepo repository.BankAccount, uploader handler.Uploader, resHandler handler.Resource,
 	logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
-	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, cerRepo: cerRepo, favoriteRepo: favoriteRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
+	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, cerRepo: cerRepo, favoriteRepo: favoriteRepo, cardRepo: cardRepo, bankRepo: bankRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
 func (t *trainer) CreateTrainer(c *gin.Context, uid int64, param *dto.CreateTrainerParam) (*dto.Trainer, errcode.Error) {
@@ -412,6 +414,41 @@ func (t *trainer) GetCMSTrainers(c *gin.Context, param *dto.FinsCMSTrainersParam
 		Size:       pagingParam.Size,
 	}
 	return trainers, &paging, nil
+}
+
+func (t *trainer) GetCMSTrainer(c *gin.Context, userID int64) (*dto.CMSTrainer, errcode.Error) {
+	var trainer dto.CMSTrainer
+	if err := t.trainerRepo.FindTrainerEntity(userID, &trainer); err != nil {
+		return nil, t.errHandler.Set(c, "trainer repo", err)
+	}
+	if trainer.UserID == 0 {
+		return nil, t.errHandler.Set(c, "trainer repo", errors.New(strconv.Itoa(errcode.DataNotFound)))
+	}
+	var bankAccount dto.BankAccount
+	err := t.bankRepo.FindBankAccountEntity(userID, &bankAccount)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, t.errHandler.Set(c, "bank repo", err)
+	}
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		trainer.BankAccount = &bankAccount
+	}
+	var card dto.Card
+	err = t.cardRepo.FindCardEntity(userID, &card)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, t.errHandler.Set(c, "card repo", err)
+	}
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		trainer.Card = &card
+	}
+	trainer.Certificates = make([]*dto.Certificate, 0)
+	if err := t.cerRepo.FindCertificatesByUID(userID, &trainer.Certificates); err != nil{
+		return nil, t.errHandler.Set(c, "cert repo", err)
+	}
+	trainer.TrainerAlbumPhotos = make([]*dto.TrainerAlbumPhoto, 0)
+	if err := t.albumRepo.FindAlbumPhotosByUID(userID, &trainer.TrainerAlbumPhotos); err != nil {
+		return nil, t.errHandler.Set(c, "album repo", err)
+	}
+	return &trainer, nil
 }
 
 func (t *trainer) UploadAlbumPhoto(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.TrainerAlbumPhotoResult, errcode.Error) {

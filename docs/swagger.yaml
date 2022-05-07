@@ -150,6 +150,122 @@ definitions:
         example: henry
         type: string
     type: object
+  dto.BankAccount:
+    properties:
+      account:
+        description: 銀行帳戶
+        example: "8441236"
+        type: string
+      account_image:
+        description: 帳戶照片
+        example: sd2lkd1e23w54dw3e.png
+        type: string
+      account_name:
+        description: 戶名
+        example: 王小明
+        type: string
+      bank_code:
+        description: 銀行代號
+        example: "009"
+        type: string
+      branch:
+        description: 分行
+        example: 南京分行
+        type: string
+    type: object
+  dto.CMSTrainer:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區信義路五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: ld3ae0faf5we.png
+        type: string
+      bank_account:
+        $ref: '#/definitions/dto.BankAccount'
+        description: 銀行資訊
+      cards:
+        description: 身分證
+        items:
+          $ref: '#/definitions/dto.Card'
+        type: array
+      certificates:
+        description: 教練證照
+        items:
+          $ref: '#/definitions/dto.Certificate'
+        type: array
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 年資
+        example: 10
+        type: integer
+      facebook_url:
+        description: 臉書連結
+        example: www.facebook.com
+        type: string
+      instagram_url:
+        description: ig連結
+        example: www.instagram.com
+        type: string
+      intro:
+        description: 個人介紹
+        example: 我叫戰車老師
+        type: string
+      motto:
+        description: 座右銘
+        example: 我不會煎一塊牛排，因為我都煎兩塊
+        type: string
+      name:
+        description: 教練本名
+        example: 王小明
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: 戰車老師
+        type: string
+      phone:
+        description: 電話
+        example: "0955321456"
+        type: string
+      skill:
+        description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        example: 1,3,5
+        type: string
+      trainer_album_photos:
+        description: 教練相簿
+        items:
+          $ref: '#/definitions/dto.TrainerAlbumPhoto'
+        type: array
+      trainer_level:
+        description: 教練評鑑等級
+        example: 1
+        type: integer
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 10001
+        type: integer
+      youtube_url:
+        description: youtube連結
+        example: www.youtube.com
+        type: string
+    type: object
   dto.CMSTrainerSummary:
     properties:
       create_at:
@@ -247,6 +363,17 @@ definitions:
         description: 體重
         example: 72.5
         type: number
+    type: object
+  dto.Card:
+    properties:
+      back_image:
+        description: 身分證背面照
+        example: sd2lkd1e23w54dw3e.png
+        type: string
+      front_image:
+        description: 身分證正面照
+        example: sd2lkd1e23w54dw3e.png
+        type: string
     type: object
   dto.Certificate:
     properties:
@@ -2903,6 +3030,38 @@ paths:
       summary: 管理者登出
       tags:
       - CMS/Login
+  /cms/trainer/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 取得教練詳細資訊
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CMSTrainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得教練詳細資訊
+      tags:
+      - CMS/Trainer
   /cms/trainers:
     get:
       consumes:
