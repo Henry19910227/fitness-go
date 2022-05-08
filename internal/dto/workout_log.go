@@ -49,6 +49,7 @@ func NewWorkoutLog(log *model.WorkoutLog, logSets []*model.WorkoutSetLog) Workou
 
 func NewWorkoutLogSummary(data *model.WorkoutLog) WorkoutLogSummary {
 	workoutLog := WorkoutLogSummary{
+		ID: data.ID,
 		Duration:  data.Duration,
 		Intensity: data.Intensity,
 		Place:     data.Place,
