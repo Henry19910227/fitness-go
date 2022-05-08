@@ -36,7 +36,8 @@ func (a *actionPR) FindActionBestPR(tx *gorm.DB, userID int64, actionID int64) (
 			"IFNULL(max_reps_records.update_at,'') AS max_reps_update_at",
 			"IFNULL(max_speed_records.update_at,'') AS max_speed_update_at",
 			"IFNULL(max_weight_records.update_at,'') AS max_weight_update_at",
-			"IFNULL(min_duration_records.update_at,'') AS min_duration_update_at").
+			"IFNULL(min_duration_records.update_at,'') AS min_duration_update_at",
+			"IFNULL(max_distance_records.update_at,'') AS max_distance_update_at").
 		Joins("LEFT JOIN max_rm_records ON actions.id = max_rm_records.action_id AND max_rm_records.user_id = ?", userID).
 		Joins("LEFT JOIN max_reps_records ON actions.id = max_reps_records.action_id AND max_reps_records.user_id = ?", userID).
 		Joins("LEFT JOIN max_speed_records ON actions.id = max_speed_records.action_id AND max_speed_records.user_id = ?", userID).

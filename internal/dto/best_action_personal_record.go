@@ -39,11 +39,13 @@ func NewActionBestPR(data *model.ActionBestPR) ActionBestPR {
 		pr.MaxReps.Value = data.MaxReps
 		pr.MinDuration.Value = data.MinDuration
 		pr.MaxSpeed.Value = data.MaxSpeed
+		pr.MaxDistance.Value = data.MaxDistance
 		pr.MaxRM.UpdateAt = data.MaxRMUpdateAt
 		pr.MaxWeight.UpdateAt = data.MaxWeightUpdateAt
 		pr.MaxReps.UpdateAt = data.MaxRepsUpdateAt
 		pr.MinDuration.UpdateAt = data.MinDurationUpdateAt
 		pr.MaxSpeed.UpdateAt = data.MaxSpeedUpdateAt
+		pr.MaxDistance.UpdateAt = data.MaxDistanceUpdateAt
 	}
 	return pr
 }
