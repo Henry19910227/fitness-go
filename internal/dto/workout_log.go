@@ -7,6 +7,7 @@ type WorkoutLog struct {
 	Duration       int              `json:"duration" example:"1"`                    // 訓練時長
 	Intensity      int              `json:"intensity" example:"1"`                   // 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
 	Place          int              `json:"place" example:"1"`                       // 地點(0:未指定/1:住家/2:健身房/3:戶外)
+	Course         *CourseProductItem `json:"course"`                       // 課表
 	Workout        *Workout         `json:"workout"`                                 // 訓練
 	WorkoutSetLogs []*WorkoutSetLog `json:"workout_set_logs"`                        // 訓練組
 	CreateAt       string           `json:"create_at" example:"2021-05-28 11:00:00"` // 創建時間

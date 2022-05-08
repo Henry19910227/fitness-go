@@ -531,6 +531,12 @@ func (w *workoutLog) GetWorkoutLog(c *gin.Context, workoutLogID int64) (*dto.Wor
 		return nil, w.errHandler.Set(c, "workout log set repo", err)
 	}
 	workoutLog := dto.NewWorkoutLog(log, logSets)
+	if workoutLog.Workout != nil {
+		err := w.courseRepo.FindCourseByWorkoutID(workoutLog.Workout.ID, &workoutLog.Course)
+		if err != nil {
+			return nil, w.errHandler.Set(c, "course repo", err)
+		}
+	}
 	return &workoutLog, nil
 }
 
