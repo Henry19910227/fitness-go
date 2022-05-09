@@ -42,7 +42,7 @@ type User interface {
 	UpdateUserByToken(c *gin.Context, token string, param *dto.UpdateUserParam) (*dto.User, errcode.Error)
 	GetUserByUID(c *gin.Context, uid int64) (*dto.User, errcode.Error)
 	GetUserByToken(c *gin.Context, token string) (*dto.User, errcode.Error)
-	GetCMSUsers(c *gin.Context, param *dto.FinsCMSUsersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSUser, *dto.Paging, errcode.Error)
+	GetCMSUsers(c *gin.Context, param *dto.FinsCMSUsersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSUserSummary, *dto.Paging, errcode.Error)
 	UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error)
 	UploadUserAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error)
 }

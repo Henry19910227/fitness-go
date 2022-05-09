@@ -37,7 +37,7 @@ func NewCMSUser(baseGroup *gin.RouterGroup, userService service.User, userMiddle
 // @Param order_type query string false "排序類型 (ASC:由低到高/DESC:由高到低)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} model.SuccessResult{data=[]dto.CMSUser} "成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.CMSUserSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /cms/users [GET]
 func (u *CMSUser) GetUsers(c *gin.Context) {

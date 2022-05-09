@@ -134,20 +134,32 @@ func (u *user) GetUserByToken(c *gin.Context, token string) (*dto.User, errcode.
 	return u.GetUserByUID(c, uid)
 }
 
-func (u *user) GetCMSUsers(c *gin.Context, param *dto.FinsCMSUsersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSUser, *dto.Paging, errcode.Error) {
-	var orderType = global.DESC
-	var orderField = "create_at"
+func (u *user) GetCMSUsers(c *gin.Context, param *dto.FinsCMSUsersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSUserSummary, *dto.Paging, errcode.Error) {
+	//設置排序
+	var orderBy *model.OrderBy
 	if orderByParam != nil {
+		orderBy = &model.OrderBy{
+			OrderType: global.DESC,
+			Field:     "create_at",
+		}
 		if orderByParam.OrderType != nil {
-			orderType = global.OrderType(*orderByParam.OrderType)
+			orderBy.OrderType = global.OrderType(*orderByParam.OrderType)
 		}
 		if orderByParam.OrderField != nil {
-			orderField = *orderByParam.OrderField
+			orderBy.Field = *orderByParam.OrderField
 		}
 	}
-	offset, limit := u.GetPagingIndex(pagingParam.Page, pagingParam.Size)
+	//設置分頁
+	var paging *model.PagingParam
+	if pagingParam != nil {
+		offset, limit := u.GetPagingIndex(pagingParam.Page, pagingParam.Size)
+		paging = &model.PagingParam{
+			Offset: offset,
+			Limit:  limit,
+		}
+	}
 	//獲取分頁資料
-	users := make([]*dto.CMSUser, 0)
+	users := make([]*dto.CMSUserSummary, 0)
 	var totalCount int64
 	if err := u.userRepo.FindUsers(&users, &totalCount, &model.FinsUsersParam{
 		UserID:     param.UserID,
@@ -155,22 +167,16 @@ func (u *user) GetCMSUsers(c *gin.Context, param *dto.FinsCMSUsersParam, orderBy
 		Email:      param.Email,
 		UserStatus: param.UserStatus,
 		UserType:   param.UserType,
-	}, &model.OrderBy{
-		Field:     orderField,
-		OrderType: orderType,
-	}, &model.PagingParam{
-		Offset: offset,
-		Limit:  limit,
-	}); err != nil {
+	}, orderBy, paging); err != nil {
 		return nil, nil, u.errHandler.Set(c, "user repo", err)
 	}
-	paging := dto.Paging{
+	pagingResult := dto.Paging{
 		TotalCount: int(totalCount),
 		TotalPage:  u.GetTotalPage(int(totalCount), pagingParam.Size),
 		Page:       pagingParam.Page,
 		Size:       pagingParam.Size,
 	}
-	return users, &paging, nil
+	return users, &pagingResult, nil
 }
 
 func (u *user) UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error) {
