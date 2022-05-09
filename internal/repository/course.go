@@ -184,7 +184,7 @@ func (c *course) FindCourseAmountByUserID(uid int64) (int, error) {
 	return amount, nil
 }
 
-func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummary, error) {
+func (c *course) FindCourseSummaries(totalCount *int64, param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummary, error) {
 	if param == nil {
 		return nil, nil
 	}
@@ -196,18 +196,14 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 		params = append(params, *param.UID)
 	}
 	//加入 status 篩選條件
-	if param.Status != nil {
-		query += "AND courses.course_status = ? "
-		params = append(params, *param.Status)
+	if len(param.Status) > 0 {
+		query += "AND courses.course_status IN (?) "
+		params = append(params, param.Status)
 	}
 	var db *gorm.DB
 	//基本查詢
 	db = c.gorm.DB().
 		Table("courses").
-		Select("courses.id AS id", "courses.user_id AS user_id", "courses.sale_id AS sale_id",
-			"courses.sale_type AS sale_type", "courses.course_status AS course_status", "courses.category AS category",
-			"courses.schedule_type AS schedule_type", "courses.name AS name", "courses.cover AS cover",
-			"courses.`level` AS level", "courses.plan_count AS plan_count", "courses.workout_count AS workout_count").
 		Preload("Trainer").
 		Preload("Sale").
 		Preload("Sale.ProductLabel")
@@ -219,9 +215,19 @@ func (c *course) FindCourseSummaries(param *model.FindCourseSummariesParam, orde
 	if paging != nil {
 		db = db.Offset(paging.Offset).Limit(paging.Limit)
 	}
+	//查詢數據
 	var courses []*model.CourseSummary
 	if err := db.Where(query, params...).Find(&courses).Error; err != nil {
 		return nil, err
+	}
+	//查詢資料數量
+	if totalCount != nil {
+		if err := c.gorm.DB().
+			Table("courses").
+			Where(query, params...).
+			Count(totalCount).Error; err != nil {
+			return nil, err
+		}
 	}
 	return courses, nil
 }

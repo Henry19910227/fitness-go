@@ -186,11 +186,9 @@ definitions:
       bank_account:
         $ref: '#/definitions/dto.BankAccount'
         description: 銀行資訊
-      cards:
+      card:
+        $ref: '#/definitions/dto.Card'
         description: 身分證
-        items:
-          $ref: '#/definitions/dto.Card'
-        type: array
       certificates:
         description: 教練證照
         items:
@@ -962,6 +960,10 @@ definitions:
         description: 課表封面
         example: d2w3e15d3awe.jpg
         type: string
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
       id:
         description: 課表 id
         example: 2
@@ -992,6 +994,10 @@ definitions:
       trainer:
         $ref: '#/definitions/dto.TrainerSummary'
         description: 教練簡介
+      update_at:
+        description: 修改日期
+        example: "2021-06-01 12:00:00"
+        type: string
       workout_count:
         description: 訓練總數
         example: 10
@@ -3048,7 +3054,7 @@ paths:
           description: 成功!
           schema:
             allOf:
-            - $ref: '#/definitions/model.SuccessResult'
+            - $ref: '#/definitions/model.SuccessPagingResult'
             - properties:
                 data:
                   $ref: '#/definitions/dto.CMSTrainer'
@@ -3060,6 +3066,56 @@ paths:
       security:
       - fitness_token: []
       summary: 取得教練詳細資訊
+      tags:
+      - CMS/Trainer
+  /cms/trainer/{user_id}/courses:
+    get:
+      consumes:
+      - application/json
+      description: 取得教練所屬的課表
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: 排序欄位 (update_at:更新時間)
+        in: query
+        name: order_field
+        type: string
+      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
+        in: query
+        name: order_type
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CourseSummary'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得教練所屬的課表
       tags:
       - CMS/Trainer
   /cms/trainers:
@@ -3086,7 +3142,7 @@ paths:
         type: string
       - description: 排序欄位 (create_at:創建時間)
         in: query
-        name: order_column
+        name: order_field
         type: string
       - description: 排序類型 (ASC:由低到高/DESC:由高到低)
         in: query
@@ -3109,7 +3165,7 @@ paths:
           description: 成功!
           schema:
             allOf:
-            - $ref: '#/definitions/model.SuccessResult'
+            - $ref: '#/definitions/model.SuccessPagingResult'
             - properties:
                 data:
                   items:

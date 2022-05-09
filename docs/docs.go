@@ -667,13 +667,94 @@ var doc = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/model.SuccessResult"
+                                    "$ref": "#/definitions/model.SuccessPagingResult"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/dto.CMSTrainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/cms/trainer/{user_id}/courses": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得教練所屬的課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Trainer"
+                ],
+                "summary": "取得教練所屬的課表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (update_at:更新時間)",
+                        "name": "order_field",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.CourseSummary"
                                         }
                                     }
                                 }
@@ -735,7 +816,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "排序欄位 (create_at:創建時間)",
-                        "name": "order_column",
+                        "name": "order_field",
                         "in": "query"
                     },
                     {
@@ -765,7 +846,7 @@ var doc = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/model.SuccessResult"
+                                    "$ref": "#/definitions/model.SuccessPagingResult"
                                 },
                                 {
                                     "type": "object",
@@ -6613,12 +6694,9 @@ var doc = `{
                     "description": "銀行資訊",
                     "$ref": "#/definitions/dto.BankAccount"
                 },
-                "cards": {
+                "card": {
                     "description": "身分證",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.Card"
-                    }
+                    "$ref": "#/definitions/dto.Card"
                 },
                 "certificates": {
                     "description": "教練證照",
@@ -7611,6 +7689,11 @@ var doc = `{
                     "type": "string",
                     "example": "d2w3e15d3awe.jpg"
                 },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
                 "id": {
                     "description": "課表 id",
                     "type": "integer",
@@ -7648,6 +7731,11 @@ var doc = `{
                 "trainer": {
                     "description": "教練簡介",
                     "$ref": "#/definitions/dto.TrainerSummary"
+                },
+                "update_at": {
+                    "description": "修改日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
                 },
                 "workout_count": {
                     "description": "訓練總數",

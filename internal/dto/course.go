@@ -52,6 +52,8 @@ type CourseSummary struct {
 	Level        int             `json:"level" example:"3"`                                      // 強度(1:初級/2:中級/3:中高級/4:高級)
 	PlanCount    int             `json:"plan_count" gorm:"column:plan_count" example:"2"`        // 計畫總數
 	WorkoutCount int             `json:"workout_count" gorm:"column:workout_count" example:"10"` // 訓練總數
+	CreateAt    string  `json:"create_at" gorm:"column:create_at" example:"2021-06-01 12:00:00"`   // 創建日期
+	UpdateAt    string  `json:"update_at" gorm:"column:update_at" example:"2021-06-01 12:00:00"`   // 修改日期
 }
 
 type Course struct {
@@ -473,4 +475,41 @@ func NewCourseAssetSummary(data *model.CourseAssetSummary) CourseAssetSummary {
 		}
 	}
 	return course
+}
+
+func NewCourseSummary(data *model.CourseSummary) *CourseSummary {
+	course := CourseSummary{
+		ID:           data.ID,
+		SaleType:     data.SaleType,
+		CourseStatus: data.CourseStatus,
+		Category:     data.Category,
+		ScheduleType: data.ScheduleType,
+		Name:         data.Name,
+		Cover:        data.Cover,
+		Level:        data.Level,
+		PlanCount:    data.PlanCount,
+		WorkoutCount: data.WorkoutCount,
+		CreateAt: 	  data.CreateAt,
+		UpdateAt:     data.UpdateAt,
+	}
+	trainer := &TrainerSummary{
+		UserID:   data.Trainer.UserID,
+		Nickname: data.Trainer.Nickname,
+		Avatar:   data.Trainer.Avatar,
+		Skill:    data.Trainer.Skill,
+	}
+	course.Trainer = trainer
+	if data.Sale != nil {
+		sale := &SaleItem{
+			ID:   data.Sale.ID,
+			Type: data.Sale.Type,
+		}
+		course.Sale = sale
+		if data.Sale.ProductLabel != nil {
+			course.Sale.Name = data.Sale.ProductLabel.Name
+			course.Sale.Twd = data.Sale.ProductLabel.Twd
+			course.Sale.ProductID = data.Sale.ProductLabel.ProductID
+		}
+	}
+	return &course
 }

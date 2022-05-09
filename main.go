@@ -144,7 +144,7 @@ func main() {
 	controller.NewFavorite(baseGroup, favoriteService, courseService, userMidd, courseMidd)
 	controller.NewCMSLogin(baseGroup, loginService, userMidd)
 	controller.NewCMSUser(baseGroup, userService, userMidd)
-	controller.NewCMSTrainer(baseGroup, trainerService, userMidd)
+	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 

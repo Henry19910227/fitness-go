@@ -12,10 +12,11 @@ import (
 type CMSTrainer struct {
 	Base
 	trainerService service.Trainer
+	courseService  service.Course
 }
 
-func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, userMiddleware middleware.User) {
-	cms := &CMSTrainer{trainerService: trainerService}
+func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, courseService service.Course, userMiddleware middleware.User) {
+	cms := &CMSTrainer{trainerService: trainerService, courseService: courseService}
 	baseGroup.GET("/cms/trainers",
 		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
 		cms.GetTrainers)
@@ -23,6 +24,10 @@ func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, u
 	baseGroup.GET("/cms/trainer/:user_id",
 		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
 		cms.GetTrainer)
+
+	baseGroup.GET("/cms/trainer/:user_id/courses",
+		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
+		cms.GetTrainerCourses)
 }
 
 // GetTrainers 獲取教練列表
@@ -36,11 +41,11 @@ func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, u
 // @Param nickname query string false "教練名稱(1~40字元)"
 // @Param email query string false "教練Email"
 // @Param trainer_status query string false "教練狀態(1:正常/2:審核中/3:停權/4:未啟用)"
-// @Param order_column query string false "排序欄位 (create_at:創建時間)"
+// @Param order_field query string false "排序欄位 (create_at:創建時間)"
 // @Param order_type query string false "排序類型 (ASC:由低到高/DESC:由高到低)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} model.SuccessResult{data=[]dto.CMSTrainerSummary} "成功!"
+// @Success 200 {object} model.SuccessPagingResult{data=[]dto.CMSTrainerSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /cms/trainers [GET]
 func (t *CMSTrainer) GetTrainers(c *gin.Context) {
@@ -86,7 +91,7 @@ func (t *CMSTrainer) GetTrainers(c *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param user_id path int64 true "教練id"
-// @Success 200 {object} model.SuccessResult{data=dto.CMSTrainer} "成功!"
+// @Success 200 {object} model.SuccessPagingResult{data=dto.CMSTrainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /cms/trainer/{user_id} [GET]
 func (t *CMSTrainer) GetTrainer(c *gin.Context) {
@@ -101,4 +106,50 @@ func (t *CMSTrainer) GetTrainer(c *gin.Context) {
 		return
 	}
 	t.JSONSuccessResponse(c, trainer, "success!")
+}
+
+// GetTrainerCourses 取得教練所屬的課表
+// @Summary 取得教練所屬的課表
+// @Description 取得教練所屬的課表
+// @Tags CMS/Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練id"
+// @Param order_field query string false "排序欄位 (update_at:更新時間)"
+// @Param order_type query string false "排序類型 (ASC:由低到高/DESC:由高到低)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} model.SuccessResult{data=dto.CourseSummary} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /cms/trainer/{user_id}/courses [GET]
+func (t *CMSTrainer) GetTrainerCourses(c *gin.Context) {
+	var uri validator.TrainerIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var orderByQuery validator.OrderByQuery
+	if err := c.ShouldBind(&orderByQuery); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var pagingQuery validator.PagingQuery
+	if err := c.ShouldBind(&pagingQuery); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	courses, paging, err := t.courseService.GetCourseSummariesByUID(c,
+		uri.TrainerID, []int{int(global.Reviewing), int(global.Sale), int(global.Reject), int(global.Remove)}, &dto.OrderByParam{
+			OrderField: orderByQuery.OrderField,
+			OrderType:  orderByQuery.OrderType,
+		}, &dto.PagingParam{
+			Page: pagingQuery.Page,
+			Size: pagingQuery.Size,
+		})
+	if err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessPagingResponse(c, courses, paging, "success!")
 }

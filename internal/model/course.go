@@ -46,6 +46,8 @@ type CourseSummary struct {
 	WorkoutCount int             `gorm:"column:workout_count"`                  // 訓練總數
 	Trainer      *TrainerSummary `gorm:"foreignKey:user_id;references:user_id"` // 教練簡介
 	Sale         *SaleItem       `gorm:"foreignKey:id;references:sale_id"`      // 銷售項目
+	CreateAt    string  		 `gorm:"column:create_at"`   // 創建日期
+	UpdateAt    string  		 `gorm:"column:update_at"`   // 修改日期
 }
 
 func (CourseSummary) TableName() string {
@@ -198,7 +200,7 @@ type FindCourseProductCountParam struct {
 
 type FindCourseSummariesParam struct {
 	UID    *int64
-	Status *int
+	Status []int
 }
 
 type CreateCourseParam struct {

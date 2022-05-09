@@ -380,17 +380,28 @@ func (t *trainer) GetTrainerSummaries(c *gin.Context, param dto.GetTrainerSummar
 }
 
 func (t *trainer) GetCMSTrainers(c *gin.Context, param *dto.FinsCMSTrainersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSTrainerSummary, *dto.Paging, errcode.Error) {
-	var orderType = global.DESC
-	var orderField = "create_at"
+	var orderBy *model.OrderBy
 	if orderByParam != nil {
+		orderBy = &model.OrderBy{
+			OrderType: global.DESC,
+			Field:     "update_at",
+		}
 		if orderByParam.OrderType != nil {
-			orderType = global.OrderType(*orderByParam.OrderType)
+			orderBy.OrderType = global.OrderType(*orderByParam.OrderType)
 		}
 		if orderByParam.OrderField != nil {
-			orderField = *orderByParam.OrderField
+			orderBy.Field = *orderByParam.OrderField
 		}
 	}
-	offset, limit := t.GetPagingIndex(pagingParam.Page, pagingParam.Size)
+	//設置分頁
+	var paging *model.PagingParam
+	if pagingParam != nil {
+		offset, limit := t.GetPagingIndex(pagingParam.Page, pagingParam.Size)
+		paging = &model.PagingParam{
+			Offset: offset,
+			Limit:  limit,
+		}
+	}
 	trainers := make([]*dto.CMSTrainerSummary, 0)
 	var totalCount int64
 	if err := t.trainerRepo.FindTrainers(&trainers, &totalCount, &model.FinsTrainersParam{
@@ -398,22 +409,16 @@ func (t *trainer) GetCMSTrainers(c *gin.Context, param *dto.FinsCMSTrainersParam
 		NickName:      param.NickName,
 		Email:         param.Email,
 		TrainerStatus: param.TrainerStatus,
-	}, &model.OrderBy{
-		Field:     orderField,
-		OrderType: orderType,
-	}, &model.PagingParam{
-		Offset: offset,
-		Limit:  limit,
-	}); err != nil {
+	}, orderBy, paging); err != nil {
 		return nil, nil, t.errHandler.Set(c, "trainer repo", err)
 	}
-	paging := dto.Paging{
+	pagingResult := dto.Paging{
 		TotalCount: int(totalCount),
 		TotalPage:  t.GetTotalPage(int(totalCount), pagingParam.Size),
 		Page:       pagingParam.Page,
 		Size:       pagingParam.Size,
 	}
-	return trainers, &paging, nil
+	return trainers, &pagingResult, nil
 }
 
 func (t *trainer) GetCMSTrainer(c *gin.Context, userID int64) (*dto.CMSTrainer, errcode.Error) {
@@ -441,7 +446,7 @@ func (t *trainer) GetCMSTrainer(c *gin.Context, userID int64) (*dto.CMSTrainer, 
 		trainer.Card = &card
 	}
 	trainer.Certificates = make([]*dto.Certificate, 0)
-	if err := t.cerRepo.FindCertificatesByUID(userID, &trainer.Certificates); err != nil{
+	if err := t.cerRepo.FindCertificatesByUID(userID, &trainer.Certificates); err != nil {
 		return nil, t.errHandler.Set(c, "cert repo", err)
 	}
 	trainer.TrainerAlbumPhotos = make([]*dto.TrainerAlbumPhoto, 0)
