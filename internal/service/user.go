@@ -179,6 +179,14 @@ func (u *user) GetCMSUsers(c *gin.Context, param *dto.FinsCMSUsersParam, orderBy
 	return users, &pagingResult, nil
 }
 
+func (u *user) GetCMSUser(c *gin.Context, userID int64) (*dto.CMSUser, errcode.Error) {
+	var user dto.CMSUser
+	if err := u.userRepo.FindUserByUID(userID, &user); err != nil {
+		return nil, u.errHandler.Set(c, "user repo", err)
+	}
+	return &user, nil
+}
+
 func (u *user) UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error) {
 	//上傳照片
 	newImageNamed, err := u.uploader.UploadUserAvatar(imageFile, imageNamed)

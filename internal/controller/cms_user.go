@@ -19,11 +19,15 @@ func NewCMSUser(baseGroup *gin.RouterGroup, userService service.User, userMiddle
 	baseGroup.GET("/cms/users",
 		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
 		cms.GetUsers)
+
+	baseGroup.GET("/cms/user/:user_id",
+		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
+		cms.GetUser)
 }
 
-// GetUsers 獲取用戶資訊
-// @Summary 獲取用戶資訊
-// @Description 獲取用戶資訊
+// GetUsers 獲取用戶列表
+// @Summary 獲取用戶列表
+// @Description 獲取用戶列表
 // @Tags CMS/User
 // @Accept json
 // @Produce json
@@ -74,4 +78,29 @@ func (u *CMSUser) GetUsers(c *gin.Context) {
 		return
 	}
 	u.JSONSuccessPagingResponse(c, users, paging, "success!")
+}
+
+// GetUser 取得用戶詳細資訊
+// @Summary 取得用戶詳細資訊
+// @Description 取得用戶詳細資訊
+// @Tags CMS/User
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "用戶id"
+// @Success 200 {object} model.SuccessPagingResult{data=dto.CMSUser} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /cms/user/{user_id} [GET]
+func (u *CMSUser) GetUser(c *gin.Context) {
+	var uri validator.UserIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		u.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	user, err := u.userService.GetCMSUser(c, *uri.UserID)
+	if err != nil {
+		u.JSONErrorResponse(c, err)
+		return
+	}
+	u.JSONSuccessResponse(c, user, "success!")
 }

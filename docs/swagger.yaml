@@ -291,6 +291,69 @@ definitions:
         example: 1001
         type: integer
     type: object
+  dto.CMSUser:
+    properties:
+      account_type:
+        description: 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
+        example: 1
+        type: integer
+      avatar:
+        description: 用戶大頭貼
+        example: d2fe5w321a.png
+        type: string
+      birthday:
+        description: 生日
+        example: "1991-02-27"
+        type: string
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
+        example: 2
+        type: integer
+      height:
+        description: 身高
+        example: 176.5
+        type: number
+      id:
+        description: 帳戶id
+        example: 10001
+        type: integer
+      nickname:
+        description: 暱稱
+        example: Henry
+        type: string
+      sex:
+        description: 性別 (m:男/f:女)
+        example: m
+        type: string
+      target:
+        description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
+        example: 3
+        type: integer
+      update_at:
+        description: 修改日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      user_status:
+        description: 用戶狀態 (1:正常/2:違規/3:刪除)
+        example: 1
+        type: integer
+      user_type:
+        description: 用戶狀態 (1:一般用戶/2:訂閱用戶)
+        example: 1
+        type: integer
+      weight:
+        description: 體重
+        example: 72.5
+        type: number
+    type: object
   dto.CMSUserSummary:
     properties:
       account_type:
@@ -3193,11 +3256,43 @@ paths:
       summary: 獲取教練列表
       tags:
       - CMS/Trainer
+  /cms/user/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 取得用戶詳細資訊
+      parameters:
+      - description: 用戶id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessPagingResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CMSUser'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得用戶詳細資訊
+      tags:
+      - CMS/User
   /cms/users:
     get:
       consumes:
       - application/json
-      description: 獲取用戶資訊
+      description: 獲取用戶列表
       parameters:
       - description: 用戶ID
         in: query
@@ -3257,7 +3352,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取用戶資訊
+      summary: 獲取用戶列表
       tags:
       - CMS/User
   /course:
