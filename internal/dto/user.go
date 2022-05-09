@@ -8,6 +8,8 @@ type UpdateUserParam struct {
 	Weight     *float64 `gorm:"column:weight"`
 	Experience *int     `gorm:"column:experience"`
 	Target     *int     `gorm:"column:target"`
+	UserStatus *int     `gorm:"column:user_status"`
+	Password   *string  `gorm:"column:password"`
 }
 
 type User struct {

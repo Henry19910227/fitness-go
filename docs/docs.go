@@ -966,13 +966,75 @@ var doc = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/model.SuccessPagingResult"
+                                    "$ref": "#/definitions/model.SuccessResult"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/dto.CMSUser"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新用戶資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/User"
+                ],
+                "summary": "更新用戶資訊",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用戶id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CMSUpdateUserBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.User"
                                         }
                                     }
                                 }
@@ -9614,6 +9676,21 @@ var doc = `{
                     "description": "密碼 (6~18字元)",
                     "type": "string",
                     "example": "12345678"
+                }
+            }
+        },
+        "validator.CMSUpdateUserBody": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "description": "密碼 (6~18字元)",
+                    "type": "string",
+                    "example": "12345678"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

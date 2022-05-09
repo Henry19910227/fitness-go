@@ -63,6 +63,8 @@ func (u *user) UpdateUserByUID(c *gin.Context, uid int64, param *dto.UpdateUserP
 		Weight:     param.Weight,
 		Experience: param.Experience,
 		Target:     param.Target,
+		UserStatus: param.UserStatus,
+		Password:   param.Password,
 	}); err != nil {
 		//資料已存在
 		if u.MysqlDuplicateEntry(err) {
