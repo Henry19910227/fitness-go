@@ -42,6 +42,8 @@ type User interface {
 	UpdateUserByToken(c *gin.Context, token string, param *dto.UpdateUserParam) (*dto.User, errcode.Error)
 	GetUserByUID(c *gin.Context, uid int64) (*dto.User, errcode.Error)
 	GetUserByToken(c *gin.Context, token string) (*dto.User, errcode.Error)
+	GetCMSUsers(c *gin.Context, param *dto.FinsCMSUsersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSUserSummary, *dto.Paging, errcode.Error)
+	GetCMSUser(c *gin.Context, userID int64) (*dto.CMSUser, errcode.Error)
 	UploadUserAvatarByUID(c *gin.Context, uid int64, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error)
 	UploadUserAvatarByToken(c *gin.Context, token string, imageNamed string, imageFile multipart.File) (*dto.UserAvatar, errcode.Error)
 }
@@ -58,6 +60,8 @@ type Trainer interface {
 	DeleteCertificate(c *gin.Context, cerID int64) errcode.Error
 	GetTrainerAlbumPhotoCount(c *gin.Context, uid int64) (int, errcode.Error)
 	GetCertificateCount(c *gin.Context, uid int64) (int, errcode.Error)
+	GetCMSTrainers(c *gin.Context, param *dto.FinsCMSTrainersParam, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CMSTrainerSummary, *dto.Paging, errcode.Error)
+	GetCMSTrainer(c *gin.Context, userID int64) (*dto.CMSTrainer, errcode.Error)
 }
 
 type Course interface {
@@ -66,7 +70,7 @@ type Course interface {
 	UpdateCourse(c *gin.Context, courseID int64, param *dto.UpdateCourseParam) (*dto.Course, errcode.Error)
 	UpdateCourseSaleType(c *gin.Context, courseID int64, saleType int, saleID *int64) (*dto.Course, errcode.Error)
 	DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, errcode.Error)
-	GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error)
+	GetCourseSummariesByUID(c *gin.Context, uid int64, status []int, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CourseSummary, *dto.Paging, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
 	GetCourseProductByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error)
 	GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)

@@ -61,7 +61,7 @@ func NewAction(baseGroup *gin.RouterGroup,
 
 // UpdateAction 修改動作
 // @Summary 修改動作
-// @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}
+// @Description 查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}
 // @Tags Action
 // @Accept json
 // @Produce json

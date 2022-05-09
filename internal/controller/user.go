@@ -88,7 +88,7 @@ func (u *user) GetUserInfo(c *gin.Context) {
 
 // UploadMyUserAvatar 上傳我的大頭照
 // @Summary 上傳我的大頭照
-// @Description 查看我的大頭照 : https://www.fitness-app.tk/api/v1/resource/user/avatar/{圖片名}
+// @Description 查看我的大頭照 : https://www.fitopia-hub.tk/api/v1/resource/user/avatar/{圖片名}
 // @Tags User
 // @Security fitness_token
 // @Accept mpfd

@@ -83,7 +83,7 @@ func (t *trainer) CreateTrainer(uid int64, param *model.CreateTrainerParam) erro
 		UserID:       uid,
 		AccountName:  param.AccountName,
 		AccountImage: param.AccountImage,
-		BackCode:     param.BankCode,
+		BankCode:     param.BankCode,
 		Account:      param.Account,
 		Branch:       param.Branch,
 		CreateAt:     time.Now().Format("2006-01-02 15:04:05"),
@@ -183,6 +183,9 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	}
 	if param.TrainerStatus != nil {
 		selects = append(selects, "trainer_status")
+	}
+	if param.TrainerLevel != nil {
+		selects = append(selects, "trainer_level")
 	}
 	if param.Intro != nil {
 		selects = append(selects, "intro")
@@ -287,6 +290,70 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 		}
 		return nil
 	}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *trainer) FindTrainers(result interface{}, totalCount *int64, param *model.FinsTrainersParam, orderBy *model.OrderBy, paging *model.PagingParam) error {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 userID 篩選條件
+	if param.UserID != nil {
+		query += "AND user_id = ? "
+		params = append(params, *param.UserID)
+	}
+	//加入 nickname 篩選條件
+	if param.NickName != nil {
+		query += "AND nickname LIKE ? "
+		params = append(params, "%"+*param.NickName+"%")
+	}
+	//加入 email 篩選條件
+	if param.Email != nil {
+		query += "AND email = ? "
+		params = append(params, *param.Email)
+	}
+	//加入 trainer_status 篩選條件
+	if param.TrainerStatus != nil {
+		query += "AND trainer_status = ? "
+		params = append(params, *param.TrainerStatus)
+	}
+	var db *gorm.DB
+	db = t.gorm.DB().Model(&entity.Trainer{}).Where(query, params...)
+
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	//分頁
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	//查詢數據
+	if err := db.Find(result).Error; err != nil {
+		return nil
+	}
+	//查詢資料數量
+	if totalCount != nil {
+		if err := t.gorm.DB().
+			Table("trainers").
+			Where(query, params...).
+			Count(totalCount).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (t *trainer) FindTrainerDetail(userID int64, result interface{}) error {
+	if err := t.gorm.DB().
+		Model(&model.TrainerDetail{}).
+		Preload("BankAccount").
+		Preload("TrainerAlbumPhotos").
+		Preload("Certificates").
+		Preload("Cards").
+		Where("user_id = ?", userID).
+		Take(result).Error; err != nil {
 		return err
 	}
 	return nil

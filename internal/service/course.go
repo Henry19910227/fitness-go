@@ -147,51 +147,54 @@ func (cs *course) DeleteCourse(c *gin.Context, courseID int64) (*dto.CourseID, e
 	return &dto.CourseID{ID: courseID}, nil
 }
 
-func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status *int) ([]*dto.CourseSummary, errcode.Error) {
-	entities, err := cs.courseRepo.FindCourseSummaries(&model.FindCourseSummariesParam{
+func (cs *course) GetCourseSummariesByUID(c *gin.Context, uid int64, status []int, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CourseSummary, *dto.Paging, errcode.Error) {
+	//設置排序
+	var orderBy *model.OrderBy
+	if orderByParam != nil {
+		orderBy = &model.OrderBy{
+			OrderType: global.DESC,
+			Field:     "update_at",
+		}
+		if orderByParam.OrderType != nil {
+			orderBy.OrderType = global.OrderType(*orderByParam.OrderType)
+		}
+		if orderByParam.OrderField != nil {
+			orderBy.Field = *orderByParam.OrderField
+		}
+	}
+	//設置分頁
+	var paging *model.PagingParam
+	if pagingParam != nil {
+		offset, limit := cs.GetPagingIndex(pagingParam.Page, pagingParam.Size)
+		paging = &model.PagingParam{
+			Offset: offset,
+			Limit:  limit,
+		}
+	}
+	//查詢數據
+	var totalCount int64
+	datas, err := cs.courseRepo.FindCourseSummaries(&totalCount, &model.FindCourseSummariesParam{
 		UID:    &uid,
 		Status: status,
-	}, nil, nil)
+	}, orderBy, paging)
 	if err != nil {
 		cs.logger.Set(c, handler.Error, "CourseRepo", cs.errHandler.SystemError().Code(), err.Error())
-		return nil, cs.errHandler.SystemError()
+		return nil, nil, cs.errHandler.SystemError()
 	}
 	courses := make([]*dto.CourseSummary, 0)
-	for _, entity := range entities {
-		course := dto.CourseSummary{
-			ID:           entity.ID,
-			SaleType:     entity.SaleType,
-			CourseStatus: entity.CourseStatus,
-			Category:     entity.Category,
-			ScheduleType: entity.ScheduleType,
-			Name:         entity.Name,
-			Cover:        entity.Cover,
-			Level:        entity.Level,
-			PlanCount:    entity.PlanCount,
-			WorkoutCount: entity.WorkoutCount,
-		}
-		trainer := &dto.TrainerSummary{
-			UserID:   entity.Trainer.UserID,
-			Nickname: entity.Trainer.Nickname,
-			Avatar:   entity.Trainer.Avatar,
-			Skill:    entity.Trainer.Skill,
-		}
-		course.Trainer = trainer
-		if entity.Sale != nil {
-			sale := &dto.SaleItem{
-				ID:   entity.Sale.ID,
-				Type: entity.Sale.Type,
-			}
-			course.Sale = sale
-			if entity.Sale.ProductLabel != nil {
-				course.Sale.Name = entity.Sale.ProductLabel.Name
-				course.Sale.Twd = entity.Sale.ProductLabel.Twd
-				course.Sale.ProductID = entity.Sale.ProductLabel.ProductID
-			}
-		}
-		courses = append(courses, &course)
+	for _, data := range datas {
+		courses = append(courses, dto.NewCourseSummary(data))
 	}
-	return courses, nil
+	var pagingResult *dto.Paging
+	if pagingParam != nil {
+		pagingResult = &dto.Paging{
+			TotalCount: int(totalCount),
+			TotalPage:  cs.GetTotalPage(int(totalCount), pagingParam.Size),
+			Page:       pagingParam.Page,
+			Size:       pagingParam.Size,
+		}
+	}
+	return courses, pagingResult, nil
 }
 
 func (cs *course) GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error) {

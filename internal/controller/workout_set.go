@@ -143,7 +143,7 @@ func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
 
 // UploadWorkoutSetStartAudio 上傳訓練組前導語音
 // @Summary 上傳訓練組前導語音
-// @Description 下載訓練組前導語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}
+// @Description 下載訓練組前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}
 // @Tags WorkoutSet
 // @Security fitness_token
 // @Accept mpfd
@@ -198,7 +198,7 @@ func (w *workoutset) DeleteWorkoutSetStartAudio(c *gin.Context) {
 
 // UploadWorkoutSetProgressAudio 上傳訓練組進行中語音
 // @Summary 上傳訓練組進行中語音
-// @Description 下載訓練組進行中語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}
+// @Description 下載訓練組進行中語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}
 // @Tags WorkoutSet
 // @Security fitness_token
 // @Accept mpfd

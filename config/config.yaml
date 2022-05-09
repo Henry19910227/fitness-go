@@ -92,5 +92,5 @@ Swagger:
       BasePath: /api/v1
     Release:
       Protocol: https
-      Host: www.fitness-app.tk
+      Host: www.fitopia-hub.tk
       BasePath: /api/v1

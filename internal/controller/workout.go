@@ -157,7 +157,7 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 
 // UploadWorkoutStartAudio 上傳訓練前導語音
 // @Summary 上傳訓練前導語音
-// @Description 下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/start_audio/{語音檔案名}
+// @Description 下載前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout/start_audio/{語音檔案名}
 // @Tags Workout
 // @Security fitness_token
 // @Accept mpfd
@@ -188,7 +188,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 
 // UploadWorkoutEndAudio 上傳訓練結束語音
 // @Summary 上傳訓練結束語音
-// @Description 上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/end_audio/{語音檔案名}
+// @Description 上傳訓練結束語音 : https://www.fitopia-hub.tk/api/v1/resource/workout/end_audio/{語音檔案名}
 // @Tags Workout
 // @Security fitness_token
 // @Accept mpfd

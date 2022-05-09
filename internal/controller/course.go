@@ -256,7 +256,11 @@ func (cc *Course) GetCourses(c *gin.Context) {
 		cc.JSONValidatorErrorResponse(c, err.Error())
 		return
 	}
-	courses, err := cc.courseService.GetCourseSummariesByUID(c, uid, query.Status)
+	status := make([]int, 0)
+	if query.Status != nil {
+		status = append(status, *query.Status)
+	}
+	courses, _, err := cc.courseService.GetCourseSummariesByUID(c, uid, status, nil, nil)
 	if err != nil {
 		cc.JSONErrorResponse(c, err)
 		return
@@ -316,7 +320,7 @@ func (cc *Course) GetCourseOverview(c *gin.Context) {
 
 // UploadCourseCover 上傳課表封面照
 // @Summary 上傳課表封面照
-// @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}
+// @Description 查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/course/cover/{圖片名}
 // @Tags Course
 // @Security fitness_token
 // @Accept mpfd

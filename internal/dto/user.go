@@ -8,6 +8,8 @@ type UpdateUserParam struct {
 	Weight     *float64 `gorm:"column:weight"`
 	Experience *int     `gorm:"column:experience"`
 	Target     *int     `gorm:"column:target"`
+	UserStatus *int     `gorm:"column:user_status"`
+	Password   *string  `gorm:"column:password"`
 }
 
 type User struct {
@@ -40,4 +42,12 @@ type UserSummary struct {
 
 type UserAvatar struct {
 	Avatar string `json:"avatar" example:"dkf2se51fsdds.png"` // 用戶大頭照
+}
+
+type FinsCMSUsersParam struct {
+	UserID     *int64  // 用戶ID
+	Name       *string // 用戶名稱(1~40字元)
+	Email      *string // 用戶Email
+	UserStatus *int    // 用戶狀態 (1:正常/2:違規/3:刪除)
+	UserType   *int    // 用戶類型 (1:一般用戶/2:訂閱用戶)
 }

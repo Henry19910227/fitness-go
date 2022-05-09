@@ -19,6 +19,7 @@ type User interface {
 	FindUserByAccountAndPassword(account string, password string, entity interface{}) error
 	FindUserIDByNickname(nickname string) (int64, error)
 	FindUserIDByEmail(email string) (int64, error)
+	FindUsers(result interface{}, totalCount *int64, param *model.FinsUsersParam, orderBy *model.OrderBy, paging *model.PagingParam) error
 }
 
 type Trainer interface {
@@ -28,6 +29,8 @@ type Trainer interface {
 	FindTrainerEntities(input interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error
 	FindTrainersCount(status *global.TrainerStatus) (int, error)
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
+	FindTrainers(result interface{}, totalCount *int64, param *model.FinsTrainersParam, orderBy *model.OrderBy, paging *model.PagingParam) error
+	FindTrainerDetail(userID int64, result interface{}) error
 }
 
 type TrainerStatistic interface {
@@ -41,7 +44,7 @@ type Course interface {
 	CreateCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	CreateSingleWorkoutCourse(uid int64, param *model.CreateCourseParam) (int64, error)
 	UpdateCourseByID(tx *gorm.DB, courseID int64, param *model.UpdateCourseParam) error
-	FindCourseSummaries(param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummary, error)
+	FindCourseSummaries(totalCount *int64, param *model.FindCourseSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseSummary, error)
 	FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
 	FindCourseProductCount(param model.FindCourseProductCountParam) (int, error)
 	FindCourseProduct(courseID int64) (*model.CourseProduct, error)
@@ -137,7 +140,7 @@ type SubscribePlan interface {
 type TrainerAlbum interface {
 	CreateAlbumPhoto(uid int64, imageNamed string) error
 	FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error)
-	FindAlbumPhotosByUID(uid int64, entity interface{}) error
+	FindAlbumPhotosByUID(uid int64, input interface{}) error
 	FindAlbumPhotoByID(photoID int64, entity interface{}) error
 	FindAlbumPhotosByIDs(photoIDs []int64, entity interface{}) error
 	DeleteAlbumPhotoByID(photoID int64) error
@@ -251,4 +254,12 @@ type Favorite interface {
 	DeleteFavoriteCourse(userID int64, courseID int64) error
 	DeleteFavoriteTrainer(userID int64, trainerID int64) error
 	DeleteFavoriteAction(userID int64, actionID int64) error
+}
+
+type BankAccount interface {
+	FindBankAccountEntity(userID int64, inputModel interface{}) error
+}
+
+type Card interface {
+	FindCardEntity(userID int64, inputModel interface{}) error
 }
