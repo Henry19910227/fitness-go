@@ -184,6 +184,9 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	if param.TrainerStatus != nil {
 		selects = append(selects, "trainer_status")
 	}
+	if param.TrainerLevel != nil {
+		selects = append(selects, "trainer_level")
+	}
 	if param.Intro != nil {
 		selects = append(selects, "intro")
 	}

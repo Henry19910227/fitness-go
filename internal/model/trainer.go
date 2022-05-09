@@ -96,6 +96,7 @@ type UpdateTrainerParam struct {
 	Nickname             *string  // 教練暱稱
 	Skill                *string  // 專長
 	TrainerStatus        *int     // 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+	TrainerLevel         *int     // 教練評鑑等級
 	Intro                *string  // 個人介紹
 	Experience           *int     // 年資
 	Motto                *string  // 座右銘

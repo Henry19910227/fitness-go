@@ -2514,6 +2514,17 @@ definitions:
     required:
     - name
     type: object
+  validator.UpdateTrainerBody:
+    properties:
+      trainer_level:
+        description: 教練評鑑等級 (1~5星)
+        example: 5
+        type: integer
+      trainer_status:
+        description: 教練狀態(1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+    type: object
   validator.UpdateUserInfoBody:
     properties:
       birthday:
@@ -3066,6 +3077,43 @@ paths:
       security:
       - fitness_token: []
       summary: 取得教練詳細資訊
+      tags:
+      - CMS/Trainer
+    patch:
+      consumes:
+      - application/json
+      description: 更新教練資訊
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: 更新欄位
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.UpdateTrainerBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Trainer'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 更新教練資訊
       tags:
       - CMS/Trainer
   /cms/trainer/{user_id}/courses:

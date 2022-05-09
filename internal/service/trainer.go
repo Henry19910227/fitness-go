@@ -249,6 +249,8 @@ func (t *trainer) UpdateTrainer(c *gin.Context, uid int64, param *dto.UpdateTrai
 	if err := t.trainerRepo.UpdateTrainerByUID(uid, &model.UpdateTrainerParam{
 		Nickname:             param.Nickname,
 		Skill:                &skill,
+		TrainerStatus:        param.TrainerStatus,
+		TrainerLevel:         param.TrainerLevel,
 		Intro:                param.Intro,
 		Experience:           param.Experience,
 		Motto:                param.Motto,

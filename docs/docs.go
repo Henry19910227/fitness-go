@@ -687,6 +687,68 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新教練資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Trainer"
+                ],
+                "summary": "更新教練資訊",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "更新欄位",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateTrainerBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Trainer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
             }
         },
         "/cms/trainer/{user_id}/courses": {
@@ -9776,6 +9838,21 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "第一週增肌計畫"
+                }
+            }
+        },
+        "validator.UpdateTrainerBody": {
+            "type": "object",
+            "properties": {
+                "trainer_level": {
+                    "description": "教練評鑑等級 (1~5星)",
+                    "type": "integer",
+                    "example": 5
+                },
+                "trainer_status": {
+                    "description": "教練狀態(1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

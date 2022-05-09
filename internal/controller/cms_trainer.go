@@ -25,6 +25,10 @@ func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, c
 		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
 		cms.GetTrainer)
 
+	baseGroup.PATCH("/cms/trainer/:user_id",
+		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
+		cms.UpdateTrainer)
+
 	baseGroup.GET("/cms/trainer/:user_id/courses",
 		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
 		cms.GetTrainerCourses)
@@ -101,6 +105,40 @@ func (t *CMSTrainer) GetTrainer(c *gin.Context) {
 		return
 	}
 	trainer, err := t.trainerService.GetCMSTrainer(c, uri.TrainerID)
+	if err != nil {
+		t.JSONErrorResponse(c, err)
+		return
+	}
+	t.JSONSuccessResponse(c, trainer, "success!")
+}
+
+// UpdateTrainer 更新教練資訊
+// @Summary 更新教練資訊
+// @Description 更新教練資訊
+// @Tags CMS/Trainer
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練id"
+// @Param json_body body validator.UpdateTrainerBody true "更新欄位"
+// @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /cms/trainer/{user_id} [PATCH]
+func (t *CMSTrainer) UpdateTrainer(c *gin.Context) {
+	var uri validator.TrainerIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	var body validator.UpdateTrainerBody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		t.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	trainer, err := t.trainerService.UpdateTrainer(c, uri.TrainerID, &dto.UpdateTrainerParam{
+		TrainerStatus: body.TrainerStatus,
+		TrainerLevel:  body.TrainerLevel,
+	})
 	if err != nil {
 		t.JSONErrorResponse(c, err)
 		return
