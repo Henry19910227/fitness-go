@@ -52,7 +52,7 @@ func NewReview(baseGroup *gin.RouterGroup,
 
 // CreateReview 創建評論
 // @Summary 創建評論
-// @Description 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
+// @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review
 // @Accept json
 // @Produce json
@@ -107,7 +107,7 @@ func (r *Review) CreateReview(c *gin.Context) {
 
 // GetReviews 獲取評論列表
 // @Summary 獲取評論列表
-// @Description 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
+// @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review
 // @Accept json
 // @Produce json
@@ -153,7 +153,7 @@ func (r *Review) GetReviews(c *gin.Context) {
 
 // GetReview 獲取評論
 // @Summary 獲取評論
-// @Description 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
+// @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review
 // @Accept json
 // @Produce json

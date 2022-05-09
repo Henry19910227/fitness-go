@@ -824,6 +824,25 @@ definitions:
         example: 10
         type: integer
     type: object
+  dto.CourseProductItem:
+    properties:
+      cover:
+        description: 課表封面
+        example: f43e5715fe.jpg
+        type: string
+      id:
+        description: 課表 id
+        example: 10001
+        type: integer
+      name:
+        description: 課表名稱
+        example: henry
+        type: string
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        example: 1
+        type: integer
+    type: object
   dto.CourseProductStructure:
     properties:
       allow_access:
@@ -1921,6 +1940,9 @@ definitions:
     type: object
   dto.WorkoutLog:
     properties:
+      course:
+        $ref: '#/definitions/dto.CourseProductItem'
+        description: 課表
       create_at:
         description: 創建時間
         example: "2021-05-28 11:00:00"
@@ -2746,7 +2768,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -3661,7 +3683,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}'
+      description: '查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/course/cover/{圖片名}'
       parameters:
       - description: 課表id
         in: path
@@ -4108,7 +4130,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
+      description: 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
       parameters:
       - description: 課表id
         in: path
@@ -4153,7 +4175,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
+      description: 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
       parameters:
       - description: 課表id
         in: path
@@ -5257,7 +5279,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}
+      description: 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
       parameters:
       - description: 評論id
         in: path
@@ -5429,7 +5451,7 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -5535,7 +5557,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -5797,7 +5819,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看我的大頭照 : https://www.fitness-app.tk/api/v1/resource/user/avatar/{圖片名}'
+      description: '查看我的大頭照 : https://www.fitopia-hub.tk/api/v1/resource/user/avatar/{圖片名}'
       parameters:
       - description: 用戶大頭照
         in: formData
@@ -6038,7 +6060,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/end_audio/{語音檔案名}'
+      description: '上傳訓練結束語音 : https://www.fitopia-hub.tk/api/v1/resource/workout/end_audio/{語音檔案名}'
       parameters:
       - description: 訓練id
         in: path
@@ -6166,7 +6188,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/start_audio/{語音檔案名}'
+      description: '下載前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout/start_audio/{語音檔案名}'
       parameters:
       - description: 訓練id
         in: path
@@ -6617,7 +6639,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '下載訓練組進行中語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}'
+      description: '下載訓練組進行中語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}'
       parameters:
       - description: 訓練組id
         in: path
@@ -6680,7 +6702,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '下載訓練組前導語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}'
+      description: '下載訓練組前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}'
       parameters:
       - description: 訓練組id
         in: path

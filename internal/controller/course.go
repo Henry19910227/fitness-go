@@ -320,7 +320,7 @@ func (cc *Course) GetCourseOverview(c *gin.Context) {
 
 // UploadCourseCover 上傳課表封面照
 // @Summary 上傳課表封面照
-// @Description 查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}
+// @Description 查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/course/cover/{圖片名}
 // @Tags Course
 // @Security fitness_token
 // @Accept mpfd

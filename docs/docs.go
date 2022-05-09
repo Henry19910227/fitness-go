@@ -84,7 +84,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitness-app.tk/api/v1/resource/action/video/{影片名}",
+                "description": "查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -1589,7 +1589,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看封面照 : https://www.fitness-app.tk/api/v1/resource/course/cover/{圖片名}",
+                "description": "查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/course/cover/{圖片名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -2345,7 +2345,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}",
+                "description": "查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -2419,7 +2419,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}",
+                "description": "查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -4177,7 +4177,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看評論圖 https://www.fitness-app.tk/api/v1/resource/course/review/{圖片名}",
+                "description": "查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -4518,7 +4518,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}",
+                "description": "查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -4724,7 +4724,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看教練大頭照 : https://www.fitness-app.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitness-app.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitness-app.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitness-app.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitness-app.tk/api/v1/resource/trainer/account_image/{圖片名}",
+                "description": "查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -5096,7 +5096,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看我的大頭照 : https://www.fitness-app.tk/api/v1/resource/user/avatar/{圖片名}",
+                "description": "查看我的大頭照 : https://www.fitopia-hub.tk/api/v1/resource/user/avatar/{圖片名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -5459,7 +5459,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "上傳訓練結束語音 : https://www.fitness-app.tk/api/v1/resource/workout/end_audio/{語音檔案名}",
+                "description": "上傳訓練結束語音 : https://www.fitopia-hub.tk/api/v1/resource/workout/end_audio/{語音檔案名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -5669,7 +5669,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "下載前導語音 : https://www.fitness-app.tk/api/v1/resource/workout/start_audio/{語音檔案名}",
+                "description": "下載前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout/start_audio/{語音檔案名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -6425,7 +6425,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "下載訓練組進行中語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}",
+                "description": "下載訓練組進行中語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -6528,7 +6528,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "下載訓練組前導語音 : https://www.fitness-app.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}",
+                "description": "下載訓練組前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -7691,6 +7691,31 @@ var doc = `{
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.CourseProductItem": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "f43e5715fe.jpg"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -9169,6 +9194,10 @@ var doc = `{
         "dto.WorkoutLog": {
             "type": "object",
             "properties": {
+                "course": {
+                    "description": "課表",
+                    "$ref": "#/definitions/dto.CourseProductItem"
+                },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
