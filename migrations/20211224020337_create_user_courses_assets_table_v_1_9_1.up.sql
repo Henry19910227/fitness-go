@@ -8,5 +8,6 @@ CREATE TABLE IF NOT EXISTS user_course_assets (
     `update_at`       DATETIME NOT NULL DEFAULT NOW() COMMENT '更新日期',
     UNIQUE KEY `unique_user_course` (`user_id`,`course_id`),
     CONSTRAINT fk_purchase_courses_user_id_to_users_id FOREIGN KEY (user_id) REFERENCES users(id),
-    CONSTRAINT fk_purchase_courses_course_id_to_courses_id FOREIGN KEY (course_id) REFERENCES courses(id)
+    CONSTRAINT fk_purchase_courses_course_id_to_courses_id FOREIGN KEY (course_id) REFERENCES courses(id),
+    CONSTRAINT fk_purchase_courses_order_id_to_orders_id FOREIGN KEY (order_id) REFERENCES orders(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;
