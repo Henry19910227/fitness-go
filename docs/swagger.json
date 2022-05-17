@@ -7501,6 +7501,36 @@
                 }
             }
         },
+        "dto.CourseCustom1": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "f43e5715fe.jpg"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
         "dto.CourseID": {
             "type": "object",
             "properties": {
@@ -7673,31 +7703,6 @@
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
-                }
-            }
-        },
-        "dto.CourseProductItem": {
-            "type": "object",
-            "properties": {
-                "cover": {
-                    "description": "課表封面",
-                    "type": "string",
-                    "example": "f43e5715fe.jpg"
-                },
-                "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 10001
-                },
-                "name": {
-                    "description": "課表名稱",
-                    "type": "string",
-                    "example": "henry"
-                },
-                "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 1
                 }
             }
         },
@@ -9178,7 +9183,7 @@
             "properties": {
                 "course": {
                     "description": "課表",
-                    "$ref": "#/definitions/dto.CourseProductItem"
+                    "$ref": "#/definitions/dto.CourseCustom1"
                 },
                 "create_at": {
                     "description": "創建時間",
