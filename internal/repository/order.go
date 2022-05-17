@@ -216,6 +216,70 @@ func (o *order) FindOrders(userID int64, param *model.FindOrdersParam, orderBy *
 	return orders, nil
 }
 
+func (o *order) FindCMSUserOrdersAPIItems(userID int64, result interface{}, orderBy *model.OrderBy, paging *model.PagingParam) (int, error) {
+	db := o.gorm.DB().
+		Table("orders").
+		Select("orders.id AS id", "courses.name AS course_name", "trainers.nickname AS trainer_name", "orders.create_at AS create_at").
+		Joins("INNER JOIN order_courses ON orders.id = order_courses.order_id").
+		Joins("INNER JOIN courses ON order_courses.course_id = courses.id").
+		Joins("INNER JOIN trainers ON courses.user_ID = trainers.user_id")
+	//個數
+	var amount int64
+	db = db.Count(&amount)
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	//分頁
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	//查詢數據
+	if err := db.Where("orders.user_id = ? AND orders.order_status = ? AND orders.order_type = ?", userID, global.SuccessOrderStatus, 1).Find(result).Error; err != nil {
+		return 0, nil
+	}
+	return int(amount), nil
+}
+
+func (o *order) List(listResult interface{}, param *model.FindOrderListParam, preloads []*model.Preload, orderBy *model.OrderBy, paging *model.PagingParam) (int, error) {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 userID 篩選條件
+	if param.UserID != nil {
+		query += "AND user_id = ? "
+		params = append(params, *param.UserID)
+	}
+	//創建orm
+	db := o.gorm.DB().Model(&entity.OrderTemplate{})
+	//關聯加載
+	for _, preload := range preloads {
+		db = db.Preload(preload.Field, func(db *gorm.DB) *gorm.DB {
+			return db.Select("", preload.Selects...)
+		})
+	}
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	//分頁
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	//查詢數據
+	if err := db.Where(query, params...).Find(listResult).Error; err != nil {
+		return 0, nil
+	}
+	//查詢資料數量
+	var amount int64
+	if err := o.gorm.DB().
+		Model(&entity.OrderTemplate{}).
+		Where(query, params...).
+		Count(&amount).Error; err != nil {
+		return 0, err
+	}
+	return int(amount), nil
+}
+
 func randRange(min int64, max int64) int64 {
 	if min > max || min < 0 {
 		return 0

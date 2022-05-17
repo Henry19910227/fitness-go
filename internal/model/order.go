@@ -60,3 +60,7 @@ type FindOrdersParam struct {
 	OrderStatus      *global.OrderStatus      //訂單狀態(1:等待付款/2:已付款/3:錯誤/4:退費/5:取消)
 	SubscribePlanID  *int64                   // 訂閱項目id
 }
+
+type FindOrderListParam struct {
+	UserID *int64
+}

@@ -31,6 +31,13 @@ type CMSUser struct {
 	UpdateAt    string  `json:"update_at" gorm:"column:update_at" example:"2021-06-01 12:00:00"` // 修改日期
 }
 
+type CMSUserOrderResult struct {
+	ID          int64
+	CourseName  string
+	TrainerName string
+	CreateAt    string
+}
+
 func (CMSUser) TableName() string {
 	return "users"
 }

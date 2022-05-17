@@ -2309,6 +2309,25 @@ definitions:
         example: success!
         type: string
     type: object
+  order.CMSUserOrdersAPI:
+    properties:
+      course_name:
+        description: 課表名稱
+        example: Henry課表
+        type: string
+      create_at:
+        description: 創建時間
+        example: "2022-04-25 20:18:13"
+        type: string
+      id:
+        description: 訂單id
+        example: "20220425201813456293"
+        type: string
+      trainer_name:
+        description: 教練名稱
+        example: henry
+        type: string
+    type: object
   registerdto.OTP:
     properties:
       otp_code:
@@ -3360,6 +3379,60 @@ paths:
       security:
       - fitness_token: []
       summary: 更新用戶資訊
+      tags:
+      - CMS/User
+  /cms/user/{user_id}/orders:
+    get:
+      consumes:
+      - application/json
+      description: 獲取用戶購買歷史訂單
+      parameters:
+      - description: 用戶ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: 排序欄位 (create_at:創建時間)
+        in: query
+        name: order_field
+        required: true
+        type: string
+      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
+        in: query
+        name: order_type
+        required: true
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/order.CMSUserOrdersAPI'
+                  type: array
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取用戶購買歷史訂單
       tags:
       - CMS/User
   /cms/users:

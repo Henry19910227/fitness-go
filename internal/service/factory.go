@@ -221,3 +221,11 @@ func NewWorkoutSetLogService(viperTool *viper.Viper, gormTool tool.Gorm) Workout
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewWorkoutSetLog(workoutSetLogRepo, errHandler)
 }
+
+func NewOrderService(viperTool *viper.Viper, gormTool tool.Gorm) Order {
+	orderRepo := repository.NewOrder(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewOrder(orderRepo, errHandler)
+}

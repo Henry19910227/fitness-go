@@ -11,4 +11,4 @@ migrate_down:
 migrate_force:
 	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20220510111952
 migrate_create:
-	migrate create -ext sql -dir migrations add_user_course_assets_table_order_id_constraint_v_1_9_6
+	migrate create -ext sql -dir migrations create_course_data_statistic_table_v_1_9_6
