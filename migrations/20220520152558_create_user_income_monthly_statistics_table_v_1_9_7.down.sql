@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS user_income_monthly_statistics;
