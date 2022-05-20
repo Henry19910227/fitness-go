@@ -16,7 +16,7 @@ type CMSLogin struct {
 func NewCMSLogin(baseGroup *gin.RouterGroup, loginService service.Login, userMiddleware middleware.User) {
 	cms := &CMSLogin{loginService: loginService}
 
-	baseGroup.POST("/cms/login",cms.Login)
+	baseGroup.POST("/cms/login", cms.Login)
 	baseGroup.POST("/cms/logout",
 		userMiddleware.TokenPermission([]global.Role{global.AdminRole}),
 		cms.Logout)
@@ -32,7 +32,7 @@ func NewCMSLogin(baseGroup *gin.RouterGroup, loginService service.Login, userMid
 // @Success 200 {object} model.SuccessLoginResult{data=dto.Admin} "登入成功"
 // @Failure 400 {object} model.ErrorResult "登入失敗"
 // @Router /cms/login [POST]
-func (l *CMSLogin) Login(c *gin.Context)  {
+func (l *CMSLogin) Login(c *gin.Context) {
 	var body validator.CMSLoginByEmailBody
 	if err := c.ShouldBindJSON(&body); err != nil {
 		l.JSONValidatorErrorResponse(c, err.Error())

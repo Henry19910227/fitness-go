@@ -180,6 +180,8 @@ type Order interface {
 	FindOrderByOriginalTransactionID(originalTransactionID string) (*model.Order, error)
 	FindOrderByCourseID(userID int64, courseID int64) (*model.Order, error)
 	FindOrders(userID int64, param *model.FindOrdersParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.Order, error)
+	FindCMSUserOrdersAPIItems(userID int64, result interface{}, orderBy *model.OrderBy, paging *model.PagingParam) (int, error)
+	List(listResult interface{}, param *model.FindOrderListParam, preloads []*model.Preload, orderBy *model.OrderBy, paging *model.PagingParam) (int, error)
 }
 
 type OrderSubscribePlan interface {

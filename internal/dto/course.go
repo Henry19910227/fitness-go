@@ -40,20 +40,20 @@ type UploadCourseCoverParam struct {
 }
 
 type CourseSummary struct {
-	ID           int64           `json:"id" example:"2"`                                         // 課表 id
-	Trainer      *TrainerSummary `json:"trainer"`                                                // 教練簡介
-	SaleType     int             `json:"sale_type" example:"1"`                                  // 銷售類型
-	Sale         *SaleItem       `json:"sale"`                                                   // 銷售資料
-	CourseStatus int             `json:"course_status" example:"1"`                              // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
-	Category     int             `json:"category" gorm:"column:category" example:"3"`            // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
-	ScheduleType int             `json:"schedule_type" gorm:"column:schedule_type" example:"2"`  // 排課類別(1:單一訓練/2:多項計畫)
-	Name         string          `json:"name" example:"Henry課表"`                                 // 課表名稱
-	Cover        string          `json:"cover" example:"d2w3e15d3awe.jpg"`                       // 課表封面
-	Level        int             `json:"level" example:"3"`                                      // 強度(1:初級/2:中級/3:中高級/4:高級)
-	PlanCount    int             `json:"plan_count" gorm:"column:plan_count" example:"2"`        // 計畫總數
-	WorkoutCount int             `json:"workout_count" gorm:"column:workout_count" example:"10"` // 訓練總數
-	CreateAt    string  `json:"create_at" gorm:"column:create_at" example:"2021-06-01 12:00:00"`   // 創建日期
-	UpdateAt    string  `json:"update_at" gorm:"column:update_at" example:"2021-06-01 12:00:00"`   // 修改日期
+	ID           int64           `json:"id" example:"2"`                                                  // 課表 id
+	Trainer      *TrainerSummary `json:"trainer"`                                                         // 教練簡介
+	SaleType     int             `json:"sale_type" example:"1"`                                           // 銷售類型
+	Sale         *SaleItem       `json:"sale"`                                                            // 銷售資料
+	CourseStatus int             `json:"course_status" example:"1"`                                       // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+	Category     int             `json:"category" gorm:"column:category" example:"3"`                     // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+	ScheduleType int             `json:"schedule_type" gorm:"column:schedule_type" example:"2"`           // 排課類別(1:單一訓練/2:多項計畫)
+	Name         string          `json:"name" example:"Henry課表"`                                          // 課表名稱
+	Cover        string          `json:"cover" example:"d2w3e15d3awe.jpg"`                                // 課表封面
+	Level        int             `json:"level" example:"3"`                                               // 強度(1:初級/2:中級/3:中高級/4:高級)
+	PlanCount    int             `json:"plan_count" gorm:"column:plan_count" example:"2"`                 // 計畫總數
+	WorkoutCount int             `json:"workout_count" gorm:"column:workout_count" example:"10"`          // 訓練總數
+	CreateAt     string          `json:"create_at" gorm:"column:create_at" example:"2021-06-01 12:00:00"` // 創建日期
+	UpdateAt     string          `json:"update_at" gorm:"column:update_at" example:"2021-06-01 12:00:00"` // 修改日期
 }
 
 type Course struct {
@@ -213,6 +213,14 @@ type CourseProductItem struct {
 	SaleType int    `json:"sale_type" example:"1"`          // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
 	Name     string `json:"name" example:"henry"`           // 課表名稱
 	Cover    string `json:"cover" example:"f43e5715fe.jpg"` // 課表封面
+}
+
+type CourseCustom1 struct {
+	ID           int64  `json:"id" example:"10001"`                                    // 課表 id
+	SaleType     int    `json:"sale_type" example:"1"`                                 // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	ScheduleType int    `json:"schedule_type" gorm:"column:schedule_type" example:"2"` // 排課類別(1:單一訓練/2:多項計畫)
+	Name         string `json:"name" example:"henry"`                                  // 課表名稱
+	Cover        string `json:"cover" example:"f43e5715fe.jpg"`                        // 課表封面
 }
 
 type GetCourseProductSummariesParam struct {
@@ -489,7 +497,7 @@ func NewCourseSummary(data *model.CourseSummary) *CourseSummary {
 		Level:        data.Level,
 		PlanCount:    data.PlanCount,
 		WorkoutCount: data.WorkoutCount,
-		CreateAt: 	  data.CreateAt,
+		CreateAt:     data.CreateAt,
 		UpdateAt:     data.UpdateAt,
 	}
 	trainer := &TrainerSummary{

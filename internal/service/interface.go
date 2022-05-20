@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
+	orderDTO "github.com/Henry19910227/fitness-go/internal/dto/order"
 	"github.com/Henry19910227/fitness-go/internal/dto/registerdto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/gin-gonic/gin"
@@ -174,6 +175,10 @@ type Payment interface {
 	GetGooglePlayAPISubscription(c *gin.Context, productID string, purchaseToken string) (*dto.IABSubscriptionAPIResponse, errcode.Error)
 	GetGooglePlayApiAccessToken(c *gin.Context) (string, errcode.Error)
 	GetAppleStoreApiAccessToken(c *gin.Context) (string, errcode.Error)
+}
+
+type Order interface {
+	GetCMSUserOrders(c *gin.Context, userID int64, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*orderDTO.CMSUserOrdersAPI, *dto.Paging, errcode.Error)
 }
 
 type Favorite interface {

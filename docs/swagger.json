@@ -1032,6 +1032,92 @@
                 }
             }
         },
+        "/cms/user/{user_id}/orders": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取用戶購買歷史訂單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/User"
+                ],
+                "summary": "獲取用戶購買歷史訂單",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用戶ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/order.CMSUserOrdersAPI"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/cms/users": {
             "get": {
                 "security": [
@@ -7501,6 +7587,36 @@
                 }
             }
         },
+        "dto.CourseCustom1": {
+            "type": "object",
+            "properties": {
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "f43e5715fe.jpg"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
         "dto.CourseID": {
             "type": "object",
             "properties": {
@@ -7673,31 +7789,6 @@
                     "description": "訓練總數",
                     "type": "integer",
                     "example": 10
-                }
-            }
-        },
-        "dto.CourseProductItem": {
-            "type": "object",
-            "properties": {
-                "cover": {
-                    "description": "課表封面",
-                    "type": "string",
-                    "example": "f43e5715fe.jpg"
-                },
-                "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 10001
-                },
-                "name": {
-                    "description": "課表名稱",
-                    "type": "string",
-                    "example": "henry"
-                },
-                "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                    "type": "integer",
-                    "example": 1
                 }
             }
         },
@@ -9178,7 +9269,7 @@
             "properties": {
                 "course": {
                     "description": "課表",
-                    "$ref": "#/definitions/dto.CourseProductItem"
+                    "$ref": "#/definitions/dto.CourseCustom1"
                 },
                 "create_at": {
                     "description": "創建時間",
@@ -9648,6 +9739,31 @@
                     "description": "成功訊息",
                     "type": "string",
                     "example": "success!"
+                }
+            }
+        },
+        "order.CMSUserOrdersAPI": {
+            "type": "object",
+            "properties": {
+                "course_name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "Henry課表"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-04-25 20:18:13"
+                },
+                "id": {
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "20220425201813456293"
+                },
+                "trainer_name": {
+                    "description": "教練名稱",
+                    "type": "string",
+                    "example": "henry"
                 }
             }
         },

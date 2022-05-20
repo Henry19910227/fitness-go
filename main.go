@@ -61,6 +61,7 @@ var (
 	workoutLogService    service.WorkoutLog
 	favoriteService      service.Favorite
 	workoutSetLogService service.WorkoutSetLog
+	orderService         service.Order
 )
 
 var (
@@ -145,6 +146,7 @@ func main() {
 	controller.NewCMSLogin(baseGroup, loginService, userMidd)
 	controller.NewCMSUser(baseGroup, userService, userMidd)
 	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
+	controller.NewOrder(baseGroup, orderService, userMidd)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 
@@ -239,6 +241,7 @@ func setupService() {
 	workoutLogService = service.NewWorkoutLogService(viperTool, gormTool)
 	favoriteService = service.NewFavoriteService(viperTool, gormTool)
 	workoutSetLogService = service.NewWorkoutSetLogService(viperTool, gormTool)
+	orderService = service.NewOrderService(viperTool, gormTool)
 }
 
 func setupMigrateService() {
