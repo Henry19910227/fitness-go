@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS course_usage_statistics (
+    `id`             INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '報表id',
+    `course_id`    INT(11) UNSIGNED COMMENT '課表 id',
+    `total_finish_workout_count`  INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '歷史訓練總量(完成一次該課表的訓練，重複計算)',
+    `user_finish_count`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用戶使用人數(完成一次該課表的訓練，不重複計算)',
+    `male_finish_count`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '男生使用人數',
+    `female_finish_count`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '女生使用人數',
+    `finish_avg`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '平均完成度',
+    `age_13_17_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '13-17歲使用人數',
+    `age_18_24_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '18-24歲使用人數',
+    `age_25_34_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '25-34歲使用人數',
+    `age_35_44_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '35-44歲使用人數',
+    `age_45_54_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '45-54歲使用人數',
+    `age_55_64_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '55-64歲使用人數',
+    `age_65_up_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '65+歲使用人數',
+    `create_at`      DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
+    `update_at`      DATETIME NOT NULL DEFAULT NOW() COMMENT '更新日期',
+    UNIQUE KEY `unique_course_usage_statistics` (`course_id`),
+    CONSTRAINT fk_course_usage_statistics_course_id_to_courses_id FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;
