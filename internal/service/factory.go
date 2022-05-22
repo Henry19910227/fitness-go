@@ -229,3 +229,12 @@ func NewOrderService(viperTool *viper.Viper, gormTool tool.Gorm) Order {
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewOrder(orderRepo, errHandler)
 }
+
+func NewCourseUsageStatisticService(viperTool *viper.Viper, gormTool tool.Gorm) CourseUsageStatistic {
+	transactionRepo := repository.NewTransaction(gormTool)
+	statisticRepo := repository.NewCourseUsageStatistic(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewCourseUsageStatistic(transactionRepo, statisticRepo, errHandler)
+}

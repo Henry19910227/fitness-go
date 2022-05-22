@@ -9,6 +9,6 @@ migrate_up:
 migrate_down:
 	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ down 1
 migrate_force:
-	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20220510111952
+	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20220429101717
 migrate_create:
 	migrate create -ext sql -dir migrations create_user_income_monthly_statistics_table_v_1_9_7

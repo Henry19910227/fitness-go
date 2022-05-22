@@ -12,6 +12,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/setting"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
+	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
 	"log"
 	"os"
@@ -33,6 +34,7 @@ var (
 	logTool     tool.Logger
 	otpTool     tool.OTP
 	resTool     tool.Resource
+	schedulerTool  = cron.New(cron.WithSeconds())
 )
 
 var (
@@ -62,6 +64,7 @@ var (
 	favoriteService      service.Favorite
 	workoutSetLogService service.WorkoutSetLog
 	orderService         service.Order
+	courseUsageStatisticService service.CourseUsageStatistic
 )
 
 var (
@@ -147,9 +150,10 @@ func main() {
 	controller.NewCMSUser(baseGroup, userService, userMidd)
 	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
 	controller.NewOrder(baseGroup, orderService, userMidd)
+	controller.NewScheduler(schedulerTool, courseUsageStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
-
+	schedulerTool.Start()
 	router.Run(":" + viperTool.GetString("Server.HttpPort"))
 }
 
@@ -242,6 +246,7 @@ func setupService() {
 	favoriteService = service.NewFavoriteService(viperTool, gormTool)
 	workoutSetLogService = service.NewWorkoutSetLogService(viperTool, gormTool)
 	orderService = service.NewOrderService(viperTool, gormTool)
+	courseUsageStatisticService = service.NewCourseUsageStatisticService(viperTool, gormTool)
 }
 
 func setupMigrateService() {

@@ -265,3 +265,8 @@ type BankAccount interface {
 type Card interface {
 	FindCardEntity(userID int64, inputModel interface{}) error
 }
+
+type CourseUsageStatistic interface {
+	CalculateTotalFinishWorkoutCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	SaveTotalFinishWorkoutCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
+}
