@@ -121,6 +121,7 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger()) //加入路由Logger
 	router.Use(gin.CustomRecovery(middleware.Recover(logHandler)))
+	router.Use(middleware.CORS()) //加入解決跨域中間層
 	//gin.SetMode(gin.ReleaseMode)
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
