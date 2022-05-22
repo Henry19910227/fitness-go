@@ -29,4 +29,14 @@ func (cu *courseUsageStatistic) UpdateCourseUsageStatistic() {
 		cu.errHandler.Set(nil, "course_usage_statistic repo", err)
 		tx.Rollback()
 	}
+	//計算並更新 UserFinishCount 欄位
+	courseUsageStatisticResults, err = cu.courseUsageStatisticRepo.CalculateUserFinishCount(tx)
+	if err != nil {
+		cu.errHandler.Set(nil, "course_usage_statistic repo", err)
+		tx.Rollback()
+	}
+	if err := cu.courseUsageStatisticRepo.SaveUserFinishCount(tx, courseUsageStatisticResults); err != nil {
+		cu.errHandler.Set(nil, "course_usage_statistic repo", err)
+		tx.Rollback()
+	}
 }
