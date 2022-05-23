@@ -7,7 +7,7 @@ type CourseUsageStatistic struct {
 	UserFinishCourt         int    `gorm:"column:user_finish_count"`          // 用戶使用人數(完成一次該課表的訓練，不重複計算)
 	MaleFinishCount         int    `gorm:"column:male_finish_count"`          // 男生使用人數
 	FemaleFinishCount       int    `gorm:"column:female_finish_count"`        // 女生使用人數
-	FinishAvg               int    `gorm:"column:finish_avg"`                 // 平均完成度
+	FinishCountAvg          int    `gorm:"column:finish_count_avg"`           // 平均完成訓練次數(同一訓練不重複)
 	Age13to17Count          int    `gorm:"column:age_13_17_count"`            // 13-17歲使用人數
 	Age18to24Count          int    `gorm:"column:age_18_24_count"`            // 18-24歲使用人數
 	Age25to34Count          int    `gorm:"column:age_25_34_count"`            // 25-34歲使用人數

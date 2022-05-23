@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS course_usage_statistics (
     `user_finish_count`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用戶使用人數(完成一次該課表的訓練，不重複計算)',
     `male_finish_count`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '男生使用人數',
     `female_finish_count`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '女生使用人數',
-    `finish_avg`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '平均完成度',
+    `finish_count_avg`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '平均完成訓練次數(同一訓練不重複)',
     `age_13_17_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '13-17歲使用人數',
     `age_18_24_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '18-24歲使用人數',
     `age_25_34_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '25-34歲使用人數',
