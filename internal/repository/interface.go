@@ -272,9 +272,12 @@ type CourseUsageStatistic interface {
 	CalculateMaleFinishCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
 	CalculateFemaleFinishCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
 	CalculateFinishCountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
-	SaveTotalFinishWorkoutCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
-	SaveUserFinishCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
-	SaveMaleFinishCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
-	SaveFemaleFinishCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
-	SaveFinishCountAvg(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
+	CalculateAge13to17CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge18to24CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge25to34CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge35to44CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge45to54CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge55to64CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge65UpCountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	Save(tx *gorm.DB, ColumnName string, values []*model.CourseUsageStatisticResult) error
 }
