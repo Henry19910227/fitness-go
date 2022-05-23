@@ -65,6 +65,7 @@ var (
 	workoutSetLogService service.WorkoutSetLog
 	orderService         service.Order
 	courseUsageStatisticService service.CourseUsageStatistic
+	userCourseUsageMonthlyStatisticService service.UserCourseUsageMonthlyStatistic
 )
 
 var (
@@ -151,7 +152,7 @@ func main() {
 	controller.NewCMSUser(baseGroup, userService, userMidd)
 	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
 	controller.NewOrder(baseGroup, orderService, userMidd)
-	controller.NewScheduler(schedulerTool, courseUsageStatisticService)
+	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 	schedulerTool.Start()
@@ -248,6 +249,7 @@ func setupService() {
 	workoutSetLogService = service.NewWorkoutSetLogService(viperTool, gormTool)
 	orderService = service.NewOrderService(viperTool, gormTool)
 	courseUsageStatisticService = service.NewCourseUsageStatisticService(viperTool, gormTool)
+	userCourseUsageMonthlyStatisticService = service.NewUserCourseUsageMonthlyStatisticService(viperTool, gormTool)
 }
 
 func setupMigrateService() {

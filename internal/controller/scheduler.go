@@ -9,16 +9,19 @@ import (
 
 type Scheduler struct {
 	courseUsageStatisticService service.CourseUsageStatistic
+	userCourseUsageMonthlyStatisticService service.UserCourseUsageMonthlyStatistic
 }
 
-func NewScheduler(schedulerTool *cron.Cron, courseUsageStatisticService service.CourseUsageStatistic)  {
+func NewScheduler(schedulerTool *cron.Cron, courseUsageStatisticService service.CourseUsageStatistic, userCourseUsageMonthlyStatisticService service.UserCourseUsageMonthlyStatistic)  {
 	scheduler := Scheduler{
 		courseUsageStatisticService: courseUsageStatisticService,
+		userCourseUsageMonthlyStatisticService: userCourseUsageMonthlyStatisticService,
 	}
 	_, _ = schedulerTool.AddFunc("0 * * * * *", scheduler.MinuteTask) // 每分鐘零秒執行任務
 }
 
 func (s *Scheduler) MinuteTask() {
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05") + " 執行每分鐘輪詢任務")
-	s.courseUsageStatisticService.UpdateCourseUsageStatistic()
+	//s.courseUsageStatisticService.UpdateCourseUsageStatistic()
+	s.userCourseUsageMonthlyStatisticService.Update()
 }

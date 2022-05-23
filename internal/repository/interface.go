@@ -281,3 +281,8 @@ type CourseUsageStatistic interface {
 	CalculateAge65UpCountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
 	Save(tx *gorm.DB, ColumnName string, values []*model.CourseUsageStatisticResult) error
 }
+
+type UserCourseUsageMonthlyStatistic interface {
+	CalculateCourseUsageMonthlyCount(tx *gorm.DB, saleType global.SaleType, date string) ([]*model.UserCourseUsageMonthlyStatisticResult, error)
+	Save(tx *gorm.DB, ColumnName string, values []*model.UserCourseUsageMonthlyStatisticResult) error
+}

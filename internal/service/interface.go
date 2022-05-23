@@ -193,3 +193,7 @@ type Favorite interface {
 type CourseUsageStatistic interface {
 	UpdateCourseUsageStatistic()
 }
+
+type UserCourseUsageMonthlyStatistic interface {
+	Update()
+}
