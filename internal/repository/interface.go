@@ -269,6 +269,12 @@ type Card interface {
 type CourseUsageStatistic interface {
 	CalculateTotalFinishWorkoutCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
 	CalculateUserFinishCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateMaleFinishCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateFemaleFinishCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateFinishCountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
 	SaveTotalFinishWorkoutCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
 	SaveUserFinishCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
+	SaveMaleFinishCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
+	SaveFemaleFinishCount(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
+	SaveFinishCountAvg(tx *gorm.DB, values []*model.CourseUsageStatisticResult) error
 }
