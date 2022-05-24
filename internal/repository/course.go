@@ -329,6 +329,29 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 	return courses, nil
 }
 
+func (c *course) FindCourseStatisticSummaries(userID int64, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseStatisticSummary, int, error) {
+	var amount int64
+	var db *gorm.DB
+	db = c.gorm.DB().
+		Model(model.CourseStatisticSummary{}).
+		Preload("CourseUsageStatistic").
+		Where("courses.user_id = ?", userID).Count(&amount)
+	//排序
+	if orderBy != nil {
+		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
+	}
+	//分頁
+	if paging != nil {
+		db = db.Offset(paging.Offset).Limit(paging.Limit)
+	}
+	courses := make([]*model.CourseStatisticSummary, 0)
+	//查詢數據
+	if err := db.Find(&courses).Error; err != nil {
+		return nil, 0, err
+	}
+	return courses, int(amount), nil
+}
+
 func (c *course) FindCourseProductCount(param model.FindCourseProductCountParam) (int, error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)

@@ -203,6 +203,25 @@ type CourseAssetSummary struct {
 	Review       *ReviewStatisticSummary `json:"review"`                                                 // 評分統計
 }
 
+type CourseStatistic struct {
+}
+
+type CourseStatisticSummary struct {
+	ID                   int64                        `json:"id" example:"1"`                                            // 課表 id
+	UserID               int64                        `json:"user_id" example:"10001"`                              // 教練 id
+	SaleType             int                          `json:"sale_type" example:"1"`                                     // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	CourseStatus         int                          `json:"course_status" example:"1"`                      // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+	Category             int                          `json:"category" example:"3"`                                // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+	ScheduleType         int                          `json:"schedule_type" gorm:"column:schedule_type" example:"2"`                      // 排課類別(1:單一訓練/2:多項計畫)
+	Name                 string                       `json:"name" example:"Henry課表"`                                  // 課表名稱
+	Cover                string                       `json:"cover" example:"d2w3e15d3awe.jpg"`                       // 課表封面
+	Level                int                          `json:"level" example:"3"`                                      // 強度(1:初級/2:中級/3:中高級/4:高級)
+	PlanCount            int                          `json:"plan_count" example:"100"`                          // 計畫總數
+	WorkoutCount         int                          `json:"workout_count" example:"10"`                     // 訓練總數
+	CourseUsageStatistic *CourseUsageStatisticSummary `json:"course_usage_statistic,omitempty"` // 課表使用統計
+}
+
+
 type UserCourseStatistic struct {
 	FinishWorkoutCourt int `json:"finish_workout_count" example:"10"` // 完成訓練數量(去除重複)
 	Duration           int `json:"duration" example:"3600"`           // 總花費時間(秒)
@@ -518,6 +537,29 @@ func NewCourseSummary(data *model.CourseSummary) *CourseSummary {
 			course.Sale.Twd = data.Sale.ProductLabel.Twd
 			course.Sale.ProductID = data.Sale.ProductLabel.ProductID
 		}
+	}
+	return &course
+}
+
+func NewCourseStatisticSummary(data *model.CourseStatisticSummary) *CourseStatisticSummary {
+	course := CourseStatisticSummary{
+		ID: data.ID,
+		UserID: data.UserID,
+		SaleType: data.SaleType,
+		CourseStatus: data.CourseStatus,
+		Category: data.Category,
+		ScheduleType: data.ScheduleType,
+		Name: data.Name,
+		Cover: data.Cover,
+		Level: data.Level,
+		PlanCount: data.PlanCount,
+		WorkoutCount: data.WorkoutCount,
+	}
+	course.CourseUsageStatistic = &CourseUsageStatisticSummary{}
+	if data.CourseUsageStatistic != nil {
+		course.CourseUsageStatistic.TotalFinishWorkoutCount = data.CourseUsageStatistic.TotalFinishWorkoutCount
+		course.CourseUsageStatistic.UserFinishCount = data.CourseUsageStatistic.UserFinishCount
+		course.CourseUsageStatistic.FinishCountAvg = data.CourseUsageStatistic.FinishCountAvg
 	}
 	return &course
 }

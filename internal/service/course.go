@@ -358,6 +358,36 @@ func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourse
 	return parserCourseProductSummaries(datas), &paging, nil
 }
 
+func (cs *course) GetCourseStatisticSummaries(c *gin.Context, userID int64, pagingParam *dto.PagingParam) ([]*dto.CourseStatisticSummary, *dto.Paging, errcode.Error) {
+	//設置分頁
+	var paging *model.PagingParam
+	if pagingParam != nil {
+		offset, limit := cs.GetPagingIndex(pagingParam.Page, pagingParam.Size)
+		paging = &model.PagingParam{
+			Offset: offset,
+			Limit:  limit,
+		}
+	}
+	datas, amount, err := cs.courseRepo.FindCourseStatisticSummaries(userID, &model.OrderBy{
+		OrderType: global.ASC,
+		Field:     "create_at",
+	}, paging)
+	if err != nil {
+		return nil, nil, cs.errHandler.Set(c, "course repo", err)
+	}
+	courses := make([]*dto.CourseStatisticSummary, 0)
+	for _, data := range datas {
+		courses = append(courses, dto.NewCourseStatisticSummary(data))
+	}
+	pagingResult := dto.Paging{
+		TotalCount: amount,
+		TotalPage:  cs.GetTotalPage(amount, pagingParam.Size),
+		Page:       pagingParam.Page,
+		Size:       pagingParam.Size,
+	}
+	return courses, &pagingResult, nil
+}
+
 func (cs *course) GetProgressCourseAssetSummaries(c *gin.Context, userID int64, page int, size int) ([]*dto.CourseAssetSummary, *dto.Paging, errcode.Error) {
 	offset, limit := cs.GetPagingIndex(page, size)
 	datas, err := cs.courseRepo.FindProgressCourseAssetSummaries(userID, &model.PagingParam{

@@ -135,6 +135,7 @@ func main() {
 	controller.NewCourse(baseGroup, courseService, planService, actionService, reviewService, userMidd, courseMidd)
 	controller.NewCourseProduct(baseGroup, courseService, planService, workoutSetService, courseMidd, userMidd)
 	controller.NewCourseAsset(baseGroup, courseService, planService, userMidd, courseMidd)
+	controller.NewCourseStatistic(baseGroup, courseService, userMidd)
 	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
 	controller.NewPlanProduct(baseGroup, planService, workoutService, planMidd, userMidd)
 	controller.NewPlanAsset(baseGroup, planService, workoutService, planMidd, userMidd)

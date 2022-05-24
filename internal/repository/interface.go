@@ -48,6 +48,7 @@ type Course interface {
 	FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
 	FindCourseProductCount(param model.FindCourseProductCountParam) (int, error)
 	FindCourseProduct(courseID int64) (*model.CourseProduct, error)
+	FindCourseStatisticSummaries(userID int64, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseStatisticSummary, int, error)
 	FindProgressCourseAssetSummaries(userID int64, paging *model.PagingParam) ([]*model.CourseAssetSummary, error)
 	FindChargeCourseAssetSummaries(userID int64, paging *model.PagingParam) ([]*model.CourseAssetSummary, error)
 	FindProgressCourseAssetCount(userID int64) (int, error)
