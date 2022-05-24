@@ -286,3 +286,8 @@ type UserCourseUsageMonthlyStatistic interface {
 	CalculateCourseUsageMonthlyCount(tx *gorm.DB, saleType global.SaleType, date string) ([]*model.UserCourseUsageMonthlyStatisticResult, error)
 	Save(tx *gorm.DB, ColumnName string, values []*model.UserCourseUsageMonthlyStatisticResult) error
 }
+
+type UserIncomeMonthlyStatistic interface {
+	CalculateUserIncomeMonthlyCount(tx *gorm.DB, date string) ([]*model.UserIncomeMonthlyStatisticResult, error)
+	Save(tx *gorm.DB, values []*model.UserIncomeMonthlyStatisticResult) error
+}

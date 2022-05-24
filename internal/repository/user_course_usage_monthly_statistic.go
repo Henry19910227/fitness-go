@@ -16,6 +16,7 @@ func NewUserCourseUsageMonthlyStatistic(gorm tool.Gorm) UserCourseUsageMonthlySt
 	return &userCourseUsageMonthlyStatistic{gorm: gorm}
 }
 
+// CalculateCourseUsageMonthlyCount SQL
 //SELECT t.trainer_id AS user_id, COUNT(*) AS `value`
 //FROM (
 //SELECT MAX(courses.user_id) AS trainer_id, courses.id AS course_id, workout_logs.user_id AS user_id

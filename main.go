@@ -25,16 +25,16 @@ var (
 )
 
 var (
-	mysqlTool   tool.Mysql
-	gormTool    tool.Gorm
-	viperTool   *viper.Viper
-	migrateTool tool.Migrate
-	redisTool   tool.Redis
-	jwtTool     tool.JWT
-	logTool     tool.Logger
-	otpTool     tool.OTP
-	resTool     tool.Resource
-	schedulerTool  = cron.New(cron.WithSeconds())
+	mysqlTool     tool.Mysql
+	gormTool      tool.Gorm
+	viperTool     *viper.Viper
+	migrateTool   tool.Migrate
+	redisTool     tool.Redis
+	jwtTool       tool.JWT
+	logTool       tool.Logger
+	otpTool       tool.OTP
+	resTool       tool.Resource
+	schedulerTool = cron.New(cron.WithSeconds())
 )
 
 var (
@@ -45,27 +45,28 @@ var (
 )
 
 var (
-	migrateService       service.Migrate
-	swagService          service.Swagger
-	loginService         service.Login
-	regService           service.Register
-	userService          service.User
-	trainerService       service.Trainer
-	courseService        service.Course
-	planService          service.Plan
-	workoutService       service.Workout
-	workoutSetService    service.WorkoutSet
-	actionService        service.Action
-	saleService          service.Sale
-	storeService         service.Store
-	reviewService        service.Review
-	paymentService       service.Payment
-	workoutLogService    service.WorkoutLog
-	favoriteService      service.Favorite
-	workoutSetLogService service.WorkoutSetLog
-	orderService         service.Order
-	courseUsageStatisticService service.CourseUsageStatistic
+	migrateService                         service.Migrate
+	swagService                            service.Swagger
+	loginService                           service.Login
+	regService                             service.Register
+	userService                            service.User
+	trainerService                         service.Trainer
+	courseService                          service.Course
+	planService                            service.Plan
+	workoutService                         service.Workout
+	workoutSetService                      service.WorkoutSet
+	actionService                          service.Action
+	saleService                            service.Sale
+	storeService                           service.Store
+	reviewService                          service.Review
+	paymentService                         service.Payment
+	workoutLogService                      service.WorkoutLog
+	favoriteService                        service.Favorite
+	workoutSetLogService                   service.WorkoutSetLog
+	orderService                           service.Order
+	courseUsageStatisticService            service.CourseUsageStatistic
 	userCourseUsageMonthlyStatisticService service.UserCourseUsageMonthlyStatistic
+	userIncomeMonthlyStatisticService      service.UserIncomeMonthlyStatistic
 )
 
 var (
@@ -152,7 +153,7 @@ func main() {
 	controller.NewCMSUser(baseGroup, userService, userMidd)
 	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
 	controller.NewOrder(baseGroup, orderService, userMidd)
-	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService)
+	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService, userIncomeMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 	schedulerTool.Start()
@@ -250,6 +251,7 @@ func setupService() {
 	orderService = service.NewOrderService(viperTool, gormTool)
 	courseUsageStatisticService = service.NewCourseUsageStatisticService(viperTool, gormTool)
 	userCourseUsageMonthlyStatisticService = service.NewUserCourseUsageMonthlyStatisticService(viperTool, gormTool)
+	userIncomeMonthlyStatisticService = service.NewUserIncomeMonthlyStatisticService(viperTool, gormTool)
 }
 
 func setupMigrateService() {

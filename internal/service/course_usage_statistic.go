@@ -16,7 +16,7 @@ func NewCourseUsageStatistic(transactionRepo repository.Transaction, courseUsage
 	return &courseUsageStatistic{transactionRepo: transactionRepo, courseUsageStatisticRepo: courseUsageStatisticRepo, errHandler: errHandler}
 }
 
-func (cu *courseUsageStatistic) UpdateCourseUsageStatistic() {
+func (cu *courseUsageStatistic) Update() {
 	tx := cu.transactionRepo.CreateTransaction()
 	defer cu.transactionRepo.FinishTransaction(tx)
 	//計算並更新 TotalFinishWorkoutCount 欄位

@@ -247,3 +247,12 @@ func NewUserCourseUsageMonthlyStatisticService(viperTool *viper.Viper, gormTool 
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewUserCourseUsageMonthlyStatistic(transactionRepo, statisticRepo, errHandler)
 }
+
+func NewUserIncomeMonthlyStatisticService(viperTool *viper.Viper, gormTool tool.Gorm) UserIncomeMonthlyStatistic {
+	transactionRepo := repository.NewTransaction(gormTool)
+	statisticRepo := repository.NewUserIncomeMonthlyStatistic(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewUserIncomeMonthlyStatistic(transactionRepo, statisticRepo, errHandler)
+}
