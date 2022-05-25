@@ -1,8 +1,12 @@
 package service
 
 import (
+	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/repository"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -13,7 +17,7 @@ type userIncomeMonthlyStatistic struct {
 	errHandler      errcode.Handler
 }
 
-func NewUserIncomeMonthlyStatistic(transactionRepo repository.Transaction, statRepo repository.UserIncomeMonthlyStatistic, errHandler errcode.Handler) UserCourseUsageMonthlyStatistic {
+func NewUserIncomeMonthlyStatistic(transactionRepo repository.Transaction, statRepo repository.UserIncomeMonthlyStatistic, errHandler errcode.Handler) UserIncomeMonthlyStatistic {
 	return &userIncomeMonthlyStatistic{transactionRepo: transactionRepo, statRepo: statRepo, errHandler: errHandler}
 }
 
@@ -31,4 +35,12 @@ func (u *userIncomeMonthlyStatistic) Update() {
 		tx.Rollback()
 		return
 	}
+}
+
+func (u *userIncomeMonthlyStatistic) GetUserIncomeMonthlyStatistic(c *gin.Context, userID int64) (*dto.UserIncomeMonthlyStatistic, errcode.Error) {
+	income := dto.UserIncomeMonthlyStatistic{}
+	if err := u.statRepo.Find(userID, &income); err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, u.errHandler.Set(c, "user_income_monthly_statistic repo", err)
+	}
+	return &income, nil
 }

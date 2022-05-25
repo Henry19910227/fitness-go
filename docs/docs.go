@@ -2894,6 +2894,52 @@ var doc = `{
                 }
             }
         },
+        "/course_usage_monthly_statistic": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得當月課表使用人數分析",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Statistic"
+                ],
+                "summary": "取得當月課表使用人數分析",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.UserCourseUsageMonthlyStatistic"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/courses": {
             "get": {
                 "security": [
@@ -3339,6 +3385,52 @@ var doc = `{
                     },
                     "400": {
                         "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/income_monthly_statistic": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得當月收益分析",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Statistic"
+                ],
+                "summary": "取得當月收益分析",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.UserIncomeMonthlyStatistic"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -8364,11 +8456,6 @@ var doc = `{
                     "type": "integer",
                     "example": 550
                 },
-                "course_id": {
-                    "description": "課表id",
-                    "type": "integer",
-                    "example": 1000
-                },
                 "create_at": {
                     "description": "創建日期",
                     "type": "string",
@@ -8383,11 +8470,6 @@ var doc = `{
                     "description": "平均完成訓練次數(同一訓練不重複)",
                     "type": "integer",
                     "example": 25
-                },
-                "id": {
-                    "description": "報表id",
-                    "type": "integer",
-                    "example": 1
                 },
                 "male_finish_count": {
                     "description": "男生使用人數",
@@ -9457,6 +9539,87 @@ var doc = `{
                     "description": "完成訓練數量(去除重複)",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "dto.UserCourseUsageMonthlyStatistic": {
+            "type": "object",
+            "properties": {
+                "chargeUsageCount": {
+                    "description": "付費課表使用人數",
+                    "type": "integer"
+                },
+                "createAt": {
+                    "description": "創建日期",
+                    "type": "string"
+                },
+                "freeUsageCount": {
+                    "description": "免費課表使用人數",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "報表id",
+                    "type": "integer"
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer"
+                },
+                "subscribeUsageCount": {
+                    "description": "訂閱課表使用人數",
+                    "type": "integer"
+                },
+                "updateAt": {
+                    "description": "更新日期",
+                    "type": "string"
+                },
+                "userID": {
+                    "description": "教練id",
+                    "type": "integer"
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UserIncomeMonthlyStatistic": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2022-05-25 11:00:00"
+                },
+                "id": {
+                    "description": "報表id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "income": {
+                    "description": "收益",
+                    "type": "integer",
+                    "example": 12000
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer",
+                    "example": 25
+                },
+                "update_at": {
+                    "description": "更新日期",
+                    "type": "string",
+                    "example": "2022-05-25 12:00:00"
+                },
+                "user_id": {
+                    "description": "教練id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer",
+                    "example": 5
                 }
             }
         },

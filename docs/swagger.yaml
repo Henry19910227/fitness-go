@@ -1186,10 +1186,6 @@ definitions:
         description: 65+歲使用人數
         example: 550
         type: integer
-      course_id:
-        description: 課表id
-        example: 1000
-        type: integer
       create_at:
         description: 創建日期
         example: "2021-05-28 11:00:00"
@@ -1201,10 +1197,6 @@ definitions:
       finish_count_avg:
         description: 平均完成訓練次數(同一訓練不重複)
         example: 25
-        type: integer
-      id:
-        description: 報表id
-        example: 1
         type: integer
       male_finish_count:
         description: 男生使用人數
@@ -1993,6 +1985,67 @@ definitions:
       finish_workout_count:
         description: 完成訓練數量(去除重複)
         example: 10
+        type: integer
+    type: object
+  dto.UserCourseUsageMonthlyStatistic:
+    properties:
+      chargeUsageCount:
+        description: 付費課表使用人數
+        type: integer
+      createAt:
+        description: 創建日期
+        type: string
+      freeUsageCount:
+        description: 免費課表使用人數
+        type: integer
+      id:
+        description: 報表id
+        type: integer
+      month:
+        description: 月份
+        type: integer
+      subscribeUsageCount:
+        description: 訂閱課表使用人數
+        type: integer
+      updateAt:
+        description: 更新日期
+        type: string
+      userID:
+        description: 教練id
+        type: integer
+      year:
+        description: 年份
+        type: integer
+    type: object
+  dto.UserIncomeMonthlyStatistic:
+    properties:
+      create_at:
+        description: 創建日期
+        example: "2022-05-25 11:00:00"
+        type: string
+      id:
+        description: 報表id
+        example: 1
+        type: integer
+      income:
+        description: 收益
+        example: 12000
+        type: integer
+      month:
+        description: 月份
+        example: 25
+        type: integer
+      update_at:
+        description: 更新日期
+        example: "2022-05-25 12:00:00"
+        type: string
+      user_id:
+        description: 教練id
+        example: 10001
+        type: integer
+      year:
+        description: 年份
+        example: 5
         type: integer
     type: object
   dto.UserSubscribeInfo:
@@ -4679,6 +4732,32 @@ paths:
       summary: 獲取個人課表數據統計列表
       tags:
       - Statistic
+  /course_usage_monthly_statistic:
+    get:
+      consumes:
+      - application/json
+      description: 取得當月課表使用人數分析
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserCourseUsageMonthlyStatistic'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得當月課表使用人數分析
+      tags:
+      - Statistic
   /courses:
     get:
       consumes:
@@ -4960,6 +5039,32 @@ paths:
       summary: 取得 google play developer api subscription(測試用)
       tags:
       - Payment
+  /income_monthly_statistic:
+    get:
+      consumes:
+      - application/json
+      description: 取得當月收益分析
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserIncomeMonthlyStatistic'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 取得當月收益分析
+      tags:
+      - Statistic
   /login/admin/email:
     post:
       consumes:

@@ -202,4 +202,5 @@ type UserCourseUsageMonthlyStatistic interface {
 
 type UserIncomeMonthlyStatistic interface {
 	Update()
+	GetUserIncomeMonthlyStatistic(c *gin.Context, userID int64) (*dto.UserIncomeMonthlyStatistic, errcode.Error)
 }

@@ -154,6 +154,7 @@ func main() {
 	controller.NewCMSUser(baseGroup, userService, userMidd)
 	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
 	controller.NewOrder(baseGroup, orderService, userMidd)
+	controller.NewStatistic(baseGroup, userIncomeMonthlyStatisticService, userMidd)
 	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService, userIncomeMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
