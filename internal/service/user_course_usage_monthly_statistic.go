@@ -1,9 +1,13 @@
 package service
 
 import (
+	"errors"
 	"github.com/Henry19910227/fitness-go/errcode"
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/repository"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -57,4 +61,12 @@ func (u *userCourseUsageMonthlyStatistic) Update() {
 		tx.Rollback()
 		return
 	}
+}
+
+func (u *userCourseUsageMonthlyStatistic) GetUserCourseUsageMonthlyStatistic(c *gin.Context, userID int64) (*dto.UserCourseUsageMonthlyStatistic, errcode.Error) {
+	statistic := dto.UserCourseUsageMonthlyStatistic{}
+	if err := u.statRepo.Find(userID, &statistic); err != nil && !errors.Is(err, gorm.ErrRecordNotFound)  {
+		return nil, u.errHandler.Set(c, "user_course_usage_monthly_statistic repo", err)
+	}
+	return &statistic, nil
 }

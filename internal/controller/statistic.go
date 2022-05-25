@@ -10,13 +10,18 @@ import (
 type Statistic struct {
 	Base
 	incomeStatisticService service.UserIncomeMonthlyStatistic
+	usageStatisticService service.UserCourseUsageMonthlyStatistic
 }
 
-func NewStatistic(baseGroup *gin.RouterGroup, incomeStatisticService service.UserIncomeMonthlyStatistic, userMidd midd.User) {
-	statistic := Statistic{incomeStatisticService: incomeStatisticService}
+func NewStatistic(baseGroup *gin.RouterGroup, incomeStatisticService service.UserIncomeMonthlyStatistic, usageStatisticService service.UserCourseUsageMonthlyStatistic, userMidd midd.User) {
+	statistic := Statistic{incomeStatisticService: incomeStatisticService, usageStatisticService: usageStatisticService}
 	baseGroup.GET("/income_monthly_statistic",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		statistic.GetIncomeMonthlyStatistic)
+
+	baseGroup.GET("/course_usage_monthly_statistic",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		statistic.GetCourseUsageMonthlyStatistic)
 }
 
 // GetIncomeMonthlyStatistic 取得當月收益分析
@@ -54,20 +59,15 @@ func (s *Statistic) GetIncomeMonthlyStatistic(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /course_usage_monthly_statistic [GET]
 func (s *Statistic) GetCourseUsageMonthlyStatistic(c *gin.Context) {
-	//uid, e := t.GetUID(c)
-	//if e != nil {
-	//	t.JSONValidatorErrorResponse(c, e.Error())
-	//	return
-	//}
-	//var uri validator.TrainerIDUri
-	//if err := c.ShouldBindUri(&uri); err != nil {
-	//	t.JSONValidatorErrorResponse(c, err.Error())
-	//	return
-	//}
-	//trainer, err := t.trainerService.GetTrainer(c, &uid, uri.TrainerID)
-	//if err != nil {
-	//	t.JSONErrorResponse(c, err)
-	//	return
-	//}
-	//t.JSONSuccessResponse(c, trainer, "success!")
+	uid, e := s.GetUID(c)
+	if e != nil {
+		s.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	result, err := s.usageStatisticService.GetUserCourseUsageMonthlyStatistic(c, uid)
+	if err != nil {
+		s.JSONErrorResponse(c, err)
+		return
+	}
+	s.JSONSuccessResponse(c, result, "success!")
 }

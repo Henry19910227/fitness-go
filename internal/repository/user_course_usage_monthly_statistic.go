@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
@@ -71,6 +72,16 @@ func (u *userCourseUsageMonthlyStatistic) Save(tx *gorm.DB, ColumnName string, v
 		Columns:   []clause.Column{{Name: "user_id"}, {Name: "year"}, {Name: "month"}},
 		DoUpdates: clause.AssignmentColumns([]string{ColumnName, "update_at"}),
 	}).Create(&params).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *userCourseUsageMonthlyStatistic) Find(userID int64, output interface{}) error {
+	if err := u.gorm.DB().
+		Model(&entity.UserCourseUsageMonthlyStatistic{}).
+		Where("user_id = ?", userID).
+		Take(output).Error; err != nil {
 		return err
 	}
 	return nil

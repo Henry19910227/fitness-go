@@ -9545,41 +9545,40 @@ var doc = `{
         "dto.UserCourseUsageMonthlyStatistic": {
             "type": "object",
             "properties": {
-                "chargeUsageCount": {
+                "charge_usage_count": {
                     "description": "付費課表使用人數",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 50
                 },
-                "createAt": {
+                "create_at": {
                     "description": "創建日期",
-                    "type": "string"
+                    "type": "string",
+                    "example": "2022-05-20 12:00:00"
                 },
-                "freeUsageCount": {
+                "free_usage_count": {
                     "description": "免費課表使用人數",
-                    "type": "integer"
-                },
-                "id": {
-                    "description": "報表id",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 400
                 },
                 "month": {
                     "description": "月份",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 5
                 },
-                "subscribeUsageCount": {
+                "subscribe_usage_count": {
                     "description": "訂閱課表使用人數",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 60
                 },
-                "updateAt": {
+                "update_at": {
                     "description": "更新日期",
-                    "type": "string"
-                },
-                "userID": {
-                    "description": "教練id",
-                    "type": "integer"
+                    "type": "string",
+                    "example": "2022-05-21 12:00:00"
                 },
                 "year": {
                     "description": "年份",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2022
                 }
             }
         },
@@ -9590,11 +9589,6 @@ var doc = `{
                     "description": "創建日期",
                     "type": "string",
                     "example": "2022-05-25 11:00:00"
-                },
-                "id": {
-                    "description": "報表id",
-                    "type": "integer",
-                    "example": 1
                 },
                 "income": {
                     "description": "收益",
@@ -9610,11 +9604,6 @@ var doc = `{
                     "description": "更新日期",
                     "type": "string",
                     "example": "2022-05-25 12:00:00"
-                },
-                "user_id": {
-                    "description": "教練id",
-                    "type": "integer",
-                    "example": 10001
                 },
                 "year": {
                     "description": "年份",
