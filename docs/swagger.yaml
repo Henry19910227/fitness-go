@@ -3674,7 +3674,7 @@ paths:
         type: integer
       - description: 用戶名稱(1~40字元)
         in: query
-        name: name
+        name: nickname
         type: string
       - description: 用戶Email
         in: query

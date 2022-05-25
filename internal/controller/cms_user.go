@@ -37,7 +37,7 @@ func NewCMSUser(baseGroup *gin.RouterGroup, userService service.User, userMiddle
 // @Produce json
 // @Security fitness_token
 // @Param user_id query int64 false "用戶ID"
-// @Param name query string false "用戶名稱(1~40字元)"
+// @Param nickname query string false "用戶名稱(1~40字元)"
 // @Param email query string false "用戶Email"
 // @Param user_status query string false "用戶狀態 (1:正常/2:違規/3:刪除)"
 // @Param user_type query string false "用戶類型 (1:一般用戶/2:訂閱用戶)"
@@ -66,7 +66,7 @@ func (u *CMSUser) GetUsers(c *gin.Context) {
 	}
 	users, paging, err := u.userService.GetCMSUsers(c, &dto.FinsCMSUsersParam{
 		UserID:     form.UserID,
-		Name:       form.Name,
+		Name:       form.Nickname,
 		Email:      form.Email,
 		UserStatus: form.UserStatus,
 		UserType:   form.UserType,

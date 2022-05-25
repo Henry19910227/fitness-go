@@ -1164,7 +1164,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "用戶名稱(1~40字元)",
-                        "name": "name",
+                        "name": "nickname",
                         "in": "query"
                     },
                     {
