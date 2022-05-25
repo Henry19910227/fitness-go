@@ -74,6 +74,8 @@ type Course interface {
 	GetCourseSummariesByUID(c *gin.Context, uid int64, status []int, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CourseSummary, *dto.Paging, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
 	GetCourseProductByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error)
+	GetCourseStatistic(c *gin.Context, courseID int64) (*dto.CourseStatistic, errcode.Error)
+	GetCourseStatisticSummaries(c *gin.Context, userID int64, pagingParam *dto.PagingParam) ([]*dto.CourseStatisticSummary, *dto.Paging, errcode.Error)
 	GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
 	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, *dto.Paging, errcode.Error)
 	GetProgressCourseAssetSummaries(c *gin.Context, userID int64, page int, size int) ([]*dto.CourseAssetSummary, *dto.Paging, errcode.Error)
@@ -188,4 +190,18 @@ type Favorite interface {
 	DeleteFavoriteCourse(c *gin.Context, userID int64, courseID int64) errcode.Error
 	DeleteFavoriteTrainer(c *gin.Context, userID int64, trainerID int64) errcode.Error
 	DeleteFavoriteAction(c *gin.Context, userID int64, actionID int64) errcode.Error
+}
+
+type CourseUsageStatistic interface {
+	Update()
+}
+
+type UserCourseUsageMonthlyStatistic interface {
+	Update()
+	GetUserCourseUsageMonthlyStatistic(c *gin.Context, userID int64) (*dto.UserCourseUsageMonthlyStatistic, errcode.Error)
+}
+
+type UserIncomeMonthlyStatistic interface {
+	Update()
+	GetUserIncomeMonthlyStatistic(c *gin.Context, userID int64) (*dto.UserIncomeMonthlyStatistic, errcode.Error)
 }

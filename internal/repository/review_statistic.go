@@ -17,6 +17,16 @@ func NewReviewStatistic(gorm tool.Gorm) ReviewStatistic {
 	return &reviewStatistic{gorm: gorm}
 }
 
+func (r *reviewStatistic) FindReviewStatisticOutput(courseID int64, output interface{}) error {
+	if err := r.gorm.DB().
+		Model(&model.ReviewStatistic{}).
+		Where("course_id = ?", courseID).
+		Take(output).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *reviewStatistic) SaveReviewStatistic(tx *gorm.DB, courseID int64, param *model.SaveReviewStatisticParam) error {
 	db := r.gorm.DB()
 	if tx != nil {

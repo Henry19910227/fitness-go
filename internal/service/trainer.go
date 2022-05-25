@@ -17,21 +17,22 @@ import (
 
 type trainer struct {
 	Base
-	trainerRepo  repository.Trainer
-	albumRepo    repository.TrainerAlbum
-	cerRepo      repository.Certificate
-	favoriteRepo repository.Favorite
-	cardRepo     repository.Card
-	bankRepo     repository.BankAccount
-	uploader     handler.Uploader
-	resHandler   handler.Resource
-	logger       handler.Logger
-	jwtTool      tool.JWT
-	errHandler   errcode.Handler
+	trainerRepo         repository.Trainer
+	albumRepo           repository.TrainerAlbum
+	cerRepo             repository.Certificate
+	favoriteRepo        repository.Favorite
+	cardRepo            repository.Card
+	bankRepo            repository.BankAccount
+	uploader            handler.Uploader
+	resHandler          handler.Resource
+	logger              handler.Logger
+	jwtTool             tool.JWT
+	errHandler          errcode.Handler
 }
 
 func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, cerRepo repository.Certificate,
-	favoriteRepo repository.Favorite, cardRepo repository.Card, bankRepo repository.BankAccount, uploader handler.Uploader, resHandler handler.Resource,
+	favoriteRepo repository.Favorite, cardRepo repository.Card, bankRepo repository.BankAccount,
+	uploader handler.Uploader, resHandler handler.Resource,
 	logger handler.Logger, jwtTool tool.JWT, errHandler errcode.Handler) Trainer {
 	return &trainer{trainerRepo: trainerRepo, albumRepo: albumRepo, cerRepo: cerRepo, favoriteRepo: favoriteRepo, cardRepo: cardRepo, bankRepo: bankRepo, uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }

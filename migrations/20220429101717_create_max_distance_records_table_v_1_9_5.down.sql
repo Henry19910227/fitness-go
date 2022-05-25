@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS max_distance_records;

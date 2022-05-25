@@ -17,23 +17,25 @@ import (
 
 type course struct {
 	Base
-	courseRepo              repository.Course
-	userCourseAssetRepo     repository.UserCourseAsset
-	trainerRepo             repository.Trainer
-	trainerStatRepo         repository.TrainerStatistic
-	planRepo                repository.Plan
-	workoutRepo             repository.Workout
-	workoutSetRepo          repository.WorkoutSet
-	saleRepo                repository.Sale
-	subscribeInfoRepo       repository.UserSubscribeInfo
-	userCourseStatisticRepo repository.UserCourseStatistic
-	favoriteRepo            repository.Favorite
-	transactionRepo         repository.Transaction
-	uploader                handler.Uploader
-	resHandler              handler.Resource
-	logger                  handler.Logger
-	jwtTool                 tool.JWT
-	errHandler              errcode.Handler
+	courseRepo               repository.Course
+	userCourseAssetRepo      repository.UserCourseAsset
+	trainerRepo              repository.Trainer
+	trainerStatRepo          repository.TrainerStatistic
+	planRepo                 repository.Plan
+	workoutRepo              repository.Workout
+	workoutSetRepo           repository.WorkoutSet
+	saleRepo                 repository.Sale
+	subscribeInfoRepo        repository.UserSubscribeInfo
+	userCourseStatisticRepo  repository.UserCourseStatistic
+	favoriteRepo             repository.Favorite
+	reviewStatisticRepo      repository.ReviewStatistic
+	courseUsageStatisticRepo repository.CourseUsageStatistic
+	transactionRepo          repository.Transaction
+	uploader                 handler.Uploader
+	resHandler               handler.Resource
+	logger                   handler.Logger
+	jwtTool                  tool.JWT
+	errHandler               errcode.Handler
 }
 
 func NewCourse(courseRepo repository.Course,
@@ -47,6 +49,8 @@ func NewCourse(courseRepo repository.Course,
 	subscribeInfoRepo repository.UserSubscribeInfo,
 	userCourseStatisticRepo repository.UserCourseStatistic,
 	favoriteRepo repository.Favorite,
+	reviewStatisticRepo repository.ReviewStatistic,
+	courseUsageStatisticRepo repository.CourseUsageStatistic,
 	transactionRepo repository.Transaction,
 	uploader handler.Uploader, resHandler handler.Resource, logger handler.Logger,
 	jwtTool tool.JWT,
@@ -54,7 +58,7 @@ func NewCourse(courseRepo repository.Course,
 	return &course{courseRepo: courseRepo, userCourseAssetRepo: userCourseAssetRepo,
 		trainerRepo: trainerRepo, trainerStatRepo: trainerStatRepo, planRepo: planRepo, workoutRepo: workoutRepo, workoutSetRepo: workoutSetRepo,
 		saleRepo: saleRepo, subscribeInfoRepo: subscribeInfoRepo, userCourseStatisticRepo: userCourseStatisticRepo,
-		favoriteRepo: favoriteRepo, transactionRepo: transactionRepo,
+		favoriteRepo: favoriteRepo, reviewStatisticRepo: reviewStatisticRepo, courseUsageStatisticRepo: courseUsageStatisticRepo, transactionRepo: transactionRepo,
 		uploader: uploader, resHandler: resHandler, logger: logger, jwtTool: jwtTool, errHandler: errHandler}
 }
 
@@ -356,6 +360,56 @@ func (cs *course) GetCourseProductSummaries(c *gin.Context, param *dto.GetCourse
 		Size:       size,
 	}
 	return parserCourseProductSummaries(datas), &paging, nil
+}
+
+func (cs *course) GetCourseStatistic(c *gin.Context, courseID int64) (*dto.CourseStatistic, errcode.Error) {
+	var course dto.CourseStatistic
+	if err := cs.courseRepo.FindCourseOutput(courseID, &course); err != nil {
+		return nil, cs.errHandler.Set(c, "course repo", err)
+	}
+	//查找 ReviewStatistic
+	var reviewStatistic dto.ReviewStatisticSummary
+	if err := cs.reviewStatisticRepo.FindReviewStatisticOutput(courseID, &reviewStatistic); err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, cs.errHandler.Set(c, "review_statistic repo", err)
+	}
+	course.Review = &reviewStatistic
+	//查找 CourseUsageStatistic
+	var courseUsageStatistic dto.CourseUsageStatistic
+	if err := cs.courseUsageStatisticRepo.FindCourseUsageStatisticOutput(courseID, &courseUsageStatistic); err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, cs.errHandler.Set(c, "course_usage_statistic repo", err)
+	}
+	course.CourseUsageStatistic = &courseUsageStatistic
+	return &course, nil
+}
+
+func (cs *course) GetCourseStatisticSummaries(c *gin.Context, userID int64, pagingParam *dto.PagingParam) ([]*dto.CourseStatisticSummary, *dto.Paging, errcode.Error) {
+	//設置分頁
+	var paging *model.PagingParam
+	if pagingParam != nil {
+		offset, limit := cs.GetPagingIndex(pagingParam.Page, pagingParam.Size)
+		paging = &model.PagingParam{
+			Offset: offset,
+			Limit:  limit,
+		}
+	}
+	datas, amount, err := cs.courseRepo.FindCourseStatisticSummaries(userID, &model.OrderBy{
+		OrderType: global.ASC,
+		Field:     "create_at",
+	}, paging)
+	if err != nil {
+		return nil, nil, cs.errHandler.Set(c, "course repo", err)
+	}
+	courses := make([]*dto.CourseStatisticSummary, 0)
+	for _, data := range datas {
+		courses = append(courses, dto.NewCourseStatisticSummary(data))
+	}
+	pagingResult := dto.Paging{
+		TotalCount: amount,
+		TotalPage:  cs.GetTotalPage(amount, pagingParam.Size),
+		Page:       pagingParam.Page,
+		Size:       pagingParam.Size,
+	}
+	return courses, &pagingResult, nil
 }
 
 func (cs *course) GetProgressCourseAssetSummaries(c *gin.Context, userID int64, page int, size int) ([]*dto.CourseAssetSummary, *dto.Paging, errcode.Error) {

@@ -12,6 +12,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/setting"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/gin-gonic/gin"
+	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
 	"log"
 	"os"
@@ -24,15 +25,16 @@ var (
 )
 
 var (
-	mysqlTool   tool.Mysql
-	gormTool    tool.Gorm
-	viperTool   *viper.Viper
-	migrateTool tool.Migrate
-	redisTool   tool.Redis
-	jwtTool     tool.JWT
-	logTool     tool.Logger
-	otpTool     tool.OTP
-	resTool     tool.Resource
+	mysqlTool     tool.Mysql
+	gormTool      tool.Gorm
+	viperTool     *viper.Viper
+	migrateTool   tool.Migrate
+	redisTool     tool.Redis
+	jwtTool       tool.JWT
+	logTool       tool.Logger
+	otpTool       tool.OTP
+	resTool       tool.Resource
+	schedulerTool = cron.New(cron.WithSeconds())
 )
 
 var (
@@ -43,25 +45,28 @@ var (
 )
 
 var (
-	migrateService       service.Migrate
-	swagService          service.Swagger
-	loginService         service.Login
-	regService           service.Register
-	userService          service.User
-	trainerService       service.Trainer
-	courseService        service.Course
-	planService          service.Plan
-	workoutService       service.Workout
-	workoutSetService    service.WorkoutSet
-	actionService        service.Action
-	saleService          service.Sale
-	storeService         service.Store
-	reviewService        service.Review
-	paymentService       service.Payment
-	workoutLogService    service.WorkoutLog
-	favoriteService      service.Favorite
-	workoutSetLogService service.WorkoutSetLog
-	orderService         service.Order
+	migrateService                         service.Migrate
+	swagService                            service.Swagger
+	loginService                           service.Login
+	regService                             service.Register
+	userService                            service.User
+	trainerService                         service.Trainer
+	courseService                          service.Course
+	planService                            service.Plan
+	workoutService                         service.Workout
+	workoutSetService                      service.WorkoutSet
+	actionService                          service.Action
+	saleService                            service.Sale
+	storeService                           service.Store
+	reviewService                          service.Review
+	paymentService                         service.Payment
+	workoutLogService                      service.WorkoutLog
+	favoriteService                        service.Favorite
+	workoutSetLogService                   service.WorkoutSetLog
+	orderService                           service.Order
+	courseUsageStatisticService            service.CourseUsageStatistic
+	userCourseUsageMonthlyStatisticService service.UserCourseUsageMonthlyStatistic
+	userIncomeMonthlyStatisticService      service.UserIncomeMonthlyStatistic
 )
 
 var (
@@ -118,6 +123,7 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger()) //加入路由Logger
 	router.Use(gin.CustomRecovery(middleware.Recover(logHandler)))
+	router.Use(middleware.CORS()) //加入解決跨域中間層
 	//gin.SetMode(gin.ReleaseMode)
 	baseGroup := router.Group("/api/v1")
 	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
@@ -129,6 +135,7 @@ func main() {
 	controller.NewCourse(baseGroup, courseService, planService, actionService, reviewService, userMidd, courseMidd)
 	controller.NewCourseProduct(baseGroup, courseService, planService, workoutSetService, courseMidd, userMidd)
 	controller.NewCourseAsset(baseGroup, courseService, planService, userMidd, courseMidd)
+	controller.NewCourseStatistic(baseGroup, courseService, userMidd)
 	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
 	controller.NewPlanProduct(baseGroup, planService, workoutService, planMidd, userMidd)
 	controller.NewPlanAsset(baseGroup, planService, workoutService, planMidd, userMidd)
@@ -147,9 +154,11 @@ func main() {
 	controller.NewCMSUser(baseGroup, userService, userMidd)
 	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
 	controller.NewOrder(baseGroup, orderService, userMidd)
+	controller.NewStatistic(baseGroup, userIncomeMonthlyStatisticService, userCourseUsageMonthlyStatisticService, userMidd)
+	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService, userIncomeMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
-
+	schedulerTool.Start()
 	router.Run(":" + viperTool.GetString("Server.HttpPort"))
 }
 
@@ -242,6 +251,9 @@ func setupService() {
 	favoriteService = service.NewFavoriteService(viperTool, gormTool)
 	workoutSetLogService = service.NewWorkoutSetLogService(viperTool, gormTool)
 	orderService = service.NewOrderService(viperTool, gormTool)
+	courseUsageStatisticService = service.NewCourseUsageStatisticService(viperTool, gormTool)
+	userCourseUsageMonthlyStatisticService = service.NewUserCourseUsageMonthlyStatisticService(viperTool, gormTool)
+	userIncomeMonthlyStatisticService = service.NewUserIncomeMonthlyStatisticService(viperTool, gormTool)
 }
 
 func setupMigrateService() {

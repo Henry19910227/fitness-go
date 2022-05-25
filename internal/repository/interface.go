@@ -48,6 +48,7 @@ type Course interface {
 	FindCourseProductSummaries(param model.FindCourseProductSummariesParam, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseProductSummary, error)
 	FindCourseProductCount(param model.FindCourseProductCountParam) (int, error)
 	FindCourseProduct(courseID int64) (*model.CourseProduct, error)
+	FindCourseStatisticSummaries(userID int64, orderBy *model.OrderBy, paging *model.PagingParam) ([]*model.CourseStatisticSummary, int, error)
 	FindProgressCourseAssetSummaries(userID int64, paging *model.PagingParam) ([]*model.CourseAssetSummary, error)
 	FindChargeCourseAssetSummaries(userID int64, paging *model.PagingParam) ([]*model.CourseAssetSummary, error)
 	FindProgressCourseAssetCount(userID int64) (int, error)
@@ -56,6 +57,7 @@ type Course interface {
 	FindCourseByCourseID(courseID int64) (*model.Course, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
 	FindCourseByID(tx *gorm.DB, courseID int64, entity interface{}) error
+	FindCourseOutput(courseID int64, output interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
 	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
 	FindCourseByWorkoutSetID(setID int64, entity interface{}) error
@@ -168,6 +170,7 @@ type ReviewImage interface {
 }
 
 type ReviewStatistic interface {
+	FindReviewStatisticOutput(courseID int64, output interface{}) error
 	CalculateReviewStatistic(tx *gorm.DB, courseID int64) (*model.ReviewStatistic, error)
 	SaveReviewStatistic(tx *gorm.DB, courseID int64, param *model.SaveReviewStatisticParam) error
 }
@@ -264,4 +267,33 @@ type BankAccount interface {
 
 type Card interface {
 	FindCardEntity(userID int64, inputModel interface{}) error
+}
+
+type CourseUsageStatistic interface {
+	CalculateTotalFinishWorkoutCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateUserFinishCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateMaleFinishCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateFemaleFinishCount(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateFinishCountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge13to17CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge18to24CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge25to34CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge35to44CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge45to54CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge55to64CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	CalculateAge65UpCountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
+	Save(tx *gorm.DB, ColumnName string, values []*model.CourseUsageStatisticResult) error
+	FindCourseUsageStatisticOutput(courseID int64, output interface{}) error
+}
+
+type UserCourseUsageMonthlyStatistic interface {
+	CalculateCourseUsageMonthlyCount(tx *gorm.DB, saleType global.SaleType, date string) ([]*model.UserCourseUsageMonthlyStatisticResult, error)
+	Save(tx *gorm.DB, ColumnName string, values []*model.UserCourseUsageMonthlyStatisticResult) error
+	Find(userID int64, output interface{}) error
+}
+
+type UserIncomeMonthlyStatistic interface {
+	CalculateUserIncomeMonthlyCount(tx *gorm.DB, date string) ([]*model.UserIncomeMonthlyStatisticResult, error)
+	Save(tx *gorm.DB, values []*model.UserIncomeMonthlyStatisticResult) error
+	Find(userID int64, output interface{}) error
 }

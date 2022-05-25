@@ -42,15 +42,27 @@ func (handler *logger) Set(c *gin.Context, level LogLevel, tag string, code int,
 }
 
 func (handler *logger) GetFields(c *gin.Context, tag string, code int) map[string]interface{} {
-	uid, _ := handler.jwtTool.GetIDByToken(c.Request.Header.Get("token"))
+	var uid int64
+	var path string
+	var hostIP string
+	var body interface{}
+	var rid interface{}
+	if c != nil {
+		uid, _ = handler.jwtTool.GetIDByToken(c.Request.Header.Get("token"))
+		path = c.FullPath()
+		hostIP = c.ClientIP()
+		body = c.Value("Body")
+		rid = c.Value("X-Request-Id")
+	}
+
 	fields := map[string]interface{}{
 		"tag":     tag,
 		"code":    code,
-		"path":    c.FullPath(),
-		"host_ip": c.ClientIP(),
+		"path":    path,
+		"host_ip": hostIP,
 		"uid":     uid,
-		"body":    c.Value("Body"),
-		"rid":     c.Value("X-Request-Id"),
+		"body":    body,
+		"rid":     rid,
 	}
 	return fields
 }
