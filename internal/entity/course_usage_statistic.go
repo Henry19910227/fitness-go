@@ -4,7 +4,7 @@ type CourseUsageStatistic struct {
 	ID                      int64  `gorm:"column:id"`                         // 報表id
 	CourseID                int64  `gorm:"column:course_id"`                  // 課表id
 	TotalFinishWorkoutCount int    `gorm:"column:total_finish_workout_count"` // 歷史訓練總量(完成一次該課表的訓練，重複計算)
-	UserFinishCourt         int    `gorm:"column:user_finish_count"`          // 用戶使用人數(完成一次該課表的訓練，不重複計算)
+	UserFinishCount         int    `gorm:"column:user_finish_count"`          // 用戶使用人數(完成一次該課表的訓練，不重複計算)
 	MaleFinishCount         int    `gorm:"column:male_finish_count"`          // 男生使用人數
 	FemaleFinishCount       int    `gorm:"column:female_finish_count"`        // 女生使用人數
 	FinishCountAvg          int    `gorm:"column:finish_count_avg"`           // 平均完成訓練次數(同一訓練不重複)

@@ -74,6 +74,7 @@ type Course interface {
 	GetCourseSummariesByUID(c *gin.Context, uid int64, status []int, orderByParam *dto.OrderByParam, pagingParam *dto.PagingParam) ([]*dto.CourseSummary, *dto.Paging, errcode.Error)
 	GetCourseDetailByCourseID(c *gin.Context, courseID int64) (*dto.Course, errcode.Error)
 	GetCourseProductByCourseID(c *gin.Context, userID int64, courseID int64) (*dto.CourseProduct, errcode.Error)
+	GetCourseStatistic(c *gin.Context, courseID int64) (*dto.CourseStatistic, errcode.Error)
 	GetCourseStatisticSummaries(c *gin.Context, userID int64, pagingParam *dto.PagingParam) ([]*dto.CourseStatisticSummary, *dto.Paging, errcode.Error)
 	GetCourseOverviewByCourseID(c *gin.Context, courseID int64) (*dto.CourseProduct, errcode.Error)
 	GetCourseProductSummaries(c *gin.Context, param *dto.GetCourseProductSummariesParam, page, size int) ([]*dto.CourseProductSummary, *dto.Paging, errcode.Error)

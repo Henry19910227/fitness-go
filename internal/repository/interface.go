@@ -57,6 +57,7 @@ type Course interface {
 	FindCourseByCourseID(courseID int64) (*model.Course, error)
 	FindCourseAmountByUserID(uid int64) (int, error)
 	FindCourseByID(tx *gorm.DB, courseID int64, entity interface{}) error
+	FindCourseOutput(courseID int64, output interface{}) error
 	FindCourseByPlanID(planID int64, entity interface{}) error
 	FindCourseByWorkoutID(workoutID int64, entity interface{}) error
 	FindCourseByWorkoutSetID(setID int64, entity interface{}) error
@@ -169,6 +170,7 @@ type ReviewImage interface {
 }
 
 type ReviewStatistic interface {
+	FindReviewStatisticOutput(courseID int64, output interface{}) error
 	CalculateReviewStatistic(tx *gorm.DB, courseID int64) (*model.ReviewStatistic, error)
 	SaveReviewStatistic(tx *gorm.DB, courseID int64, param *model.SaveReviewStatisticParam) error
 }
@@ -281,6 +283,7 @@ type CourseUsageStatistic interface {
 	CalculateAge55to64CountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
 	CalculateAge65UpCountAvg(tx *gorm.DB) ([]*model.CourseUsageStatisticResult, error)
 	Save(tx *gorm.DB, ColumnName string, values []*model.CourseUsageStatisticResult) error
+	FindCourseUsageStatisticOutput(courseID int64, output interface{}) error
 }
 
 type UserCourseUsageMonthlyStatistic interface {

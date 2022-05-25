@@ -22,6 +22,9 @@ func NewCourseStatistic(baseGroup *gin.RouterGroup, courseService service.Course
 	baseGroup.GET("/course_statistics",
 		userMidd.TokenPermission([]global.Role{global.UserRole}),
 		course.GetCourseStatistics)
+	baseGroup.GET("/course_statistic/:course_id",
+		userMidd.TokenPermission([]global.Role{global.UserRole}),
+		course.GetCourseStatistic)
 }
 
 // GetCourseStatistics 獲取個人課表數據統計列表
@@ -56,4 +59,29 @@ func (a *CourseStatistic) GetCourseStatistics(c *gin.Context) {
 		return
 	}
 	a.JSONSuccessPagingResponse(c, courses, paging, "success!")
+}
+
+// GetCourseStatistic 獲取個人課表數據詳細
+// @Summary 獲取個人課表數據詳細
+// @Description 獲取個人課表數據詳細
+// @Tags Statistic
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} model.SuccessResult{data=dto.CourseStatistic} "獲取成功!"
+// @Failure 400 {object} model.ErrorResult "獲取失敗"
+// @Router /course_statistic/{course_id} [GET]
+func (a *CourseStatistic) GetCourseStatistic(c *gin.Context) {
+	var uri validator.CourseIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		a.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	course, err := a.courseService.GetCourseStatistic(c, uri.CourseID)
+	if err != nil {
+		a.JSONErrorResponse(c, err)
+		return
+	}
+	a.JSONSuccessResponse(c, course, "success!")
 }

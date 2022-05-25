@@ -572,6 +572,16 @@ func (c *course) FindCourseByID(tx *gorm.DB, courseID int64, entity interface{})
 	return nil
 }
 
+func (c *course) FindCourseOutput(courseID int64, output interface{}) error {
+	if err := c.gorm.DB().
+		Model(&model.Course{}).
+		Where("id = ?", courseID).
+		Take(output).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *course) FindCourseByPlanID(planID int64, entity interface{}) error {
 	var courseID int64
 	if err := c.gorm.DB().

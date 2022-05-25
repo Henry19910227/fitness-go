@@ -38,6 +38,8 @@ func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	subscribeInfoRepo := repository.NewSubscribeInfo(gormTool)
 	userCourseStatisticRepo := repository.NewUserCourseStatistic(gormTool)
 	favoriteRepo := repository.NewFavorite(gormTool)
+	reviewStatisticRepo := repository.NewReviewStatistic(gormTool)
+	courseUsageStatisticRepo := repository.NewCourseUsageStatistic(gormTool)
 	transactionRepo := repository.NewTransaction(gormTool)
 	resTool := tool.NewResource(setting.NewResource(viperTool))
 	uploader := handler.NewUploader(resTool, setting.NewUploadLimit(viperTool))
@@ -45,7 +47,10 @@ func NewCourseService(viperTool *viper.Viper, gormTool tool.Gorm) Course {
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	logger := handler.NewLogger(logTool, jwtTool)
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewCourse(courseRepo, userCourseAsset, trainerRepo, trainerStatRepo, planRepo, workoutRepo, workoutSetRepo, saleRepo, subscribeInfoRepo, userCourseStatisticRepo, favoriteRepo, transactionRepo, uploader, resHandler, logger, jwtTool, errHandler)
+	return NewCourse(courseRepo, userCourseAsset, trainerRepo, trainerStatRepo,
+		planRepo, workoutRepo, workoutSetRepo, saleRepo, subscribeInfoRepo,
+		userCourseStatisticRepo, favoriteRepo, reviewStatisticRepo,
+		courseUsageStatisticRepo, transactionRepo, uploader, resHandler, logger, jwtTool, errHandler)
 }
 
 func NewPlanService(viperTool *viper.Viper, gormTool tool.Gorm) Plan {
