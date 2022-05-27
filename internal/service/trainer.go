@@ -406,18 +406,18 @@ func (t *trainer) GetCMSTrainers(c *gin.Context, param *dto.FinsCMSTrainersParam
 		}
 	}
 	trainers := make([]*dto.CMSTrainerSummary, 0)
-	var totalCount int64
-	if err := t.trainerRepo.FindTrainers(&trainers, &totalCount, &model.FinsTrainersParam{
+	amount, err := t.trainerRepo.FindTrainers(&trainers, &model.FinsTrainersParam{
 		UserID:        param.UserID,
 		NickName:      param.NickName,
 		Email:         param.Email,
 		TrainerStatus: param.TrainerStatus,
-	}, orderBy, paging); err != nil {
+	}, orderBy, paging)
+	if err != nil {
 		return nil, nil, t.errHandler.Set(c, "trainer repo", err)
 	}
 	pagingResult := dto.Paging{
-		TotalCount: int(totalCount),
-		TotalPage:  t.GetTotalPage(int(totalCount), pagingParam.Size),
+		TotalCount: amount,
+		TotalPage:  t.GetTotalPage(amount, pagingParam.Size),
 		Page:       pagingParam.Page,
 		Size:       pagingParam.Size,
 	}
