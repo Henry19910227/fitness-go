@@ -142,7 +142,3 @@ func (u *CMSUser) UpdateUser(c *gin.Context) {
 	}
 	u.JSONSuccessResponse(c, user, "success!")
 }
-
-func (u *CMSUser) GetUserOrders(c *gin.Context) {
-
-}

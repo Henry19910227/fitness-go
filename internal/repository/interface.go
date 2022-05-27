@@ -19,7 +19,7 @@ type User interface {
 	FindUserByAccountAndPassword(account string, password string, entity interface{}) error
 	FindUserIDByNickname(nickname string) (int64, error)
 	FindUserIDByEmail(email string) (int64, error)
-	FindUsers(result interface{}, totalCount *int64, param *model.FinsUsersParam, orderBy *model.OrderBy, paging *model.PagingParam) error
+	FindUsers(result interface{}, param *model.FinsUsersParam, orderBy *model.OrderBy, paging *model.PagingParam) (int, error)
 }
 
 type Trainer interface {
