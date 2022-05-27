@@ -223,6 +223,7 @@ func (o *order) FindCMSUserOrdersAPIItems(userID int64, result interface{}, orde
 		Joins("INNER JOIN order_courses ON orders.id = order_courses.order_id").
 		Joins("INNER JOIN courses ON order_courses.course_id = courses.id").
 		Joins("INNER JOIN trainers ON courses.user_ID = trainers.user_id")
+	db = db.Where("orders.user_id = ? AND orders.order_status = ? AND orders.order_type = ?", userID, global.SuccessOrderStatus, 1)
 	//個數
 	var amount int64
 	db = db.Count(&amount)
@@ -235,7 +236,7 @@ func (o *order) FindCMSUserOrdersAPIItems(userID int64, result interface{}, orde
 		db = db.Offset(paging.Offset).Limit(paging.Limit)
 	}
 	//查詢數據
-	if err := db.Where("orders.user_id = ? AND orders.order_status = ? AND orders.order_type = ?", userID, global.SuccessOrderStatus, 1).Find(result).Error; err != nil {
+	if err := db.Find(result).Error; err != nil {
 		return 0, nil
 	}
 	return int(amount), nil
