@@ -261,3 +261,7 @@ func NewUserIncomeMonthlyStatisticService(viperTool *viper.Viper, gormTool tool.
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewUserIncomeMonthlyStatistic(transactionRepo, statisticRepo, errHandler)
 }
+
+func NewRDAService() RDA {
+	return NewRDA(tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie())
+}

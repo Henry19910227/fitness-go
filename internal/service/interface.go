@@ -205,3 +205,22 @@ type UserIncomeMonthlyStatistic interface {
 	Update()
 	GetUserIncomeMonthlyStatistic(c *gin.Context, userID int64) (*dto.UserIncomeMonthlyStatistic, errcode.Error)
 }
+
+type RDA interface {
+	CalculateRDA(param *dto.CalculateRDAParam) *dto.RDA
+	CalculateBMR(birthday string, weight float64, height float64, bodyFat *int, sex string) int
+	CalculateTDEE(bmr int, activityLevel global.ActivityLevel, exerciseFeqLevel global.ExerciseFeqLevel) int
+	CalculateCalorie(tdee int, dietTarget global.DietTarget) int
+	CalculateProteinCalorie(calorie int, dietTarget global.DietTarget) int
+	CalculateFatCalorie(calorie int, dietTarget global.DietTarget) int
+	CalculateCarbsCalorie(calorie int, dietTarget global.DietTarget) int
+	CalculateProteinAmount(proteinCal int) int
+	CalculateCarbsAmount(carbsCal int) int
+	CalculateFatAmount(fatCal int) int
+	CalculateDairyAmount(dietType global.DietType) int
+	CalculateVegetableAmount() int
+	CalculateFruitAmount() int
+	CalculateGrainAmount(carbsCal int, dairyAmt int, vegetableAmt int, fruitAmt int) int
+	CalculateMeatAmount(proteinCal int, dairyAmt int, grainAmt int, vegetableAmt int) int
+	CalculateNutAmount(fatCal int, dairyAmt int, meatAmt int) int
+}
