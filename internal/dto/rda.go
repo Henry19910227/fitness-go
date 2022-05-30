@@ -1,17 +1,17 @@
 package dto
 
 type RDA struct {
-	TDEE      int `gorm:"column:tdee"`      // TDEE
-	Calorie   int `gorm:"column:calorie"`   // 目標熱量
-	Protein   int `gorm:"column:protein"`   // 蛋白質(克)
-	Fat       int `gorm:"column:fat"`       // 脂肪(克)
-	Carbs     int `gorm:"column:carbs"`     // 碳水化合物(克)
-	Grain     int `gorm:"column:grain"`     // 穀物類(份)
-	Vegetable int `gorm:"column:vegetable"` // 蔬菜類(份)
-	Fruit     int `gorm:"column:fruit"`     // 水果類(份)
-	Meat      int `gorm:"column:meat"`      // 蛋豆魚肉類(份)
-	Dairy     int `gorm:"column:dairy"`     // 乳製品類(份)
-	Nut       int `gorm:"column:nut"`       // 堅果類(份)
+	TDEE      int `json:"tdee" example:"2000"`      // TDEE
+	Calorie   int `json:"calorie" example:"1800"`   // 目標熱量
+	Protein   int `json:"protein" example:"70"`   // 蛋白質(克)
+	Fat       int `json:"fat" example:"30"`       // 脂肪(克)
+	Carbs     int `json:"carbs" example:"100"`     // 碳水化合物(克)
+	Grain     int `json:"grain" example:"2"`     // 穀物類(份)
+	Vegetable int `json:"vegetable" example:"3"` // 蔬菜類(份)
+	Fruit     int `json:"fruit" example:"2"`     // 水果類(份)
+	Meat      int `json:"meat" example:"4"`      // 蛋豆魚肉類(份)
+	Dairy     int `json:"dairy" example:"3"`     // 乳製品類(份)
+	Nut       int `json:"nut" example:"1"`       // 堅果類(份)
 }
 
 type CalculateRDAParam struct {

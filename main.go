@@ -67,6 +67,7 @@ var (
 	courseUsageStatisticService            service.CourseUsageStatistic
 	userCourseUsageMonthlyStatisticService service.UserCourseUsageMonthlyStatistic
 	userIncomeMonthlyStatisticService      service.UserIncomeMonthlyStatistic
+	rdaService service.RDA
 )
 
 var (
@@ -155,6 +156,7 @@ func main() {
 	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
 	controller.NewOrder(baseGroup, orderService, userMidd)
 	controller.NewStatistic(baseGroup, userIncomeMonthlyStatisticService, userCourseUsageMonthlyStatisticService, userMidd)
+	controller.NewRDA(baseGroup, rdaService, userMidd)
 	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService, userIncomeMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
@@ -254,6 +256,7 @@ func setupService() {
 	courseUsageStatisticService = service.NewCourseUsageStatisticService(viperTool, gormTool)
 	userCourseUsageMonthlyStatisticService = service.NewUserCourseUsageMonthlyStatisticService(viperTool, gormTool)
 	userIncomeMonthlyStatisticService = service.NewUserIncomeMonthlyStatisticService(viperTool, gormTool)
+	rdaService = service.NewRDAService()
 }
 
 func setupMigrateService() {

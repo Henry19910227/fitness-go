@@ -530,6 +530,63 @@
                 }
             }
         },
+        "/calculate_rda": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CalculateRDABody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.RDA"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/cms/login": {
             "post": {
                 "description": "管理者登入",
@@ -8816,6 +8873,66 @@
                 }
             }
         },
+        "dto.RDA": {
+            "type": "object",
+            "properties": {
+                "calorie": {
+                    "description": "目標熱量",
+                    "type": "integer",
+                    "example": 1800
+                },
+                "carbs": {
+                    "description": "碳水化合物(克)",
+                    "type": "integer",
+                    "example": 100
+                },
+                "dairy": {
+                    "description": "乳製品類(份)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "fat": {
+                    "description": "脂肪(克)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "fruit": {
+                    "description": "水果類(份)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "grain": {
+                    "description": "穀物類(份)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "meat": {
+                    "description": "蛋豆魚肉類(份)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "nut": {
+                    "description": "堅果類(份)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "protein": {
+                    "description": "蛋白質(克)",
+                    "type": "integer",
+                    "example": 70
+                },
+                "tdee": {
+                    "description": "TDEE",
+                    "type": "integer",
+                    "example": 2000
+                },
+                "vegetable": {
+                    "description": "蔬菜類(份)",
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
         "dto.Review": {
             "type": "object",
             "properties": {
@@ -10327,6 +10444,66 @@
                     "description": "用戶狀態 (1:正常/2:違規)",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "validator.CalculateRDABody": {
+            "type": "object",
+            "required": [
+                "activity_level",
+                "birthday",
+                "diet_type",
+                "exercise_feq",
+                "height",
+                "sex",
+                "target",
+                "weight"
+            ],
+            "properties": {
+                "activity_level": {
+                    "description": "活動量 (1:麻痺、昏迷、無法活動/2:臥床不動，僅手臂移動/3:幾乎坐著或躺著/4:大部分坐著，少許步行/5:久坐、辦公室性質工作/6:每週輕度步行3-4天/7:每週輕度步行5-7天/8:體力勞動工作性質/9:沉重的體力勞動工作性質/10:極重度的勞動或職業運動員)",
+                    "type": "integer",
+                    "example": 6
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "body_fat": {
+                    "description": "體脂肪率 (最大99)",
+                    "type": "integer",
+                    "example": 15
+                },
+                "diet_type": {
+                    "description": "飲食型態 (1:標準飲食/2:全素食/3:蛋奶素食/4:蛋素食/5:奶素食)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "exercise_feq": {
+                    "description": "運動頻率 (1:無運動/2:一週2-3次，一次30-45分鐘/3:一週3-5次，一次45-60分鐘/4:一週5次以上，一次60分鐘)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "height": {
+                    "description": "身高 (最大999)",
+                    "type": "number",
+                    "example": 176.5
+                },
+                "sex": {
+                    "description": "性別 (f:女/m:男)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (1:減脂/2:增肌/3:維持健康生活/4:提升體能與力量/5:哺乳者/6:懷孕者)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "weight": {
+                    "description": "體重 (最大999)",
+                    "type": "number",
+                    "example": 70.5
                 }
             }
         },
