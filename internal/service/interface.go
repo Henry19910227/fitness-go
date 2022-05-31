@@ -207,6 +207,7 @@ type UserIncomeMonthlyStatistic interface {
 }
 
 type RDA interface {
+	CreateRDA(c *gin.Context, userID int64, param *dto.RDA) errcode.Error
 	CalculateRDA(param *dto.CalculateRDAParam) *dto.RDA
 	CalculateBMR(birthday string, weight float64, height float64, bodyFat *int, sex string) int
 	CalculateTDEE(bmr int, activityLevel global.ActivityLevel, exerciseFeqLevel global.ExerciseFeqLevel) int

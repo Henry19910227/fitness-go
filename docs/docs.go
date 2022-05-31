@@ -4296,6 +4296,51 @@ var doc = `{
                 }
             }
         },
+        "/rda": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新建議飲食攝取量",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "更新建議飲食攝取量",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateRDABody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/redeem_course": {
             "post": {
                 "security": [
@@ -10836,6 +10881,79 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "第一週增肌計畫"
+                }
+            }
+        },
+        "validator.UpdateRDABody": {
+            "type": "object",
+            "required": [
+                "calorie",
+                "carbs",
+                "dairy",
+                "fat",
+                "fruit",
+                "grain",
+                "meat",
+                "nut",
+                "protein",
+                "tdee",
+                "vegetable"
+            ],
+            "properties": {
+                "calorie": {
+                    "description": "目標熱量",
+                    "type": "integer",
+                    "example": 1800
+                },
+                "carbs": {
+                    "description": "碳水化合物(克)",
+                    "type": "integer",
+                    "example": 50
+                },
+                "dairy": {
+                    "description": "乳製品類(份)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "fat": {
+                    "description": "脂肪(克)",
+                    "type": "integer",
+                    "example": 20
+                },
+                "fruit": {
+                    "description": "水果類(份)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "grain": {
+                    "description": "穀物類(份)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "meat": {
+                    "description": "蛋豆魚肉類(份)",
+                    "type": "integer",
+                    "example": 6
+                },
+                "nut": {
+                    "description": "堅果類(份)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "protein": {
+                    "description": "蛋白質(克)",
+                    "type": "integer",
+                    "example": 70
+                },
+                "tdee": {
+                    "description": "TDEE",
+                    "type": "integer",
+                    "example": 2000
+                },
+                "vegetable": {
+                    "description": "蔬菜類(份)",
+                    "type": "integer",
+                    "example": 5
                 }
             }
         },

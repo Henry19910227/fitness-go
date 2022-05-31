@@ -262,6 +262,10 @@ func NewUserIncomeMonthlyStatisticService(viperTool *viper.Viper, gormTool tool.
 	return NewUserIncomeMonthlyStatistic(transactionRepo, statisticRepo, errHandler)
 }
 
-func NewRDAService() RDA {
-	return NewRDA(tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie())
+func NewRDAService(viperTool *viper.Viper, gormTool tool.Gorm) RDA {
+	rdaRepo := repository.NewRDA(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewRDA(rdaRepo, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), errHandler)
 }

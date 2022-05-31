@@ -1,25 +1,49 @@
 package service
 
 import (
+	"github.com/Henry19910227/fitness-go/errcode"
 	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
+	"github.com/Henry19910227/fitness-go/internal/model"
+	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/Henry19910227/fitness-go/internal/util"
+	"github.com/gin-gonic/gin"
 	"math"
 	"time"
 )
 
 type rda struct {
 	Base
+	rdaRepo     repository.RDA
 	bmrTool     tool.BMR
 	tdeeTool    tool.TDEE
 	calorieTool tool.Calorie
+	errHandler  errcode.Handler
 }
 
-func NewRDA(bmrTool tool.BMR, tdeeTool tool.TDEE, calorieTool tool.Calorie) RDA {
-	return &rda{bmrTool: bmrTool, tdeeTool: tdeeTool, calorieTool: calorieTool}
+func NewRDA(rdaRepo repository.RDA, bmrTool tool.BMR, tdeeTool tool.TDEE, calorieTool tool.Calorie, errHandler errcode.Handler) RDA {
+	return &rda{rdaRepo: rdaRepo, bmrTool: bmrTool, tdeeTool: tdeeTool, calorieTool: calorieTool}
 }
 
+func (r *rda) CreateRDA(c *gin.Context, userID int64, param *dto.RDA) errcode.Error {
+	if err := r.rdaRepo.CreateRDA(nil, userID, &model.CreateRDAParam{
+		TDEE:      param.TDEE,
+		Calorie:   param.Calorie,
+		Protein:   param.Protein,
+		Fat:       param.Fat,
+		Carbs:     param.Carbs,
+		Grain:     param.Grain,
+		Vegetable: param.Vegetable,
+		Fruit:     param.Fruit,
+		Meat:      param.Meat,
+		Dairy:     param.Dairy,
+		Nut:       param.Nut,
+	}); err != nil {
+		return r.errHandler.Set(c, "iap handler", err)
+	}
+	return nil
+}
 func (r *rda) CalculateRDA(param *dto.CalculateRDAParam) *dto.RDA {
 	if param == nil {
 		return &dto.RDA{}

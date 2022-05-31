@@ -297,3 +297,7 @@ type UserIncomeMonthlyStatistic interface {
 	Save(tx *gorm.DB, values []*model.UserIncomeMonthlyStatisticResult) error
 	Find(userID int64, output interface{}) error
 }
+
+type RDA interface {
+	CreateRDA(tx *gorm.DB, userID int64, param *model.CreateRDAParam) error
+}

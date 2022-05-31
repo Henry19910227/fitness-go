@@ -14,11 +14,14 @@ type RDA struct {
 	rdaService service.RDA
 }
 
-func NewRDA(baseGroup *gin.RouterGroup, rdaService service.RDA, userMiddleware middleware.User)  {
-	rda := RDA{rdaService:  rdaService}
+func NewRDA(baseGroup *gin.RouterGroup, rdaService service.RDA, userMiddleware middleware.User) {
+	rda := RDA{rdaService: rdaService}
 	baseGroup.POST("/calculate_rda",
 		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
 		rda.CalculateRDA)
+	baseGroup.PUT("/rda",
+		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
+		rda.UpdateRDA)
 }
 
 // CalculateRDA 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
@@ -39,15 +42,55 @@ func (r *RDA) CalculateRDA(c *gin.Context) {
 		return
 	}
 	result := r.rdaService.CalculateRDA(&dto.CalculateRDAParam{
-		Sex: body.Sex,
-		Birthday: body.Birthday,
-		Height: body.Height,
-		Weight: body.Weight,
-		BodyFat: body.BodyFat,
+		Sex:           body.Sex,
+		Birthday:      body.Birthday,
+		Height:        body.Height,
+		Weight:        body.Weight,
+		BodyFat:       body.BodyFat,
 		ActivityLevel: body.ActivityLevel,
-		ExerciseFeq: body.ExerciseFeq,
-		Target: body.Target,
-		DietType: body.DietType,
+		ExerciseFeq:   body.ExerciseFeq,
+		Target:        body.Target,
+		DietType:      body.DietType,
 	})
 	r.JSONSuccessResponse(c, result, "success!")
+}
+
+// UpdateRDA 更新建議飲食攝取量
+// @Summary 更新建議飲食攝取量
+// @Description 更新建議飲食攝取量
+// @Tags Diet
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body validator.UpdateRDABody true "輸入參數"
+// @Success 200 {object} model.SuccessResult "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /rda [PUT]
+func (r *RDA) UpdateRDA(c *gin.Context) {
+	uid, e := r.GetUID(c)
+	if e != nil {
+		r.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var body validator.UpdateRDABody
+	if err := c.ShouldBindJSON(&body); err != nil {
+		r.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := r.rdaService.CreateRDA(c, uid, &dto.RDA{
+		TDEE:      body.TDEE,
+		Calorie:   body.Calorie,
+		Protein:   body.Protein,
+		Fat:       body.Fat,
+		Carbs:     body.Carbs,
+		Grain:     body.Grain,
+		Vegetable: body.Vegetable,
+		Fruit:     body.Fruit,
+		Meat:      body.Meat,
+		Dairy:     body.Dairy,
+		Nut:       body.Nut,
+	}); err != nil {
+		r.JSONErrorResponse(c, err)
+	}
+	r.JSONSuccessResponse(c, nil, "success!")
 }

@@ -67,7 +67,7 @@ var (
 	courseUsageStatisticService            service.CourseUsageStatistic
 	userCourseUsageMonthlyStatisticService service.UserCourseUsageMonthlyStatistic
 	userIncomeMonthlyStatisticService      service.UserIncomeMonthlyStatistic
-	rdaService service.RDA
+	rdaService                             service.RDA
 )
 
 var (
@@ -256,7 +256,7 @@ func setupService() {
 	courseUsageStatisticService = service.NewCourseUsageStatisticService(viperTool, gormTool)
 	userCourseUsageMonthlyStatisticService = service.NewUserCourseUsageMonthlyStatisticService(viperTool, gormTool)
 	userIncomeMonthlyStatisticService = service.NewUserIncomeMonthlyStatisticService(viperTool, gormTool)
-	rdaService = service.NewRDAService()
+	rdaService = service.NewRDAService(viperTool, gormTool)
 }
 
 func setupMigrateService() {
