@@ -221,7 +221,7 @@ type RDA interface {
 	CalculateDairyAmount(dietType global.DietType) int
 	CalculateVegetableAmount() int
 	CalculateFruitAmount() int
-	CalculateGrainAmount(carbsCal int, dairyAmt int, vegetableAmt int, fruitAmt int) int
-	CalculateMeatAmount(proteinCal int, dairyAmt int, grainAmt int, vegetableAmt int) int
-	CalculateNutAmount(fatCal int, dairyAmt int, meatAmt int) int
+	CalculateGrainAmount(carbsAmt int, dairyAmt int, vegetableAmt int, fruitAmt int) int
+	CalculateMeatAmount(proteinAmt int, dairyAmt int, grainAmt int, vegetableAmt int) int
+	CalculateNutAmount(fatAmt int, dairyAmt int, meatAmt int) int
 }

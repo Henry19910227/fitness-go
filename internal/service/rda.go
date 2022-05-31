@@ -57,9 +57,9 @@ func (r *rda) CalculateRDA(param *dto.CalculateRDAParam) *dto.RDA {
 	dairyAmt := r.CalculateDairyAmount(global.DietType(param.DietType))
 	vegetableAmt := r.CalculateVegetableAmount()
 	fruitAmt := r.CalculateFruitAmount()
-	grainAmt := r.CalculateGrainAmount(carbsCal, dairyAmt, vegetableAmt, fruitAmt)
-	meatAmt := r.CalculateMeatAmount(proteinCal, dairyAmt, grainAmt, vegetableAmt)
-	nutAmount := r.CalculateNutAmount(fatCal, dairyAmt, meatAmt)
+	grainAmt := r.CalculateGrainAmount(r.CalculateCarbsAmount(carbsCal), dairyAmt, vegetableAmt, fruitAmt)
+	meatAmt := r.CalculateMeatAmount(r.CalculateProteinAmount(proteinCal), dairyAmt, grainAmt, vegetableAmt)
+	nutAmount := r.CalculateNutAmount(r.CalculateFatAmount(fatCal), dairyAmt, meatAmt)
 	return &dto.RDA{
 		TDEE:      tdee,
 		Calorie:   calorie,
@@ -124,7 +124,7 @@ func (r *rda) CalculateCarbsCalorie(calorie int, dietTarget global.DietTarget) i
 	if dietTarget == global.DietTargetLoseFat {
 		return int(math.Round(float64(calorie) * 0.5))
 	}
-	if dietTarget == global.DietTargetLoseFat {
+	if dietTarget == global.DietTargetBuildMuscle {
 		return int(math.Round(float64(calorie) * 0.6))
 	}
 	return int(math.Round(float64(calorie) * 0.65))
@@ -164,22 +164,22 @@ func (r *rda) CalculateFruitAmount() int {
 }
 
 // CalculateGrainAmount 計算穀物類份量
-func (r *rda) CalculateGrainAmount(carbsCal int, dairyAmt int, vegetableAmt int, fruitAmt int) int {
-	value := (float64(carbsCal) - (float64(dairyAmt)*12+float64(vegetableAmt)*5+float64(fruitAmt)*15)*4) / 60
+func (r *rda) CalculateGrainAmount(carbsAmt int, dairyAmt int, vegetableAmt int, fruitAmt int) int {
+	value := (float64(carbsAmt) - (float64(dairyAmt)*12 + float64(vegetableAmt)*5 + float64(fruitAmt)*15)) / 15
 	result := math.Round(value)
 	return int(result)
 }
 
 // CalculateMeatAmount 計算蛋豆魚肉類份量
-func (r *rda) CalculateMeatAmount(proteinCal int, dairyAmt int, grainAmt int, vegetableAmt int) int {
-	value := (float64(proteinCal) - (float64(dairyAmt)*8+float64(grainAmt)*2+float64(vegetableAmt)*1)*4) / 28
+func (r *rda) CalculateMeatAmount(proteinAmt int, dairyAmt int, grainAmt int, vegetableAmt int) int {
+	value := (float64(proteinAmt) - (float64(dairyAmt)*8 + float64(grainAmt)*2 + float64(vegetableAmt)*1)) / 7
 	result := math.Round(value)
 	return int(result)
 }
 
 // CalculateNutAmount 計算油脂堅果類份量
-func (r *rda) CalculateNutAmount(fatCal int, dairyAmt int, meatAmt int) int {
-	value := (float64(fatCal) - (float64(dairyAmt)*4+float64(meatAmt)*3)*9) / 45
+func (r *rda) CalculateNutAmount(fatAmt int, dairyAmt int, meatAmt int) int {
+	value := (float64(fatAmt) - (float64(dairyAmt)*4 + float64(meatAmt)*3)) / 5
 	result := math.Round(value)
 	return int(result)
 }

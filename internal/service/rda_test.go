@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/dto"
 	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/Henry19910227/fitness-go/internal/util"
@@ -110,18 +111,81 @@ func TestCalculateFatAmount(t *testing.T) {
 
 func TestRda_CalculateGrainAmount(t *testing.T) {
 	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
-	value := rdaService.CalculateGrainAmount(750, 1, 5, 2)
+	value := rdaService.CalculateGrainAmount(188, 1, 5, 2)
 	assert.Equal(t, 8, value)
 }
 
 func TestRda_CalculateMeatAmount(t *testing.T) {
 	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
-	value := rdaService.CalculateMeatAmount(300, 1, 8, 5)
+	value := rdaService.CalculateMeatAmount(75, 1, 8, 5)
 	assert.Equal(t, 7, value)
 }
 
 func TestRda_CalculateNutAmount(t *testing.T) {
 	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
-	value := rdaService.CalculateNutAmount(450, 1, 7)
+	value := rdaService.CalculateNutAmount(50, 1, 7)
 	assert.Equal(t, 5, value)
+}
+
+//飲食計算機條件：
+//標準飲食
+//性別：男性
+//年齡：30（生日：1992/2/2）
+//身高：178cm
+//體重：70kg
+//體脂：20%
+//活動量：每週輕度步行3-4天（1.375）
+//運動量：中度 一週3-5次，一次45-60分鐘 （+300）
+//飲食目標：增肌
+//
+//
+//計算結果：
+//TDEE=2533
+//建議每日攝取熱量=2913
+//蛋白質146克、脂肪65克、醣類437克
+//乳製品1份、蔬菜5份、水果2份、全穀雜糧25份、蛋豆魚肉12份、油脂堅果5份
+
+//—————————————以下為計算公式—————————————
+//男性（有體脂）BMR公式={[10*體重(kg)+6.25*身高(cm)-5*年齡+5] + [370+21.6*(100% - 體脂率) * 體重]}/2
+//BMR= {[10*70+6.25*178-5*30+5] + [370+21.6*(0.8) * 70]}/2= 1624 (1623.55 四捨五入）
+//TDEE公式 = BMR * 活動量因子 + 運動量
+//1624 * 1.375 + 300 = 2533
+//飲食目標增肌建議每日攝取熱量 = TDEE *1.15
+//2533*1.15 = 2913 (2912.95 四捨五入）
+//增肌-三大營養素克數: 蛋白質20%、脂肪20%、醣類60%
+//2913*0.2/4 = 146
+//2913*0.2/9 = 65
+//2913*0.6/4 = 437
+//蛋白質146克、脂肪65克、醣類437克
+//a乳製品 1
+//b蔬菜 5
+//c水果 2
+//d全穀雜糧 = (437 – (1 * 12 + 5 * 5 + 2 * 15)) / 15 = 25
+//e蛋豆魚肉 = (146 – (1 * 8 + 25 * 2 + 5 * 1)) / 7 = 12
+//f油脂堅果 = (65 – (1 * 4 + 12 * 3)) / 5 = 5
+
+func TestRda_CalculateRDA(t *testing.T) {
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
+	rda := rdaService.CalculateRDA(&dto.CalculateRDAParam{
+		DietType:      1,
+		Sex:           "m",
+		Birthday:      "1992-02-02",
+		Height:        178,
+		Weight:        70,
+		BodyFat:       util.PointerInt(20),
+		ActivityLevel: 6,
+		ExerciseFeq:   3,
+		Target:        2,
+	})
+	assert.Equal(t, 2533, rda.TDEE)
+	assert.Equal(t, 2913, rda.Calorie)
+	assert.Equal(t, 146, rda.Protein)
+	assert.Equal(t, 65, rda.Fat)
+	assert.Equal(t, 437, rda.Carbs)
+	assert.Equal(t, 1, rda.Dairy)
+	assert.Equal(t, 5, rda.Vegetable)
+	assert.Equal(t, 2, rda.Fruit)
+	assert.Equal(t, 25, rda.Grain)
+	assert.Equal(t, 12, rda.Meat)
+	assert.Equal(t, 5, rda.Nut)
 }
