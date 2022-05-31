@@ -23,7 +23,7 @@ type rda struct {
 }
 
 func NewRDA(rdaRepo repository.RDA, bmrTool tool.BMR, tdeeTool tool.TDEE, calorieTool tool.Calorie, errHandler errcode.Handler) RDA {
-	return &rda{rdaRepo: rdaRepo, bmrTool: bmrTool, tdeeTool: tdeeTool, calorieTool: calorieTool}
+	return &rda{rdaRepo: rdaRepo, bmrTool: bmrTool, tdeeTool: tdeeTool, calorieTool: calorieTool, errHandler: errHandler}
 }
 
 func (r *rda) CreateRDA(c *gin.Context, userID int64, param *dto.RDA) errcode.Error {

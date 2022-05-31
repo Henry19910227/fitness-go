@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/global"
+	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/Henry19910227/fitness-go/internal/util"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -12,7 +13,7 @@ import (
 // => 700 + 1100 - 155 + 5
 // = 1650
 func TestCalculateBMRCase1(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateBMR("1991-02-27", 70, 176, nil, "m")
 	assert.Equal(t, 1650, value)
 
@@ -26,7 +27,7 @@ func TestCalculateBMRCase1(t *testing.T) {
 // = 1614.5
 // = 1615 四捨五入
 func TestCalculateBMRCase2(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateBMR("1991-02-27", 70, 176, util.PointerInt(20), "m")
 	assert.Equal(t, 1615, value)
 }
@@ -36,7 +37,7 @@ func TestCalculateBMRCase2(t *testing.T) {
 // => 700 + 1100 - 155 - 161
 // = 1484
 func TestCalculateBMRCase3(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateBMR("1991-02-27", 70, 176, nil, "f")
 	assert.Equal(t, 1484, value)
 }
@@ -49,7 +50,7 @@ func TestCalculateBMRCase3(t *testing.T) {
 // = 1531.5
 // = 1532 四捨五入
 func TestCalculateBMRCase4(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateBMR("1991-02-27", 70, 176, util.PointerInt(20), "f")
 	assert.Equal(t, 1532, value)
 }
@@ -57,7 +58,7 @@ func TestCalculateBMRCase4(t *testing.T) {
 // TDEE測試1 植物人
 // 1650 * 1.0 + 0 = 1650
 func TestCalculateTDEECase1(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateTDEE(1650, global.ActivityLevel1, global.ExerciseFeqLevel1)
 	assert.Equal(t, 1650, value)
 }
@@ -65,7 +66,7 @@ func TestCalculateTDEECase1(t *testing.T) {
 // TDEE測試2 每週輕度步行 3-4天 & 一週3-5次，一次45-60分鐘
 // 1650 * 1.375 + 300 = 2568.75 = 2569 四捨五入
 func TestCalculateTDEECase2(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateTDEE(1650, global.ActivityLevel6, global.ExerciseFeqLevel3)
 	assert.Equal(t, 2569, value)
 }
@@ -73,7 +74,7 @@ func TestCalculateTDEECase2(t *testing.T) {
 // 建議熱量測試1 增肌
 // 1650 * 1.15 = 1897.5 = 1897
 func TestCalculateCalorieCase1(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateCalorie(1650, global.DietTargetBuildMuscle)
 	assert.Equal(t, 1897, value)
 }
@@ -81,46 +82,46 @@ func TestCalculateCalorieCase1(t *testing.T) {
 // 建議熱量測試2 哺乳者
 // 1650 + 600 = 2250
 func TestCalculateCalorieCase2(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateCalorie(1650, global.DietTargetFeed)
 	assert.Equal(t, 2250, value)
 }
 
 //減脂時期蛋白質克數 1650 * 0.2 / 4 = 82.5 = 83 四捨五入
 func TestCalculateProteinAmount(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateProteinCalorie(1650, global.DietTargetLoseFat)
 	assert.Equal(t, 83, rdaService.CalculateProteinAmount(value))
 }
 
 //減脂時期碳水化合物克數 1650 * 0.5 / 4 = 206.25 = 206
 func TestCalculateCarbsAmount(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateCarbsCalorie(1650, global.DietTargetLoseFat)
 	assert.Equal(t, 206, rdaService.CalculateCarbsAmount(value))
 }
 
 //減脂時期脂肪克數 1650 * 0.3 / 9 = 55
 func TestCalculateFatAmount(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateFatCalorie(1650, global.DietTargetLoseFat)
 	assert.Equal(t, 55, rdaService.CalculateFatAmount(value))
 }
 
 func TestRda_CalculateGrainAmount(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateGrainAmount(750, 1, 5, 2)
 	assert.Equal(t, 8, value)
 }
 
 func TestRda_CalculateMeatAmount(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateMeatAmount(300, 1, 8, 5)
 	assert.Equal(t, 7, value)
 }
 
 func TestRda_CalculateNutAmount(t *testing.T) {
-	rdaService := NewRDAService()
+	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	value := rdaService.CalculateNutAmount(450, 1, 7)
 	assert.Equal(t, 5, value)
 }
