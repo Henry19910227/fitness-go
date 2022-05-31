@@ -42,15 +42,15 @@ func (r *RDA) CalculateRDA(c *gin.Context) {
 		return
 	}
 	result := r.rdaService.CalculateRDA(&dto.CalculateRDAParam{
-		Sex:           body.Sex,
-		Birthday:      body.Birthday,
-		Height:        body.Height,
-		Weight:        body.Weight,
-		BodyFat:       body.BodyFat,
-		ActivityLevel: body.ActivityLevel,
-		ExerciseFeq:   body.ExerciseFeq,
-		Target:        body.Target,
-		DietType:      body.DietType,
+		Sex:              body.Sex,
+		Birthday:         body.Birthday,
+		Height:           body.Height,
+		Weight:           body.Weight,
+		BodyFat:          body.BodyFat,
+		ActivityLevel:    body.ActivityLevel,
+		ExerciseFeqLevel: body.ExerciseFeqLevel,
+		DietTarget:       body.DietTarget,
+		DietType:         body.DietType,
 	})
 	r.JSONSuccessResponse(c, result, "success!")
 }

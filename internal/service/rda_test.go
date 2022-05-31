@@ -167,15 +167,15 @@ func TestRda_CalculateNutAmount(t *testing.T) {
 func TestRda_CalculateRDA(t *testing.T) {
 	rdaService := NewRDA(nil, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), nil)
 	rda := rdaService.CalculateRDA(&dto.CalculateRDAParam{
-		DietType:      1,
-		Sex:           "m",
-		Birthday:      "1992-02-02",
-		Height:        178,
-		Weight:        70,
-		BodyFat:       util.PointerInt(20),
-		ActivityLevel: 6,
-		ExerciseFeq:   3,
-		Target:        2,
+		DietType:         1,
+		Sex:              "m",
+		Birthday:         "1992-02-02",
+		Height:           178,
+		Weight:           70,
+		BodyFat:          util.PointerInt(20),
+		ActivityLevel:    6,
+		ExerciseFeqLevel: 3,
+		DietTarget:       2,
 	})
 	assert.Equal(t, 2533, rda.TDEE)
 	assert.Equal(t, 2913, rda.Calorie)

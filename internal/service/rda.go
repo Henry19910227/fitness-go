@@ -49,11 +49,11 @@ func (r *rda) CalculateRDA(param *dto.CalculateRDAParam) *dto.RDA {
 		return &dto.RDA{}
 	}
 	bmr := r.CalculateBMR(param.Birthday, param.Weight, param.Height, param.BodyFat, param.Sex)
-	tdee := r.CalculateTDEE(bmr, global.ActivityLevel(param.ActivityLevel), global.ExerciseFeqLevel(param.ExerciseFeq))
-	calorie := r.CalculateCalorie(tdee, global.DietTarget(param.Target))
-	proteinCal := r.CalculateProteinCalorie(calorie, global.DietTarget(param.Target))
-	fatCal := r.CalculateFatCalorie(calorie, global.DietTarget(param.Target))
-	carbsCal := r.CalculateCarbsCalorie(calorie, global.DietTarget(param.Target))
+	tdee := r.CalculateTDEE(bmr, global.ActivityLevel(param.ActivityLevel), global.ExerciseFeqLevel(param.ExerciseFeqLevel))
+	calorie := r.CalculateCalorie(tdee, global.DietTarget(param.DietTarget))
+	proteinCal := r.CalculateProteinCalorie(calorie, global.DietTarget(param.DietTarget))
+	fatCal := r.CalculateFatCalorie(calorie, global.DietTarget(param.DietTarget))
+	carbsCal := r.CalculateCarbsCalorie(calorie, global.DietTarget(param.DietTarget))
 	dairyAmt := r.CalculateDairyAmount(global.DietType(param.DietType))
 	vegetableAmt := r.CalculateVegetableAmount()
 	fruitAmt := r.CalculateFruitAmount()

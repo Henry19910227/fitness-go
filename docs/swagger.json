@@ -8924,22 +8924,22 @@
                 "calorie": {
                     "description": "目標熱量",
                     "type": "integer",
-                    "example": 1800
+                    "example": 2913
                 },
                 "carbs": {
                     "description": "碳水化合物(克)",
                     "type": "integer",
-                    "example": 100
+                    "example": 437
                 },
                 "dairy": {
                     "description": "乳製品類(份)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "fat": {
                     "description": "脂肪(克)",
                     "type": "integer",
-                    "example": 30
+                    "example": 65
                 },
                 "fruit": {
                     "description": "水果類(份)",
@@ -8949,32 +8949,32 @@
                 "grain": {
                     "description": "穀物類(份)",
                     "type": "integer",
-                    "example": 2
+                    "example": 25
                 },
                 "meat": {
                     "description": "蛋豆魚肉類(份)",
                     "type": "integer",
-                    "example": 4
+                    "example": 12
                 },
                 "nut": {
                     "description": "堅果類(份)",
                     "type": "integer",
-                    "example": 1
+                    "example": 5
                 },
                 "protein": {
                     "description": "蛋白質(克)",
                     "type": "integer",
-                    "example": 70
+                    "example": 146
                 },
                 "tdee": {
                     "description": "TDEE",
                     "type": "integer",
-                    "example": 2000
+                    "example": 2533
                 },
                 "vegetable": {
                     "description": "蔬菜類(份)",
                     "type": "integer",
-                    "example": 3
+                    "example": 5
                 }
             }
         },
@@ -10497,11 +10497,11 @@
             "required": [
                 "activity_level",
                 "birthday",
+                "diet_target",
                 "diet_type",
-                "exercise_feq",
+                "exercise_feq_level",
                 "height",
                 "sex",
-                "target",
                 "weight"
             ],
             "properties": {
@@ -10513,19 +10513,24 @@
                 "birthday": {
                     "description": "生日",
                     "type": "string",
-                    "example": "1991-02-27"
+                    "example": "1992-02-02"
                 },
                 "body_fat": {
                     "description": "體脂肪率 (最大99)",
                     "type": "integer",
-                    "example": 15
+                    "example": 20
+                },
+                "diet_target": {
+                    "description": "飲食目標 (1:減脂/2:增肌/3:維持健康生活/4:提升體能與力量/5:哺乳者/6:懷孕者)",
+                    "type": "integer",
+                    "example": 2
                 },
                 "diet_type": {
                     "description": "飲食型態 (1:標準飲食/2:全素食/3:蛋奶素食/4:蛋素食/5:奶素食)",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
-                "exercise_feq": {
+                "exercise_feq_level": {
                     "description": "運動頻率 (1:無運動/2:一週2-3次，一次30-45分鐘/3:一週3-5次，一次45-60分鐘/4:一週5次以上，一次60分鐘)",
                     "type": "integer",
                     "example": 3
@@ -10533,22 +10538,17 @@
                 "height": {
                     "description": "身高 (最大999)",
                     "type": "number",
-                    "example": 176.5
+                    "example": 178
                 },
                 "sex": {
                     "description": "性別 (f:女/m:男)",
                     "type": "string",
                     "example": "m"
                 },
-                "target": {
-                    "description": "目標 (1:減脂/2:增肌/3:維持健康生活/4:提升體能與力量/5:哺乳者/6:懷孕者)",
-                    "type": "integer",
-                    "example": 4
-                },
                 "weight": {
                     "description": "體重 (最大999)",
                     "type": "number",
-                    "example": 70.5
+                    "example": 70
                 }
             }
         },
