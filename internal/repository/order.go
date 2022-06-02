@@ -254,9 +254,7 @@ func (o *order) List(listResult interface{}, param *model.FindOrderListParam, pr
 	db := o.gorm.DB().Model(&entity.OrderTemplate{})
 	//關聯加載
 	for _, preload := range preloads {
-		db = db.Preload(preload.Field, func(db *gorm.DB) *gorm.DB {
-			return db.Select("", preload.Selects...)
-		})
+		db = db.Preload(preload.Field)
 	}
 	//排序
 	if orderBy != nil {

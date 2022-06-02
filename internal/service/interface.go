@@ -225,3 +225,8 @@ type RDA interface {
 	CalculateMeatAmount(proteinAmt int, dairyAmt int, grainAmt int, vegetableAmt int) int
 	CalculateNutAmount(fatAmt int, dairyAmt int, meatAmt int) int
 }
+
+type Diet interface {
+	CreateDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Diet, errcode.Error)
+	GetDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Diet, errcode.Error)
+}

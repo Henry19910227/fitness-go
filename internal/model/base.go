@@ -14,5 +14,4 @@ type OrderBy struct {
 
 type Preload struct {
 	Field   string
-	Selects []interface{}
 }

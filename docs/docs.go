@@ -3054,6 +3054,116 @@ var doc = `{
                 }
             }
         },
+        "/diet": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "以日期獲取飲食紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "以日期獲取飲食紀錄",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "排程日",
+                        "name": "schedule_at",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Diet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建飲食紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "創建飲食紀錄",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateDietBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Diet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/favorite/action/{action_id}": {
             "post": {
                 "security": [
@@ -8615,6 +8725,32 @@ var doc = `{
                 }
             }
         },
+        "dto.Diet": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "type": "string",
+                    "example": "2022-05-25 11:00:00"
+                },
+                "id": {
+                    "description": "rda",
+                    "type": "integer",
+                    "example": 1
+                },
+                "rda": {
+                    "description": "rda",
+                    "$ref": "#/definitions/dto.RDA"
+                },
+                "schedule_at": {
+                    "type": "string",
+                    "example": "2022-05-25 11:00:00"
+                },
+                "update_at": {
+                    "type": "string",
+                    "example": "2022-05-25 11:00:00"
+                }
+            }
+        },
         "dto.IABProductAPIResponse": {
             "type": "object",
             "properties": {
@@ -10611,6 +10747,18 @@ var doc = `{
                     "description": "課表 id",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "validator.CreateDietBody": {
+            "type": "object",
+            "required": [
+                "schedule_at"
+            ],
+            "properties": {
+                "schedule_at": {
+                    "type": "string",
+                    "example": "2022-05-25"
                 }
             }
         },

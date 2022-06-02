@@ -269,3 +269,12 @@ func NewRDAService(viperTool *viper.Viper, gormTool tool.Gorm) RDA {
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewRDA(rdaRepo, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), errHandler)
 }
+
+func NewDietService(viperTool *viper.Viper, gormTool tool.Gorm) Diet {
+	dietRepo := repository.NewDiet(gormTool)
+	rdaRepo := repository.NewRDA(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewDiet(dietRepo, rdaRepo, errHandler)
+}

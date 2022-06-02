@@ -1230,6 +1230,25 @@ definitions:
         example: 1000
         type: integer
     type: object
+  dto.Diet:
+    properties:
+      create_at:
+        example: "2022-05-25 11:00:00"
+        type: string
+      id:
+        description: rda
+        example: 1
+        type: integer
+      rda:
+        $ref: '#/definitions/dto.RDA'
+        description: rda
+      schedule_at:
+        example: "2022-05-25 11:00:00"
+        type: string
+      update_at:
+        example: "2022-05-25 11:00:00"
+        type: string
+    type: object
   dto.IABProductAPIResponse:
     properties:
       acknowledgementState:
@@ -2725,6 +2744,14 @@ definitions:
         type: integer
     required:
     - course_id
+    type: object
+  validator.CreateDietBody:
+    properties:
+      schedule_at:
+        example: "2022-05-25"
+        type: string
+    required:
+    - schedule_at
     type: object
   validator.CreatePlanBody:
     properties:
@@ -4971,6 +4998,70 @@ paths:
       summary: 獲取我的課表列表
       tags:
       - Course
+  /diet:
+    get:
+      consumes:
+      - application/json
+      description: 以日期獲取飲食紀錄
+      parameters:
+      - description: 排程日
+        in: query
+        name: schedule_at
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Diet'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 以日期獲取飲食紀錄
+      tags:
+      - Diet
+    post:
+      consumes:
+      - application/json
+      description: 創建飲食紀錄
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CreateDietBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Diet'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 創建飲食紀錄
+      tags:
+      - Diet
   /favorite/action/{action_id}:
     delete:
       consumes:
