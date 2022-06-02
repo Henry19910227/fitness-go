@@ -3398,6 +3398,55 @@
                 }
             }
         },
+        "/food_categories": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取食物分類",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "獲取食物分類",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.FoodCategory"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/google_play/access_token": {
             "get": {
                 "description": "取得 google play api access token(測試用)",
@@ -8730,6 +8779,26 @@
                 "update_at": {
                     "type": "string",
                     "example": "2022-05-25 11:00:00"
+                }
+            }
+        },
+        "dto.FoodCategory": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "tag": {
+                    "description": "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "description": "類別名稱",
+                    "type": "string",
+                    "example": "米麥類"
                 }
             }
         },

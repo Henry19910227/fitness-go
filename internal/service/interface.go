@@ -230,3 +230,6 @@ type Diet interface {
 	CreateDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Diet, errcode.Error)
 	GetDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Diet, errcode.Error)
 }
+type FoodCategory interface {
+	GetFoodCategories(c *gin.Context) ([]*dto.FoodCategory, errcode.Error)
+}

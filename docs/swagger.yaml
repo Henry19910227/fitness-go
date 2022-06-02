@@ -1249,6 +1249,21 @@ definitions:
         example: "2022-05-25 11:00:00"
         type: string
     type: object
+  dto.FoodCategory:
+    properties:
+      id:
+        description: 主鍵id
+        example: 1
+        type: integer
+      tag:
+        description: 食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)
+        example: 1
+        type: integer
+      title:
+        description: 類別名稱
+        example: 米麥類
+        type: string
+    type: object
   dto.IABProductAPIResponse:
     properties:
       acknowledgementState:
@@ -5221,6 +5236,34 @@ paths:
       summary: 收藏教練
       tags:
       - Favorite
+  /food_categories:
+    get:
+      consumes:
+      - application/json
+      description: 獲取食物分類
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.FoodCategory'
+                  type: array
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取食物分類
+      tags:
+      - Diet
   /google_play/access_token:
     get:
       consumes:

@@ -307,3 +307,7 @@ type Diet interface {
 	CreateDiet(tx *gorm.DB, userID int64, rdaID int64, scheduleTime string) (int64, error)
 	FindDiet(tx *gorm.DB, param *model.FindDietParam, preloads []*model.Preload) (*model.Diet, error)
 }
+
+type FoodCategory interface {
+	FindFoodCategories() ([]*model.FoodCategory, error)
+}
