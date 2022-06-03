@@ -70,6 +70,7 @@ var (
 	rdaService                             service.RDA
 	dietService                            service.Diet
 	foodCategoryService                    service.FoodCategory
+	foodService 						   service.Food
 )
 
 var (
@@ -161,6 +162,7 @@ func main() {
 	controller.NewRDA(baseGroup, rdaService, userMidd)
 	controller.NewDiet(baseGroup, dietService, userMidd)
 	controller.NewFoodCategory(baseGroup, foodCategoryService, userMidd)
+	controller.NewFood(baseGroup, foodService, userMidd)
 	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService, userIncomeMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
@@ -263,6 +265,7 @@ func setupService() {
 	rdaService = service.NewRDAService(viperTool, gormTool)
 	dietService = service.NewDietService(viperTool, gormTool)
 	foodCategoryService = service.NewFoodCategoryService(viperTool, gormTool)
+	foodService = service.NewFoodService(viperTool, gormTool)
 }
 
 func setupMigrateService() {

@@ -286,3 +286,13 @@ func NewFoodCategoryService(viperTool *viper.Viper, gormTool tool.Gorm) FoodCate
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewFoodCategory(foodCategoryRepo, errHandler)
 }
+
+func NewFoodService(viperTool *viper.Viper, gormTool tool.Gorm) Food {
+	foodRepo := repository.NewFood(gormTool)
+	foodCategoryRepo := repository.NewFoodCategory(gormTool)
+	calorieTool := tool.NewCalorie()
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewFood(foodRepo, foodCategoryRepo, calorieTool, errHandler)
+}

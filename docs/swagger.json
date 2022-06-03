@@ -3398,6 +3398,63 @@
                 }
             }
         },
+        "/food": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建食物",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "創建食物",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateFoodBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Food"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/food_categories": {
             "get": {
                 "security": [
@@ -8782,6 +8839,55 @@
                 }
             }
         },
+        "dto.Food": {
+            "type": "object",
+            "properties": {
+                "amount_desc": {
+                    "description": "份量描述",
+                    "type": "string",
+                    "example": "一份地瓜100克70卡"
+                },
+                "calorie": {
+                    "description": "食物熱量",
+                    "type": "integer",
+                    "example": 70
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "food_category": {
+                    "description": "食物分類",
+                    "$ref": "#/definitions/dto.FoodCategory"
+                },
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "食物名稱",
+                    "type": "string",
+                    "example": "蕃薯"
+                },
+                "source": {
+                    "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "user_id": {
+                    "description": "創建用戶id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
         "dto.FoodCategory": {
             "type": "object",
             "properties": {
@@ -10810,6 +10916,31 @@
                 "schedule_at": {
                     "type": "string",
                     "example": "2022-05-25"
+                }
+            }
+        },
+        "validator.CreateFoodBody": {
+            "type": "object",
+            "required": [
+                "amount_desc",
+                "food_category_id",
+                "name"
+            ],
+            "properties": {
+                "amount_desc": {
+                    "description": "份量描述",
+                    "type": "string",
+                    "example": "一份地瓜100克70卡"
+                },
+                "food_category_id": {
+                    "description": "食物類別id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "食物名稱",
+                    "type": "string",
+                    "example": "地瓜"
                 }
             }
         },

@@ -105,4 +105,5 @@ type TDEE interface {
 
 type Calorie interface {
 	TargetCalorie(tdee int, target global.DietTarget) float64
+	FoodCalorie(tag global.FoodCategoryTag) int
 }

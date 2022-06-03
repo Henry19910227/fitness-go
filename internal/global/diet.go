@@ -44,3 +44,14 @@ const (
 	DietTypeOvoVegan      DietType = 4 // 蛋素食
 	DietTypeLactoVegan    DietType = 5 // 奶素食
 )
+
+type FoodCategoryTag int
+
+const (
+	GrainTag FoodCategoryTag = 1 // 穀物類
+	MeatTag      FoodCategoryTag = 2 // 蛋豆魚肉類
+	FruitTag FoodCategoryTag = 3 // 水果類
+	VegetableTag FoodCategoryTag = 4 // 蔬菜類
+	DairyTag    FoodCategoryTag = 5 // 乳製品類
+	NutTag      FoodCategoryTag = 6 // 堅果類
+)

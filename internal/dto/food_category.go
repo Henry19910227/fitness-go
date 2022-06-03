@@ -6,6 +6,3 @@ type FoodCategory struct {
 	Title string `json:"title" example:"米麥類"` //類別名稱
 }
 
-func (FoodCategory) TableName() string {
-	return "food_categories"
-}
