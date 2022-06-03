@@ -50,29 +50,36 @@ func (f *food) FindFood(foodID int64, preloads []*model.Preload) (*model.Food, e
 }
 
 
-func (f *food) FindFoods(param *model.FindFoodsParam, preloads []*model.Preload) ([]*model.Food, error) {
+func (f *food) FindFoods(param *model.FindFoodsParam) ([]*model.Food, error) {
 	//設置篩選
 	query := "1=1 "
 	params := make([]interface{}, 0)
+	if param.IsDeleted != nil {
+		query += "AND foods.is_deleted = ? "
+		params = append(params, *param.IsDeleted)
+	}
 	if param.UserID != nil {
-		query += "AND user_id = ? "
+		query += "AND (foods.user_id = ? OR foods.user_id IS NULL) "
 		params = append(params, *param.UserID)
 	}
 	if param.Tag != nil {
-		query += "AND tag = ?"
+		query += "AND food_categories.tag = ? "
 		params = append(params, *param.Tag)
 	}
 	//設置表
 	db := f.gorm.DB().Model(&model.Food{})
 	//關聯加載
-	if len(preloads) > 0 {
-		for _, preload := range preloads {
+	if len(param.Preloads) > 0 {
+		for _, preload := range param.Preloads {
 			db = db.Preload(preload.Field)
 		}
 	}
 	//查找數據
 	foods := make([]*model.Food, 0)
-	if err := db.Where(query, params...).Find(&foods).Error; err != nil {
+	if err := db.
+		Joins("INNER JOIN food_categories ON foods.food_category_id = food_categories.id").
+		Where(query, params...).
+		Find(&foods).Error; err != nil {
 		return nil, err
 	}
 	return foods, nil

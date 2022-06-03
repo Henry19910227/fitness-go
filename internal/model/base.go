@@ -15,3 +15,19 @@ type OrderBy struct {
 type Preload struct {
 	Field   string
 }
+
+type InPageParam struct {
+	Paging *PagingParam
+}
+
+type OrderByParam struct {
+	OrderBy *OrderBy
+}
+
+type PreloadParam struct {
+	Preloads []*Preload
+}
+
+type DeletedParam struct {
+	IsDeleted *int
+}

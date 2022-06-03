@@ -316,5 +316,5 @@ type FoodCategory interface {
 type Food interface {
 	CreateFood(param *model.CreateFoodParam) (int64, error)
 	FindFood(foodID int64, preloads []*model.Preload) (*model.Food, error)
-	FindFoods(param *model.FindFoodsParam, preloads []*model.Preload) ([]*model.Food, error)
+	FindFoods(param *model.FindFoodsParam) ([]*model.Food, error)
 }

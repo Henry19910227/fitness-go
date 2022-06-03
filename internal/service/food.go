@@ -55,3 +55,25 @@ func (f *food) CreateFood(c *gin.Context, param *dto.CreateFoodParam) (*dto.Food
 	}
 	return &food, nil
 }
+
+func (f *food) GetFoods(c *gin.Context, userID int64, tag global.FoodCategoryTag) ([]*dto.Food, errcode.Error) {
+	input := model.FindFoodsParam{}
+	input.IsDeleted = util.PointerInt(0)
+	input.UserID = util.PointerInt64(userID)
+	input.Tag = util.PointerInt(int(tag))
+	input.Preloads = []*model.Preload{{Field: "FoodCategory"}}
+	datas, err := f.foodRepo.FindFoods(&input)
+	if err != nil {
+		return nil, f.errHandler.Set(c, "food repo", err)
+	}
+	foods := make([]*dto.Food, 0)
+	for _, data := range datas{
+		var food dto.Food
+		if err := util.Parser(data, &food); err != nil {
+			f.errHandler.Set(c, "foods parser error", err)
+			continue
+		}
+		foods = append(foods, &food)
+	}
+	return foods, nil
+}

@@ -5350,6 +5350,40 @@ paths:
       summary: 獲取食物分類
       tags:
       - Diet
+  /foods:
+    get:
+      consumes:
+      - application/json
+      description: 獲取食物列表
+      parameters:
+      - description: 食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)
+        in: query
+        name: food_category_tag
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.Food'
+                  type: array
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取食物列表
+      tags:
+      - Diet
   /google_play/access_token:
     get:
       consumes:
