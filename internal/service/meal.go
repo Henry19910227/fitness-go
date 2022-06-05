@@ -32,3 +32,17 @@ func (m *meal) CreateMeals(c *gin.Context, param *dto.CreateMealsParam) errcode.
 	}
 	return nil
 }
+
+func (m *meal) DeleteMeal(c *gin.Context, mealID int64, userID int64) errcode.Error {
+	ownerID, err := m.mealRepo.FindMealOwner(mealID)
+	if err != nil {
+		return m.errHandler.Set(c, "meal repo", err)
+	}
+	if ownerID != userID {
+		return m.errHandler.PermissionDenied()
+	}
+	if err := m.mealRepo.DeleteMeal(mealID); err != nil {
+		return m.errHandler.Set(c, "meal repo", err)
+	}
+	return nil
+}

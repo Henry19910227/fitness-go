@@ -50,3 +50,24 @@ func (m *meal) FindMeals(param *model.FindMealsParam) ([]*model.Meal, error) {
 	}
 	return meals, nil
 }
+
+func (m *meal) FindMealOwner(mealID int64) (int64, error) {
+	var userID int64
+	if err := m.gorm.DB().
+		Table("meals").
+		Select("diets.user_id").
+		Joins("INNER JOIN diets ON meals.diet_id = diets.id").
+		Where("meals.id = ?", mealID).
+		Take(&userID).Error; err != nil {
+			return 0, err
+	}
+	return userID, nil
+}
+
+func (m *meal) DeleteMeal(mealID int64) error {
+	if err := m.gorm.DB().Delete(&entity.Meal{}, mealID).Error; err != nil {
+		return err
+	}
+	return nil
+}
+

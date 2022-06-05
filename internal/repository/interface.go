@@ -322,4 +322,6 @@ type Food interface {
 type Meal interface {
 	SaveMeals(param *model.SaveMealsParam) ([]int64, error)
 	FindMeals(param *model.FindMealsParam) ([]*model.Meal, error)
+	FindMealOwner(mealID int64) (int64, error)
+	DeleteMeal(mealID int64) error
 }

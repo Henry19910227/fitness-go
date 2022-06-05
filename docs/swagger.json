@@ -3923,6 +3923,49 @@
                 }
             }
         },
+        "/meal/{meal_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除餐食",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "刪除餐食",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "餐食id",
+                        "name": "meal_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/meals": {
             "post": {
                 "security": [
@@ -8964,11 +9007,6 @@
                     "type": "integer",
                     "example": 70
                 },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
-                },
                 "food_category": {
                     "description": "食物分類",
                     "$ref": "#/definitions/dto.FoodCategory"
@@ -8987,11 +9025,6 @@
                     "description": "來源(1:系統創建食物/2:用戶創建食物)",
                     "type": "integer",
                     "example": 1
-                },
-                "update_at": {
-                    "description": "更新日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
                 },
                 "user_id": {
                     "description": "創建用戶id",
@@ -9223,11 +9256,6 @@
                     "description": "數量",
                     "type": "integer",
                     "example": 2
-                },
-                "create_at": {
-                    "description": "創建日期",
-                    "type": "string",
-                    "example": "2021-06-01 12:00:00"
                 },
                 "food": {
                     "description": "食物",

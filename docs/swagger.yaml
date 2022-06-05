@@ -1263,10 +1263,6 @@ definitions:
         description: 食物熱量
         example: 70
         type: integer
-      create_at:
-        description: 創建日期
-        example: "2021-06-01 12:00:00"
-        type: string
       food_category:
         $ref: '#/definitions/dto.FoodCategory'
         description: 食物分類
@@ -1282,10 +1278,6 @@ definitions:
         description: 來源(1:系統創建食物/2:用戶創建食物)
         example: 1
         type: integer
-      update_at:
-        description: 更新日期
-        example: "2021-06-01 12:00:00"
-        type: string
       user_id:
         description: 創建用戶id
         example: 10001
@@ -1442,10 +1434,6 @@ definitions:
         description: 數量
         example: 2
         type: integer
-      create_at:
-        description: 創建日期
-        example: "2021-06-01 12:00:00"
-        type: string
       food:
         $ref: '#/definitions/dto.Food'
         description: 食物
@@ -5653,6 +5641,33 @@ paths:
       summary: 用戶登出
       tags:
       - Login
+  /meal/{meal_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除餐食
+      parameters:
+      - description: 餐食id
+        in: path
+        name: meal_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除餐食
+      tags:
+      - Diet
   /meals:
     post:
       consumes:

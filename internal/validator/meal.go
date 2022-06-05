@@ -1,5 +1,9 @@
 package validator
 
+type MealIDUri struct {
+	MealID int64 `uri:"meal_id" binding:"required" example:"1"` //餐食id
+}
+
 type MealParamItem struct {
 	DietID int64 `json:"diet_id" binding:"required" example:"1"` //飲食紀錄id
 	FoodID int64 `json:"food_id" binding:"required" example:"1"` //食物id

@@ -241,4 +241,5 @@ type Food interface {
 
 type Meal interface {
 	CreateMeals(c *gin.Context, param *dto.CreateMealsParam) errcode.Error
+	DeleteMeal(c *gin.Context, mealID int64, userID int64) errcode.Error
 }

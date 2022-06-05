@@ -21,6 +21,9 @@ func NewMeal(baseGroup *gin.RouterGroup, mealService service.Meal, userMiddlewar
 	baseGroup.POST("/meals",
 		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
 		meal.CreateMeals)
+	baseGroup.DELETE("/meal/:meal_id",
+		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
+		meal.DeleteMeal)
 }
 
 // CreateMeals 創建餐食
@@ -48,6 +51,35 @@ func (m *Meal) CreateMeals(c *gin.Context) {
 	if err := m.mealService.CreateMeals(c, &dto.CreateMealsParam{
 		MealParamItems: mealParamItems,
 	}); err != nil {
+		m.JSONErrorResponse(c, err)
+		return
+	}
+	m.JSONSuccessResponse(c, nil, "success!")
+}
+
+// DeleteMeal 刪除餐食
+// @Summary 刪除餐食
+// @Description 刪除餐食
+// @Tags Diet
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param meal_id path int64 true "餐食id"
+// @Success 200 {object} model.SuccessResult "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /meal/{meal_id} [DELETE]
+func (m *Meal) DeleteMeal(c *gin.Context) {
+	uid, e := m.GetUID(c)
+	if e != nil {
+		m.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.MealIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		m.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := m.mealService.DeleteMeal(c, uri.MealID, uid); err != nil {
 		m.JSONErrorResponse(c, err)
 		return
 	}
