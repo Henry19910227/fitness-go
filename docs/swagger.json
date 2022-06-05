@@ -3950,7 +3950,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/validator.MealItem"
+                                "$ref": "#/definitions/validator.MealParamItem"
                             }
                         }
                     }
@@ -8931,6 +8931,12 @@
                     "type": "integer",
                     "example": 1
                 },
+                "meals": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Meal"
+                    }
+                },
                 "rda": {
                     "description": "rda",
                     "$ref": "#/definitions/dto.RDA"
@@ -9207,6 +9213,35 @@
                 "status": {
                     "description": "訂閱狀態 (1:訂閱處於活動狀態/2:訂閱已過期/3:訂閱處於計費重試期/4:訂閱處於計費寬限期/5:訂閱被撤銷)",
                     "type": "integer"
+                }
+            }
+        },
+        "dto.Meal": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "description": "數量",
+                    "type": "integer",
+                    "example": 2
+                },
+                "create_at": {
+                    "description": "創建日期",
+                    "type": "string",
+                    "example": "2021-06-01 12:00:00"
+                },
+                "food": {
+                    "description": "食物",
+                    "$ref": "#/definitions/dto.Food"
+                },
+                "id": {
+                    "description": "餐食id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "type": {
+                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "type": "integer",
+                    "example": 3
                 }
             }
         },
@@ -11186,16 +11221,17 @@
                 }
             }
         },
-        "validator.MealItem": {
+        "validator.MealParamItem": {
             "type": "object",
             "required": [
                 "amount",
                 "diet_id",
-                "food_id"
+                "food_id",
+                "type"
             ],
             "properties": {
                 "amount": {
-                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "description": "數量",
                     "type": "integer",
                     "example": 2
                 },
@@ -11208,6 +11244,11 @@
                     "description": "食物id",
                     "type": "integer",
                     "example": 1
+                },
+                "type": {
+                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "type": "integer",
+                    "example": 2
                 }
             }
         },

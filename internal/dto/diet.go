@@ -6,4 +6,5 @@ type Diet struct {
 	ScheduleAt string  `json:"schedule_at" example:"2022-05-25 11:00:00"`
 	CreateAt   *string `json:"create_at,omitempty" example:"2022-05-25 11:00:00"`
 	UpdateAt   *string `json:"update_at,omitempty" example:"2022-05-25 11:00:00"`
+	Meals      []*Meal `json:"meals"`
 }

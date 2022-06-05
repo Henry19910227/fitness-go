@@ -7,8 +7,6 @@ type Food struct {
 	Name string  `json:"name" example:"蕃薯"` //食物名稱
 	Calorie int `json:"calorie" example:"70"` //食物熱量
 	AmountDesc string `json:"amount_desc" example:"一份地瓜100克70卡"` //份量描述
-	CreateAt  string `json:"create_at" example:"2021-06-01 12:00:00"`  //創建日期
-	UpdateAt  string `json:"update_at" example:"2021-06-01 12:00:00"`  //更新日期
 	FoodCategory *FoodCategory `json:"food_category,omitempty"`  //食物分類
 }
 

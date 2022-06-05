@@ -58,7 +58,11 @@ func (d *diet) CreateDiet(c *gin.Context, userID int64, scheduleAt string) (*dto
 func (d *diet) GetDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Diet, errcode.Error) {
 	//查找diet
 	preloads := make([]*model.Preload, 0)
-	preloads = append(preloads, &model.Preload{Field: "RDA"})
+	preloads = append(preloads,
+		&model.Preload{Field: "RDA"},
+		&model.Preload{Field: "Meals"},
+		&model.Preload{Field: "Meals.Food"},
+		&model.Preload{Field: "Meals.Food.FoodCategory"})
 	data, err := d.dietRepo.FindDiet(nil, &model.FindDietParam{
 		UserID:     util.PointerInt64(userID),
 		ScheduleAt: util.PointerString(scheduleAt),

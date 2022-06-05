@@ -1239,6 +1239,10 @@ definitions:
         description: rda
         example: 1
         type: integer
+      meals:
+        items:
+          $ref: '#/definitions/dto.Meal'
+        type: array
       rda:
         $ref: '#/definitions/dto.RDA'
         description: rda
@@ -1430,6 +1434,28 @@ definitions:
         $ref: '#/definitions/dto.SignedTransactionInfo'
       status:
         description: 訂閱狀態 (1:訂閱處於活動狀態/2:訂閱已過期/3:訂閱處於計費重試期/4:訂閱處於計費寬限期/5:訂閱被撤銷)
+        type: integer
+    type: object
+  dto.Meal:
+    properties:
+      amount:
+        description: 數量
+        example: 2
+        type: integer
+      create_at:
+        description: 創建日期
+        example: "2021-06-01 12:00:00"
+        type: string
+      food:
+        $ref: '#/definitions/dto.Food'
+        description: 食物
+      id:
+        description: 餐食id
+        example: 1
+        type: integer
+      type:
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        example: 3
         type: integer
     type: object
   dto.Plan:
@@ -2918,10 +2944,10 @@ definitions:
     - email
     - password
     type: object
-  validator.MealItem:
+  validator.MealParamItem:
     properties:
       amount:
-        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        description: 數量
         example: 2
         type: integer
       diet_id:
@@ -2932,10 +2958,15 @@ definitions:
         description: 食物id
         example: 1
         type: integer
+      type:
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        example: 2
+        type: integer
     required:
     - amount
     - diet_id
     - food_id
+    - type
     type: object
   validator.RedeemCourseBody:
     properties:
@@ -5634,7 +5665,7 @@ paths:
         required: true
         schema:
           items:
-            $ref: '#/definitions/validator.MealItem'
+            $ref: '#/definitions/validator.MealParamItem'
           type: array
       produces:
       - application/json

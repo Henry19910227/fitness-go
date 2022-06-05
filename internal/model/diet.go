@@ -7,7 +7,8 @@ type Diet struct {
 	ScheduleAt string `json:"schedule_at" gorm:"column:schedule_at"`            //排程時間
 	CreateAt   string `json:"create_at" gorm:"column:create_at"`                //創建時間
 	UpdateAt   string `json:"update_at" gorm:"column:update_at"`                //更新時間
-	RDA        *RDA   `json:"rda" gorm:"foreignkey:user_id;references:user_id"` //更新時間
+	RDA        *RDA   `json:"rda" gorm:"foreignkey:id;references:rda_id"`       //營養建議
+	Meals 	   []*Meal	`json:"meals" gorm:"foreignkey:diet_id;references:id"`  //餐食
 }
 
 type FindDietParam struct {
