@@ -22,6 +22,9 @@ func NewFood(baseGroup *gin.RouterGroup, foodService service.Food, userMiddlewar
 	baseGroup.GET("/foods",
 		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
 		food.GetFoods)
+	baseGroup.DELETE("/food/:food_id",
+		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
+		food.DeleteFood)
 }
 
 // CreateFood 創建食物
@@ -88,4 +91,33 @@ func (f *Food) GetFoods(c *gin.Context) {
 		return
 	}
 	f.JSONSuccessResponse(c, foods, "success!")
+}
+
+// DeleteFood 刪除食物
+// @Summary 刪除食物
+// @Description 刪除食物
+// @Tags Diet
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param food_id path int64 true "食物id"
+// @Success 200 {object} model.SuccessResult "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /food/{food_id} [DELETE]
+func (f *Food) DeleteFood(c *gin.Context) {
+	uid, e := f.GetUID(c)
+	if e != nil {
+		f.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	var uri validator.FoodIDUri
+	if err := c.ShouldBindUri(&uri); err != nil {
+		f.JSONValidatorErrorResponse(c, err.Error())
+		return
+	}
+	if err := f.foodService.DeleteFood(c, uri.FoodID, uid); err != nil {
+		f.JSONErrorResponse(c, err)
+		return
+	}
+	f.JSONSuccessResponse(c, nil, "success!")
 }

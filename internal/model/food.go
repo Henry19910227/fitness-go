@@ -34,3 +34,9 @@ type FindFoodsParam struct {
 	Tag *int
 }
 
+type UpdateFoodParam struct {
+	FoodID    int64
+	IsDeleted *int `gorm:"column:is_deleted"`
+	UpdateAt  *string `gorm:"column:update_at"`  //更新日期
+}
+

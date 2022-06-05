@@ -237,6 +237,7 @@ type FoodCategory interface {
 type Food interface {
 	CreateFood(c *gin.Context, param *dto.CreateFoodParam) (*dto.Food, errcode.Error)
 	GetFoods(c *gin.Context, userID int64, tag global.FoodCategoryTag) ([]*dto.Food, errcode.Error)
+	DeleteFood(c *gin.Context, foodID int64, userID int64) errcode.Error
 }
 
 type Meal interface {

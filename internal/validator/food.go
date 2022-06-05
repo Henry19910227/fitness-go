@@ -1,5 +1,9 @@
 package validator
 
+type FoodIDUri struct {
+	FoodID int64 `uri:"food_id" binding:"required" example:"1"` //食物id
+}
+
 type CreateFoodBody struct {
 	FoodCategoryID  int64 `json:"food_category_id" binding:"required" example:"1"` //食物類別id
 	Name string `json:"name" binding:"required,max=50" example:"地瓜"` //食物名稱

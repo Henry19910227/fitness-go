@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/entity"
 	"github.com/Henry19910227/fitness-go/internal/model"
 	"github.com/Henry19910227/fitness-go/internal/tool"
+	"github.com/Henry19910227/fitness-go/internal/util"
 	"time"
 )
 
@@ -49,6 +50,25 @@ func (f *food) FindFood(foodID int64, preloads []*model.Preload) (*model.Food, e
 	return &food, nil
 }
 
+func (f *food) UpdateFood(param *model.UpdateFoodParam) error {
+	if param == nil {
+		return nil
+	}
+	selects := make([]interface{}, 0)
+	if param.IsDeleted != nil {
+		selects = append(selects, "is_deleted")
+	}
+	selects = append(selects, "update_at")
+	param.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+	if err := f.gorm.DB().
+		Table("foods").
+		Where("id = ?", param.FoodID).
+		Select("", selects...).
+		Updates(param).Error; err != nil {
+		return err
+	}
+	return nil
+}
 
 func (f *food) FindFoods(param *model.FindFoodsParam) ([]*model.Food, error) {
 	//設置篩選
@@ -83,4 +103,16 @@ func (f *food) FindFoods(param *model.FindFoodsParam) ([]*model.Food, error) {
 		return nil, err
 	}
 	return foods, nil
+}
+
+func (f *food) FindFoodOwner(foodID int64) (int64, error) {
+	var userID int64
+	if err := f.gorm.DB().
+		Table("foods").
+		Select("IFNULL(user_id,0) AS user_id").
+		Where("id = ?", foodID).
+		Take(&userID).Error; err != nil {
+		return 0, err
+	}
+	return userID, nil
 }

@@ -5360,6 +5360,33 @@ paths:
       summary: 創建食物
       tags:
       - Diet
+  /food/{food_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除食物
+      parameters:
+      - description: 食物id
+        in: path
+        name: food_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除食物
+      tags:
+      - Diet
   /food_categories:
     get:
       consumes:

@@ -68,7 +68,24 @@ func (f *food) GetFoods(c *gin.Context, userID int64, tag global.FoodCategoryTag
 	}
 	foods := make([]*dto.Food, 0)
 	if err := util.Parser(datas, &foods); err != nil {
-		f.errHandler.Set(c, "foods parser error", err)
+		return nil, f.errHandler.Set(c, "foods parser error", err)
 	}
 	return foods, nil
+}
+
+func (f *food) DeleteFood(c *gin.Context, foodID int64, userID int64) errcode.Error {
+	ownerID, err := f.foodRepo.FindFoodOwner(foodID)
+	if err != nil {
+		return f.errHandler.Set(c, "foods parser error", err)
+	}
+	if ownerID != userID {
+		return f.errHandler.PermissionDenied()
+	}
+	if err := f.foodRepo.UpdateFood(&model.UpdateFoodParam{
+		FoodID: foodID,
+		IsDeleted: util.PointerInt(1),
+	}); err != nil {
+		return f.errHandler.Set(c, "food repo", err)
+	}
+	return nil
 }
