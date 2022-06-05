@@ -3941,6 +3941,54 @@ var doc = `{
                 }
             }
         },
+        "/meals": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建餐食",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "創建餐食",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validator.MealItem"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/migrate/down": {
             "put": {
                 "security": [
@@ -11153,6 +11201,31 @@ var doc = `{
                     "description": "密碼 (6~18字元)",
                     "type": "string",
                     "example": "12345678"
+                }
+            }
+        },
+        "validator.MealItem": {
+            "type": "object",
+            "required": [
+                "amount",
+                "diet_id",
+                "food_id"
+            ],
+            "properties": {
+                "amount": {
+                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "diet_id": {
+                    "description": "飲食紀錄id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "food_id": {
+                    "description": "食物id",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

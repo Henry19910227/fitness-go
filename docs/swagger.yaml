@@ -2918,6 +2918,25 @@ definitions:
     - email
     - password
     type: object
+  validator.MealItem:
+    properties:
+      amount:
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        example: 2
+        type: integer
+      diet_id:
+        description: 飲食紀錄id
+        example: 1
+        type: integer
+      food_id:
+        description: 食物id
+        example: 1
+        type: integer
+    required:
+    - amount
+    - diet_id
+    - food_id
+    type: object
   validator.RedeemCourseBody:
     properties:
       order_id:
@@ -5603,6 +5622,36 @@ paths:
       summary: 用戶登出
       tags:
       - Login
+  /meals:
+    post:
+      consumes:
+      - application/json
+      description: 創建餐食
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/validator.MealItem'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 創建餐食
+      tags:
+      - Diet
   /migrate/down:
     put:
       consumes:

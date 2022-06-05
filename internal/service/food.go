@@ -67,13 +67,8 @@ func (f *food) GetFoods(c *gin.Context, userID int64, tag global.FoodCategoryTag
 		return nil, f.errHandler.Set(c, "food repo", err)
 	}
 	foods := make([]*dto.Food, 0)
-	for _, data := range datas{
-		var food dto.Food
-		if err := util.Parser(data, &food); err != nil {
-			f.errHandler.Set(c, "foods parser error", err)
-			continue
-		}
-		foods = append(foods, &food)
+	if err := util.Parser(datas, &foods); err != nil {
+		f.errHandler.Set(c, "foods parser error", err)
 	}
 	return foods, nil
 }

@@ -318,3 +318,8 @@ type Food interface {
 	FindFood(foodID int64, preloads []*model.Preload) (*model.Food, error)
 	FindFoods(param *model.FindFoodsParam) ([]*model.Food, error)
 }
+
+type Meal interface {
+	SaveMeals(param *model.SaveMealsParam) ([]int64, error)
+	FindMeals(param *model.FindMealsParam) ([]*model.Meal, error)
+}

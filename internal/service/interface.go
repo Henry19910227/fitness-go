@@ -238,3 +238,7 @@ type Food interface {
 	CreateFood(c *gin.Context, param *dto.CreateFoodParam) (*dto.Food, errcode.Error)
 	GetFoods(c *gin.Context, userID int64, tag global.FoodCategoryTag) ([]*dto.Food, errcode.Error)
 }
+
+type Meal interface {
+	CreateMeals(c *gin.Context, param *dto.CreateMealsParam) errcode.Error
+}

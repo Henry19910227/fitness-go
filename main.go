@@ -71,6 +71,7 @@ var (
 	dietService                            service.Diet
 	foodCategoryService                    service.FoodCategory
 	foodService 						   service.Food
+	mealService							   service.Meal
 )
 
 var (
@@ -163,6 +164,7 @@ func main() {
 	controller.NewDiet(baseGroup, dietService, userMidd)
 	controller.NewFoodCategory(baseGroup, foodCategoryService, userMidd)
 	controller.NewFood(baseGroup, foodService, userMidd)
+	controller.NewMeal(baseGroup, mealService, userMidd)
 	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService, userIncomeMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
@@ -266,6 +268,7 @@ func setupService() {
 	dietService = service.NewDietService(viperTool, gormTool)
 	foodCategoryService = service.NewFoodCategoryService(viperTool, gormTool)
 	foodService = service.NewFoodService(viperTool, gormTool)
+	mealService = service.NewMealService(viperTool, gormTool)
 }
 
 func setupMigrateService() {
