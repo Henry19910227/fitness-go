@@ -14,7 +14,7 @@ type Food struct {
 	foodService service.Food
 }
 
-func NewFood(baseGroup *gin.RouterGroup, foodService service.Food, userMiddleware middleware.User)  {
+func NewFood(baseGroup *gin.RouterGroup, foodService service.Food, userMiddleware middleware.User) {
 	food := &Food{foodService: foodService}
 	baseGroup.POST("/food",
 		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
@@ -22,6 +22,9 @@ func NewFood(baseGroup *gin.RouterGroup, foodService service.Food, userMiddlewar
 	baseGroup.GET("/foods",
 		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
 		food.GetFoods)
+	baseGroup.GET("/recent_foods",
+		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
+		food.GetRecentFoods)
 	baseGroup.DELETE("/food/:food_id",
 		userMiddleware.TokenPermission([]global.Role{global.UserRole}),
 		food.DeleteFood)
@@ -50,11 +53,11 @@ func (f *Food) CreateFood(c *gin.Context) {
 		return
 	}
 	food, err := f.foodService.CreateFood(c, &dto.CreateFoodParam{
-		UserID: uid,
+		UserID:         uid,
 		FoodCategoryID: body.FoodCategoryID,
-		Source: 2,
-		Name: body.Name,
-		AmountDesc: body.AmountDesc,
+		Source:         2,
+		Name:           body.Name,
+		AmountDesc:     body.AmountDesc,
 	})
 	if err != nil {
 		f.JSONErrorResponse(c, err)
@@ -86,6 +89,30 @@ func (f *Food) GetFoods(c *gin.Context) {
 		return
 	}
 	foods, err := f.foodService.GetFoods(c, uid, global.FoodCategoryTag(query.FoodCategoryTag))
+	if err != nil {
+		f.JSONErrorResponse(c, err)
+		return
+	}
+	f.JSONSuccessResponse(c, foods, "success!")
+}
+
+// GetRecentFoods 獲取食物歷程列表
+// @Summary 獲取食物歷程列表
+// @Description 獲取食物歷程列表
+// @Tags Diet
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} model.SuccessResult{data=[]dto.RecentFood} "成功!"
+// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Router /recent_foods [GET]
+func (f *Food) GetRecentFoods(c *gin.Context) {
+	uid, e := f.GetUID(c)
+	if e != nil {
+		f.JSONValidatorErrorResponse(c, e.Error())
+		return
+	}
+	foods, err := f.foodService.GetRecentFood(c, uid)
 	if err != nil {
 		f.JSONErrorResponse(c, err)
 		return

@@ -71,7 +71,7 @@ func (d *diet) GetDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Di
 		return nil, d.errHandler.Set(c, "diet repo", err)
 	}
 	//parser diet
-	var diet dto.Diet
+	diet := dto.Diet{}
 	if err := util.Parser(data, &diet); err != nil {
 		return nil, d.errHandler.Set(c, "parser error", err)
 	}

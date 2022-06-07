@@ -18,14 +18,14 @@ func NewFood(gorm tool.Gorm) Food {
 
 func (f *food) CreateFood(param *model.CreateFoodParam) (int64, error) {
 	food := entity.Food{
-		UserID: param.UserID,
+		UserID:         param.UserID,
 		FoodCategoryID: param.FoodCategoryID,
-		Source: param.Source,
-		Name: param.Name,
-		Calorie: param.Calorie,
-		AmountDesc: param.AmountDesc,
-		CreateAt: time.Now().Format("2006-01-02 15:04:05"),
-		UpdateAt: time.Now().Format("2006-01-02 15:04:05"),
+		Source:         param.Source,
+		Name:           param.Name,
+		Calorie:        param.Calorie,
+		AmountDesc:     param.AmountDesc,
+		CreateAt:       time.Now().Format("2006-01-02 15:04:05"),
+		UpdateAt:       time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := f.gorm.DB().Create(&food).Error; err != nil {
 		return 0, err
@@ -99,6 +99,47 @@ func (f *food) FindFoods(param *model.FindFoodsParam) ([]*model.Food, error) {
 	if err := db.
 		Joins("INNER JOIN food_categories ON foods.food_category_id = food_categories.id").
 		Where(query, params...).
+		Find(&foods).Error; err != nil {
+		return nil, err
+	}
+	return foods, nil
+}
+
+func (f *food) FindRecentFoods(param *model.FindRecentFoodsParam) ([]*model.RecentFood, error) {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	if param.UserID != nil {
+		query += "AND (foods.user_id = ? OR foods.user_id IS NULL) "
+		params = append(params, *param.UserID)
+	}
+	if param.IsDeleted != nil {
+		query += "AND foods.is_deleted = ? "
+		params = append(params, *param.IsDeleted)
+	}
+	foods := make([]*model.RecentFood, 0)
+	db := f.gorm.DB().
+		Table("foods").
+		Select("MAX(foods.id) AS id",
+			"MAX(foods.food_category_id) AS food_category_id",
+			"MAX(foods.user_id) AS user_id",
+			"MAX(meals.id) AS meal_id",
+			"MAX(foods.source) AS source",
+			"MAX(foods.`name`) AS `name`",
+			"MAX(foods.calorie) AS `calorie`",
+			"MAX(foods.amount_desc) AS amount_desc",
+			"MAX(foods.is_deleted) AS is_deleted",
+			"MAX(foods.create_at) AS create_at",
+			"MAX(foods.update_at) AS update_at")
+	if len(param.Preloads) > 0 {
+		for _, preload := range param.Preloads {
+			db = db.Preload(preload.Field)
+		}
+	}
+	if err := db.
+		Joins("INNER JOIN meals ON meals.food_id = foods.id").
+		Where(query, params...).
+		Group("meals.food_id,meals.type").
+		Order("meals.type ASC").
 		Find(&foods).Error; err != nil {
 		return nil, err
 	}

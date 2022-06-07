@@ -318,6 +318,7 @@ type Food interface {
 	FindFood(foodID int64, preloads []*model.Preload) (*model.Food, error)
 	UpdateFood(param *model.UpdateFoodParam) error
 	FindFoods(param *model.FindFoodsParam) ([]*model.Food, error)
+	FindRecentFoods(param *model.FindRecentFoodsParam) ([]*model.RecentFood, error)
 	FindFoodOwner(foodID int64) (int64, error)
 }
 

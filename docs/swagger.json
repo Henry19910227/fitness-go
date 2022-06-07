@@ -4731,6 +4731,55 @@
                 }
             }
         },
+        "/recent_foods": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取食物歷程列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "獲取食物歷程列表",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.RecentFood"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/redeem_course": {
             "post": {
                 "security": [
@@ -9316,6 +9365,16 @@
                 }
             }
         },
+        "dto.MealType": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
         "dto.Plan": {
             "type": "object",
             "properties": {
@@ -9498,6 +9557,49 @@
                     "description": "蔬菜類(份)",
                     "type": "integer",
                     "example": 5
+                }
+            }
+        },
+        "dto.RecentFood": {
+            "type": "object",
+            "properties": {
+                "amount_desc": {
+                    "description": "份量描述",
+                    "type": "string",
+                    "example": "一份地瓜100克70卡"
+                },
+                "calorie": {
+                    "description": "食物熱量",
+                    "type": "integer",
+                    "example": 70
+                },
+                "food_category": {
+                    "description": "食物分類",
+                    "$ref": "#/definitions/dto.FoodCategory"
+                },
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "meal": {
+                    "description": "餐食",
+                    "$ref": "#/definitions/dto.MealType"
+                },
+                "name": {
+                    "description": "食物名稱",
+                    "type": "string",
+                    "example": "蕃薯"
+                },
+                "source": {
+                    "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_id": {
+                    "description": "創建用戶id",
+                    "type": "integer",
+                    "example": 10001
                 }
             }
         },

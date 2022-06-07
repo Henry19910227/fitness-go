@@ -13,10 +13,10 @@ import (
 
 type food struct {
 	Base
-	foodRepo repository.Food
+	foodRepo         repository.Food
 	foodCategoryRepo repository.FoodCategory
-	calorieTool tool.Calorie
-	errHandler errcode.Handler
+	calorieTool      tool.Calorie
+	errHandler       errcode.Handler
 }
 
 func NewFood(foodRepo repository.Food, foodCategoryRepo repository.FoodCategory, calorieTool tool.Calorie, errHandler errcode.Handler) Food {
@@ -31,12 +31,12 @@ func (f *food) CreateFood(c *gin.Context, param *dto.CreateFoodParam) (*dto.Food
 	}
 	//創建food
 	foodID, err := f.foodRepo.CreateFood(&model.CreateFoodParam{
-		UserID: util.PointerInt64(param.UserID),
+		UserID:         util.PointerInt64(param.UserID),
 		FoodCategoryID: param.FoodCategoryID,
-		Source: param.Source,
-		Name: param.Name,
-		Calorie: f.calorieTool.FoodCalorie(global.FoodCategoryTag(category.Tag)),
-		AmountDesc: param.AmountDesc,
+		Source:         param.Source,
+		Name:           param.Name,
+		Calorie:        f.calorieTool.FoodCalorie(global.FoodCategoryTag(category.Tag)),
+		AmountDesc:     param.AmountDesc,
 	})
 	if err != nil {
 		return nil, f.errHandler.Set(c, "food repo", err)
@@ -73,6 +73,22 @@ func (f *food) GetFoods(c *gin.Context, userID int64, tag global.FoodCategoryTag
 	return foods, nil
 }
 
+func (f *food) GetRecentFood(c *gin.Context, userID int64) ([]*dto.RecentFood, errcode.Error) {
+	param := model.FindRecentFoodsParam{}
+	param.UserID = util.PointerInt64(userID)
+	param.IsDeleted = util.PointerInt(0)
+	param.Preloads = []*model.Preload{{Field: "FoodCategory"}, {Field: "Meal"}}
+	datas, err := f.foodRepo.FindRecentFoods(&param)
+	if err != nil {
+		return nil, f.errHandler.Set(c, "food repo", err)
+	}
+	foods := make([]*dto.RecentFood, 0)
+	if err := util.Parser(datas, &foods); err != nil {
+		return nil, f.errHandler.Set(c, "foods parser error", err)
+	}
+	return foods, nil
+}
+
 func (f *food) DeleteFood(c *gin.Context, foodID int64, userID int64) errcode.Error {
 	ownerID, err := f.foodRepo.FindFoodOwner(foodID)
 	if err != nil {
@@ -82,7 +98,7 @@ func (f *food) DeleteFood(c *gin.Context, foodID int64, userID int64) errcode.Er
 		return f.errHandler.PermissionDenied()
 	}
 	if err := f.foodRepo.UpdateFood(&model.UpdateFoodParam{
-		FoodID: foodID,
+		FoodID:    foodID,
 		IsDeleted: util.PointerInt(1),
 	}); err != nil {
 		return f.errHandler.Set(c, "food repo", err)

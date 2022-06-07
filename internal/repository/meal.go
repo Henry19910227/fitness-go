@@ -21,11 +21,12 @@ func (m *meal) SaveMeals(param *model.SaveMealsParam) ([]int64, error) {
 		return []int64{}, nil
 	}
 	meals := make([]*entity.Meal, 0)
-	for _, item := range param.MealItems{
+	for _, item := range param.MealItems {
 		meal := entity.Meal{
-			DietID: item.DietID,
-			FoodID: item.FoodID,
-			Amount: item.Amount,
+			DietID:   item.DietID,
+			FoodID:   item.FoodID,
+			Amount:   item.Amount,
+			Type:     item.Type,
 			CreateAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
 		meals = append(meals, &meal)
@@ -37,7 +38,7 @@ func (m *meal) SaveMeals(param *model.SaveMealsParam) ([]int64, error) {
 		return nil, err
 	}
 	mealIDs := make([]int64, 0)
-	for _, meal := range meals{
+	for _, meal := range meals {
 		mealIDs = append(mealIDs, meal.ID)
 	}
 	return mealIDs, nil
@@ -59,7 +60,7 @@ func (m *meal) FindMealOwner(mealID int64) (int64, error) {
 		Joins("INNER JOIN diets ON meals.diet_id = diets.id").
 		Where("meals.id = ?", mealID).
 		Take(&userID).Error; err != nil {
-			return 0, err
+		return 0, err
 	}
 	return userID, nil
 }
@@ -70,4 +71,3 @@ func (m *meal) DeleteMeal(mealID int64) error {
 	}
 	return nil
 }
-
