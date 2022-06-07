@@ -261,3 +261,46 @@ func NewUserIncomeMonthlyStatisticService(viperTool *viper.Viper, gormTool tool.
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
 	return NewUserIncomeMonthlyStatistic(transactionRepo, statisticRepo, errHandler)
 }
+
+func NewRDAService(viperTool *viper.Viper, gormTool tool.Gorm) RDA {
+	rdaRepo := repository.NewRDA(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewRDA(rdaRepo, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), errHandler)
+}
+
+func NewDietService(viperTool *viper.Viper, gormTool tool.Gorm) Diet {
+	dietRepo := repository.NewDiet(gormTool)
+	rdaRepo := repository.NewRDA(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewDiet(dietRepo, rdaRepo, errHandler)
+}
+
+func NewFoodCategoryService(viperTool *viper.Viper, gormTool tool.Gorm) FoodCategory {
+	foodCategoryRepo := repository.NewFoodCategory(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewFoodCategory(foodCategoryRepo, errHandler)
+}
+
+func NewFoodService(viperTool *viper.Viper, gormTool tool.Gorm) Food {
+	foodRepo := repository.NewFood(gormTool)
+	foodCategoryRepo := repository.NewFoodCategory(gormTool)
+	calorieTool := tool.NewCalorie()
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewFood(foodRepo, foodCategoryRepo, calorieTool, errHandler)
+}
+
+func NewMealService(viperTool *viper.Viper, gormTool tool.Gorm) Meal {
+	mealRepo := repository.NewMeal(gormTool)
+	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
+	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
+	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
+	return NewMeal(mealRepo, errHandler)
+}

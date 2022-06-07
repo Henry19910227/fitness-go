@@ -530,6 +530,63 @@
                 }
             }
         },
+        "/calculate_rda": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CalculateRDABody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.RDA"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/cms/login": {
             "post": {
                 "description": "管理者登入",
@@ -2979,6 +3036,116 @@
                 }
             }
         },
+        "/diet": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "以日期獲取飲食紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "以日期獲取飲食紀錄",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "排程日",
+                        "name": "schedule_at",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Diet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建飲食紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "創建飲食紀錄",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateDietBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Diet"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
         "/favorite/action/{action_id}": {
             "post": {
                 "security": [
@@ -3224,6 +3391,213 @@
                     },
                     "400": {
                         "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/food": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建食物",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "創建食物",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.CreateFoodBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.Food"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/food/{food_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除食物",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "刪除食物",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "食物id",
+                        "name": "food_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/food_categories": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取食物分類",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "獲取食物分類",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.FoodCategory"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/foods": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取食物列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "獲取食物列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)",
+                        "name": "food_category_tag",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.Food"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -3585,6 +3959,97 @@
                     },
                     "400": {
                         "description": "登出失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/meal/{meal_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除餐食",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "刪除餐食",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "餐食id",
+                        "name": "meal_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/meals": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建餐食",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "創建餐食",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validator.MealParamItem"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -4214,6 +4679,100 @@
                     },
                     "400": {
                         "description": "獲取失敗",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/rda": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新建議飲食攝取量",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "更新建議飲食攝取量",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validator.UpdateRDABody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessResult"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/recent_foods": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取食物歷程列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet"
+                ],
+                "summary": "獲取食物歷程列表",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.SuccessResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.RecentFood"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
                         }
@@ -8495,6 +9054,97 @@
                 }
             }
         },
+        "dto.Diet": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "type": "string",
+                    "example": "2022-05-25 11:00:00"
+                },
+                "id": {
+                    "description": "rda",
+                    "type": "integer",
+                    "example": 1
+                },
+                "meals": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Meal"
+                    }
+                },
+                "rda": {
+                    "description": "rda",
+                    "$ref": "#/definitions/dto.RDA"
+                },
+                "schedule_at": {
+                    "type": "string",
+                    "example": "2022-05-25 11:00:00"
+                },
+                "update_at": {
+                    "type": "string",
+                    "example": "2022-05-25 11:00:00"
+                }
+            }
+        },
+        "dto.Food": {
+            "type": "object",
+            "properties": {
+                "amount_desc": {
+                    "description": "份量描述",
+                    "type": "string",
+                    "example": "一份地瓜100克70卡"
+                },
+                "calorie": {
+                    "description": "食物熱量",
+                    "type": "integer",
+                    "example": 70
+                },
+                "food_category": {
+                    "description": "食物分類",
+                    "$ref": "#/definitions/dto.FoodCategory"
+                },
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "食物名稱",
+                    "type": "string",
+                    "example": "蕃薯"
+                },
+                "source": {
+                    "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_id": {
+                    "description": "創建用戶id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
+        "dto.FoodCategory": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "tag": {
+                    "description": "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "description": "類別名稱",
+                    "type": "string",
+                    "example": "米麥類"
+                }
+            }
+        },
         "dto.IABProductAPIResponse": {
             "type": "object",
             "properties": {
@@ -8691,6 +9341,40 @@
                 }
             }
         },
+        "dto.Meal": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "description": "數量",
+                    "type": "integer",
+                    "example": 2
+                },
+                "food": {
+                    "description": "食物",
+                    "$ref": "#/definitions/dto.Food"
+                },
+                "id": {
+                    "description": "餐食id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "type": {
+                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "dto.MealType": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
         "dto.Plan": {
             "type": "object",
             "properties": {
@@ -8813,6 +9497,109 @@
                 },
                 "priceMicros": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.RDA": {
+            "type": "object",
+            "properties": {
+                "calorie": {
+                    "description": "目標熱量",
+                    "type": "integer",
+                    "example": 2913
+                },
+                "carbs": {
+                    "description": "碳水化合物(克)",
+                    "type": "integer",
+                    "example": 437
+                },
+                "dairy": {
+                    "description": "乳製品類(份)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "fat": {
+                    "description": "脂肪(克)",
+                    "type": "integer",
+                    "example": 65
+                },
+                "fruit": {
+                    "description": "水果類(份)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "grain": {
+                    "description": "穀物類(份)",
+                    "type": "integer",
+                    "example": 25
+                },
+                "meat": {
+                    "description": "蛋豆魚肉類(份)",
+                    "type": "integer",
+                    "example": 12
+                },
+                "nut": {
+                    "description": "堅果類(份)",
+                    "type": "integer",
+                    "example": 5
+                },
+                "protein": {
+                    "description": "蛋白質(克)",
+                    "type": "integer",
+                    "example": 146
+                },
+                "tdee": {
+                    "description": "TDEE",
+                    "type": "integer",
+                    "example": 2533
+                },
+                "vegetable": {
+                    "description": "蔬菜類(份)",
+                    "type": "integer",
+                    "example": 5
+                }
+            }
+        },
+        "dto.RecentFood": {
+            "type": "object",
+            "properties": {
+                "amount_desc": {
+                    "description": "份量描述",
+                    "type": "string",
+                    "example": "一份地瓜100克70卡"
+                },
+                "calorie": {
+                    "description": "食物熱量",
+                    "type": "integer",
+                    "example": 70
+                },
+                "food_category": {
+                    "description": "食物分類",
+                    "$ref": "#/definitions/dto.FoodCategory"
+                },
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "meal": {
+                    "description": "餐食",
+                    "$ref": "#/definitions/dto.MealType"
+                },
+                "name": {
+                    "description": "食物名稱",
+                    "type": "string",
+                    "example": "蕃薯"
+                },
+                "source": {
+                    "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_id": {
+                    "description": "創建用戶id",
+                    "type": "integer",
+                    "example": 10001
                 }
             }
         },
@@ -10330,6 +11117,66 @@
                 }
             }
         },
+        "validator.CalculateRDABody": {
+            "type": "object",
+            "required": [
+                "activity_level",
+                "birthday",
+                "diet_target",
+                "diet_type",
+                "exercise_feq_level",
+                "height",
+                "sex",
+                "weight"
+            ],
+            "properties": {
+                "activity_level": {
+                    "description": "活動量 (1:麻痺、昏迷、無法活動/2:臥床不動，僅手臂移動/3:幾乎坐著或躺著/4:大部分坐著，少許步行/5:久坐、辦公室性質工作/6:每週輕度步行3-4天/7:每週輕度步行5-7天/8:體力勞動工作性質/9:沉重的體力勞動工作性質/10:極重度的勞動或職業運動員)",
+                    "type": "integer",
+                    "example": 6
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1992-02-02"
+                },
+                "body_fat": {
+                    "description": "體脂肪率 (最大99)",
+                    "type": "integer",
+                    "example": 20
+                },
+                "diet_target": {
+                    "description": "飲食目標 (1:減脂/2:增肌/3:維持健康生活/4:提升體能與力量/5:哺乳者/6:懷孕者)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "diet_type": {
+                    "description": "飲食型態 (1:標準飲食/2:全素食/3:蛋奶素食/4:蛋素食/5:奶素食)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "exercise_feq_level": {
+                    "description": "運動頻率 (1:無運動/2:一週2-3次，一次30-45分鐘/3:一週3-5次，一次45-60分鐘/4:一週5次以上，一次60分鐘)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "height": {
+                    "description": "身高 (最大999)",
+                    "type": "number",
+                    "example": 178
+                },
+                "sex": {
+                    "description": "性別 (f:女/m:男)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "weight": {
+                    "description": "體重 (最大999)",
+                    "type": "number",
+                    "example": 70
+                }
+            }
+        },
         "validator.CreateCourseBody": {
             "type": "object",
             "required": [
@@ -10371,6 +11218,43 @@
                     "description": "課表 id",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "validator.CreateDietBody": {
+            "type": "object",
+            "required": [
+                "schedule_at"
+            ],
+            "properties": {
+                "schedule_at": {
+                    "type": "string",
+                    "example": "2022-05-25"
+                }
+            }
+        },
+        "validator.CreateFoodBody": {
+            "type": "object",
+            "required": [
+                "amount_desc",
+                "food_category_id",
+                "name"
+            ],
+            "properties": {
+                "amount_desc": {
+                    "description": "份量描述",
+                    "type": "string",
+                    "example": "一份地瓜100克70卡"
+                },
+                "food_category_id": {
+                    "description": "食物類別id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "食物名稱",
+                    "type": "string",
+                    "example": "地瓜"
                 }
             }
         },
@@ -10510,6 +11394,37 @@
                 }
             }
         },
+        "validator.MealParamItem": {
+            "type": "object",
+            "required": [
+                "amount",
+                "diet_id",
+                "food_id",
+                "type"
+            ],
+            "properties": {
+                "amount": {
+                    "description": "數量",
+                    "type": "integer",
+                    "example": 2
+                },
+                "diet_id": {
+                    "description": "飲食紀錄id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "food_id": {
+                    "description": "食物id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "type": {
+                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
         "validator.RedeemCourseBody": {
             "type": "object",
             "required": [
@@ -10641,6 +11556,79 @@
                 "name": {
                     "type": "string",
                     "example": "第一週增肌計畫"
+                }
+            }
+        },
+        "validator.UpdateRDABody": {
+            "type": "object",
+            "required": [
+                "calorie",
+                "carbs",
+                "dairy",
+                "fat",
+                "fruit",
+                "grain",
+                "meat",
+                "nut",
+                "protein",
+                "tdee",
+                "vegetable"
+            ],
+            "properties": {
+                "calorie": {
+                    "description": "目標熱量",
+                    "type": "integer",
+                    "example": 1800
+                },
+                "carbs": {
+                    "description": "碳水化合物(克)",
+                    "type": "integer",
+                    "example": 50
+                },
+                "dairy": {
+                    "description": "乳製品類(份)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "fat": {
+                    "description": "脂肪(克)",
+                    "type": "integer",
+                    "example": 20
+                },
+                "fruit": {
+                    "description": "水果類(份)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "grain": {
+                    "description": "穀物類(份)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "meat": {
+                    "description": "蛋豆魚肉類(份)",
+                    "type": "integer",
+                    "example": 6
+                },
+                "nut": {
+                    "description": "堅果類(份)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "protein": {
+                    "description": "蛋白質(克)",
+                    "type": "integer",
+                    "example": 70
+                },
+                "tdee": {
+                    "description": "TDEE",
+                    "type": "integer",
+                    "example": 2000
+                },
+                "vegetable": {
+                    "description": "蔬菜類(份)",
+                    "type": "integer",
+                    "example": 5
                 }
             }
         },

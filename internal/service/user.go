@@ -162,19 +162,19 @@ func (u *user) GetCMSUsers(c *gin.Context, param *dto.FinsCMSUsersParam, orderBy
 	}
 	//獲取分頁資料
 	users := make([]*dto.CMSUserSummary, 0)
-	var totalCount int64
-	if err := u.userRepo.FindUsers(&users, &totalCount, &model.FinsUsersParam{
+	amount, err := u.userRepo.FindUsers(&users, &model.FinsUsersParam{
 		UserID:     param.UserID,
 		Name:       param.Name,
 		Email:      param.Email,
 		UserStatus: param.UserStatus,
 		UserType:   param.UserType,
-	}, orderBy, paging); err != nil {
+	}, orderBy, paging)
+	if err != nil {
 		return nil, nil, u.errHandler.Set(c, "user repo", err)
 	}
 	pagingResult := dto.Paging{
-		TotalCount: int(totalCount),
-		TotalPage:  u.GetTotalPage(int(totalCount), pagingParam.Size),
+		TotalCount: amount,
+		TotalPage:  u.GetTotalPage(amount, pagingParam.Size),
 		Page:       pagingParam.Page,
 		Size:       pagingParam.Size,
 	}

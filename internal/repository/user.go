@@ -152,7 +152,7 @@ func (u *user) FindUserIDByEmail(email string) (int64, error) {
 	return uid, nil
 }
 
-func (u *user) FindUsers(result interface{}, totalCount *int64, param *model.FinsUsersParam, orderBy *model.OrderBy, paging *model.PagingParam) error {
+func (u *user) FindUsers(result interface{}, param *model.FinsUsersParam, orderBy *model.OrderBy, paging *model.PagingParam) (int, error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 userID 篩選條件
@@ -167,8 +167,8 @@ func (u *user) FindUsers(result interface{}, totalCount *int64, param *model.Fin
 	}
 	//加入 email 篩選條件
 	if param.Email != nil {
-		query += "AND email = ? "
-		params = append(params, *param.Email)
+		query += "AND email LIKE ? "
+		params = append(params, "%"+*param.Email+"%")
 	}
 	//加入 user_status 篩選條件
 	if param.UserStatus != nil {
@@ -182,7 +182,8 @@ func (u *user) FindUsers(result interface{}, totalCount *int64, param *model.Fin
 	}
 
 	var db *gorm.DB
-	db = u.gorm.DB().Model(&model.User{}).Where(query, params...)
+	var amount int64
+	db = u.gorm.DB().Model(&model.User{}).Where(query, params...).Count(&amount)
 
 	//排序
 	if orderBy != nil {
@@ -194,16 +195,7 @@ func (u *user) FindUsers(result interface{}, totalCount *int64, param *model.Fin
 	}
 	//查詢數據
 	if err := db.Find(result).Error; err != nil {
-		return nil
+		return 0, nil
 	}
-	//查詢資料數量
-	if totalCount != nil {
-		if err := u.gorm.DB().
-			Table("users").
-			Where(query, params...).
-			Count(totalCount).Error; err != nil {
-			return err
-		}
-	}
-	return nil
+	return int(amount), nil
 }

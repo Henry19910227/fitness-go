@@ -19,7 +19,7 @@ type User interface {
 	FindUserByAccountAndPassword(account string, password string, entity interface{}) error
 	FindUserIDByNickname(nickname string) (int64, error)
 	FindUserIDByEmail(email string) (int64, error)
-	FindUsers(result interface{}, totalCount *int64, param *model.FinsUsersParam, orderBy *model.OrderBy, paging *model.PagingParam) error
+	FindUsers(result interface{}, param *model.FinsUsersParam, orderBy *model.OrderBy, paging *model.PagingParam) (int, error)
 }
 
 type Trainer interface {
@@ -29,7 +29,7 @@ type Trainer interface {
 	FindTrainerEntities(input interface{}, status *global.TrainerStatus, orderBy *model.OrderBy, paging *model.PagingParam) error
 	FindTrainersCount(status *global.TrainerStatus) (int, error)
 	UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam) error
-	FindTrainers(result interface{}, totalCount *int64, param *model.FinsTrainersParam, orderBy *model.OrderBy, paging *model.PagingParam) error
+	FindTrainers(result interface{}, param *model.FinsTrainersParam, orderBy *model.OrderBy, paging *model.PagingParam) (int, error)
 	FindTrainerDetail(userID int64, result interface{}) error
 }
 
@@ -296,4 +296,35 @@ type UserIncomeMonthlyStatistic interface {
 	CalculateUserIncomeMonthlyCount(tx *gorm.DB, date string) ([]*model.UserIncomeMonthlyStatisticResult, error)
 	Save(tx *gorm.DB, values []*model.UserIncomeMonthlyStatisticResult) error
 	Find(userID int64, output interface{}) error
+}
+
+type RDA interface {
+	CreateRDA(tx *gorm.DB, userID int64, param *model.CreateRDAParam) error
+	FindRDA(tx *gorm.DB, param *model.FindRDAParam, orderBy *model.OrderBy, output interface{}) error
+}
+
+type Diet interface {
+	CreateDiet(tx *gorm.DB, userID int64, rdaID int64, scheduleTime string) (int64, error)
+	FindDiet(tx *gorm.DB, param *model.FindDietParam, preloads []*model.Preload) (*model.Diet, error)
+}
+
+type FoodCategory interface {
+	FindFoodCategory(categoryID int64) (*model.FoodCategory, error)
+	FindFoodCategories() ([]*model.FoodCategory, error)
+}
+
+type Food interface {
+	CreateFood(param *model.CreateFoodParam) (int64, error)
+	FindFood(foodID int64, preloads []*model.Preload) (*model.Food, error)
+	UpdateFood(param *model.UpdateFoodParam) error
+	FindFoods(param *model.FindFoodsParam) ([]*model.Food, error)
+	FindRecentFoods(param *model.FindRecentFoodsParam) ([]*model.RecentFood, error)
+	FindFoodOwner(foodID int64) (int64, error)
+}
+
+type Meal interface {
+	SaveMeals(param *model.SaveMealsParam) ([]int64, error)
+	FindMeals(param *model.FindMealsParam) ([]*model.Meal, error)
+	FindMealOwner(mealID int64) (int64, error)
+	DeleteMeal(mealID int64) error
 }

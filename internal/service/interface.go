@@ -205,3 +205,43 @@ type UserIncomeMonthlyStatistic interface {
 	Update()
 	GetUserIncomeMonthlyStatistic(c *gin.Context, userID int64) (*dto.UserIncomeMonthlyStatistic, errcode.Error)
 }
+
+type RDA interface {
+	CreateRDA(c *gin.Context, userID int64, param *dto.RDA) errcode.Error
+	CalculateRDA(param *dto.CalculateRDAParam) *dto.RDA
+	CalculateBMR(birthday string, weight float64, height float64, bodyFat *int, sex string) int
+	CalculateTDEE(bmr int, activityLevel global.ActivityLevel, exerciseFeqLevel global.ExerciseFeqLevel) int
+	CalculateCalorie(tdee int, dietTarget global.DietTarget) int
+	CalculateProteinCalorie(calorie int, dietTarget global.DietTarget) int
+	CalculateFatCalorie(calorie int, dietTarget global.DietTarget) int
+	CalculateCarbsCalorie(calorie int, dietTarget global.DietTarget) int
+	CalculateProteinAmount(proteinCal int) int
+	CalculateCarbsAmount(carbsCal int) int
+	CalculateFatAmount(fatCal int) int
+	CalculateDairyAmount(dietType global.DietType) int
+	CalculateVegetableAmount() int
+	CalculateFruitAmount() int
+	CalculateGrainAmount(carbsAmt int, dairyAmt int, vegetableAmt int, fruitAmt int) int
+	CalculateMeatAmount(proteinAmt int, dairyAmt int, grainAmt int, vegetableAmt int) int
+	CalculateNutAmount(fatAmt int, dairyAmt int, meatAmt int) int
+}
+
+type Diet interface {
+	CreateDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Diet, errcode.Error)
+	GetDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Diet, errcode.Error)
+}
+type FoodCategory interface {
+	GetFoodCategories(c *gin.Context) ([]*dto.FoodCategory, errcode.Error)
+}
+
+type Food interface {
+	CreateFood(c *gin.Context, param *dto.CreateFoodParam) (*dto.Food, errcode.Error)
+	GetFoods(c *gin.Context, userID int64, tag global.FoodCategoryTag) ([]*dto.Food, errcode.Error)
+	GetRecentFood(c *gin.Context, userID int64) ([]*dto.RecentFood, errcode.Error)
+	DeleteFood(c *gin.Context, foodID int64, userID int64) errcode.Error
+}
+
+type Meal interface {
+	CreateMeals(c *gin.Context, param *dto.CreateMealsParam) errcode.Error
+	DeleteMeal(c *gin.Context, mealID int64, userID int64) errcode.Error
+}

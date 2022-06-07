@@ -14,5 +14,20 @@ type OrderBy struct {
 
 type Preload struct {
 	Field   string
-	Selects []interface{}
+}
+
+type InPageParam struct {
+	Paging *PagingParam
+}
+
+type OrderByParam struct {
+	OrderBy *OrderBy
+}
+
+type PreloadParam struct {
+	Preloads []*Preload
+}
+
+type DeletedParam struct {
+	IsDeleted *int
 }

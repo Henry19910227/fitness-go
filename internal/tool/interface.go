@@ -2,6 +2,7 @@ package tool
 
 import (
 	"database/sql"
+	"github.com/Henry19910227/fitness-go/internal/global"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 	"io"
@@ -89,4 +90,20 @@ type IAB interface {
 	URL() string
 	Scope() string
 	GenerateGoogleOAuth2Token(duration time.Duration) (string, error)
+}
+
+type BMR interface {
+	// MSJBMR Mifflin-St Jeor BMR 方程式
+	MSJBMR(weight float64, height float64, age int, sex string) float64
+	// KMABMR Katch-McArdle BMR 方程式
+	KMABMR(weight float64, bodyFat int) float64
+}
+
+type TDEE interface {
+	TDEE(bmr int, activityLevel global.ActivityLevel, exerciseFeqLevel global.ExerciseFeqLevel) float64
+}
+
+type Calorie interface {
+	TargetCalorie(tdee int, target global.DietTarget) float64
+	FoodCalorie(tag global.FoodCategoryTag) int
 }

@@ -295,7 +295,7 @@ func (t *trainer) UpdateTrainerByUID(uid int64, param *model.UpdateTrainerParam)
 	return nil
 }
 
-func (t *trainer) FindTrainers(result interface{}, totalCount *int64, param *model.FinsTrainersParam, orderBy *model.OrderBy, paging *model.PagingParam) error {
+func (t *trainer) FindTrainers(result interface{}, param *model.FinsTrainersParam, orderBy *model.OrderBy, paging *model.PagingParam) (int, error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 userID 篩選條件
@@ -310,8 +310,8 @@ func (t *trainer) FindTrainers(result interface{}, totalCount *int64, param *mod
 	}
 	//加入 email 篩選條件
 	if param.Email != nil {
-		query += "AND email = ? "
-		params = append(params, *param.Email)
+		query += "AND email LIKE ? "
+		params = append(params, "%"+*param.Email+"%")
 	}
 	//加入 trainer_status 篩選條件
 	if param.TrainerStatus != nil {
@@ -319,7 +319,8 @@ func (t *trainer) FindTrainers(result interface{}, totalCount *int64, param *mod
 		params = append(params, *param.TrainerStatus)
 	}
 	var db *gorm.DB
-	db = t.gorm.DB().Model(&entity.Trainer{}).Where(query, params...)
+	var amount int64
+	db = t.gorm.DB().Model(&entity.Trainer{}).Where(query, params...).Count(&amount)
 
 	//排序
 	if orderBy != nil {
@@ -331,18 +332,9 @@ func (t *trainer) FindTrainers(result interface{}, totalCount *int64, param *mod
 	}
 	//查詢數據
 	if err := db.Find(result).Error; err != nil {
-		return nil
+		return 0, nil
 	}
-	//查詢資料數量
-	if totalCount != nil {
-		if err := t.gorm.DB().
-			Table("trainers").
-			Where(query, params...).
-			Count(totalCount).Error; err != nil {
-			return err
-		}
-	}
-	return nil
+	return int(amount), nil
 }
 
 func (t *trainer) FindTrainerDetail(userID int64, result interface{}) error {
