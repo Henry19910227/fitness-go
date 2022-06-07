@@ -60,11 +60,11 @@ func (r *rda) FindRDA(tx *gorm.DB, param *model.FindRDAParam, orderBy *model.Ord
 		query += "AND user_id = ? "
 		params = append(params, *param.UserID)
 	}
-	db.Model(&entity.RDA{}).Where(query, params...)
+	db = db.Model(&entity.RDA{})
 	if orderBy != nil {
 		db = db.Order(fmt.Sprintf("%s %s", orderBy.Field, orderBy.OrderType))
 	}
-	if err := db.Take(output).Error; err != nil {
+	if err := db.Where(query, params...).Take(output).Error; err != nil {
 		return err
 	}
 	return nil
