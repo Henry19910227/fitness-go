@@ -9,6 +9,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/repository"
 	"github.com/Henry19910227/fitness-go/internal/util"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type diet struct {
@@ -67,13 +68,30 @@ func (d *diet) GetDiet(c *gin.Context, userID int64, scheduleAt string) (*dto.Di
 		UserID:     util.PointerInt64(userID),
 		ScheduleAt: util.PointerString(scheduleAt),
 	}, preloads)
-	if err != nil {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, d.errHandler.Set(c, "diet repo", err)
 	}
-	//parser diet
 	diet := dto.Diet{}
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		diet.RDA = d.GetLatestRDA(userID)
+		return &diet, nil
+	}
 	if err := util.Parser(data, &diet); err != nil {
 		return nil, d.errHandler.Set(c, "parser error", err)
 	}
 	return &diet, nil
+}
+
+func (d *diet) GetLatestRDA(userID int64) *dto.RDA {
+	//查找當前最新rda
+	var rdaModel model.RDA
+	_ = d.rdaRepo.FindRDA(nil, &model.FindRDAParam{
+		UserID: util.PointerInt64(userID),
+	}, &model.OrderBy{
+		Field:     "create_at",
+		OrderType: global.DESC,
+	}, &rdaModel)
+	var rda dto.RDA
+	_ = util.Parser(rdaModel, &rda)
+	return &rda
 }
