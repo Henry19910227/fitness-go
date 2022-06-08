@@ -17,17 +17,17 @@ import (
 
 type trainer struct {
 	Base
-	trainerRepo         repository.Trainer
-	albumRepo           repository.TrainerAlbum
-	cerRepo             repository.Certificate
-	favoriteRepo        repository.Favorite
-	cardRepo            repository.Card
-	bankRepo            repository.BankAccount
-	uploader            handler.Uploader
-	resHandler          handler.Resource
-	logger              handler.Logger
-	jwtTool             tool.JWT
-	errHandler          errcode.Handler
+	trainerRepo  repository.Trainer
+	albumRepo    repository.TrainerAlbum
+	cerRepo      repository.Certificate
+	favoriteRepo repository.Favorite
+	cardRepo     repository.Card
+	bankRepo     repository.BankAccount
+	uploader     handler.Uploader
+	resHandler   handler.Resource
+	logger       handler.Logger
+	jwtTool      tool.JWT
+	errHandler   errcode.Handler
 }
 
 func NewTrainer(trainerRepo repository.Trainer, albumRepo repository.TrainerAlbum, cerRepo repository.Certificate,
@@ -387,7 +387,7 @@ func (t *trainer) GetCMSTrainers(c *gin.Context, param *dto.FinsCMSTrainersParam
 	if orderByParam != nil {
 		orderBy = &model.OrderBy{
 			OrderType: global.DESC,
-			Field:     "update_at",
+			Field:     "create_at",
 		}
 		if orderByParam.OrderType != nil {
 			orderBy.OrderType = global.OrderType(*orderByParam.OrderType)
