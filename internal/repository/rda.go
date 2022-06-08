@@ -17,7 +17,7 @@ func NewRDA(gorm tool.Gorm) RDA {
 	return &rda{gorm: gorm}
 }
 
-func (r *rda) CreateRDA(tx *gorm.DB, userID int64, param *model.CreateRDAParam) error {
+func (r *rda) CreateRDA(tx *gorm.DB, userID int64, param *model.CreateRDAParam) (int64, error) {
 	db := r.gorm.DB()
 	if tx != nil {
 		db = tx
@@ -38,9 +38,9 @@ func (r *rda) CreateRDA(tx *gorm.DB, userID int64, param *model.CreateRDAParam) 
 		CreateAt:  time.Now().Format("2006-01-02 15:04:05"),
 	}
 	if err := db.Create(&rda).Error; err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return rda.ID, nil
 }
 
 func (r *rda) FindRDA(tx *gorm.DB, param *model.FindRDAParam, orderBy *model.OrderBy, output interface{}) error {

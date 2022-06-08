@@ -299,13 +299,15 @@ type UserIncomeMonthlyStatistic interface {
 }
 
 type RDA interface {
-	CreateRDA(tx *gorm.DB, userID int64, param *model.CreateRDAParam) error
+	CreateRDA(tx *gorm.DB, userID int64, param *model.CreateRDAParam) (int64, error)
 	FindRDA(tx *gorm.DB, param *model.FindRDAParam, orderBy *model.OrderBy, output interface{}) error
 }
 
 type Diet interface {
 	CreateDiet(tx *gorm.DB, userID int64, rdaID int64, scheduleTime string) (int64, error)
+	SaveDiets(tx *gorm.DB, param *model.SaveDietsParam) error
 	FindDiet(tx *gorm.DB, param *model.FindDietParam, preloads []*model.Preload) (*model.Diet, error)
+	FindDiets(tx *gorm.DB, param *model.FindDietsParam) ([]*model.Diet, error)
 }
 
 type FoodCategory interface {

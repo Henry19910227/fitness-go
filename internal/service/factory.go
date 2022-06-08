@@ -264,10 +264,12 @@ func NewUserIncomeMonthlyStatisticService(viperTool *viper.Viper, gormTool tool.
 
 func NewRDAService(viperTool *viper.Viper, gormTool tool.Gorm) RDA {
 	rdaRepo := repository.NewRDA(gormTool)
+	dietRepo := repository.NewDiet(gormTool)
+	transactionRepo := repository.NewTransaction(gormTool)
 	jwtTool := tool.NewJWT(setting.NewJWT(viperTool))
 	logTool, _ := tool.NewLogger(setting.NewLogger(viperTool))
 	errHandler := errcode.NewErrHandler(handler.NewLogger(logTool, jwtTool))
-	return NewRDA(rdaRepo, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), errHandler)
+	return NewRDA(rdaRepo, dietRepo, transactionRepo, tool.NewBMR(), tool.NewTDEE(), tool.NewCalorie(), errHandler)
 }
 
 func NewDietService(viperTool *viper.Viper, gormTool tool.Gorm) Diet {

@@ -38,6 +38,23 @@ func (d *diet) CreateDiet(tx *gorm.DB, userID int64, rdaID int64, scheduleTime s
 	return diet.ID, nil
 }
 
+func (d *diet) SaveDiets(tx *gorm.DB, param *model.SaveDietsParam) error {
+	if len(param.Diets) == 0 {
+		return nil
+	}
+	db := d.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	if err := db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "id"}},
+		DoUpdates: clause.AssignmentColumns([]string{"rda_id", "update_at"}),
+	}).Create(&param.Diets).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (d *diet) FindDiet(tx *gorm.DB, param *model.FindDietParam, preloads []*model.Preload) (*model.Diet, error) {
 	db := d.gorm.DB()
 	if tx != nil {
@@ -74,4 +91,36 @@ func (d *diet) FindDiet(tx *gorm.DB, param *model.FindDietParam, preloads []*mod
 		return nil, err
 	}
 	return &diet, nil
+}
+
+func (d *diet) FindDiets(tx *gorm.DB, param *model.FindDietsParam) ([]*model.Diet, error) {
+	query := "1=1 "
+	params := make([]interface{}, 0)
+	//加入 user_id 篩選條件
+	if param.UserID != nil {
+		query += "AND user_id = ? "
+		params = append(params, *param.UserID)
+	}
+	//加入 schedule_at 篩選條件
+	if param.AfterScheduleAt != nil {
+		query += "AND DATE_FORMAT(?,'%Y-%m-%d') <= DATE_FORMAT(schedule_at,'%Y-%m-%d')"
+		params = append(params, *param.AfterScheduleAt)
+	}
+	db := d.gorm.DB()
+	if tx != nil {
+		db = tx
+	}
+	db = db.Model(&model.Diet{})
+	//關聯加載
+	if len(param.Preloads) > 0 {
+		for _, preload := range param.Preloads {
+			db = db.Preload(preload.Field)
+		}
+	}
+	//查找數據
+	diets := make([]*model.Diet, 0)
+	if err := db.Where(query, params...).Find(&diets).Error; err != nil {
+		return nil, err
+	}
+	return diets, nil
 }

@@ -91,6 +91,7 @@ func (r *RDA) UpdateRDA(c *gin.Context) {
 		Nut:       body.Nut,
 	}); err != nil {
 		r.JSONErrorResponse(c, err)
+		return
 	}
 	r.JSONSuccessResponse(c, nil, "success!")
 }

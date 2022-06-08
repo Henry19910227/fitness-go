@@ -15,19 +15,24 @@ import (
 
 type rda struct {
 	Base
-	rdaRepo     repository.RDA
-	bmrTool     tool.BMR
-	tdeeTool    tool.TDEE
-	calorieTool tool.Calorie
-	errHandler  errcode.Handler
+	rdaRepo         repository.RDA
+	dietRepo        repository.Diet
+	transactionRepo repository.Transaction
+	bmrTool         tool.BMR
+	tdeeTool        tool.TDEE
+	calorieTool     tool.Calorie
+	errHandler      errcode.Handler
 }
 
-func NewRDA(rdaRepo repository.RDA, bmrTool tool.BMR, tdeeTool tool.TDEE, calorieTool tool.Calorie, errHandler errcode.Handler) RDA {
-	return &rda{rdaRepo: rdaRepo, bmrTool: bmrTool, tdeeTool: tdeeTool, calorieTool: calorieTool, errHandler: errHandler}
+func NewRDA(rdaRepo repository.RDA, dietRepo repository.Diet, transactionRepo repository.Transaction, bmrTool tool.BMR, tdeeTool tool.TDEE, calorieTool tool.Calorie, errHandler errcode.Handler) RDA {
+	return &rda{rdaRepo: rdaRepo, dietRepo: dietRepo, transactionRepo: transactionRepo, bmrTool: bmrTool, tdeeTool: tdeeTool, calorieTool: calorieTool, errHandler: errHandler}
 }
 
 func (r *rda) CreateRDA(c *gin.Context, userID int64, param *dto.RDA) errcode.Error {
-	if err := r.rdaRepo.CreateRDA(nil, userID, &model.CreateRDAParam{
+	tx := r.transactionRepo.CreateTransaction()
+	defer r.transactionRepo.FinishTransaction(tx)
+	//創建rda
+	rdaID, err := r.rdaRepo.CreateRDA(tx, userID, &model.CreateRDAParam{
 		TDEE:      param.TDEE,
 		Calorie:   param.Calorie,
 		Protein:   param.Protein,
@@ -39,8 +44,38 @@ func (r *rda) CreateRDA(c *gin.Context, userID int64, param *dto.RDA) errcode.Er
 		Meat:      param.Meat,
 		Dairy:     param.Dairy,
 		Nut:       param.Nut,
-	}); err != nil {
+	})
+	if err != nil {
+		tx.Rollback()
 		return r.errHandler.Set(c, "iap handler", err)
+	}
+	//查找今天之後的飲食紀錄
+	findDietsParam := model.FindDietsParam{}
+	findDietsParam.UserID = util.PointerInt64(userID)
+	findDietsParam.AfterScheduleAt = util.PointerString(time.Now().Format("2006-01-02"))
+	items, err := r.dietRepo.FindDiets(tx, &findDietsParam)
+	if err != nil {
+		tx.Rollback()
+		return r.errHandler.Set(c, "diet repo", err)
+	}
+	//修改今天之後的飲食紀錄rda
+	diets := make([]*model.DietItem, 0)
+	for _, item := range items {
+		diet := model.DietItem{
+			ID:         item.ID,
+			RdaID:      rdaID,
+			UserID:     item.UserID,
+			ScheduleAt: item.ScheduleAt,
+			CreateAt:   time.Now().Format("2006-01-02 15:04:05"),
+			UpdateAt:   time.Now().Format("2006-01-02 15:04:05"),
+		}
+		diets = append(diets, &diet)
+	}
+	saveDietsParam := model.SaveDietsParam{}
+	saveDietsParam.Diets = diets
+	if err := r.dietRepo.SaveDiets(tx, &saveDietsParam); err != nil {
+		tx.Rollback()
+		return r.errHandler.Set(c, "diet repo", err)
 	}
 	return nil
 }
