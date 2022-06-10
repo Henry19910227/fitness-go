@@ -1,10 +1,10 @@
 package dto
 
 type Meal struct {
-	ID     int64 `json:"id" example:"1"`     //餐食id
-	Type   int   `json:"type" example:"3"`   //類型(1:/早餐/2:午餐/3:晚餐/4:點心)
-	Amount int   `json:"amount" example:"2"` //數量
-	Food   *Food `json:"food,omitempty"`     //食物
+	ID     int64   `json:"id" example:"1"`       //餐食id
+	Type   int     `json:"type" example:"3"`     //類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+	Amount float64 `json:"amount" example:"0.5"` //數量
+	Food   *Food   `json:"food,omitempty"`       //食物
 }
 
 type MealType struct {
