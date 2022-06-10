@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS favorite_trainers;
+DROP TABLE IF EXISTS favorite_actions;
