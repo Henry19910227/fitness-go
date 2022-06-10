@@ -9364,8 +9364,8 @@ var doc = `{
             "properties": {
                 "amount": {
                     "description": "數量",
-                    "type": "integer",
-                    "example": 2
+                    "type": "number",
+                    "example": 0.5
                 },
                 "food": {
                     "description": "食物",
@@ -11423,8 +11423,8 @@ var doc = `{
             "properties": {
                 "amount": {
                     "description": "數量",
-                    "type": "integer",
-                    "example": 2
+                    "type": "number",
+                    "example": 0.5
                 },
                 "diet_id": {
                     "description": "飲食紀錄id",
