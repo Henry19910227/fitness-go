@@ -301,6 +301,7 @@ type UserIncomeMonthlyStatistic interface {
 type RDA interface {
 	CreateRDA(tx *gorm.DB, userID int64, param *model.CreateRDAParam) (int64, error)
 	FindRDA(tx *gorm.DB, param *model.FindRDAParam, orderBy *model.OrderBy, output interface{}) error
+	FindRDAByID(rdaID int64) (*model.RDA, error)
 }
 
 type Diet interface {

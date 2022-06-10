@@ -60,14 +60,9 @@ type Handler interface {
 	Set(c *gin.Context, tag string, err error) Error
 	// SystemError 9000 - 系統發生錯誤
 	SystemError() Error
-	// UpdateError 9001 - 更新失敗
-	UpdateError() Error
-	// DataNotFound 9002 - 查無資料
 	DataNotFound() Error
 	// DataAlreadyExists 9003 - 資料已存在
 	DataAlreadyExists() Error
-	// InvalidThirdParty 9004 - 無效的第三方驗證
-	InvalidThirdParty() Error
 	// InvalidToken 9005 - 無效的token
 	InvalidToken() Error
 	// NewError(9006, errors.New("權限不足,存取遭拒"))
@@ -78,8 +73,6 @@ type Handler interface {
 	FileSizeError() Error
 
 	/** 註冊 */
-	// NewError(1400, errors.New("註冊失敗"))
-	RegisterFailure() Error
 	// NewError(1401, errors.New("手機驗證碼發送失敗"))
 	SendOTPFailure() Error
 	// NewError(1402, errors.New("無效的手機驗證碼"))
@@ -88,16 +81,10 @@ type Handler interface {
 	NicknameDuplicate() Error
 	// NewError(1406, errors.New("該信箱已被使用"))
 	EmailDuplicate() Error
-	// NewError(1407, errors.New("該帳號已被使用"))
-	AccountDuplicate() Error
 
 	/** 登入 */
 	// LoginFailure 1100 - 登入失敗, 帳號或密碼錯誤
 	LoginFailure() Error
-	// NewError(1101, errors.New("登入身份錯誤"))
-	LoginRoleFailure() Error
-	//NewError(1102, errors.New("帳號無法使用"))
-	LoginStatusFailure() Error
 
 	/** 課表 */
 	// NewError(1500, errors.New("不存在的動作"))

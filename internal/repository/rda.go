@@ -69,3 +69,14 @@ func (r *rda) FindRDA(tx *gorm.DB, param *model.FindRDAParam, orderBy *model.Ord
 	}
 	return nil
 }
+
+func (r *rda) FindRDAByID(rdaID int64) (*model.RDA, error) {
+	var rda model.RDA
+	if err := r.gorm.DB().
+		Table("rdas").
+		Where("id = ?", rdaID).
+		Take(&rda).Error; err != nil {
+			return nil, err
+	}
+	return &rda, nil
+}
