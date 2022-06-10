@@ -14,3 +14,7 @@ func NewMockRdaService(gormTool tool.Gorm) RDA {
 func NewMockDietService(gormTool tool.Gorm) Diet {
 	return NewDiet(repository.NewDiet(gormTool), repository.NewRDA(gormTool), errcode.NewMockHandler())
 }
+
+func NewMockMealService(gormTool tool.Gorm) Meal {
+	return NewMeal(repository.NewMeal(gormTool), errcode.NewMockHandler())
+}
