@@ -1,7 +1,7 @@
 package entity
 
 type RDA struct {
-	ID int64 `gorm:"column:id primaryKey"` // id
+	ID int64 `gorm:"column:id"` // id
 	UserID int64 `gorm:"column:user_id"` // 用戶id
 	TDEE int `gorm:"column:tdee"` // TDEE
 	Calorie int `gorm:"column:calorie"` // 目標熱量

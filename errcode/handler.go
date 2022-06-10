@@ -120,20 +120,8 @@ func (h handle) EmailDuplicate() Error {
 	return EmailDuplicate
 }
 
-func (h handle) AccountDuplicate() Error {
-	return AccountDuplicate
-}
-
 func (h handle) LoginFailure() Error {
 	return LoginFailure
-}
-
-func (h handle) LoginRoleFailure() Error {
-	return LoginRoleFailure
-}
-
-func (h handle) LoginStatusFailure() Error {
-	return LoginStatusFailure
 }
 
 /** 課表 */

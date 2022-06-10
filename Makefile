@@ -12,3 +12,9 @@ migrate_force:
 	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20220602113830
 migrate_create:
 	migrate create -ext sql -dir migrations create_meals_table_v_1_9_8
+
+test-mysql:
+	docker-compose up --build -d test-mysql
+
+redis:
+	docker-compose up --build -d redis

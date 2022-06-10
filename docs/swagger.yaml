@@ -1433,8 +1433,8 @@ definitions:
     properties:
       amount:
         description: 數量
-        example: 2
-        type: integer
+        example: 0.5
+        type: number
       food:
         $ref: '#/definitions/dto.Food'
         description: 食物
@@ -2979,8 +2979,8 @@ definitions:
     properties:
       amount:
         description: 數量
-        example: 2
-        type: integer
+        example: 0.5
+        type: number
       diet_id:
         description: 飲食紀錄id
         example: 1
