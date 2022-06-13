@@ -66,3 +66,39 @@ type APIGetCMSCoursesData []*struct {
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 }
+
+// APIGetCMSCourseOutput /cms/course [GET] 獲取課表詳細 API
+type APIGetCMSCourseOutput struct {
+	base.Output
+	Data *APIGetCMSCourseData `json:"data,omitempty"`
+}
+type APIGetCMSCourseData struct {
+	IDField
+	UserIDField
+	SaleTypeField
+	CourseStatusField
+	CategoryField
+	ScheduleTypeField
+	NameField
+	CoverField
+	IntroField
+	FoodField
+	LevelField
+	SuitField
+	EquipmentField
+	PlaceField
+	TrainTargetField
+	BodyTargetField
+	NoticeField
+	CreateAtField
+	UpdateAtField
+	SaleItem *struct {
+		saleItem.IDField
+		saleItem.NameField
+		ProductLabel *struct {
+			productLabel.IDField
+			productLabel.ProductIDField
+			productLabel.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+}

@@ -587,6 +587,49 @@
                 }
             }
         },
+        "/cms/course/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表詳細",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Course"
+                ],
+                "summary": "獲取課表詳細",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetCMSCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/cms/courses": {
             "get": {
                 "security": [
@@ -7568,6 +7611,159 @@
                 }
             }
         },
+        "course.APIGetCMSCourseData": {
+            "type": "object",
+            "properties": {
+                "body_target": {
+                    "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)",
+                    "type": "string",
+                    "example": "4,5"
+                },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
+                },
+                "food": {
+                    "description": "飲食建議",
+                    "type": "string",
+                    "example": "多吃雞胸肉"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "intro": {
+                    "description": "課表介紹",
+                    "type": "string",
+                    "example": "增肌專用課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                },
+                "notice": {
+                    "description": "注意事項",
+                    "type": "string",
+                    "example": "注意關節避免鎖死"
+                },
+                "place": {
+                    "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
+                    "type": "string",
+                    "example": "1,2"
+                },
+                "sale_item": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "description": "銷售id",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "name": {
+                            "description": "銷售名稱",
+                            "type": "string",
+                            "example": "銅級課表 "
+                        },
+                        "product_label": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "產品標籤id",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "product_id": {
+                                    "description": "產品id",
+                                    "type": "string",
+                                    "example": "com.fitness.gold_member_month"
+                                },
+                                "twd": {
+                                    "description": "台幣價格",
+                                    "type": "integer",
+                                    "example": 500
+                                }
+                            }
+                        }
+                    }
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "suit": {
+                    "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
+                    "type": "string",
+                    "example": "2"
+                },
+                "train_target": {
+                    "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
+                    "type": "string",
+                    "example": "2,3,4"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶 id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
+        "course.APIGetCMSCourseOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/course.APIGetCMSCourseData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "course.APIGetCMSCoursesOutput": {
             "type": "object",
             "properties": {
@@ -7600,6 +7796,41 @@
                                 "description": "課表名稱",
                                 "type": "string",
                                 "example": "增肌課表"
+                            },
+                            "sale_item": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "description": "銷售id",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "description": "銷售名稱",
+                                        "type": "string",
+                                        "example": "銅級課表 "
+                                    },
+                                    "product_label": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "description": "產品標籤id",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "product_id": {
+                                                "description": "產品id",
+                                                "type": "string",
+                                                "example": "com.fitness.gold_member_month"
+                                            },
+                                            "twd": {
+                                                "description": "台幣價格",
+                                                "type": "integer",
+                                                "example": 500
+                                            }
+                                        }
+                                    }
+                                }
                             },
                             "sale_type": {
                                 "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",

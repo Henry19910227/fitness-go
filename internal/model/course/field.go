@@ -1,7 +1,7 @@
 package course
 
 type IDField struct {
-	ID *int64 `json:"id,omitempty" form:"id" gorm:"column:id" binding:"omitempty" example:"2"` // 課表 id
+	ID *int64 `json:"id,omitempty" uri:"id" form:"id" gorm:"column:id" binding:"omitempty" example:"2"` // 課表 id
 }
 type UserIDField struct {
 	UserID *int64 `json:"user_id,omitempty" gorm:"column:user_id" example:"10001"` // 用戶 id
@@ -40,16 +40,16 @@ type SuitField struct {
 	Suit *string `json:"suit,omitempty" gorm:"column:suit" example:"2"` // 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)
 }
 type EquipmentField struct {
-	Equipment *string `json:"equipment,omitempty" gorm:"column:equipment" example:"2"` // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+	Equipment *string `json:"equipment,omitempty" gorm:"column:equipment" example:"2,3,6"` // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
 }
 type PlaceField struct {
-	Place *string `json:"place,omitempty" gorm:"column:place" example:"1"` // 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
+	Place *string `json:"place,omitempty" gorm:"column:place" example:"1,2"` // 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
 }
 type TrainTargetField struct {
-	TrainTarget *string `json:"train_target,omitempty" gorm:"column:train_target" example:"2"` // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
+	TrainTarget *string `json:"train_target,omitempty" gorm:"column:train_target" example:"2,3,4"` // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
 }
 type BodyTargetField struct {
-	BodyTarget *string `json:"body_target,omitempty" gorm:"column:body_target" example:"4"` // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
+	BodyTarget *string `json:"body_target,omitempty" gorm:"column:body_target" example:"4,5"` // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
 }
 type NoticeField struct {
 	Notice *string `json:"notice,omitempty" gorm:"column:notice" example:"注意關節避免鎖死"` // 注意事項

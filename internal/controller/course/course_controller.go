@@ -60,3 +60,31 @@ func (c *controller) GetCMSCourses(ctx *gin.Context) {
 	output := c.resolver.APIGetCMSCourses(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetCMSCourse 獲取課表詳細
+// @Summary 獲取課表詳細
+// @Description 獲取課表詳細
+// @Tags CMS/Course
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param id path int64 true "課表ID"
+// @Success 200 {object} course.APIGetCMSCourseOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /cms/course/{id} [GET]
+func (c *controller) GetCMSCourse(ctx *gin.Context) {
+	var uri struct {
+		model.IDField
+	}
+	if err := ctx.ShouldBindUri(&uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	input := model.APIGetCMSCourseInput{}
+	if err := util.Parser(uri, &input); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSCourse(&input)
+	ctx.JSON(http.StatusOK, output)
+}

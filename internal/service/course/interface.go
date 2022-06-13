@@ -6,6 +6,6 @@ import (
 )
 
 type Service interface {
-	List(input *model.ListParam) (output []*model.Table, page *paging.Output, err error)
-	APIGetCMSCourses(input *model.APIGetCMSCoursesInput) interface{}
+	Find(input *model.FindInput) (output *model.Table, err error)
+	List(input *model.ListInput) (output []*model.Table, page *paging.Output, err error)
 }

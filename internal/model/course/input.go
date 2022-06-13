@@ -10,7 +10,12 @@ type PagingInput = paging.Input
 type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
 
-type ListParam struct {
+type FindInput struct {
+	IDField
+	PreloadInput
+}
+
+type ListInput struct {
 	IDField
 	NameField
 	CourseStatusField
@@ -27,4 +32,8 @@ type APIGetCMSCoursesInput struct {
 	SaleTypeField
 	PagingInput
 	OrderByInput
+}
+
+type APIGetCMSCourseInput struct {
+	IDField
 }
