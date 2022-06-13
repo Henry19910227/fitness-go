@@ -1,12 +1,12 @@
 package course
 
 import (
-	baseModel "github.com/Henry19910227/fitness-go/internal/model/base"
-	model "github.com/Henry19910227/fitness-go/internal/model/course"
-	orderBy "github.com/Henry19910227/fitness-go/internal/model/order_by"
-	"github.com/Henry19910227/fitness-go/internal/model/paging"
-	"github.com/Henry19910227/fitness-go/internal/resolver/course"
 	"github.com/Henry19910227/fitness-go/internal/util"
+	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
+	"github.com/Henry19910227/fitness-go/internal/v2/resolver/course"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -36,7 +36,7 @@ func New(resolver course.Resolver) Controller {
 // @Param size query int true "筆數"
 // @Success 200 {object} course.APIGetCMSCoursesOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /cms/courses [GET]
+// @Router /v2/cms/courses [GET]
 func (c *controller) GetCMSCourses(ctx *gin.Context) {
 	type pagingInput paging.Input
 	type orderByInput orderBy.Input
@@ -71,7 +71,7 @@ func (c *controller) GetCMSCourses(ctx *gin.Context) {
 // @Param id path int64 true "課表ID"
 // @Success 200 {object} course.APIGetCMSCourseOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /cms/course/{id} [GET]
+// @Router /v2/cms/course/{id} [GET]
 func (c *controller) GetCMSCourse(ctx *gin.Context) {
 	var uri struct {
 		model.IDField

@@ -2,9 +2,9 @@ package token
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/global"
-	output "github.com/Henry19910227/fitness-go/internal/model/base"
 	"github.com/Henry19910227/fitness-go/internal/tool"
 	"github.com/Henry19910227/fitness-go/internal/util"
+	output "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"

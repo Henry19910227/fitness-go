@@ -6,137 +6,6 @@
         "contact": {}
     },
     "paths": {
-        "/cms/course/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取課表詳細",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CMS/Course_v2"
-                ],
-                "summary": "獲取課表詳細",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/course.APIGetCMSCourseOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/cms/courses": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取課表列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CMS/Course_v2"
-                ],
-                "summary": "獲取課表列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "課表名稱",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
-                        "name": "course_status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                        "name": "sale_type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "排序欄位 (create_at:創建時間)",
-                        "name": "order_field",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
-                        "name": "order_type",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "頁數(從第一頁開始)",
-                        "name": "page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "筆數",
-                        "name": "size",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/course.APIGetCMSCoursesOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/action/{action_id}": {
             "delete": {
                 "security": [
@@ -7589,6 +7458,137 @@
                         "description": "刪除失敗",
                         "schema": {
                             "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/cms/course/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表詳細",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Course_v2"
+                ],
+                "summary": "獲取課表詳細",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetCMSCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/cms/courses": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Course_v2"
+                ],
+                "summary": "獲取課表列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "課表名稱",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                        "name": "course_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                        "name": "sale_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetCMSCoursesOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
                         }
                     }
                 }

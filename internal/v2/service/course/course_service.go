@@ -1,10 +1,10 @@
 package course
 
 import (
-	model "github.com/Henry19910227/fitness-go/internal/model/course"
-	"github.com/Henry19910227/fitness-go/internal/model/paging"
-	"github.com/Henry19910227/fitness-go/internal/repository/course"
 	"github.com/Henry19910227/fitness-go/internal/util"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
+	"github.com/Henry19910227/fitness-go/internal/v2/repository/course"
 )
 
 type service struct {

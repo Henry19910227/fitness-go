@@ -2,8 +2,8 @@ package course
 
 import (
 	"fmt"
-	model "github.com/Henry19910227/fitness-go/internal/model/course"
 	"github.com/Henry19910227/fitness-go/internal/tool"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 )
 
 type repository struct {

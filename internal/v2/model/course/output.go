@@ -1,11 +1,11 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/model/base"
-	"github.com/Henry19910227/fitness-go/internal/model/paging"
-	productLabel "github.com/Henry19910227/fitness-go/internal/model/product_label"
-	saleItem "github.com/Henry19910227/fitness-go/internal/model/sale_item"
-	"github.com/Henry19910227/fitness-go/internal/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
+	productLabel "github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
+	saleItem "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 )
 
 type Table struct {

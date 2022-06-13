@@ -1,6 +1,6 @@
 package sale_item
 
-import "github.com/Henry19910227/fitness-go/internal/model/product_label"
+import "github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
 
 type Table struct {
 	IDField

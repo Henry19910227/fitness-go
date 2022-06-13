@@ -1,8 +1,8 @@
 package course
 
 import (
-	model "github.com/Henry19910227/fitness-go/internal/model/course"
-	"github.com/Henry19910227/fitness-go/internal/model/paging"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 )
 
 type Service interface {
