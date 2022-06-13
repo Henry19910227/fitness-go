@@ -1,8 +1,8 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/global"
-	"github.com/Henry19910227/fitness-go/internal/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/global"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
 	"github.com/Henry19910227/fitness-go/internal/v2/controller/course"
 	middleware "github.com/Henry19910227/fitness-go/internal/v2/middleware/token"
 	"github.com/gin-gonic/gin"

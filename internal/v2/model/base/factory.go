@@ -1,6 +1,6 @@
 package base
 
-import "github.com/Henry19910227/fitness-go/code"
+import "github.com/Henry19910227/fitness-go/internal/pkg/code"
 
 func BadRequest(msg *string) *Output {
 	output := Output{}

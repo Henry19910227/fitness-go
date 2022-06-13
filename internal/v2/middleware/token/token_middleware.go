@@ -1,11 +1,11 @@
 package token
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/global"
-	"github.com/Henry19910227/fitness-go/internal/tool"
-	"github.com/Henry19910227/fitness-go/internal/util"
+	"github.com/Henry19910227/fitness-go/internal/pkg/global"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	"github.com/Henry19910227/fitness-go/internal/v1/validator"
 	output "github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	"github.com/Henry19910227/fitness-go/internal/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -17,7 +17,7 @@ var (
 )
 
 type middleware struct {
-	jwtTool tool.JWT
+	jwtTool   tool.JWT
 	redisTool tool.Redis
 }
 

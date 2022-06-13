@@ -1,8 +1,8 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/code"
-	"github.com/Henry19910227/fitness-go/internal/util"
+	"github.com/Henry19910227/fitness-go/internal/pkg/code"
+	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"

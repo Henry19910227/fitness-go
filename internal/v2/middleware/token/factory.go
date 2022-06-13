@@ -1,8 +1,8 @@
 package token
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/setting"
-	"github.com/Henry19910227/fitness-go/internal/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/setting"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
 	"github.com/spf13/viper"
 )
 

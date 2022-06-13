@@ -2,7 +2,7 @@ package course
 
 import (
 	"fmt"
-	"github.com/Henry19910227/fitness-go/internal/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 )
 

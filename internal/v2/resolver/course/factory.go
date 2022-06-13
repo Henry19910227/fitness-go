@@ -1,7 +1,7 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
 )
 

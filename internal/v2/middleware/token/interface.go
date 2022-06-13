@@ -1,7 +1,7 @@
 package token
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/global"
+	"github.com/Henry19910227/fitness-go/internal/pkg/global"
 	"github.com/gin-gonic/gin"
 )
 

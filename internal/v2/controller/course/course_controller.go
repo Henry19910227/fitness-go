@@ -1,7 +1,7 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/util"
+	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"

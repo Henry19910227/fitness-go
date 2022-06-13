@@ -1,7 +1,7 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/util"
+	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/course"
