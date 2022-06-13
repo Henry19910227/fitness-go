@@ -605,6 +605,94 @@ var doc = `{
                 }
             }
         },
+        "/cms/courses": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Course"
+                ],
+                "summary": "獲取課表列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "課表名稱",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                        "name": "course_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                        "name": "sale_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetCMSCoursesOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/cms/login": {
             "post": {
                 "description": "管理者登入",
@@ -7013,7 +7101,7 @@ var doc = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "date": {
+                                        "data": {
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/definitions/dto.WorkoutLogSummary"
@@ -7483,6 +7571,92 @@ var doc = `{
         }
     },
     "definitions": {
+        "base.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "course.APIGetCMSCoursesOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "course_status": {
+                                "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                                "type": "integer",
+                                "example": 3
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-12 00:00:00"
+                            },
+                            "id": {
+                                "description": "課表 id",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "name": {
+                                "description": "課表名稱",
+                                "type": "string",
+                                "example": "增肌課表"
+                            },
+                            "sale_type": {
+                                "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                                "type": "integer",
+                                "example": 3
+                            },
+                            "schedule_type": {
+                                "description": "排課類別(1:單一訓練/2:多項計畫)",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "trainer": {
+                                "type": "object",
+                                "properties": {
+                                    "nickname": {
+                                        "description": "教練暱稱",
+                                        "type": "string",
+                                        "example": "Henry"
+                                    },
+                                    "user_id": {
+                                        "description": "用戶id",
+                                        "type": "integer",
+                                        "example": 10001
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
         "dto.Action": {
             "type": "object",
             "properties": {
@@ -11078,6 +11252,35 @@ var doc = `{
                     "description": "教練名稱",
                     "type": "string",
                     "example": "henry"
+                }
+            }
+        },
+        "paging.Output": {
+            "type": "object",
+            "required": [
+                "page",
+                "size"
+            ],
+            "properties": {
+                "page": {
+                    "description": "當前頁數",
+                    "type": "integer",
+                    "example": 1
+                },
+                "size": {
+                    "description": "一頁筆數",
+                    "type": "integer",
+                    "example": 5
+                },
+                "total_count": {
+                    "description": "總筆數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "total_page": {
+                    "description": "總頁數",
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },

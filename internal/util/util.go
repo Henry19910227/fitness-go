@@ -1,6 +1,7 @@
 package util
 
 import (
+	"math"
 	"time"
 )
 
@@ -21,4 +22,12 @@ func GetAge(birthday time.Time) (age int) {
 		age--
 	}
 	return age
+}
+
+func Pagination(totalCount int, size int) int {
+	totalPage := int(math.Ceil(float64(totalCount) / float64(size)))
+	if totalPage < 0 {
+		return 0
+	}
+	return totalPage
 }

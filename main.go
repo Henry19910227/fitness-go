@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/handler"
 	"github.com/Henry19910227/fitness-go/internal/middleware"
 	"github.com/Henry19910227/fitness-go/internal/repository"
+	"github.com/Henry19910227/fitness-go/internal/router/course"
 	"github.com/Henry19910227/fitness-go/internal/service"
 	"github.com/Henry19910227/fitness-go/internal/setting"
 	"github.com/Henry19910227/fitness-go/internal/tool"
@@ -169,6 +170,8 @@ func main() {
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 	schedulerTool.Start()
+
+	router = course.GetRoute(router, gormTool, redisTool, viperTool)
 	router.Run(":" + viperTool.GetString("Server.HttpPort"))
 }
 

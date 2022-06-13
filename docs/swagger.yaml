@@ -1,4 +1,68 @@
 definitions:
+  base.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  course.APIGetCMSCoursesOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            course_status:
+              description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+              example: 3
+              type: integer
+            create_at:
+              description: 創建時間
+              example: "2022-06-12 00:00:00"
+              type: string
+            id:
+              description: 課表 id
+              example: 2
+              type: integer
+            name:
+              description: 課表名稱
+              example: 增肌課表
+              type: string
+            sale_type:
+              description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+              example: 3
+              type: integer
+            schedule_type:
+              description: 排課類別(1:單一訓練/2:多項計畫)
+              example: 2
+              type: integer
+            trainer:
+              properties:
+                nickname:
+                  description: 教練暱稱
+                  example: Henry
+                  type: string
+                user_id:
+                  description: 用戶id
+                  example: 10001
+                  type: integer
+              type: object
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
+    type: object
   dto.Action:
     properties:
       body:
@@ -2732,6 +2796,28 @@ definitions:
         example: henry
         type: string
     type: object
+  paging.Output:
+    properties:
+      page:
+        description: 當前頁數
+        example: 1
+        type: integer
+      size:
+        description: 一頁筆數
+        example: 5
+        type: integer
+      total_count:
+        description: 總筆數
+        example: 100
+        type: integer
+      total_page:
+        description: 總頁數
+        example: 10
+        type: integer
+    required:
+    - page
+    - size
+    type: object
   registerdto.OTP:
     properties:
       otp_code:
@@ -3673,6 +3759,64 @@ paths:
       summary: 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
       tags:
       - Diet
+  /cms/courses:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表列表
+      parameters:
+      - description: 課表ID
+        in: query
+        name: id
+        type: integer
+      - description: 課表名稱
+        in: query
+        name: name
+        type: string
+      - description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        in: query
+        name: course_status
+        type: integer
+      - description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        in: query
+        name: sale_type
+        type: integer
+      - description: 排序欄位 (create_at:創建時間)
+        in: query
+        name: order_field
+        required: true
+        type: string
+      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
+        in: query
+        name: order_type
+        required: true
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/course.APIGetCMSCoursesOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取課表列表
+      tags:
+      - CMS/Course
   /cms/login:
     post:
       consumes:
@@ -7560,7 +7704,7 @@ paths:
             allOf:
             - $ref: '#/definitions/model.SuccessResult'
             - properties:
-                date:
+                data:
                   items:
                     $ref: '#/definitions/dto.WorkoutLogSummary'
                   type: array

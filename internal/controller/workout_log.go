@@ -64,7 +64,7 @@ func (p *WorkoutLog) GetWorkoutLog(c *gin.Context) {
 // @Security fitness_token
 // @Param start_date query string true "區間開始日期 YYYY-MM-DD"
 // @Param end_date query string true "區間結束日期 YYYY-MM-DD"
-// @Success 200 {object} model.SuccessResult{date=[]dto.WorkoutLogSummary} "獲取成功!"
+// @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutLogSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
 // @Router /workout_logs [GET]
 func (p *WorkoutLog) GetWorkoutLogSummaries(c *gin.Context) {
