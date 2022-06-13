@@ -80,7 +80,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 // UpdateWorkoutSet 修改訓練組
 // @Summary 修改訓練組
 // @Description 修改訓練組
-// @Tags WorkoutSet
+// @Tags WorkoutSet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -88,7 +88,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 // @Param json_body body validator.UpdateWorkoutSetBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.WorkoutSet} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
-// @Router /workout_set/{workout_set_id} [PATCH]
+// @Router /v1/workout_set/{workout_set_id} [PATCH]
 func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 	var uri validator.WorkoutSetIDUri
 	var body validator.UpdateWorkoutSetBody
@@ -119,14 +119,14 @@ func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 // DeleteWorkoutSet 刪除訓練組
 // @Summary 刪除訓練組
 // @Description 刪除訓練組
-// @Tags WorkoutSet
+// @Tags WorkoutSet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Success 200 {object} model.SuccessResult{data=dto.WorkoutSetID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
-// @Router /workout_set/{workout_set_id} [DELETE]
+// @Router /v1/workout_set/{workout_set_id} [DELETE]
 func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
 	var uri validator.WorkoutSetIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -144,7 +144,7 @@ func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
 // UploadWorkoutSetStartAudio 上傳訓練組前導語音
 // @Summary 上傳訓練組前導語音
 // @Description 下載訓練組前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}
-// @Tags WorkoutSet
+// @Tags WorkoutSet_v1
 // @Security fitness_token
 // @Accept mpfd
 // @Param workout_set_id path int64 true "訓練組id"
@@ -152,7 +152,7 @@ func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} model.SuccessResult{data=dto.WorkoutAudio} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /workout_set/{workout_set_id}/start_audio [POST]
+// @Router /v1/workout_set/{workout_set_id}/start_audio [POST]
 func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
 	var uri validator.WorkoutSetIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -175,14 +175,14 @@ func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
 // DeleteWorkoutSetStartAudio 刪除訓練組前導語音
 // @Summary 刪除訓練組前導語音
 // @Description 刪除訓練組前導語音
-// @Tags WorkoutSet
+// @Tags WorkoutSet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
-// @Router /workout_set/{workout_set_id}/start_audio [DELETE]
+// @Router /v1/workout_set/{workout_set_id}/start_audio [DELETE]
 func (w *workoutset) DeleteWorkoutSetStartAudio(c *gin.Context) {
 	var uri validator.WorkoutSetIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -199,7 +199,7 @@ func (w *workoutset) DeleteWorkoutSetStartAudio(c *gin.Context) {
 // UploadWorkoutSetProgressAudio 上傳訓練組進行中語音
 // @Summary 上傳訓練組進行中語音
 // @Description 下載訓練組進行中語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}
-// @Tags WorkoutSet
+// @Tags WorkoutSet_v1
 // @Security fitness_token
 // @Accept mpfd
 // @Param workout_set_id path int64 true "訓練組id"
@@ -207,7 +207,7 @@ func (w *workoutset) DeleteWorkoutSetStartAudio(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} model.SuccessResult{data=dto.WorkoutAudio} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /workout_set/{workout_set_id}/progress_audio [POST]
+// @Router /v1/workout_set/{workout_set_id}/progress_audio [POST]
 func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
 	var uri validator.WorkoutSetIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -230,14 +230,14 @@ func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
 // DeleteWorkoutSetProgressAudio 刪除訓練組進行中語音
 // @Summary 刪除訓練組進行中語音
 // @Description 刪除訓練組進行中語音
-// @Tags WorkoutSet
+// @Tags WorkoutSet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param workout_set_id path int64 true "訓練組id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
-// @Router /workout_set/{workout_set_id}/progress_audio [DELETE]
+// @Router /v1/workout_set/{workout_set_id}/progress_audio [DELETE]
 func (w *workoutset) DeleteWorkoutSetProgressAudio(c *gin.Context) {
 	var uri validator.WorkoutSetIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -254,7 +254,7 @@ func (w *workoutset) DeleteWorkoutSetProgressAudio(c *gin.Context) {
 // DuplicateWorkoutSet 複製訓練組
 // @Summary 複製訓練組
 // @Description 複製訓練組
-// @Tags WorkoutSet
+// @Tags WorkoutSet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -262,7 +262,7 @@ func (w *workoutset) DeleteWorkoutSetProgressAudio(c *gin.Context) {
 // @Param json_body body validator.DuplicateWorkoutSetBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "複製成功!"
 // @Failure 400 {object} model.ErrorResult "複製失敗"
-// @Router /workout_set/{workout_set_id}/duplicate [POST]
+// @Router /v1/workout_set/{workout_set_id}/duplicate [POST]
 func (w *workoutset) DuplicateWorkoutSet(c *gin.Context) {
 	var uri validator.WorkoutSetIDUri
 	var body validator.DuplicateWorkoutSetBody

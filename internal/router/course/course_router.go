@@ -9,11 +9,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func GetRoute(route *gin.Engine, gormTool tool.Gorm, redisTool tool.Redis, viperTool *viper.Viper) *gin.Engine {
+func SetRoute(baseGroup *gin.RouterGroup, gormTool tool.Gorm, redisTool tool.Redis, viperTool *viper.Viper) {
 	controller := course.NewController(gormTool)
 	midd := middleware.NewTokenMiddleware(redisTool, viperTool)
-	v1 := route.Group("/api/v1")
-	v1.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)
-	v1.GET("/cms/course/:id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
-	return route
+	baseGroup.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)
+	baseGroup.GET("/cms/course/:id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
 }

@@ -28,13 +28,13 @@ func NewSale(baseGroup *gin.RouterGroup, saleService service.Sale, userMidd midd
 // GetSaleItems 取得銷售項目清單
 // @Summary  取得銷售項目清單
 // @Description  取得銷售項目清單
-// @Tags Sale
+// @Tags Sale_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=[]dto.SaleItem} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /sale_items [GET]
+// @Router /v1/sale_items [GET]
 func (s *Sale) GetSaleItems(c *gin.Context) {
 	saleItems, err := s.saleService.GetSaleItems(c)
 	if err != nil {
@@ -47,13 +47,13 @@ func (s *Sale) GetSaleItems(c *gin.Context) {
 // GetSubscribePlans 取得訂閱方案清單
 // @Summary  取得訂閱方案清單
 // @Description  取得訂閱方案清單
-// @Tags Sale
+// @Tags Sale_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=[]dto.SubscribePlan} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /subscribe_plans [GET]
+// @Router /v1/subscribe_plans [GET]
 func (s *Sale) GetSubscribePlans(c *gin.Context) {
 	subscribePlans, err := s.saleService.GetSubscribePlans(c)
 	if err != nil {

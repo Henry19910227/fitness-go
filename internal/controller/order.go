@@ -26,7 +26,7 @@ func NewOrder(baseGroup *gin.RouterGroup, orderService service.Order, userMiddle
 // GetCMSUserOrders 獲取用戶購買歷史訂單
 // @Summary 獲取用戶購買歷史訂單
 // @Description 獲取用戶購買歷史訂單
-// @Tags CMS/User
+// @Tags CMS/User_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -37,7 +37,7 @@ func NewOrder(baseGroup *gin.RouterGroup, orderService service.Order, userMiddle
 // @Param size query int true "筆數"
 // @Success 200 {object} model.SuccessResult{data=[]order.CMSUserOrdersAPI} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /cms/user/{user_id}/orders [GET]
+// @Router /v1/cms/user/{user_id}/orders [GET]
 func (o *Order) GetCMSUserOrders(c *gin.Context) {
 	var uri validator.UserIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

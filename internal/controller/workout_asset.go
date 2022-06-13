@@ -36,14 +36,14 @@ func NewWorkoutAsset(baseGroup *gin.RouterGroup, workoutService service.Workout,
 // GetWorkoutSets 獲取訓練組列表
 // @Summary 獲取訓練組列表
 // @Description 獲取訓練組列表
-// @Tags Exercise
+// @Tags Exercise_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param workout_id path int64 true "訓練id"
 // @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /workout_asset/{workout_id}/workout_sets [GET]
+// @Router /v1/workout_asset/{workout_id}/workout_sets [GET]
 func (p *WorkoutAsset) GetWorkoutSets(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {
@@ -66,7 +66,7 @@ func (p *WorkoutAsset) GetWorkoutSets(c *gin.Context) {
 // CreateWorkoutLog 創建訓練記錄
 // @Summary 創建訓練記錄
 // @Description 創建訓練記錄
-// @Tags Exercise
+// @Tags Exercise_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -74,7 +74,7 @@ func (p *WorkoutAsset) GetWorkoutSets(c *gin.Context) {
 // @Param json_body body validator.CreateWorkoutLogBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSetLogTag} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /workout_asset/{workout_id}/workout_log [POST]
+// @Router /v1/workout_asset/{workout_id}/workout_log [POST]
 func (p *WorkoutAsset) CreateWorkoutLog(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {

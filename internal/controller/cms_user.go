@@ -32,7 +32,7 @@ func NewCMSUser(baseGroup *gin.RouterGroup, userService service.User, userMiddle
 // GetUsers 獲取用戶列表
 // @Summary 獲取用戶列表
 // @Description 獲取用戶列表
-// @Tags CMS/User
+// @Tags CMS/User_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -47,7 +47,7 @@ func NewCMSUser(baseGroup *gin.RouterGroup, userService service.User, userMiddle
 // @Param size query int true "筆數"
 // @Success 200 {object} model.SuccessResult{data=[]dto.CMSUserSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /cms/users [GET]
+// @Router /v1/cms/users [GET]
 func (u *CMSUser) GetUsers(c *gin.Context) {
 	var form validator.CMSGetUsersQuery
 	if err := c.ShouldBind(&form); err != nil {
@@ -87,14 +87,14 @@ func (u *CMSUser) GetUsers(c *gin.Context) {
 // GetUser 取得用戶詳細資訊
 // @Summary 取得用戶詳細資訊
 // @Description 取得用戶詳細資訊
-// @Tags CMS/User
+// @Tags CMS/User_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param user_id path int64 true "用戶id"
 // @Success 200 {object} model.SuccessResult{data=dto.CMSUser} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /cms/user/{user_id} [GET]
+// @Router /v1/cms/user/{user_id} [GET]
 func (u *CMSUser) GetUser(c *gin.Context) {
 	var uri validator.UserIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -112,7 +112,7 @@ func (u *CMSUser) GetUser(c *gin.Context) {
 // UpdateUser 更新用戶資訊
 // @Summary 更新用戶資訊
 // @Description 更新用戶資訊
-// @Tags CMS/User
+// @Tags CMS/User_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -120,7 +120,7 @@ func (u *CMSUser) GetUser(c *gin.Context) {
 // @Param json_body body validator.CMSUpdateUserBody true "更新欄位"
 // @Success 200 {object} model.SuccessResult{data=dto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /cms/user/{user_id} [PATCH]
+// @Router /v1/cms/user/{user_id} [PATCH]
 func (u *CMSUser) UpdateUser(c *gin.Context) {
 	var uri validator.UserIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

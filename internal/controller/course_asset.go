@@ -40,14 +40,14 @@ func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, pl
 // GetCourseAsset 獲取課表詳細
 // @Summary 獲取課表詳細
 // @Description 獲取課表詳細
-// @Tags Exercise
+// @Tags Exercise_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseAsset} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_asset/{course_id} [GET]
+// @Router /v1/course_asset/{course_id} [GET]
 func (a *CourseAsset) GetCourseAsset(c *gin.Context) {
 	uid, e := a.GetUID(c)
 	if e != nil {
@@ -70,14 +70,14 @@ func (a *CourseAsset) GetCourseAsset(c *gin.Context) {
 // GetCourseAssetStructure 獲取課表結構(只限單一訓練課表)
 // @Summary 獲取課表結構
 // @Description 單一訓練的課表使用
-// @Tags Exercise
+// @Tags Exercise_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseAssetStructure} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_asset_structure/{course_id} [GET]
+// @Router /v1/course_asset_structure/{course_id} [GET]
 func (a *CourseAsset) GetCourseAssetStructure(c *gin.Context) {
 	uid, e := a.GetUID(c)
 	if e != nil {
@@ -100,7 +100,7 @@ func (a *CourseAsset) GetCourseAssetStructure(c *gin.Context) {
 // GetCourseAssets 獲取課表列表
 // @Summary 獲取課表
 // @Description 獲取課表
-// @Tags Exercise
+// @Tags Exercise_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -109,7 +109,7 @@ func (a *CourseAsset) GetCourseAssetStructure(c *gin.Context) {
 // @Param size query int true "筆數"
 // @Success 200 {object} model.SuccessResult{data=[]dto.CourseAssetSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_assets [GET]
+// @Router /v1/course_assets [GET]
 func (a *CourseAsset) GetCourseAssets(c *gin.Context) {
 	uid, e := a.GetUID(c)
 	if e != nil {
@@ -141,14 +141,14 @@ func (a *CourseAsset) GetCourseAssets(c *gin.Context) {
 // GetPlanAssets 獲取課表計畫列表
 // @Summary 獲取課表計畫列表
 // @Description 獲取課表計畫列表
-// @Tags Exercise
+// @Tags Exercise_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=[]dto.PlanAsset} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_asset/{course_id}/plans [GET]
+// @Router /v1/course_asset/{course_id}/plans [GET]
 func (a *CourseAsset) GetPlanAssets(c *gin.Context) {
 	uid, e := a.GetUID(c)
 	if e != nil {

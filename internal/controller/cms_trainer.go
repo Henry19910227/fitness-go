@@ -37,7 +37,7 @@ func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, c
 // GetTrainers 獲取教練列表
 // @Summary 獲取教練列表
 // @Description 獲取教練列表
-// @Tags CMS/Trainer
+// @Tags CMS/Trainer_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -51,7 +51,7 @@ func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, c
 // @Param size query int true "筆數"
 // @Success 200 {object} model.SuccessPagingResult{data=[]dto.CMSTrainerSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /cms/trainers [GET]
+// @Router /v1/cms/trainers [GET]
 func (t *CMSTrainer) GetTrainers(c *gin.Context) {
 	var form validator.CMSGetTrainersQuery
 	if err := c.ShouldBind(&form); err != nil {
@@ -90,14 +90,14 @@ func (t *CMSTrainer) GetTrainers(c *gin.Context) {
 // GetTrainer 取得教練詳細資訊
 // @Summary 取得教練詳細資訊
 // @Description 取得教練詳細資訊
-// @Tags CMS/Trainer
+// @Tags CMS/Trainer_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param user_id path int64 true "教練id"
 // @Success 200 {object} model.SuccessPagingResult{data=dto.CMSTrainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /cms/trainer/{user_id} [GET]
+// @Router /v1/cms/trainer/{user_id} [GET]
 func (t *CMSTrainer) GetTrainer(c *gin.Context) {
 	var uri validator.TrainerIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -115,7 +115,7 @@ func (t *CMSTrainer) GetTrainer(c *gin.Context) {
 // UpdateTrainer 更新教練資訊
 // @Summary 更新教練資訊
 // @Description 更新教練資訊
-// @Tags CMS/Trainer
+// @Tags CMS/Trainer_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -123,7 +123,7 @@ func (t *CMSTrainer) GetTrainer(c *gin.Context) {
 // @Param json_body body validator.UpdateTrainerBody true "更新欄位"
 // @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /cms/trainer/{user_id} [PATCH]
+// @Router /v1/cms/trainer/{user_id} [PATCH]
 func (t *CMSTrainer) UpdateTrainer(c *gin.Context) {
 	var uri validator.TrainerIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -149,7 +149,7 @@ func (t *CMSTrainer) UpdateTrainer(c *gin.Context) {
 // GetTrainerCourses 取得教練所屬的課表
 // @Summary 取得教練所屬的課表
 // @Description 取得教練所屬的課表
-// @Tags CMS/Trainer
+// @Tags CMS/Trainer_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -160,7 +160,7 @@ func (t *CMSTrainer) UpdateTrainer(c *gin.Context) {
 // @Param size query int true "筆數"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /cms/trainer/{user_id}/courses [GET]
+// @Router /v1/cms/trainer/{user_id}/courses [GET]
 func (t *CMSTrainer) GetTrainerCourses(c *gin.Context) {
 	var uri validator.TrainerIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

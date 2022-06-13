@@ -60,7 +60,7 @@ func NewPlan(baseGroup *gin.RouterGroup,
 // UpdatePlan 修改計畫
 // @Summary 修改計畫
 // @Description 修改計畫
-// @Tags Plan
+// @Tags Plan_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -68,7 +68,7 @@ func NewPlan(baseGroup *gin.RouterGroup,
 // @Param json_body body validator.UpdatePlanBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Plan} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
-// @Router /plan/{plan_id} [PATCH]
+// @Router /v1/plan/{plan_id} [PATCH]
 func (p *Plan) UpdatePlan(c *gin.Context) {
 	var uri validator.PlanIDUri
 	var body validator.UpdatePlanBody
@@ -91,14 +91,14 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 // DeletePlan 刪除計畫
 // @Summary 刪除計畫
 // @Description 刪除計畫
-// @Tags Plan
+// @Tags Plan_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
 // @Success 200 {object} model.SuccessResult{data=dto.PlanID} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /plan/{plan_id} [DELETE]
+// @Router /v1/plan/{plan_id} [DELETE]
 func (p *Plan) DeletePlan(c *gin.Context) {
 	var uri validator.PlanIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -116,7 +116,7 @@ func (p *Plan) DeletePlan(c *gin.Context) {
 // CreateWorkout 創建訓練
 // @Summary 創建訓練
 // @Description 創建訓練
-// @Tags Plan
+// @Tags Plan_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -124,7 +124,7 @@ func (p *Plan) DeletePlan(c *gin.Context) {
 // @Param json_body body validator.CreateWorkoutBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Workout} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
-// @Router /plan/{plan_id}/workout [POST]
+// @Router /v1/plan/{plan_id}/workout [POST]
 func (p *Plan) CreateWorkout(c *gin.Context) {
 	var uri validator.PlanIDUri
 	var body validator.CreateWorkoutBody
@@ -167,14 +167,14 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 // GetWorkouts 取得計畫內的訓練列表
 // @Summary  取得計畫內的訓練列表
 // @Description  取得計畫內的訓練列表
-// @Tags Plan
+// @Tags Plan_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
 // @Success 200 {object} model.SuccessResult{data=[]dto.Workout} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /plan/{plan_id}/workouts [GET]
+// @Router /v1/plan/{plan_id}/workouts [GET]
 func (p *Plan) GetWorkouts(c *gin.Context) {
 	var uri validator.PlanIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

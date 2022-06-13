@@ -33,14 +33,14 @@ func NewFood(baseGroup *gin.RouterGroup, foodService service.Food, userMiddlewar
 // CreateFood 創建食物
 // @Summary 創建食物
 // @Description 創建食物
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.CreateFoodBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Food} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /food [POST]
+// @Router /v1/food [POST]
 func (f *Food) CreateFood(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {
@@ -69,14 +69,14 @@ func (f *Food) CreateFood(c *gin.Context) {
 // GetFoods 獲取食物列表
 // @Summary 獲取食物列表
 // @Description 獲取食物列表
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param food_category_tag query int true "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)"
 // @Success 200 {object} model.SuccessResult{data=[]dto.Food} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /foods [GET]
+// @Router /v1/foods [GET]
 func (f *Food) GetFoods(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {
@@ -99,13 +99,13 @@ func (f *Food) GetFoods(c *gin.Context) {
 // GetRecentFoods 獲取食物歷程列表
 // @Summary 獲取食物歷程列表
 // @Description 獲取食物歷程列表
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=[]dto.RecentFood} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /recent_foods [GET]
+// @Router /v1/recent_foods [GET]
 func (f *Food) GetRecentFoods(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {
@@ -123,14 +123,14 @@ func (f *Food) GetRecentFoods(c *gin.Context) {
 // DeleteFood 刪除食物
 // @Summary 刪除食物
 // @Description 刪除食物
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param food_id path int64 true "食物id"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /food/{food_id} [DELETE]
+// @Router /v1/food/{food_id} [DELETE]
 func (f *Food) DeleteFood(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {

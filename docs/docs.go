@@ -24,7 +24,138 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/action/{action_id}": {
+        "/cms/course/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表詳細",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Course_v2"
+                ],
+                "summary": "獲取課表詳細",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetCMSCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/cms/courses": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS/Course_v2"
+                ],
+                "summary": "獲取課表列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "課表名稱",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                        "name": "course_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                        "name": "sale_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetCMSCoursesOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/action/{action_id}": {
             "delete": {
                 "security": [
                     {
@@ -39,7 +170,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Action"
+                    "Action_v1"
                 ],
                 "summary": "刪除動作",
                 "parameters": [
@@ -92,7 +223,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Action"
+                    "Action_v1"
                 ],
                 "summary": "修改動作",
                 "parameters": [
@@ -174,7 +305,7 @@ var doc = `{
                 }
             }
         },
-        "/action/{action_id}/best_personal_record": {
+        "/v1/action/{action_id}/best_personal_record": {
             "get": {
                 "security": [
                     {
@@ -189,7 +320,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Action"
+                    "Action_v1"
                 ],
                 "summary": "獲取動作個人最佳紀錄",
                 "parameters": [
@@ -229,7 +360,7 @@ var doc = `{
                 }
             }
         },
-        "/action/{action_id}/video": {
+        "/v1/action/{action_id}/video": {
             "delete": {
                 "security": [
                     {
@@ -244,7 +375,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Action"
+                    "Action_v1"
                 ],
                 "summary": "刪除動作影片",
                 "parameters": [
@@ -272,7 +403,7 @@ var doc = `{
                 }
             }
         },
-        "/action/{action_id}/workout_set_logs": {
+        "/v1/action/{action_id}/workout_set_logs": {
             "get": {
                 "security": [
                     {
@@ -287,7 +418,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Action"
+                    "Action_v1"
                 ],
                 "summary": "以日期獲取動作訓練組紀錄",
                 "parameters": [
@@ -344,7 +475,7 @@ var doc = `{
                 }
             }
         },
-        "/actions": {
+        "/v1/actions": {
             "get": {
                 "security": [
                     {
@@ -359,7 +490,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Action"
+                    "Action_v1"
                 ],
                 "summary": "搜尋動作庫的動作列表",
                 "parameters": [
@@ -419,7 +550,7 @@ var doc = `{
                 }
             }
         },
-        "/app_store/access_token": {
+        "/v1/app_store/access_token": {
             "get": {
                 "description": "取得 Apple Store api access token",
                 "consumes": [
@@ -429,7 +560,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "取得 Apple Store api access token",
                 "responses": {
@@ -448,7 +579,7 @@ var doc = `{
                 }
             }
         },
-        "/app_store/history/{original_transaction_id}": {
+        "/v1/app_store/history/{original_transaction_id}": {
             "get": {
                 "description": "獲取交易歷史資料(測試用)",
                 "consumes": [
@@ -458,7 +589,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "獲取交易歷史資料(測試用)",
                 "parameters": [
@@ -498,7 +629,7 @@ var doc = `{
                 }
             }
         },
-        "/app_store/subscriptions/{original_transaction_id}": {
+        "/v1/app_store/subscriptions/{original_transaction_id}": {
             "get": {
                 "description": "獲取訂閱資料(測試用)",
                 "consumes": [
@@ -508,7 +639,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "獲取訂閱資料(測試用)",
                 "parameters": [
@@ -548,7 +679,7 @@ var doc = `{
                 }
             }
         },
-        "/calculate_rda": {
+        "/v1/calculate_rda": {
             "post": {
                 "security": [
                     {
@@ -563,7 +694,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)",
                 "parameters": [
@@ -605,138 +736,7 @@ var doc = `{
                 }
             }
         },
-        "/cms/course/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取課表詳細",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CMS/Course"
-                ],
-                "summary": "獲取課表詳細",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/course.APIGetCMSCourseOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/cms/courses": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取課表列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CMS/Course"
-                ],
-                "summary": "獲取課表列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "課表名稱",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
-                        "name": "course_status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
-                        "name": "sale_type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "排序欄位 (create_at:創建時間)",
-                        "name": "order_field",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
-                        "name": "order_type",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "頁數(從第一頁開始)",
-                        "name": "page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "筆數",
-                        "name": "size",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/course.APIGetCMSCoursesOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/cms/login": {
+        "/v1/cms/login": {
             "post": {
                 "description": "管理者登入",
                 "consumes": [
@@ -746,7 +746,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/Login"
+                    "CMS/Login_v1"
                 ],
                 "summary": "管理者登入",
                 "parameters": [
@@ -788,7 +788,7 @@ var doc = `{
                 }
             }
         },
-        "/cms/logout": {
+        "/v1/cms/logout": {
             "post": {
                 "security": [
                     {
@@ -803,7 +803,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/Login"
+                    "CMS/Login_v1"
                 ],
                 "summary": "管理者登出",
                 "responses": {
@@ -822,7 +822,7 @@ var doc = `{
                 }
             }
         },
-        "/cms/trainer/{user_id}": {
+        "/v1/cms/trainer/{user_id}": {
             "get": {
                 "security": [
                     {
@@ -837,7 +837,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/Trainer"
+                    "CMS/Trainer_v1"
                 ],
                 "summary": "取得教練詳細資訊",
                 "parameters": [
@@ -890,7 +890,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/Trainer"
+                    "CMS/Trainer_v1"
                 ],
                 "summary": "更新教練資訊",
                 "parameters": [
@@ -939,7 +939,7 @@ var doc = `{
                 }
             }
         },
-        "/cms/trainer/{user_id}/courses": {
+        "/v1/cms/trainer/{user_id}/courses": {
             "get": {
                 "security": [
                     {
@@ -954,7 +954,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/Trainer"
+                    "CMS/Trainer_v1"
                 ],
                 "summary": "取得教練所屬的課表",
                 "parameters": [
@@ -1020,7 +1020,7 @@ var doc = `{
                 }
             }
         },
-        "/cms/trainers": {
+        "/v1/cms/trainers": {
             "get": {
                 "security": [
                     {
@@ -1035,7 +1035,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/Trainer"
+                    "CMS/Trainer_v1"
                 ],
                 "summary": "獲取教練列表",
                 "parameters": [
@@ -1121,7 +1121,7 @@ var doc = `{
                 }
             }
         },
-        "/cms/user/{user_id}": {
+        "/v1/cms/user/{user_id}": {
             "get": {
                 "security": [
                     {
@@ -1136,7 +1136,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/User"
+                    "CMS/User_v1"
                 ],
                 "summary": "取得用戶詳細資訊",
                 "parameters": [
@@ -1189,7 +1189,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/User"
+                    "CMS/User_v1"
                 ],
                 "summary": "更新用戶資訊",
                 "parameters": [
@@ -1238,7 +1238,7 @@ var doc = `{
                 }
             }
         },
-        "/cms/user/{user_id}/orders": {
+        "/v1/cms/user/{user_id}/orders": {
             "get": {
                 "security": [
                     {
@@ -1253,7 +1253,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/User"
+                    "CMS/User_v1"
                 ],
                 "summary": "獲取用戶購買歷史訂單",
                 "parameters": [
@@ -1324,7 +1324,7 @@ var doc = `{
                 }
             }
         },
-        "/cms/users": {
+        "/v1/cms/users": {
             "get": {
                 "security": [
                     {
@@ -1339,7 +1339,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/User"
+                    "CMS/User_v1"
                 ],
                 "summary": "獲取用戶列表",
                 "parameters": [
@@ -1431,7 +1431,7 @@ var doc = `{
                 }
             }
         },
-        "/course": {
+        "/v1/course": {
             "post": {
                 "security": [
                     {
@@ -1446,7 +1446,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "創建課表",
                 "parameters": [
@@ -1488,7 +1488,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}": {
+        "/v1/course/{course_id}": {
             "get": {
                 "security": [
                     {
@@ -1503,7 +1503,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "獲取課表詳細",
                 "parameters": [
@@ -1556,7 +1556,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "刪除課表",
                 "parameters": [
@@ -1609,7 +1609,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "更新課表",
                 "parameters": [
@@ -1658,7 +1658,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/action": {
+        "/v1/course/{course_id}/action": {
             "post": {
                 "security": [
                     {
@@ -1673,7 +1673,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "創建動作",
                 "parameters": [
@@ -1768,7 +1768,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/actions": {
+        "/v1/course/{course_id}/actions": {
             "get": {
                 "security": [
                     {
@@ -1783,7 +1783,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "搜尋動作列表",
                 "parameters": [
@@ -1856,7 +1856,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/cover": {
+        "/v1/course/{course_id}/cover": {
             "post": {
                 "security": [
                     {
@@ -1871,7 +1871,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "上傳課表封面照",
                 "parameters": [
@@ -1918,7 +1918,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/overview": {
+        "/v1/course/{course_id}/overview": {
             "get": {
                 "security": [
                     {
@@ -1933,7 +1933,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "獲取課表總覽",
                 "parameters": [
@@ -1973,7 +1973,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/plan": {
+        "/v1/course/{course_id}/plan": {
             "post": {
                 "security": [
                     {
@@ -1988,7 +1988,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "創建計畫",
                 "parameters": [
@@ -2037,7 +2037,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/plans": {
+        "/v1/course/{course_id}/plans": {
             "get": {
                 "security": [
                     {
@@ -2052,7 +2052,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "取得課表內的計畫列表",
                 "parameters": [
@@ -2095,7 +2095,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/sale_type": {
+        "/v1/course/{course_id}/sale_type": {
             "put": {
                 "security": [
                     {
@@ -2110,7 +2110,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "更新課表銷售類型",
                 "parameters": [
@@ -2159,7 +2159,7 @@ var doc = `{
                 }
             }
         },
-        "/course/{course_id}/submit": {
+        "/v1/course/{course_id}/submit": {
             "post": {
                 "security": [
                     {
@@ -2174,7 +2174,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "送審課表",
                 "parameters": [
@@ -2202,7 +2202,7 @@ var doc = `{
                 }
             }
         },
-        "/course_asset/{course_id}": {
+        "/v1/course_asset/{course_id}": {
             "get": {
                 "security": [
                     {
@@ -2217,7 +2217,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Exercise"
+                    "Exercise_v1"
                 ],
                 "summary": "獲取課表詳細",
                 "parameters": [
@@ -2257,7 +2257,7 @@ var doc = `{
                 }
             }
         },
-        "/course_asset/{course_id}/plans": {
+        "/v1/course_asset/{course_id}/plans": {
             "get": {
                 "security": [
                     {
@@ -2272,7 +2272,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Exercise"
+                    "Exercise_v1"
                 ],
                 "summary": "獲取課表計畫列表",
                 "parameters": [
@@ -2315,7 +2315,7 @@ var doc = `{
                 }
             }
         },
-        "/course_asset_structure/{course_id}": {
+        "/v1/course_asset_structure/{course_id}": {
             "get": {
                 "security": [
                     {
@@ -2330,7 +2330,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Exercise"
+                    "Exercise_v1"
                 ],
                 "summary": "獲取課表結構",
                 "parameters": [
@@ -2370,7 +2370,7 @@ var doc = `{
                 }
             }
         },
-        "/course_assets": {
+        "/v1/course_assets": {
             "get": {
                 "security": [
                     {
@@ -2385,7 +2385,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Exercise"
+                    "Exercise_v1"
                 ],
                 "summary": "獲取課表",
                 "parameters": [
@@ -2442,7 +2442,7 @@ var doc = `{
                 }
             }
         },
-        "/course_order": {
+        "/v1/course_order": {
             "post": {
                 "security": [
                     {
@@ -2457,7 +2457,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "創建課表訂單",
                 "parameters": [
@@ -2499,7 +2499,7 @@ var doc = `{
                 }
             }
         },
-        "/course_product/{course_id}": {
+        "/v1/course_product/{course_id}": {
             "get": {
                 "security": [
                     {
@@ -2514,7 +2514,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Explore"
+                    "Explore_v1"
                 ],
                 "summary": "獲取課表產品詳細",
                 "parameters": [
@@ -2554,7 +2554,7 @@ var doc = `{
                 }
             }
         },
-        "/course_product/{course_id}/plans": {
+        "/v1/course_product/{course_id}/plans": {
             "get": {
                 "security": [
                     {
@@ -2569,7 +2569,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Explore"
+                    "Explore_v1"
                 ],
                 "summary": "獲取課表產品計畫列表",
                 "parameters": [
@@ -2612,7 +2612,7 @@ var doc = `{
                 }
             }
         },
-        "/course_product/{course_id}/review": {
+        "/v1/course_product/{course_id}/review": {
             "post": {
                 "security": [
                     {
@@ -2627,7 +2627,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Review"
+                    "Review_v1"
                 ],
                 "summary": "創建評論",
                 "parameters": [
@@ -2686,7 +2686,7 @@ var doc = `{
                 }
             }
         },
-        "/course_product/{course_id}/reviews": {
+        "/v1/course_product/{course_id}/reviews": {
             "get": {
                 "security": [
                     {
@@ -2701,7 +2701,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Review"
+                    "Review_v1"
                 ],
                 "summary": "獲取評論列表",
                 "parameters": [
@@ -2764,7 +2764,7 @@ var doc = `{
                 }
             }
         },
-        "/course_product_structure/{course_id}": {
+        "/v1/course_product_structure/{course_id}": {
             "get": {
                 "security": [
                     {
@@ -2779,7 +2779,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Explore"
+                    "Explore_v1"
                 ],
                 "summary": "獲取課表結構(只限單一訓練課表)",
                 "parameters": [
@@ -2819,7 +2819,7 @@ var doc = `{
                 }
             }
         },
-        "/course_products": {
+        "/v1/course_products": {
             "get": {
                 "security": [
                     {
@@ -2834,7 +2834,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Explore"
+                    "Explore_v1"
                 ],
                 "summary": "搜尋課表產品列表",
                 "parameters": [
@@ -2962,7 +2962,7 @@ var doc = `{
                 }
             }
         },
-        "/course_statistic/{course_id}": {
+        "/v1/course_statistic/{course_id}": {
             "get": {
                 "security": [
                     {
@@ -2977,7 +2977,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Statistic"
+                    "Statistic_v1"
                 ],
                 "summary": "獲取個人課表數據詳細",
                 "parameters": [
@@ -3017,7 +3017,7 @@ var doc = `{
                 }
             }
         },
-        "/course_statistics": {
+        "/v1/course_statistics": {
             "get": {
                 "security": [
                     {
@@ -3032,7 +3032,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Statistic"
+                    "Statistic_v1"
                 ],
                 "summary": "獲取個人課表數據統計列表",
                 "parameters": [
@@ -3082,7 +3082,7 @@ var doc = `{
                 }
             }
         },
-        "/course_usage_monthly_statistic": {
+        "/v1/course_usage_monthly_statistic": {
             "get": {
                 "security": [
                     {
@@ -3097,7 +3097,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Statistic"
+                    "Statistic_v1"
                 ],
                 "summary": "取得當月課表使用人數分析",
                 "responses": {
@@ -3128,7 +3128,7 @@ var doc = `{
                 }
             }
         },
-        "/courses": {
+        "/v1/courses": {
             "get": {
                 "security": [
                     {
@@ -3143,7 +3143,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Course"
+                    "Course_v1"
                 ],
                 "summary": "獲取我的課表列表",
                 "parameters": [
@@ -3185,7 +3185,7 @@ var doc = `{
                 }
             }
         },
-        "/diet": {
+        "/v1/diet": {
             "get": {
                 "security": [
                     {
@@ -3200,7 +3200,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "以日期獲取飲食紀錄",
                 "parameters": [
@@ -3253,7 +3253,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "創建飲食紀錄",
                 "parameters": [
@@ -3295,7 +3295,7 @@ var doc = `{
                 }
             }
         },
-        "/favorite/action/{action_id}": {
+        "/v1/favorite/action/{action_id}": {
             "post": {
                 "security": [
                     {
@@ -3310,7 +3310,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Favorite"
+                    "Favorite_v1"
                 ],
                 "summary": "收藏動作",
                 "parameters": [
@@ -3351,7 +3351,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Favorite"
+                    "Favorite_v1"
                 ],
                 "summary": "刪除收藏動作",
                 "parameters": [
@@ -3379,7 +3379,7 @@ var doc = `{
                 }
             }
         },
-        "/favorite/course/{course_id}": {
+        "/v1/favorite/course/{course_id}": {
             "post": {
                 "security": [
                     {
@@ -3394,7 +3394,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Favorite"
+                    "Favorite_v1"
                 ],
                 "summary": "新增收藏課表",
                 "parameters": [
@@ -3435,7 +3435,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Favorite"
+                    "Favorite_v1"
                 ],
                 "summary": "刪除收藏課表",
                 "parameters": [
@@ -3463,7 +3463,7 @@ var doc = `{
                 }
             }
         },
-        "/favorite/trainer/{user_id}": {
+        "/v1/favorite/trainer/{user_id}": {
             "post": {
                 "security": [
                     {
@@ -3478,7 +3478,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Favorite"
+                    "Favorite_v1"
                 ],
                 "summary": "收藏教練",
                 "parameters": [
@@ -3519,7 +3519,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Favorite"
+                    "Favorite_v1"
                 ],
                 "summary": "刪除收藏教練",
                 "parameters": [
@@ -3547,7 +3547,7 @@ var doc = `{
                 }
             }
         },
-        "/food": {
+        "/v1/food": {
             "post": {
                 "security": [
                     {
@@ -3562,7 +3562,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "創建食物",
                 "parameters": [
@@ -3604,7 +3604,7 @@ var doc = `{
                 }
             }
         },
-        "/food/{food_id}": {
+        "/v1/food/{food_id}": {
             "delete": {
                 "security": [
                     {
@@ -3619,7 +3619,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "刪除食物",
                 "parameters": [
@@ -3647,7 +3647,7 @@ var doc = `{
                 }
             }
         },
-        "/food_categories": {
+        "/v1/food_categories": {
             "get": {
                 "security": [
                     {
@@ -3662,7 +3662,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "獲取食物分類",
                 "responses": {
@@ -3696,7 +3696,7 @@ var doc = `{
                 }
             }
         },
-        "/foods": {
+        "/v1/foods": {
             "get": {
                 "security": [
                     {
@@ -3711,7 +3711,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "獲取食物列表",
                 "parameters": [
@@ -3754,7 +3754,7 @@ var doc = `{
                 }
             }
         },
-        "/google_play/access_token": {
+        "/v1/google_play/access_token": {
             "get": {
                 "description": "取得 google play api access token(測試用)",
                 "consumes": [
@@ -3764,7 +3764,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "取得 google play api access token(測試用)",
                 "responses": {
@@ -3783,7 +3783,7 @@ var doc = `{
                 }
             }
         },
-        "/google_play/product/{product_id}": {
+        "/v1/google_play/product/{product_id}": {
             "get": {
                 "description": "取得 google play developer api product(測試用)",
                 "consumes": [
@@ -3793,7 +3793,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "取得 google play developer api product(測試用)",
                 "parameters": [
@@ -3840,7 +3840,7 @@ var doc = `{
                 }
             }
         },
-        "/google_play/subscription/{product_id}": {
+        "/v1/google_play/subscription/{product_id}": {
             "get": {
                 "description": "取得 google play developer api subscription(測試用)",
                 "consumes": [
@@ -3850,7 +3850,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "取得 google play developer api subscription(測試用)",
                 "parameters": [
@@ -3897,7 +3897,7 @@ var doc = `{
                 }
             }
         },
-        "/income_monthly_statistic": {
+        "/v1/income_monthly_statistic": {
             "get": {
                 "security": [
                     {
@@ -3912,7 +3912,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Statistic"
+                    "Statistic_v1"
                 ],
                 "summary": "取得當月收益分析",
                 "responses": {
@@ -3943,7 +3943,7 @@ var doc = `{
                 }
             }
         },
-        "/login/admin/email": {
+        "/v1/login/admin/email": {
             "post": {
                 "description": "管理者使用信箱登入",
                 "consumes": [
@@ -3953,7 +3953,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Login"
+                    "Login_v1"
                 ],
                 "summary": "管理者使用信箱登入",
                 "parameters": [
@@ -3995,7 +3995,7 @@ var doc = `{
                 }
             }
         },
-        "/login/user/email": {
+        "/v1/login/user/email": {
             "post": {
                 "description": "用戶使用信箱登入",
                 "consumes": [
@@ -4005,7 +4005,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Login"
+                    "Login_v1"
                 ],
                 "summary": "用戶使用信箱登入",
                 "parameters": [
@@ -4047,7 +4047,7 @@ var doc = `{
                 }
             }
         },
-        "/logout/admin": {
+        "/v1/logout/admin": {
             "post": {
                 "security": [
                     {
@@ -4062,7 +4062,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Login"
+                    "Login_v1"
                 ],
                 "summary": "管理員登出",
                 "responses": {
@@ -4081,7 +4081,7 @@ var doc = `{
                 }
             }
         },
-        "/logout/user": {
+        "/v1/logout/user": {
             "post": {
                 "security": [
                     {
@@ -4096,7 +4096,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Login"
+                    "Login_v1"
                 ],
                 "summary": "用戶登出",
                 "responses": {
@@ -4115,7 +4115,7 @@ var doc = `{
                 }
             }
         },
-        "/meal/{meal_id}": {
+        "/v1/meal/{meal_id}": {
             "delete": {
                 "security": [
                     {
@@ -4130,7 +4130,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "刪除餐食",
                 "parameters": [
@@ -4158,7 +4158,7 @@ var doc = `{
                 }
             }
         },
-        "/meals": {
+        "/v1/meals": {
             "post": {
                 "security": [
                     {
@@ -4173,7 +4173,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "創建餐食",
                 "parameters": [
@@ -4206,7 +4206,7 @@ var doc = `{
                 }
             }
         },
-        "/migrate/down": {
+        "/v1/migrate/down": {
             "put": {
                 "security": [
                     {
@@ -4221,7 +4221,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Migrate"
+                    "Migrate_v1"
                 ],
                 "summary": "回滾 Schema 至初始版本",
                 "responses": {
@@ -4240,7 +4240,7 @@ var doc = `{
                 }
             }
         },
-        "/migrate/down/{step}": {
+        "/v1/migrate/down/{step}": {
             "put": {
                 "security": [
                     {
@@ -4255,7 +4255,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Migrate"
+                    "Migrate_v1"
                 ],
                 "summary": "將 Schema 回滾N個版本",
                 "parameters": [
@@ -4283,7 +4283,7 @@ var doc = `{
                 }
             }
         },
-        "/migrate/force/{version}": {
+        "/v1/migrate/force/{version}": {
             "put": {
                 "security": [
                     {
@@ -4298,7 +4298,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Migrate"
+                    "Migrate_v1"
                 ],
                 "summary": "修正 Schema 版本並解除錯誤狀態",
                 "parameters": [
@@ -4326,7 +4326,7 @@ var doc = `{
                 }
             }
         },
-        "/migrate/up": {
+        "/v1/migrate/up": {
             "put": {
                 "security": [
                     {
@@ -4341,7 +4341,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Migrate"
+                    "Migrate_v1"
                 ],
                 "summary": "將 Schema 升至最新版本",
                 "responses": {
@@ -4360,7 +4360,7 @@ var doc = `{
                 }
             }
         },
-        "/migrate/up/{step}": {
+        "/v1/migrate/up/{step}": {
             "put": {
                 "security": [
                     {
@@ -4375,7 +4375,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Migrate"
+                    "Migrate_v1"
                 ],
                 "summary": "將 Schema 升級N個版本",
                 "parameters": [
@@ -4403,7 +4403,7 @@ var doc = `{
                 }
             }
         },
-        "/migrate/version": {
+        "/v1/migrate/version": {
             "get": {
                 "security": [
                     {
@@ -4418,7 +4418,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Migrate"
+                    "Migrate_v1"
                 ],
                 "summary": "獲取當前 Schema 版本",
                 "responses": {
@@ -4437,7 +4437,7 @@ var doc = `{
                 }
             }
         },
-        "/migrate/version/{version}": {
+        "/v1/migrate/version/{version}": {
             "put": {
                 "security": [
                     {
@@ -4452,7 +4452,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Migrate"
+                    "Migrate_v1"
                 ],
                 "summary": "升級至指定 Schema 版本",
                 "parameters": [
@@ -4480,7 +4480,7 @@ var doc = `{
                 }
             }
         },
-        "/plan/{plan_id}": {
+        "/v1/plan/{plan_id}": {
             "delete": {
                 "security": [
                     {
@@ -4495,7 +4495,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Plan"
+                    "Plan_v1"
                 ],
                 "summary": "刪除計畫",
                 "parameters": [
@@ -4548,7 +4548,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Plan"
+                    "Plan_v1"
                 ],
                 "summary": "修改計畫",
                 "parameters": [
@@ -4597,7 +4597,7 @@ var doc = `{
                 }
             }
         },
-        "/plan/{plan_id}/workout": {
+        "/v1/plan/{plan_id}/workout": {
             "post": {
                 "security": [
                     {
@@ -4612,7 +4612,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Plan"
+                    "Plan_v1"
                 ],
                 "summary": "創建訓練",
                 "parameters": [
@@ -4661,7 +4661,7 @@ var doc = `{
                 }
             }
         },
-        "/plan/{plan_id}/workouts": {
+        "/v1/plan/{plan_id}/workouts": {
             "get": {
                 "security": [
                     {
@@ -4676,7 +4676,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Plan"
+                    "Plan_v1"
                 ],
                 "summary": "取得計畫內的訓練列表",
                 "parameters": [
@@ -4719,7 +4719,7 @@ var doc = `{
                 }
             }
         },
-        "/plan_asset/{plan_id}/workouts": {
+        "/v1/plan_asset/{plan_id}/workouts": {
             "get": {
                 "security": [
                     {
@@ -4734,7 +4734,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Exercise"
+                    "Exercise_v1"
                 ],
                 "summary": "獲取訓練列表",
                 "parameters": [
@@ -4777,7 +4777,7 @@ var doc = `{
                 }
             }
         },
-        "/plan_product/{plan_id}/workouts": {
+        "/v1/plan_product/{plan_id}/workouts": {
             "get": {
                 "security": [
                     {
@@ -4792,7 +4792,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Explore"
+                    "Explore_v1"
                 ],
                 "summary": "獲取訓練列表",
                 "parameters": [
@@ -4835,7 +4835,7 @@ var doc = `{
                 }
             }
         },
-        "/rda": {
+        "/v1/rda": {
             "put": {
                 "security": [
                     {
@@ -4850,7 +4850,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "更新建議飲食攝取量",
                 "parameters": [
@@ -4880,7 +4880,7 @@ var doc = `{
                 }
             }
         },
-        "/recent_foods": {
+        "/v1/recent_foods": {
             "get": {
                 "security": [
                     {
@@ -4895,7 +4895,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet"
+                    "Diet_v1"
                 ],
                 "summary": "獲取食物歷程列表",
                 "responses": {
@@ -4929,7 +4929,7 @@ var doc = `{
                 }
             }
         },
-        "/redeem_course": {
+        "/v1/redeem_course": {
             "post": {
                 "security": [
                     {
@@ -4944,7 +4944,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "兌換免費課表",
                 "parameters": [
@@ -4974,7 +4974,7 @@ var doc = `{
                 }
             }
         },
-        "/register/email": {
+        "/v1/register/email": {
             "post": {
                 "description": "使用信箱註冊",
                 "consumes": [
@@ -4984,7 +4984,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Register"
+                    "Register_v1"
                 ],
                 "summary": "使用信箱註冊",
                 "parameters": [
@@ -5026,7 +5026,7 @@ var doc = `{
                 }
             }
         },
-        "/register/email/otp": {
+        "/v1/register/email/otp": {
             "post": {
                 "description": "發送 Email OTP",
                 "consumes": [
@@ -5036,7 +5036,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Register"
+                    "Register_v1"
                 ],
                 "summary": "發送 Email OTP",
                 "parameters": [
@@ -5078,7 +5078,7 @@ var doc = `{
                 }
             }
         },
-        "/register/email/validate": {
+        "/v1/register/email/validate": {
             "post": {
                 "description": "驗證信箱是否可使用",
                 "consumes": [
@@ -5088,7 +5088,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Register"
+                    "Register_v1"
                 ],
                 "summary": "驗證信箱是否可使用",
                 "parameters": [
@@ -5118,7 +5118,7 @@ var doc = `{
                 }
             }
         },
-        "/register/nickname/validate": {
+        "/v1/register/nickname/validate": {
             "post": {
                 "description": "驗證暱稱是否可使用",
                 "consumes": [
@@ -5128,7 +5128,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Register"
+                    "Register_v1"
                 ],
                 "summary": "驗證暱稱是否可使用",
                 "parameters": [
@@ -5158,7 +5158,7 @@ var doc = `{
                 }
             }
         },
-        "/review/{review_id}": {
+        "/v1/review/{review_id}": {
             "get": {
                 "security": [
                     {
@@ -5173,7 +5173,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Review"
+                    "Review_v1"
                 ],
                 "summary": "獲取評論",
                 "parameters": [
@@ -5226,7 +5226,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Review"
+                    "Review_v1"
                 ],
                 "summary": "刪除評論",
                 "parameters": [
@@ -5254,7 +5254,7 @@ var doc = `{
                 }
             }
         },
-        "/sale_items": {
+        "/v1/sale_items": {
             "get": {
                 "security": [
                     {
@@ -5269,7 +5269,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Sale"
+                    "Sale_v1"
                 ],
                 "summary": "取得銷售項目清單",
                 "responses": {
@@ -5303,7 +5303,7 @@ var doc = `{
                 }
             }
         },
-        "/store_home_page": {
+        "/v1/store_home_page": {
             "get": {
                 "security": [
                     {
@@ -5318,7 +5318,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Store"
+                    "Store_v1"
                 ],
                 "summary": "獲取商店首頁資料",
                 "responses": {
@@ -5349,7 +5349,7 @@ var doc = `{
                 }
             }
         },
-        "/subscribe_order": {
+        "/v1/subscribe_order": {
             "post": {
                 "security": [
                     {
@@ -5364,7 +5364,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "創建訂閱訂單",
                 "parameters": [
@@ -5406,7 +5406,7 @@ var doc = `{
                 }
             }
         },
-        "/subscribe_plans": {
+        "/v1/subscribe_plans": {
             "get": {
                 "security": [
                     {
@@ -5421,7 +5421,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Sale"
+                    "Sale_v1"
                 ],
                 "summary": "取得訂閱方案清單",
                 "responses": {
@@ -5455,7 +5455,7 @@ var doc = `{
                 }
             }
         },
-        "/trainer": {
+        "/v1/trainer": {
             "get": {
                 "security": [
                     {
@@ -5470,7 +5470,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Trainer"
+                    "Trainer_v1"
                 ],
                 "summary": "取得我的教練資訊",
                 "responses": {
@@ -5514,7 +5514,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Trainer"
+                    "Trainer_v1"
                 ],
                 "summary": "創建教練",
                 "parameters": [
@@ -5720,7 +5720,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Trainer"
+                    "Trainer_v1"
                 ],
                 "summary": "編輯教練",
                 "parameters": [
@@ -5873,7 +5873,7 @@ var doc = `{
                 }
             }
         },
-        "/trainer/{user_id}": {
+        "/v1/trainer/{user_id}": {
             "get": {
                 "security": [
                     {
@@ -5888,7 +5888,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Trainer"
+                    "Trainer_v1"
                 ],
                 "summary": "取得指定教練資訊",
                 "parameters": [
@@ -5928,7 +5928,7 @@ var doc = `{
                 }
             }
         },
-        "/trainer/{user_id}/course_products": {
+        "/v1/trainer/{user_id}/course_products": {
             "get": {
                 "security": [
                     {
@@ -5943,7 +5943,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Trainer"
+                    "Trainer_v1"
                 ],
                 "summary": "取得教練的課表產品清單",
                 "parameters": [
@@ -6006,7 +6006,7 @@ var doc = `{
                 }
             }
         },
-        "/trainers": {
+        "/v1/trainers": {
             "get": {
                 "security": [
                     {
@@ -6021,7 +6021,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Trainer"
+                    "Trainer_v1"
                 ],
                 "summary": "取得教練列表",
                 "parameters": [
@@ -6077,7 +6077,7 @@ var doc = `{
                 }
             }
         },
-        "/user/avatar": {
+        "/v1/user/avatar": {
             "post": {
                 "security": [
                     {
@@ -6092,7 +6092,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "User_v1"
                 ],
                 "summary": "上傳我的大頭照",
                 "parameters": [
@@ -6132,7 +6132,7 @@ var doc = `{
                 }
             }
         },
-        "/user/info": {
+        "/v1/user/info": {
             "get": {
                 "security": [
                     {
@@ -6147,7 +6147,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "User_v1"
                 ],
                 "summary": "獲取個人資訊",
                 "responses": {
@@ -6191,7 +6191,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "User_v1"
                 ],
                 "summary": "更新個人資訊",
                 "parameters": [
@@ -6233,7 +6233,7 @@ var doc = `{
                 }
             }
         },
-        "/verify_apple_receipt": {
+        "/v1/verify_apple_receipt": {
             "post": {
                 "security": [
                     {
@@ -6248,7 +6248,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "驗證apple收據",
                 "parameters": [
@@ -6278,7 +6278,7 @@ var doc = `{
                 }
             }
         },
-        "/verify_google_receipt": {
+        "/v1/verify_google_receipt": {
             "post": {
                 "security": [
                     {
@@ -6293,7 +6293,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Payment"
+                    "Payment_v1"
                 ],
                 "summary": "驗證google收據",
                 "parameters": [
@@ -6323,7 +6323,7 @@ var doc = `{
                 }
             }
         },
-        "/workout/{workout_id}": {
+        "/v1/workout/{workout_id}": {
             "delete": {
                 "security": [
                     {
@@ -6338,7 +6338,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "刪除訓練",
                 "parameters": [
@@ -6391,7 +6391,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "修改訓練",
                 "parameters": [
@@ -6440,7 +6440,7 @@ var doc = `{
                 }
             }
         },
-        "/workout/{workout_id}/end_audio": {
+        "/v1/workout/{workout_id}/end_audio": {
             "post": {
                 "security": [
                     {
@@ -6455,7 +6455,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "上傳訓練結束語音",
                 "parameters": [
@@ -6515,7 +6515,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "刪除訓練結束語音",
                 "parameters": [
@@ -6543,7 +6543,7 @@ var doc = `{
                 }
             }
         },
-        "/workout/{workout_id}/order": {
+        "/v1/workout/{workout_id}/order": {
             "put": {
                 "security": [
                     {
@@ -6558,7 +6558,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "修改訓練組的順序",
                 "parameters": [
@@ -6595,7 +6595,7 @@ var doc = `{
                 }
             }
         },
-        "/workout/{workout_id}/rest_set": {
+        "/v1/workout/{workout_id}/rest_set": {
             "post": {
                 "security": [
                     {
@@ -6610,7 +6610,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "新增休息組",
                 "parameters": [
@@ -6650,7 +6650,7 @@ var doc = `{
                 }
             }
         },
-        "/workout/{workout_id}/start_audio": {
+        "/v1/workout/{workout_id}/start_audio": {
             "post": {
                 "security": [
                     {
@@ -6665,7 +6665,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "上傳訓練前導語音",
                 "parameters": [
@@ -6725,7 +6725,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "刪除訓練前導語音",
                 "parameters": [
@@ -6753,7 +6753,7 @@ var doc = `{
                 }
             }
         },
-        "/workout/{workout_id}/workout_set": {
+        "/v1/workout/{workout_id}/workout_set": {
             "post": {
                 "security": [
                     {
@@ -6768,7 +6768,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "新增訓練組",
                 "parameters": [
@@ -6820,7 +6820,7 @@ var doc = `{
                 }
             }
         },
-        "/workout/{workout_id}/workout_sets": {
+        "/v1/workout/{workout_id}/workout_sets": {
             "get": {
                 "security": [
                     {
@@ -6835,7 +6835,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Workout"
+                    "Workout_v1"
                 ],
                 "summary": "取得訓練內的訓練組列表",
                 "parameters": [
@@ -6878,7 +6878,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_asset/{workout_id}/workout_log": {
+        "/v1/workout_asset/{workout_id}/workout_log": {
             "post": {
                 "security": [
                     {
@@ -6893,7 +6893,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Exercise"
+                    "Exercise_v1"
                 ],
                 "summary": "創建訓練記錄",
                 "parameters": [
@@ -6945,7 +6945,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_asset/{workout_id}/workout_sets": {
+        "/v1/workout_asset/{workout_id}/workout_sets": {
             "get": {
                 "security": [
                     {
@@ -6960,7 +6960,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Exercise"
+                    "Exercise_v1"
                 ],
                 "summary": "獲取訓練組列表",
                 "parameters": [
@@ -7003,7 +7003,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_log/{workout_log_id}": {
+        "/v1/workout_log/{workout_log_id}": {
             "get": {
                 "security": [
                     {
@@ -7018,7 +7018,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "History"
+                    "History_v1"
                 ],
                 "summary": "獲取訓練紀錄詳細",
                 "parameters": [
@@ -7071,7 +7071,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "History"
+                    "History_v1"
                 ],
                 "summary": "刪除訓練紀錄",
                 "parameters": [
@@ -7099,7 +7099,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_logs": {
+        "/v1/workout_logs": {
             "get": {
                 "security": [
                     {
@@ -7114,7 +7114,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "History"
+                    "History_v1"
                 ],
                 "summary": "以日期區間獲取訓練記錄",
                 "parameters": [
@@ -7164,7 +7164,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_product/{workout_id}/workout_sets": {
+        "/v1/workout_product/{workout_id}/workout_sets": {
             "get": {
                 "security": [
                     {
@@ -7179,7 +7179,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Explore"
+                    "Explore_v1"
                 ],
                 "summary": "獲取訓練組列表(探索區課表)",
                 "parameters": [
@@ -7222,7 +7222,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_set/{workout_set_id}": {
+        "/v1/workout_set/{workout_set_id}": {
             "delete": {
                 "security": [
                     {
@@ -7237,7 +7237,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "WorkoutSet"
+                    "WorkoutSet_v1"
                 ],
                 "summary": "刪除訓練組",
                 "parameters": [
@@ -7290,7 +7290,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "WorkoutSet"
+                    "WorkoutSet_v1"
                 ],
                 "summary": "修改訓練組",
                 "parameters": [
@@ -7339,7 +7339,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_set/{workout_set_id}/duplicate": {
+        "/v1/workout_set/{workout_set_id}/duplicate": {
             "post": {
                 "security": [
                     {
@@ -7354,7 +7354,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "WorkoutSet"
+                    "WorkoutSet_v1"
                 ],
                 "summary": "複製訓練組",
                 "parameters": [
@@ -7406,7 +7406,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_set/{workout_set_id}/progress_audio": {
+        "/v1/workout_set/{workout_set_id}/progress_audio": {
             "post": {
                 "security": [
                     {
@@ -7421,7 +7421,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "WorkoutSet"
+                    "WorkoutSet_v1"
                 ],
                 "summary": "上傳訓練組進行中語音",
                 "parameters": [
@@ -7481,7 +7481,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "WorkoutSet"
+                    "WorkoutSet_v1"
                 ],
                 "summary": "刪除訓練組進行中語音",
                 "parameters": [
@@ -7509,7 +7509,7 @@ var doc = `{
                 }
             }
         },
-        "/workout_set/{workout_set_id}/start_audio": {
+        "/v1/workout_set/{workout_set_id}/start_audio": {
             "post": {
                 "security": [
                     {
@@ -7524,7 +7524,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "WorkoutSet"
+                    "WorkoutSet_v1"
                 ],
                 "summary": "上傳訓練組前導語音",
                 "parameters": [
@@ -7584,7 +7584,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "WorkoutSet"
+                    "WorkoutSet_v1"
                 ],
                 "summary": "刪除訓練組前導語音",
                 "parameters": [

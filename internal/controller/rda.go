@@ -27,14 +27,14 @@ func NewRDA(baseGroup *gin.RouterGroup, rdaService service.RDA, userMiddleware m
 // CalculateRDA 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
 // @Summary 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
 // @Description 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.CalculateRDABody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.RDA} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /calculate_rda [POST]
+// @Router /v1/calculate_rda [POST]
 func (r *RDA) CalculateRDA(c *gin.Context) {
 	var body validator.CalculateRDABody
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -58,14 +58,14 @@ func (r *RDA) CalculateRDA(c *gin.Context) {
 // UpdateRDA 更新建議飲食攝取量
 // @Summary 更新建議飲食攝取量
 // @Description 更新建議飲食攝取量
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.UpdateRDABody true "輸入參數"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /rda [PUT]
+// @Router /v1/rda [PUT]
 func (r *RDA) UpdateRDA(c *gin.Context) {
 	uid, e := r.GetUID(c)
 	if e != nil {

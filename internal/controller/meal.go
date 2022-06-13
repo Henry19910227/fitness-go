@@ -29,14 +29,14 @@ func NewMeal(baseGroup *gin.RouterGroup, mealService service.Meal, userMiddlewar
 // CreateMeals 創建餐食
 // @Summary 創建餐食
 // @Description 創建餐食
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body []validator.MealParamItem true "輸入參數"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /meals [POST]
+// @Router /v1/meals [POST]
 func (m *Meal) CreateMeals(c *gin.Context) {
 	datas := make([]*validator.MealParamItem, 0)
 	if err := c.ShouldBindJSON(&datas); err != nil {
@@ -60,14 +60,14 @@ func (m *Meal) CreateMeals(c *gin.Context) {
 // DeleteMeal 刪除餐食
 // @Summary 刪除餐食
 // @Description 刪除餐食
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param meal_id path int64 true "餐食id"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /meal/{meal_id} [DELETE]
+// @Router /v1/meal/{meal_id} [DELETE]
 func (m *Meal) DeleteMeal(c *gin.Context) {
 	uid, e := m.GetUID(c)
 	if e != nil {

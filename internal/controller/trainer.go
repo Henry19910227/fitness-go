@@ -63,7 +63,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, cour
 // CreateTrainer 創建教練
 // @Summary 創建教練
 // @Description 查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}
-// @Tags Trainer
+// @Tags Trainer_v1
 // @Accept mpfd
 // @Produce json
 // @Security fitness_token
@@ -92,7 +92,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, cour
 // @Param bank_code formData string true "銀行代碼"
 // @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer [POST]
+// @Router /v1/trainer [POST]
 func (t *Trainer) CreateTrainer(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
@@ -206,7 +206,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context) {
 // UpdateTrainer 編輯教練
 // @Summary 編輯教練
 // @Description 查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}
-// @Tags Trainer
+// @Tags Trainer_v1
 // @Accept mpfd
 // @Produce json
 // @Security fitness_token
@@ -229,7 +229,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context) {
 // @Param create_certificate_names formData []string false "待新增的證照名稱(需與待新增的證照照片數量相同)"
 // @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer [PATCH]
+// @Router /v1/trainer [PATCH]
 func (t *Trainer) UpdateTrainer(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
@@ -312,13 +312,13 @@ func (t *Trainer) UpdateTrainer(c *gin.Context) {
 // GetTrainer 取得我的教練資訊
 // @Summary 取得我的教練資訊
 // @Description 取得我的教練資訊
-// @Tags Trainer
+// @Tags Trainer_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer [GET]
+// @Router /v1/trainer [GET]
 func (t *Trainer) GetTrainer(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {
@@ -336,7 +336,7 @@ func (t *Trainer) GetTrainer(c *gin.Context) {
 // GetTrainers 取得教練列表
 // @Summary 取得教練列表
 // @Description 取得教練列表
-// @Tags Trainer
+// @Tags Trainer_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -345,7 +345,7 @@ func (t *Trainer) GetTrainer(c *gin.Context) {
 // @Param size query int true "每頁筆數"
 // @Success 200 {object} model.SuccessPagingResult{data=[]dto.TrainerSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainers [GET]
+// @Router /v1/trainers [GET]
 func (t *Trainer) GetTrainers(c *gin.Context) {
 	var query validator.GetTrainerSummariesQuery
 	if err := c.ShouldBind(&query); err != nil {
@@ -365,7 +365,7 @@ func (t *Trainer) GetTrainers(c *gin.Context) {
 // GetTrainerCourseProducts 取得教練的課表產品清單
 // @Summary 取得教練的課表產品清單
 // @Description 取得教練的課表產品清單
-// @Tags Trainer
+// @Tags Trainer_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -375,7 +375,7 @@ func (t *Trainer) GetTrainers(c *gin.Context) {
 // @Param size query int true "每頁筆數"
 // @Success 200 {object} model.SuccessPagingResult{data=[]dto.CourseProductSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer/{user_id}/course_products [GET]
+// @Router /v1/trainer/{user_id}/course_products [GET]
 func (t *Trainer) GetTrainerCourseProducts(c *gin.Context) {
 	var uri validator.TrainerIDUri
 	var query validator.GetTrainerCourseProductsQuery
@@ -410,14 +410,14 @@ func (t *Trainer) GetTrainerCourseProducts(c *gin.Context) {
 // GetTrainerByUID 取得指定教練資訊
 // @Summary 取得指定教練資訊
 // @Description 取得指定教練資訊
-// @Tags Trainer
+// @Tags Trainer_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param user_id path int64 true "教練id"
 // @Success 200 {object} model.SuccessResult{data=dto.Trainer} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /trainer/{user_id} [GET]
+// @Router /v1/trainer/{user_id} [GET]
 func (t *Trainer) GetTrainerByUID(c *gin.Context) {
 	uid, e := t.GetUID(c)
 	if e != nil {

@@ -26,14 +26,14 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 // UpdateUserInfo 更新個人資訊
 // @Summary 更新個人資訊
 // @Description 更新個人資訊
-// @Tags User
+// @Tags User_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.UpdateUserInfoBody true "更新欄位"
 // @Success 200 {object} model.SuccessResult{data=dto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /user/info [PATCH]
+// @Router /v1/user/info [PATCH]
 func (u *user) UpdateUserInfo(c *gin.Context)  {
 	var header validator.TokenHeader
 	var body validator.UpdateUserInfoBody
@@ -65,13 +65,13 @@ func (u *user) UpdateUserInfo(c *gin.Context)  {
 // GetUserInfo 獲取個人資訊
 // @Summary 獲取個人資訊
 // @Description 獲取個人資訊
-// @Tags User
+// @Tags User_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=dto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /user/info [GET]
+// @Router /v1/user/info [GET]
 func (u *user) GetUserInfo(c *gin.Context) {
 	var header validator.TokenHeader
 	if err := c.ShouldBindHeader(&header); err != nil {
@@ -89,14 +89,14 @@ func (u *user) GetUserInfo(c *gin.Context) {
 // UploadMyUserAvatar 上傳我的大頭照
 // @Summary 上傳我的大頭照
 // @Description 查看我的大頭照 : https://www.fitopia-hub.tk/api/v1/resource/user/avatar/{圖片名}
-// @Tags User
+// @Tags User_v1
 // @Security fitness_token
 // @Accept mpfd
 // @Param avatar formData file true "用戶大頭照"
 // @Produce json
 // @Success 200 {object} model.SuccessResult{data=dto.UserAvatar} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /user/avatar [POST]
+// @Router /v1/user/avatar [POST]
 func (u *user) UploadMyUserAvatar(c *gin.Context) {
 	var header validator.TokenHeader
 	if err := c.ShouldBindHeader(&header); err != nil {

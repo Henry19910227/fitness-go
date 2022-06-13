@@ -28,14 +28,14 @@ func NewPlanProduct(baseGroup *gin.RouterGroup, planService service.Plan, workou
 // GetWorkouts 獲取訓練列表
 // @Summary 獲取訓練列表
 // @Description 獲取訓練列表
-// @Tags Explore
+// @Tags Explore_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
 // @Success 200 {object} model.SuccessResult{data=[]dto.Workout} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /plan_product/{plan_id}/workouts [GET]
+// @Router /v1/plan_product/{plan_id}/workouts [GET]
 func (p *PlanProduct) GetWorkouts(c *gin.Context) {
 	var uri validator.PlanIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

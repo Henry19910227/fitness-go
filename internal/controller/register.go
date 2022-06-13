@@ -22,13 +22,13 @@ func NewRegister(baseGroup *gin.RouterGroup, regService service.Register)  {
 // SendEmailOTP 發送 Email OTP
 // @Summary 發送 Email OTP
 // @Description 發送 Email OTP
-// @Tags Register
+// @Tags Register_v1
 // @Accept json
 // @Produce json
 // @Param json_body Parameter body validator.EmailBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=registerdto.OTP} "驗證郵件已寄出"
 // @Failure 400 {object} model.ErrorResult "發送失敗"
-// @Router /register/email/otp [POST]
+// @Router /v1/register/email/otp [POST]
 func (r *Register) SendEmailOTP(c *gin.Context)  {
 	var body validator.EmailBody
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -46,13 +46,13 @@ func (r *Register) SendEmailOTP(c *gin.Context)  {
 // RegisterForEmail 使用信箱註冊
 // @Summary 使用信箱註冊
 // @Description 使用信箱註冊
-// @Tags Register
+// @Tags Register_v1
 // @Accept json
 // @Produce json
 // @Param json_body body validator.RegisterForEmailBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=registerdto.Register} "註冊成功"
 // @Failure 400 {object} model.ErrorResult "註冊失敗"
-// @Router /register/email [POST]
+// @Router /v1/register/email [POST]
 func (r *Register) RegisterForEmail(c *gin.Context)  {
 	var body validator.RegisterForEmailBody
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -74,13 +74,13 @@ func (r *Register) RegisterForEmail(c *gin.Context)  {
 // ValidateNicknameDuplicate 驗證暱稱是否可使用
 // @Summary 驗證暱稱是否可使用
 // @Description 驗證暱稱是否可使用
-// @Tags Register
+// @Tags Register_v1
 // @Accept json
 // @Produce json
 // @Param json_body body validator.ValidateNicknameDupBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult "此暱稱可使用"
 // @Failure 400 {object} model.ErrorResult "該資料已存在"
-// @Router /register/nickname/validate [POST]
+// @Router /v1/register/nickname/validate [POST]
 func (r *Register) ValidateNicknameDuplicate(c *gin.Context) {
 	var body validator.ValidateNicknameDupBody
 	// 驗證輸入
@@ -99,13 +99,13 @@ func (r *Register) ValidateNicknameDuplicate(c *gin.Context) {
 // ValidateEmailDuplicate 驗證信箱是否可使用
 // @Summary 驗證信箱是否可使用
 // @Description 驗證信箱是否可使用
-// @Tags Register
+// @Tags Register_v1
 // @Accept json
 // @Produce json
 // @Param json_body body validator.ValidateEmailDupBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult "此暱稱可使用"
 // @Failure 400 {object} model.ErrorResult "該資料已存在"
-// @Router /register/email/validate [POST]
+// @Router /v1/register/email/validate [POST]
 func (r *Register) ValidateEmailDuplicate(c *gin.Context) {
 	var body validator.ValidateEmailDupBody
 	// 驗證輸入

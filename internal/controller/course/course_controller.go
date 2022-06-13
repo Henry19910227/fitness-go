@@ -22,7 +22,7 @@ func New(resolver course.Resolver) Controller {
 // GetCMSCourses 獲取課表列表
 // @Summary 獲取課表列表
 // @Description 獲取課表列表
-// @Tags CMS/Course
+// @Tags CMS/Course_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -64,7 +64,7 @@ func (c *controller) GetCMSCourses(ctx *gin.Context) {
 // GetCMSCourse 獲取課表詳細
 // @Summary 獲取課表詳細
 // @Description 獲取課表詳細
-// @Tags CMS/Course
+// @Tags CMS/Course_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token

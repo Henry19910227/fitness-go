@@ -30,7 +30,7 @@ func NewCourseStatistic(baseGroup *gin.RouterGroup, courseService service.Course
 // GetCourseStatistics 獲取個人課表數據統計列表
 // @Summary 獲取個人課表數據統計列表
 // @Description 獲取個人課表數據統計列表
-// @Tags Statistic
+// @Tags Statistic_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -38,7 +38,7 @@ func NewCourseStatistic(baseGroup *gin.RouterGroup, courseService service.Course
 // @Param size query int true "筆數"
 // @Success 200 {object} model.SuccessPagingResult{data=[]dto.CourseStatisticSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_statistics [GET]
+// @Router /v1/course_statistics [GET]
 func (a *CourseStatistic) GetCourseStatistics(c *gin.Context) {
 	uid, e := a.GetUID(c)
 	if e != nil {
@@ -64,14 +64,14 @@ func (a *CourseStatistic) GetCourseStatistics(c *gin.Context) {
 // GetCourseStatistic 獲取個人課表數據詳細
 // @Summary 獲取個人課表數據詳細
 // @Description 獲取個人課表數據詳細
-// @Tags Statistic
+// @Tags Statistic_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseStatistic} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_statistic/{course_id} [GET]
+// @Router /v1/course_statistic/{course_id} [GET]
 func (a *CourseStatistic) GetCourseStatistic(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

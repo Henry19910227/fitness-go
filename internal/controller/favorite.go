@@ -41,14 +41,14 @@ func NewFavorite(baseGroup *gin.RouterGroup, favoriteService service.Favorite, c
 // CreateFavoriteCourse 新增收藏課表
 // @Summary 新增收藏課表
 // @Description 新增收藏課表
-// @Tags Favorite
+// @Tags Favorite_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult "新增成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /favorite/course/{course_id} [POST]
+// @Router /v1/favorite/course/{course_id} [POST]
 func (f *Favorite) CreateFavoriteCourse(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {
@@ -70,14 +70,14 @@ func (f *Favorite) CreateFavoriteCourse(c *gin.Context) {
 // CreateFavoriteTrainer 收藏教練
 // @Summary 收藏教練
 // @Description 收藏教練
-// @Tags Favorite
+// @Tags Favorite_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param user_id path int64 true "教練id"
 // @Success 200 {object} model.SuccessResult "新增成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /favorite/trainer/{user_id} [POST]
+// @Router /v1/favorite/trainer/{user_id} [POST]
 func (f *Favorite) CreateFavoriteTrainer(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {
@@ -99,14 +99,14 @@ func (f *Favorite) CreateFavoriteTrainer(c *gin.Context) {
 // CreateFavoriteAction 收藏動作
 // @Summary 收藏動作
 // @Description 收藏動作
-// @Tags Favorite
+// @Tags Favorite_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
 // @Success 200 {object} model.SuccessResult "新增成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /favorite/action/{action_id} [POST]
+// @Router /v1/favorite/action/{action_id} [POST]
 func (f *Favorite) CreateFavoriteAction(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {
@@ -128,14 +128,14 @@ func (f *Favorite) CreateFavoriteAction(c *gin.Context) {
 // DeleteFavoriteCourse 刪除收藏課表
 // @Summary 刪除收藏課表
 // @Description 刪除收藏課表
-// @Tags Favorite
+// @Tags Favorite_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /favorite/course/{course_id} [DELETE]
+// @Router /v1/favorite/course/{course_id} [DELETE]
 func (f *Favorite) DeleteFavoriteCourse(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {
@@ -157,14 +157,14 @@ func (f *Favorite) DeleteFavoriteCourse(c *gin.Context) {
 // DeleteFavoriteTrainer 刪除收藏教練
 // @Summary 刪除收藏教練
 // @Description 刪除收藏教練
-// @Tags Favorite
+// @Tags Favorite_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param user_id path int64 true "教練id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /favorite/trainer/{user_id} [DELETE]
+// @Router /v1/favorite/trainer/{user_id} [DELETE]
 func (f *Favorite) DeleteFavoriteTrainer(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {
@@ -186,14 +186,14 @@ func (f *Favorite) DeleteFavoriteTrainer(c *gin.Context) {
 // DeleteFavoriteAction 刪除收藏動作
 // @Summary 刪除收藏動作
 // @Description 刪除收藏動作
-// @Tags Favorite
+// @Tags Favorite_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /favorite/action/{action_id} [DELETE]
+// @Router /v1/favorite/action/{action_id} [DELETE]
 func (f *Favorite) DeleteFavoriteAction(c *gin.Context) {
 	uid, e := f.GetUID(c)
 	if e != nil {

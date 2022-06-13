@@ -22,13 +22,13 @@ func NewFoodCategory(baseGroup *gin.RouterGroup, foodCategoryService service.Foo
 // GetFoodCategories 獲取食物分類
 // @Summary 獲取食物分類
 // @Description 獲取食物分類
-// @Tags Diet
+// @Tags Diet_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=[]dto.FoodCategory} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /food_categories [GET]
+// @Router /v1/food_categories [GET]
 func (f *FoodCategory) GetFoodCategories(c *gin.Context) {
 	categories, err := f.foodCategoryService.GetFoodCategories(c)
 	if err != nil {

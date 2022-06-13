@@ -30,14 +30,14 @@ func NewWorkoutProduct(baseGroup *gin.RouterGroup, workoutService service.Workou
 // GetWorkoutSets 獲取訓練組列表(探索區課表)
 // @Summary 獲取訓練組列表(探索區課表)
 // @Description 獲取訓練組列表(探索區課表)
-// @Tags Explore
+// @Tags Explore_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param workout_id path int64 true "訓練id"
 // @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSet} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /workout_product/{workout_id}/workout_sets [GET]
+// @Router /v1/workout_product/{workout_id}/workout_sets [GET]
 func (p *WorkoutProduct) GetWorkoutSets(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {

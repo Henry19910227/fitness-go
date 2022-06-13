@@ -128,14 +128,14 @@ func NewCourse(baseGroup *gin.RouterGroup,
 // CreateCourse 創建課表
 // @Summary 創建課表
 // @Description 創建課表
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.CreateCourseBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Course} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
-// @Router /course [POST]
+// @Router /v1/course [POST]
 func (cc *Course) CreateCourse(c *gin.Context) {
 	uid, e := cc.GetUID(c)
 	if e != nil {
@@ -163,7 +163,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // UpdateCourse 更新課表
 // @Summary 更新課表
 // @Description 更新課表
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -171,7 +171,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 // @Param json_body body validator.UpdateCourseBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Course} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
-// @Router /course/{course_id} [PATCH]
+// @Router /v1/course/{course_id} [PATCH]
 func (cc *Course) UpdateCourse(c *gin.Context) {
 	var uri validator.CourseIDUri
 	var body validator.UpdateCourseBody
@@ -206,7 +206,7 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 // UpdateCourseSaleType 更新課表銷售類型
 // @Summary 更新課表銷售類型
 // @Description 更新課表銷售類型
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -214,7 +214,7 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 // @Param json_body body validator.UpdateCourseSaleTypeBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Course} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
-// @Router /course/{course_id}/sale_type [PUT]
+// @Router /v1/course/{course_id}/sale_type [PUT]
 func (cc *Course) UpdateCourseSaleType(c *gin.Context) {
 	var uri validator.CourseIDUri
 	var body validator.UpdateCourseSaleTypeBody
@@ -237,14 +237,14 @@ func (cc *Course) UpdateCourseSaleType(c *gin.Context) {
 // GetCourses 獲取我創建的課表
 // @Summary 獲取我的課表列表
 // @Description 獲取我的課表列表
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param status query int false "課表狀態(1:準備中/2:審核中/3:銷售中/4:退審/5:下架)"
 // @Success 200 {object} model.SuccessResult{data=[]dto.CourseSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /courses [GET]
+// @Router /v1/courses [GET]
 func (cc *Course) GetCourses(c *gin.Context) {
 	uid, e := cc.GetUID(c)
 	if e != nil {
@@ -271,14 +271,14 @@ func (cc *Course) GetCourses(c *gin.Context) {
 // GetCourse 獲取課表詳細
 // @Summary 獲取課表詳細
 // @Description 獲取課表詳細
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.Course} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course/{course_id} [GET]
+// @Router /v1/course/{course_id} [GET]
 func (cc *Course) GetCourse(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -296,14 +296,14 @@ func (cc *Course) GetCourse(c *gin.Context) {
 // GetCourseOverview 獲取課表總覽
 // @Summary 獲取課表總覽
 // @Description 獲取課表總覽
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseProduct} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course/{course_id}/overview [GET]
+// @Router /v1/course/{course_id}/overview [GET]
 func (cc *Course) GetCourseOverview(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -321,7 +321,7 @@ func (cc *Course) GetCourseOverview(c *gin.Context) {
 // UploadCourseCover 上傳課表封面照
 // @Summary 上傳課表封面照
 // @Description 查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/course/cover/{圖片名}
-// @Tags Course
+// @Tags Course_v1
 // @Security fitness_token
 // @Accept mpfd
 // @Param course_id path int64 true "課表id"
@@ -329,7 +329,7 @@ func (cc *Course) GetCourseOverview(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} model.SuccessResult{data=dto.CourseCover} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /course/{course_id}/cover [POST]
+// @Router /v1/course/{course_id}/cover [POST]
 func (cc *Course) UploadCourseCover(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -355,14 +355,14 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 // DeleteCourse 刪除課表
 // @Summary 刪除課表
 // @Description 刪除課表
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
-// @Router /course/{course_id} [DELETE]
+// @Router /v1/course/{course_id} [DELETE]
 func (cc *Course) DeleteCourse(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -380,7 +380,7 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 // CreatePlan 創建計畫
 // @Summary 創建計畫
 // @Description 創建計畫
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -388,7 +388,7 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 // @Param json_body body validator.CreatePlanBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.Plan} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
-// @Router /course/{course_id}/plan [POST]
+// @Router /v1/course/{course_id}/plan [POST]
 func (cc *Course) CreatePlan(c *gin.Context) {
 	var uri validator.CourseIDUri
 	var body validator.CreatePlanBody
@@ -411,14 +411,14 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 // GetPlans 取得課表內的計畫列表
 // @Summary  取得課表內的計畫列表
 // @Description  取得課表內的計畫列表
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=[]dto.Plan} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course/{course_id}/plans [GET]
+// @Router /v1/course/{course_id}/plans [GET]
 func (cc *Course) GetPlans(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -436,7 +436,7 @@ func (cc *Course) GetPlans(c *gin.Context) {
 // CreateAction 創建動作
 // @Summary 創建動作
 // @Description 創建動作
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -451,7 +451,7 @@ func (cc *Course) GetPlans(c *gin.Context) {
 // @Param video formData file false "影片檔"
 // @Success 200 {object} model.SuccessResult{data=dto.Action} "創建成功!"
 // @Failure 400 {object} model.ErrorResult "創建失敗"
-// @Router /course/{course_id}/action [POST]
+// @Router /v1/course/{course_id}/action [POST]
 func (cc *Course) CreateAction(c *gin.Context) {
 	var uri validator.CourseIDUri
 	var form validator.CreateActionForm
@@ -502,7 +502,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 // SearchActions 搜尋動作列表
 // @Summary 搜尋動作列表
 // @Description 搜尋動作列表
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -514,7 +514,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 // @Param equipment query string false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"
 // @Success 200 {object} model.SuccessResult{data=[]dto.Action} "查詢成功!"
 // @Failure 400 {object} model.ErrorResult "查詢失敗"
-// @Router /course/{course_id}/actions [GET]
+// @Router /v1/course/{course_id}/actions [GET]
 func (cc *Course) SearchActions(c *gin.Context) {
 	uid, e := cc.GetUID(c)
 	if e != nil {
@@ -549,14 +549,14 @@ func (cc *Course) SearchActions(c *gin.Context) {
 // CourseSubmit 送審課表
 // @Summary 送審課表
 // @Description 送審課表
-// @Tags Course
+// @Tags Course_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /course/{course_id}/submit [POST]
+// @Router /v1/course/{course_id}/submit [POST]
 func (cc *Course) CourseSubmit(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

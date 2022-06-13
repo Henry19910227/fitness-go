@@ -29,13 +29,13 @@ func NewStore(baseGroup *gin.RouterGroup, storeService service.Store, courseServ
 // GetHomePage 獲取商店首頁資料
 // @Summary 獲取商店首頁資料
 // @Description 獲取商店首頁資料
-// @Tags Store
+// @Tags Store_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=dto.StoreHomePage} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /store_home_page [GET]
+// @Router /v1/store_home_page [GET]
 func (s *Store) GetHomePage(c *gin.Context) {
 	homePage, err := s.storeService.GetHomePage(c)
 	if err != nil {

@@ -73,14 +73,14 @@ func NewPayment(baseGroup *gin.RouterGroup,
 // CreateCourseOrder 創建課表訂單
 // @Summary 創建課表訂單
 // @Description 創建課表訂單
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.CreateCourseOrderBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseOrder} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /course_order [POST]
+// @Router /v1/course_order [POST]
 func (p *Payment) CreateCourseOrder(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {
@@ -103,14 +103,14 @@ func (p *Payment) CreateCourseOrder(c *gin.Context) {
 // CreateSubscribeOrder 創建訂閱訂單
 // @Summary 創建訂閱訂單
 // @Description 創建訂閱訂單
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.CreateSubscribeOrderBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult{data=dto.SubscribeOrder} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /subscribe_order [POST]
+// @Router /v1/subscribe_order [POST]
 func (p *Payment) CreateSubscribeOrder(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {
@@ -133,14 +133,14 @@ func (p *Payment) CreateSubscribeOrder(c *gin.Context) {
 // VerifyAppleReceipt 驗證apple收據
 // @Summary 驗證apple收據
 // @Description 驗證apple收據
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.VerifyReceiptBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /verify_apple_receipt [POST]
+// @Router /v1/verify_apple_receipt [POST]
 func (p *Payment) VerifyAppleReceipt(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {
@@ -162,14 +162,14 @@ func (p *Payment) VerifyAppleReceipt(c *gin.Context) {
 // VerifyGoogleReceipt 驗證google收據
 // @Summary 驗證google收據
 // @Description 驗證google收據
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.VerifyGoogleReceiptBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /verify_google_receipt [POST]
+// @Router /v1/verify_google_receipt [POST]
 func (p *Payment) VerifyGoogleReceipt(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {
@@ -191,14 +191,14 @@ func (p *Payment) VerifyGoogleReceipt(c *gin.Context) {
 // RedeemCourse 兌換免費課表
 // @Summary 兌換免費課表
 // @Description 兌換免費課表
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param json_body body validator.RedeemCourseBody true "輸入參數"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /redeem_course [POST]
+// @Router /v1/redeem_course [POST]
 func (p *Payment) RedeemCourse(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {
@@ -248,13 +248,13 @@ func (p *Payment) GooglePlayNotification(c *gin.Context) {
 // GetSubscriptions 獲取訂閱資料(測試用)
 // @Summary 獲取訂閱資料(測試用)
 // @Description 獲取訂閱資料(測試用)
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Param original_transaction_id path string true "交易id"
 // @Success 200 {object} model.SuccessResult{data=dto.IAPSubscribeAPIResponse} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /app_store/subscriptions/{original_transaction_id} [GET]
+// @Router /v1/app_store/subscriptions/{original_transaction_id} [GET]
 func (p *Payment) GetSubscriptions(c *gin.Context) {
 	var uri validator.GetSubscriptionsUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -272,13 +272,13 @@ func (p *Payment) GetSubscriptions(c *gin.Context) {
 // GetHistory 獲取交易歷史資料(測試用)
 // @Summary 獲取交易歷史資料(測試用)
 // @Description 獲取交易歷史資料(測試用)
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Param original_transaction_id path string true "交易id"
 // @Success 200 {object} model.SuccessResult{data=dto.IAPSubscribeAPIResponse} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /app_store/history/{original_transaction_id} [GET]
+// @Router /v1/app_store/history/{original_transaction_id} [GET]
 func (p *Payment) GetHistory(c *gin.Context) {
 	var uri validator.GetSubscriptionsUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -296,12 +296,12 @@ func (p *Payment) GetHistory(c *gin.Context) {
 // GetAppStoreServerAPIAccessToken 取得 App Store Server api access token
 // @Summary 取得 Apple Store api access token
 // @Description 取得 Apple Store api access token
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.SuccessResult "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /app_store/access_token [GET]
+// @Router /v1/app_store/access_token [GET]
 func (p *Payment) GetAppStoreServerAPIAccessToken(c *gin.Context) {
 	accessToken, err := p.PaymentService.GetAppleStoreApiAccessToken(c)
 	if err != nil {
@@ -314,12 +314,12 @@ func (p *Payment) GetAppStoreServerAPIAccessToken(c *gin.Context) {
 // GetGooglePlayDeveloperAPIAccessToken 取得 google play developer api access token(測試用)
 // @Summary 取得 google play api access token(測試用)
 // @Description 取得 google play api access token(測試用)
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.SuccessResult "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /google_play/access_token [GET]
+// @Router /v1/google_play/access_token [GET]
 func (p *Payment) GetGooglePlayDeveloperAPIAccessToken(c *gin.Context) {
 	accessToken, err := p.PaymentService.GetGooglePlayApiAccessToken(c)
 	if err != nil {
@@ -332,14 +332,14 @@ func (p *Payment) GetGooglePlayDeveloperAPIAccessToken(c *gin.Context) {
 // GetGooglePlayDeveloperAPIProduct 取得 google play developer api product(測試用)
 // @Summary 取得 google play developer api product(測試用)
 // @Description 取得 google play developer api product(測試用)
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Param product_id path string true "產品id"
 // @Param purchase_token query string true "收據token"
 // @Success 200 {object} model.SuccessResult{data=dto.IABProductAPIResponse} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /google_play/product/{product_id} [GET]
+// @Router /v1/google_play/product/{product_id} [GET]
 func (p *Payment) GetGooglePlayDeveloperAPIProduct(c *gin.Context) {
 	var uri validator.ProductIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -362,14 +362,14 @@ func (p *Payment) GetGooglePlayDeveloperAPIProduct(c *gin.Context) {
 // GetGooglePlayDeveloperAPISubscription 取得 google play developer api subscription(測試用)
 // @Summary 取得 google play developer api subscription(測試用)
 // @Description 取得 google play developer api subscription(測試用)
-// @Tags Payment
+// @Tags Payment_v1
 // @Accept json
 // @Produce json
 // @Param product_id path string true "產品id"
 // @Param purchase_token query string true "收據token"
 // @Success 200 {object} model.SuccessResult{data=dto.IABSubscriptionAPIResponse} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /google_play/subscription/{product_id} [GET]
+// @Router /v1/google_play/subscription/{product_id} [GET]
 func (p *Payment) GetGooglePlayDeveloperAPISubscription(c *gin.Context) {
 	var uri validator.ProductIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

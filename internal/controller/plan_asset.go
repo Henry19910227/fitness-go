@@ -28,14 +28,14 @@ func NewPlanAsset(baseGroup *gin.RouterGroup, planService service.Plan, workoutS
 // GetWorkouts 獲取訓練列表
 // @Summary 獲取訓練列表
 // @Description 獲取訓練列表
-// @Tags Exercise
+// @Tags Exercise_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
 // @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutAsset} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /plan_asset/{plan_id}/workouts [GET]
+// @Router /v1/plan_asset/{plan_id}/workouts [GET]
 func (p *PlanAsset) GetWorkouts(c *gin.Context) {
 	uid, e := p.GetUID(c)
 	if e != nil {

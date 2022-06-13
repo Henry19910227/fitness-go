@@ -25,13 +25,13 @@ func NewCMSLogin(baseGroup *gin.RouterGroup, loginService service.Login, userMid
 // Login 管理者登入
 // @Summary 管理者登入
 // @Description 管理者登入
-// @Tags CMS/Login
+// @Tags CMS/Login_v1
 // @Accept json
 // @Produce json
 // @Param json_body body validator.CMSLoginByEmailBody true "輸入參數"
 // @Success 200 {object} model.SuccessLoginResult{data=dto.Admin} "登入成功"
 // @Failure 400 {object} model.ErrorResult "登入失敗"
-// @Router /cms/login [POST]
+// @Router /v1/cms/login [POST]
 func (l *CMSLogin) Login(c *gin.Context) {
 	var body validator.CMSLoginByEmailBody
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -49,13 +49,13 @@ func (l *CMSLogin) Login(c *gin.Context) {
 // Logout 管理者登出
 // @Summary 管理者登出
 // @Description 管理者登出
-// @Tags CMS/Login
+// @Tags CMS/Login_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult "登出成功"
 // @Failure 400 {object} model.ErrorResult "登出失敗"
-// @Router /cms/logout [POST]
+// @Router /v1/cms/logout [POST]
 func (l *CMSLogin) Logout(c *gin.Context) {
 	var header validator.TokenHeader
 	if err := c.ShouldBindHeader(&header); err != nil {

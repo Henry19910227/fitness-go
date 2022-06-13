@@ -33,14 +33,14 @@ func NewWorkoutLog(baseGroup *gin.RouterGroup, workoutLogService service.Workout
 // GetWorkoutLog 獲取訓練紀錄詳細
 // @Summary 獲取訓練紀錄詳細
 // @Description 獲取訓練紀錄詳細
-// @Tags History
+// @Tags History_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param workout_log_id path int64 true "訓練記錄id"
 // @Success 200 {object} model.SuccessResult{data=dto.WorkoutLog} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /workout_log/{workout_log_id} [GET]
+// @Router /v1/workout_log/{workout_log_id} [GET]
 func (p *WorkoutLog) GetWorkoutLog(c *gin.Context) {
 	var uri validator.WorkoutLogIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -58,7 +58,7 @@ func (p *WorkoutLog) GetWorkoutLog(c *gin.Context) {
 // GetWorkoutLogSummaries 以日期區間獲取訓練記錄
 // @Summary 以日期區間獲取訓練記錄
 // @Description 以日期區間獲取訓練記錄，用於獲取歷史首頁資料
-// @Tags History
+// @Tags History_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -66,7 +66,7 @@ func (p *WorkoutLog) GetWorkoutLog(c *gin.Context) {
 // @Param end_date query string true "區間結束日期 YYYY-MM-DD"
 // @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutLogSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /workout_logs [GET]
+// @Router /v1/workout_logs [GET]
 func (p *WorkoutLog) GetWorkoutLogSummaries(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {
@@ -89,14 +89,14 @@ func (p *WorkoutLog) GetWorkoutLogSummaries(c *gin.Context) {
 // DeleteWorkoutLog 刪除訓練紀錄
 // @Summary 刪除訓練紀錄
 // @Description 用於歷史頁面刪除訓練紀錄
-// @Tags History
+// @Tags History_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param workout_log_id path int64 true "訓練記錄id"
 // @Success 200 {object} model.SuccessResult "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /workout_log/{workout_log_id} [DELETE]
+// @Router /v1/workout_log/{workout_log_id} [DELETE]
 func (p *WorkoutLog) DeleteWorkoutLog(c *gin.Context) {
 	uid, err := p.GetUID(c)
 	if err != nil {

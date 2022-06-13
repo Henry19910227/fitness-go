@@ -44,14 +44,14 @@ func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, 
 // GetCourseProduct 獲取課表產品詳細
 // @Summary 獲取課表產品詳細
 // @Description 獲取課表產品詳細
-// @Tags Explore
+// @Tags Explore_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseProduct} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_product/{course_id} [GET]
+// @Router /v1/course_product/{course_id} [GET]
 func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
 	uid, e := p.GetUID(c)
 	if e != nil {
@@ -74,14 +74,14 @@ func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
 // GetCourseProductStructure 獲取課表結構(只限單一訓練課表)
 // @Summary 獲取課表結構(只限單一訓練課表)
 // @Description 只限單一訓練的課表使用
-// @Tags Explore
+// @Tags Explore_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=dto.CourseProductStructure} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_product_structure/{course_id} [GET]
+// @Router /v1/course_product_structure/{course_id} [GET]
 func (p *CourseProduct) GetCourseProductStructure(c *gin.Context) {
 	uid, e := p.GetUID(c)
 	if e != nil {
@@ -104,7 +104,7 @@ func (p *CourseProduct) GetCourseProductStructure(c *gin.Context) {
 // SearchCourseProducts 搜尋課表產品列表
 // @Summary 搜尋課表產品列表
 // @Description 搜尋課表產品列表
-// @Tags Explore
+// @Tags Explore_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -125,7 +125,7 @@ func (p *CourseProduct) GetCourseProductStructure(c *gin.Context) {
 // @Param size query int true "筆數"
 // @Success 200 {object} model.SuccessPagingResult{data=[]dto.CourseProductSummary} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_products [GET]
+// @Router /v1/course_products [GET]
 func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 	var query validator.SearchCourseProductsQuery
 	if err := c.ShouldBind(&query); err != nil {
@@ -157,14 +157,14 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 // GetPlanProducts 獲取課表產品計畫列表
 // @Summary 獲取課表產品計畫列表
 // @Description 獲取課表產品計畫列表
-// @Tags Explore
+// @Tags Explore_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} model.SuccessResult{data=[]dto.Plan} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_product/{course_id}/plans [GET]
+// @Router /v1/course_product/{course_id}/plans [GET]
 func (p *CourseProduct) GetPlanProducts(c *gin.Context) {
 	var uri validator.CourseIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

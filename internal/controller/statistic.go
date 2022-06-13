@@ -27,13 +27,13 @@ func NewStatistic(baseGroup *gin.RouterGroup, incomeStatisticService service.Use
 // GetIncomeMonthlyStatistic 取得當月收益分析
 // @Summary 取得當月收益分析
 // @Description 取得當月收益分析
-// @Tags Statistic
+// @Tags Statistic_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=dto.UserIncomeMonthlyStatistic} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /income_monthly_statistic [GET]
+// @Router /v1/income_monthly_statistic [GET]
 func (s *Statistic) GetIncomeMonthlyStatistic(c *gin.Context) {
 	uid, e := s.GetUID(c)
 	if e != nil {
@@ -51,13 +51,13 @@ func (s *Statistic) GetIncomeMonthlyStatistic(c *gin.Context) {
 // GetCourseUsageMonthlyStatistic 取得當月課表使用人數分析
 // @Summary 取得當月課表使用人數分析
 // @Description 取得當月課表使用人數分析
-// @Tags Statistic
+// @Tags Statistic_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Success 200 {object} model.SuccessResult{data=dto.UserCourseUsageMonthlyStatistic} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
-// @Router /course_usage_monthly_statistic [GET]
+// @Router /v1/course_usage_monthly_statistic [GET]
 func (s *Statistic) GetCourseUsageMonthlyStatistic(c *gin.Context) {
 	uid, e := s.GetUID(c)
 	if e != nil {

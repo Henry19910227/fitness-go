@@ -53,7 +53,7 @@ func NewReview(baseGroup *gin.RouterGroup,
 // CreateReview 創建評論
 // @Summary 創建評論
 // @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
-// @Tags Review
+// @Tags Review_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -63,7 +63,7 @@ func NewReview(baseGroup *gin.RouterGroup,
 // @Param review_images formData file false "評論照片(多張)"
 // @Success 200 {object} model.SuccessResult{data=dto.Review} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /course_product/{course_id}/review [POST]
+// @Router /v1/course_product/{course_id}/review [POST]
 func (r *Review) CreateReview(c *gin.Context) {
 	var uri validator.CourseIDUri
 	var form validator.CreateReviewForm
@@ -108,7 +108,7 @@ func (r *Review) CreateReview(c *gin.Context) {
 // GetReviews 獲取評論列表
 // @Summary 獲取評論列表
 // @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
-// @Tags Review
+// @Tags Review_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -118,7 +118,7 @@ func (r *Review) CreateReview(c *gin.Context) {
 // @Param size query int true "筆數"
 // @Success 200 {object} model.SuccessPagingResult{data=[]dto.Review} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /course_product/{course_id}/reviews [GET]
+// @Router /v1/course_product/{course_id}/reviews [GET]
 func (r *Review) GetReviews(c *gin.Context) {
 	var uri validator.CourseIDUri
 	var reviewQuery validator.GetReviewsQuery
@@ -154,14 +154,14 @@ func (r *Review) GetReviews(c *gin.Context) {
 // GetReview 獲取評論
 // @Summary 獲取評論
 // @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
-// @Tags Review
+// @Tags Review_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param review_id path int64 true "評論id"
 // @Success 200 {object} model.SuccessResult{data=dto.Review} "獲取成功!"
 // @Failure 400 {object} model.ErrorResult "獲取失敗"
-// @Router /review/{review_id} [GET]
+// @Router /v1/review/{review_id} [GET]
 func (r *Review) GetReview(c *gin.Context) {
 	var uri validator.ReviewIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -179,14 +179,14 @@ func (r *Review) GetReview(c *gin.Context) {
 // DeleteReview 刪除評論
 // @Summary 刪除評論
 // @Description 刪除評論
-// @Tags Review
+// @Tags Review_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param review_id path int64 true "評論id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /review/{review_id} [DELETE]
+// @Router /v1/review/{review_id} [DELETE]
 func (r *Review) DeleteReview(c *gin.Context) {
 	var uri validator.ReviewIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {

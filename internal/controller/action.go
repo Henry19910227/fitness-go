@@ -12,7 +12,7 @@ import (
 
 type Action struct {
 	Base
-	actionService service.Action
+	actionService        service.Action
 	workoutSetLogService service.WorkoutSetLog
 }
 
@@ -62,7 +62,7 @@ func NewAction(baseGroup *gin.RouterGroup,
 // UpdateAction 修改動作
 // @Summary 修改動作
 // @Description 查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}
-// @Tags Action
+// @Tags Action_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -76,7 +76,7 @@ func NewAction(baseGroup *gin.RouterGroup,
 // @Param video formData file false "影片檔"
 // @Success 200 {object} model.SuccessResult{data=dto.Action} "更新成功!"
 // @Failure 400 {object} model.ErrorResult "更新失敗"
-// @Router /action/{action_id} [PATCH]
+// @Router /v1/action/{action_id} [PATCH]
 func (a *Action) UpdateAction(c *gin.Context) {
 	var uri validator.ActionIDUri
 	var form validator.UpdateActionForm
@@ -125,14 +125,14 @@ func (a *Action) UpdateAction(c *gin.Context) {
 // DeleteAction 刪除動作
 // @Summary 刪除動作
 // @Description 刪除動作
-// @Tags Action
+// @Tags Action_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
 // @Success 200 {object} model.SuccessResult{data=dto.ActionID} "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
-// @Router /action/{action_id} [DELETE]
+// @Router /v1/action/{action_id} [DELETE]
 func (a *Action) DeleteAction(c *gin.Context) {
 	var uri validator.ActionIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -150,14 +150,14 @@ func (a *Action) DeleteAction(c *gin.Context) {
 // DeleteActionVideo 刪除動作影片
 // @Summary 刪除動作影片
 // @Description 刪除動作影片
-// @Tags Action
+// @Tags Action_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作影片id"
 // @Success 200 {object} model.SuccessResult "刪除成功!"
 // @Failure 400 {object} model.ErrorResult "刪除失敗"
-// @Router /action/{action_id}/video [DELETE]
+// @Router /v1/action/{action_id}/video [DELETE]
 func (a *Action) DeleteActionVideo(c *gin.Context) {
 	var uri validator.ActionIDUri
 	if err := c.ShouldBindUri(&uri); err != nil {
@@ -174,7 +174,7 @@ func (a *Action) DeleteActionVideo(c *gin.Context) {
 // SearchActions 搜尋動作庫的動作列表
 // @Summary 搜尋動作庫的動作列表
 // @Description 搜尋動作庫的動作列表
-// @Tags Action
+// @Tags Action_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -184,7 +184,7 @@ func (a *Action) DeleteActionVideo(c *gin.Context) {
 // @Param equipment query string false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"
 // @Success 200 {object} model.SuccessResult{data=[]dto.Action} "查詢成功!"
 // @Failure 400 {object} model.ErrorResult "查詢失敗"
-// @Router /actions [GET]
+// @Router /v1/actions [GET]
 func (a *Action) SearchActions(c *gin.Context) {
 	uid, e := a.GetUID(c)
 	if e != nil {
@@ -214,14 +214,14 @@ func (a *Action) SearchActions(c *gin.Context) {
 // GetActionBestPR 獲取動作個人最佳紀錄
 // @Summary 獲取動作個人最佳紀錄
 // @Description 獲取動作個人最佳紀錄
-// @Tags Action
+// @Tags Action_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
 // @Success 200 {object} model.SuccessResult{data=dto.ActionBestPR} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /action/{action_id}/best_personal_record [GET]
+// @Router /v1/action/{action_id}/best_personal_record [GET]
 func (a *Action) GetActionBestPR(c *gin.Context) {
 	uid, e := a.GetUID(c)
 	if e != nil {
@@ -244,7 +244,7 @@ func (a *Action) GetActionBestPR(c *gin.Context) {
 // GetWorkoutSetLogs 以日期獲取動作訓練組紀錄
 // @Summary 以日期獲取動作訓練組紀錄
 // @Description 以日期獲取動作訓練組紀錄
-// @Tags Action
+// @Tags Action_v1
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -253,7 +253,7 @@ func (a *Action) GetActionBestPR(c *gin.Context) {
 // @Param end_date query string true "區間結束日期 YYYY-MM-DD"
 // @Success 200 {object} model.SuccessResult{data=[]dto.WorkoutSetLogSummary} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗"
-// @Router /action/{action_id}/workout_set_logs [GET]
+// @Router /v1/action/{action_id}/workout_set_logs [GET]
 func (a *Action) GetWorkoutSetLogs(c *gin.Context) {
 	uid, e := a.GetUID(c)
 	if e != nil {

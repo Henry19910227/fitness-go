@@ -1576,8 +1576,7 @@ definitions:
       orderId:
         type: string
       paymentState:
-        description: 0. Payment pending 1. Payment received 2. Free trial 3. Pending
-          deferred upgrade/downgrade
+        description: 0. Payment pending 1. Payment received 2. Free trial 3. Pending deferred upgrade/downgrade
         type: integer
       priceAmountMicros:
         type: string
@@ -2021,8 +2020,7 @@ definitions:
         description: App Store 退還交易或從家庭共享中撤銷交易的 UNIX 時間（以毫秒為單位）
         type: integer
       revocationReason:
-        description: App Store 退還交易或從家庭共享中撤銷交易的原因(0:Apple Support 因其他原因代表客戶退還交易；例如，意外購買/1:由於您的應用程序中存在實際或感知的問題，Apple
-          支持代表客戶退還了交易)
+        description: App Store 退還交易或從家庭共享中撤銷交易的原因(0:Apple Support 因其他原因代表客戶退還交易；例如，意外購買/1:由於您的應用程序中存在實際或感知的問題，Apple 支持代表客戶退還了交易)
         type: string
       signedDate:
         description: App Store 對 JSON Web 簽名 (JWS) 數據進行簽名的 UNIX 時間（以毫秒為單位)
@@ -2034,8 +2032,7 @@ definitions:
         description: 交易的唯一標識符
         type: string
       type:
-        description: 應用內購買的產品類型(Auto-Renewable Subscription/Non-Consumable/Consumable/Non-Renewing
-          Subscription)
+        description: 應用內購買的產品類型(Auto-Renewable Subscription/Non-Consumable/Consumable/Non-Renewing Subscription)
         type: string
       webOrderLineItemId:
         description: 跨設備訂閱購買事件的唯一標識符，包括訂閱續訂
@@ -3551,358 +3548,6 @@ info:
   description: 健身平台 api
   title: fitness api
 paths:
-  /action/{action_id}:
-    delete:
-      consumes:
-      - application/json
-      description: 刪除動作
-      parameters:
-      - description: 動作id
-        in: path
-        name: action_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 刪除成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.ActionID'
-              type: object
-        "400":
-          description: 刪除失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 刪除動作
-      tags:
-      - Action
-    patch:
-      consumes:
-      - application/json
-      description: '查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名}
-        查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}'
-      parameters:
-      - description: 動作id
-        in: path
-        name: action_id
-        required: true
-        type: integer
-      - description: 動作名稱(1~20字元)
-        in: formData
-        name: name
-        type: string
-      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
-        in: formData
-        name: category
-        type: integer
-      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-        in: formData
-        name: body
-        type: integer
-      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        in: formData
-        name: equipment
-        type: integer
-      - description: 動作介紹(1~400字元)
-        in: formData
-        name: intro
-        type: string
-      - description: 課表封面照
-        in: formData
-        name: cover
-        type: file
-      - description: 影片檔
-        in: formData
-        name: video
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 更新成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.Action'
-              type: object
-        "400":
-          description: 更新失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 修改動作
-      tags:
-      - Action
-  /action/{action_id}/best_personal_record:
-    get:
-      consumes:
-      - application/json
-      description: 獲取動作個人最佳紀錄
-      parameters:
-      - description: 動作id
-        in: path
-        name: action_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.ActionBestPR'
-              type: object
-        "400":
-          description: 失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 獲取動作個人最佳紀錄
-      tags:
-      - Action
-  /action/{action_id}/video:
-    delete:
-      consumes:
-      - application/json
-      description: 刪除動作影片
-      parameters:
-      - description: 動作影片id
-        in: path
-        name: action_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 刪除成功!
-          schema:
-            $ref: '#/definitions/model.SuccessResult'
-        "400":
-          description: 刪除失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 刪除動作影片
-      tags:
-      - Action
-  /action/{action_id}/workout_set_logs:
-    get:
-      consumes:
-      - application/json
-      description: 以日期獲取動作訓練組紀錄
-      parameters:
-      - description: 動作id
-        in: path
-        name: action_id
-        required: true
-        type: integer
-      - description: 區間開始日期 YYYY-MM-DD
-        in: query
-        name: start_date
-        required: true
-        type: string
-      - description: 區間結束日期 YYYY-MM-DD
-        in: query
-        name: end_date
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/dto.WorkoutSetLogSummary'
-                  type: array
-              type: object
-        "400":
-          description: 失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 以日期獲取動作訓練組紀錄
-      tags:
-      - Action
-  /actions:
-    get:
-      consumes:
-      - application/json
-      description: 搜尋動作庫的動作列表
-      parameters:
-      - description: 動作名稱
-        in: query
-        name: name
-        type: string
-      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
-        in: query
-        name: category
-        type: string
-      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-        in: query
-        name: body
-        type: string
-      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        in: query
-        name: equipment
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 查詢成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/dto.Action'
-                  type: array
-              type: object
-        "400":
-          description: 查詢失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 搜尋動作庫的動作列表
-      tags:
-      - Action
-  /app_store/access_token:
-    get:
-      consumes:
-      - application/json
-      description: 取得 Apple Store api access token
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 獲取成功!
-          schema:
-            $ref: '#/definitions/model.SuccessResult'
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      summary: 取得 Apple Store api access token
-      tags:
-      - Payment
-  /app_store/history/{original_transaction_id}:
-    get:
-      consumes:
-      - application/json
-      description: 獲取交易歷史資料(測試用)
-      parameters:
-      - description: 交易id
-        in: path
-        name: original_transaction_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 獲取成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.IAPSubscribeAPIResponse'
-              type: object
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      summary: 獲取交易歷史資料(測試用)
-      tags:
-      - Payment
-  /app_store/subscriptions/{original_transaction_id}:
-    get:
-      consumes:
-      - application/json
-      description: 獲取訂閱資料(測試用)
-      parameters:
-      - description: 交易id
-        in: path
-        name: original_transaction_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 獲取成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.IAPSubscribeAPIResponse'
-              type: object
-        "400":
-          description: 獲取失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      summary: 獲取訂閱資料(測試用)
-      tags:
-      - Payment
-  /calculate_rda:
-    post:
-      consumes:
-      - application/json
-      description: 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
-      parameters:
-      - description: 輸入參數
-        in: body
-        name: json_body
-        required: true
-        schema:
-          $ref: '#/definitions/validator.CalculateRDABody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.RDA'
-              type: object
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
-      tags:
-      - Diet
   /cms/course/{id}:
     get:
       consumes:
@@ -3929,7 +3574,7 @@ paths:
       - fitness_token: []
       summary: 獲取課表詳細
       tags:
-      - CMS/Course
+      - CMS/Course_v2
   /cms/courses:
     get:
       consumes:
@@ -3987,8 +3632,359 @@ paths:
       - fitness_token: []
       summary: 獲取課表列表
       tags:
-      - CMS/Course
-  /cms/login:
+      - CMS/Course_v2
+  /v1/action/{action_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除動作
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.ActionID'
+              type: object
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除動作
+      tags:
+      - Action_v1
+    patch:
+      consumes:
+      - application/json
+      description: '查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}'
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 動作名稱(1~20字元)
+        in: formData
+        name: name
+        type: string
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: formData
+        name: category
+        type: integer
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: formData
+        name: body
+        type: integer
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        in: formData
+        name: equipment
+        type: integer
+      - description: 動作介紹(1~400字元)
+        in: formData
+        name: intro
+        type: string
+      - description: 課表封面照
+        in: formData
+        name: cover
+        type: file
+      - description: 影片檔
+        in: formData
+        name: video
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.Action'
+              type: object
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 修改動作
+      tags:
+      - Action_v1
+  /v1/action/{action_id}/best_personal_record:
+    get:
+      consumes:
+      - application/json
+      description: 獲取動作個人最佳紀錄
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.ActionBestPR'
+              type: object
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取動作個人最佳紀錄
+      tags:
+      - Action_v1
+  /v1/action/{action_id}/video:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除動作影片
+      parameters:
+      - description: 動作影片id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刪除成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 刪除失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 刪除動作影片
+      tags:
+      - Action_v1
+  /v1/action/{action_id}/workout_set_logs:
+    get:
+      consumes:
+      - application/json
+      description: 以日期獲取動作訓練組紀錄
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 區間開始日期 YYYY-MM-DD
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: 區間結束日期 YYYY-MM-DD
+        in: query
+        name: end_date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.WorkoutSetLogSummary'
+                  type: array
+              type: object
+        "400":
+          description: 失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 以日期獲取動作訓練組紀錄
+      tags:
+      - Action_v1
+  /v1/actions:
+    get:
+      consumes:
+      - application/json
+      description: 搜尋動作庫的動作列表
+      parameters:
+      - description: 動作名稱
+        in: query
+        name: name
+        type: string
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: query
+        name: category
+        type: string
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: query
+        name: body
+        type: string
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        in: query
+        name: equipment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查詢成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.Action'
+                  type: array
+              type: object
+        "400":
+          description: 查詢失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 搜尋動作庫的動作列表
+      tags:
+      - Action_v1
+  /v1/app_store/access_token:
+    get:
+      consumes:
+      - application/json
+      description: 取得 Apple Store api access token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            $ref: '#/definitions/model.SuccessResult'
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 取得 Apple Store api access token
+      tags:
+      - Payment_v1
+  /v1/app_store/history/{original_transaction_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取交易歷史資料(測試用)
+      parameters:
+      - description: 交易id
+        in: path
+        name: original_transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.IAPSubscribeAPIResponse'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 獲取交易歷史資料(測試用)
+      tags:
+      - Payment_v1
+  /v1/app_store/subscriptions/{original_transaction_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訂閱資料(測試用)
+      parameters:
+      - description: 交易id
+        in: path
+        name: original_transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 獲取成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.IAPSubscribeAPIResponse'
+              type: object
+        "400":
+          description: 獲取失敗
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      summary: 獲取訂閱資料(測試用)
+      tags:
+      - Payment_v1
+  /v1/calculate_rda:
+    post:
+      consumes:
+      - application/json
+      description: 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/validator.CalculateRDABody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.SuccessResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.RDA'
+              type: object
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
+      tags:
+      - Diet_v1
+  /v1/cms/login:
     post:
       consumes:
       - application/json
@@ -4018,8 +4014,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 管理者登入
       tags:
-      - CMS/Login
-  /cms/logout:
+      - CMS/Login_v1
+  /v1/cms/logout:
     post:
       consumes:
       - application/json
@@ -4039,8 +4035,8 @@ paths:
       - fitness_token: []
       summary: 管理者登出
       tags:
-      - CMS/Login
-  /cms/trainer/{user_id}:
+      - CMS/Login_v1
+  /v1/cms/trainer/{user_id}:
     get:
       consumes:
       - application/json
@@ -4071,7 +4067,7 @@ paths:
       - fitness_token: []
       summary: 取得教練詳細資訊
       tags:
-      - CMS/Trainer
+      - CMS/Trainer_v1
     patch:
       consumes:
       - application/json
@@ -4108,8 +4104,8 @@ paths:
       - fitness_token: []
       summary: 更新教練資訊
       tags:
-      - CMS/Trainer
-  /cms/trainer/{user_id}/courses:
+      - CMS/Trainer_v1
+  /v1/cms/trainer/{user_id}/courses:
     get:
       consumes:
       - application/json
@@ -4158,8 +4154,8 @@ paths:
       - fitness_token: []
       summary: 取得教練所屬的課表
       tags:
-      - CMS/Trainer
-  /cms/trainers:
+      - CMS/Trainer_v1
+  /v1/cms/trainers:
     get:
       consumes:
       - application/json
@@ -4221,8 +4217,8 @@ paths:
       - fitness_token: []
       summary: 獲取教練列表
       tags:
-      - CMS/Trainer
-  /cms/user/{user_id}:
+      - CMS/Trainer_v1
+  /v1/cms/user/{user_id}:
     get:
       consumes:
       - application/json
@@ -4253,7 +4249,7 @@ paths:
       - fitness_token: []
       summary: 取得用戶詳細資訊
       tags:
-      - CMS/User
+      - CMS/User_v1
     patch:
       consumes:
       - application/json
@@ -4290,8 +4286,8 @@ paths:
       - fitness_token: []
       summary: 更新用戶資訊
       tags:
-      - CMS/User
-  /cms/user/{user_id}/orders:
+      - CMS/User_v1
+  /v1/cms/user/{user_id}/orders:
     get:
       consumes:
       - application/json
@@ -4344,8 +4340,8 @@ paths:
       - fitness_token: []
       summary: 獲取用戶購買歷史訂單
       tags:
-      - CMS/User
-  /cms/users:
+      - CMS/User_v1
+  /v1/cms/users:
     get:
       consumes:
       - application/json
@@ -4411,8 +4407,8 @@ paths:
       - fitness_token: []
       summary: 獲取用戶列表
       tags:
-      - CMS/User
-  /course:
+      - CMS/User_v1
+  /v1/course:
     post:
       consumes:
       - application/json
@@ -4444,8 +4440,8 @@ paths:
       - fitness_token: []
       summary: 創建課表
       tags:
-      - Course
-  /course/{course_id}:
+      - Course_v1
+  /v1/course/{course_id}:
     delete:
       consumes:
       - application/json
@@ -4476,7 +4472,7 @@ paths:
       - fitness_token: []
       summary: 刪除課表
       tags:
-      - Course
+      - Course_v1
     get:
       consumes:
       - application/json
@@ -4507,7 +4503,7 @@ paths:
       - fitness_token: []
       summary: 獲取課表詳細
       tags:
-      - Course
+      - Course_v1
     patch:
       consumes:
       - application/json
@@ -4544,8 +4540,8 @@ paths:
       - fitness_token: []
       summary: 更新課表
       tags:
-      - Course
-  /course/{course_id}/action:
+      - Course_v1
+  /v1/course/{course_id}/action:
     post:
       consumes:
       - application/json
@@ -4615,8 +4611,8 @@ paths:
       - fitness_token: []
       summary: 創建動作
       tags:
-      - Course
-  /course/{course_id}/actions:
+      - Course_v1
+  /v1/course/{course_id}/actions:
     get:
       consumes:
       - application/json
@@ -4669,8 +4665,8 @@ paths:
       - fitness_token: []
       summary: 搜尋動作列表
       tags:
-      - Course
-  /course/{course_id}/cover:
+      - Course_v1
+  /v1/course/{course_id}/cover:
     post:
       consumes:
       - multipart/form-data
@@ -4706,8 +4702,8 @@ paths:
       - fitness_token: []
       summary: 上傳課表封面照
       tags:
-      - Course
-  /course/{course_id}/overview:
+      - Course_v1
+  /v1/course/{course_id}/overview:
     get:
       consumes:
       - application/json
@@ -4738,8 +4734,8 @@ paths:
       - fitness_token: []
       summary: 獲取課表總覽
       tags:
-      - Course
-  /course/{course_id}/plan:
+      - Course_v1
+  /v1/course/{course_id}/plan:
     post:
       consumes:
       - application/json
@@ -4776,8 +4772,8 @@ paths:
       - fitness_token: []
       summary: 創建計畫
       tags:
-      - Course
-  /course/{course_id}/plans:
+      - Course_v1
+  /v1/course/{course_id}/plans:
     get:
       consumes:
       - application/json
@@ -4810,8 +4806,8 @@ paths:
       - fitness_token: []
       summary: 取得課表內的計畫列表
       tags:
-      - Course
-  /course/{course_id}/sale_type:
+      - Course_v1
+  /v1/course/{course_id}/sale_type:
     put:
       consumes:
       - application/json
@@ -4848,8 +4844,8 @@ paths:
       - fitness_token: []
       summary: 更新課表銷售類型
       tags:
-      - Course
-  /course/{course_id}/submit:
+      - Course_v1
+  /v1/course/{course_id}/submit:
     post:
       consumes:
       - application/json
@@ -4875,8 +4871,8 @@ paths:
       - fitness_token: []
       summary: 送審課表
       tags:
-      - Course
-  /course_asset/{course_id}:
+      - Course_v1
+  /v1/course_asset/{course_id}:
     get:
       consumes:
       - application/json
@@ -4907,8 +4903,8 @@ paths:
       - fitness_token: []
       summary: 獲取課表詳細
       tags:
-      - Exercise
-  /course_asset/{course_id}/plans:
+      - Exercise_v1
+  /v1/course_asset/{course_id}/plans:
     get:
       consumes:
       - application/json
@@ -4941,8 +4937,8 @@ paths:
       - fitness_token: []
       summary: 獲取課表計畫列表
       tags:
-      - Exercise
-  /course_asset_structure/{course_id}:
+      - Exercise_v1
+  /v1/course_asset_structure/{course_id}:
     get:
       consumes:
       - application/json
@@ -4973,8 +4969,8 @@ paths:
       - fitness_token: []
       summary: 獲取課表結構
       tags:
-      - Exercise
-  /course_assets:
+      - Exercise_v1
+  /v1/course_assets:
     get:
       consumes:
       - application/json
@@ -5017,8 +5013,8 @@ paths:
       - fitness_token: []
       summary: 獲取課表
       tags:
-      - Exercise
-  /course_order:
+      - Exercise_v1
+  /v1/course_order:
     post:
       consumes:
       - application/json
@@ -5050,8 +5046,8 @@ paths:
       - fitness_token: []
       summary: 創建課表訂單
       tags:
-      - Payment
-  /course_product/{course_id}:
+      - Payment_v1
+  /v1/course_product/{course_id}:
     get:
       consumes:
       - application/json
@@ -5082,8 +5078,8 @@ paths:
       - fitness_token: []
       summary: 獲取課表產品詳細
       tags:
-      - Explore
-  /course_product/{course_id}/plans:
+      - Explore_v1
+  /v1/course_product/{course_id}/plans:
     get:
       consumes:
       - application/json
@@ -5116,8 +5112,8 @@ paths:
       - fitness_token: []
       summary: 獲取課表產品計畫列表
       tags:
-      - Explore
-  /course_product/{course_id}/review:
+      - Explore_v1
+  /v1/course_product/{course_id}/review:
     post:
       consumes:
       - application/json
@@ -5161,8 +5157,8 @@ paths:
       - fitness_token: []
       summary: 創建評論
       tags:
-      - Review
-  /course_product/{course_id}/reviews:
+      - Review_v1
+  /v1/course_product/{course_id}/reviews:
     get:
       consumes:
       - application/json
@@ -5209,8 +5205,8 @@ paths:
       - fitness_token: []
       summary: 獲取評論列表
       tags:
-      - Review
-  /course_product_structure/{course_id}:
+      - Review_v1
+  /v1/course_product_structure/{course_id}:
     get:
       consumes:
       - application/json
@@ -5241,8 +5237,8 @@ paths:
       - fitness_token: []
       summary: 獲取課表結構(只限單一訓練課表)
       tags:
-      - Explore
-  /course_products:
+      - Explore_v1
+  /v1/course_products:
     get:
       consumes:
       - application/json
@@ -5332,8 +5328,8 @@ paths:
       - fitness_token: []
       summary: 搜尋課表產品列表
       tags:
-      - Explore
-  /course_statistic/{course_id}:
+      - Explore_v1
+  /v1/course_statistic/{course_id}:
     get:
       consumes:
       - application/json
@@ -5364,8 +5360,8 @@ paths:
       - fitness_token: []
       summary: 獲取個人課表數據詳細
       tags:
-      - Statistic
-  /course_statistics:
+      - Statistic_v1
+  /v1/course_statistics:
     get:
       consumes:
       - application/json
@@ -5403,8 +5399,8 @@ paths:
       - fitness_token: []
       summary: 獲取個人課表數據統計列表
       tags:
-      - Statistic
-  /course_usage_monthly_statistic:
+      - Statistic_v1
+  /v1/course_usage_monthly_statistic:
     get:
       consumes:
       - application/json
@@ -5429,8 +5425,8 @@ paths:
       - fitness_token: []
       summary: 取得當月課表使用人數分析
       tags:
-      - Statistic
-  /courses:
+      - Statistic_v1
+  /v1/courses:
     get:
       consumes:
       - application/json
@@ -5462,8 +5458,8 @@ paths:
       - fitness_token: []
       summary: 獲取我的課表列表
       tags:
-      - Course
-  /diet:
+      - Course_v1
+  /v1/diet:
     get:
       consumes:
       - application/json
@@ -5494,7 +5490,7 @@ paths:
       - fitness_token: []
       summary: 以日期獲取飲食紀錄
       tags:
-      - Diet
+      - Diet_v1
     post:
       consumes:
       - application/json
@@ -5526,8 +5522,8 @@ paths:
       - fitness_token: []
       summary: 創建飲食紀錄
       tags:
-      - Diet
-  /favorite/action/{action_id}:
+      - Diet_v1
+  /v1/favorite/action/{action_id}:
     delete:
       consumes:
       - application/json
@@ -5553,7 +5549,7 @@ paths:
       - fitness_token: []
       summary: 刪除收藏動作
       tags:
-      - Favorite
+      - Favorite_v1
     post:
       consumes:
       - application/json
@@ -5579,8 +5575,8 @@ paths:
       - fitness_token: []
       summary: 收藏動作
       tags:
-      - Favorite
-  /favorite/course/{course_id}:
+      - Favorite_v1
+  /v1/favorite/course/{course_id}:
     delete:
       consumes:
       - application/json
@@ -5606,7 +5602,7 @@ paths:
       - fitness_token: []
       summary: 刪除收藏課表
       tags:
-      - Favorite
+      - Favorite_v1
     post:
       consumes:
       - application/json
@@ -5632,8 +5628,8 @@ paths:
       - fitness_token: []
       summary: 新增收藏課表
       tags:
-      - Favorite
-  /favorite/trainer/{user_id}:
+      - Favorite_v1
+  /v1/favorite/trainer/{user_id}:
     delete:
       consumes:
       - application/json
@@ -5659,7 +5655,7 @@ paths:
       - fitness_token: []
       summary: 刪除收藏教練
       tags:
-      - Favorite
+      - Favorite_v1
     post:
       consumes:
       - application/json
@@ -5685,8 +5681,8 @@ paths:
       - fitness_token: []
       summary: 收藏教練
       tags:
-      - Favorite
-  /food:
+      - Favorite_v1
+  /v1/food:
     post:
       consumes:
       - application/json
@@ -5718,8 +5714,8 @@ paths:
       - fitness_token: []
       summary: 創建食物
       tags:
-      - Diet
-  /food/{food_id}:
+      - Diet_v1
+  /v1/food/{food_id}:
     delete:
       consumes:
       - application/json
@@ -5745,8 +5741,8 @@ paths:
       - fitness_token: []
       summary: 刪除食物
       tags:
-      - Diet
-  /food_categories:
+      - Diet_v1
+  /v1/food_categories:
     get:
       consumes:
       - application/json
@@ -5773,8 +5769,8 @@ paths:
       - fitness_token: []
       summary: 獲取食物分類
       tags:
-      - Diet
-  /foods:
+      - Diet_v1
+  /v1/foods:
     get:
       consumes:
       - application/json
@@ -5807,8 +5803,8 @@ paths:
       - fitness_token: []
       summary: 獲取食物列表
       tags:
-      - Diet
-  /google_play/access_token:
+      - Diet_v1
+  /v1/google_play/access_token:
     get:
       consumes:
       - application/json
@@ -5826,8 +5822,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 取得 google play api access token(測試用)
       tags:
-      - Payment
-  /google_play/product/{product_id}:
+      - Payment_v1
+  /v1/google_play/product/{product_id}:
     get:
       consumes:
       - application/json
@@ -5861,8 +5857,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 取得 google play developer api product(測試用)
       tags:
-      - Payment
-  /google_play/subscription/{product_id}:
+      - Payment_v1
+  /v1/google_play/subscription/{product_id}:
     get:
       consumes:
       - application/json
@@ -5896,8 +5892,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 取得 google play developer api subscription(測試用)
       tags:
-      - Payment
-  /income_monthly_statistic:
+      - Payment_v1
+  /v1/income_monthly_statistic:
     get:
       consumes:
       - application/json
@@ -5922,8 +5918,8 @@ paths:
       - fitness_token: []
       summary: 取得當月收益分析
       tags:
-      - Statistic
-  /login/admin/email:
+      - Statistic_v1
+  /v1/login/admin/email:
     post:
       consumes:
       - application/json
@@ -5953,8 +5949,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 管理者使用信箱登入
       tags:
-      - Login
-  /login/user/email:
+      - Login_v1
+  /v1/login/user/email:
     post:
       consumes:
       - application/json
@@ -5984,8 +5980,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 用戶使用信箱登入
       tags:
-      - Login
-  /logout/admin:
+      - Login_v1
+  /v1/logout/admin:
     post:
       consumes:
       - application/json
@@ -6005,8 +6001,8 @@ paths:
       - fitness_token: []
       summary: 管理員登出
       tags:
-      - Login
-  /logout/user:
+      - Login_v1
+  /v1/logout/user:
     post:
       consumes:
       - application/json
@@ -6026,8 +6022,8 @@ paths:
       - fitness_token: []
       summary: 用戶登出
       tags:
-      - Login
-  /meal/{meal_id}:
+      - Login_v1
+  /v1/meal/{meal_id}:
     delete:
       consumes:
       - application/json
@@ -6053,8 +6049,8 @@ paths:
       - fitness_token: []
       summary: 刪除餐食
       tags:
-      - Diet
-  /meals:
+      - Diet_v1
+  /v1/meals:
     post:
       consumes:
       - application/json
@@ -6083,8 +6079,8 @@ paths:
       - fitness_token: []
       summary: 創建餐食
       tags:
-      - Diet
-  /migrate/down:
+      - Diet_v1
+  /v1/migrate/down:
     put:
       consumes:
       - application/json
@@ -6104,8 +6100,8 @@ paths:
       - fitness_token: []
       summary: 回滾 Schema 至初始版本
       tags:
-      - Migrate
-  /migrate/down/{step}:
+      - Migrate_v1
+  /v1/migrate/down/{step}:
     put:
       consumes:
       - application/json
@@ -6131,8 +6127,8 @@ paths:
       - fitness_token: []
       summary: 將 Schema 回滾N個版本
       tags:
-      - Migrate
-  /migrate/force/{version}:
+      - Migrate_v1
+  /v1/migrate/force/{version}:
     put:
       consumes:
       - application/json
@@ -6158,8 +6154,8 @@ paths:
       - fitness_token: []
       summary: 修正 Schema 版本並解除錯誤狀態
       tags:
-      - Migrate
-  /migrate/up:
+      - Migrate_v1
+  /v1/migrate/up:
     put:
       consumes:
       - application/json
@@ -6179,8 +6175,8 @@ paths:
       - fitness_token: []
       summary: 將 Schema 升至最新版本
       tags:
-      - Migrate
-  /migrate/up/{step}:
+      - Migrate_v1
+  /v1/migrate/up/{step}:
     put:
       consumes:
       - application/json
@@ -6206,8 +6202,8 @@ paths:
       - fitness_token: []
       summary: 將 Schema 升級N個版本
       tags:
-      - Migrate
-  /migrate/version:
+      - Migrate_v1
+  /v1/migrate/version:
     get:
       consumes:
       - application/json
@@ -6227,8 +6223,8 @@ paths:
       - fitness_token: []
       summary: 獲取當前 Schema 版本
       tags:
-      - Migrate
-  /migrate/version/{version}:
+      - Migrate_v1
+  /v1/migrate/version/{version}:
     put:
       consumes:
       - application/json
@@ -6254,8 +6250,8 @@ paths:
       - fitness_token: []
       summary: 升級至指定 Schema 版本
       tags:
-      - Migrate
-  /plan/{plan_id}:
+      - Migrate_v1
+  /v1/plan/{plan_id}:
     delete:
       consumes:
       - application/json
@@ -6286,7 +6282,7 @@ paths:
       - fitness_token: []
       summary: 刪除計畫
       tags:
-      - Plan
+      - Plan_v1
     patch:
       consumes:
       - application/json
@@ -6323,8 +6319,8 @@ paths:
       - fitness_token: []
       summary: 修改計畫
       tags:
-      - Plan
-  /plan/{plan_id}/workout:
+      - Plan_v1
+  /v1/plan/{plan_id}/workout:
     post:
       consumes:
       - application/json
@@ -6361,8 +6357,8 @@ paths:
       - fitness_token: []
       summary: 創建訓練
       tags:
-      - Plan
-  /plan/{plan_id}/workouts:
+      - Plan_v1
+  /v1/plan/{plan_id}/workouts:
     get:
       consumes:
       - application/json
@@ -6395,8 +6391,8 @@ paths:
       - fitness_token: []
       summary: 取得計畫內的訓練列表
       tags:
-      - Plan
-  /plan_asset/{plan_id}/workouts:
+      - Plan_v1
+  /v1/plan_asset/{plan_id}/workouts:
     get:
       consumes:
       - application/json
@@ -6429,8 +6425,8 @@ paths:
       - fitness_token: []
       summary: 獲取訓練列表
       tags:
-      - Exercise
-  /plan_product/{plan_id}/workouts:
+      - Exercise_v1
+  /v1/plan_product/{plan_id}/workouts:
     get:
       consumes:
       - application/json
@@ -6463,8 +6459,8 @@ paths:
       - fitness_token: []
       summary: 獲取訓練列表
       tags:
-      - Explore
-  /rda:
+      - Explore_v1
+  /v1/rda:
     put:
       consumes:
       - application/json
@@ -6491,8 +6487,8 @@ paths:
       - fitness_token: []
       summary: 更新建議飲食攝取量
       tags:
-      - Diet
-  /recent_foods:
+      - Diet_v1
+  /v1/recent_foods:
     get:
       consumes:
       - application/json
@@ -6519,8 +6515,8 @@ paths:
       - fitness_token: []
       summary: 獲取食物歷程列表
       tags:
-      - Diet
-  /redeem_course:
+      - Diet_v1
+  /v1/redeem_course:
     post:
       consumes:
       - application/json
@@ -6547,8 +6543,8 @@ paths:
       - fitness_token: []
       summary: 兌換免費課表
       tags:
-      - Payment
-  /register/email:
+      - Payment_v1
+  /v1/register/email:
     post:
       consumes:
       - application/json
@@ -6578,8 +6574,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 使用信箱註冊
       tags:
-      - Register
-  /register/email/otp:
+      - Register_v1
+  /v1/register/email/otp:
     post:
       consumes:
       - application/json
@@ -6609,8 +6605,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 發送 Email OTP
       tags:
-      - Register
-  /register/email/validate:
+      - Register_v1
+  /v1/register/email/validate:
     post:
       consumes:
       - application/json
@@ -6635,8 +6631,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 驗證信箱是否可使用
       tags:
-      - Register
-  /register/nickname/validate:
+      - Register_v1
+  /v1/register/nickname/validate:
     post:
       consumes:
       - application/json
@@ -6661,8 +6657,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       summary: 驗證暱稱是否可使用
       tags:
-      - Register
-  /review/{review_id}:
+      - Register_v1
+  /v1/review/{review_id}:
     delete:
       consumes:
       - application/json
@@ -6688,7 +6684,7 @@ paths:
       - fitness_token: []
       summary: 刪除評論
       tags:
-      - Review
+      - Review_v1
     get:
       consumes:
       - application/json
@@ -6719,8 +6715,8 @@ paths:
       - fitness_token: []
       summary: 獲取評論
       tags:
-      - Review
-  /sale_items:
+      - Review_v1
+  /v1/sale_items:
     get:
       consumes:
       - application/json
@@ -6747,8 +6743,8 @@ paths:
       - fitness_token: []
       summary: 取得銷售項目清單
       tags:
-      - Sale
-  /store_home_page:
+      - Sale_v1
+  /v1/store_home_page:
     get:
       consumes:
       - application/json
@@ -6773,8 +6769,8 @@ paths:
       - fitness_token: []
       summary: 獲取商店首頁資料
       tags:
-      - Store
-  /subscribe_order:
+      - Store_v1
+  /v1/subscribe_order:
     post:
       consumes:
       - application/json
@@ -6806,8 +6802,8 @@ paths:
       - fitness_token: []
       summary: 創建訂閱訂單
       tags:
-      - Payment
-  /subscribe_plans:
+      - Payment_v1
+  /v1/subscribe_plans:
     get:
       consumes:
       - application/json
@@ -6834,8 +6830,8 @@ paths:
       - fitness_token: []
       summary: 取得訂閱方案清單
       tags:
-      - Sale
-  /trainer:
+      - Sale_v1
+  /v1/trainer:
     get:
       consumes:
       - application/json
@@ -6860,16 +6856,11 @@ paths:
       - fitness_token: []
       summary: 取得我的教練資訊
       tags:
-      - Trainer
+      - Trainer_v1
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -6971,16 +6962,11 @@ paths:
       - fitness_token: []
       summary: 編輯教練
       tags:
-      - Trainer
+      - Trainer_v1
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名}
-        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名}
-        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名}
-        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名}
-        |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名}
-        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -7114,8 +7100,8 @@ paths:
       - fitness_token: []
       summary: 創建教練
       tags:
-      - Trainer
-  /trainer/{user_id}:
+      - Trainer_v1
+  /v1/trainer/{user_id}:
     get:
       consumes:
       - application/json
@@ -7146,8 +7132,8 @@ paths:
       - fitness_token: []
       summary: 取得指定教練資訊
       tags:
-      - Trainer
-  /trainer/{user_id}/course_products:
+      - Trainer_v1
+  /v1/trainer/{user_id}/course_products:
     get:
       consumes:
       - application/json
@@ -7194,8 +7180,8 @@ paths:
       - fitness_token: []
       summary: 取得教練的課表產品清單
       tags:
-      - Trainer
-  /trainers:
+      - Trainer_v1
+  /v1/trainers:
     get:
       consumes:
       - application/json
@@ -7237,8 +7223,8 @@ paths:
       - fitness_token: []
       summary: 取得教練列表
       tags:
-      - Trainer
-  /user/avatar:
+      - Trainer_v1
+  /v1/user/avatar:
     post:
       consumes:
       - multipart/form-data
@@ -7269,8 +7255,8 @@ paths:
       - fitness_token: []
       summary: 上傳我的大頭照
       tags:
-      - User
-  /user/info:
+      - User_v1
+  /v1/user/info:
     get:
       consumes:
       - application/json
@@ -7295,7 +7281,7 @@ paths:
       - fitness_token: []
       summary: 獲取個人資訊
       tags:
-      - User
+      - User_v1
     patch:
       consumes:
       - application/json
@@ -7327,8 +7313,8 @@ paths:
       - fitness_token: []
       summary: 更新個人資訊
       tags:
-      - User
-  /verify_apple_receipt:
+      - User_v1
+  /v1/verify_apple_receipt:
     post:
       consumes:
       - application/json
@@ -7355,8 +7341,8 @@ paths:
       - fitness_token: []
       summary: 驗證apple收據
       tags:
-      - Payment
-  /verify_google_receipt:
+      - Payment_v1
+  /v1/verify_google_receipt:
     post:
       consumes:
       - application/json
@@ -7383,8 +7369,8 @@ paths:
       - fitness_token: []
       summary: 驗證google收據
       tags:
-      - Payment
-  /workout/{workout_id}:
+      - Payment_v1
+  /v1/workout/{workout_id}:
     delete:
       consumes:
       - application/json
@@ -7415,7 +7401,7 @@ paths:
       - fitness_token: []
       summary: 刪除訓練
       tags:
-      - Workout
+      - Workout_v1
     patch:
       consumes:
       - application/json
@@ -7452,8 +7438,8 @@ paths:
       - fitness_token: []
       summary: 修改訓練
       tags:
-      - Workout
-  /workout/{workout_id}/end_audio:
+      - Workout_v1
+  /v1/workout/{workout_id}/end_audio:
     delete:
       consumes:
       - application/json
@@ -7479,7 +7465,7 @@ paths:
       - fitness_token: []
       summary: 刪除訓練結束語音
       tags:
-      - Workout
+      - Workout_v1
     post:
       consumes:
       - multipart/form-data
@@ -7515,8 +7501,8 @@ paths:
       - fitness_token: []
       summary: 上傳訓練結束語音
       tags:
-      - Workout
-  /workout/{workout_id}/order:
+      - Workout_v1
+  /v1/workout/{workout_id}/order:
     put:
       consumes:
       - application/json
@@ -7548,8 +7534,8 @@ paths:
       - fitness_token: []
       summary: 修改訓練組的順序
       tags:
-      - Workout
-  /workout/{workout_id}/rest_set:
+      - Workout_v1
+  /v1/workout/{workout_id}/rest_set:
     post:
       consumes:
       - application/json
@@ -7580,8 +7566,8 @@ paths:
       - fitness_token: []
       summary: 新增休息組
       tags:
-      - Workout
-  /workout/{workout_id}/start_audio:
+      - Workout_v1
+  /v1/workout/{workout_id}/start_audio:
     delete:
       consumes:
       - application/json
@@ -7607,7 +7593,7 @@ paths:
       - fitness_token: []
       summary: 刪除訓練前導語音
       tags:
-      - Workout
+      - Workout_v1
     post:
       consumes:
       - multipart/form-data
@@ -7643,8 +7629,8 @@ paths:
       - fitness_token: []
       summary: 上傳訓練前導語音
       tags:
-      - Workout
-  /workout/{workout_id}/workout_set:
+      - Workout_v1
+  /v1/workout/{workout_id}/workout_set:
     post:
       consumes:
       - application/json
@@ -7683,8 +7669,8 @@ paths:
       - fitness_token: []
       summary: 新增訓練組
       tags:
-      - Workout
-  /workout/{workout_id}/workout_sets:
+      - Workout_v1
+  /v1/workout/{workout_id}/workout_sets:
     get:
       consumes:
       - application/json
@@ -7717,8 +7703,8 @@ paths:
       - fitness_token: []
       summary: 取得訓練內的訓練組列表
       tags:
-      - Workout
-  /workout_asset/{workout_id}/workout_log:
+      - Workout_v1
+  /v1/workout_asset/{workout_id}/workout_log:
     post:
       consumes:
       - application/json
@@ -7757,8 +7743,8 @@ paths:
       - fitness_token: []
       summary: 創建訓練記錄
       tags:
-      - Exercise
-  /workout_asset/{workout_id}/workout_sets:
+      - Exercise_v1
+  /v1/workout_asset/{workout_id}/workout_sets:
     get:
       consumes:
       - application/json
@@ -7791,8 +7777,8 @@ paths:
       - fitness_token: []
       summary: 獲取訓練組列表
       tags:
-      - Exercise
-  /workout_log/{workout_log_id}:
+      - Exercise_v1
+  /v1/workout_log/{workout_log_id}:
     delete:
       consumes:
       - application/json
@@ -7818,7 +7804,7 @@ paths:
       - fitness_token: []
       summary: 刪除訓練紀錄
       tags:
-      - History
+      - History_v1
     get:
       consumes:
       - application/json
@@ -7849,8 +7835,8 @@ paths:
       - fitness_token: []
       summary: 獲取訓練紀錄詳細
       tags:
-      - History
-  /workout_logs:
+      - History_v1
+  /v1/workout_logs:
     get:
       consumes:
       - application/json
@@ -7888,8 +7874,8 @@ paths:
       - fitness_token: []
       summary: 以日期區間獲取訓練記錄
       tags:
-      - History
-  /workout_product/{workout_id}/workout_sets:
+      - History_v1
+  /v1/workout_product/{workout_id}/workout_sets:
     get:
       consumes:
       - application/json
@@ -7922,8 +7908,8 @@ paths:
       - fitness_token: []
       summary: 獲取訓練組列表(探索區課表)
       tags:
-      - Explore
-  /workout_set/{workout_set_id}:
+      - Explore_v1
+  /v1/workout_set/{workout_set_id}:
     delete:
       consumes:
       - application/json
@@ -7954,7 +7940,7 @@ paths:
       - fitness_token: []
       summary: 刪除訓練組
       tags:
-      - WorkoutSet
+      - WorkoutSet_v1
     patch:
       consumes:
       - application/json
@@ -7991,8 +7977,8 @@ paths:
       - fitness_token: []
       summary: 修改訓練組
       tags:
-      - WorkoutSet
-  /workout_set/{workout_set_id}/duplicate:
+      - WorkoutSet_v1
+  /v1/workout_set/{workout_set_id}/duplicate:
     post:
       consumes:
       - application/json
@@ -8031,8 +8017,8 @@ paths:
       - fitness_token: []
       summary: 複製訓練組
       tags:
-      - WorkoutSet
-  /workout_set/{workout_set_id}/progress_audio:
+      - WorkoutSet_v1
+  /v1/workout_set/{workout_set_id}/progress_audio:
     delete:
       consumes:
       - application/json
@@ -8058,7 +8044,7 @@ paths:
       - fitness_token: []
       summary: 刪除訓練組進行中語音
       tags:
-      - WorkoutSet
+      - WorkoutSet_v1
     post:
       consumes:
       - multipart/form-data
@@ -8094,8 +8080,8 @@ paths:
       - fitness_token: []
       summary: 上傳訓練組進行中語音
       tags:
-      - WorkoutSet
-  /workout_set/{workout_set_id}/start_audio:
+      - WorkoutSet_v1
+  /v1/workout_set/{workout_set_id}/start_audio:
     delete:
       consumes:
       - application/json
@@ -8121,7 +8107,7 @@ paths:
       - fitness_token: []
       summary: 刪除訓練組前導語音
       tags:
-      - WorkoutSet
+      - WorkoutSet_v1
     post:
       consumes:
       - multipart/form-data
@@ -8157,7 +8143,7 @@ paths:
       - fitness_token: []
       summary: 上傳訓練組前導語音
       tags:
-      - WorkoutSet
+      - WorkoutSet_v1
 securityDefinitions:
   fitness_token:
     in: header
