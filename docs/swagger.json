@@ -7463,7 +7463,7 @@
                 }
             }
         },
-        "/v2/cms/course/{id}": {
+        "/v2/cms/course/{course_id}": {
             "get": {
                 "security": [
                     {
@@ -7478,14 +7478,14 @@
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/Course_v2"
+                    "CMS課表管理_v2"
                 ],
                 "summary": "獲取課表詳細",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "課表ID",
-                        "name": "id",
+                        "name": "course_id",
                         "in": "path",
                         "required": true
                     }
@@ -7495,6 +7495,76 @@
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/course.APIGetCMSCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/cms/course/{course_id}/plans": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取計畫列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS課表管理_v2"
+                ],
+                "summary": "獲取計畫列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表ID",
+                        "name": "course_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APIGetCMSPlansOutput"
                         }
                     },
                     "400": {
@@ -7521,14 +7591,14 @@
                     "application/json"
                 ],
                 "tags": [
-                    "CMS/Course_v2"
+                    "CMS課表管理_v2"
                 ],
                 "summary": "獲取課表列表",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "課表ID",
-                        "name": "id",
+                        "name": "course_id",
                         "in": "query"
                     },
                     {
@@ -11494,6 +11564,99 @@
                     "description": "總頁數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "plan.APIGetCMSPlansOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "計畫id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "description": "計畫名稱",
+                                "type": "string",
+                                "example": "第一週增肌計畫"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "workout_count": {
+                                "description": "訓練數量",
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "workouts": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "create_at": {
+                                            "description": "創建時間",
+                                            "type": "string",
+                                            "example": "2022-06-14 00:00:00"
+                                        },
+                                        "end_audio": {
+                                            "description": "結束語音",
+                                            "type": "string"
+                                        },
+                                        "equipment": {
+                                            "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "description": "訓練 id",
+                                            "type": "integer"
+                                        },
+                                        "name": {
+                                            "description": "訓練名稱",
+                                            "type": "string"
+                                        },
+                                        "start_audio": {
+                                            "description": "前導語音",
+                                            "type": "string"
+                                        },
+                                        "update_at": {
+                                            "description": "更新時間",
+                                            "type": "string",
+                                            "example": "2022-06-14 00:00:00"
+                                        },
+                                        "workout_set_count": {
+                                            "description": "動作組數",
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },

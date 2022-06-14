@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"gorm.io/gorm"
 )
 
 type repository struct {
@@ -64,6 +65,12 @@ func (r *repository) List(input *model.ListInput) (output []*model.Table, amount
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
+			if preload.OrderBy != nil {
+				db = db.Preload(preload.Field, func(db *gorm.DB) *gorm.DB {
+					return db.Order(fmt.Sprintf("%s %s", input.OrderField, input.OrderType))
+				})
+				continue
+			}
 			db = db.Preload(preload.Field)
 		}
 	}

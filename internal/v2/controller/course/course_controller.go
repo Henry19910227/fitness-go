@@ -22,11 +22,11 @@ func New(resolver course.Resolver) Controller {
 // GetCMSCourses 獲取課表列表
 // @Summary 獲取課表列表
 // @Description 獲取課表列表
-// @Tags CMS/Course_v2
+// @Tags CMS課表管理_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param id query int64 false "課表ID"
+// @Param course_id query int64 false "課表ID"
 // @Param name query string false "課表名稱"
 // @Param course_status query int false "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)"
 // @Param sale_type query int false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)"
@@ -64,14 +64,14 @@ func (c *controller) GetCMSCourses(ctx *gin.Context) {
 // GetCMSCourse 獲取課表詳細
 // @Summary 獲取課表詳細
 // @Description 獲取課表詳細
-// @Tags CMS/Course_v2
+// @Tags CMS課表管理_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param id path int64 true "課表ID"
+// @Param course_id path int64 true "課表ID"
 // @Success 200 {object} course.APIGetCMSCourseOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/cms/course/{id} [GET]
+// @Router /v2/cms/course/{course_id} [GET]
 func (c *controller) GetCMSCourse(ctx *gin.Context) {
 	var uri struct {
 		model.IDField
