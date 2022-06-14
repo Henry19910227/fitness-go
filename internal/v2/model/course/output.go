@@ -42,7 +42,7 @@ func (Table) TableName() string {
 // APIGetCMSCoursesOutput /cms/courses [GET] 獲取課表列表 API
 type APIGetCMSCoursesOutput struct {
 	base.Output
-	Data   APIGetCMSCoursesData `json:"data,omitempty"`
+	Data   APIGetCMSCoursesData `json:"data"`
 	Paging *paging.Output       `json:"paging,omitempty"`
 }
 type APIGetCMSCoursesData []*struct {
