@@ -2,15 +2,18 @@ package main
 
 import (
 	"flag"
-	"github.com/Henry19910227/fitness-go/errcode"
-	"github.com/Henry19910227/fitness-go/internal/access"
-	"github.com/Henry19910227/fitness-go/internal/controller"
-	"github.com/Henry19910227/fitness-go/internal/handler"
-	"github.com/Henry19910227/fitness-go/internal/middleware"
-	"github.com/Henry19910227/fitness-go/internal/repository"
-	"github.com/Henry19910227/fitness-go/internal/service"
-	"github.com/Henry19910227/fitness-go/internal/setting"
-	"github.com/Henry19910227/fitness-go/internal/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/errcode"
+	"github.com/Henry19910227/fitness-go/internal/pkg/setting"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
+	"github.com/Henry19910227/fitness-go/internal/v1/access"
+	"github.com/Henry19910227/fitness-go/internal/v1/controller"
+	"github.com/Henry19910227/fitness-go/internal/v1/handler"
+	"github.com/Henry19910227/fitness-go/internal/v1/middleware"
+	"github.com/Henry19910227/fitness-go/internal/v1/repository"
+	"github.com/Henry19910227/fitness-go/internal/v1/service"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/plan"
+	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
@@ -70,8 +73,8 @@ var (
 	rdaService                             service.RDA
 	dietService                            service.Diet
 	foodCategoryService                    service.FoodCategory
-	foodService 						   service.Food
-	mealService							   service.Meal
+	foodService                            service.Food
+	mealService                            service.Meal
 )
 
 var (
@@ -130,45 +133,50 @@ func main() {
 	router.Use(gin.CustomRecovery(middleware.Recover(logHandler)))
 	router.Use(middleware.CORS()) //加入解決跨域中間層
 	//gin.SetMode(gin.ReleaseMode)
-	baseGroup := router.Group("/api/v1")
-	controller.NewMigrate(baseGroup, migrateService, adminLV2Middleware)
-	controller.NewManager(baseGroup)
-	controller.NewRegister(baseGroup, regService)
-	controller.NewLogin(baseGroup, loginService, userMiddleware, adminLV1Middleware)
-	controller.NewUser(baseGroup, userService, userMiddleware)
-	controller.NewTrainer(baseGroup, trainerService, courseService, userMiddleware, userMidd)
-	controller.NewCourse(baseGroup, courseService, planService, actionService, reviewService, userMidd, courseMidd)
-	controller.NewCourseProduct(baseGroup, courseService, planService, workoutSetService, courseMidd, userMidd)
-	controller.NewCourseAsset(baseGroup, courseService, planService, userMidd, courseMidd)
-	controller.NewCourseStatistic(baseGroup, courseService, userMidd)
-	controller.NewPlan(baseGroup, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
-	controller.NewPlanProduct(baseGroup, planService, workoutService, planMidd, userMidd)
-	controller.NewPlanAsset(baseGroup, planService, workoutService, planMidd, userMidd)
-	controller.NewWorkout(baseGroup, workoutService, workoutSetService, userMidd, courseMidd)
-	controller.NewWorkoutProduct(baseGroup, workoutService, workoutSetService, workoutLogService, workoutMidd, userMidd)
-	controller.NewWorkoutAsset(baseGroup, workoutService, workoutSetService, workoutLogService, workoutMidd, userMidd)
-	controller.NewWorkoutSet(baseGroup, workoutSetService, userMidd, courseMidd)
-	controller.NewWorkoutLog(baseGroup, workoutLogService, userMidd)
-	controller.NewAction(baseGroup, actionService, workoutSetLogService, userMidd, courseMidd)
-	controller.NewSale(baseGroup, saleService, userMidd)
-	controller.NewStore(baseGroup, storeService, courseService, planService, workoutService, workoutSetService, courseMidd, planMidd)
-	controller.NewReview(baseGroup, courseService, reviewService, userMidd, courseMidd, reviewMidd)
-	controller.NewPayment(baseGroup, paymentService, courseService, userMidd)
-	controller.NewFavorite(baseGroup, favoriteService, courseService, userMidd, courseMidd)
-	controller.NewCMSLogin(baseGroup, loginService, userMidd)
-	controller.NewCMSUser(baseGroup, userService, userMidd)
-	controller.NewCMSTrainer(baseGroup, trainerService, courseService, userMidd)
-	controller.NewOrder(baseGroup, orderService, userMidd)
-	controller.NewStatistic(baseGroup, userIncomeMonthlyStatisticService, userCourseUsageMonthlyStatisticService, userMidd)
-	controller.NewRDA(baseGroup, rdaService, userMidd)
-	controller.NewDiet(baseGroup, dietService, userMidd)
-	controller.NewFoodCategory(baseGroup, foodCategoryService, userMidd)
-	controller.NewFood(baseGroup, foodService, userMidd)
-	controller.NewMeal(baseGroup, mealService, userMidd)
+	baseGroup := router.Group("/api")
+	v1 := baseGroup.Group("/v1")
+	controller.NewMigrate(v1, migrateService, adminLV2Middleware)
+	controller.NewRegister(v1, regService)
+	controller.NewLogin(v1, loginService, userMiddleware, adminLV1Middleware)
+	controller.NewUser(v1, userService, userMiddleware)
+	controller.NewTrainer(v1, trainerService, courseService, userMiddleware, userMidd)
+	controller.NewCourse(v1, courseService, planService, actionService, reviewService, userMidd, courseMidd)
+	controller.NewCourseProduct(v1, courseService, planService, workoutSetService, courseMidd, userMidd)
+	controller.NewCourseAsset(v1, courseService, planService, userMidd, courseMidd)
+	controller.NewCourseStatistic(v1, courseService, userMidd)
+	controller.NewPlan(v1, planService, workoutService, workoutSetAccess, userMidd, courseMidd)
+	controller.NewPlanProduct(v1, planService, workoutService, planMidd, userMidd)
+	controller.NewPlanAsset(v1, planService, workoutService, planMidd, userMidd)
+	controller.NewWorkout(v1, workoutService, workoutSetService, userMidd, courseMidd)
+	controller.NewWorkoutProduct(v1, workoutService, workoutSetService, workoutLogService, workoutMidd, userMidd)
+	controller.NewWorkoutAsset(v1, workoutService, workoutSetService, workoutLogService, workoutMidd, userMidd)
+	controller.NewWorkoutSet(v1, workoutSetService, userMidd, courseMidd)
+	controller.NewWorkoutLog(v1, workoutLogService, userMidd)
+	controller.NewAction(v1, actionService, workoutSetLogService, userMidd, courseMidd)
+	controller.NewSale(v1, saleService, userMidd)
+	controller.NewStore(v1, storeService, courseService, planService, workoutService, workoutSetService, courseMidd, planMidd)
+	controller.NewReview(v1, courseService, reviewService, userMidd, courseMidd, reviewMidd)
+	controller.NewPayment(v1, paymentService, courseService, userMidd)
+	controller.NewFavorite(v1, favoriteService, courseService, userMidd, courseMidd)
+	controller.NewCMSLogin(v1, loginService, userMidd)
+	controller.NewCMSUser(v1, userService, userMidd)
+	controller.NewCMSTrainer(v1, trainerService, courseService, userMidd)
+	controller.NewOrder(v1, orderService, userMidd)
+	controller.NewStatistic(v1, userIncomeMonthlyStatisticService, userCourseUsageMonthlyStatisticService, userMidd)
+	controller.NewRDA(v1, rdaService, userMidd)
+	controller.NewDiet(v1, dietService, userMidd)
+	controller.NewFoodCategory(v1, foodCategoryService, userMidd)
+	controller.NewFood(v1, foodService, userMidd)
+	controller.NewMeal(v1, mealService, userMidd)
 	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService, userIncomeMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
 	schedulerTool.Start()
+
+	v2 := baseGroup.Group("/v2")
+	course.SetRoute(v2, gormTool, redisTool, viperTool)
+	plan.SetRoute(v2, gormTool, redisTool, viperTool)
+	workoutSet.SetRoute(v2, gormTool, redisTool, viperTool)
 	router.Run(":" + viperTool.GetString("Server.HttpPort"))
 }
 

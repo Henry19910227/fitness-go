@@ -89,8 +89,8 @@ Swagger:
     Debug:
       Protocol: http
       Host: 127.0.0.1:9090
-      BasePath: /api/v1
+      BasePath: /api
     Release:
       Protocol: https
       Host: www.fitopia-hub.tk
-      BasePath: /api/v1
+      BasePath: /api
