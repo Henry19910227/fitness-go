@@ -13,6 +13,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v1/service"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/plan"
+	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
@@ -175,6 +176,7 @@ func main() {
 	v2 := baseGroup.Group("/v2")
 	course.SetRoute(v2, gormTool, redisTool, viperTool)
 	plan.SetRoute(v2, gormTool, redisTool, viperTool)
+	workoutSet.SetRoute(v2, gormTool, redisTool, viperTool)
 	router.Run(":" + viperTool.GetString("Server.HttpPort"))
 }
 
