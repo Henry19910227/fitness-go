@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 )
 
@@ -203,8 +204,12 @@ func setupLogTool() {
 }
 
 func setupViper() {
+	fullPath, err := filepath.Abs("./config/config.yaml")
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 	vp := viper.New()
-	vp.SetConfigFile("./config/config.yaml")
+	vp.SetConfigFile(fullPath)
 	if err := vp.ReadInConfig(); err != nil {
 		log.Fatalf(err.Error())
 	}

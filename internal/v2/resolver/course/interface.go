@@ -1,8 +1,11 @@
 package course
 
-import model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+import (
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/gin-gonic/gin"
+)
 
 type Resolver interface {
-	APIGetCMSCourses(input *model.APIGetCMSCoursesInput) interface{}
-	APIGetCMSCourse(input *model.APIGetCMSCourseInput) interface{}
+	APIGetCMSCourses(ctx *gin.Context, input *model.APIGetCMSCoursesInput) interface{}
+	APIGetCMSCourse(ctx *gin.Context, input *model.APIGetCMSCourseInput) interface{}
 }
