@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/errcode"
 	"github.com/Henry19910227/fitness-go/internal/pkg/setting"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/v1/access"
 	"github.com/Henry19910227/fitness-go/internal/v1/controller"
 	"github.com/Henry19910227/fitness-go/internal/v1/handler"
@@ -12,6 +13,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v1/repository"
 	"github.com/Henry19910227/fitness-go/internal/v1/service"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/food"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/plan"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
 	"github.com/gin-gonic/gin"
@@ -135,6 +137,8 @@ func main() {
 	router.Use(middleware.CORS()) //加入解決跨域中間層
 	//gin.SetMode(gin.ReleaseMode)
 	baseGroup := router.Group("/api")
+
+	//v1
 	v1 := baseGroup.Group("/v1")
 	controller.NewMigrate(v1, migrateService, adminLV2Middleware)
 	controller.NewRegister(v1, regService)
@@ -174,10 +178,13 @@ func main() {
 	controller.NewHealthy(router)
 	schedulerTool.Start()
 
+	// v2
+	ormTool := orm.NewTool(viperTool)
 	v2 := baseGroup.Group("/v2")
 	course.SetRoute(v2, gormTool, redisTool, viperTool)
 	plan.SetRoute(v2, gormTool, redisTool, viperTool)
 	workoutSet.SetRoute(v2, gormTool, redisTool, viperTool)
+	food.SetRoute(v2, ormTool, redisTool, viperTool)
 	router.Run(":" + viperTool.GetString("Server.HttpPort"))
 }
 

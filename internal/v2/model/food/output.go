@@ -1,21 +1,35 @@
 package food
 
-import "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
+import (
+	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	foodCategory "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
+)
 
-type Table struct {
+type Output struct {
+	Table
+	FoodCategory *foodCategory.Table `json:"food_category,omitempty" gorm:"foreignkey:id;references:food_category_id"` // 餐食
+}
+
+func (Output) TableName() string {
+	return "foods"
+}
+
+type APIGetFoodsOutput struct {
+	base.Output
+	Data APIGetFoodsData `json:"data"`
+}
+type APIGetFoodsData []*struct {
 	IDField
 	UserIDField
-	FoodCategoryIDField
 	SourceField
 	NameField
 	CalorieField
 	AmountDescField
-	IsDeletedField
 	CreateAtField
 	UpdateAtField
-	FoodCategory *food_category.Table `json:"food_category,omitempty" gorm:"foreignKey:id;references:food_category_id"` // 餐食
-}
-
-func (Table) TableName() string {
-	return "foods"
+	FoodCategory *struct {
+		foodCategory.IDField
+		foodCategory.TagField
+		foodCategory.TitleField
+	} `json:"food_category,omitempty"`
 }

@@ -8,7 +8,7 @@ type setting struct {
 }
 
 func New(vp *viper.Viper) Setting {
-	return &setting{}
+	return &setting{vp: vp, mode: vp.GetString("Server.RunMode")}
 }
 
 func (s *setting) GetUserName() string {

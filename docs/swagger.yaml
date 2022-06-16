@@ -2837,6 +2837,69 @@ definitions:
           $ref: '#/definitions/dto.WorkoutSet'
         type: array
     type: object
+  food.APIGetFoodsOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            amount_desc:
+              description: 份量描述
+              example: 一份三百卡
+              type: string
+            calorie:
+              description: 食物熱量
+              example: 300
+              type: integer
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            food_category:
+              properties:
+                id:
+                  description: 主鍵id
+                  example: 1
+                  type: integer
+                tag:
+                  description: 食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)
+                  example: 2
+                  type: integer
+                title:
+                  description: 類別名稱
+                  example: 米麥類
+                  type: string
+              type: object
+            id:
+              description: 主鍵id
+              example: 1
+              type: integer
+            name:
+              description: 食物名稱
+              example: 蕃薯
+              type: string
+            source:
+              description: 來源(1:系統創建食物/2:用戶創建食物)
+              example: 1
+              type: integer
+            update_at:
+              description: 更新時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            user_id:
+              description: 用戶id
+              example: 10001
+              type: integer
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   model.Data:
     type: object
   model.ErrorResult:
@@ -8432,6 +8495,36 @@ paths:
       summary: 獲取訓練組列表
       tags:
       - CMS課表管理_v2
+  /v2/foods:
+    get:
+      consumes:
+      - application/json
+      description: 獲取食物列表
+      parameters:
+      - description: 食物名稱
+        in: query
+        name: name
+        type: string
+      - description: 食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)
+        in: query
+        name: tag
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/food.APIGetFoodsOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/model.ErrorResult'
+      security:
+      - fitness_token: []
+      summary: 獲取食物列表
+      tags:
+      - Diet_v2
 securityDefinitions:
   fitness_token:
     in: header

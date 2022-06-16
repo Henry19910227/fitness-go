@@ -8,5 +8,5 @@ type Output struct {
 }
 
 func (Output) TableName() string {
-	return "meals"
+	return "foods"
 }
