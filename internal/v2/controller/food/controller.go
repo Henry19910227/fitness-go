@@ -21,7 +21,7 @@ func New(resolver food.Resolver) Controller {
 // GetFoods 獲取食物列表
 // @Summary 獲取食物列表
 // @Description 獲取食物列表
-// @Tags Diet_v2
+// @Tags 飲食_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
