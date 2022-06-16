@@ -7755,7 +7755,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Diet_v2"
+                    "飲食_v2"
                 ],
                 "summary": "獲取食物列表",
                 "parameters": [
@@ -11824,23 +11824,28 @@ var doc = `{
                                         },
                                         "end_audio": {
                                             "description": "結束語音",
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "123.mp3"
                                         },
                                         "equipment": {
                                             "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "2,3,6"
                                         },
                                         "id": {
                                             "description": "訓練 id",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": 1
                                         },
                                         "name": {
                                             "description": "訓練名稱",
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "腿部訓練"
                                         },
                                         "start_audio": {
                                             "description": "前導語音",
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "123.mp3"
                                         },
                                         "update_at": {
                                             "description": "更新時間",
@@ -11849,7 +11854,8 @@ var doc = `{
                                         },
                                         "workout_set_count": {
                                             "description": "動作組數",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": 10
                                         }
                                     }
                                 }
