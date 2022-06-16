@@ -57,7 +57,7 @@ func (c *controller) GetCMSCourses(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetCMSCourses(&input)
+	output := c.resolver.APIGetCMSCourses(ctx, &input)
 	ctx.JSON(http.StatusOK, output)
 }
 
@@ -85,6 +85,6 @@ func (c *controller) GetCMSCourse(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetCMSCourse(&input)
+	output := c.resolver.APIGetCMSCourse(ctx, &input)
 	ctx.JSON(http.StatusOK, output)
 }

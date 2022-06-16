@@ -37,10 +37,14 @@ func (r repository) List(input *model.ListInput) (output []*model.Table, amount 
 			db = db.Preload(preload.Field)
 		}
 	}
+	// Count
+	db = db.Count(&amount)
+	// Paging
+	if input.Page > 0 && input.Size > 0 {
+		db = db.Offset((input.Page - 1)*input.Size).Limit(input.Size)
+	}
 	//查詢數據
-	err = db.Count(&amount).
-		Offset((input.Page - 1) * input.Size).
-		Limit(input.Size).
+	err = db.
 		Order(fmt.Sprintf("%s %s", "workout_set_orders.seq", "ASC")).
 		Find(&output).Error
 	return output, amount, err

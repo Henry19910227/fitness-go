@@ -7739,6 +7739,54 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/v2/foods": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取食物列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Diet_v2"
+                ],
+                "summary": "獲取食物列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "食物名稱",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)",
+                        "name": "tag",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/food.APIGetFoodsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -11473,6 +11521,89 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/dto.WorkoutSet"
                     }
+                }
+            }
+        },
+        "food.APIGetFoodsOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "amount_desc": {
+                                "description": "份量描述",
+                                "type": "string",
+                                "example": "一份三百卡"
+                            },
+                            "calorie": {
+                                "description": "食物熱量",
+                                "type": "integer",
+                                "example": 300
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "food_category": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "description": "主鍵id",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tag": {
+                                        "description": "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "title": {
+                                        "description": "類別名稱",
+                                        "type": "string",
+                                        "example": "米麥類"
+                                    }
+                                }
+                            },
+                            "id": {
+                                "description": "主鍵id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "description": "食物名稱",
+                                "type": "string",
+                                "example": "蕃薯"
+                            },
+                            "source": {
+                                "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "user_id": {
+                                "description": "用戶id",
+                                "type": "integer",
+                                "example": 10001
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

@@ -10,7 +10,7 @@ import (
 )
 
 func SetRoute(baseGroup *gin.RouterGroup, gormTool tool.Gorm, redisTool tool.Redis, viperTool *viper.Viper) {
-	controller := course.NewController(gormTool)
+	controller := course.NewController(gormTool, viperTool)
 	midd := middleware.NewTokenMiddleware(redisTool, viperTool)
 	baseGroup.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)
 	baseGroup.GET("/cms/course/:course_id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
