@@ -27,7 +27,7 @@ func NewMeal(baseGroup *gin.RouterGroup, mealService service.Meal, userMiddlewar
 }
 
 // CreateMeals 創建餐食
-// @Summary 創建餐食
+// @Summary 創建餐食 (由 /v2/diet/{diet_id}/meals [PUT] 取代)
 // @Description 創建餐食
 // @Tags Diet_v1
 // @Accept json
@@ -58,7 +58,7 @@ func (m *Meal) CreateMeals(c *gin.Context) {
 }
 
 // DeleteMeal 刪除餐食
-// @Summary 刪除餐食
+// @Summary 刪除餐食 (由 /v2/diet/{diet_id}/meals [PUT] 取代)
 // @Description 刪除餐食
 // @Tags Diet_v1
 // @Accept json

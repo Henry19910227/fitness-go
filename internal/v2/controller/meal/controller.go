@@ -19,9 +19,9 @@ func New(resolver meal.Resolver) Controller {
 	return &controller{resolver: resolver}
 }
 
-// UpdateMeals 修改餐食
-// @Summary 修改餐食
-// @Description 修改餐食
+// UpdateMeals 修改並覆蓋餐食
+// @Summary 修改並覆蓋餐食
+// @Description 修改並覆蓋餐食
 // @Tags 飲食_v2
 // @Accept json
 // @Produce json
