@@ -1,7 +1,7 @@
 package diet
 
 type IDField struct {
-	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"1"` //id
+	ID *int64 `json:"id,omitempty" uri:"diet_id" gorm:"column:id" example:"1"` //id
 }
 type UserIDField struct {
 	UserID *int64 `json:"user_id,omitempty" gorm:"column:user_id" example:"10001"` //用戶id
@@ -27,6 +27,7 @@ type Table struct {
 	CreateAtField
 	UpdateAtField
 }
+
 func (Table) TableName() string {
 	return "diets"
 }

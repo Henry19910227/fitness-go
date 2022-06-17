@@ -28,7 +28,7 @@ func New(resolver food.Resolver) Controller {
 // @Param name query string false "食物名稱"
 // @Param tag query int false "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)"
 // @Success 200 {object} food.APIGetFoodsOutput "成功!"
-// @Failure 400 {object} model.ErrorResult "失敗!"
+// @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/foods [GET]
 func (c *controller) GetFoods(ctx *gin.Context) {
 	uid, exists := ctx.Get("uid")

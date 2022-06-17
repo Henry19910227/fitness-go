@@ -1,14 +1,13 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
-	"github.com/spf13/viper"
+	"gorm.io/gorm"
 )
 
-func NewResolver(gormTool tool.Gorm, vp *viper.Viper) Resolver {
-	courseSvc := courseService.NewService(gormTool)
-	logTool := logger.NewTool(vp)
+func NewResolver(db *gorm.DB) Resolver {
+	courseSvc := courseService.NewService(db)
+	logTool := logger.NewTool()
 	return New(courseSvc, logTool)
 }

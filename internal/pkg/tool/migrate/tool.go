@@ -8,20 +8,21 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/prometheus/common/log"
 )
 
 type tool struct {
 	mig *migrate.Migrate
 }
 
-func New(setting mysql.Setting) (Tool, error) {
+func New(setting mysql.Setting) Tool {
 	source := "file://" + migrations.RootPath()
 	dbURL := fmt.Sprintf("mysql://%v:%v@tcp(%v)/%v", setting.GetUserName(), setting.GetPassword(), setting.GetHost(), setting.GetDatabase())
 	mig, err := migrate.New(source, dbURL)
 	if err != nil {
-		return nil, err
+		log.Fatalf(err.Error())
 	}
-	return &tool{mig: mig}, nil
+	return &tool{mig: mig}
 }
 
 func (t *tool) Up(step *int) error {

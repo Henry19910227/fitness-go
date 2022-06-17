@@ -25,3 +25,10 @@ func PermissionDenied() *Output {
 	output.Msg = "permission denied"
 	return &output
 }
+
+func Success() *Output {
+	output := Output{}
+	output.Code = code.Success
+	output.Msg = "success"
+	return &output
+}
