@@ -2,21 +2,24 @@ package meal
 
 import (
 	"fmt"
-	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/meal"
 	"gorm.io/gorm"
 )
 
 type repository struct {
-	gorm orm.Tool
+	db *gorm.DB
 }
 
-func New(gormTool orm.Tool) Repository {
-	return &repository{gorm: gormTool}
+func New(db *gorm.DB) Repository {
+	return &repository{db: db}
+}
+
+func (r *repository) WithTrx(tx *gorm.DB) Repository {
+	return New(tx)
 }
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
-	db := r.gorm.DB().Model(&model.Output{})
+	db := r.db.Model(&model.Output{})
 	//加入 id 篩選條件
 	if input.DietID != nil {
 		db = db.Where("diet_id = ?", *input.DietID)
@@ -49,17 +52,17 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 }
 
 func (r *repository) Create(items []*model.Table) (err error) {
-	err = r.gorm.DB().Model(&model.Table{}).Create(items).Error
+	err = r.db.Model(&model.Table{}).Create(items).Error
 	return err
 }
 
 func (r *repository) Update(items []*model.Table) (err error) {
-	err = r.gorm.DB().Model(&model.Table{}).Save(&items).Error
+	err = r.db.Model(&model.Table{}).Save(&items).Error
 	return err
 }
 
 func (r *repository) Delete(input *model.DeleteInput) (err error) {
-	db := r.gorm.DB()
+	db := r.db
 	if input.ID != nil{
 		db = db.Where("id = ?", *input.ID)
 	}

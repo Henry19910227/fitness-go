@@ -5,10 +5,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type Repository interface {
-	WithTrx(tx *gorm.DB) Repository
-	List(input *model.ListInput) (outputs []*model.Output, amount int64, err error)
+type Service interface {
+	Tx(tx *gorm.DB) Service
 	Create(items []*model.Table) (err error)
-	Update(items []*model.Table) (err error)
 	Delete(input *model.DeleteInput) (err error)
 }

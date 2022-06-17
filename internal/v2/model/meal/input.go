@@ -22,6 +22,12 @@ type DeleteInput struct {
 	DietIDField
 }
 
-func (ListInput) TableName() string {
-	return "meals"
+type APIPutMealsInput struct {
+	DietIDField
+	Meals  []*APIPutMealsInputItem
+}
+type APIPutMealsInputItem struct {
+	FoodIDField
+	TypeField
+	AmountField
 }
