@@ -7740,6 +7740,61 @@ var doc = `{
                 }
             }
         },
+        "/v2/diet/{diet_id}/meals": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "修改餐食",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "飲食_v2"
+                ],
+                "summary": "修改餐食",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "飲食id",
+                        "name": "diet_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/meal.APIPutMealsInputItem"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/foods": {
             "get": {
                 "security": [
@@ -7782,7 +7837,7 @@ var doc = `{
                     "400": {
                         "description": "失敗!",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
+                            "$ref": "#/definitions/base.Output"
                         }
                     }
                 }
@@ -11604,6 +11659,26 @@ var doc = `{
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
+                }
+            }
+        },
+        "meal.APIPutMealsInputItem": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "description": "數量",
+                    "type": "number",
+                    "example": 1
+                },
+                "food_id": {
+                    "description": "食物id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "type": {
+                    "description": "類型(1:/早餐/2:午餐/3:晚餐/4:點心)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

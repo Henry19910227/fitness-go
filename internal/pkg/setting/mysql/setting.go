@@ -1,14 +1,18 @@
 package mysql
 
-import "github.com/spf13/viper"
+import (
+	"github.com/Henry19910227/fitness-go/internal/pkg/build"
+	"github.com/Henry19910227/fitness-go/internal/pkg/vp"
+	"github.com/spf13/viper"
+)
 
 type setting struct {
 	vp   *viper.Viper
 	mode string
 }
 
-func New(vp *viper.Viper) Setting {
-	return &setting{vp: vp, mode: vp.GetString("Server.RunMode")}
+func New() Setting {
+	return &setting{vp: vp.Shared(), mode: build.RunMode()}
 }
 
 func (s *setting) GetUserName() string {

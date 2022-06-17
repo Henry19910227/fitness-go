@@ -1,6 +1,7 @@
 package food
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -9,6 +10,11 @@ import (
 
 type service struct {
 	repository food.Repository
+}
+
+func (s service) WithTrx(gormTool orm.Tool) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func New(repository food.Repository) Service {

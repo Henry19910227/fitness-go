@@ -56,7 +56,7 @@ func TestRepository_List(t *testing.T) {
 	if err := gormTool.DB().Create(&meals).Error; err != nil {
 		t.Fatalf(err.Error())
 	}
-	repo := New(gormTool)
+	repo := New(gormTool.DB())
 	input := meal.ListInput{}
 	input.DietID = util.PointerInt64(1)
 	input.Page = 3
@@ -106,7 +106,7 @@ func TestRepository_Create(t *testing.T) {
 	mealItem.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
 	meals = append(meals, &mealItem)
 
-	repo := New(gormTool)
+	repo := New(gormTool.DB())
 	if err := repo.Create(meals); err != nil {
 		t.Fatalf(err.Error())
 	}
@@ -156,7 +156,7 @@ func TestRepository_Delete(t *testing.T) {
 		t.Fatalf(err.Error())
 	}
 	// 測試刪除meal
-	repo := New(gormTool)
+	repo := New(gormTool.DB())
 	input := meal.DeleteInput{}
 	input.DietID = diets[0].ID
 	if err := repo.Delete(&input); err != nil {
@@ -215,7 +215,7 @@ func TestRepository_Update(t *testing.T) {
 	// 測試更新meal
 	m := meals[0]
 	m.Amount = util.PointerFloat64(1000)
-	repo := New(gormTool)
+	repo := New(gormTool.DB())
 	if err := repo.Update([]*meal.Table{m}); err != nil {
 		t.Fatalf(err.Error())
 	}
