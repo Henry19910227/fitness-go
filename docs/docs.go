@@ -3582,7 +3582,7 @@ var doc = `{
                 "tags": [
                     "Diet_v1"
                 ],
-                "summary": "獲取食物列表",
+                "summary": "獲取食物列表 (由 /v2/foods [GET] 取代)",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4001,7 +4001,7 @@ var doc = `{
                 "tags": [
                     "Diet_v1"
                 ],
-                "summary": "刪除餐食",
+                "summary": "刪除餐食 (由 /v2/diet/{diet_id}/meals [PUT] 取代)",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4044,7 +4044,7 @@ var doc = `{
                 "tags": [
                     "Diet_v1"
                 ],
-                "summary": "創建餐食",
+                "summary": "創建餐食 (由 /v2/diet/{diet_id}/meals [PUT] 取代)",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -7747,7 +7747,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "修改餐食",
+                "description": "修改並覆蓋餐食",
                 "consumes": [
                     "application/json"
                 ],
@@ -7757,7 +7757,7 @@ var doc = `{
                 "tags": [
                     "飲食_v2"
                 ],
-                "summary": "修改餐食",
+                "summary": "修改並覆蓋餐食",
                 "parameters": [
                     {
                         "type": "integer",
