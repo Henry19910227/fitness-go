@@ -50,6 +50,6 @@ func (c *controller) GetFoods(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetFoods(ctx, &input)
+	output := c.resolver.APIGetFoods(&input)
 	ctx.JSON(http.StatusOK, output)
 }

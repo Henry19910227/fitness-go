@@ -2,23 +2,24 @@ package food
 
 import (
 	"fmt"
-	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	"gorm.io/gorm"
 )
 
 type repository struct {
-	gorm orm.Tool
+	db *gorm.DB
 }
 
-func New(gormTool orm.Tool) Repository {
-	return &repository{gorm: gormTool}
+func New(db *gorm.DB) Repository {
+	return &repository{db: db}
 }
 
 func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount int64, err error) {
-
-	db := r.gorm.DB().Model(&model.Output{})
+	db := r.db.Model(&model.Output{}).
+		Select("foods.id AS id", "foods.user_id AS user_id",
+			"foods.source AS source", "foods.name AS name", "foods.calorie AS calorie",
+			"foods.amount_desc AS amount_desc", "foods.create_at AS create_at", "foods.update_at AS update_at")
 	//加入 tag 篩選條件
 	if input.Tag != nil {
 		db = db.Joins("INNER JOIN food_categories ON foods.food_category_id = food_categories.id")
