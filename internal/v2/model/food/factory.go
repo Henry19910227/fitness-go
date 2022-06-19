@@ -15,9 +15,9 @@ func Generate(input *GenerateInput) []*Table {
 		table.UserID = nil
 		table.FoodCategoryID = nil
 		table.Source = util.PointerInt(1)
-		table.Name = util.PointerString(fmt.Sprintf("TestFood%v", i))
+		table.Name = util.PointerString(fmt.Sprintf("food_%v", i))
 		table.Calorie = util.PointerInt(i * 100)
-		table.AmountDesc = util.PointerString("")
+		table.AmountDesc = util.PointerString(fmt.Sprintf("amount_desc_%v", i))
 		table.IsDeleted = util.PointerInt(0)
 		table.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
 		table.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
