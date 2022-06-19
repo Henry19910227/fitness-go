@@ -1,6 +1,9 @@
 package meal
 
-import "github.com/Henry19910227/fitness-go/internal/v2/model/food"
+import (
+	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/food"
+)
 
 type Output struct {
 	Table
@@ -9,4 +12,8 @@ type Output struct {
 
 func (Output) TableName() string {
 	return "foods"
+}
+
+type APIPutMealsOutput struct {
+	base.Output
 }

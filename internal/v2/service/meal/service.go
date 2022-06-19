@@ -19,6 +19,9 @@ func (s *service) Tx(tx *gorm.DB) Service {
 }
 
 func (s *service) Create(items []*model.Table) (err error) {
+	if len(items) == 0 {
+		return err
+	}
 	err = s.repository.Create(items)
 	return err
 }

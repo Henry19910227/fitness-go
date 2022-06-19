@@ -1,7 +1,6 @@
 package food
 
 import (
-	mysqlDB "github.com/Henry19910227/fitness-go/internal/pkg/setting/mysql"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/migrate"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
@@ -23,13 +22,9 @@ func TestRepository_List(t *testing.T) {
 	if err != nil && err.Error() != "no change" {
 		t.Fatalf(err.Error())
 	}
-	gormTool, err := orm.New(mysqlDB.NewMockSetting())
-	if err != nil {
-		t.Fatalf(err.Error())
-	}
 	// 創建user
 	users := user.NewMockTables()
-	if err := gormTool.DB().Create(&users).Error; err != nil {
+	if err := orm.Mock().DB().Create(&users).Error; err != nil {
 		t.Fatalf(err.Error())
 	}
 	// 創建food
@@ -51,11 +46,11 @@ func TestRepository_List(t *testing.T) {
 		}
 		foods = append(foods, &foodItem)
 	}
-	if err := gormTool.DB().Create(&foods).Error; err != nil {
+	if err := orm.Mock().DB().Create(&foods).Error; err != nil {
 		t.Fatalf(err.Error())
 	}
 	// 驗證測試項目
-	repo := New(gormTool)
+	repo := New(orm.Mock())
 	input := food.ListInput{}
 	input.UserID = users[0].ID
 	input.Tag = util.PointerInt(1)
