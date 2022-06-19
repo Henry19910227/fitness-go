@@ -36,21 +36,18 @@ func (c *controller) UpdateMeals(ctx *gin.Context) {
 		dietModel.IDField
 	}
 	if err := ctx.ShouldBindUri(&uri); err != nil {
-		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		ctx.JSON(http.StatusOK, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
 	meals := make([]*mealModel.APIPutMealsInputItem, 0)
 	if err := ctx.ShouldBindJSON(&meals); err != nil {
-		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		ctx.JSON(http.StatusOK, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	tx := ctx.MustGet("db_trx").(*gorm.DB)
 	input := mealModel.APIPutMealsInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
 	input.DietID = uri.ID
 	input.Meals = meals
-	if err := c.resolver.APIPutMeals(tx, &input); err != nil {
-		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
-		return
-	}
-	ctx.JSON(http.StatusOK, baseModel.Success())
+	output := c.resolver.APIPutMeals(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
 }

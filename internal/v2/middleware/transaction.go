@@ -14,7 +14,7 @@ func Transaction(db *gorm.DB) gin.HandlerFunc {
 			}
 		}()
 		c.Set("db", db)
-		c.Set("db_trx", txHandle)
+		c.Set("tx", txHandle)
 		c.Next()
 	}
 }

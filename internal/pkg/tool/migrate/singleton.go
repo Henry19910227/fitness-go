@@ -1,4 +1,4 @@
-package orm
+package migrate
 
 import "sync"
 

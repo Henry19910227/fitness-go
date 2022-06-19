@@ -6,5 +6,5 @@ import (
 )
 
 type Resolver interface {
-	APIPutMeals(tx *gorm.DB, input *model.APIPutMealsInput) error
+	APIPutMeals(tx *gorm.DB, input *model.APIPutMealsInput) (output model.APIPutMealsOutput)
 }

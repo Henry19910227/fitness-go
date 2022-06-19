@@ -1,10 +1,30 @@
 package user
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"time"
 )
 
+func Generate(input *GenerateInput) []*Table {
+	tables := make([]*Table, 0)
+	for i := 1; i <= input.DataAmount; i++ {
+		table := Table{}
+		table.ID = util.PointerInt64(int64(10000 + i))
+		table.AccountType = util.PointerInt(1)
+		table.Nickname = util.PointerString(fmt.Sprintf("BOT%v", i))
+		table.Sex = util.PointerString("m")
+		table.Account = util.PointerString(fmt.Sprintf("%v@gmail.com", int64(10000 + i)))
+		table.Email = util.PointerString(fmt.Sprintf("%v@gmail.com", int64(10000 + i)))
+		table.Height = util.PointerFloat64(176)
+		table.Weight = util.PointerFloat64(70)
+		table.Birthday = util.PointerString(time.Now().Format("2006-01-02"))
+		table.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+		table.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+		tables = append(tables, &table)
+	}
+	return tables
+}
 
 func NewMockTables() []*Table {
 	tables := make([]*Table, 0)

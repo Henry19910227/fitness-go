@@ -23,6 +23,7 @@ type DeleteInput struct {
 }
 
 type APIPutMealsInput struct {
+	UserID int64
 	DietIDField
 	Meals  []*APIPutMealsInputItem
 }
