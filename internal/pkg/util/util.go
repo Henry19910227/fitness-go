@@ -12,6 +12,13 @@ func PointerInt(i int) *int              { return &i }
 func PointerBool(b bool) *bool           { return &b }
 func PointerTime(t time.Time) *time.Time { return &t }
 
+func OnNilJustReturnInt64(input *int64, i int64) int64 {
+	if input == nil {
+		return i
+	}
+	return *input
+}
+
 func GetAge(birthday time.Time) (age int) {
 	if birthday.IsZero() {
 		return 0

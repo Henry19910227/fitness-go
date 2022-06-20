@@ -1,11 +1,11 @@
 package plan
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
 	planService "github.com/Henry19910227/fitness-go/internal/v2/service/plan"
+	"gorm.io/gorm"
 )
 
-func NewResolver(gormTool tool.Gorm) Resolver {
-	planSvc := planService.NewService(gormTool)
+func NewResolver(db *gorm.DB) Resolver {
+	planSvc := planService.NewService(db)
 	return New(planSvc)
 }

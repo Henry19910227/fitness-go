@@ -6,7 +6,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 )
 
-type Table struct {
+type Output struct {
 	IDField
 	CourseIDField
 	NameField
@@ -16,7 +16,7 @@ type Table struct {
 	Workout []*workout.Table `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"` // 訓練
 }
 
-func (Table) TableName() string {
+func (Output) TableName() string {
 	return "plans"
 }
 

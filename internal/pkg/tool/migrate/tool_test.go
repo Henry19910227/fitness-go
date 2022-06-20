@@ -7,6 +7,5 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	_, err := New(mysql.NewMockSetting())
-	assert.NoError(t, err)
+	assert.NotEmpty(t, New(mysql.NewMockSetting()))
 }

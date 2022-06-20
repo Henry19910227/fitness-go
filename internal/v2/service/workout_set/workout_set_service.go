@@ -15,7 +15,7 @@ func New(repository workoutSet.Repository) Service {
 	return &service{repository: repository}
 }
 
-func (s service) List(input *model.ListInput) (output []*model.Table, page *paging.Output, err error) {
+func (s service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
 	output, amount, err := s.repository.List(input)
 	if err != nil {
 		return output, page, err

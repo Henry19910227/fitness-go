@@ -2,20 +2,19 @@ package course
 
 import (
 	"fmt"
-	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"gorm.io/gorm"
 )
 
 type repository struct {
-	gorm tool.Gorm
+	db *gorm.DB
 }
 
-func New(gormTool tool.Gorm) Repository {
-	return &repository{gorm: gormTool}
+func New(db *gorm.DB) Repository {
+	return &repository{db: db}
 }
 
-func (r *repository) Find(input *model.FindInput) (output *model.Table, err error) {
+func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 id 篩選條件
@@ -23,7 +22,7 @@ func (r *repository) Find(input *model.FindInput) (output *model.Table, err erro
 		query += "AND id = ? "
 		params = append(params, *input.ID)
 	}
-	db := r.gorm.DB().Model(&model.Table{})
+	db := r.db.Model(&model.Output{})
 	db = db.Where(query, params...)
 	//Preload
 	if len(input.Preloads) > 0 {
@@ -36,7 +35,7 @@ func (r *repository) Find(input *model.FindInput) (output *model.Table, err erro
 	return output, err
 }
 
-func (r *repository) List(input *model.ListInput) (output []*model.Table, amount int64, err error) {
+func (r *repository) List(input *model.ListInput) (output []*model.Output, amount int64, err error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 id 篩選條件
@@ -60,7 +59,7 @@ func (r *repository) List(input *model.ListInput) (output []*model.Table, amount
 		params = append(params, *input.SaleType)
 	}
 
-	db := r.gorm.DB().Model(&model.Table{})
+	db := r.db.Model(&model.Output{})
 	db = db.Where(query, params...)
 	//Preload
 	if len(input.Preloads) > 0 {
@@ -78,7 +77,7 @@ func (r *repository) List(input *model.ListInput) (output []*model.Table, amount
 	db = db.Count(&amount)
 	// Paging
 	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1)*input.Size).Limit(input.Size)
+		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {

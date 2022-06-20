@@ -1,9 +1,7 @@
 package mysql
 
-import "github.com/spf13/viper"
-
-func NewSetting(vp *viper.Viper) Setting {
-	return New(vp)
+func NewSetting() Setting {
+	return New()
 }
 
 func NewMockSetting() Setting {

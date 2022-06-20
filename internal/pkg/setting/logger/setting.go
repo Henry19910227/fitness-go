@@ -1,17 +1,26 @@
 package logger
 
 import (
+	"github.com/Henry19910227/fitness-go/config"
+	"github.com/Henry19910227/fitness-go/internal/pkg/build"
+	"github.com/prometheus/common/log"
 	"github.com/spf13/viper"
 	"time"
 )
 
 type setting struct {
-	vp *viper.Viper
+	vp   *viper.Viper
 	mode string
 }
 
-func New(vp *viper.Viper) Setting {
-	return &setting{vp: vp, mode: vp.GetString("Server.RunMode")}
+func New() Setting {
+	path := config.RootPath() + "/config.yaml"
+	vp := viper.New()
+	vp.SetConfigFile(path)
+	if err := vp.ReadInConfig(); err != nil {
+		log.Fatalf(err.Error())
+	}
+	return &setting{vp: vp, mode: build.RunMode()}
 }
 
 func (s *setting) GetLogFilePath() string {
@@ -44,5 +53,5 @@ func (s *setting) GetLogRotationTime() time.Duration {
 }
 
 func (s *setting) GetRunMode() string {
-	return s.vp.GetString("Server.RunMode")
+	return s.mode
 }

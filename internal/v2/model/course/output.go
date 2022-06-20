@@ -8,34 +8,13 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 )
 
-type Table struct {
-	IDField
-	UserIDField
-	SaleTypeField
-	SaleIDField
-	CourseStatusField
-	CategoryField
-	ScheduleTypeField
-	NameField
-	CoverField
-	IntroField
-	FoodField
-	LevelField
-	SuitField
-	EquipmentField
-	PlaceField
-	TrainTargetField
-	BodyTargetField
-	NoticeField
-	PlanCountField
-	WorkoutCountField
-	CreateAtField
-	UpdateAtField
+type Output struct {
+	Table
 	Trainer  *trainer.Table  `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"` // 教練
 	SaleItem *saleItem.Table `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`    // 銷售項目
 }
 
-func (Table) TableName() string {
+func (Output) TableName() string {
 	return "courses"
 }
 

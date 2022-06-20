@@ -1,11 +1,11 @@
 package main
 
 import (
-	"flag"
+	"github.com/Henry19910227/fitness-go/internal/pkg/build"
 	"github.com/Henry19910227/fitness-go/internal/pkg/errcode"
 	"github.com/Henry19910227/fitness-go/internal/pkg/setting"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
-	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
+	"github.com/Henry19910227/fitness-go/internal/pkg/vp"
 	"github.com/Henry19910227/fitness-go/internal/v1/access"
 	"github.com/Henry19910227/fitness-go/internal/v1/controller"
 	"github.com/Henry19910227/fitness-go/internal/v1/handler"
@@ -14,6 +14,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v1/service"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/food"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/meal"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/plan"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
 	"github.com/gin-gonic/gin"
@@ -179,13 +180,13 @@ func main() {
 	schedulerTool.Start()
 
 	// v2
-	ormTool := orm.NewTool(viperTool)
 	v2 := baseGroup.Group("/v2")
-	course.SetRoute(v2, gormTool, redisTool, viperTool)
-	plan.SetRoute(v2, gormTool, redisTool, viperTool)
-	workoutSet.SetRoute(v2, gormTool, redisTool, viperTool)
-	food.SetRoute(v2, ormTool, redisTool, viperTool)
-	router.Run(":" + viperTool.GetString("Server.HttpPort"))
+	course.SetRoute(v2)
+	plan.SetRoute(v2)
+	workoutSet.SetRoute(v2)
+	food.SetRoute(v2)
+	meal.SetRoute(v2)
+	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }
 
 /** Tool */
@@ -220,10 +221,7 @@ func setupViper() {
 	if err := vp.ReadInConfig(); err != nil {
 		log.Fatalf(err.Error())
 	}
-	var mode string
-	flag.StringVar(&mode, "m", "debug", "獲取運行模式")
-	flag.Parse()
-	vp.Set("Server.RunMode", mode)
+	vp.Set("Server.RunMode", build.RunMode())
 	viperTool = vp
 }
 
