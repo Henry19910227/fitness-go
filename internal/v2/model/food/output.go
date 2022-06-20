@@ -7,7 +7,7 @@ import (
 
 type Output struct {
 	Table
-	FoodCategory *foodCategory.Table `json:"food_category,omitempty" gorm:"foreignkey:id;references:food_category_id"` // 餐食
+	FoodCategory *foodCategory.Output `json:"food_category,omitempty" gorm:"foreignkey:id;references:food_category_id"` // 餐食
 }
 
 func (Output) TableName() string {

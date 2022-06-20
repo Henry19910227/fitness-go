@@ -6,10 +6,10 @@ import (
 	"time"
 )
 
-func Generate(input *GenerateInput) []*Table {
-	tables := make([]*Table, 0)
+func Generate(input *GenerateInput) []*Output {
+	tables := make([]*Output, 0)
 	for i := 1; i <= input.DataAmount; i++ {
-		table := Table{}
+		table := Output{}
 		table.ID = util.PointerInt64(int64(i))
 		table.Tag = util.PointerInt(1)
 		table.Title = util.PointerString(fmt.Sprintf("category_%v", i))
