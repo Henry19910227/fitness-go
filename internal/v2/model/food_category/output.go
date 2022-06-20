@@ -1,14 +1,9 @@
 package food_category
 
-type Table struct {
-	IDField
-	TagField
-	TitleField
-	IsDeletedField
-	CreateAtField
-	UpdateAtField
+type Output struct {
+	Table
 }
 
-func (Table) TableName() string {
+func (Output) TableName() string {
 	return "food_categories"
 }

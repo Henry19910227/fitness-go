@@ -17,7 +17,7 @@ func New(db *gorm.DB) Repository {
 
 func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{}).
-		Select("foods.id AS id", "foods.user_id AS user_id",
+		Select("foods.id AS id", "foods.user_id AS user_id", "foods.food_category_id AS food_category_id",
 			"foods.source AS source", "foods.name AS name", "foods.calorie AS calorie",
 			"foods.amount_desc AS amount_desc", "foods.create_at AS create_at", "foods.update_at AS update_at")
 	//加入 tag 篩選條件
