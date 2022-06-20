@@ -6755,7 +6755,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 獲取食物歷程列表
+      description: 獲取食物歷程列表 ((由 /v2/meals [GET] 取代))
       produces:
       - application/json
       responses:
@@ -6776,7 +6776,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取食物歷程列表
+      summary: 獲取食物歷程列表 ((由 /v2/meals [GET] 取代))
       tags:
       - Diet_v1
   /v1/redeem_course:

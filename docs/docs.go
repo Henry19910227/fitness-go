@@ -4756,7 +4756,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取食物歷程列表",
+                "description": "獲取食物歷程列表 ((由 /v2/meals [GET] 取代))",
                 "consumes": [
                     "application/json"
                 ],
@@ -4766,7 +4766,7 @@ var doc = `{
                 "tags": [
                     "Diet_v1"
                 ],
-                "summary": "獲取食物歷程列表",
+                "summary": "獲取食物歷程列表 ((由 /v2/meals [GET] 取代))",
                 "responses": {
                     "200": {
                         "description": "成功!",

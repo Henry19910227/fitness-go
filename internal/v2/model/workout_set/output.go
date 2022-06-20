@@ -6,26 +6,12 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 )
 
-type Table struct {
-	IDField
-	WorkoutIDField
-	ActionIDField
-	TypeField
-	AutoNextField
-	StartAudioField
-	ProgressAudioField
-	RemarkField
-	WeightField
-	RepsField
-	DistanceField
-	DurationField
-	InclineField
-	CreateAtField
-	UpdateAtField
+type Output struct {
+	Table
 	Action *action.Table `json:"action,omitempty" gorm:"foreignKey:id;references:action_id"` // 動作
 }
 
-func (Table) TableName() string {
+func (Output) TableName() string {
 	return "workout_sets"
 }
 
