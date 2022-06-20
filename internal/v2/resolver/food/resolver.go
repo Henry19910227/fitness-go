@@ -26,7 +26,7 @@ func (r *resolver) APIGetFoods(input *model.APIGetFoodsInput) (output model.APIG
 	param.Preloads = []*preloadModel.Preload{
 		{Field: "FoodCategory"},
 	}
-	// 調用 repo
+	// 調用 service
 	result, _, err := r.foodService.List(&param)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
