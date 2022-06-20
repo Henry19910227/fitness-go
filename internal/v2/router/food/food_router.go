@@ -10,7 +10,7 @@ import (
 )
 
 func SetRoute(baseGroup *gin.RouterGroup) {
-	controller := food.NewController(orm.Shared())
+	controller := food.NewController(orm.Shared().DB())
 	midd := middleware.NewTokenMiddleware(redis.Shared())
 	baseGroup.GET("/foods", midd.Verify([]global.Role{global.UserRole}), controller.GetFoods)
 }

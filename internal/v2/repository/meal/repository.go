@@ -19,10 +19,16 @@ func (r *repository) WithTrx(tx *gorm.DB) Repository {
 }
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
-	db := r.db.Model(&model.Output{})
-	//加入 id 篩選條件
+	db := r.db.Model(&model.Output{}).Select("meals.id AS id", "meals.diet_id AS diet_id",
+		"meals.food_id AS food_id", "meals.type AS type", "meals.amount AS amount", "meals.create_at AS create_at")
+	//加入 diet id 篩選條件
 	if input.DietID != nil {
-		db = db.Where("diet_id = ?", *input.DietID)
+		db = db.Where("meals.diet_id = ?", *input.DietID)
+	}
+	//加入 user_id 篩選條件
+	if input.UserID != nil {
+		db = db.Joins("INNER JOIN diets ON meals.diet_id = diets.id")
+		db = db.Where("diets.user_id = ?", *input.UserID)
 	}
 	//Preload
 	if len(input.Preloads) > 0 {
@@ -40,11 +46,11 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	db = db.Count(&amount)
 	// Paging
 	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1)*input.Size).Limit(input.Size)
+		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("%s %s", input.OrderField, input.OrderType))
+		db = db.Order(fmt.Sprintf("meals.%s %s", input.OrderField, input.OrderType))
 	}
 	//查詢數據
 	err = db.Find(&outputs).Error
@@ -63,10 +69,10 @@ func (r *repository) Update(items []*model.Table) (err error) {
 
 func (r *repository) Delete(input *model.DeleteInput) (err error) {
 	db := r.db
-	if input.ID != nil{
+	if input.ID != nil {
 		db = db.Where("id = ?", *input.ID)
 	}
-	if input.DietID != nil{
+	if input.DietID != nil {
 		db = db.Where("diet_id = ?", *input.DietID)
 	}
 	err = db.Delete(&model.Table{}).Error

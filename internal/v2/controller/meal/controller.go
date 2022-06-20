@@ -45,9 +45,31 @@ func (c *controller) UpdateMeals(ctx *gin.Context) {
 		return
 	}
 	input := mealModel.APIPutMealsInput{}
-	input.UserID = ctx.MustGet("uid").(int64)
+	input.UserID = util.PointerInt64(ctx.MustGet("uid").(int64))
 	input.DietID = uri.ID
 	input.Meals = meals
 	output := c.resolver.APIPutMeals(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetMeals 獲取餐食列表
+// @Summary 獲取餐食列表
+// @Description 獲取餐食列表
+// @Tags 飲食_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} meal.APIGetMealsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/meals [GET]
+func (c *controller) GetMeals(ctx *gin.Context) {
+	uid, exists := ctx.Get("uid")
+	if !exists {
+		ctx.JSON(http.StatusBadRequest, baseModel.InvalidToken())
+		return
+	}
+	input := mealModel.APIGetMealsInput{}
+	input.UserID = util.PointerInt64(uid.(int64))
+	output := c.resolver.APIGetMeals(&input)
 	ctx.JSON(http.StatusOK, output)
 }
