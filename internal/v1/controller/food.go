@@ -97,8 +97,8 @@ func (f *Food) GetFoods(c *gin.Context) {
 }
 
 // GetRecentFoods 獲取食物歷程列表
-// @Summary 獲取食物歷程列表
-// @Description 獲取食物歷程列表
+// @Summary 獲取食物歷程列表 ((由 /v2/meals [GET] 取代))
+// @Description 獲取食物歷程列表 ((由 /v2/meals [GET] 取代))
 // @Tags Diet_v1
 // @Accept json
 // @Produce json

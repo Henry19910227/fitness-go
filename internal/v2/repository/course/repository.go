@@ -14,7 +14,7 @@ func New(db *gorm.DB) Repository {
 	return &repository{db: db}
 }
 
-func (r *repository) Find(input *model.FindInput) (output *model.Table, err error) {
+func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 id 篩選條件
@@ -22,7 +22,7 @@ func (r *repository) Find(input *model.FindInput) (output *model.Table, err erro
 		query += "AND id = ? "
 		params = append(params, *input.ID)
 	}
-	db := r.db.Model(&model.Table{})
+	db := r.db.Model(&model.Output{})
 	db = db.Where(query, params...)
 	//Preload
 	if len(input.Preloads) > 0 {
@@ -35,7 +35,7 @@ func (r *repository) Find(input *model.FindInput) (output *model.Table, err erro
 	return output, err
 }
 
-func (r *repository) List(input *model.ListInput) (output []*model.Table, amount int64, err error) {
+func (r *repository) List(input *model.ListInput) (output []*model.Output, amount int64, err error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)
 	//加入 id 篩選條件
@@ -59,7 +59,7 @@ func (r *repository) List(input *model.ListInput) (output []*model.Table, amount
 		params = append(params, *input.SaleType)
 	}
 
-	db := r.db.Model(&model.Table{})
+	db := r.db.Model(&model.Output{})
 	db = db.Where(query, params...)
 	//Preload
 	if len(input.Preloads) > 0 {

@@ -6,5 +6,5 @@ import (
 )
 
 type Service interface {
-	List(input *model.ListInput) (output []*model.Table, page *paging.Output, err error)
+	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
 }

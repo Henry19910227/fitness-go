@@ -66,3 +66,32 @@ type CreateAtField struct {
 type UpdateAtField struct {
 	UpdateAt *string `json:"update_at,omitempty" gorm:"column:update_at" example:"2022-06-12 00:00:00"` // 更新時間
 }
+
+type Table struct {
+	IDField
+	UserIDField
+	SaleTypeField
+	SaleIDField
+	CourseStatusField
+	CategoryField
+	ScheduleTypeField
+	NameField
+	CoverField
+	IntroField
+	FoodField
+	LevelField
+	SuitField
+	EquipmentField
+	PlaceField
+	TrainTargetField
+	BodyTargetField
+	NoticeField
+	PlanCountField
+	WorkoutCountField
+	CreateAtField
+	UpdateAtField
+}
+
+func (Table) TableName() string {
+	return "courses"
+}
