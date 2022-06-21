@@ -23,6 +23,7 @@ func New(mealService meal.Service, dietService diet.Service) Resolver {
 func (r *resolver) APIPutMeals(tx *gorm.DB, input *mealModel.APIPutMealsInput) (output mealModel.APIPutMealsOutput) {
 	defer tx.Rollback()
 	findInput := dietModel.FindInput{}
+	findInput.ID = input.DietID
 	dietOutput, err := r.dietService.Find(&findInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())

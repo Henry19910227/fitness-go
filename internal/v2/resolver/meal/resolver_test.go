@@ -41,8 +41,11 @@ func TestResolver_APIPutMeals(t *testing.T) {
 	}
 	// 創建diet
 	diets := diet.Generate(&diet.GenerateInput{
-		DataAmount: 5,
-		UserID:     []*base.GenerateSetting{{Start: 1, End: 5, Value: *users[0].ID}},
+		DataAmount: 6,
+		UserID: []*base.GenerateSetting{
+			{Start: 1, End: 3, Value: *users[1].ID},
+			{Start: 4, End: 6, Value: *users[0].ID},
+		},
 	})
 	if err := prepareTx.Create(&diets).Error; err != nil {
 		t.Fatalf(err.Error())
@@ -71,7 +74,7 @@ func TestResolver_APIPutMeals(t *testing.T) {
 	resolver := NewResolver(db1)
 	input := meal.APIPutMealsInput{}
 	input.UserID = users[0].ID
-	input.DietID = diets[0].ID
+	input.DietID = diets[5].ID
 	input.Meals = items
 	tx1 := db1.Begin()
 	output := resolver.APIPutMeals(tx1, &input)
@@ -81,7 +84,7 @@ func TestResolver_APIPutMeals(t *testing.T) {
 	resolver = NewResolver(db2)
 	input2 := meal.APIPutMealsInput{}
 	input2.UserID = users[0].ID
-	input2.DietID = diets[0].ID
+	input2.DietID = diets[5].ID
 	input2.Meals = make([]*meal.APIPutMealsInputItem, 0)
 	tx2 := db2.Begin()
 	output = resolver.APIPutMeals(tx2, &input2)
@@ -90,7 +93,7 @@ func TestResolver_APIPutMeals(t *testing.T) {
 	db3 := orm.NewMockTool().DB()
 	resolver = NewResolver(db3)
 	input3 := meal.APIPutMealsInput{}
-	input3.UserID = users[1].ID
+	input3.UserID = users[0].ID
 	input3.DietID = diets[0].ID
 	input3.Meals = items
 	tx3 := db3.Begin()
