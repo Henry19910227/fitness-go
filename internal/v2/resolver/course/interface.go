@@ -10,4 +10,5 @@ type Resolver interface {
 	APIGetCMSCourses(ctx *gin.Context, input *model.APIGetCMSCoursesInput) interface{}
 	APIGetCMSCourse(ctx *gin.Context, input *model.APIGetCMSCourseInput) interface{}
 	APIUpdateCMSCoursesStatus(input *model.APIUpdateCMSCoursesStatusInput) (output base.Output)
+	APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverInput) (output model.APIUpdateCMSCourseCoverOutput)
 }

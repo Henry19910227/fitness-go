@@ -7524,6 +7524,56 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/course/{course_id}/cover": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看封面照 : {Base URL}/v2/resource/course/cover/{Filename}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS課表管理_v2"
+                ],
+                "summary": "更新課表封面照",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "cover",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIUpdateCMSCourseCoverOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/course/{course_id}/plans": {
             "get": {
                 "security": [
@@ -7690,7 +7740,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "批量修改課表狀態",
+                "description": "批量修改課表審核狀態",
                 "consumes": [
                     "application/json"
                 ],
@@ -7700,7 +7750,7 @@ var doc = `{
                 "tags": [
                     "CMS課表管理_v2"
                 ],
-                "summary": "批量修改課表狀態",
+                "summary": "批量修改課表審核狀態",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -8195,6 +8245,25 @@ var doc = `{
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "course.APIUpdateCMSCourseCoverOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "string",
+                    "example": "123.jpg"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

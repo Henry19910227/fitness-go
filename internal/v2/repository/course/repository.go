@@ -83,7 +83,12 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	return outputs, amount, err
 }
 
-func (r *repository) Update(items []*model.Table) (err error) {
+func (r *repository) Updates(items []*model.Table) (err error) {
 	err = r.db.Model(&model.Table{}).Save(&items).Error
+	return err
+}
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
 	return err
 }

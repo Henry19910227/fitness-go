@@ -81,3 +81,9 @@ type APIGetCMSCourseData struct {
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 }
+
+// APIUpdateCMSCourseCoverOutput /v2/cms/course/{course_id}/cover [GET] 獲取課表詳細 API
+type APIUpdateCMSCourseCoverOutput struct {
+	base.Output
+	Data *string `json:"data,omitempty" example:"123.jpg"`
+}
