@@ -22,6 +22,6 @@ type UpdateRDABody struct {
 	Vegetable int `json:"vegetable" binding:"required" example:"5"`  // 蔬菜類(份)
 	Fruit     int `json:"fruit" binding:"required" example:"2"`      // 水果類(份)
 	Meat      int `json:"meat" binding:"required" example:"6"`       // 蛋豆魚肉類(份)
-	Dairy     int `json:"dairy" binding:"required" example:"3"`      // 乳製品類(份)
+	Dairy     int `json:"dairy" binding:"omitempty" example:"3"`      // 乳製品類(份)
 	Nut       int `json:"nut" binding:"required" example:"1"`        // 堅果類(份)
 }

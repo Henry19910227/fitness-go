@@ -12780,7 +12780,6 @@ var doc = `{
             "required": [
                 "calorie",
                 "carbs",
-                "dairy",
                 "fat",
                 "fruit",
                 "grain",
