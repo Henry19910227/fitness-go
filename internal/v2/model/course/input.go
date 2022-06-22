@@ -17,29 +17,35 @@ type GenerateInput struct {
 }
 
 type FindInput struct {
-	IDField
+	IDOptional
 	PreloadInput
 }
 
 type ListInput struct {
-	IDField
-	NameField
-	CourseStatusField
-	SaleTypeField
+	IDOptional
+	NameOptional
+	CourseStatusOptional
+	SaleTypeOptional
 	PagingInput
 	PreloadInput
 	OrderByInput
+	IDs []int64
 }
 
 type APIGetCMSCoursesInput struct {
-	IDField
-	NameField
-	CourseStatusField
-	SaleTypeField
+	IDOptional
+	NameOptional
+	CourseStatusOptional
+	SaleTypeOptional
 	PagingInput
 	OrderByInput
 }
 
 type APIGetCMSCourseInput struct {
-	IDField
+	IDRequired
+}
+
+type APIUpdateCMSCoursesStatusInput struct {
+	IDs []int64 `json:"ids" binding:"required"` // 課表 id
+	CourseStatusRequired
 }

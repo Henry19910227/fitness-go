@@ -13,7 +13,7 @@ import (
 
 type resolver struct {
 	courseService courseService.Service
-	logTool logger.Tool
+	logTool       logger.Tool
 }
 
 func New(courseService courseService.Service, logTool logger.Tool) Resolver {
@@ -77,5 +77,21 @@ func (r *resolver) APIGetCMSCourse(ctx *gin.Context, input *model.APIGetCMSCours
 	output.Data = &data
 	output.Code = code.Success
 	output.Msg = "success!"
+	return output
+}
+
+func (r *resolver) APIUpdateCMSCoursesStatus(input *model.APIUpdateCMSCoursesStatusInput) (output base.Output) {
+	tables := make([]*model.Table, 0)
+	for _, courseID := range input.IDs {
+		table := model.Table{}
+		table.ID = util.PointerInt64(courseID)
+		table.CourseStatus = &input.CourseStatus
+		tables = append(tables, &table)
+	}
+	if err := r.courseService.Update(tables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
 	return output
 }

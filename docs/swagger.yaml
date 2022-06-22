@@ -207,6 +207,21 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  course.APIUpdateCMSCoursesStatusInput:
+    properties:
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 3
+        type: integer
+      ids:
+        description: 課表 id
+        items:
+          type: integer
+        type: array
+    required:
+    - course_status
+    - ids
+    type: object
   dto.Action:
     properties:
       body:
@@ -8547,6 +8562,34 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取課表列表
+      tags:
+      - CMS課表管理_v2
+  /v2/cms/courses/course_status:
+    patch:
+      consumes:
+      - application/json
+      description: 批量修改課表狀態
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/course.APIUpdateCMSCoursesStatusInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/base.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 批量修改課表狀態
       tags:
       - CMS課表管理_v2
   /v2/cms/workout/{workout_id}/workout_sets:

@@ -88,3 +88,24 @@ func (c *controller) GetCMSCourse(ctx *gin.Context) {
 	output := c.resolver.APIGetCMSCourse(ctx, &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// UpdateCMSCoursesStatus 批量修改課表狀態
+// @Summary 批量修改課表狀態
+// @Description 批量修改課表狀態
+// @Tags CMS課表管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body course.APIUpdateCMSCoursesStatusInput true "輸入參數"
+// @Success 200 {object} base.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/courses/course_status [PATCH]
+func (c *controller) UpdateCMSCoursesStatus(ctx *gin.Context) {
+	var input model.APIUpdateCMSCoursesStatusInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateCMSCoursesStatus(&input)
+	ctx.JSON(http.StatusOK, output)
+}

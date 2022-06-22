@@ -6,5 +6,6 @@ import (
 
 type Repository interface {
 	Find(input *model.FindInput) (output *model.Output, err error)
-	List(input *model.ListInput) (output []*model.Output, amount int64, err error)
+	List(input *model.ListInput) (outputs []*model.Output, amount int64, err error)
+	Update(items []*model.Table) (err error)
 }

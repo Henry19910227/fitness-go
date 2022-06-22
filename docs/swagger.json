@@ -7665,6 +7665,51 @@
                 }
             }
         },
+        "/v2/cms/courses/course_status": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "批量修改課表狀態",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS課表管理_v2"
+                ],
+                "summary": "批量修改課表狀態",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/course.APIUpdateCMSCoursesStatusInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/workout/{workout_id}/workout_sets": {
             "get": {
                 "security": [
@@ -8132,6 +8177,27 @@
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "course.APIUpdateCMSCoursesStatusInput": {
+            "type": "object",
+            "required": [
+                "course_status",
+                "ids"
+            ],
+            "properties": {
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "ids": {
+                    "description": "課表 id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

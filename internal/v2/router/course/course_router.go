@@ -14,4 +14,5 @@ func SetRoute(baseGroup *gin.RouterGroup) {
 	midd := middleware.NewTokenMiddleware(redis.Shared())
 	baseGroup.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)
 	baseGroup.GET("/cms/course/:course_id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
+	baseGroup.PATCH("/cms/courses/course_status", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesStatus)
 }
