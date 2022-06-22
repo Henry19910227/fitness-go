@@ -35,32 +35,27 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 	return output, err
 }
 
-func (r *repository) List(input *model.ListInput) (output []*model.Output, amount int64, err error) {
-	query := "1=1 "
-	params := make([]interface{}, 0)
-	//加入 id 篩選條件
-	if input.ID != nil {
-		query += "AND id = ? "
-		params = append(params, *input.ID)
-	}
-	//加入 name 篩選條件
-	if input.Name != nil {
-		query += "AND name LIKE ? "
-		params = append(params, "%"+*input.Name+"%")
-	}
-	//加入 course_status 篩選條件
-	if input.CourseStatus != nil {
-		query += "AND course_status = ? "
-		params = append(params, *input.CourseStatus)
-	}
-	//加入 trainer_status 篩選條件
-	if input.SaleType != nil {
-		query += "AND sale_type = ? "
-		params = append(params, *input.SaleType)
-	}
-
+func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
-	db = db.Where(query, params...)
+	// id 篩選條件
+	if input.ID != nil {
+		db = db.Where("id = ?", *input.ID)
+	}
+	// name 篩選條件
+	if input.Name != nil {
+		db = db.Where("name = ?", "%"+*input.Name+"%")
+	}
+	// course_status 篩選條件
+	if input.CourseStatus != nil {
+		db = db.Where("course_status = ?", *input.CourseStatus)
+	}
+	// trainer_status 篩選條件
+	if input.SaleType != nil {
+		db = db.Where("sale_type = ?", *input.SaleType)
+	}
+	if len(input.IDs) > 0 {
+		db = db.Where("id IN (?)", input.IDs)
+	}
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
@@ -84,6 +79,16 @@ func (r *repository) List(input *model.ListInput) (output []*model.Output, amoun
 		db = db.Order(fmt.Sprintf("%s %s", input.OrderField, input.OrderType))
 	}
 	//查詢數據
-	err = db.Find(&output).Error
-	return output, amount, err
+	err = db.Find(&outputs).Error
+	return outputs, amount, err
+}
+
+func (r *repository) Updates(items []*model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Save(&items).Error
+	return err
+}
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
+	return err
 }

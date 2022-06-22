@@ -5,6 +5,7 @@ import (
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"mime/multipart"
 )
 
 type PagingInput = paging.Input
@@ -17,29 +18,41 @@ type GenerateInput struct {
 }
 
 type FindInput struct {
-	IDField
+	IDOptional
 	PreloadInput
 }
 
 type ListInput struct {
-	IDField
-	NameField
-	CourseStatusField
-	SaleTypeField
+	IDOptional
+	NameOptional
+	CourseStatusOptional
+	SaleTypeOptional
 	PagingInput
 	PreloadInput
 	OrderByInput
+	IDs []int64
 }
 
 type APIGetCMSCoursesInput struct {
-	IDField
-	NameField
-	CourseStatusField
-	SaleTypeField
+	IDOptional
+	NameOptional
+	CourseStatusOptional
+	SaleTypeOptional
 	PagingInput
 	OrderByInput
 }
 
 type APIGetCMSCourseInput struct {
-	IDField
+	IDRequired
+}
+
+type APIUpdateCMSCoursesStatusInput struct {
+	IDs []int64 `json:"ids" binding:"required"` // 課表 id
+	CourseStatusRequired
+}
+
+type APIUpdateCMSCourseCoverInput struct {
+	IDRequired
+	CoverNamed string
+	File       multipart.File
 }

@@ -88,3 +88,57 @@ func (c *controller) GetCMSCourse(ctx *gin.Context) {
 	output := c.resolver.APIGetCMSCourse(ctx, &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// UpdateCMSCoursesStatus 批量修改課表審核狀態
+// @Summary 批量修改課表審核狀態
+// @Description 批量修改課表審核狀態
+// @Tags CMS課表管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body course.APIUpdateCMSCoursesStatusInput true "輸入參數"
+// @Success 200 {object} base.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/courses/course_status [PATCH]
+func (c *controller) UpdateCMSCoursesStatus(ctx *gin.Context) {
+	var input model.APIUpdateCMSCoursesStatusInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateCMSCoursesStatus(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateCMSCoursesCover 更新課表封面照
+// @Summary 更新課表封面照
+// @Description 查看封面照 : {Base URL}/v2/resource/course/cover/{Filename}
+// @Tags CMS課表管理_v2
+// @Security fitness_token
+// @Accept mpfd
+// @Param course_id path int64 true "課表id"
+// @Param cover formData file true "課表封面照"
+// @Produce json
+// @Success 200 {object} course.APIUpdateCMSCourseCoverOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/course/{course_id}/cover [PATCH]
+func (c *controller) UpdateCMSCoursesCover(ctx *gin.Context) {
+	var uri struct {
+		model.IDRequired
+	}
+	if err := ctx.ShouldBindUri(&uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	file, fileHeader, err := ctx.Request.FormFile("cover")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	input := model.APIUpdateCMSCourseCoverInput{}
+	input.ID = uri.ID
+	input.CoverNamed = fileHeader.Filename
+	input.File = file
+	output := c.resolver.APIUpdateCMSCourseCover(&input)
+	ctx.JSON(http.StatusOK, output)
+}

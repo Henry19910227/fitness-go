@@ -1,0 +1,7 @@
+package uploader
+
+import setting "github.com/Henry19910227/fitness-go/internal/pkg/setting/uploader"
+
+func NewCourseCoverTool() Tool {
+	return New(setting.NewCourseCover())
+}
