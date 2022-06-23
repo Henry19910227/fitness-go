@@ -7463,6 +7463,56 @@
                 }
             }
         },
+        "/v2/cms/actions": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取動作列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_動作庫_v2"
+                ],
+                "summary": "獲取動作列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/action.APIGetCMSActionsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/course/{course_id}": {
             "get": {
                 "security": [
@@ -8006,6 +8056,67 @@
         }
     },
     "definitions": {
+        "action.APIGetCMSActionsOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "body": {
+                                "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                                "type": "integer",
+                                "example": 4
+                            },
+                            "category": {
+                                "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "動作id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "is_deleted": {
+                                "description": "是否刪除",
+                                "type": "string",
+                                "example": "0"
+                            },
+                            "name": {
+                                "description": "動作名稱",
+                                "type": "string",
+                                "example": "划船機"
+                            },
+                            "source": {
+                                "description": "動作來源(1:系統動作/2:教練自創動作)",
+                                "type": "integer",
+                                "example": 2
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
         "base.Output": {
             "type": "object",
             "properties": {

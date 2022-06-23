@@ -8,7 +8,7 @@ import (
 
 type Output struct {
 	Table
-	Action *action.Table `json:"action,omitempty" gorm:"foreignKey:id;references:action_id"` // 動作
+	Action *action.Output `json:"action,omitempty" gorm:"foreignKey:id;references:action_id"` // 動作
 }
 
 func (Output) TableName() string {
