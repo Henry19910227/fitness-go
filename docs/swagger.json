@@ -12762,7 +12762,6 @@
             "required": [
                 "calorie",
                 "carbs",
-                "dairy",
                 "fat",
                 "fruit",
                 "grain",
