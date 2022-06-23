@@ -3225,6 +3225,20 @@ definitions:
         example: 10001
         type: integer
     type: object
+  trainer.APIUpdateCMSTrainerAvatarOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        example: 123.jpg
+        type: string
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   validator.CMSLoginByEmailBody:
     properties:
       email:
@@ -8624,6 +8638,38 @@ paths:
       summary: 批量修改課表審核狀態
       tags:
       - CMS課表管理_v2
+  /v2/cms/trainer/{user_id}/avatar:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: '查看教練大頭照 : {Base URL}/v2/resource/trainer/avatar/{Filename}'
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: 教練大頭照
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/trainer.APIUpdateCMSTrainerAvatarOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 更新教練大頭照
+      tags:
+      - CMS會員管理_v2
   /v2/cms/workout/{workout_id}/workout_sets:
     get:
       consumes:
