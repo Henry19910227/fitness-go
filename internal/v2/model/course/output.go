@@ -10,7 +10,7 @@ import (
 
 type Output struct {
 	Table
-	Trainer  *trainer.Table  `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"` // 教練
+	Trainer  *trainer.Output `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"` // 教練
 	SaleItem *saleItem.Table `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`    // 銷售項目
 }
 

@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var path = "/course/cover"
+var courseCoverPath = "/course/cover"
 
 type courseCoverSetting struct {
 	vp *viper.Viper
@@ -24,5 +24,5 @@ func (c *courseCoverSetting) MaxSize() int {
 }
 
 func (c *courseCoverSetting) FilePath() string {
-	return c.vp.GetString("Resource.RootPath") + path
+	return c.vp.GetString("Resource.RootPath") + courseCoverPath
 }

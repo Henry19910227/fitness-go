@@ -5,3 +5,7 @@ import setting "github.com/Henry19910227/fitness-go/internal/pkg/setting/uploade
 func NewCourseCoverTool() Tool {
 	return New(setting.NewCourseCover())
 }
+
+func NewTrainerAvatarTool() Tool {
+	return New(setting.NewTrainerAvatar())
+}
