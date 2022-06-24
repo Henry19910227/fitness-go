@@ -1,7 +1,7 @@
 package action
 
 type IDField struct {
-	ID int64 `json:"id,omitempty" gorm:"column:id" example:"1"` //動作id
+	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"1"` //動作id
 }
 type CourseIDField struct {
 	CourseID *int64 `json:"course_id,omitempty" gorm:"column:course_id" example:"10"` //課表id
@@ -34,7 +34,7 @@ type VideoField struct {
 	Video *string `json:"video,omitempty" gorm:"column:video" example:"1234.mp4"` //動作影片
 }
 type IsDeletedField struct {
-	IsDeleted *string `json:"is_deleted,omitempty" gorm:"column:is_deleted" example:"0"` //是否刪除
+	IsDeleted *int `json:"is_deleted,omitempty" gorm:"column:is_deleted" example:"0"` //是否刪除
 }
 type CreateAtField struct {
 	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at" example:"2022-06-14 00:00:00"` //創建時間

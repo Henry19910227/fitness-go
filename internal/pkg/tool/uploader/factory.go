@@ -9,3 +9,11 @@ func NewCourseCoverTool() Tool {
 func NewTrainerAvatarTool() Tool {
 	return New(setting.NewTrainerAvatar())
 }
+
+func NewActionCoverTool() Tool {
+	return New(setting.NewActionCover())
+}
+
+func NewActionVideoTool() Tool {
+	return New(setting.NewActionVideo())
+}

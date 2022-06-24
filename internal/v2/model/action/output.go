@@ -28,3 +28,22 @@ type APIGetCMSActionsData []*struct {
 	IsDeletedField
 	CreateAtField
 }
+
+// APICreateCMSActionOutput /cms/action [POST] 創建動作 API
+type APICreateCMSActionOutput struct {
+	base.Output
+	Data *APICreateCMSActionData `json:"data,omitempty"`
+}
+type APICreateCMSActionData struct {
+	IDField
+	NameField
+	TypeField
+	CategoryField
+	BodyField
+	EquipmentField
+	IntroField
+	CoverField
+	VideoField
+	CreateAtField
+	UpdateAtField
+}

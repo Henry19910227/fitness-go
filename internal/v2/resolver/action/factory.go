@@ -8,6 +8,7 @@ import (
 
 func NewResolver(db *gorm.DB) Resolver {
 	actionSvc := actionService.NewService(db)
-	uploadTool := uploader.NewCourseCoverTool()
-	return New(actionSvc, uploadTool)
+	coverUploadTool := uploader.NewActionCoverTool()
+	videoUploadTool := uploader.NewActionVideoTool()
+	return New(actionSvc, coverUploadTool, videoUploadTool)
 }
