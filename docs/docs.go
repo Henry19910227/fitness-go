@@ -7572,6 +7572,79 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/action/{action_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_動作庫_v2"
+                ],
+                "summary": "修改動作",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "動作名稱(1~20字元)",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "動作介紹(1~400字元)",
+                        "name": "intro",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "是否刪除(0:否/1:是)",
+                        "name": "is_deleted",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "cover",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "影片檔",
+                        "name": "video",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/actions": {
             "get": {
                 "security": [

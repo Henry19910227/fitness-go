@@ -8,4 +8,5 @@ import (
 type Service interface {
 	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
 	Create(item *model.Table) (output *model.Output, err error)
+	Update(item *model.Table) (err error)
 }

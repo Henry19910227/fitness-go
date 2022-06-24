@@ -8612,6 +8612,53 @@ paths:
       summary: 創建動作
       tags:
       - CMS內容管理_動作庫_v2
+  /v2/cms/action/{action_id}:
+    patch:
+      consumes:
+      - application/json
+      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}'
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 動作名稱(1~20字元)
+        in: formData
+        name: name
+        type: string
+      - description: 動作介紹(1~400字元)
+        in: formData
+        name: intro
+        type: string
+      - description: 是否刪除(0:否/1:是)
+        in: formData
+        name: is_deleted
+        type: integer
+      - description: 課表封面照
+        in: formData
+        name: cover
+        type: file
+      - description: 影片檔
+        in: formData
+        name: video
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            $ref: '#/definitions/base.Output'
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 修改動作
+      tags:
+      - CMS內容管理_動作庫_v2
   /v2/cms/actions:
     get:
       consumes:

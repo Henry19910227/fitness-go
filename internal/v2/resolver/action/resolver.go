@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	actionService "github.com/Henry19910227/fitness-go/internal/v2/service/action"
 )
@@ -86,6 +87,44 @@ func (r *resolver) APICreateCMSAction(input *model.APICreateCMSActionInput) (out
 	}
 	data := model.APICreateCMSActionData{}
 	if err := util.Parser(result, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIUpdateCMSAction(input *model.APIUpdateCMSActionInput) (output base.Output) {
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 儲存動作封面圖
+	if input.CoverFile != nil {
+		coverNamed, err := r.coverUploadTool.Save(input.CoverFile.Data, input.CoverFile.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		table.Cover = util.PointerString(coverNamed)
+	}
+	// 儲存動作影片
+	if input.VideoFile != nil {
+		videoNamed, err := r.videoUploadTool.Save(input.VideoFile.Data, input.VideoFile.Named)
+		if err != nil {
+			if table.Cover != nil {
+				_ = r.coverUploadTool.Delete(*table.Cover)
+			}
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		table.Video = util.PointerString(videoNamed)
+	}
+	// 更新資料
+	if err := r.actionService.Update(&table); err != nil {
 		if table.Cover != nil {
 			_ = r.coverUploadTool.Delete(*table.Cover)
 		}
@@ -96,10 +135,5 @@ func (r *resolver) APICreateCMSAction(input *model.APICreateCMSActionInput) (out
 		return output
 	}
 	output.Set(code.Success, "success")
-	output.Data = &data
 	return output
-}
-
-func (r *resolver) clean() {
-
 }

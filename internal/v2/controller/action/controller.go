@@ -78,10 +78,11 @@ func (c *controller) CreateCMSAction(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	input.CoverFile = &fileModel.Input{}
-	input.CoverFile.Named = fileHeader.Filename
-	input.CoverFile.Data = file
-
+	if file != nil {
+		input.CoverFile = &fileModel.Input{}
+		input.CoverFile.Named = fileHeader.Filename
+		input.CoverFile.Data = file
+	}
 	//獲取動作影片
 	file, fileHeader, _ = ctx.Request.FormFile("video")
 	if file != nil {
@@ -90,5 +91,49 @@ func (c *controller) CreateCMSAction(ctx *gin.Context) {
 		input.VideoFile.Data = file
 	}
 	output := c.resolver.APICreateCMSAction(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateCMSAction 修改動作
+// @Summary 修改動作
+// @Description 查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}
+// @Tags CMS內容管理_動作庫_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作id"
+// @Param name formData string false "動作名稱(1~20字元)"`
+// @Param intro formData string false "動作介紹(1~400字元)"`
+// @Param is_deleted formData int false "是否刪除(0:否/1:是)"`
+// @Param cover formData file false "課表封面照"
+// @Param video formData file false "影片檔"
+// @Success 200 {object} base.Output "更新成功!"
+// @Failure 400 {object} base.Output "更新失敗"
+// @Router /v2/cms/action/{action_id} [PATCH]
+func (c *controller) UpdateCMSAction(ctx *gin.Context) {
+	input := model.APIUpdateCMSActionInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBind(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	//獲取動作封面
+	file, fileHeader, _ := ctx.Request.FormFile("cover")
+	if file != nil {
+		input.CoverFile = &fileModel.Input{}
+		input.CoverFile.Named = fileHeader.Filename
+		input.CoverFile.Data = file
+	}
+	//獲取動作影片
+	file, fileHeader, _ = ctx.Request.FormFile("video")
+	if file != nil {
+		input.VideoFile = &fileModel.Input{}
+		input.VideoFile.Named = fileHeader.Filename
+		input.VideoFile.Data = file
+	}
+	output := c.resolver.APIUpdateCMSAction(&input)
 	ctx.JSON(http.StatusOK, output)
 }

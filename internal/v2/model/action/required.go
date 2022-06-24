@@ -1,5 +1,8 @@
 package action
 
+type IDRequired struct {
+	ID int64 `json:"id" uri:"action_id" binding:"required" example:"1"` //動作id
+}
 type NameRequired struct {
 	Name string `json:"name" form:"name" binding:"required,min=1,max=20" example:"划船機"` //動作名稱
 }

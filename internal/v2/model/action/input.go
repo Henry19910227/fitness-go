@@ -39,3 +39,19 @@ type APICreateCMSActionForm struct {
 	EquipmentRequired
 	IntroRequired
 }
+
+// APIUpdateCMSActionInput /v2/cms/action/{action_id} [PATCH] 更新動作 API
+type APIUpdateCMSActionInput struct {
+	Uri       APIUpdateCMSActionUri
+	Form      APIUpdateCMSActionForm
+	CoverFile *file.Input
+	VideoFile *file.Input
+}
+type APIUpdateCMSActionForm struct {
+	NameOptional
+	IntroOptional
+	IsDeletedOptional
+}
+type APIUpdateCMSActionUri struct {
+	IDRequired
+}
