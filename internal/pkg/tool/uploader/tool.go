@@ -51,6 +51,11 @@ func (t *tool) Save(file io.Reader, fileNamed string) (string, error) {
 	return newFileNamed, nil
 }
 
+func (t *tool) Delete(fileNamed string) error {
+	dst := t.setting.FilePath()
+	return os.Remove(dst + "/" + fileNamed)
+}
+
 func (t *tool) checkMaxSize(file io.Reader) bool {
 	if sizeValue, ok := file.(Size); ok {
 		size := int(sizeValue.Size())

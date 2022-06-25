@@ -1,4 +1,110 @@
 definitions:
+  action.APICreateCMSActionData:
+    properties:
+      body:
+        description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        example: 4
+        type: integer
+      category:
+        description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        example: 1
+        type: integer
+      cover:
+        description: 封面
+        example: 1234.jpg
+        type: string
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      equipment:
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 4
+        type: integer
+      id:
+        description: 動作id
+        example: 1
+        type: integer
+      intro:
+        description: 動作介紹
+        example: 全靠雙腳的力量將身體後蹬，雙手依舊輕鬆握住拉桿，上半身利用下背力量稍微挺直，直到雙腳完全伸直為止
+        type: string
+      name:
+        description: 動作名稱
+        example: 划船機
+        type: string
+      type:
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      video:
+        description: 動作影片
+        example: 1234.mp4
+        type: string
+    type: object
+  action.APICreateCMSActionOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/action.APICreateCMSActionData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  action.APIGetCMSActionsOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            body:
+              description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+              example: 4
+              type: integer
+            category:
+              description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+              example: 1
+              type: integer
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: 動作id
+              example: 1
+              type: integer
+            is_deleted:
+              description: 是否刪除
+              example: 0
+              type: integer
+            name:
+              description: 動作名稱
+              example: 划船機
+              type: string
+            source:
+              description: 動作來源(1:系統動作/2:教練自創動作)
+              example: 2
+              type: integer
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
+    type: object
   base.Output:
     properties:
       code:
@@ -8445,6 +8551,146 @@ paths:
       summary: 上傳訓練組前導語音
       tags:
       - WorkoutSet_v1
+  /v2/cms/action:
+    post:
+      consumes:
+      - application/json
+      description: 創建動作
+      parameters:
+      - description: 動作名稱(1~20字元)
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        in: formData
+        name: type
+        required: true
+        type: integer
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: formData
+        name: category
+        required: true
+        type: integer
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: formData
+        name: body
+        required: true
+        type: integer
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        in: formData
+        name: equipment
+        required: true
+        type: integer
+      - description: 動作介紹(1~400字元)
+        in: formData
+        name: intro
+        required: true
+        type: string
+      - description: 課表封面照
+        in: formData
+        name: cover
+        required: true
+        type: file
+      - description: 影片檔
+        in: formData
+        name: video
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/action.APICreateCMSActionOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 創建動作
+      tags:
+      - CMS內容管理_動作庫_v2
+  /v2/cms/action/{action_id}:
+    patch:
+      consumes:
+      - application/json
+      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}'
+      parameters:
+      - description: 動作id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 動作名稱(1~20字元)
+        in: formData
+        name: name
+        type: string
+      - description: 動作介紹(1~400字元)
+        in: formData
+        name: intro
+        type: string
+      - description: 是否刪除(0:否/1:是)
+        in: formData
+        name: is_deleted
+        type: integer
+      - description: 課表封面照
+        in: formData
+        name: cover
+        type: file
+      - description: 影片檔
+        in: formData
+        name: video
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功!
+          schema:
+            $ref: '#/definitions/base.Output'
+        "400":
+          description: 更新失敗
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 修改動作
+      tags:
+      - CMS內容管理_動作庫_v2
+  /v2/cms/actions:
+    get:
+      consumes:
+      - application/json
+      description: 獲取動作列表
+      parameters:
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/action.APIGetCMSActionsOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取動作列表
+      tags:
+      - CMS內容管理_動作庫_v2
   /v2/cms/course/{course_id}:
     get:
       consumes:

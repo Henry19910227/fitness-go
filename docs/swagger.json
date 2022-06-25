@@ -7463,6 +7463,220 @@
                 }
             }
         },
+        "/v2/cms/action": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建動作",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_動作庫_v2"
+                ],
+                "summary": "創建動作",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "動作名稱(1~20字元)",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                        "name": "type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                        "name": "category",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                        "name": "body",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                        "name": "equipment",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "動作介紹(1~400字元)",
+                        "name": "intro",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "cover",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "影片檔",
+                        "name": "video",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/action.APICreateCMSActionOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/cms/action/{action_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_動作庫_v2"
+                ],
+                "summary": "修改動作",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "動作名稱(1~20字元)",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "動作介紹(1~400字元)",
+                        "name": "intro",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "是否刪除(0:否/1:是)",
+                        "name": "is_deleted",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "cover",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "影片檔",
+                        "name": "video",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/cms/actions": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取動作列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_動作庫_v2"
+                ],
+                "summary": "獲取動作列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/action.APIGetCMSActionsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/course/{course_id}": {
             "get": {
                 "security": [
@@ -8006,6 +8220,145 @@
         }
     },
     "definitions": {
+        "action.APICreateCMSActionData": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "category": {
+                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "cover": {
+                    "description": "封面",
+                    "type": "string",
+                    "example": "1234.jpg"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "equipment": {
+                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "id": {
+                    "description": "動作id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "intro": {
+                    "description": "動作介紹",
+                    "type": "string",
+                    "example": "全靠雙腳的力量將身體後蹬，雙手依舊輕鬆握住拉桿，上半身利用下背力量稍微挺直，直到雙腳完全伸直為止"
+                },
+                "name": {
+                    "description": "動作名稱",
+                    "type": "string",
+                    "example": "划船機"
+                },
+                "type": {
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "video": {
+                    "description": "動作影片",
+                    "type": "string",
+                    "example": "1234.mp4"
+                }
+            }
+        },
+        "action.APICreateCMSActionOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/action.APICreateCMSActionData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "action.APIGetCMSActionsOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "body": {
+                                "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                                "type": "integer",
+                                "example": 4
+                            },
+                            "category": {
+                                "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "動作id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "is_deleted": {
+                                "description": "是否刪除",
+                                "type": "integer",
+                                "example": 0
+                            },
+                            "name": {
+                                "description": "動作名稱",
+                                "type": "string",
+                                "example": "划船機"
+                            },
+                            "source": {
+                                "description": "動作來源(1:系統動作/2:教練自創動作)",
+                                "type": "integer",
+                                "example": 2
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
         "base.Output": {
             "type": "object",
             "properties": {

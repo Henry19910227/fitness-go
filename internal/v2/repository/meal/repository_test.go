@@ -16,7 +16,7 @@ import (
 func TestRepository_List(t *testing.T) {
 	migTool := migrate.NewMockTool()
 	err := migTool.Down(nil)
-	if err != nil && err.Error() != "no change"{
+	if err != nil && err.Error() != "no change" {
 		t.Fatalf(err.Error())
 	}
 	err = migTool.Up(nil)
@@ -72,7 +72,7 @@ func TestRepository_List(t *testing.T) {
 func TestRepository_Create(t *testing.T) {
 	migTool := migrate.NewMockTool()
 	err := migTool.Down(nil)
-	if err != nil && err.Error() != "no change"{
+	if err != nil && err.Error() != "no change" {
 		assert.EqualError(t, err, "no change")
 	}
 	err = migTool.Up(nil)
@@ -115,7 +115,7 @@ func TestRepository_Create(t *testing.T) {
 func TestRepository_Delete(t *testing.T) {
 	migTool := migrate.NewMockTool()
 	err := migTool.Down(nil)
-	if err != nil && err.Error() != "no change"{
+	if err != nil && err.Error() != "no change" {
 		t.Fatalf(err.Error())
 	}
 	err = migTool.Up(nil)
@@ -172,7 +172,7 @@ func TestRepository_Delete(t *testing.T) {
 func TestRepository_Update(t *testing.T) {
 	migTool := migrate.NewMockTool()
 	err := migTool.Down(nil)
-	if err != nil && err.Error() != "no change"{
+	if err != nil && err.Error() != "no change" {
 		t.Fatalf(err.Error())
 	}
 	err = migTool.Up(nil)
