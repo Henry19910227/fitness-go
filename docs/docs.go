@@ -7611,12 +7611,6 @@ var doc = `{
                         "in": "formData"
                     },
                     {
-                        "type": "integer",
-                        "description": "是否刪除(0:否/1:是)",
-                        "name": "is_deleted",
-                        "in": "formData"
-                    },
-                    {
                         "type": "file",
                         "description": "課表封面照",
                         "name": "cover",

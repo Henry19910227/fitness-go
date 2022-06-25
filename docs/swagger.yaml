@@ -8631,10 +8631,6 @@ paths:
         in: formData
         name: intro
         type: string
-      - description: 是否刪除(0:否/1:是)
-        in: formData
-        name: is_deleted
-        type: integer
       - description: 課表封面照
         in: formData
         name: cover
