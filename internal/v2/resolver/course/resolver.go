@@ -28,6 +28,7 @@ func (r *resolver) APIGetCMSCourses(ctx *gin.Context, input *model.APIGetCMSCour
 		logger.Shared().Error(ctx, err.Error())
 		return base.BadRequest(util.PointerString(err.Error()))
 	}
+	param.IgnoredCourseStatus = []int{1}
 	param.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "SaleItem"},

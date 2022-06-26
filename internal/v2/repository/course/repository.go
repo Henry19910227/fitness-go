@@ -56,6 +56,9 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if len(input.IDs) > 0 {
 		db = db.Where("id IN (?)", input.IDs)
 	}
+	if len(input.IgnoredCourseStatus) > 0 {
+		db = db.Where("course_status NOT IN ?", input.IgnoredCourseStatus)
+	}
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
