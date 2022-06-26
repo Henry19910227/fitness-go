@@ -7611,6 +7611,12 @@ var doc = `{
                         "in": "formData"
                     },
                     {
+                        "type": "integer",
+                        "description": "動作狀態(0:下架/1:上架)",
+                        "name": "status",
+                        "in": "formData"
+                    },
+                    {
                         "type": "file",
                         "description": "課表封面照",
                         "name": "cover",
@@ -8275,6 +8281,11 @@ var doc = `{
                     "type": "string",
                     "example": "划船機"
                 },
+                "status": {
+                    "description": "動作狀態(0:下架/1:上架)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "type": {
                     "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
@@ -8343,11 +8354,6 @@ var doc = `{
                                 "type": "integer",
                                 "example": 1
                             },
-                            "is_deleted": {
-                                "description": "是否刪除",
-                                "type": "integer",
-                                "example": 0
-                            },
                             "name": {
                                 "description": "動作名稱",
                                 "type": "string",
@@ -8357,6 +8363,11 @@ var doc = `{
                                 "description": "動作來源(1:系統動作/2:教練自創動作)",
                                 "type": "integer",
                                 "example": 2
+                            },
+                            "status": {
+                                "description": "動作狀態(0:下架/1:上架)",
+                                "type": "integer",
+                                "example": 1
                             }
                         }
                     }

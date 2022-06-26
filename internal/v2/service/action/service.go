@@ -30,6 +30,7 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 }
 
 func (s *service) Create(item *model.Table) (output *model.Output, err error) {
+	item.Status = util.PointerInt(1)
 	item.IsDeleted = util.PointerInt(0)
 	item.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
 	item.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
@@ -43,7 +44,7 @@ func (s *service) Create(item *model.Table) (output *model.Output, err error) {
 	return output, err
 }
 
-func (s *service) 	Update(item *model.Table) (err error) {
+func (s *service) Update(item *model.Table) (err error) {
 	input := model.FindInput{}
 	input.ID = item.ID
 	output, err := s.repository.Find(&input)

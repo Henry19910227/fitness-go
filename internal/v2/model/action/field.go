@@ -33,6 +33,9 @@ type CoverField struct {
 type VideoField struct {
 	Video *string `json:"video,omitempty" gorm:"column:video" example:"1234.mp4"` //動作影片
 }
+type StatusField struct {
+	Status *int `json:"status,omitempty" gorm:"column:status" example:"1"` //動作狀態(0:下架/1:上架)
+}
 type IsDeletedField struct {
 	IsDeleted *int `json:"is_deleted,omitempty" gorm:"column:is_deleted" example:"0"` //是否刪除
 }
@@ -55,6 +58,7 @@ type Table struct {
 	IntroField
 	CoverField
 	VideoField
+	StatusField
 	IsDeletedField
 	CreateAtField
 	UpdateAtField
