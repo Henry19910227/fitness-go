@@ -27,10 +27,11 @@ type ListInput struct {
 	NameOptional
 	CourseStatusOptional
 	SaleTypeOptional
+	IgnoredCourseStatus []int // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+	IDs []int64
 	PagingInput
 	PreloadInput
 	OrderByInput
-	IDs []int64
 }
 
 type APIGetCMSCoursesInput struct {
