@@ -104,6 +104,7 @@ func (c *controller) CreateCMSAction(ctx *gin.Context) {
 // @Param action_id path int64 true "動作id"
 // @Param name formData string false "動作名稱(1~20字元)"`
 // @Param intro formData string false "動作介紹(1~400字元)"`
+// @Param status formData int false "動作狀態(0:下架/1:上架)"`
 // @Param cover formData file false "課表封面照"
 // @Param video formData file false "影片檔"
 // @Success 200 {object} base.Output "更新成功!"

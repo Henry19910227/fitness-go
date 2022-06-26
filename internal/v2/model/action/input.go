@@ -50,6 +50,7 @@ type APIUpdateCMSActionInput struct {
 type APIUpdateCMSActionForm struct {
 	NameOptional
 	IntroOptional
+	StatusOptional
 }
 type APIUpdateCMSActionUri struct {
 	IDRequired

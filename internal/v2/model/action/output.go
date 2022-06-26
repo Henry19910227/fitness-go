@@ -25,7 +25,7 @@ type APIGetCMSActionsData []*struct {
 	SourceField
 	CategoryField
 	BodyField
-	IsDeletedField
+	StatusField
 	CreateAtField
 }
 
@@ -44,6 +44,7 @@ type APICreateCMSActionData struct {
 	IntroField
 	CoverField
 	VideoField
+	StatusField
 	CreateAtField
 	UpdateAtField
 }

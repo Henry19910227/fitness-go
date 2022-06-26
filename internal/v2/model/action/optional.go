@@ -24,6 +24,9 @@ type EquipmentOptional struct {
 type IntroOptional struct {
 	Intro *string `json:"intro,omitempty" form:"intro" binding:"omitempty,min=1,max=400" example:"槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"` //動作介紹(1~400字元)
 }
+type StatusOptional struct {
+	Status *int `json:"status,omitempty" form:"status" binding:"omitempty,oneof=0 1" example:"1"` //動作狀態(0:下架/1:上架)
+}
 type IsDeletedOptional struct {
 	IsDeleted *int `json:"is_deleted,omitempty" form:"is_deleted" binding:"omitempty,oneof=0 1" example:"0"` //是否刪除(0:否/1:是)
 }
