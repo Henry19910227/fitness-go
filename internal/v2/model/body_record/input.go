@@ -21,6 +21,10 @@ type ListInput struct {
 	OrderByInput
 }
 
+type DeleteInput struct {
+	IDOptional
+}
+
 // APICreateBodyRecordInput /body_record [POST] 創建體態紀錄 API
 type APICreateBodyRecordInput struct {
 	UserIDRequired
@@ -51,5 +55,13 @@ type APIUpdateBodyRecordBody struct {
 	ValueOptional
 }
 type APIUpdateBodyRecordUri struct {
+	IDRequired
+}
+
+// APIDeleteBodyRecordInput /body_record/{body_record_id} [DELETE] 刪除體態紀錄
+type APIDeleteBodyRecordInput struct {
+	Uri APIUpdateBodyRecordUri
+}
+type APIDeleteBodyRecordUri struct {
 	IDRequired
 }

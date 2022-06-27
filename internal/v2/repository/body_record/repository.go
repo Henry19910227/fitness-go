@@ -32,6 +32,15 @@ func (r *repository) Create(item *model.Table) (id int64, err error) {
 	return *item.ID, err
 }
 
+func (r *repository) Delete(input *model.DeleteInput) (err error) {
+	db := r.db
+	if input.ID != nil {
+		db = db.Where("id = ?", *input.ID)
+	}
+	err = db.Delete(&model.Table{}).Error
+	return err
+}
+
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
 	if input.UserID != nil {

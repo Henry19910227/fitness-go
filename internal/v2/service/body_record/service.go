@@ -66,3 +66,9 @@ func (s *service) Update(item *model.Table) (err error) {
 	err = s.repository.Update(&table)
 	return err
 }
+
+func (s *service) Delete(input *model.DeleteInput) (err error) {
+	err = s.repository.Delete(input)
+	return err
+}
+

@@ -8707,6 +8707,32 @@ paths:
       tags:
       - 體態紀錄_v2
   /v2/body_record/{body_record_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除體態紀錄
+      parameters:
+      - description: 紀錄id
+        in: path
+        name: body_record_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/base.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除體態紀錄
+      tags:
+      - 體態紀錄_v2
     patch:
       consumes:
       - application/json

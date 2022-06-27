@@ -98,3 +98,24 @@ func (c *controller) UpdateBodyRecord(ctx *gin.Context) {
 	output := c.resolver.APIUpdateBodyRecord(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// DeleteBodyRecord 刪除體態紀錄
+// @Summary 刪除體態紀錄
+// @Description 刪除體態紀錄
+// @Tags 體態紀錄_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param body_record_id path int64 true "紀錄id"
+// @Success 200 {object} base.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/body_record/{body_record_id} [DELETE]
+func (c *controller) DeleteBodyRecord(ctx *gin.Context) {
+	input := model.APIDeleteBodyRecordInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteBodyRecord(&input)
+	ctx.JSON(http.StatusOK, output)
+}

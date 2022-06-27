@@ -7,6 +7,7 @@ import (
 type Repository interface {
 	Find(input *model.FindInput) (output *model.Output, err error)
 	List(input *model.ListInput) (outputs []*model.Output, amount int64, err error)
+	Delete(input *model.DeleteInput) (err error)
 	Create(item *model.Table) (id int64, err error)
 	Update(item *model.Table) (err error)
 }

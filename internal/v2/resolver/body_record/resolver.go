@@ -77,3 +77,14 @@ func (r *resolver) APIUpdateBodyRecord(input *model.APIUpdateBodyRecordInput) (o
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIDeleteBodyRecord(input *model.APIDeleteBodyRecordInput) (output base.Output) {
+	deleteInput := model.DeleteInput{}
+	deleteInput.ID = util.PointerInt64(input.Uri.ID)
+	if err := r.bodyService.Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}
