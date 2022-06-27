@@ -35,11 +35,40 @@ func (c *controller) CreateBodyRecord(ctx *gin.Context) {
 		return
 	}
 	input := model.APICreateBodyRecordInput{}
-	input.UserID = util.PointerInt64(uid.(int64))
+	input.UserID = uid.(int64)
 	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
 	output := c.resolver.APICreateBodyRecord(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetBodyRecords 獲取體態紀錄列表
+// @Summary 獲取體態紀錄列表
+// @Description 獲取體態紀錄列表
+// @Tags 體態紀錄_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param record_type query int true "紀錄類型(1:體重紀錄/2:體脂紀錄/3:胸圍紀錄/4:腰圍紀錄/5:臀圍紀錄/6:身高紀錄/7:臂圍紀錄/8:小臂圍紀錄/9:肩圍紀錄/10:大腿圍紀錄/11:小腿圍紀錄/12:頸圍紀錄"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} body_record.APIGetBodyRecordsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/body_records [GET]
+func (c *controller) GetBodyRecords(ctx *gin.Context) {
+	uid, exists := ctx.Get("uid")
+	if !exists {
+		ctx.JSON(http.StatusBadRequest, baseModel.InvalidToken())
+		return
+	}
+	input := model.APIGetBodyRecordsInput{}
+	input.UserID = uid.(int64)
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetBodyRecords(&input)
 	ctx.JSON(http.StatusOK, output)
 }

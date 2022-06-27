@@ -30,3 +30,13 @@ type APICreateBodyRecordBody struct {
 	RecordTypeRequired
 	ValueRequired
 }
+
+// APIGetBodyRecordsInput /body_records [GET] 獲取體態紀錄 API
+type APIGetBodyRecordsInput struct {
+	UserIDRequired
+	Query APICreateBodyRecordQuery
+}
+type APICreateBodyRecordQuery struct {
+	RecordTypeRequired
+	PagingInput
+}

@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/body_record"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	bodyService "github.com/Henry19910227/fitness-go/internal/v2/service/body_record"
 )
 
@@ -17,7 +18,7 @@ func New(bodyService bodyService.Service) Resolver {
 
 func (r *resolver) APICreateBodyRecord(input *model.APICreateBodyRecordInput) (output model.APICreateBodyRecordOutput) {
 	table := model.Table{}
-	table.UserID = input.UserID
+	table.UserID = util.PointerInt64(input.UserID)
 	if err := util.Parser(input.Body, &table); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -34,5 +35,31 @@ func (r *resolver) APICreateBodyRecord(input *model.APICreateBodyRecordInput) (o
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetBodyRecords(input *model.APIGetBodyRecordsInput) (output model.APIGetBodyRecordsOutput) {
+	bodyInput := model.ListInput{}
+	bodyInput.UserID = util.PointerInt64(input.UserID)
+	bodyInput.OrderField = "create_at"
+	bodyInput.OrderType = order_by.DESC
+	if err := util.Parser(input.Query, &bodyInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	datas, page, err := r.bodyService.List(&bodyInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetBodyRecordsData{}
+	if err := util.Parser(datas, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
 	return output
 }

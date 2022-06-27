@@ -13,4 +13,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := body.NewController(orm.Shared().DB())
 	midd := middleware.NewTokenMiddleware(redis.Shared())
 	v2.POST("/body_record", midd.Verify([]global.Role{global.UserRole}), controller.CreateBodyRecord)
+	v2.GET("/body_records", midd.Verify([]global.Role{global.UserRole}), controller.GetBodyRecords)
 }
