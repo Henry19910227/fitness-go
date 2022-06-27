@@ -7526,6 +7526,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/body_record/{body_record_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "修改體態紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "修改體態紀錄",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "紀錄id",
+                        "name": "body_record_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/body_record.APIUpdateBodyRecordBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/body_records": {
             "get": {
                 "security": [
@@ -8649,6 +8701,16 @@ var doc = `{
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "body_record.APIUpdateBodyRecordBody": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "description": "數值",
+                    "type": "number",
+                    "example": 18.5
                 }
             }
         },

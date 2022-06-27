@@ -1,7 +1,7 @@
 package body_record
 
 type IDRequired struct {
-	ID int64 `json:"id" binding:"required" example:"1"` //主鍵id
+	ID int64 `json:"id" uri:"body_record_id" binding:"required" example:"1"` //主鍵id
 }
 type UserIDRequired struct {
 	UserID int64 `json:"user_id" binding:"required" example:"10001"` //用戶id

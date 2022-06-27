@@ -54,3 +54,8 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	err = db.Find(&outputs).Error
 	return outputs, amount, err
 }
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
+	return err
+}

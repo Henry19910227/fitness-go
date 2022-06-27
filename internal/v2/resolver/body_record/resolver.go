@@ -3,6 +3,7 @@ package body_record
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/body_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	bodyService "github.com/Henry19910227/fitness-go/internal/v2/service/body_record"
@@ -61,5 +62,18 @@ func (r *resolver) APIGetBodyRecords(input *model.APIGetBodyRecordsInput) (outpu
 	output.Set(code.Success, "success")
 	output.Paging = page
 	output.Data = data
+	return output
+}
+
+func (r *resolver) APIUpdateBodyRecord(input *model.APIUpdateBodyRecordInput) (output base.Output) {
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	table.Value = input.Body.Value
+	// 更新資料
+	if err := r.bodyService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
 	return output
 }

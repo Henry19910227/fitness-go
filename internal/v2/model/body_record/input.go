@@ -40,3 +40,16 @@ type APICreateBodyRecordQuery struct {
 	RecordTypeRequired
 	PagingInput
 }
+
+// APIUpdateBodyRecordInput /body_records [PATCH] 更新體態紀錄
+type APIUpdateBodyRecordInput struct {
+	Body APIUpdateBodyRecordBody
+	Uri APIUpdateBodyRecordUri
+
+}
+type APIUpdateBodyRecordBody struct {
+	ValueOptional
+}
+type APIUpdateBodyRecordUri struct {
+	IDRequired
+}

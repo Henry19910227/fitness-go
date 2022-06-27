@@ -236,6 +236,13 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  body_record.APIUpdateBodyRecordBody:
+    properties:
+      value:
+        description: 數值
+        example: 18.5
+        type: number
+    type: object
   course.APIGetCMSCourseData:
     properties:
       body_target:
@@ -8697,6 +8704,39 @@ paths:
       security:
       - fitness_token: []
       summary: 創建體態紀錄
+      tags:
+      - 體態紀錄_v2
+  /v2/body_record/{body_record_id}:
+    patch:
+      consumes:
+      - application/json
+      description: 修改體態紀錄
+      parameters:
+      - description: 紀錄id
+        in: path
+        name: body_record_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/body_record.APIUpdateBodyRecordBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/base.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 修改體態紀錄
       tags:
       - 體態紀錄_v2
   /v2/body_records:
