@@ -7481,6 +7481,51 @@ var doc = `{
                 }
             }
         },
+        "/v2/body_record": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建體態紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "創建體態紀錄",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/body_record.APICreateBodyRecordBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/body_record.APICreateBodyRecordOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/action": {
             "post": {
                 "security": [
@@ -8389,6 +8434,78 @@ var doc = `{
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "body_record.APICreateBodyRecordBody": {
+            "type": "object",
+            "required": [
+                "record_type",
+                "value"
+            ],
+            "properties": {
+                "record_type": {
+                    "description": "紀錄類型(1:體重紀錄/2:體脂紀錄/3:胸圍紀錄/4:腰圍紀錄/5:臀圍紀錄/6:身高紀錄/7:臂圍紀錄/8:小臂圍紀錄/9:肩圍紀錄/10:大腿圍紀錄/11:小腿圍紀錄/12:頸圍紀錄",
+                    "type": "integer",
+                    "example": 2
+                },
+                "value": {
+                    "description": "數值",
+                    "type": "number",
+                    "example": 18.5
+                }
+            }
+        },
+        "body_record.APICreateBodyRecordData": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "record_type": {
+                    "description": "紀錄類型(1:體重紀錄/2:體脂紀錄/3:胸圍紀錄/4:腰圍紀錄/5:臀圍紀錄/6:身高紀錄/7:臂圍紀錄/8:小臂圍紀錄/9:肩圍紀錄/10:大腿圍紀錄/11:小腿圍紀錄/12:頸圍紀錄",
+                    "type": "integer",
+                    "example": 2
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "value": {
+                    "description": "數值",
+                    "type": "number",
+                    "example": 18.5
+                }
+            }
+        },
+        "body_record.APICreateBodyRecordOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/body_record.APICreateBodyRecordData"
                 },
                 "msg": {
                     "description": "訊息",
