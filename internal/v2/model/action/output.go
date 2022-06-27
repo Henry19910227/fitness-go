@@ -23,10 +23,16 @@ type APIGetCMSActionsData []*struct {
 	IDField
 	NameField
 	SourceField
+	TypeField
 	CategoryField
 	BodyField
+	EquipmentField
+	IntroField
+	CoverField
+	VideoField
 	StatusField
 	CreateAtField
+	UpdateAtField
 }
 
 // APICreateCMSActionOutput /cms/action [POST] 創建動作 API
