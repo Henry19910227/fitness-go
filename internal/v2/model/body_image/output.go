@@ -26,3 +26,16 @@ type APIGetBodyImagesData []*struct {
 	CreateAtField
 	UpdateAtField
 }
+
+// APICreateBodyImageOutput /body_image [POST] 新增體態照片
+type APICreateBodyImageOutput struct {
+	base.Output
+	Data *APICreateBodyImageData `json:"data,omitempty"`
+}
+type APICreateBodyImageData struct {
+	IDField
+	BodyImageField
+	WeightField
+	CreateAtField
+	UpdateAtField
+}

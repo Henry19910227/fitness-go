@@ -7463,6 +7463,49 @@
                 }
             }
         },
+        "/v2/body_image": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看體態照片 : {Base URL}/v2/resource/body/image/{Filename}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "新增體態照片",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "體態照片",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/body_image.APICreateBodyImageOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/body_images": {
             "get": {
                 "security": [
@@ -8646,6 +8689,54 @@
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "body_image.APICreateBodyImageData": {
+            "type": "object",
+            "properties": {
+                "body_image": {
+                    "description": "體態照片",
+                    "type": "string",
+                    "example": "1234.jpg"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "weight": {
+                    "description": "體重(公斤)",
+                    "type": "number",
+                    "example": 50.5
+                }
+            }
+        },
+        "body_image.APICreateBodyImageOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/body_image.APICreateBodyImageData"
                 },
                 "msg": {
                     "description": "訊息",

@@ -1,6 +1,7 @@
 package body_record
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -9,6 +10,14 @@ import (
 type PagingInput = paging.Input
 type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
+
+// GenerateInput Test Input
+type GenerateInput struct {
+	DataAmount int
+	UserID     []*base.GenerateSetting
+	RecordType []*base.GenerateSetting
+	Value      []*base.GenerateSetting
+}
 
 type FindInput struct {
 	IDOptional
@@ -48,8 +57,7 @@ type APICreateBodyRecordQuery struct {
 // APIUpdateBodyRecordInput /body_records [PATCH] 更新體態紀錄
 type APIUpdateBodyRecordInput struct {
 	Body APIUpdateBodyRecordBody
-	Uri APIUpdateBodyRecordUri
-
+	Uri  APIUpdateBodyRecordUri
 }
 type APIUpdateBodyRecordBody struct {
 	ValueOptional
