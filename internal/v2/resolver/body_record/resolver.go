@@ -65,6 +65,27 @@ func (r *resolver) APIGetBodyRecords(input *model.APIGetBodyRecordsInput) (outpu
 	return output
 }
 
+func (r *resolver) APIGetBodyRecordsLatest(input *model.APIGetBodyRecordsLatestInput) (output model.APIGetBodyRecordsLatestOutput) {
+	// parser input
+	listInput := model.LatestListInput{}
+	listInput.UserID = input.UserID
+	// LatestList
+	listData, err := r.bodyService.LatestList(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetBodyRecordsLatestData{}
+	if err := util.Parser(listData, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = data
+	return output
+}
+
 func (r *resolver) APIUpdateBodyRecord(input *model.APIUpdateBodyRecordInput) (output base.Output) {
 	table := model.Table{}
 	table.ID = util.PointerInt64(input.Uri.ID)

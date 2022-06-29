@@ -30,6 +30,10 @@ type ListInput struct {
 	OrderByInput
 }
 
+type LatestListInput struct {
+	UserIDRequired
+}
+
 type DeleteInput struct {
 	IDOptional
 }
@@ -52,6 +56,11 @@ type APIGetBodyRecordsInput struct {
 type APICreateBodyRecordQuery struct {
 	RecordTypeRequired
 	PagingInput
+}
+
+// APIGetBodyRecordsLatestInput /body_records/latest [GET] 獲取各類型最新體態紀錄列表
+type APIGetBodyRecordsLatestInput struct {
+	UserIDRequired
 }
 
 // APIUpdateBodyRecordInput /body_records [PATCH] 更新體態紀錄

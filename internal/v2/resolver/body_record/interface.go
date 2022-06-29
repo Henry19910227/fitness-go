@@ -8,6 +8,7 @@ import (
 type Resolver interface {
 	APICreateBodyRecord(input *model.APICreateBodyRecordInput) (output model.APICreateBodyRecordOutput)
 	APIGetBodyRecords(input *model.APIGetBodyRecordsInput) (output model.APIGetBodyRecordsOutput)
+	APIGetBodyRecordsLatest(input *model.APIGetBodyRecordsLatestInput) (output model.APIGetBodyRecordsLatestOutput)
 	APIUpdateBodyRecord(input *model.APIUpdateBodyRecordInput) (output base.Output)
 	APIDeleteBodyRecord(input *model.APIDeleteBodyRecordInput) (output base.Output)
 }

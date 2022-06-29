@@ -64,6 +64,18 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	return outputs, amount, err
 }
 
+func (r *repository) LatestList(input *model.LatestListInput) (outputs []*model.Output, err error) {
+	b := r.db.Table("body_records").
+		Select("record_type", "MAX(create_at) AS create_at").
+		Where("user_id = ?", input.UserID).
+		Group("record_type")
+	err = r.db.Table("body_records AS a").
+		Select("a.*").
+		Joins("INNER JOIN (?) AS b ON a.record_type = b.record_type AND a.create_at = b.create_at", b).
+		Find(&outputs).Error
+	return outputs, err
+}
+
 func (r *repository) Update(item *model.Table) (err error) {
 	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
 	return err

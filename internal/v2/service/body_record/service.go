@@ -42,6 +42,11 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 	return output, page, err
 }
 
+func (s *service) LatestList(input *model.LatestListInput) (outputs []*model.Output, err error) {
+	outputs, err = s.repository.LatestList(input)
+	return outputs, err
+}
+
 func (s *service) Update(item *model.Table) (err error) {
 	input := model.FindInput{}
 	input.ID = item.ID
@@ -71,4 +76,3 @@ func (s *service) Delete(input *model.DeleteInput) (err error) {
 	err = s.repository.Delete(input)
 	return err
 }
-

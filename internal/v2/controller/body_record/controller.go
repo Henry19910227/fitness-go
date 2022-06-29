@@ -73,6 +73,28 @@ func (c *controller) GetBodyRecords(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// GetBodyRecordsLatest 獲取各類型最新體態紀錄列表
+// @Summary 獲取各類型最新體態紀錄列表
+// @Description 獲取各類型最新體態紀錄列表
+// @Tags 體態紀錄_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} body_record.APIGetBodyRecordsLatestOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/body_records/latest [GET]
+func (c *controller) GetBodyRecordsLatest(ctx *gin.Context) {
+	uid, exists := ctx.Get("uid")
+	if !exists {
+		ctx.JSON(http.StatusBadRequest, baseModel.InvalidToken())
+		return
+	}
+	input := model.APIGetBodyRecordsLatestInput{}
+	input.UserID = uid.(int64)
+	output := c.resolver.APIGetBodyRecordsLatest(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // UpdateBodyRecord 修改體態紀錄
 // @Summary 修改體態紀錄
 // @Description 修改體態紀錄

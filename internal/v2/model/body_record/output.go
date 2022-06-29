@@ -35,3 +35,16 @@ type APIGetBodyRecordsData []*struct {
 	CreateAtField
 	UpdateAtField
 }
+
+// APIGetBodyRecordsLatestOutput /body_records/latest [GET] 獲取各類型最新體態紀錄列表
+type APIGetBodyRecordsLatestOutput struct {
+	base.Output
+	Data APIGetBodyRecordsLatestData `json:"data"`
+}
+type APIGetBodyRecordsLatestData []*struct {
+	IDField
+	RecordTypeField
+	ValueField
+	CreateAtField
+	UpdateAtField
+}
