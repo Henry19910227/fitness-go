@@ -17,3 +17,7 @@ func NewActionCoverTool() Tool {
 func NewActionVideoTool() Tool {
 	return New(setting.NewActionVideo())
 }
+
+func NewBodyImageTool() Tool {
+	return New(setting.NewBodyImage())
+}

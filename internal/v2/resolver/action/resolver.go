@@ -16,8 +16,8 @@ type resolver struct {
 	videoUploadTool uploader.Tool
 }
 
-func New(courseService actionService.Service, coverUploadTool uploader.Tool, videoUploadTool uploader.Tool) Resolver {
-	return &resolver{actionService: courseService, coverUploadTool: coverUploadTool, videoUploadTool: videoUploadTool}
+func New(actionService actionService.Service, coverUploadTool uploader.Tool, videoUploadTool uploader.Tool) Resolver {
+	return &resolver{actionService: actionService, coverUploadTool: coverUploadTool, videoUploadTool: videoUploadTool}
 }
 
 func (r *resolver) APIGetCMSActions(input *model.APIGetCMSActionsInput) (output model.APIGetCMSActionsOutput) {

@@ -7463,6 +7463,328 @@
                 }
             }
         },
+        "/v2/body_image": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看體態照片 : {Base URL}/v2/resource/body/image/{Filename}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "新增體態照片",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "體態照片",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/body_image.APICreateBodyImageOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/body_images": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取體態照片列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "獲取體態照片列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/body_image.APIGetBodyImagesOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/body_record": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建體態紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "創建體態紀錄",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/body_record.APICreateBodyRecordBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/body_record.APICreateBodyRecordOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/body_record/{body_record_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除體態紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "刪除體態紀錄",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "紀錄id",
+                        "name": "body_record_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "修改體態紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "修改體態紀錄",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "紀錄id",
+                        "name": "body_record_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/body_record.APIUpdateBodyRecordBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/body_records": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取體態紀錄列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "獲取體態紀錄列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "紀錄類型(1:體重紀錄/2:體脂紀錄/3:胸圍紀錄/4:腰圍紀錄/5:臀圍紀錄/6:身高紀錄/7:臂圍紀錄/8:小臂圍紀錄/9:肩圍紀錄/10:大腿圍紀錄/11:小腿圍紀錄/12:頸圍紀錄",
+                        "name": "record_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/body_record.APIGetBodyRecordsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/body_records/latest": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取各類型最新體態紀錄列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "體態紀錄_v2"
+                ],
+                "summary": "獲取各類型最新體態紀錄列表",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/body_record.APIGetBodyRecordsLatestOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/action": {
             "post": {
                 "security": [
@@ -8326,15 +8648,30 @@
                                 "type": "integer",
                                 "example": 1
                             },
+                            "cover": {
+                                "description": "封面",
+                                "type": "string",
+                                "example": "1234.jpg"
+                            },
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
                                 "example": "2022-06-14 00:00:00"
                             },
+                            "equipment": {
+                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "integer",
+                                "example": 4
+                            },
                             "id": {
                                 "description": "動作id",
                                 "type": "integer",
                                 "example": 1
+                            },
+                            "intro": {
+                                "description": "動作介紹",
+                                "type": "string",
+                                "example": "全靠雙腳的力量將身體後蹬，雙手依舊輕鬆握住拉桿，上半身利用下背力量稍微挺直，直到雙腳完全伸直為止"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -8350,6 +8687,21 @@
                                 "description": "動作狀態(0:下架/1:上架)",
                                 "type": "integer",
                                 "example": 1
+                            },
+                            "type": {
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "video": {
+                                "description": "動作影片",
+                                "type": "string",
+                                "example": "1234.mp4"
                             }
                         }
                     }
@@ -8376,6 +8728,286 @@
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
+                }
+            }
+        },
+        "body_image.APICreateBodyImageData": {
+            "type": "object",
+            "properties": {
+                "body_image": {
+                    "description": "體態照片",
+                    "type": "string",
+                    "example": "1234.jpg"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "weight": {
+                    "description": "體重(公斤)",
+                    "type": "number",
+                    "example": 50.5
+                }
+            }
+        },
+        "body_image.APICreateBodyImageOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/body_image.APICreateBodyImageData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "body_image.APIGetBodyImagesOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "body_image": {
+                                "description": "體態照片",
+                                "type": "string",
+                                "example": "1234.jpg"
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "主鍵id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "weight": {
+                                "description": "體重(公斤)",
+                                "type": "number",
+                                "example": 50.5
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "body_record.APICreateBodyRecordBody": {
+            "type": "object",
+            "required": [
+                "record_type",
+                "value"
+            ],
+            "properties": {
+                "record_type": {
+                    "description": "紀錄類型(1:體重紀錄/2:體脂紀錄/3:胸圍紀錄/4:腰圍紀錄/5:臀圍紀錄/6:身高紀錄/7:臂圍紀錄/8:小臂圍紀錄/9:肩圍紀錄/10:大腿圍紀錄/11:小腿圍紀錄/12:頸圍紀錄",
+                    "type": "integer",
+                    "example": 2
+                },
+                "value": {
+                    "description": "數值",
+                    "type": "number",
+                    "example": 18.5
+                }
+            }
+        },
+        "body_record.APICreateBodyRecordData": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "主鍵id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "record_type": {
+                    "description": "紀錄類型(1:體重紀錄/2:體脂紀錄/3:胸圍紀錄/4:腰圍紀錄/5:臀圍紀錄/6:身高紀錄/7:臂圍紀錄/8:小臂圍紀錄/9:肩圍紀錄/10:大腿圍紀錄/11:小腿圍紀錄/12:頸圍紀錄",
+                    "type": "integer",
+                    "example": 2
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "value": {
+                    "description": "數值",
+                    "type": "number",
+                    "example": 18.5
+                }
+            }
+        },
+        "body_record.APICreateBodyRecordOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/body_record.APICreateBodyRecordData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "body_record.APIGetBodyRecordsLatestOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "主鍵id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "record_type": {
+                                "description": "紀錄類型(1:體重紀錄/2:體脂紀錄/3:胸圍紀錄/4:腰圍紀錄/5:臀圍紀錄/6:身高紀錄/7:臂圍紀錄/8:小臂圍紀錄/9:肩圍紀錄/10:大腿圍紀錄/11:小腿圍紀錄/12:頸圍紀錄",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "value": {
+                                "description": "數值",
+                                "type": "number",
+                                "example": 18.5
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "body_record.APIGetBodyRecordsOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "主鍵id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "record_type": {
+                                "description": "紀錄類型(1:體重紀錄/2:體脂紀錄/3:胸圍紀錄/4:腰圍紀錄/5:臀圍紀錄/6:身高紀錄/7:臂圍紀錄/8:小臂圍紀錄/9:肩圍紀錄/10:大腿圍紀錄/11:小腿圍紀錄/12:頸圍紀錄",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "value": {
+                                "description": "數值",
+                                "type": "number",
+                                "example": 18.5
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "body_record.APIUpdateBodyRecordBody": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "description": "數值",
+                    "type": "number",
+                    "example": 18.5
                 }
             }
         },
