@@ -16,7 +16,7 @@ func (Output) TableName() string {
 // APIGetBodyImagesOutput /body_images [GET] 獲取體態照片列表
 type APIGetBodyImagesOutput struct {
 	base.Output
-	Data   APIGetBodyImagesData `json:"data,omitempty"`
+	Data   APIGetBodyImagesData `json:"data"`
 	Paging *paging.Output       `json:"paging,omitempty"`
 }
 type APIGetBodyImagesData []*struct {

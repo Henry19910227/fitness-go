@@ -100,6 +100,19 @@ func (r *resolver) APIUpdateBodyRecord(input *model.APIUpdateBodyRecordInput) (o
 }
 
 func (r *resolver) APIDeleteBodyRecord(input *model.APIDeleteBodyRecordInput) (output base.Output) {
+	//判斷是否為紀錄創建者
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	bodyOutput, err := r.bodyService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if input.UserID != *bodyOutput.UserID {
+		output.SetStatus(code.PermissionDenied)
+		return output
+	}
+	//執行刪除
 	deleteInput := model.DeleteInput{}
 	deleteInput.ID = util.PointerInt64(input.Uri.ID)
 	if err := r.bodyService.Delete(&deleteInput); err != nil {

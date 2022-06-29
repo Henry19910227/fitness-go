@@ -29,6 +29,11 @@ func (s *service) Create(item *model.Table) (output *model.Output, err error) {
 	return output, err
 }
 
+func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {
+	output, err = s.repository.Find(input)
+	return output, err
+}
+
 func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
 	output, amount, err := s.repository.List(input)
 	if err != nil {

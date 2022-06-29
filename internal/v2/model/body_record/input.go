@@ -77,6 +77,7 @@ type APIUpdateBodyRecordUri struct {
 
 // APIDeleteBodyRecordInput /body_record/{body_record_id} [DELETE] 刪除體態紀錄
 type APIDeleteBodyRecordInput struct {
+	UserIDRequired
 	Uri APIUpdateBodyRecordUri
 }
 type APIDeleteBodyRecordUri struct {
