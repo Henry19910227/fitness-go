@@ -43,7 +43,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	}
 	// name 篩選條件
 	if input.Name != nil {
-		db = db.Where("name = ?", "%"+*input.Name+"%")
+		db = db.Where("name LIKE ?", "%"+*input.Name+"%")
 	}
 	// course_status 篩選條件
 	if input.CourseStatus != nil {
@@ -57,7 +57,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 		db = db.Where("id IN (?)", input.IDs)
 	}
 	if len(input.IgnoredCourseStatus) > 0 {
-		db = db.Where("course_status NOT IN ?", input.IgnoredCourseStatus)
+		db = db.Where("course_status NOT IN (?)", input.IgnoredCourseStatus)
 	}
 	//Preload
 	if len(input.Preloads) > 0 {
