@@ -108,7 +108,13 @@ func (c *controller) GetBodyRecordsLatest(ctx *gin.Context) {
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/body_record/{body_record_id} [PATCH]
 func (c *controller) UpdateBodyRecord(ctx *gin.Context) {
+	uid, exists := ctx.Get("uid")
+	if !exists {
+		ctx.JSON(http.StatusBadRequest, baseModel.InvalidToken())
+		return
+	}
 	input := model.APIUpdateBodyRecordInput{}
+	input.UserID = uid.(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return

@@ -65,6 +65,7 @@ type APIGetBodyRecordsLatestInput struct {
 
 // APIUpdateBodyRecordInput /body_records [PATCH] 更新體態紀錄
 type APIUpdateBodyRecordInput struct {
+	UserIDRequired
 	Body APIUpdateBodyRecordBody
 	Uri  APIUpdateBodyRecordUri
 }

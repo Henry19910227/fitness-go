@@ -87,10 +87,20 @@ func (r *resolver) APIGetBodyRecordsLatest(input *model.APIGetBodyRecordsLatestI
 }
 
 func (r *resolver) APIUpdateBodyRecord(input *model.APIUpdateBodyRecordInput) (output base.Output) {
+	//判斷是否為紀錄創建者
+	isOwner, err := r.checkOwner(input.UserID, input.Uri.ID)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !isOwner {
+		output.SetStatus(code.PermissionDenied)
+		return output
+	}
+	//執行更新
 	table := model.Table{}
 	table.ID = util.PointerInt64(input.Uri.ID)
 	table.Value = input.Body.Value
-	// 更新資料
 	if err := r.bodyService.Update(&table); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -101,14 +111,12 @@ func (r *resolver) APIUpdateBodyRecord(input *model.APIUpdateBodyRecordInput) (o
 
 func (r *resolver) APIDeleteBodyRecord(input *model.APIDeleteBodyRecordInput) (output base.Output) {
 	//判斷是否為紀錄創建者
-	findInput := model.FindInput{}
-	findInput.ID = util.PointerInt64(input.Uri.ID)
-	bodyOutput, err := r.bodyService.Find(&findInput)
+	isOwner, err := r.checkOwner(input.UserID, input.Uri.ID)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	if input.UserID != *bodyOutput.UserID {
+	if !isOwner {
 		output.SetStatus(code.PermissionDenied)
 		return output
 	}
@@ -121,4 +129,17 @@ func (r *resolver) APIDeleteBodyRecord(input *model.APIDeleteBodyRecordInput) (o
 	}
 	output.Set(code.Success, "success")
 	return output
+}
+
+func (r *resolver) checkOwner(userID int64, bodyRecordID int64) (isOwner bool, err error) {
+	input := model.FindInput{}
+	input.ID = util.PointerInt64(bodyRecordID)
+	output, err := r.bodyService.Find(&input)
+	if err != nil {
+		return false, err
+	}
+	if userID != *output.UserID {
+		return false, err
+	}
+	return true, err
 }
