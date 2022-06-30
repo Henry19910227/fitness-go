@@ -14,4 +14,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := middleware.NewTokenMiddleware(redis.Shared())
 	v2.GET("/foods", midd.Verify([]global.Role{global.UserRole}), controller.GetFoods)
 	v2.GET("/cms/foods", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSFoods)
+	v2.POST("/cms/food", midd.Verify([]global.Role{global.AdminRole}), controller.CreateCMSFood)
 }

@@ -20,6 +20,10 @@ type GenerateInput struct {
 	IsDeleted      []*base.GenerateSetting
 }
 
+type FindInput struct {
+	IDOptional
+}
+
 type ListInput struct {
 	foodCategory.TagField
 	UserIDOptional
@@ -36,4 +40,13 @@ type APIGetFoodsInput struct {
 	foodCategory.TagField
 	UserIDField
 	NameField
+}
+
+type APICreateCMSFoodInput struct {
+	Body APICreateCMSFoodBody
+}
+type APICreateCMSFoodBody struct {
+	FoodCategoryIDRequired
+	NameRequired
+	AmountDescRequired
 }

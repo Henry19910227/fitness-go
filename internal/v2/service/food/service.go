@@ -6,6 +6,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/food"
+	"time"
 )
 
 type service struct {
@@ -21,7 +22,7 @@ func New(repository food.Repository) Service {
 	return &service{repository: repository}
 }
 
-func (s service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
+func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
 	input.IsDeleted = util.PointerInt(0)
 	input.OrderField = "create_at"
 	input.OrderType = "DESC"
@@ -35,4 +36,19 @@ func (s service) List(input *model.ListInput) (output []*model.Output, page *pag
 	page.Page = input.Page
 	page.Size = input.Size
 	return output, page, err
+}
+
+func (s *service) Create(item *model.Table) (output *model.Output, err error) {
+	item.Status = util.PointerInt(1)
+	item.IsDeleted = util.PointerInt(0)
+	item.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+	item.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+	id, err := s.repository.Create(item)
+	if err != nil {
+		return nil, err
+	}
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(id)
+	output, err = s.repository.Find(&findInput)
+	return output, err
 }

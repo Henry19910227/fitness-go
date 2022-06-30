@@ -9,4 +9,5 @@ import (
 type Service interface {
 	WithTrx(gormTool orm.Tool)
 	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
+	Create(item *model.Table) (output *model.Output, err error)
 }

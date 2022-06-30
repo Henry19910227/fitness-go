@@ -3209,6 +3209,88 @@ definitions:
           $ref: '#/definitions/dto.WorkoutSet'
         type: array
     type: object
+  food.APICreateCMSFoodBody:
+    properties:
+      amount_desc:
+        description: 份量描述
+        example: 一份三百卡
+        type: string
+      food_category_id:
+        description: 食物類別id
+        example: 1
+        type: integer
+      name:
+        description: 食物名稱
+        example: 蕃薯
+        type: string
+    required:
+    - amount_desc
+    - food_category_id
+    - name
+    type: object
+  food.APICreateCMSFoodData:
+    properties:
+      amount_desc:
+        description: 份量描述
+        example: 一份三百卡
+        type: string
+      calorie:
+        description: 食物熱量
+        example: 300
+        type: integer
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      food_category:
+        properties:
+          id:
+            description: 主鍵id
+            example: 1
+            type: integer
+          tag:
+            description: 食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)
+            example: 2
+            type: integer
+          title:
+            description: 類別名稱
+            example: 米麥類
+            type: string
+        type: object
+      id:
+        description: 主鍵id
+        example: 1
+        type: integer
+      name:
+        description: 食物名稱
+        example: 蕃薯
+        type: string
+      source:
+        description: 來源(1:系統創建食物/2:用戶創建食物)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 10001
+        type: integer
+    type: object
+  food.APICreateCMSFoodOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/food.APICreateCMSFoodData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   food.APIGetCMSFoodsOutput:
     properties:
       code:
@@ -9394,6 +9476,34 @@ paths:
       summary: 批量修改課表審核狀態
       tags:
       - CMS課表管理_v2
+  /v2/cms/food:
+    post:
+      consumes:
+      - application/json
+      description: 創建食物
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/food.APICreateCMSFoodBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/food.APICreateCMSFoodOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 創建食物
+      tags:
+      - CMS內容管理_食品庫_v2
   /v2/cms/foods:
     get:
       consumes:

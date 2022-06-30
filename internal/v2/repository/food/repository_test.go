@@ -59,7 +59,7 @@ func TestRepository_List(t *testing.T) {
 	input.Size = 2
 	input.OrderField = "create_at"
 	input.OrderType = "DESC"
-	input.IsDisabled = util.PointerInt(0)
+	input.Status = util.PointerInt(0)
 	input.IsDeleted = util.PointerInt(0)
 	outputs, amount, err := repo.List(&input)
 	if err != nil {
