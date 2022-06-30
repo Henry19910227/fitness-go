@@ -42,3 +42,28 @@ func (r *resolver) APIGetFoods(input *model.APIGetFoodsInput) (output model.APIG
 	output.Data = data
 	return output
 }
+
+func (r *resolver) APIGetCMSFoods() (output model.APIGetCMSFoodsOutput) {
+	// parser input
+	param := model.ListInput{}
+	param.Source = util.PointerInt(1)
+	param.IsDeleted = util.PointerInt(0)
+	param.Preloads = []*preloadModel.Preload{
+		{Field: "FoodCategory"},
+	}
+	// 調用 service
+	result, _, err := r.foodService.List(&param)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetCMSFoodsData{}
+	if err := util.Parser(result, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = data
+	return output
+}

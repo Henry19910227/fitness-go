@@ -8314,6 +8314,40 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/foods": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取食物列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_食品庫_v2"
+                ],
+                "summary": "獲取食物列表",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/food.APIGetCMSFoodsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/trainer/{user_id}/avatar": {
             "patch": {
                 "security": [
@@ -12785,6 +12819,79 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/dto.WorkoutSet"
                     }
+                }
+            }
+        },
+        "food.APIGetCMSFoodsOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "food_category": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "description": "主鍵id",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tag": {
+                                        "description": "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "title": {
+                                        "description": "類別名稱",
+                                        "type": "string",
+                                        "example": "米麥類"
+                                    }
+                                }
+                            },
+                            "id": {
+                                "description": "主鍵id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "description": "食物名稱",
+                                "type": "string",
+                                "example": "蕃薯"
+                            },
+                            "source": {
+                                "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "status": {
+                                "description": "狀態(0:下架/1:上架)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

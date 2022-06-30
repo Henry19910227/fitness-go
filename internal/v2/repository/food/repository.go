@@ -29,8 +29,17 @@ func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount
 	if input.Name != nil {
 		db = db.Where("foods.name LIKE ?", "%"+*input.Name+"%")
 	}
+	//加入 user_id 篩選條件
 	if input.UserID != nil {
 		db = db.Where("(foods.user_id = ? OR foods.user_id IS NULL)", *input.UserID)
+	}
+	//加入 source 篩選條件
+	if input.Source != nil {
+		db = db.Where("foods.source = ?", *input.Source)
+	}
+	//加入 is_disabled 篩選條件
+	if input.Status != nil {
+		db = db.Where("foods.status = ?", *input.Status)
 	}
 	//加入 is_delete 篩選條件
 	if input.IsDeleted != nil {

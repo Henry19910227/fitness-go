@@ -6,4 +6,5 @@ import (
 
 type Resolver interface {
 	APIGetFoods(input *model.APIGetFoodsInput) (output model.APIGetFoodsOutput)
+	APIGetCMSFoods() (output model.APIGetCMSFoodsOutput)
 }

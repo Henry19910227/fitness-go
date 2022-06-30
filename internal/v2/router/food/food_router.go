@@ -9,8 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetRoute(baseGroup *gin.RouterGroup) {
+func SetRoute(v2 *gin.RouterGroup) {
 	controller := food.NewController(orm.Shared().DB())
 	midd := middleware.NewTokenMiddleware(redis.Shared())
-	baseGroup.GET("/foods", midd.Verify([]global.Role{global.UserRole}), controller.GetFoods)
+	v2.GET("/foods", midd.Verify([]global.Role{global.UserRole}), controller.GetFoods)
+	v2.GET("/cms/foods", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSFoods)
 }

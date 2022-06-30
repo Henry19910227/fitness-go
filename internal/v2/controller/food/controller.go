@@ -53,3 +53,18 @@ func (c *controller) GetFoods(ctx *gin.Context) {
 	output := c.resolver.APIGetFoods(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetCMSFoods 獲取食物列表
+// @Summary 獲取食物列表
+// @Description 獲取食物列表
+// @Tags CMS內容管理_食品庫_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} food.APIGetCMSFoodsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/foods [GET]
+func (c *controller) GetCMSFoods(ctx *gin.Context) {
+	output := c.resolver.APIGetCMSFoods()
+	ctx.JSON(http.StatusOK, output)
+}
