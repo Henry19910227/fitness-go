@@ -8341,6 +8341,40 @@
                 }
             }
         },
+        "/v2/cms/food_categories": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取食物分類",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_食品庫_v2"
+                ],
+                "summary": "獲取食物分類",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/food_category.APIGetCMSFoodCategoriesOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/foods": {
             "get": {
                 "security": [
@@ -13102,6 +13136,54 @@
                                 "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "food_category.APIGetCMSFoodCategoriesOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "主鍵id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "tag": {
+                                "description": "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "title": {
+                                "description": "類別名稱",
+                                "type": "string",
+                                "example": "米麥類"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
                             }
                         }
                     }
