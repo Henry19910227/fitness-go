@@ -42,6 +42,7 @@ type APIGetFoodsInput struct {
 	NameField
 }
 
+// APICreateCMSFoodInput /v2/cms/food [POST]
 type APICreateCMSFoodInput struct {
 	Body APICreateCMSFoodBody
 }
@@ -49,4 +50,18 @@ type APICreateCMSFoodBody struct {
 	FoodCategoryIDRequired
 	NameRequired
 	AmountDescRequired
+}
+
+// APIUpdateCMSFoodInput /v2/cms/food/{food_id} [PATCH]
+type APIUpdateCMSFoodInput struct {
+	Uri  APIUpdateCMSFoodURI
+	Body APIUpdateCMSFoodBody
+}
+type APIUpdateCMSFoodURI struct {
+	IDRequired
+}
+type APIUpdateCMSFoodBody struct {
+	NameOptional
+	AmountDescOptional
+	StatusOptional
 }

@@ -16,6 +16,10 @@ type GenerateInput struct {
 	Tag        []*base.GenerateSetting
 }
 
+type FindInput struct {
+	IDOptional
+}
+
 type ListInput struct {
 	IsDeletedOptional
 	PagingInput

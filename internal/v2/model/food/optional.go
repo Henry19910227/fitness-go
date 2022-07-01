@@ -22,7 +22,7 @@ type AmountDescOptional struct {
 	AmountDesc *string `json:"amount_desc,omitempty" binding:"omitempty" example:"一份三百卡"` //份量描述
 }
 type StatusOptional struct {
-	Status *int `json:"status,omitempty" binding:"omitempty" example:"1"` //狀態(0:下架/1:上架)
+	Status *int `json:"status,omitempty" binding:"omitempty,oneof=0 1" example:"1"` //狀態(0:下架/1:上架)
 }
 type IsDeletedOptional struct {
 	IsDeleted *int `json:"is_deleted,omitempty" binding:"omitempty" example:"0"` //是否刪除

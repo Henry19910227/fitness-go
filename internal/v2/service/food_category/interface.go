@@ -6,5 +6,6 @@ import (
 )
 
 type Service interface {
+	Find(input *model.FindInput) (output *model.Output, err error)
 	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
 }

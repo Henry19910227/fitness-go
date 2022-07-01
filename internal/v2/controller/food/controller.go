@@ -89,3 +89,29 @@ func (c *controller) CreateCMSFood(ctx *gin.Context) {
 	output := c.resolver.APICreateCMSFood(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// UpdateCMSFood 修改食物
+// @Summary 修改食物
+// @Description 修改食物
+// @Tags CMS內容管理_食品庫_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param food_id path int64 true "食物id"
+// @Param json_body body food.APIUpdateCMSFoodBody true "輸入參數"
+// @Success 200 {object} base.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/food/{food_id} [PATCH]
+func (c *controller) UpdateCMSFood(ctx *gin.Context) {
+	input := model.APIUpdateCMSFoodInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateCMSFood(&input)
+	ctx.JSON(http.StatusOK, output)
+}

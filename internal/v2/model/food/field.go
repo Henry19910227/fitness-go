@@ -1,5 +1,10 @@
 package food
 
+const (
+	System int = 1 //系統創建食物
+	Custom int = 2 //用戶創建食物
+)
+
 type IDField struct {
 	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"1"` //主鍵id
 }

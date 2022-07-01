@@ -8341,6 +8341,58 @@
                 }
             }
         },
+        "/v2/cms/food/{food_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "修改食物",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_食品庫_v2"
+                ],
+                "summary": "修改食物",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "食物id",
+                        "name": "food_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/food.APIUpdateCMSFoodBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/food_categories": {
             "get": {
                 "security": [
@@ -13144,6 +13196,26 @@
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
+                }
+            }
+        },
+        "food.APIUpdateCMSFoodBody": {
+            "type": "object",
+            "properties": {
+                "amount_desc": {
+                    "description": "份量描述",
+                    "type": "string",
+                    "example": "一份三百卡"
+                },
+                "name": {
+                    "description": "食物名稱",
+                    "type": "string",
+                    "example": "蕃薯"
+                },
+                "status": {
+                    "description": "狀態(0:下架/1:上架)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
