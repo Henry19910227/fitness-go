@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	categoryModel "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	foodService "github.com/Henry19910227/fitness-go/internal/v2/service/food"
 	foodCategoryService "github.com/Henry19910227/fitness-go/internal/v2/service/food_category"
@@ -26,6 +27,8 @@ func (r *resolver) APIGetFoods(input *model.APIGetFoodsInput) (output model.APIG
 	// parser input
 	param := model.ListInput{}
 	param.Status = util.PointerInt(1)
+	param.OrderField = "create_at"
+	param.OrderType = order_by.DESC
 	if err := util.Parser(input, &param); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -54,6 +57,8 @@ func (r *resolver) APIGetCMSFoods() (output model.APIGetCMSFoodsOutput) {
 	// parser input
 	param := model.ListInput{}
 	param.Source = util.PointerInt(1)
+	param.OrderField = "create_at"
+	param.OrderType = order_by.ASC
 	param.Preloads = []*preloadModel.Preload{
 		{Field: "FoodCategory"},
 	}

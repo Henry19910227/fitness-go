@@ -24,8 +24,6 @@ func (s *service) WithTrx(gormTool orm.Tool) {
 
 func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
 	input.IsDeleted = util.PointerInt(0)
-	input.OrderField = "create_at"
-	input.OrderType = "DESC"
 	output, amount, err := s.repository.List(input)
 	if err != nil {
 		return output, page, err
