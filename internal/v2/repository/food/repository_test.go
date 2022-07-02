@@ -50,7 +50,7 @@ func TestRepository_List(t *testing.T) {
 		t.Fatalf(err.Error())
 	}
 	// 驗證測試項目
-	repo := New(orm.Mock())
+	repo := New(orm.Mock().DB())
 	input := food.ListInput{}
 	input.UserID = users[0].ID
 	input.Tag = util.PointerInt(1)
@@ -59,6 +59,7 @@ func TestRepository_List(t *testing.T) {
 	input.Size = 2
 	input.OrderField = "create_at"
 	input.OrderType = "DESC"
+	input.Status = util.PointerInt(0)
 	input.IsDeleted = util.PointerInt(0)
 	outputs, amount, err := repo.List(&input)
 	if err != nil {

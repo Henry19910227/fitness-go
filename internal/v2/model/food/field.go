@@ -1,5 +1,10 @@
 package food
 
+const (
+	System int = 1 //系統創建食物
+	Custom int = 2 //用戶創建食物
+)
+
 type IDField struct {
 	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"1"` //主鍵id
 }
@@ -21,6 +26,9 @@ type CalorieField struct {
 type AmountDescField struct {
 	AmountDesc *string `json:"amount_desc,omitempty" gorm:"column:amount_desc;default:''" example:"一份三百卡"` //份量描述
 }
+type StatusField struct {
+	Status *int `json:"status,omitempty" gorm:"column:status;default:1" example:"1"` //狀態(0:下架/1:上架)
+}
 type IsDeletedField struct {
 	IsDeleted *int `json:"is_deleted,omitempty" gorm:"column:is_deleted;default:0" example:"0"` //是否刪除
 }
@@ -39,6 +47,7 @@ type Table struct {
 	NameField
 	CalorieField
 	AmountDescField
+	StatusField
 	IsDeletedField
 	CreateAtField
 	UpdateAtField

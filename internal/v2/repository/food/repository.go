@@ -18,7 +18,7 @@ func New(db *gorm.DB) Repository {
 func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{}).
 		Select("foods.id AS id", "foods.user_id AS user_id", "foods.food_category_id AS food_category_id",
-			"foods.source AS source", "foods.name AS name", "foods.calorie AS calorie",
+			"foods.source AS source", "foods.status AS status", "foods.name AS name", "foods.calorie AS calorie",
 			"foods.amount_desc AS amount_desc", "foods.create_at AS create_at", "foods.update_at AS update_at")
 	//加入 tag 篩選條件
 	if input.Tag != nil {
@@ -29,8 +29,17 @@ func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount
 	if input.Name != nil {
 		db = db.Where("foods.name LIKE ?", "%"+*input.Name+"%")
 	}
+	//加入 user_id 篩選條件
 	if input.UserID != nil {
 		db = db.Where("(foods.user_id = ? OR foods.user_id IS NULL)", *input.UserID)
+	}
+	//加入 source 篩選條件
+	if input.Source != nil {
+		db = db.Where("foods.source = ?", *input.Source)
+	}
+	//加入 is_disabled 篩選條件
+	if input.Status != nil {
+		db = db.Where("foods.status = ?", *input.Status)
 	}
 	//加入 is_delete 篩選條件
 	if input.IsDeleted != nil {
@@ -63,10 +72,25 @@ func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount
 	return outputs, amount, err
 }
 
-func (r *repository) Create(items []*food.Table) (err error) {
-	panic("implement me")
+func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
+	db := r.db.Model(&model.Output{})
+	if input.ID != nil {
+		db = db.Where("id = ?", *input.ID)
+	}
+	//查詢數據
+	err = db.First(&output).Error
+	return output, err
 }
 
-func (r *repository) Update(items []*food.Table) (err error) {
-	panic("implement me")
+func (r *repository) Create(item *model.Table) (id int64, err error) {
+	err = r.db.Model(&model.Table{}).Create(&item).Error
+	if err != nil {
+		return 0, err
+	}
+	return *item.ID, err
+}
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
+	return err
 }

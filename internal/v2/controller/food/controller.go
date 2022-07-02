@@ -3,7 +3,7 @@ package food
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	foodModel "github.com/Henry19910227/fitness-go/internal/v2/model/food"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	foodCategoryModel "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/food"
 	"github.com/gin-gonic/gin"
@@ -37,19 +37,81 @@ func (c *controller) GetFoods(ctx *gin.Context) {
 		return
 	}
 	var query struct {
-		foodModel.NameField
+		model.NameField
 		foodCategoryModel.TagField
 	}
 	if err := ctx.ShouldBindQuery(&query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	input := foodModel.APIGetFoodsInput{}
+	input := model.APIGetFoodsInput{}
 	input.UserID = util.PointerInt64(uid.(int64))
 	if err := util.Parser(query, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
 	output := c.resolver.APIGetFoods(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetCMSFoods 獲取食物列表
+// @Summary 獲取食物列表
+// @Description 獲取食物列表
+// @Tags CMS內容管理_食品庫_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} food.APIGetCMSFoodsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/foods [GET]
+func (c *controller) GetCMSFoods(ctx *gin.Context) {
+	output := c.resolver.APIGetCMSFoods()
+	ctx.JSON(http.StatusOK, output)
+}
+
+// CreateCMSFood 創建食物
+// @Summary 創建食物
+// @Description 創建食物
+// @Tags CMS內容管理_食品庫_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body food.APICreateCMSFoodBody true "輸入參數"
+// @Success 200 {object} food.APICreateCMSFoodOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/food [POST]
+func (c *controller) CreateCMSFood(ctx *gin.Context) {
+	input := model.APICreateCMSFoodInput{}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateCMSFood(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateCMSFood 修改食物
+// @Summary 修改食物
+// @Description 修改食物
+// @Tags CMS內容管理_食品庫_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param food_id path int64 true "食物id"
+// @Param json_body body food.APIUpdateCMSFoodBody true "輸入參數"
+// @Success 200 {object} base.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/food/{food_id} [PATCH]
+func (c *controller) UpdateCMSFood(ctx *gin.Context) {
+	input := model.APIUpdateCMSFoodInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateCMSFood(&input)
 	ctx.JSON(http.StatusOK, output)
 }

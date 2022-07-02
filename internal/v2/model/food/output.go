@@ -33,3 +33,43 @@ type APIGetFoodsData []*struct {
 		foodCategory.TitleField
 	} `json:"food_category,omitempty"`
 }
+
+// APIGetCMSFoodsOutput /v2/cms/foods [GET] 獲取食物列表 API
+type APIGetCMSFoodsOutput struct {
+	base.Output
+	Data APIGetCMSFoodsData `json:"data"`
+}
+type APIGetCMSFoodsData []*struct {
+	IDField
+	NameField
+	SourceField
+	StatusField
+	CreateAtField
+	UpdateAtField
+	FoodCategory *struct {
+		foodCategory.IDField
+		foodCategory.TagField
+		foodCategory.TitleField
+	} `json:"food_category,omitempty"`
+}
+
+// APICreateCMSFoodOutput /v2/cms/food [POST] 創建食物 API
+type APICreateCMSFoodOutput struct {
+	base.Output
+	Data *APICreateCMSFoodData `json:"data,omitempty"`
+}
+type APICreateCMSFoodData struct {
+	IDField
+	UserIDField
+	SourceField
+	NameField
+	CalorieField
+	AmountDescField
+	CreateAtField
+	UpdateAtField
+	FoodCategory *struct {
+		foodCategory.IDField
+		foodCategory.TagField
+		foodCategory.TitleField
+	} `json:"food_category,omitempty"`
+}

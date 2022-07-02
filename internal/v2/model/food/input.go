@@ -12,20 +12,25 @@ type PagingInput = paging.Input
 type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
 
-
 type GenerateInput struct {
-	DataAmount int
-	UserID []*base.GenerateSetting
+	DataAmount     int
+	UserID         []*base.GenerateSetting
 	FoodCategoryID []*base.GenerateSetting
-	Source []*base.GenerateSetting
-	IsDeleted []*base.GenerateSetting
+	Source         []*base.GenerateSetting
+	IsDeleted      []*base.GenerateSetting
+}
+
+type FindInput struct {
+	IDOptional
 }
 
 type ListInput struct {
 	foodCategory.TagField
-	UserIDField
-	NameField
-	IsDeletedField
+	UserIDOptional
+	NameOptional
+	SourceOptional
+	StatusOptional
+	IsDeletedOptional
 	PagingInput
 	PreloadInput
 	OrderByInput
@@ -35,4 +40,28 @@ type APIGetFoodsInput struct {
 	foodCategory.TagField
 	UserIDField
 	NameField
+}
+
+// APICreateCMSFoodInput /v2/cms/food [POST]
+type APICreateCMSFoodInput struct {
+	Body APICreateCMSFoodBody
+}
+type APICreateCMSFoodBody struct {
+	FoodCategoryIDRequired
+	NameRequired
+	AmountDescRequired
+}
+
+// APIUpdateCMSFoodInput /v2/cms/food/{food_id} [PATCH]
+type APIUpdateCMSFoodInput struct {
+	Uri  APIUpdateCMSFoodURI
+	Body APIUpdateCMSFoodBody
+}
+type APIUpdateCMSFoodURI struct {
+	IDRequired
+}
+type APIUpdateCMSFoodBody struct {
+	NameOptional
+	AmountDescOptional
+	StatusOptional
 }

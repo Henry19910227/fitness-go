@@ -1,16 +1,16 @@
-package food
+package food_category
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/global"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
-	"github.com/Henry19910227/fitness-go/internal/v2/controller/food"
+	"github.com/Henry19910227/fitness-go/internal/v2/controller/food_category"
 	middleware "github.com/Henry19910227/fitness-go/internal/v2/middleware/token"
 	"github.com/gin-gonic/gin"
 )
 
-func SetRoute(baseGroup *gin.RouterGroup) {
-	controller := food.NewController(orm.Shared().DB())
+func SetRoute(v2 *gin.RouterGroup) {
+	controller := food_category.NewController(orm.Shared().DB())
 	midd := middleware.NewTokenMiddleware(redis.Shared())
-	baseGroup.GET("/foods", midd.Verify([]global.Role{global.UserRole}), controller.GetFoods)
+	v2.GET("/cms/food_categories", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSFoodCategories)
 }
