@@ -4,18 +4,48 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	productLabel "github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/review_statistic"
 	saleItem "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 )
 
 type Output struct {
 	Table
-	Trainer  *trainer.Output `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"` // 教練
-	SaleItem *saleItem.Table `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`    // 銷售項目
+	Trainer         *trainer.Output          `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"`       // 教練
+	SaleItem        *saleItem.Table          `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`          // 銷售項目
+	ReviewStatistic *review_statistic.Output `json:"review_statistic,omitempty" gorm:"foreignKey:course_id;references:id"` // 評分統計
 }
 
 func (Output) TableName() string {
 	return "courses"
+}
+
+// APIGetFavoriteCoursesOutput /v2/favorite/courses [GET] 獲取收藏課表列表
+type APIGetFavoriteCoursesOutput struct {
+	base.Output
+	Data   APIGetFavoriteCoursesData `json:"data"`
+	Paging *paging.Output            `json:"paging,omitempty"`
+}
+type APIGetFavoriteCoursesData []*struct {
+	IDField
+	SaleTypeField
+	CategoryField
+	ScheduleTypeField
+	NameField
+	CoverField
+	LevelField
+	TrainTargetField
+	PlanCountField
+	CreateAtField
+	UpdateAtField
+	Trainer *struct {
+		trainer.UserIDField
+		trainer.NicknameField
+	} `json:"trainer,omitempty"`
+	ReviewStatistic struct {
+		review_statistic.ScoreTotalRequired
+		review_statistic.AmountRequired
+	} `json:"review_statistic"`
 }
 
 // APIGetCMSCoursesOutput /cms/courses [GET] 獲取課表列表 API

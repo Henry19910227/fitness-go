@@ -14,6 +14,7 @@ func SetRoute(baseGroup *gin.RouterGroup) {
 	controller := course.NewController(orm.Shared().DB())
 	midd := middleware.NewTokenMiddleware(redis.Shared())
 	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
+	baseGroup.GET("/favorite/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetFavoriteCourses)
 	baseGroup.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)
 	baseGroup.GET("/cms/course/:course_id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
 	baseGroup.PATCH("/cms/courses/course_status", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesStatus)

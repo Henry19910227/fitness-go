@@ -28,12 +28,29 @@ type ListInput struct {
 	CourseStatusOptional
 	SaleTypeOptional
 	IgnoredCourseStatus []int // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
-	IDs []int64
+	IDs                 []int64
 	PagingInput
 	PreloadInput
 	OrderByInput
 }
 
+type FavoriteListInput struct {
+	UserIDOptional
+	PagingInput
+	PreloadInput
+	OrderByInput
+}
+
+// APIGetFavoriteCoursesInput /v2/favorite/courses [GET]
+type APIGetFavoriteCoursesInput struct {
+	UserIDRequired
+	Form APIGetFavoriteCoursesForm
+}
+type APIGetFavoriteCoursesForm struct {
+	PagingInput
+}
+
+// APIGetCMSCoursesInput /v2/cms/courses [GET]
 type APIGetCMSCoursesInput struct {
 	IDOptional
 	NameOptional
@@ -43,15 +60,18 @@ type APIGetCMSCoursesInput struct {
 	OrderByInput
 }
 
+// APIGetCMSCourseInput /v2/cms/course/{course_id} [GET]
 type APIGetCMSCourseInput struct {
 	IDRequired
 }
 
+// APIUpdateCMSCoursesStatusInput /v2/cms/courses/course_status [PATCH]
 type APIUpdateCMSCoursesStatusInput struct {
 	IDs []int64 `json:"ids" binding:"required"` // 課表 id
 	CourseStatusRequired
 }
 
+// APIUpdateCMSCourseCoverInput /v2/cms/course/{course_id}/cover [PATCH]
 type APIUpdateCMSCourseCoverInput struct {
 	IDRequired
 	CoverNamed string

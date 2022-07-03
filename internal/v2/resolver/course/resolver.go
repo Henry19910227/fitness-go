@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,38 @@ type resolver struct {
 
 func New(courseService courseService.Service, uploadTool uploader.Tool) Resolver {
 	return &resolver{courseService: courseService, uploadTool: uploadTool}
+}
+
+func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput) {
+	// parser input
+	param := model.FavoriteListInput{}
+	param.UserID = util.PointerInt64(input.UserID)
+	param.OrderField = "create_at"
+	param.OrderType = order_by.DESC
+	param.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "ReviewStatistic"},
+	}
+	if err := util.Parser(input.Form, &param); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 執行查詢
+	results, page, err := r.courseService.FavoriteList(&param)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetFavoriteCoursesData{}
+	if err := util.Parser(results, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
+	return output
 }
 
 func (r *resolver) APIGetCMSCourses(ctx *gin.Context, input *model.APIGetCMSCoursesInput) interface{} {

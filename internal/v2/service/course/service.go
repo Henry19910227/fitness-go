@@ -37,6 +37,19 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 	return output, page, err
 }
 
+func (s *service) FavoriteList(input *model.FavoriteListInput) (outputs []*model.Output, page *paging.Output, err error) {
+	output, amount, err := s.repository.FavoriteList(input)
+	if err != nil {
+		return output, page, err
+	}
+	page = &paging.Output{}
+	page.TotalCount = int(amount)
+	page.TotalPage = util.Pagination(int(amount), input.Size)
+	page.Page = input.Page
+	page.Size = input.Size
+	return output, page, err
+}
+
 func (s *service) Updates(items []*model.Table) (err error) {
 	// 查找須更新的資料
 	itemMap := make(map[int64]*model.Table)

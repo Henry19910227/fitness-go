@@ -86,6 +86,39 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	return outputs, amount, err
 }
 
+func (r *repository) FavoriteList(input *model.FavoriteListInput) (outputs []*model.Output, amount int64, err error) {
+	db := r.db.Model(&model.Output{}).Joins("INNER JOIN favorite_courses ON courses.id = favorite_courses.course_id")
+	// id 篩選條件
+	if input.UserID != nil {
+		db = db.Where("favorite_courses.user_id = ?", *input.UserID)
+	}
+	//Preload
+	if len(input.Preloads) > 0 {
+		for _, preload := range input.Preloads {
+			if preload.OrderBy != nil {
+				db = db.Preload(preload.Field, func(db *gorm.DB) *gorm.DB {
+					return db.Order(fmt.Sprintf("%s %s", input.OrderField, input.OrderType))
+				})
+				continue
+			}
+			db = db.Preload(preload.Field)
+		}
+	}
+	// Count
+	db = db.Count(&amount)
+	// Paging
+	if input.Page > 0 && input.Size > 0 {
+		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
+	}
+	// Order
+	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
+		db = db.Order(fmt.Sprintf("courses.%s %s", input.OrderField, input.OrderType))
+	}
+	//查詢數據
+	err = db.Find(&outputs).Error
+	return outputs, amount, err
+}
+
 func (r *repository) Updates(items []*model.Table) (err error) {
 	err = r.db.Model(&model.Table{}).Save(&items).Error
 	return err
