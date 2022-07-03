@@ -7,7 +7,7 @@ import (
 
 type Resolver interface {
 	APIGetFoods(input *model.APIGetFoodsInput) (output model.APIGetFoodsOutput)
-	APIGetCMSFoods() (output model.APIGetCMSFoodsOutput)
+	APIGetCMSFoods(input *model.APIGetCMSFoodsInput) (output model.APIGetCMSFoodsOutput)
 	APICreateCMSFood(input *model.APICreateCMSFoodInput) (output model.APICreateCMSFoodOutput)
 	APIUpdateCMSFood(input *model.APIUpdateCMSFoodInput) (output base.Output)
 }

@@ -3297,6 +3297,10 @@ definitions:
       data:
         items:
           properties:
+            amount_desc:
+              description: 份量描述
+              example: 一份三百卡
+              type: string
             create_at:
               description: 創建時間
               example: "2022-06-14 00:00:00"
@@ -3342,6 +3346,8 @@ definitions:
         description: 訊息
         example: message..
         type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
     type: object
   food.APIGetFoodsOutput:
     properties:
@@ -9599,6 +9605,17 @@ paths:
       consumes:
       - application/json
       description: 獲取食物列表
+      parameters:
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

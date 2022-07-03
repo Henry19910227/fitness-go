@@ -3,6 +3,7 @@ package food
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	foodCategory "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 )
 
 type Output struct {
@@ -38,12 +39,14 @@ type APIGetFoodsData []*struct {
 type APIGetCMSFoodsOutput struct {
 	base.Output
 	Data APIGetCMSFoodsData `json:"data"`
+	Paging *paging.Output   `json:"paging,omitempty"`
 }
 type APIGetCMSFoodsData []*struct {
 	IDField
 	NameField
 	SourceField
 	StatusField
+	AmountDescField
 	CreateAtField
 	UpdateAtField
 	FoodCategory *struct {

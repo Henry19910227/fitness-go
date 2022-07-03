@@ -53,17 +53,19 @@ func (r *resolver) APIGetFoods(input *model.APIGetFoodsInput) (output model.APIG
 	return output
 }
 
-func (r *resolver) APIGetCMSFoods() (output model.APIGetCMSFoodsOutput) {
+func (r *resolver) APIGetCMSFoods(input *model.APIGetCMSFoodsInput) (output model.APIGetCMSFoodsOutput) {
 	// parser input
 	param := model.ListInput{}
 	param.Source = util.PointerInt(1)
+	param.Size = input.Form.Size
+	param.Page = input.Form.Page
 	param.OrderField = "create_at"
 	param.OrderType = order_by.ASC
 	param.Preloads = []*preloadModel.Preload{
 		{Field: "FoodCategory"},
 	}
 	// 調用 service
-	result, _, err := r.foodService.List(&param)
+	result, page, err := r.foodService.List(&param)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -76,6 +78,7 @@ func (r *resolver) APIGetCMSFoods() (output model.APIGetCMSFoodsOutput) {
 	}
 	output.Set(code.Success, "success")
 	output.Data = data
+	output.Paging = page
 	return output
 }
 

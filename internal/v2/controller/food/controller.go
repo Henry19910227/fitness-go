@@ -61,11 +61,18 @@ func (c *controller) GetFoods(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
 // @Success 200 {object} food.APIGetCMSFoodsOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/foods [GET]
 func (c *controller) GetCMSFoods(ctx *gin.Context) {
-	output := c.resolver.APIGetCMSFoods()
+	input := model.APIGetCMSFoodsInput{}
+	if err := ctx.ShouldBindQuery(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSFoods(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 
