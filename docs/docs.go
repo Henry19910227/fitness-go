@@ -8463,6 +8463,22 @@ var doc = `{
                     "CMS內容管理_食品庫_v2"
                 ],
                 "summary": "獲取食物列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -13074,6 +13090,11 @@ var doc = `{
                     "items": {
                         "type": "object",
                         "properties": {
+                            "amount_desc": {
+                                "description": "份量描述",
+                                "type": "string",
+                                "example": "一份三百卡"
+                            },
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
@@ -13131,6 +13152,9 @@ var doc = `{
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },

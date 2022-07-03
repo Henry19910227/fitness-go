@@ -65,3 +65,11 @@ type APIUpdateCMSFoodBody struct {
 	AmountDescOptional
 	StatusOptional
 }
+
+// APIGetCMSFoodsInput /v2/cms/foods [GET]
+type APIGetCMSFoodsInput struct {
+	Form APIGetCMSFoodsForm
+}
+type APIGetCMSFoodsForm struct {
+	PagingInput
+}

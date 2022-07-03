@@ -13,7 +13,7 @@ type SourceRequired struct {
 	Source int `json:"source,omitempty" binding:"required" example:"1"` //來源(1:系統創建食物/2:用戶創建食物)
 }
 type NameRequired struct {
-	Name string `json:"name,omitempty" form:"name" binding:"required" example:"蕃薯"` //食物名稱
+	Name string `json:"name,omitempty" form:"name" binding:"required,min=1,max=40" example:"蕃薯"` //食物名稱
 }
 type CalorieRequired struct {
 	Calorie int `json:"calorie,omitempty" binding:"required" example:"300"` //食物熱量
