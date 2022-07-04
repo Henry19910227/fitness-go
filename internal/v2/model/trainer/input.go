@@ -15,8 +15,24 @@ type FindInput struct {
 	UserIDOptional
 }
 
+type FavoriteListInput struct {
+	UserIDOptional
+	PagingInput
+	PreloadInput
+	OrderByInput
+}
+
 type APIUpdateCMSTrainerAvatarInput struct {
 	UserIDRequired
 	CoverNamed string
 	File       multipart.File
+}
+
+// APIGetFavoriteTrainersInput /v2/favorite/trainers [GET]
+type APIGetFavoriteTrainersInput struct {
+	UserIDRequired
+	Form APIGetFavoriteTrainersForm
+}
+type APIGetFavoriteTrainersForm struct {
+	PagingInput
 }

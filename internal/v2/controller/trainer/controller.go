@@ -17,6 +17,34 @@ func New(resolver trainer.Resolver) Controller {
 	return &controller{resolver: resolver}
 }
 
+// GetFavoriteTrainers 獲取教練收藏列表
+// @Summary 獲取教練收藏列表
+// @Description 獲取教練收藏列表
+// @Tags 收藏_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} trainer.APIGetFavoriteTrainersOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/favorite/trainers [GET]
+func (c *controller) GetFavoriteTrainers(ctx *gin.Context) {
+	uid, exists := ctx.Get("uid")
+	if !exists {
+		ctx.JSON(http.StatusBadRequest, baseModel.InvalidToken())
+		return
+	}
+	input := model.APIGetFavoriteTrainersInput{}
+	input.UserID = uid.(int64)
+	if err := ctx.ShouldBindQuery(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetFavoriteTrainers(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // UpdateCMSTrainerAvatar 更新教練大頭照
 // @Summary 更新教練大頭照
 // @Description 查看教練大頭照 : {Base URL}/v2/resource/trainer/avatar/{Filename}

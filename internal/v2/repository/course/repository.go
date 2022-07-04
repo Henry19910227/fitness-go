@@ -112,7 +112,7 @@ func (r *repository) FavoriteList(input *model.FavoriteListInput) (outputs []*mo
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("courses.%s %s", input.OrderField, input.OrderType))
+		db = db.Order(fmt.Sprintf("favorite_courses.%s %s", input.OrderField, input.OrderType))
 	}
 	//查詢數據
 	err = db.Find(&outputs).Error
