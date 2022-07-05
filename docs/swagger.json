@@ -8739,6 +8739,79 @@
                 }
             }
         },
+        "/v2/feedback": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建反饋",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "意見反饋_v2"
+                ],
+                "summary": "創建反饋",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "軟體版本",
+                        "name": "version",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "平台(ios/android)",
+                        "name": "platform",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "OS版本",
+                        "name": "os_version",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "手機型號",
+                        "name": "phone_model",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "內文",
+                        "name": "body",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "反饋圖片",
+                        "name": "feedback_image[]",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/foods": {
             "get": {
                 "security": [

@@ -21,3 +21,7 @@ func NewActionVideoTool() Tool {
 func NewBodyImageTool() Tool {
 	return New(setting.NewBodyImage())
 }
+
+func NewFeedbackImageTool() Tool {
+	return New(setting.NewFeedbackImage())
+}
