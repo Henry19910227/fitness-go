@@ -9,9 +9,9 @@ migrate_up:
 migrate_down:
 	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ down 1
 migrate_force:
-	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20220602113830
+	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20220705105809
 migrate_create:
-	migrate create -ext sql -dir migrations add_foods_table_is_disabled_column_v_2_0_4
+	migrate create -ext sql -dir migrations create_feedback_images_table_v_2_0_5
 
 test-mysql:
 	docker-compose up --build -d test-mysql
