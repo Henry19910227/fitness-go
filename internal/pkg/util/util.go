@@ -26,6 +26,13 @@ func OnNilJustReturnInt(input *int, i int) int {
 	return *input
 }
 
+func OnNilJustReturnString(input *string, i string) string {
+	if input == nil {
+		return i
+	}
+	return *input
+}
+
 func GetAge(birthday time.Time) (age int) {
 	if birthday.IsZero() {
 		return 0

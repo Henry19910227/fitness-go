@@ -41,8 +41,8 @@ func TestResolver_APIGetFoods(t *testing.T) {
 	// 創建food
 	foods := food.Generate(&food.GenerateInput{
 		DataAmount: 4,
-		UserID: []*base.GenerateSetting{{Start: 4, End: 4, Value: *users[0].ID}},
-		Source: []*base.GenerateSetting{{Start: 1, End: 3, Value: 1}, {Start: 4, End: 4, Value: 2}},
+		UserID:     []*base.GenerateSetting{{Start: 4, End: 4, Value: *users[0].ID}},
+		Source:     []*base.GenerateSetting{{Start: 1, End: 3, Value: 1}, {Start: 4, End: 4, Value: 2}},
 		FoodCategoryID: []*base.GenerateSetting{
 			{Start: 1, End: 1, Value: int64(1)},
 			{Start: 2, End: 2, Value: int64(4)},

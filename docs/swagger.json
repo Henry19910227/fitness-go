@@ -8893,6 +8893,51 @@
                     }
                 }
             }
+        },
+        "/v2/password": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "修改密碼",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶_v2"
+                ],
+                "summary": "修改密碼",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIUpdatePasswordBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIUpdatePasswordOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -14035,6 +14080,40 @@
                 "data": {
                     "type": "string",
                     "example": "123.jpg"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIUpdatePasswordBody": {
+            "type": "object",
+            "required": [
+                "old_password",
+                "password"
+            ],
+            "properties": {
+                "old_password": {
+                    "description": "舊密碼 (6~18字元)",
+                    "type": "string",
+                    "example": "12345678"
+                },
+                "password": {
+                    "description": "密碼",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "user.APIUpdatePasswordOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",

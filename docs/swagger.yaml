@@ -3900,6 +3900,31 @@ definitions:
         example: message..
         type: string
     type: object
+  user.APIUpdatePasswordBody:
+    properties:
+      old_password:
+        description: 舊密碼 (6~18字元)
+        example: "12345678"
+        type: string
+      password:
+        description: 密碼
+        example: "12345678"
+        type: string
+    required:
+    - old_password
+    - password
+    type: object
+  user.APIUpdatePasswordOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   validator.CMSLoginByEmailBody:
     properties:
       email:
@@ -10034,6 +10059,34 @@ paths:
       summary: 獲取餐食列表
       tags:
       - 飲食_v2
+  /v2/password:
+    patch:
+      consumes:
+      - application/json
+      description: 修改密碼
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIUpdatePasswordBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIUpdatePasswordOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 修改密碼
+      tags:
+      - 用戶_v2
 securityDefinitions:
   fitness_token:
     in: header
