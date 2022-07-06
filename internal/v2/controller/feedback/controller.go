@@ -43,6 +43,10 @@ func (c *controller) CreateFeedback(ctx *gin.Context) {
 		return
 	}
 	fileDatas := ctx.Request.MultipartForm.File["feedback_image[]"]
+	if len(fileDatas) > 5 {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString("超過圖片上傳上限")))
+		return
+	}
 	files := make([]*file.Input, 0)
 	for _, fileData := range fileDatas {
 		data, _ := fileData.Open()
