@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/feedback"
 	imageModel "github.com/Henry19910227/fitness-go/internal/v2/model/feedback_image"
+	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/feedback"
 	feedbackImage "github.com/Henry19910227/fitness-go/internal/v2/service/feedback_image"
 	"gorm.io/gorm"
@@ -55,5 +56,34 @@ func (r *resolver) APICreateFeedback(tx *gorm.DB, input *model.APICreateFeedback
 	}
 	tx.Commit()
 	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIGetCMSFeedbacks(input *model.APIGetCMSFeedbacksInput) (output model.APIGetCMSFeedbacksOutput) {
+	// parser input
+	param := model.ListInput{}
+	param.Preloads = []*preloadModel.Preload{
+		{Field: "Images"},
+		{Field: "User"},
+	}
+	if err := util.Parser(input.Form, &param); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 調用 service
+	result, page, err := r.feedbackService.List(&param)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetCMSFeedbacksData{}
+	if err := util.Parser(result, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = data
+	output.Paging = page
 	return output
 }

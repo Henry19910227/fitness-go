@@ -8,4 +8,5 @@ import (
 
 type Resolver interface {
 	APICreateFeedback(tx *gorm.DB, input *model.APICreateFeedbackInput) (output base.Output)
+	APIGetCMSFeedbacks(input *model.APIGetCMSFeedbacksInput) (output model.APIGetCMSFeedbacksOutput)
 }

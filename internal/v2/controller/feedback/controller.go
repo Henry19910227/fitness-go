@@ -59,3 +59,28 @@ func (c *controller) CreateFeedback(ctx *gin.Context) {
 	output := c.resolver.APICreateFeedback(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetCMSFeedbacks 獲取反饋列表
+// @Summary 獲取反饋列表
+// @Description 獲取反饋列表
+// @Tags CMS平台管理_意見反饋_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param platform query string false "平台(ios/android)"
+// @Param order_field query string true "排序欄位 (create_at:創建時間)"
+// @Param order_type query string true "排序類型 (ASC:由低到高/DESC:由高到低)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} feedback.APIGetCMSFeedbacksOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/feedbacks [GET]
+func (c *controller) GetCMSFeedbacks(ctx *gin.Context) {
+	input := model.APIGetCMSFeedbacksInput{}
+	if err := ctx.ShouldBindQuery(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSFeedbacks(&input)
+	ctx.JSON(http.StatusOK, output)
+}

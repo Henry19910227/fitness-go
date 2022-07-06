@@ -16,4 +16,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.StaticFS("/resource/feedback/image", http.Dir("./volumes/storage/feedback/image"))
 	v2.POST("/feedback", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateFeedback)
+	v2.GET("/cms/feedbacks", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSFeedbacks)
 }

@@ -3296,6 +3296,84 @@ definitions:
           $ref: '#/definitions/dto.WorkoutSet'
         type: array
     type: object
+  feedback.APIGetCMSFeedbacksOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            body:
+              description: 反饋內文
+              example: 我遇到了bug!!
+              type: string
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: 主鍵id
+              example: 1
+              type: integer
+            images:
+              items:
+                properties:
+                  create_at:
+                    description: 創建時間
+                    example: "2022-06-14 00:00:00"
+                    type: string
+                  id:
+                    description: 主鍵id
+                    example: 1
+                    type: integer
+                  image:
+                    description: 反饋圖片
+                    example: 123.png
+                    type: string
+                type: object
+              type: array
+            os_version:
+              description: OS版本
+              example: "14.0"
+              type: string
+            phone_model:
+              description: 手機型號
+              example: iPhoneX
+              type: string
+            platform:
+              description: 平台(ios/android)
+              example: ios
+              type: string
+            update_at:
+              description: 更新時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            user:
+              properties:
+                id:
+                  description: 帳戶id
+                  example: 10001
+                  type: integer
+                nickname:
+                  description: 暱稱
+                  example: henry
+                  type: string
+              type: object
+            version:
+              description: 軟體版本
+              example: 1.0.0
+              type: string
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
+    type: object
   food.APICreateCMSFoodBody:
     properties:
       amount_desc:
@@ -9679,6 +9757,52 @@ paths:
       summary: 批量修改課表審核狀態
       tags:
       - CMS課表管理_v2
+  /v2/cms/feedbacks:
+    get:
+      consumes:
+      - application/json
+      description: 獲取反饋列表
+      parameters:
+      - description: 平台(ios/android)
+        in: query
+        name: platform
+        type: string
+      - description: 排序欄位 (create_at:創建時間)
+        in: query
+        name: order_field
+        required: true
+        type: string
+      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
+        in: query
+        name: order_type
+        required: true
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/feedback.APIGetCMSFeedbacksOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取反饋列表
+      tags:
+      - CMS平台管理_意見反饋_v2
   /v2/cms/food:
     post:
       consumes:

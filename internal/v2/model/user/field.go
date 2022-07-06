@@ -1,7 +1,7 @@
 package user
 
 type IDField struct {
-	ID *int64 `json:"id,omitempty" gorm:"column:id"` // 帳戶id
+	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"10001"` // 帳戶id
 }
 type AccountTypeField struct {
 	AccountType *int `json:"account_type,omitempty" gorm:"column:account_type;default:1"` // 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
@@ -25,7 +25,7 @@ type EmailField struct {
 	Email *string `json:"email,omitempty" gorm:"column:email;default:''"` // 信箱
 }
 type NicknameField struct {
-	Nickname *string `json:"nickname,omitempty" gorm:"column:nickname;default:''"` // 暱稱
+	Nickname *string `json:"nickname,omitempty" gorm:"column:nickname;default:''" example:"henry"` // 暱稱
 }
 type AvatarField struct {
 	Avatar *string `json:"avatar,omitempty" gorm:"column:avatar;default:''"` // 用戶大頭貼
@@ -75,6 +75,7 @@ type Table struct {
 	CreateAtField
 	UpdateAtField
 }
+
 func (Table) TableName() string {
 	return "users"
 }

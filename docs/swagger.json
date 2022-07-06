@@ -8296,6 +8296,76 @@
                 }
             }
         },
+        "/v2/cms/feedbacks": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取反饋列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS平台管理_意見反饋_v2"
+                ],
+                "summary": "獲取反饋列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "平台(ios/android)",
+                        "name": "platform",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/feedback.APIGetCMSFeedbacksOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/food": {
             "post": {
                 "security": [
@@ -13281,6 +13351,110 @@
                     "items": {
                         "$ref": "#/definitions/dto.WorkoutSet"
                     }
+                }
+            }
+        },
+        "feedback.APIGetCMSFeedbacksOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "body": {
+                                "description": "反饋內文",
+                                "type": "string",
+                                "example": "我遇到了bug!!"
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "主鍵id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "images": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "create_at": {
+                                            "description": "創建時間",
+                                            "type": "string",
+                                            "example": "2022-06-14 00:00:00"
+                                        },
+                                        "id": {
+                                            "description": "主鍵id",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "image": {
+                                            "description": "反饋圖片",
+                                            "type": "string",
+                                            "example": "123.png"
+                                        }
+                                    }
+                                }
+                            },
+                            "os_version": {
+                                "description": "OS版本",
+                                "type": "string",
+                                "example": "14.0"
+                            },
+                            "phone_model": {
+                                "description": "手機型號",
+                                "type": "string",
+                                "example": "iPhoneX"
+                            },
+                            "platform": {
+                                "description": "平台(ios/android)",
+                                "type": "string",
+                                "example": "ios"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "user": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "description": "帳戶id",
+                                        "type": "integer",
+                                        "example": 10001
+                                    },
+                                    "nickname": {
+                                        "description": "暱稱",
+                                        "type": "string",
+                                        "example": "henry"
+                                    }
+                                }
+                            },
+                            "version": {
+                                "description": "軟體版本",
+                                "type": "string",
+                                "example": "1.0.0"
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },
