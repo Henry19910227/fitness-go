@@ -12,3 +12,14 @@ type ProductIDField struct {
 type TwdField struct {
 	Twd *int `json:"twd,omitempty" gorm:"column:twd" example:"500"` // 台幣價格
 }
+
+type Table struct {
+	IDField
+	NameField
+	ProductIDField
+	TwdField
+}
+
+func (Table) TableName() string {
+	return "product_labels"
+}

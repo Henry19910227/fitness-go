@@ -7,7 +7,7 @@ type ProductLabelIDField struct {
 	ProductLabelID *int `json:"product_label_id,omitempty" gorm:"column:product_label_id" example:"2"` // 產品標籤id
 }
 type TypeField struct {
-	Type *int `json:"type,omitempty" gorm:"column:type" example:"3"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	Type *int `json:"type,omitempty" gorm:"column:type" example:"3"` // 銷售類型(1:免費課表/3:付費課表)
 }
 type EnableField struct {
 	Enable *int `json:"enable,omitempty" gorm:"column:enable" example:"1"` // 是否啟用
@@ -20,4 +20,18 @@ type CreateAtField struct {
 }
 type UpdateAtField struct {
 	UpdateAt *string `json:"update_at,omitempty" gorm:"column:update_at" example:"2022-06-12 00:00:00"` // 更新時間
+}
+
+type Table struct {
+	IDField
+	ProductLabelIDField
+	TypeField
+	EnableField
+	NameField
+	CreateAtField
+	UpdateAtField
+}
+
+func (Table) TableName() string {
+	return "sale_items"
 }

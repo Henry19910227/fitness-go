@@ -1,12 +1,9 @@
 package product_label
 
-type Table struct {
-	IDField
-	NameField
-	ProductIDField
-	TwdField
+type Output struct {
+	Table
 }
 
-func (Table) TableName() string {
+func (Output) TableName() string {
 	return "product_labels"
 }

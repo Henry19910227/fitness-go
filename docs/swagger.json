@@ -8547,6 +8547,94 @@
                 }
             }
         },
+        "/v2/cms/orders": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取訂單列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS訂單管理_v2"
+                ],
+                "summary": "獲取訂單列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "訂單ID",
+                        "name": "order_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用戶ID",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "訂單類型(1:課表購買/2:會員訂閱)",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
+                        "name": "order_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/order.APIGetCMSOrdersOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/trainer/{user_id}/avatar": {
             "patch": {
                 "security": [
@@ -14021,6 +14109,177 @@
                     "description": "成功訊息",
                     "type": "string",
                     "example": "success!"
+                }
+            }
+        },
+        "order.APIGetCMSOrdersOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
+                            },
+                            "order_course": {
+                                "type": "object",
+                                "properties": {
+                                    "course": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "description": "課表 id",
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "name": {
+                                                "description": "課表名稱",
+                                                "type": "string",
+                                                "example": "增肌課表"
+                                            }
+                                        }
+                                    },
+                                    "sale_item": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "description": "銷售id",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "product_label": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "產品標籤id",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "description": "產品名稱",
+                                                        "type": "string",
+                                                        "example": "金卡會員(月)"
+                                                    },
+                                                    "product_id": {
+                                                        "description": "產品id",
+                                                        "type": "string",
+                                                        "example": "com.fitness.gold_member_month"
+                                                    },
+                                                    "twd": {
+                                                        "description": "台幣價格",
+                                                        "type": "integer",
+                                                        "example": 500
+                                                    }
+                                                }
+                                            },
+                                            "type": {
+                                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                                "type": "integer",
+                                                "example": 3
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "order_status": {
+                                "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "order_subscribe_plan": {
+                                "type": "object",
+                                "properties": {
+                                    "subscribe_plan": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "description": "主鍵id",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "description": "銷售名稱",
+                                                "type": "string",
+                                                "example": "金牌課表"
+                                            },
+                                            "period": {
+                                                "description": "週期(1:一個月/2:二個月/3:三個月/6:六個月/12:一年/99:永久)",
+                                                "type": "integer",
+                                                "example": 12
+                                            },
+                                            "product_label": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "產品標籤id",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "description": "產品名稱",
+                                                        "type": "string",
+                                                        "example": "金卡會員(月)"
+                                                    },
+                                                    "product_id": {
+                                                        "description": "產品id",
+                                                        "type": "string",
+                                                        "example": "com.fitness.gold_member_month"
+                                                    },
+                                                    "twd": {
+                                                        "description": "台幣價格",
+                                                        "type": "integer",
+                                                        "example": 500
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "order_type": {
+                                "description": "訂單類型(1:課表購買/2:會員訂閱)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "quantity": {
+                                "description": "數量",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "user_id": {
+                                "description": "用戶id",
+                                "type": "integer",
+                                "example": 10001
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },
