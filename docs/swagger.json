@@ -8635,6 +8635,70 @@
                 }
             }
         },
+        "/v2/cms/receipts": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取收據列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS訂單管理_v2"
+                ],
+                "summary": "獲取收據列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/receipt.APIGetCMSReceiptsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/trainer/{user_id}/avatar": {
             "patch": {
                 "security": [
@@ -14422,6 +14486,87 @@
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "receipt.APIGetCMSReceiptsOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "收據id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "original_transaction_id": {
+                                "description": "初始交易id",
+                                "type": "string",
+                                "example": "1000000968276600"
+                            },
+                            "payment_type": {
+                                "description": "支付方式(1:apple內購/2:google內購)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "product_label": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "description": "產品標籤id",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "description": "產品名稱",
+                                        "type": "string",
+                                        "example": "金卡會員(月)"
+                                    },
+                                    "product_id": {
+                                        "description": "產品id",
+                                        "type": "string",
+                                        "example": "com.fitness.gold_member_month"
+                                    },
+                                    "twd": {
+                                        "description": "台幣價格",
+                                        "type": "integer",
+                                        "example": 500
+                                    }
+                                }
+                            },
+                            "quantity": {
+                                "description": "數量",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "transaction_id": {
+                                "description": "交易id",
+                                "type": "string",
+                                "example": "1000000968276600"
                             }
                         }
                     }
