@@ -35,3 +35,16 @@ type APIGetCMSReviewsForm struct {
 	OrderByInput
 	PagingInput
 }
+
+// APIUpdateCMSReviewInput /v2/cms/review/{review_id} [PATCH]
+type APIUpdateCMSReviewInput struct {
+	Uri  APIUpdateCMSReviewUri
+	Body APIUpdateCMSReviewBody
+}
+type APIUpdateCMSReviewUri struct {
+	IDRequired
+}
+type APIUpdateCMSReviewBody struct {
+	ScoreOptional
+	BodyOptional
+}

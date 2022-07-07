@@ -13,4 +13,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := review.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.GET("/cms/reviews", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSReviews)
+	v2.PATCH("/cms/review/:review_id", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSReview)
 }

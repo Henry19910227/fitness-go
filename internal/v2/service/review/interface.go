@@ -6,5 +6,6 @@ import (
 )
 
 type Service interface {
+	Update(item *model.Table) (err error)
 	List(input *model.ListInput) (outputs []*model.Output, page *paging.Output, err error)
 }

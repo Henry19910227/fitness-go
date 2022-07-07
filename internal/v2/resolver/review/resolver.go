@@ -9,11 +9,11 @@ import (
 )
 
 type resolver struct {
-	orderService reviewService.Service
+	reviewService reviewService.Service
 }
 
 func New(orderService reviewService.Service) Resolver {
-	return &resolver{orderService: orderService}
+	return &resolver{reviewService: orderService}
 }
 
 func (r *resolver) APIGetCMSReviews(input *model.APIGetCMSReviewsInput) (output model.APIGetCMSReviewsOutput) {
@@ -29,7 +29,7 @@ func (r *resolver) APIGetCMSReviews(input *model.APIGetCMSReviewsInput) (output 
 		return output
 	}
 	// get list
-	datas, page, err := r.orderService.List(&param)
+	datas, page, err := r.reviewService.List(&param)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -43,5 +43,25 @@ func (r *resolver) APIGetCMSReviews(input *model.APIGetCMSReviewsInput) (output 
 	output.Set(code.Success, "success")
 	output.Paging = page
 	output.Data = data
+	return output
+}
+
+func (r *resolver) APIUpdateCMSReview(input *model.APIUpdateCMSReviewInput) (output model.APIUpdateCMSReviewOutput) {
+	//parser input
+	table := model.Table{}
+	if err := util.Parser(input.Uri, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := util.Parser(input.Body, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//執行更新
+	if err := r.reviewService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
 	return output
 }

@@ -43,3 +43,28 @@ func (c *controller) GetCMSReviews(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// UpdateCMSReview 修改評論
+// @Summary 修改評論
+// @Description 修改評論
+// @Tags CMS評論管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param review_id path int64 true "評論id"
+// @Param json_body body review.APIUpdateCMSReviewBody true "輸入參數"
+// @Success 200 {object} review.APIUpdateCMSReviewOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/review/{review_id} [PATCH]
+func (c *controller) UpdateCMSReview(ctx *gin.Context) {
+	input := model.APIUpdateCMSReviewInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateCMSReview(&input)
+	ctx.JSON(http.StatusOK, output)
+}

@@ -8717,6 +8717,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/review/{review_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "修改評論",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS評論管理_v2"
+                ],
+                "summary": "修改評論",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "評論id",
+                        "name": "review_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/review.APIUpdateCMSReviewBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/review.APIUpdateCMSReviewOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/reviews": {
             "get": {
                 "security": [
@@ -14692,6 +14744,36 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "review.APIUpdateCMSReviewBody": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "內容",
+                    "type": "string",
+                    "example": "很棒的課表"
+                },
+                "score": {
+                    "description": "評分(1~5分)",
+                    "type": "integer",
+                    "example": 5
+                }
+            }
+        },
+        "review.APIUpdateCMSReviewOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

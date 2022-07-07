@@ -10,8 +10,8 @@ import (
 
 type Output struct {
 	Table
-	User   *user.Output         `json:"user,omitempty" gorm:"foreignKey:id;references:user_id"`
-	Course *course.Output       `json:"course,omitempty" gorm:"foreignKey:id;references:course_id"`
+	User   *user.Output           `json:"user,omitempty" gorm:"foreignKey:id;references:user_id"`
+	Course *course.Output         `json:"course,omitempty" gorm:"foreignKey:id;references:course_id"`
 	Images []*review_image.Output `json:"images,omitempty" gorm:"foreignKey:review_id;references:id"`
 }
 
@@ -43,4 +43,9 @@ type APIGetCMSReviewsData []*struct {
 		review_image.ImageField
 		review_image.CreateAtField
 	} `json:"images,omitempty"`
+}
+
+// APIUpdateCMSReviewOutput /v2/cms/review/{review_id} [PATCH]
+type APIUpdateCMSReviewOutput struct {
+	base.Output
 }
