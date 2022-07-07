@@ -25,7 +25,7 @@ type EmailOptional struct {
 	Email *string `json:"email,omitempty" gorm:"column:email;default:''"` // 信箱
 }
 type NicknameOptional struct {
-	Nickname *string `json:"nickname,omitempty" gorm:"column:nickname;default:''"` // 暱稱
+	Nickname *string `json:"nickname,omitempty" form:"nickname" example:"Henry"` // 暱稱
 }
 type AvatarOptional struct {
 	Avatar *string `json:"avatar,omitempty" gorm:"column:avatar;default:''"` // 用戶大頭貼
