@@ -8817,6 +8817,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/review_image/{review_image_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除評論照片",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS評論管理_v2"
+                ],
+                "summary": "刪除評論照片",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "評論照片id",
+                        "name": "review_image_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/review_image.APIDeleteCMSReviewImageOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/reviews": {
             "get": {
                 "security": [
@@ -14826,6 +14869,21 @@ var doc = `{
             }
         },
         "review.APIUpdateCMSReviewOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "review_image.APIDeleteCMSReviewImageOutput": {
             "type": "object",
             "properties": {
                 "code": {
