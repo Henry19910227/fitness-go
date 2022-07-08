@@ -11,16 +11,21 @@ type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
 
 type ListInput struct {
+	OrderIDOptional
 	PreloadInput
 	OrderByInput
 	PagingInput
 }
 
-// APIGetCMSReceiptsInput /v2/cms/receipts [GET]
-type APIGetCMSReceiptsInput struct {
-	Form APIGetCMSReceiptsForm
+// APIGetCMSOrderReceiptsInput /v2/cms/order/{order_id}/receipts [GET]
+type APIGetCMSOrderReceiptsInput struct {
+	Uri  APIGetCMSOrderReceiptsUri
+	Form APIGetCMSOrderReceiptsForm
 }
-type APIGetCMSReceiptsForm struct {
+type APIGetCMSOrderReceiptsUri struct {
+	OrderIDRequired
+}
+type APIGetCMSOrderReceiptsForm struct {
 	OrderByInput
 	PagingInput
 }

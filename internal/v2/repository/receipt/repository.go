@@ -16,6 +16,9 @@ func New(db *gorm.DB) Repository {
 
 func (r repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
+	if input.OrderID != nil {
+		db = db.Where("order_id = ?", *input.OrderID)
+	}
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {

@@ -15,13 +15,13 @@ func (Output) TableName() string {
 	return "receipts"
 }
 
-// APIGetCMSReceiptsOutput /v2/cms/receipts [GET]
-type APIGetCMSReceiptsOutput struct {
+// APIGetCMSOrderReceiptsOutput /v2/cms/order/{order_id}/receipts [GET]
+type APIGetCMSOrderReceiptsOutput struct {
 	base.Output
-	Data   APIGetCMSReceiptsData `json:"data"`
-	Paging *paging.Output        `json:"paging,omitempty"`
+	Data   APIGetCMSOrderReceiptsData `json:"data"`
+	Paging *paging.Output             `json:"paging,omitempty"`
 }
-type APIGetCMSReceiptsData []*struct {
+type APIGetCMSOrderReceiptsData []*struct {
 	IDField
 	PaymentTypeField
 	OriginalTransactionIDField

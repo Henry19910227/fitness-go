@@ -16,11 +16,15 @@ func New(receiptService receiptService.Service) Resolver {
 	return &resolver{receiptService: receiptService}
 }
 
-func (r *resolver) APIGetCMSReceipts(input *model.APIGetCMSReceiptsInput) (output model.APIGetCMSReceiptsOutput) {
+func (r *resolver) APIGetCMSOrderReceipts(input *model.APIGetCMSOrderReceiptsInput) (output model.APIGetCMSOrderReceiptsOutput) {
 	// parser input
 	param := model.ListInput{}
 	param.Preloads = []*preloadModel.Preload{
 		{Field: "ProductLabel"},
+	}
+	if err := util.Parser(input.Uri, &param); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
 	}
 	if err := util.Parser(input.Form, &param); err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -33,7 +37,7 @@ func (r *resolver) APIGetCMSReceipts(input *model.APIGetCMSReceiptsInput) (outpu
 		return output
 	}
 	// parser output
-	data := model.APIGetCMSReceiptsData{}
+	data := model.APIGetCMSOrderReceiptsData{}
 	if err := util.Parser(datas, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
