@@ -12,5 +12,5 @@ import (
 func SetRoute(v2 *gin.RouterGroup) {
 	controller := receipt.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
-	v2.GET("/cms/receipts", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSReceipts)
+	v2.GET("/cms/order/:order_id/receipts", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSOrderReceipts)
 }

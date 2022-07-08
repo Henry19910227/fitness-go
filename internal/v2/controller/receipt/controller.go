@@ -17,26 +17,31 @@ func New(resolver receipt.Resolver) Controller {
 	return &controller{resolver: resolver}
 }
 
-// GetCMSReceipts 獲取收據列表
-// @Summary 獲取收據列表
-// @Description 獲取收據列表
+// GetCMSOrderReceipts 獲取訂單收據列表
+// @Summary 獲取訂單收據列表
+// @Description 獲取訂單收據列表
 // @Tags CMS訂單管理_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
+// @Param order_id path string true "訂單ID"
 // @Param order_field query string true "排序欄位 (create_at:創建時間)"
 // @Param order_type query string true "排序類型 (ASC:由低到高/DESC:由高到低)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} receipt.APIGetCMSReceiptsOutput "成功!"
+// @Success 200 {object} receipt.APIGetCMSOrderReceiptsOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/cms/receipts [GET]
-func (c *controller) GetCMSReceipts(ctx *gin.Context) {
-	input := model.APIGetCMSReceiptsInput{}
+// @Router /v2/cms/order/{order_id}/receipts [GET]
+func (c *controller) GetCMSOrderReceipts(ctx *gin.Context) {
+	input := model.APIGetCMSOrderReceiptsInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
 	if err := ctx.ShouldBindQuery(&input.Form); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetCMSReceipts(&input)
+	output := c.resolver.APIGetCMSOrderReceipts(&input)
 	ctx.JSON(http.StatusOK, output)
 }

@@ -4043,7 +4043,7 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
-  receipt.APIGetCMSReceiptsOutput:
+  receipt.APIGetCMSOrderReceiptsOutput:
     properties:
       code:
         description: 狀態碼
@@ -10127,6 +10127,53 @@ paths:
       summary: 獲取食物列表
       tags:
       - CMS內容管理_食品庫_v2
+  /v2/cms/order/{order_id}/receipts:
+    get:
+      consumes:
+      - application/json
+      description: 獲取訂單收據列表
+      parameters:
+      - description: 訂單ID
+        in: path
+        name: order_id
+        required: true
+        type: string
+      - description: 排序欄位 (create_at:創建時間)
+        in: query
+        name: order_field
+        required: true
+        type: string
+      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
+        in: query
+        name: order_type
+        required: true
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/receipt.APIGetCMSOrderReceiptsOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取訂單收據列表
+      tags:
+      - CMS訂單管理_v2
   /v2/cms/orders:
     get:
       consumes:
@@ -10183,48 +10230,6 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取訂單列表
-      tags:
-      - CMS訂單管理_v2
-  /v2/cms/receipts:
-    get:
-      consumes:
-      - application/json
-      description: 獲取收據列表
-      parameters:
-      - description: 排序欄位 (create_at:創建時間)
-        in: query
-        name: order_field
-        required: true
-        type: string
-      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
-        in: query
-        name: order_type
-        required: true
-        type: string
-      - description: 頁數(從第一頁開始)
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: 筆數
-        in: query
-        name: size
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            $ref: '#/definitions/receipt.APIGetCMSReceiptsOutput'
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/base.Output'
-      security:
-      - fitness_token: []
-      summary: 獲取收據列表
       tags:
       - CMS訂單管理_v2
   /v2/cms/review/{review_id}:
