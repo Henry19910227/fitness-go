@@ -30,7 +30,7 @@ func New(resolver review.Resolver) Controller {
 // @Param order_type query string true "排序類型 (ASC:由低到高/DESC:由高到低)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} receipt.APIGetCMSReceiptsOutput "成功!"
+// @Success 200 {object} receipt.APIGetCMSOrderReceiptsOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/reviews [GET]
 func (c *controller) GetCMSReviews(ctx *gin.Context) {
@@ -66,5 +66,26 @@ func (c *controller) UpdateCMSReview(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIUpdateCMSReview(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// DeleteCMSReview 刪除評論
+// @Summary 刪除評論
+// @Description 刪除評論
+// @Tags CMS評論管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param review_id path int64 true "評論id"
+// @Success 200 {object} review.APIDeleteCMSReviewOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/review/{review_id} [DELETE]
+func (c *controller) DeleteCMSReview(ctx *gin.Context) {
+	input := model.APIDeleteCMSReviewInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteCMSReview(&input)
 	ctx.JSON(http.StatusOK, output)
 }

@@ -25,3 +25,7 @@ func NewBodyImageTool() Tool {
 func NewFeedbackImageTool() Tool {
 	return New(setting.NewFeedbackImage())
 }
+
+func NewReviewImageTool() Tool {
+	return New(setting.NewReviewImage())
+}

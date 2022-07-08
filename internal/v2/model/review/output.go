@@ -49,3 +49,8 @@ type APIGetCMSReviewsData []*struct {
 type APIUpdateCMSReviewOutput struct {
 	base.Output
 }
+
+// APIDeleteCMSReviewOutput /v2/cms/review/{review_id} [DELETE]
+type APIDeleteCMSReviewOutput struct {
+	base.Output
+}

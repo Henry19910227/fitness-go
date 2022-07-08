@@ -14,6 +14,11 @@ type OrderByInput = orderBy.Input
 
 type FindInput struct {
 	IDOptional
+	PreloadInput
+}
+
+type DeleteInput struct {
+	IDOptional
 }
 
 type ListInput struct {
@@ -47,4 +52,12 @@ type APIUpdateCMSReviewUri struct {
 type APIUpdateCMSReviewBody struct {
 	ScoreOptional
 	BodyOptional
+}
+
+// APIDeleteCMSReviewInput /v2/cms/review/{review_id} [DELETE]
+type APIDeleteCMSReviewInput struct {
+	Uri APIDeleteCMSReviewUri
+}
+type APIDeleteCMSReviewUri struct {
+	IDRequired
 }

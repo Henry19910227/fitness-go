@@ -16,8 +16,15 @@ func New(db *gorm.DB) Repository {
 
 func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
 	db := r.db.Model(&model.Output{})
+	//加入 id 篩選條件
 	if input.ID != nil {
 		db = db.Where("id = ?", *input.ID)
+	}
+	//Preload
+	if len(input.Preloads) > 0 {
+		for _, preload := range input.Preloads {
+			db = db.Preload(preload.Field)
+		}
 	}
 	//查詢數據
 	err = db.First(&output).Error
@@ -62,4 +69,13 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	//查詢數據
 	err = db.Find(&outputs).Error
 	return outputs, amount, err
+}
+
+func (r *repository) Delete(input *model.DeleteInput) (err error) {
+	db := r.db
+	if input.ID != nil {
+		db = db.Where("id = ?", *input.ID)
+	}
+	err = db.Delete(&model.Table{}).Error
+	return err
 }

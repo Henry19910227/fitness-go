@@ -8725,6 +8725,47 @@ var doc = `{
             }
         },
         "/v2/cms/review/{review_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除評論",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS評論管理_v2"
+                ],
+                "summary": "刪除評論",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "評論id",
+                        "name": "review_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/review.APIDeleteCMSReviewOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "security": [
                     {
@@ -8840,7 +8881,7 @@ var doc = `{
                     "200": {
                         "description": "成功!",
                         "schema": {
-                            "$ref": "#/definitions/receipt.APIGetCMSReceiptsOutput"
+                            "$ref": "#/definitions/receipt.APIGetCMSOrderReceiptsOutput"
                         }
                     },
                     "400": {
@@ -14751,6 +14792,21 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "review.APIDeleteCMSReviewOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

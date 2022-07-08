@@ -4118,6 +4118,17 @@ definitions:
         example: 10001
         type: integer
     type: object
+  review.APIDeleteCMSReviewOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   review.APIUpdateCMSReviewBody:
     properties:
       body:
@@ -10233,6 +10244,32 @@ paths:
       tags:
       - CMS訂單管理_v2
   /v2/cms/review/{review_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除評論
+      parameters:
+      - description: 評論id
+        in: path
+        name: review_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/review.APIDeleteCMSReviewOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除評論
+      tags:
+      - CMS評論管理_v2
     patch:
       consumes:
       - application/json
@@ -10305,7 +10342,7 @@ paths:
         "200":
           description: 成功!
           schema:
-            $ref: '#/definitions/receipt.APIGetCMSReceiptsOutput'
+            $ref: '#/definitions/receipt.APIGetCMSOrderReceiptsOutput'
         "400":
           description: 失敗!
           schema:

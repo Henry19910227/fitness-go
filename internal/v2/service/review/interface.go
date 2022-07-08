@@ -8,4 +8,6 @@ import (
 type Service interface {
 	Update(item *model.Table) (err error)
 	List(input *model.ListInput) (outputs []*model.Output, page *paging.Output, err error)
+	Delete(input *model.DeleteInput) (err error)
+	Find(input *model.FindInput) (output *model.Output, err error)
 }

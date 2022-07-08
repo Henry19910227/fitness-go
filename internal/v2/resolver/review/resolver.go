@@ -2,6 +2,7 @@ package review
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/review"
@@ -10,10 +11,11 @@ import (
 
 type resolver struct {
 	reviewService reviewService.Service
+	uploadTool    uploader.Tool
 }
 
-func New(orderService reviewService.Service) Resolver {
-	return &resolver{reviewService: orderService}
+func New(orderService reviewService.Service, uploadTool uploader.Tool) Resolver {
+	return &resolver{reviewService: orderService, uploadTool: uploadTool}
 }
 
 func (r *resolver) APIGetCMSReviews(input *model.APIGetCMSReviewsInput) (output model.APIGetCMSReviewsOutput) {
@@ -61,6 +63,40 @@ func (r *resolver) APIUpdateCMSReview(input *model.APIUpdateCMSReviewInput) (out
 	if err := r.reviewService.Update(&table); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIDeleteCMSReview(input *model.APIDeleteCMSReviewInput) (output model.APIDeleteCMSReviewOutput) {
+	//查找評論
+	findInput := model.FindInput{}
+	if err := util.Parser(input.Uri, &findInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Images"},
+	}
+	findOutput, err := r.reviewService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//parser delete input
+	deleteInput := model.DeleteInput{}
+	if err := util.Parser(input.Uri, &deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//刪除評論
+	if err := r.reviewService.Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//刪除評論照片
+	for _, imageOutput := range findOutput.Images {
+		_ = r.uploadTool.Delete(util.OnNilJustReturnString(imageOutput.Image, ""))
 	}
 	output.Set(code.Success, "success")
 	return output
