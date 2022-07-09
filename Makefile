@@ -1,6 +1,6 @@
 release:
-	docker build -t toyokoyo199/fitness-backend:2.0.5 --build-arg mode=release .
-	docker push toyokoyo199/fitness-backend:2.0.5
+	docker build -t toyokoyo199/fitness-backend:2.0.6 --build-arg mode=release .
+	docker push toyokoyo199/fitness-backend:2.0.6
 
 migrate_up_latest:
 	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ up
