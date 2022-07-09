@@ -13,5 +13,5 @@ type ImageRequired struct {
 	Image string `json:"image" binding:"required" example:"1234.jpg"` //圖片
 }
 type TypeRequired struct {
-	Type int `json:"type" form:"type" binding:"required" example:"1"` //類型(1:課表/2:教練/3:訂閱)
+	Type int `json:"type" form:"type" binding:"required,oneof=1 2 3" example:"1"` //類型(1:課表/2:教練/3:訂閱)
 }

@@ -29,3 +29,7 @@ func NewFeedbackImageTool() Tool {
 func NewReviewImageTool() Tool {
 	return New(setting.NewReviewImage())
 }
+
+func NewBannerImageTool() Tool {
+	return New(setting.NewBannerImage())
+}
