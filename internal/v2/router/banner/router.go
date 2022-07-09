@@ -16,4 +16,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.StaticFS("/resource/banner/image", http.Dir("./volumes/storage/banner/image"))
 	v2.POST("/cms/banner", midd.Verify([]global.Role{global.AdminRole}), controller.CreateCMSBanner)
 	v2.GET("/cms/banners", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSBanners)
+	v2.DELETE("/cms/banner/:banner_id", midd.Verify([]global.Role{global.AdminRole}), controller.DeleteCMSBanner)
 }

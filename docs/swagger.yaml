@@ -177,36 +177,16 @@ definitions:
         example: message..
         type: string
     type: object
-  banner.APIGetCMSBannersData:
+  banner.APIDeleteCMSBannerOutput:
     properties:
-      course_id:
-        description: 課表id
-        example: 10
+      code:
+        description: 狀態碼
+        example: 9000
         type: integer
-      create_at:
-        description: 創建時間
-        example: "2022-06-14 00:00:00"
+      msg:
+        description: 訊息
+        example: message..
         type: string
-      id:
-        description: id
-        example: 1
-        type: integer
-      image:
-        description: 圖片
-        example: 1234.jpg
-        type: string
-      type:
-        description: 類型(1:課表/2:教練/3:訂閱)
-        example: 1
-        type: integer
-      update_at:
-        description: 更新時間
-        example: "2022-06-14 00:00:00"
-        type: string
-      user_id:
-        description: 用戶id
-        example: 10001
-        type: integer
     type: object
   banner.APIGetCMSBannersOutput:
     properties:
@@ -215,7 +195,38 @@ definitions:
         example: 9000
         type: integer
       data:
-        $ref: '#/definitions/banner.APIGetCMSBannersData'
+        items:
+          properties:
+            course_id:
+              description: 課表id
+              example: 10
+              type: integer
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: id
+              example: 1
+              type: integer
+            image:
+              description: 圖片
+              example: 1234.jpg
+              type: string
+            type:
+              description: 類型(1:課表/2:教練/3:訂閱)
+              example: 1
+              type: integer
+            update_at:
+              description: 更新時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            user_id:
+              description: 用戶id
+              example: 10001
+              type: integer
+          type: object
+        type: array
       msg:
         description: 訊息
         example: message..
@@ -9910,6 +9921,33 @@ paths:
       security:
       - fitness_token: []
       summary: 新增Banner
+      tags:
+      - CMS內容管理_Banner_v2
+  /v2/cms/banner/{banner_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除banner
+      parameters:
+      - description: banner id
+        in: path
+        name: banner_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/banner.APIDeleteCMSBannerOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除banner
       tags:
       - CMS內容管理_Banner_v2
   /v2/cms/banners:

@@ -76,3 +76,24 @@ func (c *controller) GetCMSBanners(ctx *gin.Context) {
 	output := c.resolver.APIGetCMSBanners(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// DeleteCMSBanner 刪除banner
+// @Summary 刪除banner
+// @Description 刪除banner
+// @Tags CMS內容管理_Banner_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param banner_id path int64 true "banner id"
+// @Success 200 {object} banner.APIDeleteCMSBannerOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/banner/{banner_id} [DELETE]
+func (c *controller) DeleteCMSBanner(ctx *gin.Context) {
+	input := model.APIDeleteCMSBannerInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteCMSBanner(&input)
+	ctx.JSON(http.StatusOK, output)
+}

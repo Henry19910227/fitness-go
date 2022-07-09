@@ -8079,6 +8079,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/banner/{banner_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除banner",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS內容管理_Banner_v2"
+                ],
+                "summary": "刪除banner",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "banner id",
+                        "name": "banner_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/banner.APIDeleteCMSBannerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/banners": {
             "get": {
                 "security": [
@@ -9758,43 +9801,18 @@ var doc = `{
                 }
             }
         },
-        "banner.APIGetCMSBannersData": {
+        "banner.APIDeleteCMSBannerOutput": {
             "type": "object",
             "properties": {
-                "course_id": {
-                    "description": "課表id",
+                "code": {
+                    "description": "狀態碼",
                     "type": "integer",
-                    "example": 10
+                    "example": 9000
                 },
-                "create_at": {
-                    "description": "創建時間",
+                "msg": {
+                    "description": "訊息",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
-                },
-                "id": {
-                    "description": "id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "image": {
-                    "description": "圖片",
-                    "type": "string",
-                    "example": "1234.jpg"
-                },
-                "type": {
-                    "description": "類型(1:課表/2:教練/3:訂閱)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "update_at": {
-                    "description": "更新時間",
-                    "type": "string",
-                    "example": "2022-06-14 00:00:00"
-                },
-                "user_id": {
-                    "description": "用戶id",
-                    "type": "integer",
-                    "example": 10001
+                    "example": "message.."
                 }
             }
         },
@@ -9807,7 +9825,47 @@ var doc = `{
                     "example": 9000
                 },
                 "data": {
-                    "$ref": "#/definitions/banner.APIGetCMSBannersData"
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "course_id": {
+                                "description": "課表id",
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "image": {
+                                "description": "圖片",
+                                "type": "string",
+                                "example": "1234.jpg"
+                            },
+                            "type": {
+                                "description": "類型(1:課表/2:教練/3:訂閱)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "user_id": {
+                                "description": "用戶id",
+                                "type": "integer",
+                                "example": 10001
+                            }
+                        }
+                    }
                 },
                 "msg": {
                     "description": "訊息",

@@ -76,3 +76,33 @@ func (r *resolver) APIGetCMSBanners(input *model.APIGetCMSBannersInput) (output 
 	return output
 }
 
+func (r *resolver) APIDeleteCMSBanner(input *model.APIDeleteCMSBannerInput) (output model.APIDeleteCMSBannerOutput) {
+	//查找banner
+	findInput := model.FindInput{}
+	if err := util.Parser(input.Uri, &findInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	findOutput, err := r.bannerService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//parser delete input
+	deleteInput := model.DeleteInput{}
+	if err := util.Parser(input.Uri, &deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//刪除banner
+	if err := r.bannerService.Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//刪除banner圖片
+	_ = r.uploadTool.Delete(util.OnNilJustReturnString(findOutput.Image, ""))
+	output.Set(code.Success, "success")
+	return output
+}
+
+
