@@ -50,3 +50,29 @@ func (r *resolver) APICreateCMSBanner(input *model.APICreateCMSBannerInput) (out
 	output.Data = &data
 	return output
 }
+
+func (r *resolver) APIGetCMSBanners(input *model.APIGetCMSBannersInput) (output model.APIGetCMSBannersOutput) {
+	// parser input
+	listInput := model.ListInput{}
+	if err := util.Parser(input.Form, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// List
+	datas, page, err := r.bannerService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetCMSBannersData{}
+	if err := util.Parser(datas, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
+	return output
+}
+

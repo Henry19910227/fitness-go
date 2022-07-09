@@ -177,6 +177,52 @@ definitions:
         example: message..
         type: string
     type: object
+  banner.APIGetCMSBannersData:
+    properties:
+      course_id:
+        description: 課表id
+        example: 10
+        type: integer
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      id:
+        description: id
+        example: 1
+        type: integer
+      image:
+        description: 圖片
+        example: 1234.jpg
+        type: string
+      type:
+        description: 類型(1:課表/2:教練/3:訂閱)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 10001
+        type: integer
+    type: object
+  banner.APIGetCMSBannersOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/banner.APIGetCMSBannersData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
+    type: object
   base.Output:
     properties:
       code:
@@ -9864,6 +9910,48 @@ paths:
       security:
       - fitness_token: []
       summary: 新增Banner
+      tags:
+      - CMS內容管理_Banner_v2
+  /v2/cms/banners:
+    get:
+      consumes:
+      - application/json
+      description: 獲取banner列表
+      parameters:
+      - description: 排序欄位 (create_at:創建時間)
+        in: query
+        name: order_field
+        required: true
+        type: string
+      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
+        in: query
+        name: order_type
+        required: true
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/banner.APIGetCMSBannersOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取banner列表
       tags:
       - CMS內容管理_Banner_v2
   /v2/cms/course/{course_id}:

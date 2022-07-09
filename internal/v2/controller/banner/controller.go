@@ -52,3 +52,27 @@ func (c *controller) CreateCMSBanner(ctx *gin.Context) {
 	output := c.resolver.APICreateCMSBanner(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetCMSBanners 獲取banner列表
+// @Summary 獲取banner列表
+// @Description 獲取banner列表
+// @Tags CMS內容管理_Banner_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param order_field query string true "排序欄位 (create_at:創建時間)"
+// @Param order_type query string true "排序類型 (ASC:由低到高/DESC:由高到低)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} banner.APIGetCMSBannersOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/banners [GET]
+func (c *controller) GetCMSBanners(ctx *gin.Context) {
+	input := model.APIGetCMSBannersInput{}
+	if err := ctx.ShouldBindQuery(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSBanners(&input)
+	ctx.JSON(http.StatusOK, output)
+}

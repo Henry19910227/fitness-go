@@ -3,6 +3,7 @@ package banner
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/banner"
 	"time"
 )
@@ -26,4 +27,17 @@ func (s *service) Create(item *model.Table) (output *model.Output, err error) {
 	findInput.ID = util.PointerInt64(id)
 	output, err = s.repository.Find(&findInput)
 	return output, err
+}
+
+func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
+	output, amount, err := s.repository.List(input)
+	if err != nil {
+		return output, page, err
+	}
+	page = &paging.Output{}
+	page.TotalCount = int(amount)
+	page.TotalPage = util.Pagination(int(amount), input.Size)
+	page.Page = input.Page
+	page.Size = input.Size
+	return output, page, err
 }

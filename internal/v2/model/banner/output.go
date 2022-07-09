@@ -38,7 +38,7 @@ type APIGetCMSBannersOutput struct {
 	Data   APIGetCMSBannersData `json:"data"`
 	Paging *paging.Output       `json:"paging,omitempty"`
 }
-type APIGetCMSBannersData struct {
+type APIGetCMSBannersData []*struct {
 	IDField
 	CourseIDField
 	UserIDField
