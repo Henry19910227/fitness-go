@@ -9374,7 +9374,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "創建反饋",
+                "description": "查看反饋圖片 : {Base URL}/v2/resource/feedback/image/{Filename}",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -10532,6 +10532,11 @@ var doc = `{
                                 "description": "更新時間",
                                 "type": "string",
                                 "example": "2022-06-12 00:00:00"
+                            },
+                            "workout_count": {
+                                "description": "訓練總數",
+                                "type": "integer",
+                                "example": 50
                             }
                         }
                     }

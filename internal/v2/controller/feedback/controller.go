@@ -21,7 +21,7 @@ func New(resolver feedback.Resolver) Controller {
 
 // CreateFeedback 創建反饋
 // @Summary 創建反饋
-// @Description 創建反饋
+// @Description 查看反饋圖片 : {Base URL}/v2/resource/feedback/image/{Filename}
 // @Tags 意見反饋_v2
 // @Accept mpfd
 // @Produce json
