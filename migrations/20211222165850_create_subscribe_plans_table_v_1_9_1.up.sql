@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS subscribe_plans (
     `enable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '是否啟用',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
-    CONSTRAINT fk_subscribe_plans_label_id_to_product_labels_id FOREIGN KEY (product_label_id) REFERENCES product_labels(id) ON DELETE CASCADE
+    CONSTRAINT fk_subscribe_plans_label_id_to_product_labels_id FOREIGN KEY (product_label_id) REFERENCES product_labels(id) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8mb4 AUTO_INCREMENT = 1;

@@ -12,7 +12,11 @@ CREATE TABLE IF NOT EXISTS trainers (
     `intro` VARCHAR(800) NOT NULL DEFAULT '' COMMENT '教練介紹',
     `experience` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '年資',
     `motto` VARCHAR(200) NOT NULL DEFAULT '' COMMENT '座右銘',
+    `facebook_url` VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'fb連結',
+    `instagram_url` VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'ig連結',
+    `youtube_url` VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'youtube連結',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
+    INDEX `index_nickname` (`nickname`),
     CONSTRAINT `fk_trainers_user_id_to_users_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

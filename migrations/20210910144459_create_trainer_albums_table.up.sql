@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS trainer_albums (
     `id` INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '相簿照片id',
-    `user_id` INT(11) UNSIGNED NOT NULL COMMENT '用戶id',
+    `user_id` INT(11) UNSIGNED COMMENT '用戶id',
     `photo` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '照片',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     CONSTRAINT fk_trainer_albums_user_id_to_users_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

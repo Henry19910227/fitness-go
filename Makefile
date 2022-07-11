@@ -9,7 +9,7 @@ migrate_up:
 migrate_down:
 	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ down 1
 migrate_force:
-	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20220705105809
+	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20211223022623
 migrate_create:
 	migrate create -ext sql -dir migrations create_banners_table_v_2_0_6
 

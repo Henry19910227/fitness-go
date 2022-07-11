@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS certificates (
     `id` INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '證照id',
-    `user_id` INT(11) UNSIGNED NOT NULL COMMENT '用戶id',
+    `user_id` INT(11) UNSIGNED COMMENT '用戶id',
     `name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '證照名稱',
     `image` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '證照照片',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',

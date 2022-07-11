@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS meals (
     `amount`                FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '數量',
     `create_at`             DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     UNIQUE KEY `unique_meals` (`diet_id`, `food_id`, `type`),
-    CONSTRAINT fk_meals_diet_id_to_diets_id FOREIGN KEY (diet_id) REFERENCES diets(id) ON DELETE SET NULL,
-    CONSTRAINT fk_meals_food_id_to_foods_id FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE SET NULL
+    CONSTRAINT fk_meals_diet_id_to_diets_id FOREIGN KEY (diet_id) REFERENCES diets(id) ON DELETE CASCADE,
+    CONSTRAINT fk_meals_food_id_to_foods_id FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;
