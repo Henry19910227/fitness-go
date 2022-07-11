@@ -36,6 +36,7 @@ type APIGetFavoriteCoursesData []*struct {
 	LevelField
 	TrainTargetField
 	PlanCountField
+	WorkoutCountField
 	CreateAtField
 	UpdateAtField
 	Trainer *struct {
