@@ -26,7 +26,7 @@ func (r *resolver) APIGetCMSReviews(input *model.APIGetCMSReviewsInput) (output 
 		{Field: "User"},
 		{Field: "Images"},
 	}
-	if err := util.Parser(input.Form, &param); err != nil {
+	if err := util.Parser(input.Query, &param); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}

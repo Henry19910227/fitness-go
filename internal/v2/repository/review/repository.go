@@ -48,6 +48,9 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 		db = db.Joins("INNER JOIN users ON reviews.user_id = users.id")
 		db = db.Where("users.nickname LIKE ?", "%"+*input.Nickname+"%")
 	}
+	if input.Score != nil {
+		db = db.Where("reviews.score = ?", *input.Score)
+	}
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {

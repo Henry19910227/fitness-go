@@ -32,11 +32,12 @@ type ListInput struct {
 
 // APIGetCMSReviewsInput /v2/cms/reviews [GET]
 type APIGetCMSReviewsInput struct {
-	Form APIGetCMSReviewsForm
+	Query APIGetCMSReviewsQuery
 }
-type APIGetCMSReviewsForm struct {
+type APIGetCMSReviewsQuery struct {
 	course.NameOptional
 	user.NicknameOptional
+	ScoreOptional
 	OrderByInput
 	PagingInput
 }

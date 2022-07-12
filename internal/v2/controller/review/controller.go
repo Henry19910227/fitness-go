@@ -26,6 +26,7 @@ func New(resolver review.Resolver) Controller {
 // @Security fitness_token
 // @Param name query string false "課表名稱"
 // @Param nickname query string false "用戶暱稱"
+// @Param score query int false "評分(1~5分)"
 // @Param order_field query string true "排序欄位 (create_at:創建時間)"
 // @Param order_type query string true "排序類型 (ASC:由低到高/DESC:由高到低)"
 // @Param page query int true "頁數(從第一頁開始)"
@@ -35,7 +36,7 @@ func New(resolver review.Resolver) Controller {
 // @Router /v2/cms/reviews [GET]
 func (c *controller) GetCMSReviews(ctx *gin.Context) {
 	input := model.APIGetCMSReviewsInput{}
-	if err := ctx.ShouldBindQuery(&input.Form); err != nil {
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
