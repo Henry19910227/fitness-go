@@ -9061,6 +9061,12 @@ var doc = `{
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "description": "評分(1~5分)",
+                        "name": "score",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "排序欄位 (create_at:創建時間)",
                         "name": "order_field",
