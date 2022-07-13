@@ -38,3 +38,43 @@ func (c *controller) UpdatePassword(ctx *gin.Context) {
 	output := c.resolver.APIUpdatePassword(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// RegisterAccountValidate 驗證帳戶是否可使用
+// @Summary 驗證帳戶是否可使用
+// @Description 驗證帳戶是否可使用
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterAccountValidateBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterAccountValidateOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/account/validate [POST]
+func (c *controller) RegisterAccountValidate(ctx *gin.Context) {
+	var input model.APIRegisterAccountValidateInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterAccountValidate(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// RegisterNicknameValidate 驗證暱稱是否可使用
+// @Summary 驗證暱稱是否可使用
+// @Description 驗證暱稱是否可使用
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterNicknameValidateBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterNicknameValidateOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/nickname/validate [POST]
+func (c *controller) RegisterNicknameValidate(ctx *gin.Context) {
+	var input model.APIRegisterNicknameValidateInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterNicknameValidate(&input)
+	ctx.JSON(http.StatusOK, output)
+}

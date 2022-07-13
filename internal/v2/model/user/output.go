@@ -15,11 +15,21 @@ type APIUpdatePasswordOutput struct {
 	base.Output
 }
 
-// APIRegisterEmailOutput /v2/register/email [POST]
-type APIRegisterEmailOutput struct {
+// APIRegisterForEmailOutput /v2/register/email [POST]
+type APIRegisterForEmailOutput struct {
 	base.Output
-	Data *APIRegisterEmailData `json:"data,omitempty"`
+	Data *APIRegisterForEmailData `json:"data,omitempty"`
 }
-type APIRegisterEmailData struct {
+type APIRegisterForEmailData struct {
 	IDField
+}
+
+// APIRegisterNicknameValidateOutput /v2/register/nickname/validate [POST]
+type APIRegisterNicknameValidateOutput struct {
+	base.Output
+}
+
+// APIRegisterAccountValidateOutput /v2/register/account/validate [POST]
+type APIRegisterAccountValidateOutput struct {
+	base.Output
 }

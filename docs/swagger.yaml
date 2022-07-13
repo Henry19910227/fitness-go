@@ -4312,6 +4312,46 @@ definitions:
         example: message..
         type: string
     type: object
+  user.APIRegisterAccountValidateBody:
+    properties:
+      email:
+        description: 信箱
+        example: test@gmail.com
+        type: string
+    required:
+    - email
+    type: object
+  user.APIRegisterAccountValidateOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  user.APIRegisterNicknameValidateBody:
+    properties:
+      nickname:
+        description: 暱稱(1~20字元)
+        example: henry
+        type: string
+    required:
+    - nickname
+    type: object
+  user.APIRegisterNicknameValidateOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   user.APIUpdatePasswordBody:
     properties:
       old_password:
@@ -10887,6 +10927,58 @@ paths:
       summary: 修改密碼
       tags:
       - 用戶_v2
+  /v2/register/account/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證帳戶是否可使用
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIRegisterAccountValidateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIRegisterAccountValidateOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 驗證帳戶是否可使用
+      tags:
+      - 註冊_v2
+  /v2/register/nickname/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證暱稱是否可使用
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIRegisterNicknameValidateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIRegisterNicknameValidateOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 驗證暱稱是否可使用
+      tags:
+      - 註冊_v2
 securityDefinitions:
   fitness_token:
     in: header

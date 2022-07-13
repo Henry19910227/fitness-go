@@ -48,6 +48,9 @@ type ExperienceOptional struct {
 type TargetOptional struct {
 	Target *int `json:"target,omitempty" gorm:"column:target;default:0"` // 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
 }
+type IsDeletedOptional struct {
+	IsDeleted *int `json:"is_deleted,omitempty" form:"is_deleted" binding:"omitempty,oneof=0 1" example:"0"` //是否刪除(0:否/1:是)
+}
 type CreateAtOptional struct {
 	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at;default:2022-06-12 00:00:00" example:"2022-06-12 00:00:00"` // 創建時間
 }

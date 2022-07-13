@@ -25,7 +25,7 @@ type EmailRequired struct {
 	Email string `json:"email" binding:"required,email,max=255" example:"test@gmail.com"` // 信箱
 }
 type NicknameRequired struct {
-	Nickname string `json:"nickname" gorm:"column:nickname;default:''"` // 暱稱
+	Nickname string `json:"nickname" binding:"required,min=1,max=20" example:"henry"` // 暱稱(1~20字元)
 }
 type AvatarRequired struct {
 	Avatar string `json:"avatar" gorm:"column:avatar;default:''"` // 用戶大頭貼
@@ -47,6 +47,9 @@ type ExperienceRequired struct {
 }
 type TargetRequired struct {
 	Target int `json:"target" gorm:"column:target;default:0"` // 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
+}
+type IsDeletedRequired struct {
+	IsDeleted int `json:"is_deleted,omitempty" binding:"required" example:"0"` //是否刪除
 }
 type CreateAtRequired struct {
 	CreateAt string `json:"create_at" gorm:"column:create_at;default:2022-06-12 00:00:00" example:"2022-06-12 00:00:00"` // 創建時間

@@ -9572,6 +9572,86 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/v2/register/account/validate": {
+            "post": {
+                "description": "驗證帳戶是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "驗證帳戶是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterAccountValidateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterAccountValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/register/nickname/validate": {
+            "post": {
+                "description": "驗證暱稱是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "驗證暱稱是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterNicknameValidateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterNicknameValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -15269,6 +15349,62 @@ var doc = `{
                 "data": {
                     "type": "string",
                     "example": "123.jpg"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterAccountValidateBody": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                }
+            }
+        },
+        "user.APIRegisterAccountValidateOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterNicknameValidateBody": {
+            "type": "object",
+            "required": [
+                "nickname"
+            ],
+            "properties": {
+                "nickname": {
+                    "description": "暱稱(1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        },
+        "user.APIRegisterNicknameValidateOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",

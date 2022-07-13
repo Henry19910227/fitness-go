@@ -13,4 +13,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := user.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.PATCH("/password", midd.Verify([]global.Role{global.UserRole}), controller.UpdatePassword)
+	v2.POST("/register/account/validate", controller.RegisterAccountValidate)
+	v2.POST("/register/nickname/validate", controller.RegisterNicknameValidate)
 }
