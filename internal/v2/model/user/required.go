@@ -22,7 +22,7 @@ type UserTypeRequired struct {
 	UserType int `json:"user_type" gorm:"column:user_type;default:1"` // 用戶類型 (1:一般用戶/2:訂閱用戶)
 }
 type EmailRequired struct {
-	Email string `json:"email" gorm:"column:email;default:''"` // 信箱
+	Email string `json:"email" binding:"required,email,max=255" example:"test@gmail.com"` // 信箱
 }
 type NicknameRequired struct {
 	Nickname string `json:"nickname" gorm:"column:nickname;default:''"` // 暱稱

@@ -14,3 +14,12 @@ func (Output) TableName() string {
 type APIUpdatePasswordOutput struct {
 	base.Output
 }
+
+// APIRegisterEmailOutput /v2/register/email [POST]
+type APIRegisterEmailOutput struct {
+	base.Output
+	Data *APIRegisterEmailData `json:"data,omitempty"`
+}
+type APIRegisterEmailData struct {
+	IDField
+}

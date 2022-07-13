@@ -28,3 +28,11 @@ func (r *repository) Update(item *model.Table) (err error) {
 	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
 	return err
 }
+
+func (r *repository) Create(item *model.Table) (id int64, err error) {
+	err = r.db.Model(&model.Table{}).Create(&item).Error
+	if err != nil {
+		return 0, err
+	}
+	return *item.ID, err
+}

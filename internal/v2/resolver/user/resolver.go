@@ -39,3 +39,8 @@ func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (outpu
 	output.SetStatus(code.Success)
 	return output
 }
+
+func (r *resolver) APIRegisterEmail(input *model.APIRegisterEmailInput) (output model.APIRegisterEmailOutput) {
+	//TODO implement me
+	panic("implement me")
+}
