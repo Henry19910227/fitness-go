@@ -137,6 +137,15 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 	return output
 }
 
+func (r *resolver) APILogout(input *model.APILogoutInput) (output model.APILogoutOutput) {
+	if err := r.redisTool.Del(jwt.UserTokenPrefix + "." + strconv.Itoa(int(input.ID))); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
 func (r *resolver) APICreateRegisterOTP(input *model.APICreateRegisterOTPInput) (output model.APICreateRegisterOTPOutput) {
 	//產生otp碼
 	otp, err := r.otpTool.Generate(input.Body.Email)

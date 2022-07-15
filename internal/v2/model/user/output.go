@@ -55,6 +55,11 @@ type APILoginForEmailData struct {
 	} `json:"user_subscribe_info,omitempty"`
 }
 
+// APILogoutOutput /v2/logout [POST]
+type APILogoutOutput struct {
+	base.Output
+}
+
 // APICreateRegisterOTPOutput /v2/register/otp [POST]
 type APICreateRegisterOTPOutput struct {
 	base.Output

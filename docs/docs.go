@@ -9534,6 +9534,40 @@ var doc = `{
                 }
             }
         },
+        "/v2/logout": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "登出",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登入_v2"
+                ],
+                "summary": "登出",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APILogoutOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/meals": {
             "get": {
                 "security": [
@@ -15647,6 +15681,21 @@ var doc = `{
                     "description": "Token",
                     "type": "string",
                     "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6I"
+                }
+            }
+        },
+        "user.APILogoutOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

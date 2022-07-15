@@ -39,6 +39,20 @@ type APIUpdatePasswordBody struct {
 	PasswordRequired
 }
 
+// APILoginForEmailInput /v2/login/email [POST]
+type APILoginForEmailInput struct {
+	Body APILoginForEmailBody
+}
+type APILoginForEmailBody struct {
+	EmailRequired
+	PasswordRequired
+}
+
+// APILogoutInput /v2/logout [POST]
+type APILogoutInput struct {
+	IDRequired
+}
+
 // APIRegisterForEmailInput /v2/register/email [POST]
 type APIRegisterForEmailInput struct {
 	Body APIRegisterForEmailBody
@@ -48,15 +62,6 @@ type APIRegisterForEmailBody struct {
 	PasswordRequired
 	NicknameRequired
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
-}
-
-// APILoginForEmailInput /v2/login/email [POST]
-type APILoginForEmailInput struct {
-	Body APILoginForEmailBody
-}
-type APILoginForEmailBody struct {
-	EmailRequired
-	PasswordRequired
 }
 
 // APICreateRegisterOTPInput /v2/register/otp [POST]

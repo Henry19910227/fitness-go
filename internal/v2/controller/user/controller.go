@@ -59,6 +59,23 @@ func (c *controller) LoginForEmail(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// Logout 登出
+// @Summary 登出
+// @Description 登出
+// @Tags 登入_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} user.APILogoutOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/logout [POST]
+func (c *controller) Logout(ctx *gin.Context) {
+	var input model.APILogoutInput
+	input.ID = ctx.MustGet("uid").(int64)
+	output := c.resolver.APILogout(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // RegisterForEmail 使用信箱註冊
 // @Summary 使用信箱註冊
 // @Description 使用信箱註冊
