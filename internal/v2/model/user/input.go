@@ -16,6 +16,7 @@ type OrderByInput = orderBy.Input
 
 type ListInput struct {
 	AccountOptional
+	PasswordOptional
 	NicknameOptional
 	IsDeletedOptional
 	PagingInput
@@ -47,6 +48,23 @@ type APIRegisterForEmailBody struct {
 	PasswordRequired
 	NicknameRequired
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
+}
+
+// APILoginForEmailInput /v2/login/email [POST]
+type APILoginForEmailInput struct {
+	Body APILoginForEmailBody
+}
+type APILoginForEmailBody struct {
+	EmailRequired
+	PasswordRequired
+}
+
+// APICreateRegisterOTPInput /v2/register/otp [POST]
+type APICreateRegisterOTPInput struct {
+	Body APICreateRegisterOTPBody
+}
+type APICreateRegisterOTPBody struct {
+	EmailRequired
 }
 
 // APIRegisterNicknameValidateInput /v2/register/nickname/validate [POST]

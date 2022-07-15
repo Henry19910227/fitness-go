@@ -23,7 +23,7 @@ func New() Tool {
 func (t *tool) Generate(secret string) (string, error) {
 	newSecret := base32.StdEncoding.EncodeToString([]byte(secret))
 	return totp.GenerateCodeCustom(newSecret, time.Now().UTC(), totp.ValidateOpts{
-		Period:    300,
+		Period:    60,
 		Skew:      1,
 		Digits:    otp.DigitsSix,
 		Algorithm: otp.AlgorithmSHA1,
@@ -34,7 +34,7 @@ func (t *tool) Generate(secret string) (string, error) {
 func (t *tool) Validate(code string, secret string) bool {
 	newSecret := base32.StdEncoding.EncodeToString([]byte(secret))
 	verify, _ := totp.ValidateCustom(code, newSecret, time.Now().UTC(), totp.ValidateOpts{
-		Period:    300,
+		Period:    60,
 		Skew:      1,
 		Digits:    otp.DigitsSix,
 		Algorithm: otp.AlgorithmSHA1,

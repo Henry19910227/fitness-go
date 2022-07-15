@@ -9476,6 +9476,46 @@
                 }
             }
         },
+        "/v2/login/email": {
+            "post": {
+                "description": "使用信箱登入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登入_v2"
+                ],
+                "summary": "使用信箱登入",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APILoginForEmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APILoginForEmailOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/meals": {
             "get": {
                 "security": [
@@ -9595,6 +9635,46 @@
                 }
             }
         },
+        "/v2/register/email": {
+            "post": {
+                "description": "使用信箱註冊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "使用信箱註冊",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForEmailBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForEmailOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/nickname/validate": {
             "post": {
                 "description": "驗證暱稱是否可使用",
@@ -9624,6 +9704,46 @@
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIRegisterNicknameValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/register/otp": {
+            "post": {
+                "description": "發送OTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "發送OTP",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APICreateRegisterOTPBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APICreateRegisterOTPOutput"
                         }
                     },
                     "400": {
@@ -15339,6 +15459,179 @@
                 }
             }
         },
+        "user.APICreateRegisterOTPBody": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                }
+            }
+        },
+        "user.APICreateRegisterOTPData": {
+            "type": "object",
+            "properties": {
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "254235"
+                }
+            }
+        },
+        "user.APICreateRegisterOTPOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/user.APICreateRegisterOTPData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APILoginForEmailBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "password": {
+                    "description": "密碼",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "user.APILoginForEmailData": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "用戶大頭貼",
+                    "type": "string",
+                    "example": "123.png"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "trainer": {
+                    "type": "object",
+                    "properties": {
+                        "avatar": {
+                            "description": "教練大頭照",
+                            "type": "string",
+                            "example": "abc.png"
+                        },
+                        "create_at": {
+                            "description": "創建時間",
+                            "type": "string",
+                            "example": "2022-06-12 00:00:00"
+                        },
+                        "nickname": {
+                            "description": "教練暱稱",
+                            "type": "string",
+                            "example": "Henry"
+                        },
+                        "trainer_level": {
+                            "description": "教練評鑑等級",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "trainer_status": {
+                            "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "update_at": {
+                            "description": "更新時間",
+                            "type": "string",
+                            "example": "2022-06-12 00:00:00"
+                        }
+                    }
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "user_subscribe_info": {
+                    "type": "object",
+                    "properties": {
+                        "end_date": {
+                            "description": "訂閱結束日期",
+                            "type": "string",
+                            "example": "2023-07-11 11:00:00"
+                        },
+                        "start_date": {
+                            "description": "訂閱開始日期",
+                            "type": "string",
+                            "example": "2022-07-11 11:00:00"
+                        },
+                        "status": {
+                            "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "update_at": {
+                            "description": "更新時間",
+                            "type": "string",
+                            "example": "2022-06-14 00:00:00"
+                        }
+                    }
+                }
+            }
+        },
+        "user.APILoginForEmailOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/user.APILoginForEmailData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "token": {
+                    "description": "Token",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6I"
+                }
+            }
+        },
         "user.APIRegisterAccountValidateBody": {
             "type": "object",
             "required": [
@@ -15353,6 +15646,52 @@
             }
         },
         "user.APIRegisterAccountValidateOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterForEmailBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "nickname",
+                "otp_code",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "nickname": {
+                    "description": "暱稱(1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
+                },
+                "password": {
+                    "description": "密碼",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "user.APIRegisterForEmailOutput": {
             "type": "object",
             "properties": {
                 "code": {

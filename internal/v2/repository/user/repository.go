@@ -44,13 +44,17 @@ func (r *repository) Create(item *model.Table) (id int64, err error) {
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
-	//加入 nickname 篩選條件
-	if input.Nickname != nil {
-		db = db.Where("nickname = ?", *input.Nickname)
-	}
 	//加入 account 篩選條件
 	if input.Account != nil {
 		db = db.Where("account = ?", *input.Account)
+	}
+	//加入 password 篩選條件
+	if input.Password != nil {
+		db = db.Where("password = ?", *input.Password)
+	}
+	//加入 nickname 篩選條件
+	if input.Nickname != nil {
+		db = db.Where("nickname = ?", *input.Nickname)
 	}
 	//加入 is_deleted 篩選條件
 	if input.IsDeleted != nil {

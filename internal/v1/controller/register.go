@@ -11,7 +11,7 @@ type Register struct {
 	regService service.Register
 }
 
-func NewRegister(baseGroup *gin.RouterGroup, regService service.Register)  {
+func NewRegister(baseGroup *gin.RouterGroup, regService service.Register) {
 	register := &Register{regService: regService}
 	baseGroup.POST("/register/email/otp", register.SendEmailOTP)
 	baseGroup.POST("/register/email", register.RegisterForEmail)
@@ -29,7 +29,7 @@ func NewRegister(baseGroup *gin.RouterGroup, regService service.Register)  {
 // @Success 200 {object} model.SuccessResult{data=registerdto.OTP} "驗證郵件已寄出"
 // @Failure 400 {object} model.ErrorResult "發送失敗"
 // @Router /v1/register/email/otp [POST]
-func (r *Register) SendEmailOTP(c *gin.Context)  {
+func (r *Register) SendEmailOTP(c *gin.Context) {
 	var body validator.EmailBody
 	if err := c.ShouldBindJSON(&body); err != nil {
 		r.JSONValidatorErrorResponse(c, err.Error())
@@ -53,7 +53,7 @@ func (r *Register) SendEmailOTP(c *gin.Context)  {
 // @Success 200 {object} model.SuccessResult{data=registerdto.Register} "註冊成功"
 // @Failure 400 {object} model.ErrorResult "註冊失敗"
 // @Router /v1/register/email [POST]
-func (r *Register) RegisterForEmail(c *gin.Context)  {
+func (r *Register) RegisterForEmail(c *gin.Context) {
 	var body validator.RegisterForEmailBody
 	if err := c.ShouldBindJSON(&body); err != nil {
 		r.JSONValidatorErrorResponse(c, err.Error())
@@ -62,6 +62,7 @@ func (r *Register) RegisterForEmail(c *gin.Context)  {
 	//檢查Email是否重複
 	if err := r.regService.ValidateEmailDup(c, body.Email); err != nil {
 		r.JSONErrorResponse(c, err)
+		return
 	}
 	result, err := r.regService.EmailRegister(c, body.OTPCode, body.Email, body.Nickname, body.Password)
 	if err != nil {

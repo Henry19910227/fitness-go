@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+var (
+	UserTokenPrefix  = "fitness.user.token"
+	AdminTokenPrefix = "fitness.admin.token"
+)
+
 type tool struct {
 	setting setting.JWT
 }

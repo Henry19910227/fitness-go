@@ -3,19 +3,27 @@ package user
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
-	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/jwt"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/otp"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	userService "github.com/Henry19910227/fitness-go/internal/v2/service/user"
+	"strconv"
 )
 
 type resolver struct {
 	userService userService.Service
-	otpTool     tool.OTP
+	otpTool     otp.Tool
+	cryptoTool  crypto.Tool
+	redisTool   redis.Tool
+	jwtTool     jwt.Tool
 }
 
-func New(userService userService.Service, otpTool tool.OTP) Resolver {
-	return &resolver{userService: userService, otpTool: otpTool}
+func New(userService userService.Service, otpTool otp.Tool, cryptoTool crypto.Tool, redisTool redis.Tool, jwtTool jwt.Tool) Resolver {
+	return &resolver{userService: userService, otpTool: otpTool, cryptoTool: cryptoTool, redisTool: redisTool, jwtTool: jwtTool}
 }
 
 func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput) {
@@ -76,13 +84,70 @@ func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (o
 	table.Nickname = util.PointerString(input.Body.Nickname)
 	table.Email = util.PointerString(input.Body.Email)
 	table.Password = util.PointerString(input.Body.Password)
-	userID, err := r.userService.Create(&table)
+	_, err = r.userService.Create(&table)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	output.SetStatus(code.Success)
-	output.Data.ID = util.PointerInt64(userID)
+	return output
+}
+
+func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output model.APILoginForEmailOutput) {
+	listInput := model.ListInput{}
+	listInput.Account = util.PointerString(input.Body.Email)
+	listInput.Password = util.PointerString(input.Body.Password)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "UserSubscribeInfo"},
+	}
+	if err := util.Parser(input.Body, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	datas, _, err := r.userService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(datas) == 0 {
+		output.Set(code.BadRequest, errors.New("帳號或密碼錯誤").Error())
+		return output
+	}
+	data := model.APILoginForEmailData{}
+	if err := util.Parser(datas[0], &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//產生token
+	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(data.ID, 0))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//設置token過期時間
+	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(data.ID, 0)))
+	if err := r.redisTool.SetEX(key, token, r.jwtTool.GetExpire()); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = &data
+	output.Token = token
+	return output
+}
+
+func (r *resolver) APICreateRegisterOTP(input *model.APICreateRegisterOTPInput) (output model.APICreateRegisterOTPOutput) {
+	//產生otp碼
+	otp, err := r.otpTool.Generate(input.Body.Email)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	data := model.APICreateRegisterOTPData{}
+	data.Code = otp
+	output.Data = &data
 	return output
 }
 
