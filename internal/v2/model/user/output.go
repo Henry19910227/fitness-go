@@ -60,7 +60,7 @@ type APILogoutOutput struct {
 	base.Output
 }
 
-// APICreateRegisterOTPOutput /v2/register/otp [POST]
+// APICreateRegisterOTPOutput /v2/otp [POST]
 type APICreateRegisterOTPOutput struct {
 	base.Output
 	Data *APICreateRegisterOTPData `json:"data,omitempty"`

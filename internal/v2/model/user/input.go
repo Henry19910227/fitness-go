@@ -64,11 +64,11 @@ type APIRegisterForEmailBody struct {
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
-// APICreateRegisterOTPInput /v2/register/otp [POST]
-type APICreateRegisterOTPInput struct {
-	Body APICreateRegisterOTPBody
+// APICreateOTPInput /v2/otp [POST]
+type APICreateOTPInput struct {
+	Body APICreateOTPBody
 }
-type APICreateRegisterOTPBody struct {
+type APICreateOTPBody struct {
 	EmailRequired
 }
 

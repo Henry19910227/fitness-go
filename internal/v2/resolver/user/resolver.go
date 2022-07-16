@@ -146,7 +146,7 @@ func (r *resolver) APILogout(input *model.APILogoutInput) (output model.APILogou
 	return output
 }
 
-func (r *resolver) APICreateRegisterOTP(input *model.APICreateRegisterOTPInput) (output model.APICreateRegisterOTPOutput) {
+func (r *resolver) APICreateRegisterOTP(input *model.APICreateOTPInput) (output model.APICreateRegisterOTPOutput) {
 	//產生otp碼
 	otp, err := r.otpTool.Generate(input.Body.Email)
 	if err != nil {

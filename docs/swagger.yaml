@@ -11121,6 +11121,32 @@ paths:
       summary: 獲取餐食列表
       tags:
       - 飲食_v2
+  /v2/otp:
+    post:
+      consumes:
+      - application/json
+      description: 發送OTP
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APICreateRegisterOTPBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APICreateRegisterOTPOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 發送OTP
+      tags:
+      - 註冊_v2
   /v2/password:
     patch:
       consumes:
@@ -11225,32 +11251,6 @@ paths:
           schema:
             $ref: '#/definitions/base.Output'
       summary: 驗證暱稱是否可使用
-      tags:
-      - 註冊_v2
-  /v2/register/otp:
-    post:
-      consumes:
-      - application/json
-      description: 發送OTP
-      parameters:
-      - description: 輸入參數
-        in: body
-        name: json_body
-        required: true
-        schema:
-          $ref: '#/definitions/user.APICreateRegisterOTPBody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功!
-          schema:
-            $ref: '#/definitions/user.APICreateRegisterOTPOutput'
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/base.Output'
-      summary: 發送OTP
       tags:
       - 註冊_v2
 securityDefinitions:

@@ -102,12 +102,12 @@ func (c *controller) RegisterForEmail(ctx *gin.Context) {
 // @Tags 註冊_v2
 // @Accept json
 // @Produce json
-// @Param json_body body user.APICreateRegisterOTPBody true "輸入參數"
+// @Param json_body body user.APICreateOTPBody true "輸入參數"
 // @Success 200 {object} user.APICreateRegisterOTPOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/register/otp [POST]
+// @Router /v2/otp [POST]
 func (c *controller) CreateRegisterOTP(ctx *gin.Context) {
-	var input model.APICreateRegisterOTPInput
+	var input model.APICreateOTPInput
 	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return

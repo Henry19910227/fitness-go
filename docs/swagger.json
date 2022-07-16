@@ -9584,6 +9584,46 @@
                 }
             }
         },
+        "/v2/otp": {
+            "post": {
+                "description": "發送OTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "發送OTP",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APICreateRegisterOTPBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APICreateRegisterOTPOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/password": {
             "patch": {
                 "security": [
@@ -9738,46 +9778,6 @@
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIRegisterNicknameValidateOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/register/otp": {
-            "post": {
-                "description": "發送OTP",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "註冊_v2"
-                ],
-                "summary": "發送OTP",
-                "parameters": [
-                    {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user.APICreateRegisterOTPBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/user.APICreateRegisterOTPOutput"
                         }
                     },
                     "400": {
