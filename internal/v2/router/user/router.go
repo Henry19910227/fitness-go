@@ -16,6 +16,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.POST("/login/email", controller.LoginForEmail)
 	v2.POST("/logout", midd.Verify([]global.Role{global.UserRole}), controller.Logout)
 	v2.POST("/register/email", controller.RegisterForEmail)
+	v2.POST("/register/facebook", controller.RegisterForFacebook)
 	v2.POST("/otp", controller.CreateRegisterOTP)
 	v2.POST("/register/account/validate", controller.RegisterAccountValidate)
 	v2.POST("/register/nickname/validate", controller.RegisterNicknameValidate)

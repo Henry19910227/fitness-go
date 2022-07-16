@@ -96,6 +96,26 @@ func (c *controller) RegisterForEmail(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// RegisterForFacebook 使用Facebook註冊
+// @Summary 使用Facebook註冊
+// @Description 使用Facebook註冊
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterForFacebookBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterForFacebookOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/facebook [POST]
+func (c *controller) RegisterForFacebook(ctx *gin.Context) {
+	var input model.APIRegisterForFacebookInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterForFacebook(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // CreateRegisterOTP 發送OTP
 // @Summary 發送OTP
 // @Description 發送OTP

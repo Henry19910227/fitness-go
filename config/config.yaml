@@ -85,6 +85,16 @@ IAB:
     Release:
       JsonFilePath: ./config/fitness-84141-15033019d22e.json
       PackageName: com.alan.fitness.dev
+FBLogin:
+    Host: https://graph.facebook.com/
+    Debug:
+      AppID: 3268303936749363
+      AppSecret: 9e81d8aea97dae4b4d47e2e58f1535e9
+      DebugTokenURL: https://graph.facebook.com/debug_token
+    Release:
+      AppID: 3268303936749363
+      AppSecret: 9e81d8aea97dae4b4d47e2e58f1535e9
+      DebugTokenURL: https://graph.facebook.com/debug_token
 Swagger:
     Debug:
       Protocol: http

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/fb_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/jwt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/otp"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
@@ -20,10 +21,11 @@ type resolver struct {
 	cryptoTool  crypto.Tool
 	redisTool   redis.Tool
 	jwtTool     jwt.Tool
+	fbLoginTool fb_login.Tool
 }
 
-func New(userService userService.Service, otpTool otp.Tool, cryptoTool crypto.Tool, redisTool redis.Tool, jwtTool jwt.Tool) Resolver {
-	return &resolver{userService: userService, otpTool: otpTool, cryptoTool: cryptoTool, redisTool: redisTool, jwtTool: jwtTool}
+func New(userService userService.Service, otpTool otp.Tool, cryptoTool crypto.Tool, redisTool redis.Tool, jwtTool jwt.Tool, fbLoginTool fb_login.Tool) Resolver {
+	return &resolver{userService: userService, otpTool: otpTool, cryptoTool: cryptoTool, redisTool: redisTool, jwtTool: jwtTool, fbLoginTool: fbLoginTool}
 }
 
 func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput) {
@@ -77,6 +79,16 @@ func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (o
 		output.Set(code.BadRequest, errors.New("該暱稱重複").Error())
 		return output
 	}
+	//檢查Email是否重複
+	ok, err = r.emailValidate(input.Body.Email)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.BadRequest, errors.New("該信箱重複").Error())
+		return output
+	}
 	//創建用戶
 	table := model.Table{}
 	table.AccountType = util.PointerInt(model.Email)
@@ -84,6 +96,59 @@ func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (o
 	table.Nickname = util.PointerString(input.Body.Nickname)
 	table.Email = util.PointerString(input.Body.Email)
 	table.Password = util.PointerString(input.Body.Password)
+	_, err = r.userService.Create(&table)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInput) (output model.APIRegisterForFacebookOutput) {
+	//以access token 取得 fb uid
+	fbUid, err := r.fbLoginTool.GetFbUidByAccessToken(input.Body.AccessToken)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//檢查帳號是否重複
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(fbUid))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.BadRequest, errors.New("該帳號重複").Error())
+		return output
+	}
+	//檢查暱稱是否重複
+	ok, err = r.nicknameValidate(input.Body.Nickname)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.BadRequest, errors.New("該暱稱重複").Error())
+		return output
+	}
+	//檢查Email是否重複
+	ok, err = r.emailValidate(input.Body.Email)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.BadRequest, errors.New("該信箱重複").Error())
+		return output
+	}
+	//創建用戶
+	table := model.Table{}
+	table.AccountType = util.PointerInt(model.Facebook)
+	table.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
+	table.Nickname = util.PointerString(input.Body.Nickname)
+	table.Email = util.PointerString(input.Body.Email)
+	table.Password = util.PointerString("")
 	_, err = r.userService.Create(&table)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -192,6 +257,17 @@ func (r *resolver) nicknameValidate(nickname string) (bool, error) {
 	//檢查帳號是否重複
 	listInput := model.ListInput{}
 	listInput.Nickname = util.PointerString(nickname)
+	outputs, _, err := r.userService.List(&listInput)
+	if err != nil {
+		return false, err
+	}
+	return !(len(outputs) > 0), nil
+}
+
+func (r *resolver) emailValidate(email string) (bool, error) {
+	//檢查帳號是否重複
+	listInput := model.ListInput{}
+	listInput.Email = util.PointerString(email)
 	outputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		return false, err

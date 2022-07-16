@@ -26,6 +26,11 @@ type APIRegisterForEmailOutput struct {
 	base.Output
 }
 
+// APIRegisterForFacebookOutput /v2/register/facebook [POST]
+type APIRegisterForFacebookOutput struct {
+	base.Output
+}
+
 // APILoginForEmailOutput /v2/login/email [POST]
 type APILoginForEmailOutput struct {
 	base.Output

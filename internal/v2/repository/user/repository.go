@@ -52,6 +52,10 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.Password != nil {
 		db = db.Where("password = ?", *input.Password)
 	}
+	//加入 email 篩選條件
+	if input.Email != nil {
+		db = db.Where("email = ?", *input.Email)
+	}
 	//加入 nickname 篩選條件
 	if input.Nickname != nil {
 		db = db.Where("nickname = ?", *input.Nickname)

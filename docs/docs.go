@@ -9622,7 +9622,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.APICreateRegisterOTPBody"
+                            "$ref": "#/definitions/user.APICreateOTPBody"
                         }
                     }
                 ],
@@ -9756,6 +9756,46 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIRegisterForEmailOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/register/facebook": {
+            "post": {
+                "description": "使用Facebook註冊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "使用Facebook註冊",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForFacebookBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForFacebookOutput"
                         }
                     },
                     "400": {
@@ -15511,7 +15551,7 @@ var doc = `{
                 }
             }
         },
-        "user.APICreateRegisterOTPBody": {
+        "user.APICreateOTPBody": {
             "type": "object",
             "required": [
                 "email"
@@ -15759,6 +15799,46 @@ var doc = `{
             }
         },
         "user.APIRegisterForEmailOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterForFacebookBody": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "email",
+                "nickname"
+            ],
+            "properties": {
+                "access_token": {
+                    "description": "facebook sdk 回傳的 token string",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "nickname": {
+                    "description": "暱稱(1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        },
+        "user.APIRegisterForFacebookOutput": {
             "type": "object",
             "properties": {
                 "code": {

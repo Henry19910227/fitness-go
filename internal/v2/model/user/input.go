@@ -18,6 +18,7 @@ type ListInput struct {
 	AccountOptional
 	PasswordOptional
 	NicknameOptional
+	EmailOptional
 	IsDeletedOptional
 	PagingInput
 	PreloadInput
@@ -62,6 +63,16 @@ type APIRegisterForEmailBody struct {
 	PasswordRequired
 	NicknameRequired
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
+}
+
+// APIRegisterForFacebookInput /v2/register/facebook [POST]
+type APIRegisterForFacebookInput struct {
+	Body APIRegisterForFacebookBody
+}
+type APIRegisterForFacebookBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // facebook sdk 回傳的 token string
+	NicknameRequired
+	EmailRequired
 }
 
 // APICreateOTPInput /v2/otp [POST]

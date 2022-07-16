@@ -4312,7 +4312,7 @@ definitions:
         example: message..
         type: string
     type: object
-  user.APICreateRegisterOTPBody:
+  user.APICreateOTPBody:
     properties:
       email:
         description: 信箱
@@ -4497,6 +4497,36 @@ definitions:
     - password
     type: object
   user.APIRegisterForEmailOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  user.APIRegisterForFacebookBody:
+    properties:
+      access_token:
+        description: facebook sdk 回傳的 token string
+        example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
+        type: string
+      email:
+        description: 信箱
+        example: test@gmail.com
+        type: string
+      nickname:
+        description: 暱稱(1~20字元)
+        example: henry
+        type: string
+    required:
+    - access_token
+    - email
+    - nickname
+    type: object
+  user.APIRegisterForFacebookOutput:
     properties:
       code:
         description: 狀態碼
@@ -11132,7 +11162,7 @@ paths:
         name: json_body
         required: true
         schema:
-          $ref: '#/definitions/user.APICreateRegisterOTPBody'
+          $ref: '#/definitions/user.APICreateOTPBody'
       produces:
       - application/json
       responses:
@@ -11225,6 +11255,32 @@ paths:
           schema:
             $ref: '#/definitions/base.Output'
       summary: 使用信箱註冊
+      tags:
+      - 註冊_v2
+  /v2/register/facebook:
+    post:
+      consumes:
+      - application/json
+      description: 使用Facebook註冊
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIRegisterForFacebookBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIRegisterForFacebookOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 使用Facebook註冊
       tags:
       - 註冊_v2
   /v2/register/nickname/validate:
