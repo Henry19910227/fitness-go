@@ -119,7 +119,7 @@ func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInp
 		return output
 	}
 	if !ok {
-		output.Set(code.BadRequest, errors.New("該帳號重複").Error())
+		output.Set(code.DataAlreadyExists, errors.New("該帳號重複").Error())
 		return output
 	}
 	//檢查暱稱是否重複
@@ -129,7 +129,7 @@ func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInp
 		return output
 	}
 	if !ok {
-		output.Set(code.BadRequest, errors.New("該暱稱重複").Error())
+		output.Set(code.DataAlreadyExists, errors.New("該暱稱重複").Error())
 		return output
 	}
 	//檢查Email是否重複
@@ -139,7 +139,7 @@ func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInp
 		return output
 	}
 	if !ok {
-		output.Set(code.BadRequest, errors.New("該信箱重複").Error())
+		output.Set(code.DataAlreadyExists, errors.New("該信箱重複").Error())
 		return output
 	}
 	//創建用戶
@@ -232,21 +232,42 @@ func (r *resolver) APIRegisterNicknameValidate(input *model.APIRegisterNicknameV
 		return output
 	}
 	if !ok {
-		output.Set(code.BadRequest, errors.New("該暱稱不可使用").Error())
+		output.Set(code.DataAlreadyExists, errors.New("該暱稱不可使用").Error())
 		return output
 	}
 	output.SetStatus(code.Success)
 	return output
 }
 
-func (r *resolver) APIRegisterAccountValidate(input *model.APIRegisterAccountValidateInput) (output model.APIRegisterAccountValidateOutput) {
+func (r *resolver) APIRegisterEmailAccountValidate(input *model.APIRegisterEmailAccountValidateInput) (output model.APIRegisterEmailAccountValidateOutput) {
 	ok, err := r.accountValidate(input.Body.Email)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	if !ok {
-		output.Set(code.BadRequest, errors.New("該帳號不可使用").Error())
+		output.Set(code.DataAlreadyExists, errors.New("該帳號不可使用").Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIRegisterFacebookAccountValidate(input *model.APIRegisterFacebookAccountValidateInput) (output model.APIRegisterFacebookAccountValidateOutput) {
+	//以access token 取得 fb uid
+	fbUid, err := r.fbLoginTool.GetFbUidByAccessToken(input.Body.AccessToken)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//檢查帳號是否重複
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(fbUid))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該帳號已註冊").Error())
 		return output
 	}
 	output.SetStatus(code.Success)

@@ -9687,46 +9687,6 @@ var doc = `{
                 }
             }
         },
-        "/v2/register/account/validate": {
-            "post": {
-                "description": "驗證帳戶是否可使用",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "註冊_v2"
-                ],
-                "summary": "驗證帳戶是否可使用",
-                "parameters": [
-                    {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user.APIRegisterAccountValidateBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/user.APIRegisterAccountValidateOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
         "/v2/register/email": {
             "post": {
                 "description": "使用信箱註冊",
@@ -9767,6 +9727,46 @@ var doc = `{
                 }
             }
         },
+        "/v2/register/email_account/validate": {
+            "post": {
+                "description": "驗證Email帳戶是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "驗證Email帳戶是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterEmailAccountValidateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterEmailAccountValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/facebook": {
             "post": {
                 "description": "使用Facebook註冊",
@@ -9796,6 +9796,46 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIRegisterForFacebookOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/register/facebook_account/validate": {
+            "post": {
+                "description": "驗證facebook帳戶是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "驗證facebook帳戶是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterFacebookAccountValidateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterFacebookAccountValidateOutput"
                         }
                     },
                     "400": {
@@ -15739,7 +15779,7 @@ var doc = `{
                 }
             }
         },
-        "user.APIRegisterAccountValidateBody": {
+        "user.APIRegisterEmailAccountValidateBody": {
             "type": "object",
             "required": [
                 "email"
@@ -15752,7 +15792,35 @@ var doc = `{
                 }
             }
         },
-        "user.APIRegisterAccountValidateOutput": {
+        "user.APIRegisterEmailAccountValidateOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterFacebookAccountValidateBody": {
+            "type": "object",
+            "required": [
+                "access_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "description": "facebook sdk 回傳的 token string",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                }
+            }
+        },
+        "user.APIRegisterFacebookAccountValidateOutput": {
             "type": "object",
             "properties": {
                 "code": {

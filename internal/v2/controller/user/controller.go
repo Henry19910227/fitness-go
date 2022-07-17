@@ -136,23 +136,43 @@ func (c *controller) CreateRegisterOTP(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// RegisterAccountValidate 驗證帳戶是否可使用
-// @Summary 驗證帳戶是否可使用
-// @Description 驗證帳戶是否可使用
+// RegisterEmailAccountValidate 驗證Email帳戶是否可使用
+// @Summary 驗證Email帳戶是否可使用
+// @Description 驗證Email帳戶是否可使用
 // @Tags 註冊_v2
 // @Accept json
 // @Produce json
-// @Param json_body body user.APIRegisterAccountValidateBody true "輸入參數"
-// @Success 200 {object} user.APIRegisterAccountValidateOutput "成功!"
+// @Param json_body body user.APIRegisterEmailAccountValidateBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterEmailAccountValidateOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/register/account/validate [POST]
-func (c *controller) RegisterAccountValidate(ctx *gin.Context) {
-	var input model.APIRegisterAccountValidateInput
+// @Router /v2/register/email_account/validate [POST]
+func (c *controller) RegisterEmailAccountValidate(ctx *gin.Context) {
+	var input model.APIRegisterEmailAccountValidateInput
 	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIRegisterAccountValidate(&input)
+	output := c.resolver.APIRegisterEmailAccountValidate(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// RegisterFacebookAccountValidate 驗證facebook帳戶是否可使用
+// @Summary 驗證facebook帳戶是否可使用
+// @Description 驗證facebook帳戶是否可使用
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterFacebookAccountValidateBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterFacebookAccountValidateOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/facebook_account/validate [POST]
+func (c *controller) RegisterFacebookAccountValidate(ctx *gin.Context) {
+	var input model.APIRegisterFacebookAccountValidateInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterFacebookAccountValidate(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

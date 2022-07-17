@@ -9,6 +9,7 @@ type Controller interface {
 	LoginForEmail(ctx *gin.Context)
 	Logout(ctx *gin.Context)
 	CreateRegisterOTP(ctx *gin.Context)
-	RegisterAccountValidate(ctx *gin.Context)
+	RegisterEmailAccountValidate(ctx *gin.Context)
+	RegisterFacebookAccountValidate(ctx *gin.Context)
 	RegisterNicknameValidate(ctx *gin.Context)
 }

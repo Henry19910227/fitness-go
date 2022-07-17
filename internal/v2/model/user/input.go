@@ -91,10 +91,18 @@ type APIRegisterNicknameValidateBody struct {
 	NicknameRequired
 }
 
-// APIRegisterAccountValidateInput /v2/register/account/validate [POST]
-type APIRegisterAccountValidateInput struct {
-	Body APIRegisterAccountValidateBody
+// APIRegisterEmailAccountValidateInput /v2/register/email_account/validate [POST]
+type APIRegisterEmailAccountValidateInput struct {
+	Body APIRegisterEmailAccountValidateBody
 }
-type APIRegisterAccountValidateBody struct {
+type APIRegisterEmailAccountValidateBody struct {
 	EmailRequired
+}
+
+// APIRegisterFacebookAccountValidateInput /v2/register/facebook_account/validate [POST]
+type APIRegisterFacebookAccountValidateInput struct {
+	Body APIRegisterFacebookAccountValidateBody
+}
+type APIRegisterFacebookAccountValidateBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // facebook sdk 回傳的 token string
 }
