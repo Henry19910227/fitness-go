@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/jwt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/otp"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
@@ -22,10 +23,11 @@ type resolver struct {
 	redisTool   redis.Tool
 	jwtTool     jwt.Tool
 	fbLoginTool fb_login.Tool
+	uploadTool  uploader.Tool
 }
 
-func New(userService userService.Service, otpTool otp.Tool, cryptoTool crypto.Tool, redisTool redis.Tool, jwtTool jwt.Tool, fbLoginTool fb_login.Tool) Resolver {
-	return &resolver{userService: userService, otpTool: otpTool, cryptoTool: cryptoTool, redisTool: redisTool, jwtTool: jwtTool, fbLoginTool: fbLoginTool}
+func New(userService userService.Service, otpTool otp.Tool, cryptoTool crypto.Tool, redisTool redis.Tool, jwtTool jwt.Tool, fbLoginTool fb_login.Tool, uploadTool uploader.Tool) Resolver {
+	return &resolver{userService: userService, otpTool: otpTool, cryptoTool: cryptoTool, redisTool: redisTool, jwtTool: jwtTool, fbLoginTool: fbLoginTool, uploadTool: uploadTool}
 }
 
 func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput) {
@@ -77,6 +79,24 @@ func (r *resolver) APIUpdateUserProfile(input *model.APIUpdateUserProfileInput) 
 		return output
 	}
 	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIUpdateUserAvatar(input *model.APIUpdateUserAvatarInput) (output model.APIUpdateUserAvatarOutput) {
+	fileNamed, err := r.uploadTool.Save(input.File, input.CoverNamed)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.ID)
+	table.Avatar = util.PointerString(fileNamed)
+	if err := r.userService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = util.PointerString(fileNamed)
 	return output
 }
 

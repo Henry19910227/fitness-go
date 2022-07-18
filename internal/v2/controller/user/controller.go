@@ -61,6 +61,31 @@ func (c *controller) UpdateUserProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// UpdateUserAvatar 更新用戶個人大頭照
+// @Summary 更新用戶個人大頭照
+// @Description 更新用戶個人大頭照 : {Base URL}/v2/resource/user/avatar/{Filename}
+// @Tags 用戶個人_v2
+// @Security fitness_token
+// @Accept mpfd
+// @Param avatar formData file true "用戶大頭照"
+// @Produce json
+// @Success 200 {object} user.APIUpdateUserAvatarOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/avatar [PATCH]
+func (c *controller) UpdateUserAvatar(ctx *gin.Context) {
+	file, fileHeader, err := ctx.Request.FormFile("avatar")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	input := model.APIUpdateUserAvatarInput{}
+	input.ID = ctx.MustGet("uid").(int64)
+	input.CoverNamed = fileHeader.Filename
+	input.File = file
+	output := c.resolver.APIUpdateUserAvatar(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetUserProfile 獲取用戶個人資訊
 // @Summary 獲取用戶個人資訊
 // @Description 用於個人設定頁面，獲取個人資訊與帳號資訊

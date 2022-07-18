@@ -4,6 +4,7 @@ import (
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"mime/multipart"
 )
 
 type GenerateInput struct {
@@ -53,6 +54,13 @@ type APIUpdateUserProfileBody struct {
 	BirthdayOptional
 	ExperienceOptional
 	TargetOptional
+}
+
+// APIUpdateUserAvatarInput /v2/user/avatar [PATCH]
+type APIUpdateUserAvatarInput struct {
+	IDRequired
+	CoverNamed string
+	File       multipart.File
 }
 
 // APIGetUserProfileInput /v2/user/profile [GET]

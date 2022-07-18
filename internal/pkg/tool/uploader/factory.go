@@ -10,6 +10,10 @@ func NewTrainerAvatarTool() Tool {
 	return New(setting.NewTrainerAvatar())
 }
 
+func NewUserAvatarTool() Tool {
+	return New(setting.NewUserAvatar())
+}
+
 func NewActionCoverTool() Tool {
 	return New(setting.NewActionCover())
 }

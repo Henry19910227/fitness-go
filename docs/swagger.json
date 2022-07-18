@@ -9949,6 +9949,49 @@
                 }
             }
         },
+        "/v2/user/avatar": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新用戶個人大頭照 : {Base URL}/v2/resource/user/avatar/{Filename}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人_v2"
+                ],
+                "summary": "更新用戶個人大頭照",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "用戶大頭照",
+                        "name": "avatar",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIUpdateUserAvatarOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/profile": {
             "get": {
                 "security": [
@@ -16376,6 +16419,25 @@
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIUpdateUserAvatarOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "string",
+                    "example": "123.jpg"
                 },
                 "msg": {
                     "description": "訊息",

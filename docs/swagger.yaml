@@ -4804,6 +4804,20 @@ definitions:
         example: message..
         type: string
     type: object
+  user.APIUpdateUserAvatarOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        example: 123.jpg
+        type: string
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   user.APIUpdateUserProfileBody:
     properties:
       birthday:
@@ -11663,6 +11677,33 @@ paths:
       summary: 驗證暱稱是否可使用
       tags:
       - 註冊_v2
+  /v2/user/avatar:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: '更新用戶個人大頭照 : {Base URL}/v2/resource/user/avatar/{Filename}'
+      parameters:
+      - description: 用戶大頭照
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIUpdateUserAvatarOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 更新用戶個人大頭照
+      tags:
+      - 用戶個人_v2
   /v2/user/profile:
     get:
       consumes:

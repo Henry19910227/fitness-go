@@ -26,6 +26,12 @@ type APIUpdateUserProfileOutput struct {
 	base.Output
 }
 
+// APIUpdateUserAvatarOutput /v2/user/avatar [PATCH]
+type APIUpdateUserAvatarOutput struct {
+	base.Output
+	Data *string `json:"data,omitempty" example:"123.jpg"`
+}
+
 // APIGetUserProfileOutput /v2/user/profile [GET]
 type APIGetUserProfileOutput struct {
 	base.Output

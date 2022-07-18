@@ -7,13 +7,16 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/controller/user"
 	tokenMiddleware "github.com/Henry19910227/fitness-go/internal/v2/middleware/token"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func SetRoute(v2 *gin.RouterGroup) {
 	controller := user.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
+	v2.StaticFS("/resource/user/avatar", http.Dir("./volumes/storage/user/avatar"))
 	v2.PATCH("/password", midd.Verify([]global.Role{global.UserRole}), controller.UpdatePassword)
 	v2.PATCH("/user/profile", midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserProfile)
+	v2.PATCH("/user/avatar", midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserAvatar)
 	v2.GET("/user/profile", midd.Verify([]global.Role{global.UserRole}), controller.GetUserProfile)
 	v2.POST("/login/email", controller.LoginForEmail)
 	v2.POST("/login/facebook", controller.LoginForFacebook)
