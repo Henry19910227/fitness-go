@@ -17,9 +17,6 @@ func New(repository user.Repository) Service {
 }
 
 func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {
-	if input.IsDeleted == nil {
-		input.IsDeleted = util.PointerInt(0)
-	}
 	output, err = s.repository.Find(input)
 	if err != nil {
 		return output, err
@@ -60,9 +57,6 @@ func (s *service) Create(item *model.Table) (id int64, err error) {
 }
 
 func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
-	if input.IsDeleted == nil {
-		input.IsDeleted = util.PointerInt(0)
-	}
 	output, amount, err := s.repository.List(input)
 	if err != nil {
 		return output, page, err

@@ -21,6 +21,11 @@ type APIUpdatePasswordOutput struct {
 	base.Output
 }
 
+// APIUpdateUserProfileOutput /v2/user/profile [PATCH]
+type APIUpdateUserProfileOutput struct {
+	base.Output
+}
+
 // APIGetUserProfileOutput /v2/user/profile [GET]
 type APIGetUserProfileOutput struct {
 	base.Output

@@ -39,6 +39,28 @@ func (c *controller) UpdatePassword(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// UpdateUserProfile 修改用戶個人資訊
+// @Summary 修改用戶個人資訊
+// @Description 修改用戶個人資訊
+// @Tags 用戶個人_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body user.APIUpdateUserProfileBody true "輸入參數"
+// @Success 200 {object} user.APIUpdateUserProfileOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/profile [PATCH]
+func (c *controller) UpdateUserProfile(ctx *gin.Context) {
+	var input model.APIUpdateUserProfileInput
+	input.ID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateUserProfile(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetUserProfile 獲取用戶個人資訊
 // @Summary 獲取用戶個人資訊
 // @Description 用於個人設定頁面，獲取個人資訊與帳號資訊

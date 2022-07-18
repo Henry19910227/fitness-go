@@ -4804,6 +4804,48 @@ definitions:
         example: message..
         type: string
     type: object
+  user.APIUpdateUserProfileBody:
+    properties:
+      birthday:
+        description: 生日
+        example: "1991-02-27"
+        type: string
+      experience:
+        description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
+        example: 2
+        type: integer
+      height:
+        description: 身高
+        example: 176.5
+        type: number
+      nickname:
+        description: 暱稱
+        example: Henry
+        type: string
+      sex:
+        description: 性別 (m:男/f:女)
+        example: m
+        type: string
+      target:
+        description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
+        example: 3
+        type: integer
+      weight:
+        description: 體重
+        example: 70.5
+        type: number
+    type: object
+  user.APIUpdateUserProfileOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   validator.CMSLoginByEmailBody:
     properties:
       email:
@@ -11640,6 +11682,33 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取用戶個人資訊
+      tags:
+      - 用戶個人_v2
+    patch:
+      consumes:
+      - application/json
+      description: 修改用戶個人資訊
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIUpdateUserProfileBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIUpdateUserProfileOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 修改用戶個人資訊
       tags:
       - 用戶個人_v2
 securityDefinitions:

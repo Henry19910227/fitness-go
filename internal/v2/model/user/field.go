@@ -75,6 +75,7 @@ type Table struct {
 	WeightField
 	ExperienceField
 	TargetField
+	IsDeletedField
 	CreateAtField
 	UpdateAtField
 }

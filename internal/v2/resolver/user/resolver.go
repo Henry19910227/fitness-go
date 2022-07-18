@@ -32,6 +32,7 @@ func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (outpu
 	//檢測舊密碼
 	findInput := model.FindInput{}
 	findInput.ID = util.PointerInt64(input.ID)
+	findInput.IsDeleted = util.PointerInt(0)
 	data, err := r.userService.Find(&findInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -53,8 +54,35 @@ func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (outpu
 	return output
 }
 
+func (r *resolver) APIUpdateUserProfile(input *model.APIUpdateUserProfileInput) (output model.APIUpdateUserProfileOutput) {
+	//檢查暱稱是否重複
+	ok, err := r.nicknameValidate(util.OnNilJustReturnString(input.Body.Nickname, ""))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.BadRequest, errors.New("該暱稱重複").Error())
+		return output
+	}
+	//parser input
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.ID)
+	if err := util.Parser(input.Body, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := r.userService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
 func (r *resolver) APIGetUserProfile(input *model.APIGetUserProfileInput) (output model.APIGetUserProfileOutput) {
 	findInput := model.FindInput{}
+	findInput.IsDeleted = util.PointerInt(0)
 	if err := util.Parser(input, &findInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -183,6 +211,7 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 	listInput := model.ListInput{}
 	listInput.Account = util.PointerString(input.Body.Email)
 	listInput.Password = util.PointerString(input.Body.Password)
+	listInput.IsDeleted = util.PointerInt(0)
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "UserSubscribeInfo"},
@@ -229,6 +258,7 @@ func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (o
 	//parser input
 	listInput := model.ListInput{}
 	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
+	listInput.IsDeleted = util.PointerInt(0)
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "UserSubscribeInfo"},
@@ -359,6 +389,7 @@ func (r *resolver) nicknameValidate(nickname string) (bool, error) {
 	//檢查帳號是否重複
 	listInput := model.ListInput{}
 	listInput.Nickname = util.PointerString(nickname)
+	listInput.IsDeleted = util.PointerInt(0)
 	outputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		return false, err
@@ -370,6 +401,7 @@ func (r *resolver) emailValidate(email string) (bool, error) {
 	//檢查帳號是否重複
 	listInput := model.ListInput{}
 	listInput.Email = util.PointerString(email)
+	listInput.IsDeleted = util.PointerInt(0)
 	outputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		return false, err
@@ -381,6 +413,7 @@ func (r *resolver) accountValidate(account string) (bool, error) {
 	//檢查帳號是否重複
 	listInput := model.ListInput{}
 	listInput.Account = util.PointerString(account)
+	listInput.IsDeleted = util.PointerInt(0)
 	outputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		return false, err

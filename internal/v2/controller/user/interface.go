@@ -4,6 +4,7 @@ import "github.com/gin-gonic/gin"
 
 type Controller interface {
 	UpdatePassword(ctx *gin.Context)
+	UpdateUserProfile(ctx *gin.Context)
 	GetUserProfile(ctx *gin.Context)
 	RegisterForEmail(ctx *gin.Context)
 	RegisterForFacebook(ctx *gin.Context)

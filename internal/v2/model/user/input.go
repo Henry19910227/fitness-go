@@ -40,6 +40,21 @@ type APIUpdatePasswordBody struct {
 	PasswordRequired
 }
 
+// APIUpdateUserProfileInput /v2/user/profile [PATCH]
+type APIUpdateUserProfileInput struct {
+	IDRequired
+	Body APIUpdateUserProfileBody
+}
+type APIUpdateUserProfileBody struct {
+	NicknameOptional
+	SexOptional
+	HeightOptional
+	WeightOptional
+	BirthdayOptional
+	ExperienceOptional
+	TargetOptional
+}
+
 // APIGetUserProfileInput /v2/user/profile [GET]
 type APIGetUserProfileInput struct {
 	IDRequired
