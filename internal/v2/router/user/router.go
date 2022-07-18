@@ -13,6 +13,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := user.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.PATCH("/password", midd.Verify([]global.Role{global.UserRole}), controller.UpdatePassword)
+	v2.GET("/user/profile", midd.Verify([]global.Role{global.UserRole}), controller.GetUserProfile)
 	v2.POST("/login/email", controller.LoginForEmail)
 	v2.POST("/login/facebook", controller.LoginForFacebook)
 	v2.POST("/logout", midd.Verify([]global.Role{global.UserRole}), controller.Logout)

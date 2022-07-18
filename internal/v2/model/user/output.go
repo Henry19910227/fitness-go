@@ -21,6 +21,31 @@ type APIUpdatePasswordOutput struct {
 	base.Output
 }
 
+// APIGetUserProfileOutput /v2/user/profile [GET]
+type APIGetUserProfileOutput struct {
+	base.Output
+	Data *APIGetUserProfileData `json:"data,omitempty"`
+}
+type APIGetUserProfileData struct {
+	IDField
+	AccountTypeField
+	AccountField
+	DeviceTokenField
+	UserStatusField
+	UserTypeField
+	EmailField
+	NicknameField
+	AvatarField
+	SexField
+	BirthdayField
+	HeightField
+	WeightField
+	ExperienceField
+	TargetField
+	CreateAtField
+	UpdateAtField
+}
+
 // APIRegisterForEmailOutput /v2/register/email [POST]
 type APIRegisterForEmailOutput struct {
 	base.Output
@@ -35,7 +60,7 @@ type APIRegisterForFacebookOutput struct {
 type APILoginForEmailOutput struct {
 	base.Output
 	Data  *APILoginForEmailData `json:"data,omitempty"`
-	Token string                `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
+	Token *string               `json:"token,omitempty" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
 
 }
 type APILoginForEmailData struct {
@@ -64,7 +89,7 @@ type APILoginForEmailData struct {
 type APILoginForFacebookOutput struct {
 	base.Output
 	Data  *APILoginForFacebookData `json:"data,omitempty"`
-	Token string                   `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
+	Token *string                  `json:"token,omitempty" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
 
 }
 type APILoginForFacebookData struct {

@@ -53,6 +53,27 @@ func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (outpu
 	return output
 }
 
+func (r *resolver) APIGetUserProfile(input *model.APIGetUserProfileInput) (output model.APIGetUserProfileOutput) {
+	findInput := model.FindInput{}
+	if err := util.Parser(input, &findInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data, err := r.userService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	outputData := model.APIGetUserProfileData{}
+	if err := util.Parser(data, &outputData); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = &outputData
+	return output
+}
+
 func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (output model.APIRegisterForEmailOutput) {
 	//檢查驗證碼
 	if !r.otpTool.Validate(input.Body.OTPCode, input.Body.Email) {
@@ -166,10 +187,6 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 		{Field: "Trainer"},
 		{Field: "UserSubscribeInfo"},
 	}
-	if err := util.Parser(input.Body, &listInput); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
 	datas, _, err := r.userService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -198,7 +215,7 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 	}
 	output.SetStatus(code.Success)
 	output.Data = &data
-	output.Token = token
+	output.Token = util.PointerString(token)
 	return output
 }
 
@@ -248,7 +265,7 @@ func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (o
 	}
 	output.SetStatus(code.Success)
 	output.Data = &data
-	output.Token = token
+	output.Token = util.PointerString(token)
 	return output
 }
 

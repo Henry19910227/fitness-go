@@ -9679,7 +9679,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "用戶_v2"
+                    "用戶個人_v2"
                 ],
                 "summary": "修改密碼",
                 "parameters": [
@@ -9938,6 +9938,40 @@
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIRegisterNicknameValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/user/profile": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "用於個人設定頁面，獲取個人資訊與帳號資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人_v2"
+                ],
+                "summary": "獲取用戶個人資訊",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIGetUserProfileOutput"
                         }
                     },
                     "400": {
@@ -15686,6 +15720,114 @@
                 },
                 "data": {
                     "$ref": "#/definitions/user.APICreateRegisterOTPData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIGetUserProfileData": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帳號",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "account_type": {
+                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "avatar": {
+                    "description": "用戶大頭貼",
+                    "type": "string",
+                    "example": "123.png"
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "device_token": {
+                    "description": "推播token",
+                    "type": "string",
+                    "example": "d2we12ew3d12we1"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 165.5
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_type": {
+                    "description": "用戶類型 (1:一般用戶/2:訂閱用戶)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 50.5
+                }
+            }
+        },
+        "user.APIGetUserProfileOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/user.APIGetUserProfileData"
                 },
                 "msg": {
                     "description": "訊息",

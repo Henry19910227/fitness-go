@@ -20,7 +20,7 @@ func New(resolver user.Resolver) Controller {
 // UpdatePassword 修改密碼
 // @Summary 修改密碼
 // @Description 修改密碼
-// @Tags 用戶_v2
+// @Tags 用戶個人_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -36,6 +36,23 @@ func (c *controller) UpdatePassword(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIUpdatePassword(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetUserProfile 獲取用戶個人資訊
+// @Summary 獲取用戶個人資訊
+// @Description 用於個人設定頁面，獲取個人資訊與帳號資訊
+// @Tags 用戶個人_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} user.APIGetUserProfileOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/profile [GET]
+func (c *controller) GetUserProfile(ctx *gin.Context) {
+	var input model.APIGetUserProfileInput
+	input.ID = ctx.MustGet("uid").(int64)
+	output := c.resolver.APIGetUserProfile(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

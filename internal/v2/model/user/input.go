@@ -40,6 +40,11 @@ type APIUpdatePasswordBody struct {
 	PasswordRequired
 }
 
+// APIGetUserProfileInput /v2/user/profile [GET]
+type APIGetUserProfileInput struct {
+	IDRequired
+}
+
 // APILoginForEmailInput /v2/login/email [POST]
 type APILoginForEmailInput struct {
 	Body APILoginForEmailBody
