@@ -310,7 +310,7 @@ func (t *Trainer) UpdateTrainer(c *gin.Context) {
 }
 
 // GetTrainer 取得我的教練資訊
-// @Summary 取得我的教練資訊
+// @Summary 取得我的教練資訊 (/v2/trainer/profile [GET] 替代)
 // @Description 取得我的教練資訊
 // @Tags Trainer_v1
 // @Accept json

@@ -20,7 +20,7 @@ func NewRegister(baseGroup *gin.RouterGroup, regService service.Register) {
 }
 
 // SendEmailOTP 發送 Email OTP
-// @Summary 發送 Email OTP
+// @Summary 發送 Email OTP (/v2/otp [POST] 替代)
 // @Description 發送 Email OTP
 // @Tags Register_v1
 // @Accept json
@@ -44,7 +44,7 @@ func (r *Register) SendEmailOTP(c *gin.Context) {
 }
 
 // RegisterForEmail 使用信箱註冊
-// @Summary 使用信箱註冊
+// @Summary 使用信箱註冊 (/v2/otp [POST] 替代)
 // @Description 使用信箱註冊
 // @Tags Register_v1
 // @Accept json
@@ -73,7 +73,7 @@ func (r *Register) RegisterForEmail(c *gin.Context) {
 }
 
 // ValidateNicknameDuplicate 驗證暱稱是否可使用
-// @Summary 驗證暱稱是否可使用
+// @Summary 驗證暱稱是否可使用 (/v2/register/nickname/validate [POST] 替代)
 // @Description 驗證暱稱是否可使用
 // @Tags Register_v1
 // @Accept json
@@ -98,7 +98,7 @@ func (r *Register) ValidateNicknameDuplicate(c *gin.Context) {
 }
 
 // ValidateEmailDuplicate 驗證信箱是否可使用
-// @Summary 驗證信箱是否可使用
+// @Summary 驗證信箱是否可使用 (/v2/register/email/validate [POST] 和 /v2/register/email_account/validate [POST] 替代)
 // @Description 驗證信箱是否可使用
 // @Tags Register_v1
 // @Accept json

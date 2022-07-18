@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 	trainerService "github.com/Henry19910227/fitness-go/internal/v2/service/trainer"
 )
@@ -16,6 +17,25 @@ type resolver struct {
 
 func New(trainerService trainerService.Service, uploadTool uploader.Tool) Resolver {
 	return &resolver{trainerService: trainerService, uploadTool: uploadTool}
+}
+
+func (r *resolver) APIGetTrainerProfile(input *model.APIGetTrainerProfileInput) (output model.APIGetTrainerProfileOutput) {
+	findInput := model.FindInput{}
+	findInput.UserID = util.PointerInt64(input.UserID)
+	findInput.Preloads = []*preload.Preload{{Field: "TrainerStatistic"}, {Field: "Certificates"}, {Field: "TrainerAlbums"}}
+	outputData, err := r.trainerService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIGetTrainerProfileData{}
+	if err := util.Parser(outputData, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
 }
 
 func (r *resolver) APIGetFavoriteTrainers(input *model.APIGetFavoriteTrainersInput) (output model.APIGetFavoriteTrainersOutput) {

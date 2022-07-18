@@ -4301,6 +4301,143 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  trainer.APIGetTrainerProfileData:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: abc.png
+        type: string
+      certificates:
+        items:
+          properties:
+            id:
+              description: id
+              example: 1
+              type: integer
+            image:
+              description: 圖片
+              example: 1234.jpg
+              type: string
+            name:
+              description: 證照名稱
+              example: A級教練證照
+              type: string
+          type: object
+        type: array
+      create_at:
+        description: 創建時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 年資
+        example: 5
+        type: integer
+      facebook_url:
+        description: 臉書連結
+        example: www.facebook.com
+        type: string
+      instagram_url:
+        description: ig連結
+        example: www.ig.com
+        type: string
+      intro:
+        description: 個人介紹
+        example: Henry教練
+        type: string
+      motto:
+        description: 座右銘
+        example: 勞其筋骨
+        type: string
+      name:
+        description: 教練本名
+        example: 亨利
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      phone:
+        description: 電話
+        example: "0955123321"
+        type: string
+      skill:
+        description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        example: 1,4
+        type: string
+      trainer_album_photos:
+        items:
+          properties:
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: 相片id
+              example: 1
+              type: integer
+            photo:
+              description: 照片
+              example: 123.jpg
+              type: string
+          type: object
+        type: array
+      trainer_level:
+        description: 教練評鑑等級
+        example: 1
+        type: integer
+      trainer_statistic:
+        properties:
+          course_count:
+            description: 課表總數
+            example: 15
+            type: integer
+          review_score:
+            description: 課表總評分
+            example: 4.5
+            type: number
+          student_count:
+            description: 學生總數
+            example: 10
+            type: integer
+        type: object
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 10001
+        type: integer
+      youtube_url:
+        description: youtube連結
+        example: www.youtube.com
+        type: string
+    type: object
+  trainer.APIGetTrainerProfileOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/trainer.APIGetTrainerProfileData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   trainer.APIUpdateCMSTrainerAvatarOutput:
     properties:
       code:
@@ -7842,37 +7979,6 @@ paths:
       summary: 取得當月收益分析
       tags:
       - Statistic_v1
-  /v1/login/admin/email:
-    post:
-      consumes:
-      - application/json
-      description: 管理者使用信箱登入
-      parameters:
-      - description: 輸入參數
-        in: body
-        name: json_body
-        required: true
-        schema:
-          $ref: '#/definitions/validator.LoginByEmailBody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 登入成功
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.SuccessLoginResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.Admin'
-              type: object
-        "400":
-          description: 登入失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      summary: 管理者使用信箱登入
-      tags:
-      - Login_v1
   /v1/login/user/email:
     post:
       consumes:
@@ -7901,28 +8007,7 @@ paths:
           description: 登入失敗
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 用戶使用信箱登入
-      tags:
-      - Login_v1
-  /v1/logout/admin:
-    post:
-      consumes:
-      - application/json
-      description: 管理員登出
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 登出成功
-          schema:
-            $ref: '#/definitions/model.SuccessResult'
-        "400":
-          description: 登出失敗
-          schema:
-            $ref: '#/definitions/model.ErrorResult'
-      security:
-      - fitness_token: []
-      summary: 管理員登出
+      summary: 用戶使用信箱登入 (/v2/login/email [POST] 替代)
       tags:
       - Login_v1
   /v1/logout/user:
@@ -7943,7 +8028,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 用戶登出
+      summary: 用戶登出 (/v2/logout [POST] 替代)
       tags:
       - Login_v1
   /v1/meal/{meal_id}:
@@ -8495,7 +8580,7 @@ paths:
           description: 註冊失敗
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 使用信箱註冊
+      summary: 使用信箱註冊 (/v2/otp [POST] 替代)
       tags:
       - Register_v1
   /v1/register/email/otp:
@@ -8526,7 +8611,7 @@ paths:
           description: 發送失敗
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 發送 Email OTP
+      summary: 發送 Email OTP (/v2/otp [POST] 替代)
       tags:
       - Register_v1
   /v1/register/email/validate:
@@ -8552,7 +8637,8 @@ paths:
           description: 該資料已存在
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 驗證信箱是否可使用
+      summary: 驗證信箱是否可使用 (/v2/register/email/validate [POST] 和 /v2/register/email_account/validate
+        [POST] 替代)
       tags:
       - Register_v1
   /v1/register/nickname/validate:
@@ -8578,7 +8664,7 @@ paths:
           description: 該資料已存在
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 驗證暱稱是否可使用
+      summary: 驗證暱稱是否可使用 (/v2/register/nickname/validate [POST] 替代)
       tags:
       - Register_v1
   /v1/review/{review_id}:
@@ -8777,7 +8863,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 取得我的教練資訊
+      summary: 取得我的教練資訊 (/v2/trainer/profile [GET] 替代)
       tags:
       - Trainer_v1
     patch:
@@ -9186,7 +9272,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 上傳我的大頭照
+      summary: 上傳我的大頭照 (/v2/user/avatar [PATCH] 替代)
       tags:
       - User_v1
   /v1/user/info:
@@ -9212,7 +9298,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取個人資訊
+      summary: 獲取個人資訊 (/v2/user/profile [GET] 替代)
       tags:
       - User_v1
     patch:
@@ -9244,7 +9330,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 更新個人資訊
+      summary: 更新個人資訊 (/v2/user/profile [PATCH] 替代)
       tags:
       - User_v1
   /v1/verify_apple_receipt:
@@ -11677,6 +11763,27 @@ paths:
       summary: 驗證暱稱是否可使用
       tags:
       - 註冊_v2
+  /v2/trainer/profile:
+    get:
+      consumes:
+      - application/json
+      description: 獲取教練個人資訊
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/trainer.APIGetTrainerProfileOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取教練個人資訊
+      tags:
+      - 教練個人_v2
   /v2/user/avatar:
     patch:
       consumes:

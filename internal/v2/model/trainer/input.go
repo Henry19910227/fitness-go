@@ -13,6 +13,7 @@ type OrderByInput = orderBy.Input
 
 type FindInput struct {
 	UserIDOptional
+	PreloadInput
 }
 
 type FavoriteListInput struct {
@@ -22,6 +23,12 @@ type FavoriteListInput struct {
 	OrderByInput
 }
 
+// APIGetTrainerProfileInput /v2/trainer/profile [PATCH]
+type APIGetTrainerProfileInput struct {
+	UserIDRequired
+}
+
+// APIUpdateCMSTrainerAvatarInput /v2/cms/trainer/avatar [PATCH]
 type APIUpdateCMSTrainerAvatarInput struct {
 	UserIDRequired
 	CoverNamed string

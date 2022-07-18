@@ -24,7 +24,7 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 }
 
 // UpdateUserInfo 更新個人資訊
-// @Summary 更新個人資訊
+// @Summary 更新個人資訊 (/v2/user/profile [PATCH] 替代)
 // @Description 更新個人資訊
 // @Tags User_v1
 // @Accept json
@@ -34,7 +34,7 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 // @Success 200 {object} model.SuccessResult{data=dto.User} "成功!"
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /v1/user/info [PATCH]
-func (u *user) UpdateUserInfo(c *gin.Context)  {
+func (u *user) UpdateUserInfo(c *gin.Context) {
 	var header validator.TokenHeader
 	var body validator.UpdateUserInfoBody
 	if err := c.ShouldBindHeader(&header); err != nil {
@@ -47,13 +47,13 @@ func (u *user) UpdateUserInfo(c *gin.Context)  {
 	}
 	//更新個人資訊
 	user, err := u.userService.UpdateUserByToken(c, header.Token, &dto.UpdateUserParam{
-		Nickname: body.Nickname,
-		Sex: body.Sex,
-		Birthday: body.Birthday,
-		Height: body.Height,
-		Weight: body.Weight,
+		Nickname:   body.Nickname,
+		Sex:        body.Sex,
+		Birthday:   body.Birthday,
+		Height:     body.Height,
+		Weight:     body.Weight,
 		Experience: body.Experience,
-		Target: body.Target,
+		Target:     body.Target,
 	})
 	if err != nil {
 		u.JSONErrorResponse(c, err)
@@ -63,7 +63,7 @@ func (u *user) UpdateUserInfo(c *gin.Context)  {
 }
 
 // GetUserInfo 獲取個人資訊
-// @Summary 獲取個人資訊
+// @Summary 獲取個人資訊 (/v2/user/profile [GET] 替代)
 // @Description 獲取個人資訊
 // @Tags User_v1
 // @Accept json
@@ -87,7 +87,7 @@ func (u *user) GetUserInfo(c *gin.Context) {
 }
 
 // UploadMyUserAvatar 上傳我的大頭照
-// @Summary 上傳我的大頭照
+// @Summary 上傳我的大頭照 (/v2/user/avatar [PATCH] 替代)
 // @Description 查看我的大頭照 : https://www.fitopia-hub.tk/api/v1/resource/user/avatar/{圖片名}
 // @Tags User_v1
 // @Security fitness_token

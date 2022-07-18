@@ -17,6 +17,23 @@ func New(resolver trainer.Resolver) Controller {
 	return &controller{resolver: resolver}
 }
 
+// GetTrainerProfile 獲取教練個人資訊
+// @Summary 獲取教練個人資訊
+// @Description 獲取教練個人資訊
+// @Tags 教練個人_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} trainer.APIGetTrainerProfileOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/profile [GET]
+func (c *controller) GetTrainerProfile(ctx *gin.Context) {
+	var input model.APIGetTrainerProfileInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	output := c.resolver.APIGetTrainerProfile(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetFavoriteTrainers 獲取教練收藏列表
 // @Summary 獲取教練收藏列表
 // @Description 獲取教練收藏列表

@@ -3794,58 +3794,6 @@
                 }
             }
         },
-        "/v1/login/admin/email": {
-            "post": {
-                "description": "管理者使用信箱登入",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Login_v1"
-                ],
-                "summary": "管理者使用信箱登入",
-                "parameters": [
-                    {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validator.LoginByEmailBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "登入成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.SuccessLoginResult"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.Admin"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "登入失敗",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/login/user/email": {
             "post": {
                 "description": "用戶使用信箱登入",
@@ -3858,7 +3806,7 @@
                 "tags": [
                     "Login_v1"
                 ],
-                "summary": "用戶使用信箱登入",
+                "summary": "用戶使用信箱登入 (/v2/login/email [POST] 替代)",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -3898,40 +3846,6 @@
                 }
             }
         },
-        "/v1/logout/admin": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "管理員登出",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Login_v1"
-                ],
-                "summary": "管理員登出",
-                "responses": {
-                    "200": {
-                        "description": "登出成功",
-                        "schema": {
-                            "$ref": "#/definitions/model.SuccessResult"
-                        }
-                    },
-                    "400": {
-                        "description": "登出失敗",
-                        "schema": {
-                            "$ref": "#/definitions/model.ErrorResult"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/logout/user": {
             "post": {
                 "security": [
@@ -3949,7 +3863,7 @@
                 "tags": [
                     "Login_v1"
                 ],
-                "summary": "用戶登出",
+                "summary": "用戶登出 (/v2/logout [POST] 替代)",
                 "responses": {
                     "200": {
                         "description": "登出成功",
@@ -4837,7 +4751,7 @@
                 "tags": [
                     "Register_v1"
                 ],
-                "summary": "使用信箱註冊",
+                "summary": "使用信箱註冊 (/v2/otp [POST] 替代)",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -4889,7 +4803,7 @@
                 "tags": [
                     "Register_v1"
                 ],
-                "summary": "發送 Email OTP",
+                "summary": "發送 Email OTP (/v2/otp [POST] 替代)",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -4941,7 +4855,7 @@
                 "tags": [
                     "Register_v1"
                 ],
-                "summary": "驗證信箱是否可使用",
+                "summary": "驗證信箱是否可使用 (/v2/register/email/validate [POST] 和 /v2/register/email_account/validate [POST] 替代)",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -4981,7 +4895,7 @@
                 "tags": [
                     "Register_v1"
                 ],
-                "summary": "驗證暱稱是否可使用",
+                "summary": "驗證暱稱是否可使用 (/v2/register/nickname/validate [POST] 替代)",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -5323,7 +5237,7 @@
                 "tags": [
                     "Trainer_v1"
                 ],
-                "summary": "取得我的教練資訊",
+                "summary": "取得我的教練資訊 (/v2/trainer/profile [GET] 替代)",
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -5945,7 +5859,7 @@
                 "tags": [
                     "User_v1"
                 ],
-                "summary": "上傳我的大頭照",
+                "summary": "上傳我的大頭照 (/v2/user/avatar [PATCH] 替代)",
                 "parameters": [
                     {
                         "type": "file",
@@ -6000,7 +5914,7 @@
                 "tags": [
                     "User_v1"
                 ],
-                "summary": "獲取個人資訊",
+                "summary": "獲取個人資訊 (/v2/user/profile [GET] 替代)",
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -6044,7 +5958,7 @@
                 "tags": [
                     "User_v1"
                 ],
-                "summary": "更新個人資訊",
+                "summary": "更新個人資訊 (/v2/user/profile [PATCH] 替代)",
                 "parameters": [
                     {
                         "description": "更新欄位",
@@ -9938,6 +9852,40 @@
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIRegisterNicknameValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/trainer/profile": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練個人資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練個人_v2"
+                ],
+                "summary": "獲取教練個人資訊",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/trainer.APIGetTrainerProfileOutput"
                         }
                     },
                     "400": {
@@ -15751,6 +15699,185 @@
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "trainer.APIGetTrainerProfileData": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "certificates": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "description": "id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "image": {
+                                "description": "圖片",
+                                "type": "string",
+                                "example": "1234.jpg"
+                            },
+                            "name": {
+                                "description": "證照名稱",
+                                "type": "string",
+                                "example": "A級教練證照"
+                            }
+                        }
+                    }
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "年資",
+                    "type": "integer",
+                    "example": 5
+                },
+                "facebook_url": {
+                    "description": "臉書連結",
+                    "type": "string",
+                    "example": "www.facebook.com"
+                },
+                "instagram_url": {
+                    "description": "ig連結",
+                    "type": "string",
+                    "example": "www.ig.com"
+                },
+                "intro": {
+                    "description": "個人介紹",
+                    "type": "string",
+                    "example": "Henry教練"
+                },
+                "motto": {
+                    "description": "座右銘",
+                    "type": "string",
+                    "example": "勞其筋骨"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "亨利"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0955123321"
+                },
+                "skill": {
+                    "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                    "type": "string",
+                    "example": "1,4"
+                },
+                "trainer_album_photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "相片id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "photo": {
+                                "description": "照片",
+                                "type": "string",
+                                "example": "123.jpg"
+                            }
+                        }
+                    }
+                },
+                "trainer_level": {
+                    "description": "教練評鑑等級",
+                    "type": "integer",
+                    "example": 1
+                },
+                "trainer_statistic": {
+                    "type": "object",
+                    "properties": {
+                        "course_count": {
+                            "description": "課表總數",
+                            "type": "integer",
+                            "example": 15
+                        },
+                        "review_score": {
+                            "description": "課表總評分",
+                            "type": "number",
+                            "example": 4.5
+                        },
+                        "student_count": {
+                            "description": "學生總數",
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "youtube_url": {
+                    "description": "youtube連結",
+                    "type": "string",
+                    "example": "www.youtube.com"
+                }
+            }
+        },
+        "trainer.APIGetTrainerProfileOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/trainer.APIGetTrainerProfileData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },
