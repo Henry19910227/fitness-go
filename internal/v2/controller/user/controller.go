@@ -195,3 +195,23 @@ func (c *controller) RegisterNicknameValidate(ctx *gin.Context) {
 	output := c.resolver.APIRegisterNicknameValidate(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// RegisterEmailValidate 驗證Email是否可使用
+// @Summary 驗證Email是否可使用
+// @Description 驗證Email是否可使用
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterEmailValidateBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterEmailValidateOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/email/validate [POST]
+func (c *controller) RegisterEmailValidate(ctx *gin.Context) {
+	var input model.APIRegisterEmailValidateInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterEmailValidate(&input)
+	ctx.JSON(http.StatusOK, output)
+}

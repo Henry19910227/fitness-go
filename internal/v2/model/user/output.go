@@ -79,6 +79,11 @@ type APIRegisterNicknameValidateOutput struct {
 	base.Output
 }
 
+// APIRegisterEmailValidateOutput /v2/register/email/validate [POST]
+type APIRegisterEmailValidateOutput struct {
+	base.Output
+}
+
 // APIRegisterEmailAccountValidateOutput /v2/register/email_account/validate [POST]
 type APIRegisterEmailAccountValidateOutput struct {
 	base.Output

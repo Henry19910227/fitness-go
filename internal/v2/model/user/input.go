@@ -91,6 +91,14 @@ type APIRegisterNicknameValidateBody struct {
 	NicknameRequired
 }
 
+// APIRegisterEmailValidateInput /v2/register/email/validate [POST]
+type APIRegisterEmailValidateInput struct {
+	Body APIRegisterEmailValidateBody
+}
+type APIRegisterEmailValidateBody struct {
+	EmailRequired
+}
+
 // APIRegisterEmailAccountValidateInput /v2/register/email_account/validate [POST]
 type APIRegisterEmailAccountValidateInput struct {
 	Body APIRegisterEmailAccountValidateBody

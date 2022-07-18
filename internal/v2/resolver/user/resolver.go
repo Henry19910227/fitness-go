@@ -239,6 +239,20 @@ func (r *resolver) APIRegisterNicknameValidate(input *model.APIRegisterNicknameV
 	return output
 }
 
+func (r *resolver) APIRegisterEmailValidate(input *model.APIRegisterEmailValidateInput) (output model.APIRegisterEmailValidateOutput) {
+	ok, err := r.emailValidate(input.Body.Email)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該信箱不可使用").Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
 func (r *resolver) APIRegisterEmailAccountValidate(input *model.APIRegisterEmailAccountValidateInput) (output model.APIRegisterEmailAccountValidateOutput) {
 	ok, err := r.accountValidate(input.Body.Email)
 	if err != nil {
