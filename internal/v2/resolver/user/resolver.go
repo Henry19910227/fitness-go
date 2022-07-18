@@ -202,6 +202,56 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 	return output
 }
 
+func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (output model.APILoginForFacebookOutput) {
+	//以access token 取得 fb uid
+	fbUid, err := r.fbLoginTool.GetFbUidByAccessToken(input.Body.AccessToken)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//parser input
+	listInput := model.ListInput{}
+	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "UserSubscribeInfo"},
+	}
+	if err := util.Parser(input.Body, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	datas, _, err := r.userService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(datas) == 0 {
+		output.Set(code.BadRequest, errors.New("帳號或密碼錯誤").Error())
+		return output
+	}
+	data := model.APILoginForFacebookData{}
+	if err := util.Parser(datas[0], &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//產生token
+	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(data.ID, 0))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//設置token過期時間
+	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(data.ID, 0)))
+	if err := r.redisTool.SetEX(key, token, r.jwtTool.GetExpire()); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = &data
+	output.Token = token
+	return output
+}
+
 func (r *resolver) APILogout(input *model.APILogoutInput) (output model.APILogoutOutput) {
 	if err := r.redisTool.Del(jwt.UserTokenPrefix + "." + strconv.Itoa(int(input.ID))); err != nil {
 		output.Set(code.BadRequest, err.Error())

@@ -60,6 +60,35 @@ type APILoginForEmailData struct {
 	} `json:"user_subscribe_info,omitempty"`
 }
 
+// APILoginForFacebookOutput /v2/login/facebook [POST]
+type APILoginForFacebookOutput struct {
+	base.Output
+	Data  *APILoginForFacebookData `json:"data,omitempty"`
+	Token string                   `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
+
+}
+type APILoginForFacebookData struct {
+	IDField
+	NicknameField
+	AvatarField
+	CreateAtField
+	UpdateAtField
+	Trainer *struct {
+		trainer.NicknameField
+		trainer.AvatarField
+		trainer.TrainerStatusField
+		trainer.TrainerLevelField
+		trainer.CreateAtField
+		trainer.UpdateAtField
+	} `json:"trainer,omitempty"`
+	UserSubscribeInfo *struct {
+		user_subscribe_info.StatusField
+		user_subscribe_info.StartDateField
+		user_subscribe_info.EndDateField
+		user_subscribe_info.UpdateAtField
+	} `json:"user_subscribe_info,omitempty"`
+}
+
 // APILogoutOutput /v2/logout [POST]
 type APILogoutOutput struct {
 	base.Output

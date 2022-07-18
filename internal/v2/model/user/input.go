@@ -49,6 +49,14 @@ type APILoginForEmailBody struct {
 	PasswordRequired
 }
 
+// APILoginForFacebookInput /v2/login/facebook [POST]
+type APILoginForFacebookInput struct {
+	Body APILoginForFacebookBody
+}
+type APILoginForFacebookBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // facebook sdk 回傳的 token string
+}
+
 // APILogoutInput /v2/logout [POST]
 type APILogoutInput struct {
 	IDRequired

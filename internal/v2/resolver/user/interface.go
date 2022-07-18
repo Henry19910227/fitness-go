@@ -7,6 +7,7 @@ type Resolver interface {
 	APIRegisterForEmail(input *model.APIRegisterForEmailInput) (output model.APIRegisterForEmailOutput)
 	APIRegisterForFacebook(input *model.APIRegisterForFacebookInput) (output model.APIRegisterForFacebookOutput)
 	APILoginForEmail(input *model.APILoginForEmailInput) (output model.APILoginForEmailOutput)
+	APILoginForFacebook(input *model.APILoginForFacebookInput) (output model.APILoginForFacebookOutput)
 	APILogout(input *model.APILogoutInput) (output model.APILogoutOutput)
 	APICreateRegisterOTP(input *model.APICreateOTPInput) (output model.APICreateRegisterOTPOutput)
 	APIRegisterNicknameValidate(input *model.APIRegisterNicknameValidateInput) (output model.APIRegisterNicknameValidateOutput)
