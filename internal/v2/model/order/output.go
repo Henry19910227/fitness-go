@@ -21,6 +21,31 @@ func (Output) TableName() string {
 	return "orders"
 }
 
+// APICreateCourseOrderOutput /v2/course_order [POST]
+type APICreateCourseOrderOutput struct {
+	base.Output
+	Data *APICreateCourseOrderData `json:"data,omitempty"`
+}
+type APICreateCourseOrderData struct {
+	Table
+	OrderCourse *struct {
+		Course *struct {
+			course.IDField
+			course.NameField
+		} `json:"course,omitempty"`
+		SaleItem *struct {
+			sale_item.IDField
+			sale_item.TypeField
+			ProductLabel *struct {
+				product_label.IDField
+				product_label.NameField
+				product_label.ProductIDField
+				product_label.TwdField
+			} `json:"product_label,omitempty"`
+		} `json:"sale_item,omitempty"`
+	} `json:"order_course,omitempty"`
+}
+
 // APIGetCMSOrdersOutput /v2/cms/orders [GET]
 type APIGetCMSOrdersOutput struct {
 	base.Output

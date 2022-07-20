@@ -6,6 +6,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/order"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -15,6 +16,28 @@ type controller struct {
 
 func New(resolver order.Resolver) Controller {
 	return &controller{resolver: resolver}
+}
+
+// CreateCourseOrder 創建課表訂單
+// @Summary 創建課表訂單
+// @Description 創建課表訂單
+// @Tags 交易_v1
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body order.APICreateCourseOrderBody true "輸入參數"
+// @Success 200 {object} order.APICreateCourseOrderOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/course_order [POST]
+func (c *controller) CreateCourseOrder(ctx *gin.Context) {
+	input := model.APICreateCourseOrderInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateCourseOrder(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
 }
 
 // GetCMSOrders 獲取訂單列表

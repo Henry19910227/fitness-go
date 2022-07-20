@@ -9132,6 +9132,51 @@ var doc = `{
                 }
             }
         },
+        "/v2/course_order": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建課表訂單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "交易_v1"
+                ],
+                "summary": "創建課表訂單",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.APICreateCourseOrderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/order.APICreateCourseOrderOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/diet/{diet_id}/meals": {
             "put": {
                 "security": [
@@ -15186,6 +15231,137 @@ var doc = `{
                     "description": "成功訊息",
                     "type": "string",
                     "example": "success!"
+                }
+            }
+        },
+        "order.APICreateCourseOrderBody": {
+            "type": "object",
+            "required": [
+                "course_id"
+            ],
+            "properties": {
+                "course_id": {
+                    "description": "課表id",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "order.APICreateCourseOrderData": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "order_course": {
+                    "type": "object",
+                    "properties": {
+                        "course": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "課表 id",
+                                    "type": "integer",
+                                    "example": 2
+                                },
+                                "name": {
+                                    "description": "課表名稱",
+                                    "type": "string",
+                                    "example": "增肌課表"
+                                }
+                            }
+                        },
+                        "sale_item": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "銷售id",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "product_label": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "description": "產品標籤id",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "description": "產品名稱",
+                                            "type": "string",
+                                            "example": "金卡會員(月)"
+                                        },
+                                        "product_id": {
+                                            "description": "產品id",
+                                            "type": "string",
+                                            "example": "com.fitness.gold_member_month"
+                                        },
+                                        "twd": {
+                                            "description": "台幣價格",
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    }
+                                },
+                                "type": {
+                                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                                    "type": "integer",
+                                    "example": 3
+                                }
+                            }
+                        }
+                    }
+                },
+                "order_status": {
+                    "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "order_type": {
+                    "description": "訂單類型(1:課表購買/2:會員訂閱)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "quantity": {
+                    "description": "數量",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
+        "order.APICreateCourseOrderOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/order.APICreateCourseOrderData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

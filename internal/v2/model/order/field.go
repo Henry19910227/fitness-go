@@ -33,5 +33,5 @@ type Table struct {
 }
 
 func (Table) TableName() string {
-	return "foods"
+	return "orders"
 }
