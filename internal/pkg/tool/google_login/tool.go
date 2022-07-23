@@ -16,9 +16,9 @@ func New(setting google_login.Setting) Tool {
 	return &tool{setting: setting}
 }
 
-func (t *tool) GetGoogleUidByAccessToken(accessToken string) (string, error) {
+func (t *tool) GetGoogleUidByIDToken(token string) (string, error) {
 	param := map[string]interface{}{
-		"id_token": accessToken,
+		"id_token": token,
 	}
 	dict, err := util.SendRequest("GET", t.setting.GetDebugTokenURL(), nil,nil, param)
 	if err != nil {

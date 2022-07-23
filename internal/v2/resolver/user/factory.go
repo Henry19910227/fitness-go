@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/fb_login"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/google_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/jwt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/otp"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
@@ -18,6 +19,7 @@ func NewResolver(db *gorm.DB) Resolver {
 	redisTool := redis.Shared()
 	jwtTool := jwt.NewTool()
 	fbLoginTool := fb_login.NewTool()
+	googleLoginTool := google_login.NewTool()
 	uploadTool := uploader.NewUserAvatarTool()
-	return New(userSvc, otpTool, cryptoTool, redisTool, jwtTool, fbLoginTool, uploadTool)
+	return New(userSvc, otpTool, cryptoTool, redisTool, jwtTool, fbLoginTool, googleLoginTool, uploadTool)
 }

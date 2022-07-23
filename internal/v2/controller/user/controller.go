@@ -143,6 +143,26 @@ func (c *controller) LoginForFacebook(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// LoginForGoogle 使用Google登入
+// @Summary 使用Google登入
+// @Description 使用Google登入
+// @Tags 登入_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APILoginForGoogleBody true "輸入參數"
+// @Success 200 {object} user.APILoginForGoogleOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/login/google [POST]
+func (c *controller) LoginForGoogle(ctx *gin.Context) {
+	var input model.APILoginForGoogleInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APILoginForGoogle(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // Logout 登出
 // @Summary 登出
 // @Description 登出
@@ -197,6 +217,26 @@ func (c *controller) RegisterForFacebook(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIRegisterForFacebook(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// RegisterForGoogle 使用Google註冊
+// @Summary 使用Google註冊
+// @Description 使用Google註冊
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterForGoogleBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterForGoogleOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/google [POST]
+func (c *controller) RegisterForGoogle(ctx *gin.Context) {
+	var input model.APIRegisterForGoogleInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterForGoogle(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

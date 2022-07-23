@@ -9533,6 +9533,46 @@ var doc = `{
                 }
             }
         },
+        "/v2/login/google": {
+            "post": {
+                "description": "使用Google登入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登入_v2"
+                ],
+                "summary": "使用Google登入",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APILoginForGoogleBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APILoginForGoogleOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/logout": {
             "post": {
                 "security": [
@@ -9875,6 +9915,46 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIRegisterFacebookAccountValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/register/google": {
+            "post": {
+                "description": "使用Google註冊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "使用Google註冊",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForGoogleBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForGoogleOutput"
                         }
                     },
                     "400": {
@@ -16325,6 +16405,11 @@ var doc = `{
                     "type": "string",
                     "example": "2022-06-12 00:00:00"
                 },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "user_subscribe_info": {
                     "type": "object",
                     "properties": {
@@ -16451,6 +16536,11 @@ var doc = `{
                     "type": "string",
                     "example": "2022-06-12 00:00:00"
                 },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
                 "user_subscribe_info": {
                     "type": "object",
                     "properties": {
@@ -16488,6 +16578,137 @@ var doc = `{
                 },
                 "data": {
                     "$ref": "#/definitions/user.APILoginForFacebookData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "token": {
+                    "description": "Token",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6I"
+                }
+            }
+        },
+        "user.APILoginForGoogleBody": {
+            "type": "object",
+            "required": [
+                "id_token"
+            ],
+            "properties": {
+                "id_token": {
+                    "description": "google sdk 回傳的 id token",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                }
+            }
+        },
+        "user.APILoginForGoogleData": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "用戶大頭貼",
+                    "type": "string",
+                    "example": "123.png"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "id": {
+                    "description": "帳戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "trainer": {
+                    "type": "object",
+                    "properties": {
+                        "avatar": {
+                            "description": "教練大頭照",
+                            "type": "string",
+                            "example": "abc.png"
+                        },
+                        "create_at": {
+                            "description": "創建時間",
+                            "type": "string",
+                            "example": "2022-06-12 00:00:00"
+                        },
+                        "nickname": {
+                            "description": "教練暱稱",
+                            "type": "string",
+                            "example": "Henry"
+                        },
+                        "trainer_level": {
+                            "description": "教練評鑑等級",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "trainer_status": {
+                            "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "update_at": {
+                            "description": "更新時間",
+                            "type": "string",
+                            "example": "2022-06-12 00:00:00"
+                        }
+                    }
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "user_status": {
+                    "description": "用戶狀態 (1:正常/2:違規/3:刪除)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_subscribe_info": {
+                    "type": "object",
+                    "properties": {
+                        "end_date": {
+                            "description": "訂閱結束日期",
+                            "type": "string",
+                            "example": "2023-07-11 11:00:00"
+                        },
+                        "start_date": {
+                            "description": "訂閱開始日期",
+                            "type": "string",
+                            "example": "2022-07-11 11:00:00"
+                        },
+                        "status": {
+                            "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "update_at": {
+                            "description": "更新時間",
+                            "type": "string",
+                            "example": "2022-06-14 00:00:00"
+                        }
+                    }
+                }
+            }
+        },
+        "user.APILoginForGoogleOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/user.APILoginForGoogleData"
                 },
                 "msg": {
                     "description": "訊息",
@@ -16672,6 +16893,46 @@ var doc = `{
             }
         },
         "user.APIRegisterForFacebookOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterForGoogleBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "id_token",
+                "nickname"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "id_token": {
+                    "description": "google sdk 回傳的 id token",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                },
+                "nickname": {
+                    "description": "暱稱(1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        },
+        "user.APIRegisterForGoogleOutput": {
             "type": "object",
             "properties": {
                 "code": {

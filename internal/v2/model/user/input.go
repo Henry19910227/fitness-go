@@ -85,6 +85,14 @@ type APILoginForFacebookBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // facebook sdk 回傳的 token string
 }
 
+// APILoginForGoogleInput /v2/login/google [POST]
+type APILoginForGoogleInput struct {
+	Body APILoginForGoogleBody
+}
+type APILoginForGoogleBody struct {
+	IDToken string `json:"id_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // google sdk 回傳的 id token
+}
+
 // APILogoutInput /v2/logout [POST]
 type APILogoutInput struct {
 	IDRequired
@@ -107,6 +115,16 @@ type APIRegisterForFacebookInput struct {
 }
 type APIRegisterForFacebookBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // facebook sdk 回傳的 token string
+	NicknameRequired
+	EmailRequired
+}
+
+// APIRegisterForGoogleInput /v2/register/google [POST]
+type APIRegisterForGoogleInput struct {
+	Body APIRegisterForGoogleBody
+}
+type APIRegisterForGoogleBody struct {
+	IDToken string `json:"id_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // google sdk 回傳的 id token
 	NicknameRequired
 	EmailRequired
 }

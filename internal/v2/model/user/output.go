@@ -67,6 +67,11 @@ type APIRegisterForFacebookOutput struct {
 	base.Output
 }
 
+// APIRegisterForGoogleOutput /v2/register/google [POST]
+type APIRegisterForGoogleOutput struct {
+	base.Output
+}
+
 // APILoginForEmailOutput /v2/login/email [POST]
 type APILoginForEmailOutput struct {
 	base.Output
@@ -78,6 +83,7 @@ type APILoginForEmailData struct {
 	IDField
 	NicknameField
 	AvatarField
+	UserStatusField
 	CreateAtField
 	UpdateAtField
 	Trainer *struct {
@@ -104,25 +110,18 @@ type APILoginForFacebookOutput struct {
 
 }
 type APILoginForFacebookData struct {
-	IDField
-	NicknameField
-	AvatarField
-	CreateAtField
-	UpdateAtField
-	Trainer *struct {
-		trainer.NicknameField
-		trainer.AvatarField
-		trainer.TrainerStatusField
-		trainer.TrainerLevelField
-		trainer.CreateAtField
-		trainer.UpdateAtField
-	} `json:"trainer,omitempty"`
-	UserSubscribeInfo *struct {
-		user_subscribe_info.StatusField
-		user_subscribe_info.StartDateField
-		user_subscribe_info.EndDateField
-		user_subscribe_info.UpdateAtField
-	} `json:"user_subscribe_info,omitempty"`
+	APILoginForEmailData
+}
+
+// APILoginForGoogleOutput /v2/login/google [POST]
+type APILoginForGoogleOutput struct {
+	base.Output
+	Data  *APILoginForGoogleData `json:"data,omitempty"`
+	Token *string                `json:"token,omitempty" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
+
+}
+type APILoginForGoogleData struct {
+	APILoginForEmailData
 }
 
 // APILogoutOutput /v2/logout [POST]

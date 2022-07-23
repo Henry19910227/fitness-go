@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/fb_login"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/google_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/jwt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/otp"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
@@ -23,11 +24,12 @@ type resolver struct {
 	redisTool   redis.Tool
 	jwtTool     jwt.Tool
 	fbLoginTool fb_login.Tool
+	googleLoginTool google_login.Tool
 	uploadTool  uploader.Tool
 }
 
-func New(userService userService.Service, otpTool otp.Tool, cryptoTool crypto.Tool, redisTool redis.Tool, jwtTool jwt.Tool, fbLoginTool fb_login.Tool, uploadTool uploader.Tool) Resolver {
-	return &resolver{userService: userService, otpTool: otpTool, cryptoTool: cryptoTool, redisTool: redisTool, jwtTool: jwtTool, fbLoginTool: fbLoginTool, uploadTool: uploadTool}
+func New(userService userService.Service, otpTool otp.Tool, cryptoTool crypto.Tool, redisTool redis.Tool, jwtTool jwt.Tool, fbLoginTool fb_login.Tool, googleLoginTool google_login.Tool, uploadTool uploader.Tool) Resolver {
+	return &resolver{userService: userService, otpTool: otpTool, cryptoTool: cryptoTool, redisTool: redisTool, jwtTool: jwtTool, fbLoginTool: fbLoginTool, googleLoginTool: googleLoginTool, uploadTool: uploadTool}
 }
 
 func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput) {
@@ -227,6 +229,59 @@ func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInp
 	return output
 }
 
+func (r *resolver) APIRegisterForGoogle(input *model.APIRegisterForGoogleInput) (output model.APIRegisterForGoogleOutput) {
+	//以access token 取得 google uid
+	guid, err := r.googleLoginTool.GetGoogleUidByIDToken(input.Body.IDToken)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//檢查帳號是否重複
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(guid))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該帳號重複").Error())
+		return output
+	}
+	//檢查暱稱是否重複
+	ok, err = r.nicknameValidate(input.Body.Nickname)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該暱稱重複").Error())
+		return output
+	}
+	//檢查Email是否重複
+	ok, err = r.emailValidate(input.Body.Email)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該信箱重複").Error())
+		return output
+	}
+	//創建用戶
+	table := model.Table{}
+	table.AccountType = util.PointerInt(model.Google)
+	table.Account = util.PointerString(r.cryptoTool.MD5Encode(guid))
+	table.Nickname = util.PointerString(input.Body.Nickname)
+	table.Email = util.PointerString(input.Body.Email)
+	table.Password = util.PointerString("")
+	_, err = r.userService.Create(&table)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
 func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output model.APILoginForEmailOutput) {
 	listInput := model.ListInput{}
 	listInput.Account = util.PointerString(input.Body.Email)
@@ -297,6 +352,57 @@ func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (o
 		return output
 	}
 	data := model.APILoginForFacebookData{}
+	if err := util.Parser(datas[0], &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//產生token
+	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(data.ID, 0))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//設置token過期時間
+	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(data.ID, 0)))
+	if err := r.redisTool.SetEX(key, token, r.jwtTool.GetExpire()); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = &data
+	output.Token = util.PointerString(token)
+	return output
+}
+
+func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (output model.APILoginForGoogleOutput) {
+	//以 id token 取得 google uid
+	fbUid, err := r.googleLoginTool.GetGoogleUidByIDToken(input.Body.IDToken)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//parser input
+	listInput := model.ListInput{}
+	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
+	listInput.IsDeleted = util.PointerInt(0)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "UserSubscribeInfo"},
+	}
+	if err := util.Parser(input.Body, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	datas, _, err := r.userService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(datas) == 0 {
+		output.Set(code.BadRequest, errors.New("帳號或密碼錯誤").Error())
+		return output
+	}
+	data := model.APILoginForGoogleData{}
 	if err := util.Parser(datas[0], &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
