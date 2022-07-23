@@ -38,5 +38,8 @@ func (t *tool) GetFbUidByAccessToken(accessToken string) (string, error) {
 	if !ok {
 		return "", errors.New("invalid token")
 	}
+	if len(fbUID) == 0 {
+		return "", errors.New("invalid token")
+	}
 	return fbUID, nil
 }

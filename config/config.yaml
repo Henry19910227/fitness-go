@@ -95,6 +95,14 @@ FBLogin:
       AppID: 3268303936749363
       AppSecret: 9e81d8aea97dae4b4d47e2e58f1535e9
       DebugTokenURL: https://graph.facebook.com/debug_token
+GoogleLogin:
+    Iss: https://accounts.google.com
+    Debug:
+      ClientID: 376527343165-tu7fr7epqgqc1c1mf2gbqppsn056alf8.apps.googleusercontent.com
+      DebugTokenURL: https://oauth2.googleapis.com/tokeninfo
+    Release:
+      ClientID: 376527343165-tu7fr7epqgqc1c1mf2gbqppsn056alf8.apps.googleusercontent.com
+      DebugTokenURL: https://oauth2.googleapis.com/tokeninfo
 Swagger:
     Debug:
       Protocol: http
