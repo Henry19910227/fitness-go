@@ -12,8 +12,8 @@ type StatusField struct {
 type StartDateField struct {
 	StartDate *string `json:"start_date,omitempty" gorm:"column:start_date" example:"2022-07-11 11:00:00"` // 訂閱開始日期
 }
-type EndDateField struct {
-	EndDate *string `json:"end_date,omitempty" gorm:"column:end_date" example:"2023-07-11 11:00:00"` // 訂閱結束日期
+type ExpiresDateField struct {
+	ExpiresDate *string `json:"end_date,omitempty" gorm:"column:expires_date" example:"2023-07-11 11:00:00"` // 訂閱結束日期
 }
 type UpdateAtField struct {
 	UpdateAt *string `json:"update_at,omitempty" gorm:"column:update_at" example:"2022-06-14 00:00:00"` //更新時間
@@ -24,7 +24,7 @@ type Table struct {
 	OrderIDField
 	StatusField
 	StartDateField
-	EndDateField
+	ExpiresDateField
 	UpdateAtField
 }
 func (Table) TableName() string {

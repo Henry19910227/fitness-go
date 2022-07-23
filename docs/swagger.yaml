@@ -5228,6 +5228,38 @@ definitions:
         example: message..
         type: string
     type: object
+  user_subscribe_info.APIGetUserSubscribeInfoData:
+    properties:
+      end_date:
+        description: 訂閱結束日期
+        example: "2023-07-11 11:00:00"
+        type: string
+      start_date:
+        description: 訂閱開始日期
+        example: "2022-07-11 11:00:00"
+        type: string
+      status:
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+    type: object
+  user_subscribe_info.APIGetUserSubscribeInfoOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/user_subscribe_info.APIGetUserSubscribeInfoData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   validator.CMSLoginByEmailBody:
     properties:
       email:
@@ -12155,6 +12187,27 @@ paths:
       security:
       - fitness_token: []
       summary: 修改用戶個人資訊
+      tags:
+      - 用戶個人_v2
+  /v2/user/subscribe_info:
+    get:
+      consumes:
+      - application/json
+      description: 獲取用戶訂閱資訊
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user_subscribe_info.APIGetUserSubscribeInfoOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取用戶訂閱資訊
       tags:
       - 用戶個人_v2
 securityDefinitions:

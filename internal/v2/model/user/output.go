@@ -97,7 +97,7 @@ type APILoginForEmailData struct {
 	UserSubscribeInfo *struct {
 		user_subscribe_info.StatusField
 		user_subscribe_info.StartDateField
-		user_subscribe_info.EndDateField
+		user_subscribe_info.ExpiresDateField
 		user_subscribe_info.UpdateAtField
 	} `json:"user_subscribe_info,omitempty"`
 }

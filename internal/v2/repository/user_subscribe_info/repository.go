@@ -17,7 +17,7 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 	db := r.db.Model(&model.Output{})
 	//加入 user_id 篩選條件
 	if input.UserID != nil {
-		db = db.Where("id = ?", *input.UserID)
+		db = db.Where("user_id = ?", *input.UserID)
 	}
 	//查詢數據
 	err = db.First(&output).Error
