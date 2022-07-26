@@ -7,5 +7,6 @@ import (
 
 type Resolver interface {
 	APICreateCourseOrder(tx *gorm.DB, input *model.APICreateCourseOrderInput) (output model.APICreateCourseOrderOutput)
+	APICreateSubscribeOrder(tx *gorm.DB, input *model.APICreateSubscribeOrderInput) (output model.APICreateSubscribeOrderOutput)
 	APIGetCMSOrders(input *model.APIGetCMSOrdersInput) (output model.APIGetCMSOrdersOutput)
 }

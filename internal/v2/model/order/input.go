@@ -27,14 +27,22 @@ type ListInput struct {
 	PreloadInput
 }
 
-// APICreateCourseOrderInput /v2/course_order
+// APICreateCourseOrderInput /v2/course_order [POST]
 type APICreateCourseOrderInput struct {
 	UserIDRequired
 	Body APICreateCourseOrderBody
-
 }
 type APICreateCourseOrderBody struct {
 	order_course.CourseIDRequired
+}
+
+// APICreateSubscribeOrderInput /v2/subscribe_order [POST]
+type APICreateSubscribeOrderInput struct {
+	UserIDRequired
+	Body APICreateSubscribeOrderBody
+}
+type APICreateSubscribeOrderBody struct {
+	SubscribePlanID int64 `json:"subscribe_plan_id" binding:"required" example:"1"` // 訂閱項目id
 }
 
 // APIGetCMSOrdersInput /v2/cms/orders [GET]

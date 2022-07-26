@@ -9147,7 +9147,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "交易_v1"
+                    "支付_v2"
                 ],
                 "summary": "創建課表訂單",
                 "parameters": [
@@ -9995,6 +9995,51 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIRegisterNicknameValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/subscribe_order": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建訂閱訂單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付_v2"
+                ],
+                "summary": "創建訂閱訂單",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.APICreateSubscribeOrderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/order.APICreateSubscribeOrderOutput"
                         }
                     },
                     "400": {
@@ -15479,6 +15524,127 @@ var doc = `{
                 }
             }
         },
+        "order.APICreateSubscribeOrderBody": {
+            "type": "object",
+            "required": [
+                "subscribe_plan_id"
+            ],
+            "properties": {
+                "subscribe_plan_id": {
+                    "description": "訂閱項目id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "order.APICreateSubscribeOrderData": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "order_status": {
+                    "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "order_subscribe_plan": {
+                    "type": "object",
+                    "properties": {
+                        "subscribe_plan": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "訂閱項目id",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "name": {
+                                    "description": "銷售名稱",
+                                    "type": "string",
+                                    "example": "金牌課表"
+                                },
+                                "period": {
+                                    "description": "週期(1:一個月/2:二個月/3:三個月/6:六個月/12:一年/99:永久)",
+                                    "type": "integer",
+                                    "example": 12
+                                },
+                                "product_label": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "description": "產品標籤id",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "description": "產品名稱",
+                                            "type": "string",
+                                            "example": "金卡會員(月)"
+                                        },
+                                        "product_id": {
+                                            "description": "產品id",
+                                            "type": "string",
+                                            "example": "com.fitness.gold_member_month"
+                                        },
+                                        "twd": {
+                                            "description": "台幣價格",
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "order_type": {
+                    "description": "訂單類型(1:課表購買/2:會員訂閱)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "quantity": {
+                    "description": "數量",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                }
+            }
+        },
+        "order.APICreateSubscribeOrderOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/order.APICreateSubscribeOrderData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "order.APIGetCMSOrdersOutput": {
             "type": "object",
             "properties": {
@@ -15574,7 +15740,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "主鍵id",
+                                                "description": "訂閱項目id",
                                                 "type": "integer",
                                                 "example": 1
                                             },

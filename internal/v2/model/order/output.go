@@ -46,6 +46,28 @@ type APICreateCourseOrderData struct {
 	} `json:"order_course,omitempty"`
 }
 
+// APICreateSubscribeOrderOutput /v2/subscribe_order [POST]
+type APICreateSubscribeOrderOutput struct {
+	base.Output
+	Data *APICreateSubscribeOrderData `json:"data,omitempty"`
+}
+type APICreateSubscribeOrderData struct {
+	Table
+	OrderSubscribePlan *struct {
+		SubscribePlan *struct {
+			subscribe_plan.IDField
+			subscribe_plan.PeriodField
+			subscribe_plan.NameField
+			ProductLabel *struct {
+				product_label.IDField
+				product_label.NameField
+				product_label.ProductIDField
+				product_label.TwdField
+			} `json:"product_label,omitempty"`
+		} `json:"subscribe_plan,omitempty"`
+	} `json:"order_subscribe_plan,omitempty"`
+}
+
 // APIGetCMSOrdersOutput /v2/cms/orders [GET]
 type APIGetCMSOrdersOutput struct {
 	base.Output

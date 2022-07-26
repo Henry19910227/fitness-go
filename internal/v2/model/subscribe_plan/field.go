@@ -1,7 +1,7 @@
 package subscribe_plan
 
 type IDField struct {
-	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"1"` //主鍵id
+	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"1"` //訂閱項目id
 }
 type ProductLabelIDField struct {
 	ProductLabelID *int64 `json:"product_label_id,omitempty" gorm:"column:product_label_id" example:"1"` //產品標籤id

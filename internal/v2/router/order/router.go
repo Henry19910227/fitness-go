@@ -14,5 +14,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := order.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.POST("/course_order", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateCourseOrder)
+	v2.POST("/subscribe_order", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateSubscribeOrder)
 	v2.GET("/cms/orders", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSOrders)
 }

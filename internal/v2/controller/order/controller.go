@@ -21,7 +21,7 @@ func New(resolver order.Resolver) Controller {
 // CreateCourseOrder 創建課表訂單
 // @Summary 創建課表訂單
 // @Description 創建課表訂單
-// @Tags 交易_v1
+// @Tags 支付_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -37,6 +37,28 @@ func (c *controller) CreateCourseOrder(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APICreateCourseOrder(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// CreateSubscribeOrder 創建訂閱訂單
+// @Summary 創建訂閱訂單
+// @Description 創建訂閱訂單
+// @Tags 支付_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body order.APICreateSubscribeOrderBody true "輸入參數"
+// @Success 200 {object} order.APICreateSubscribeOrderOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/subscribe_order [POST]
+func (c *controller) CreateSubscribeOrder(ctx *gin.Context) {
+	input := model.APICreateSubscribeOrderInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateSubscribeOrder(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 
