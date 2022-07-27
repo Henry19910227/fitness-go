@@ -574,13 +574,34 @@ func (r *resolver) APIRegisterFacebookAccountValidate(input *model.APIRegisterFa
 
 func (r *resolver) APIRegisterLineAccountValidate(input *model.APIRegisterLineAccountValidateInput) (output model.APIRegisterLineAccountValidateOutput) {
 	//以access token 取得 uid
-	fbUid, err := r.lineLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	uid, err := r.lineLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//檢查帳號是否重複
-	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(fbUid))
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(uid))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該帳號已註冊").Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIRegisterGoogleAccountValidate(input *model.APIRegisterGoogleAccountValidateInput) (output model.APIRegisterGoogleAccountValidateOutput) {
+	//以access token 取得 uid
+	uid, err := r.googleLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//檢查帳號是否重複
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(uid))
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

@@ -5250,6 +5250,26 @@ definitions:
         example: message..
         type: string
     type: object
+  user.APIRegisterGoogleAccountValidateBody:
+    properties:
+      access_token:
+        description: sdk 回傳的 token string
+        example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
+        type: string
+    required:
+    - access_token
+    type: object
+  user.APIRegisterGoogleAccountValidateOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   user.APIRegisterLineAccountValidateBody:
     properties:
       access_token:
@@ -12221,6 +12241,32 @@ paths:
           schema:
             $ref: '#/definitions/base.Output'
       summary: 使用Google註冊
+      tags:
+      - 註冊_v2
+  /v2/register/google_account/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證Google帳戶是否可使用
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIRegisterGoogleAccountValidateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIRegisterGoogleAccountValidateOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 驗證Google帳戶是否可使用
       tags:
       - 註冊_v2
   /v2/register/line:

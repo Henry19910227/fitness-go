@@ -9966,6 +9966,46 @@ var doc = `{
                 }
             }
         },
+        "/v2/register/google_account/validate": {
+            "post": {
+                "description": "驗證Google帳戶是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "驗證Google帳戶是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterGoogleAccountValidateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterGoogleAccountValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/line": {
             "post": {
                 "description": "使用Line註冊",
@@ -17253,6 +17293,34 @@ var doc = `{
             }
         },
         "user.APIRegisterForLineOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterGoogleAccountValidateBody": {
+            "type": "object",
+            "required": [
+                "access_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "description": "sdk 回傳的 token string",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                }
+            }
+        },
+        "user.APIRegisterGoogleAccountValidateOutput": {
             "type": "object",
             "properties": {
                 "code": {

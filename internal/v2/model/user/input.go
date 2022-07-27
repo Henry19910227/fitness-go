@@ -186,3 +186,11 @@ type APIRegisterLineAccountValidateInput struct {
 type APIRegisterLineAccountValidateBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 }
+
+// APIRegisterGoogleAccountValidateInput /v2/register/google_account/validate [POST]
+type APIRegisterGoogleAccountValidateInput struct {
+	Body APIRegisterGoogleAccountValidateBody
+}
+type APIRegisterGoogleAccountValidateBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
+}

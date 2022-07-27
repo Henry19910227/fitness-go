@@ -340,6 +340,26 @@ func (c *controller) RegisterLineAccountValidate(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// RegisterGoogleAccountValidate 驗證Google帳戶是否可使用
+// @Summary 驗證Google帳戶是否可使用
+// @Description 驗證Google帳戶是否可使用
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterGoogleAccountValidateBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterGoogleAccountValidateOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/google_account/validate [POST]
+func (c *controller) RegisterGoogleAccountValidate(ctx *gin.Context) {
+	var input model.APIRegisterGoogleAccountValidateInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterGoogleAccountValidate(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // RegisterNicknameValidate 驗證暱稱是否可使用
 // @Summary 驗證暱稱是否可使用
 // @Description 驗證暱稱是否可使用

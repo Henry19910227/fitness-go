@@ -167,3 +167,8 @@ type APIRegisterFacebookAccountValidateOutput struct {
 type APIRegisterLineAccountValidateOutput struct {
 	base.Output
 }
+
+// APIRegisterGoogleAccountValidateOutput /v2/google/google_account/validate [POST]
+type APIRegisterGoogleAccountValidateOutput struct {
+	base.Output
+}
