@@ -240,6 +240,26 @@ func (c *controller) RegisterForGoogle(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// RegisterForLine 使用Line註冊
+// @Summary 使用Line註冊
+// @Description 使用Line註冊
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterForLineBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterForLineOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/line [POST]
+func (c *controller) RegisterForLine(ctx *gin.Context) {
+	var input model.APIRegisterForLineInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterForLine(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // CreateRegisterOTP 發送OTP
 // @Summary 發送OTP
 // @Description 發送OTP

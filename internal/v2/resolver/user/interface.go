@@ -10,6 +10,7 @@ type Resolver interface {
 	APIRegisterForEmail(input *model.APIRegisterForEmailInput) (output model.APIRegisterForEmailOutput)
 	APIRegisterForFacebook(input *model.APIRegisterForFacebookInput) (output model.APIRegisterForFacebookOutput)
 	APIRegisterForGoogle(input *model.APIRegisterForGoogleInput) (output model.APIRegisterForGoogleOutput)
+	APIRegisterForLine(input *model.APIRegisterForLineInput) (output model.APIRegisterForLineOutput)
 	APILoginForEmail(input *model.APILoginForEmailInput) (output model.APILoginForEmailOutput)
 	APILoginForFacebook(input *model.APILoginForFacebookInput) (output model.APILoginForFacebookOutput)
 	APILoginForGoogle(input *model.APILoginForGoogleInput) (output model.APILoginForGoogleOutput)

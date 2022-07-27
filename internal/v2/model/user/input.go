@@ -114,7 +114,7 @@ type APIRegisterForFacebookInput struct {
 	Body APIRegisterForFacebookBody
 }
 type APIRegisterForFacebookBody struct {
-	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // facebook sdk 回傳的 token string
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 	NicknameRequired
 	EmailRequired
 }
@@ -124,7 +124,17 @@ type APIRegisterForGoogleInput struct {
 	Body APIRegisterForGoogleBody
 }
 type APIRegisterForGoogleBody struct {
-	IDToken string `json:"id_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // google sdk 回傳的 id token
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
+	NicknameRequired
+	EmailRequired
+}
+
+// APIRegisterForLineInput /v2/register/line [POST]
+type APIRegisterForLineInput struct {
+	Body APIRegisterForLineBody
+}
+type APIRegisterForLineBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 	NicknameRequired
 	EmailRequired
 }

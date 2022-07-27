@@ -5163,7 +5163,7 @@ definitions:
   user.APIRegisterForFacebookBody:
     properties:
       access_token:
-        description: facebook sdk 回傳的 token string
+        description: sdk 回傳的 token string
         example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
         type: string
       email:
@@ -5192,24 +5192,54 @@ definitions:
     type: object
   user.APIRegisterForGoogleBody:
     properties:
+      access_token:
+        description: sdk 回傳的 token string
+        example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
+        type: string
       email:
         description: 信箱
         example: test@gmail.com
-        type: string
-      id_token:
-        description: google sdk 回傳的 id token
-        example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
         type: string
       nickname:
         description: 暱稱(1~20字元)
         example: henry
         type: string
     required:
+    - access_token
     - email
-    - id_token
     - nickname
     type: object
   user.APIRegisterForGoogleOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  user.APIRegisterForLineBody:
+    properties:
+      access_token:
+        description: sdk 回傳的 token string
+        example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
+        type: string
+      email:
+        description: 信箱
+        example: test@gmail.com
+        type: string
+      nickname:
+        description: 暱稱(1~20字元)
+        example: henry
+        type: string
+    required:
+    - access_token
+    - email
+    - nickname
+    type: object
+  user.APIRegisterForLineOutput:
     properties:
       code:
         description: 狀態碼
@@ -12171,6 +12201,32 @@ paths:
           schema:
             $ref: '#/definitions/base.Output'
       summary: 使用Google註冊
+      tags:
+      - 註冊_v2
+  /v2/register/line:
+    post:
+      consumes:
+      - application/json
+      description: 使用Line註冊
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIRegisterForLineBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIRegisterForLineOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 使用Line註冊
       tags:
       - 註冊_v2
   /v2/register/nickname/validate:

@@ -72,6 +72,11 @@ type APIRegisterForGoogleOutput struct {
 	base.Output
 }
 
+// APIRegisterForLineOutput /v2/register/line [POST]
+type APIRegisterForLineOutput struct {
+	base.Output
+}
+
 // APILoginForEmailOutput /v2/login/email [POST]
 type APILoginForEmailOutput struct {
 	base.Output

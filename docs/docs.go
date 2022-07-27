@@ -9966,6 +9966,46 @@ var doc = `{
                 }
             }
         },
+        "/v2/register/line": {
+            "post": {
+                "description": "使用Line註冊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "使用Line註冊",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForLineBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForLineOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/nickname/validate": {
             "post": {
                 "description": "驗證暱稱是否可使用",
@@ -17076,7 +17116,7 @@ var doc = `{
             ],
             "properties": {
                 "access_token": {
-                    "description": "facebook sdk 回傳的 token string",
+                    "description": "sdk 回傳的 token string",
                     "type": "string",
                     "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
                 },
@@ -17110,20 +17150,20 @@ var doc = `{
         "user.APIRegisterForGoogleBody": {
             "type": "object",
             "required": [
+                "access_token",
                 "email",
-                "id_token",
                 "nickname"
             ],
             "properties": {
+                "access_token": {
+                    "description": "sdk 回傳的 token string",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                },
                 "email": {
                     "description": "信箱",
                     "type": "string",
                     "example": "test@gmail.com"
-                },
-                "id_token": {
-                    "description": "google sdk 回傳的 id token",
-                    "type": "string",
-                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
                 },
                 "nickname": {
                     "description": "暱稱(1~20字元)",
@@ -17133,6 +17173,46 @@ var doc = `{
             }
         },
         "user.APIRegisterForGoogleOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterForLineBody": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "email",
+                "nickname"
+            ],
+            "properties": {
+                "access_token": {
+                    "description": "sdk 回傳的 token string",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "nickname": {
+                    "description": "暱稱(1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        },
+        "user.APIRegisterForLineOutput": {
             "type": "object",
             "properties": {
                 "code": {

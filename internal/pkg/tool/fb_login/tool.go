@@ -14,12 +14,12 @@ func New(setting fb_login.Setting) Tool {
 	return &tool{setting: setting}
 }
 
-func (t *tool) GetFbUidByAccessToken(accessToken string) (string, error) {
+func (t *tool) GetUserIDByAccessToken(accessToken string) (string, error) {
 	param := map[string]interface{}{
 		"input_token":  accessToken,
 		"access_token": t.setting.GetAppID() + "|" + t.setting.GetAppSecret(),
 	}
-	dict, err := util.SendRequest("GET", t.setting.GetDebugTokenURL(), nil,nil, param)
+	dict, err := util.SendRequest("GET", t.setting.GetDebugTokenURL(), nil, nil, param)
 	if err != nil {
 		return "", err
 	}
