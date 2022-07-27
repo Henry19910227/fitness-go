@@ -5,9 +5,9 @@ Server:
     WriteTimeout: 60
 App:
     Debug:
-      Version: 2.0.7
+      Version: 2.0.8
     Release:
-      Version: 2.0.7
+      Version: 2.0.8
 Resource:
     RootPath: ./volumes/storage
 Upload:
