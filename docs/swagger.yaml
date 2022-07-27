@@ -188,6 +188,66 @@ definitions:
         example: message..
         type: string
     type: object
+  banner.APIGetBannersOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            course:
+              properties:
+                id:
+                  description: 課表 id
+                  example: 2
+                  type: integer
+                name:
+                  description: 課表名稱
+                  example: 增肌課表
+                  type: string
+              type: object
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: id
+              example: 1
+              type: integer
+            image:
+              description: 圖片
+              example: 1234.jpg
+              type: string
+            trainer:
+              properties:
+                nickname:
+                  description: 教練暱稱
+                  example: Henry
+                  type: string
+                user_id:
+                  description: 用戶id
+                  example: 10001
+                  type: integer
+              type: object
+            type:
+              description: 類型(1:課表/2:教練/3:訂閱)
+              example: 1
+              type: integer
+            update_at:
+              description: 更新時間
+              example: "2022-06-14 00:00:00"
+              type: string
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
+    type: object
   banner.APIGetCMSBannersOutput:
     properties:
       code:
@@ -10688,6 +10748,38 @@ paths:
       summary: 上傳訓練組前導語音
       tags:
       - WorkoutSet_v1
+  /v2/banners:
+    get:
+      consumes:
+      - application/json
+      description: 獲取banner列表
+      parameters:
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/banner.APIGetBannersOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取banner列表
+      tags:
+      - Banner_v2
   /v2/body_image:
     post:
       consumes:

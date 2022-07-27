@@ -34,6 +34,12 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
+	//Preload
+	if len(input.Preloads) > 0 {
+		for _, preload := range input.Preloads {
+			db = db.Preload(preload.Field)
+		}
+	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
 		db = db.Order(fmt.Sprintf("%s %s", input.OrderField, input.OrderType))
