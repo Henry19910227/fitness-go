@@ -320,6 +320,26 @@ func (c *controller) RegisterFacebookAccountValidate(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// RegisterLineAccountValidate 驗證line帳戶是否可使用
+// @Summary 驗證line帳戶是否可使用
+// @Description 驗證line帳戶是否可使用
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterLineAccountValidateBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterLineAccountValidateOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/line_account/validate [POST]
+func (c *controller) RegisterLineAccountValidate(ctx *gin.Context) {
+	var input model.APIRegisterLineAccountValidateInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterLineAccountValidate(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // RegisterNicknameValidate 驗證暱稱是否可使用
 // @Summary 驗證暱稱是否可使用
 // @Description 驗證暱稱是否可使用

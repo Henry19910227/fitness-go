@@ -162,3 +162,8 @@ type APIRegisterEmailAccountValidateOutput struct {
 type APIRegisterFacebookAccountValidateOutput struct {
 	base.Output
 }
+
+// APIRegisterLineAccountValidateOutput /v2/register/line_account/validate [POST]
+type APIRegisterLineAccountValidateOutput struct {
+	base.Output
+}

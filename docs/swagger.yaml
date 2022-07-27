@@ -5108,7 +5108,7 @@ definitions:
   user.APIRegisterFacebookAccountValidateBody:
     properties:
       access_token:
-        description: facebook sdk 回傳的 token string
+        description: sdk 回傳的 token string
         example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
         type: string
     required:
@@ -5240,6 +5240,26 @@ definitions:
     - nickname
     type: object
   user.APIRegisterForLineOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  user.APIRegisterLineAccountValidateBody:
+    properties:
+      access_token:
+        description: sdk 回傳的 token string
+        example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
+        type: string
+    required:
+    - access_token
+    type: object
+  user.APIRegisterLineAccountValidateOutput:
     properties:
       code:
         description: 狀態碼
@@ -12227,6 +12247,32 @@ paths:
           schema:
             $ref: '#/definitions/base.Output'
       summary: 使用Line註冊
+      tags:
+      - 註冊_v2
+  /v2/register/line_account/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證line帳戶是否可使用
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIRegisterLineAccountValidateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIRegisterLineAccountValidateOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 驗證line帳戶是否可使用
       tags:
       - 註冊_v2
   /v2/register/nickname/validate:

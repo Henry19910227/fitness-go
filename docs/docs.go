@@ -10006,6 +10006,46 @@ var doc = `{
                 }
             }
         },
+        "/v2/register/line_account/validate": {
+            "post": {
+                "description": "驗證line帳戶是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "驗證line帳戶是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterLineAccountValidateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterLineAccountValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/nickname/validate": {
             "post": {
                 "description": "驗證暱稱是否可使用",
@@ -17040,7 +17080,7 @@ var doc = `{
             ],
             "properties": {
                 "access_token": {
-                    "description": "facebook sdk 回傳的 token string",
+                    "description": "sdk 回傳的 token string",
                     "type": "string",
                     "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
                 }
@@ -17213,6 +17253,34 @@ var doc = `{
             }
         },
         "user.APIRegisterForLineOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterLineAccountValidateBody": {
+            "type": "object",
+            "required": [
+                "access_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "description": "sdk 回傳的 token string",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                }
+            }
+        },
+        "user.APIRegisterLineAccountValidateOutput": {
             "type": "object",
             "properties": {
                 "code": {

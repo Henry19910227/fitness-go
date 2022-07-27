@@ -176,5 +176,13 @@ type APIRegisterFacebookAccountValidateInput struct {
 	Body APIRegisterFacebookAccountValidateBody
 }
 type APIRegisterFacebookAccountValidateBody struct {
-	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // facebook sdk 回傳的 token string
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
+}
+
+// APIRegisterLineAccountValidateInput /v2/register/line_account/validate [POST]
+type APIRegisterLineAccountValidateInput struct {
+	Body APIRegisterLineAccountValidateBody
+}
+type APIRegisterLineAccountValidateBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 }

@@ -18,6 +18,7 @@ type Controller interface {
 	CreateRegisterOTP(ctx *gin.Context)
 	RegisterEmailAccountValidate(ctx *gin.Context)
 	RegisterFacebookAccountValidate(ctx *gin.Context)
+	RegisterLineAccountValidate(ctx *gin.Context)
 	RegisterNicknameValidate(ctx *gin.Context)
 	RegisterEmailValidate(ctx *gin.Context)
 }
