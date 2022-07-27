@@ -129,6 +129,17 @@ type APILoginForGoogleData struct {
 	APILoginForEmailData
 }
 
+// APILoginForLineOutput /v2/login/line [POST]
+type APILoginForLineOutput struct {
+	base.Output
+	Data  *APILoginForLineData `json:"data,omitempty"`
+	Token *string              `json:"token,omitempty" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
+
+}
+type APILoginForLineData struct {
+	APILoginForEmailData
+}
+
 // APILogoutOutput /v2/logout [POST]
 type APILogoutOutput struct {
 	base.Output

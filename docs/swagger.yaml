@@ -4859,7 +4859,7 @@ definitions:
   user.APILoginForFacebookBody:
     properties:
       access_token:
-        description: facebook sdk 回傳的 token string
+        description: sdk 回傳的 token string
         example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
         type: string
     required:
@@ -4957,12 +4957,12 @@ definitions:
     type: object
   user.APILoginForGoogleBody:
     properties:
-      id_token:
-        description: google sdk 回傳的 id token
+      access_token:
+        description: sdk 回傳的 token string
         example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
         type: string
     required:
-    - id_token
+    - access_token
     type: object
   user.APILoginForGoogleData:
     properties:
@@ -5045,6 +5045,105 @@ definitions:
         type: integer
       data:
         $ref: '#/definitions/user.APILoginForGoogleData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      token:
+        description: Token
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6I
+        type: string
+    type: object
+  user.APILoginForLineBody:
+    properties:
+      access_token:
+        description: sdk 回傳的 token string
+        example: EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV
+        type: string
+    required:
+    - access_token
+    type: object
+  user.APILoginForLineData:
+    properties:
+      avatar:
+        description: 用戶大頭貼
+        example: 123.png
+        type: string
+      create_at:
+        description: 創建時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      id:
+        description: 帳戶id
+        example: 10001
+        type: integer
+      nickname:
+        description: 暱稱
+        example: henry
+        type: string
+      trainer:
+        properties:
+          avatar:
+            description: 教練大頭照
+            example: abc.png
+            type: string
+          create_at:
+            description: 創建時間
+            example: "2022-06-12 00:00:00"
+            type: string
+          nickname:
+            description: 教練暱稱
+            example: Henry
+            type: string
+          trainer_level:
+            description: 教練評鑑等級
+            example: 1
+            type: integer
+          trainer_status:
+            description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+            example: 1
+            type: integer
+          update_at:
+            description: 更新時間
+            example: "2022-06-12 00:00:00"
+            type: string
+        type: object
+      update_at:
+        description: 更新時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      user_status:
+        description: 用戶狀態 (1:正常/2:違規/3:刪除)
+        example: 1
+        type: integer
+      user_subscribe_info:
+        properties:
+          end_date:
+            description: 訂閱結束日期
+            example: "2023-07-11 11:00:00"
+            type: string
+          start_date:
+            description: 訂閱開始日期
+            example: "2022-07-11 11:00:00"
+            type: string
+          status:
+            description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+            example: 1
+            type: integer
+          update_at:
+            description: 更新時間
+            example: "2022-06-14 00:00:00"
+            type: string
+        type: object
+    type: object
+  user.APILoginForLineOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/user.APILoginForLineData'
       msg:
         description: 訊息
         example: message..
@@ -7530,7 +7629,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 創建課表訂單
+      summary: 創建課表訂單 (/v2/course_order [POST] 替代)
       tags:
       - Payment_v1
   /v1/course_product/{course_id}:
@@ -9235,7 +9334,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 創建訂閱訂單
+      summary: 創建訂閱訂單 (/v2/subscribe_order [POST] 替代)
       tags:
       - Payment_v1
   /v1/subscribe_plans:
@@ -11989,6 +12088,32 @@ paths:
           schema:
             $ref: '#/definitions/base.Output'
       summary: 使用Google登入
+      tags:
+      - 登入_v2
+  /v2/login/line:
+    post:
+      consumes:
+      - application/json
+      description: 使用Line登入
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APILoginForLineBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APILoginForLineOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 使用Line登入
       tags:
       - 登入_v2
   /v2/logout:

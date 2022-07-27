@@ -14,6 +14,7 @@ type Controller interface {
 	LoginForEmail(ctx *gin.Context)
 	LoginForFacebook(ctx *gin.Context)
 	LoginForGoogle(ctx *gin.Context)
+	LoginForLine(ctx *gin.Context)
 	Logout(ctx *gin.Context)
 	CreateRegisterOTP(ctx *gin.Context)
 	RegisterEmailAccountValidate(ctx *gin.Context)
