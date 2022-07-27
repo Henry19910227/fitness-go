@@ -22,12 +22,21 @@ type DeleteInput struct {
 type ListInput struct {
 	PagingInput
 	OrderByInput
+	PreloadInput
+}
+
+// APIGetBannersInput /v2/banners [GET]
+type APIGetBannersInput struct {
+	Query APIGetBannersQuery
+}
+type APIGetBannersQuery struct {
+	PagingInput
 }
 
 // APICreateCMSBannerInput /v2/cms/banner [POST]
 type APICreateCMSBannerInput struct {
 	ImageFile *file.Input
-	Form APICreateCMSBannerForm
+	Form      APICreateCMSBannerForm
 }
 type APICreateCMSBannerForm struct {
 	CourseIDOptional

@@ -5,16 +5,46 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
+	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	bannerService "github.com/Henry19910227/fitness-go/internal/v2/service/banner"
 )
 
 type resolver struct {
 	bannerService bannerService.Service
-	uploadTool   uploader.Tool
+	uploadTool    uploader.Tool
 }
 
 func New(bannerService bannerService.Service, uploadTool uploader.Tool) Resolver {
 	return &resolver{bannerService: bannerService, uploadTool: uploadTool}
+}
+
+func (r *resolver) APIGetBanners(input *model.APIGetBannersInput) (output model.APIGetBannersOutput) {
+	// parser input
+	listInput := model.ListInput{}
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "Course"},
+	}
+	if err := util.Parser(input.Query, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// List
+	datas, page, err := r.bannerService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetBannersData{}
+	if err := util.Parser(datas, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
+	return output
 }
 
 func (r *resolver) APICreateCMSBanner(input *model.APICreateCMSBannerInput) (output model.APICreateCMSBannerOutput) {
@@ -104,5 +134,3 @@ func (r *resolver) APIDeleteCMSBanner(input *model.APIDeleteCMSBannerInput) (out
 	output.Set(code.Success, "success")
 	return output
 }
-
-
