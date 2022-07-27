@@ -71,7 +71,7 @@ func NewPayment(baseGroup *gin.RouterGroup,
 }
 
 // CreateCourseOrder 創建課表訂單
-// @Summary 創建課表訂單
+// @Summary 創建課表訂單 (/v2/course_order [POST] 替代)
 // @Description 創建課表訂單
 // @Tags Payment_v1
 // @Accept json
@@ -101,7 +101,7 @@ func (p *Payment) CreateCourseOrder(c *gin.Context) {
 }
 
 // CreateSubscribeOrder 創建訂閱訂單
-// @Summary 創建訂閱訂單
+// @Summary 創建訂閱訂單 (/v2/subscribe_order [POST] 替代)
 // @Description 創建訂閱訂單
 // @Tags Payment_v1
 // @Accept json

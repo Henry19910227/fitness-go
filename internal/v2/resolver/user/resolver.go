@@ -436,8 +436,8 @@ func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (o
 }
 
 func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (output model.APILoginForGoogleOutput) {
-	//以 id token 取得 google uid
-	fbUid, err := r.googleLoginTool.GetUserIDByAccessToken(input.Body.IDToken)
+	//以 access token 取得 google uid
+	fbUid, err := r.googleLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -464,6 +464,57 @@ func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (outpu
 		return output
 	}
 	data := model.APILoginForGoogleData{}
+	if err := util.Parser(datas[0], &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//產生token
+	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(data.ID, 0))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//設置token過期時間
+	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(data.ID, 0)))
+	if err := r.redisTool.SetEX(key, token, r.jwtTool.GetExpire()); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = &data
+	output.Token = util.PointerString(token)
+	return output
+}
+
+func (r *resolver) APILoginForLine(input *model.APILoginForLineInput) (output model.APILoginForLineOutput) {
+	//以 access token 取得 uid
+	fbUid, err := r.lineLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//parser input
+	listInput := model.ListInput{}
+	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
+	listInput.IsDeleted = util.PointerInt(0)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "UserSubscribeInfo"},
+	}
+	if err := util.Parser(input.Body, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	datas, _, err := r.userService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(datas) == 0 {
+		output.Set(code.BadRequest, errors.New("帳號或密碼錯誤").Error())
+		return output
+	}
+	data := model.APILoginForLineData{}
 	if err := util.Parser(datas[0], &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

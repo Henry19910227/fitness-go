@@ -82,7 +82,7 @@ type APILoginForFacebookInput struct {
 	Body APILoginForFacebookBody
 }
 type APILoginForFacebookBody struct {
-	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // facebook sdk 回傳的 token string
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 }
 
 // APILoginForGoogleInput /v2/login/google [POST]
@@ -90,7 +90,15 @@ type APILoginForGoogleInput struct {
 	Body APILoginForGoogleBody
 }
 type APILoginForGoogleBody struct {
-	IDToken string `json:"id_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // google sdk 回傳的 id token
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
+}
+
+// APILoginForLineInput /v2/login/line [POST]
+type APILoginForLineInput struct {
+	Body APILoginForLineBody
+}
+type APILoginForLineBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 }
 
 // APILogoutInput /v2/logout [POST]
