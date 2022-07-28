@@ -10628,11 +10628,6 @@ var doc = `{
         "banner.APICreateCMSBannerData": {
             "type": "object",
             "properties": {
-                "course_id": {
-                    "description": "課表id",
-                    "type": "integer",
-                    "example": 10
-                },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
@@ -10657,11 +10652,6 @@ var doc = `{
                     "description": "更新時間",
                     "type": "string",
                     "example": "2022-06-14 00:00:00"
-                },
-                "user_id": {
-                    "description": "用戶id",
-                    "type": "integer",
-                    "example": 10001
                 }
             }
         },
@@ -10792,10 +10782,20 @@ var doc = `{
                     "items": {
                         "type": "object",
                         "properties": {
-                            "course_id": {
-                                "description": "課表id",
-                                "type": "integer",
-                                "example": 10
+                            "course": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "description": "課表 id",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "name": {
+                                        "description": "課表名稱",
+                                        "type": "string",
+                                        "example": "增肌課表"
+                                    }
+                                }
                             },
                             "create_at": {
                                 "description": "創建時間",
@@ -10812,6 +10812,21 @@ var doc = `{
                                 "type": "string",
                                 "example": "1234.jpg"
                             },
+                            "trainer": {
+                                "type": "object",
+                                "properties": {
+                                    "nickname": {
+                                        "description": "教練暱稱",
+                                        "type": "string",
+                                        "example": "Henry"
+                                    },
+                                    "user_id": {
+                                        "description": "用戶id",
+                                        "type": "integer",
+                                        "example": 10001
+                                    }
+                                }
+                            },
                             "type": {
                                 "description": "類型(1:課表/2:教練/3:訂閱)",
                                 "type": "integer",
@@ -10821,11 +10836,6 @@ var doc = `{
                                 "description": "更新時間",
                                 "type": "string",
                                 "example": "2022-06-14 00:00:00"
-                            },
-                            "user_id": {
-                                "description": "用戶id",
-                                "type": "integer",
-                                "example": 10001
                             }
                         }
                     }

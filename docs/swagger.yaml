@@ -135,10 +135,6 @@ definitions:
     type: object
   banner.APICreateCMSBannerData:
     properties:
-      course_id:
-        description: 課表id
-        example: 10
-        type: integer
       create_at:
         description: 創建時間
         example: "2022-06-14 00:00:00"
@@ -159,10 +155,6 @@ definitions:
         description: 更新時間
         example: "2022-06-14 00:00:00"
         type: string
-      user_id:
-        description: 用戶id
-        example: 10001
-        type: integer
     type: object
   banner.APICreateCMSBannerOutput:
     properties:
@@ -257,10 +249,17 @@ definitions:
       data:
         items:
           properties:
-            course_id:
-              description: 課表id
-              example: 10
-              type: integer
+            course:
+              properties:
+                id:
+                  description: 課表 id
+                  example: 2
+                  type: integer
+                name:
+                  description: 課表名稱
+                  example: 增肌課表
+                  type: string
+              type: object
             create_at:
               description: 創建時間
               example: "2022-06-14 00:00:00"
@@ -273,6 +272,17 @@ definitions:
               description: 圖片
               example: 1234.jpg
               type: string
+            trainer:
+              properties:
+                nickname:
+                  description: 教練暱稱
+                  example: Henry
+                  type: string
+                user_id:
+                  description: 用戶id
+                  example: 10001
+                  type: integer
+              type: object
             type:
               description: 類型(1:課表/2:教練/3:訂閱)
               example: 1
@@ -281,10 +291,6 @@ definitions:
               description: 更新時間
               example: "2022-06-14 00:00:00"
               type: string
-            user_id:
-              description: 用戶id
-              example: 10001
-              type: integer
           type: object
         type: array
       msg:

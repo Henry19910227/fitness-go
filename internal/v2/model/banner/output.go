@@ -46,8 +46,6 @@ type APICreateCMSBannerOutput struct {
 }
 type APICreateCMSBannerData struct {
 	IDField
-	CourseIDField
-	UserIDField
 	ImageField
 	TypeField
 	CreateAtField
@@ -67,10 +65,16 @@ type APIGetCMSBannersOutput struct {
 }
 type APIGetCMSBannersData []*struct {
 	IDField
-	CourseIDField
-	UserIDField
 	ImageField
 	TypeField
 	CreateAtField
 	UpdateAtField
+	Trainer *struct {
+		trainer.UserIDField
+		trainer.NicknameField
+	} `json:"trainer,omitempty"`
+	Course *struct {
+		course.IDField
+		course.NameField
+	} `json:"course,omitempty"`
 }
