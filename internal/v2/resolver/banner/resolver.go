@@ -84,6 +84,10 @@ func (r *resolver) APICreateCMSBanner(input *model.APICreateCMSBannerInput) (out
 func (r *resolver) APIGetCMSBanners(input *model.APIGetCMSBannersInput) (output model.APIGetCMSBannersOutput) {
 	// parser input
 	listInput := model.ListInput{}
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "Course"},
+	}
 	if err := util.Parser(input.Form, &listInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
