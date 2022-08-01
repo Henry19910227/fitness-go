@@ -601,6 +601,63 @@ func (r *resolver) APILoginForLine(input *model.APILoginForLineInput) (output mo
 	return output
 }
 
+func (r *resolver) APILoginForApple(input *model.APILoginForAppleInput) (output model.APILoginForAppleOutput) {
+	//生成 client secret
+	secret, err := r.appleLoginTool.GenerateClientSecret(time.Hour)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//以 access token 取得 uid
+	uid, err := r.appleLoginTool.GetUserID(input.Body.AccessToken, secret)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//parser input
+	listInput := model.ListInput{}
+	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(uid))
+	listInput.IsDeleted = util.PointerInt(0)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "UserSubscribeInfo"},
+	}
+	if err := util.Parser(input.Body, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	datas, _, err := r.userService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(datas) == 0 {
+		output.Set(code.BadRequest, errors.New("帳號或密碼錯誤").Error())
+		return output
+	}
+	data := model.APILoginForAppleData{}
+	if err := util.Parser(datas[0], &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//產生token
+	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(data.ID, 0))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//設置token過期時間
+	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(data.ID, 0)))
+	if err := r.redisTool.SetEX(key, token, r.jwtTool.GetExpire()); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = &data
+	output.Token = util.PointerString(token)
+	return output
+}
+
 func (r *resolver) APILogout(input *model.APILogoutInput) (output model.APILogoutOutput) {
 	if err := r.redisTool.Del(jwt.UserTokenPrefix + "." + strconv.Itoa(int(input.ID))); err != nil {
 		output.Set(code.BadRequest, err.Error())

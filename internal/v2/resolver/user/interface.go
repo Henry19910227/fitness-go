@@ -16,6 +16,7 @@ type Resolver interface {
 	APILoginForFacebook(input *model.APILoginForFacebookInput) (output model.APILoginForFacebookOutput)
 	APILoginForGoogle(input *model.APILoginForGoogleInput) (output model.APILoginForGoogleOutput)
 	APILoginForLine(input *model.APILoginForLineInput) (output model.APILoginForLineOutput)
+	APILoginForApple(input *model.APILoginForAppleInput) (output model.APILoginForAppleOutput)
 	APILogout(input *model.APILogoutInput) (output model.APILogoutOutput)
 	APICreateRegisterOTP(input *model.APICreateOTPInput) (output model.APICreateRegisterOTPOutput)
 	APIRegisterNicknameValidate(input *model.APIRegisterNicknameValidateInput) (output model.APIRegisterNicknameValidateOutput)
