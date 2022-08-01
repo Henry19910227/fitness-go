@@ -89,6 +89,12 @@ type APILoginForEmailData struct {
 	NicknameField
 	AvatarField
 	UserStatusField
+	SexField
+	BirthdayField
+	HeightField
+	WeightField
+	ExperienceField
+	TargetField
 	CreateAtField
 	UpdateAtField
 	Trainer *struct {
