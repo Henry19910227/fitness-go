@@ -191,7 +191,7 @@ func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (o
 
 func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInput) (output model.APIRegisterForFacebookOutput) {
 	//以access token 取得 fb uid
-	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken, "")
+	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -244,7 +244,7 @@ func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInp
 
 func (r *resolver) APIRegisterForGoogle(input *model.APIRegisterForGoogleInput) (output model.APIRegisterForGoogleOutput) {
 	//以access token 取得 google uid
-	guid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken, "")
+	guid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -356,7 +356,7 @@ func (r *resolver) APIRegisterForApple(input *model.APIRegisterForAppleInput) (o
 
 func (r *resolver) APIRegisterForLine(input *model.APIRegisterForLineInput) (output model.APIRegisterForLineOutput) {
 	//以access token 取得 client id
-	guid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken, "")
+	guid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -450,7 +450,7 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 
 func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (output model.APILoginForFacebookOutput) {
 	//以access token 取得 fb uid
-	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken, "")
+	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -501,7 +501,7 @@ func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (o
 
 func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (output model.APILoginForGoogleOutput) {
 	//以 access token 取得 google uid
-	fbUid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken, "")
+	fbUid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -552,7 +552,7 @@ func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (outpu
 
 func (r *resolver) APILoginForLine(input *model.APILoginForLineInput) (output model.APILoginForLineOutput) {
 	//以 access token 取得 uid
-	fbUid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken, "")
+	fbUid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -725,7 +725,7 @@ func (r *resolver) APIRegisterEmailAccountValidate(input *model.APIRegisterEmail
 
 func (r *resolver) APIRegisterFacebookAccountValidate(input *model.APIRegisterFacebookAccountValidateInput) (output model.APIRegisterFacebookAccountValidateOutput) {
 	//以access token 取得 fb uid
-	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken, "")
+	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -746,7 +746,7 @@ func (r *resolver) APIRegisterFacebookAccountValidate(input *model.APIRegisterFa
 
 func (r *resolver) APIRegisterLineAccountValidate(input *model.APIRegisterLineAccountValidateInput) (output model.APIRegisterLineAccountValidateOutput) {
 	//以access token 取得 uid
-	uid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken, "")
+	uid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -767,13 +767,28 @@ func (r *resolver) APIRegisterLineAccountValidate(input *model.APIRegisterLineAc
 
 func (r *resolver) APIRegisterGoogleAccountValidate(input *model.APIRegisterGoogleAccountValidateInput) (output model.APIRegisterGoogleAccountValidateOutput) {
 	//以access token 取得 uid
-	uid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken, "")
+	uid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//檢查帳號是否重複
 	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(uid))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該帳號已註冊").Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIRegisterAppleAccountValidate(input *model.APIRegisterAppleAccountValidateInput) (output model.APIRegisterAppleAccountValidateOutput) {
+	//檢查帳號是否重複
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(input.Body.UserIDToken))
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

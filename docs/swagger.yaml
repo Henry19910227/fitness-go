@@ -5449,6 +5449,26 @@ definitions:
         example: message..
         type: string
     type: object
+  user.APIRegisterAppleAccountValidateBody:
+    properties:
+      user_id_token:
+        description: sdk 回傳的 userID token string
+        example: 0007.d5.5w4e1
+        type: string
+    required:
+    - user_id_token
+    type: object
+  user.APIRegisterAppleAccountValidateOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   user.APIRegisterEmailAccountValidateBody:
     properties:
       email:
@@ -12609,6 +12629,32 @@ paths:
           schema:
             $ref: '#/definitions/base.Output'
       summary: 使用Apple註冊
+      tags:
+      - 註冊_v2
+  /v2/register/apple_account/validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證Apple帳戶是否可使用
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIRegisterAppleAccountValidateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIRegisterAppleAccountValidateOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 驗證Apple帳戶是否可使用
       tags:
       - 註冊_v2
   /v2/register/email:

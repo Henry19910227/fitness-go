@@ -9878,6 +9878,46 @@
                 }
             }
         },
+        "/v2/register/apple_account/validate": {
+            "post": {
+                "description": "驗證Apple帳戶是否可使用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "驗證Apple帳戶是否可使用",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterAppleAccountValidateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterAppleAccountValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/email": {
             "post": {
                 "description": "使用信箱註冊",
@@ -17698,6 +17738,34 @@
             }
         },
         "user.APILogoutOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterAppleAccountValidateBody": {
+            "type": "object",
+            "required": [
+                "user_id_token"
+            ],
+            "properties": {
+                "user_id_token": {
+                    "description": "sdk 回傳的 userID token string",
+                    "type": "string",
+                    "example": "0007.d5.5w4e1"
+                }
+            }
+        },
+        "user.APIRegisterAppleAccountValidateOutput": {
             "type": "object",
             "properties": {
                 "code": {

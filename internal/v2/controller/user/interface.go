@@ -23,6 +23,7 @@ type Controller interface {
 	RegisterFacebookAccountValidate(ctx *gin.Context)
 	RegisterLineAccountValidate(ctx *gin.Context)
 	RegisterGoogleAccountValidate(ctx *gin.Context)
+	RegisterAppleAccountValidate(ctx *gin.Context)
 	RegisterNicknameValidate(ctx *gin.Context)
 	RegisterEmailValidate(ctx *gin.Context)
 }

@@ -226,5 +226,5 @@ type APIRegisterAppleAccountValidateInput struct {
 	Body APIRegisterAppleAccountValidateBody
 }
 type APIRegisterAppleAccountValidateBody struct {
-	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
+	UserIDToken string `json:"user_id_token" binding:"required" example:"0007.d5.5w4e1"` // sdk 回傳的 userID token string
 }

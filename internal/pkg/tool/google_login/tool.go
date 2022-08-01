@@ -16,7 +16,7 @@ func New(setting google_login.Setting) Tool {
 	return &tool{setting: setting}
 }
 
-func (t *tool) GetUserID(authCode string, clientSecret string) (string, error) {
+func (t *tool) GetUserID(authCode string) (string, error) {
 	param := map[string]interface{}{
 		"id_token": authCode,
 	}

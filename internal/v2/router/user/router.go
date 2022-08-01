@@ -34,6 +34,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.POST("/register/facebook_account/validate", controller.RegisterFacebookAccountValidate)
 	v2.POST("/register/line_account/validate", controller.RegisterLineAccountValidate)
 	v2.POST("/register/google_account/validate", controller.RegisterGoogleAccountValidate)
+	v2.POST("/register/apple_account/validate", controller.RegisterAppleAccountValidate)
 	v2.POST("/register/nickname/validate", controller.RegisterNicknameValidate)
 	v2.POST("/register/email/validate", controller.RegisterEmailValidate)
 }
