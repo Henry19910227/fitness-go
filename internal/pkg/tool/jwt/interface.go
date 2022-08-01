@@ -1,6 +1,8 @@
 package jwt
 
-import "time"
+import (
+	"time"
+)
 
 type Tool interface {
 	GenerateUserToken(uid int64) (string, error)

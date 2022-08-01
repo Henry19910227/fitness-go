@@ -72,6 +72,11 @@ type APIRegisterForGoogleOutput struct {
 	base.Output
 }
 
+// APIRegisterForAppleOutput /v2/register/apple [POST]
+type APIRegisterForAppleOutput struct {
+	base.Output
+}
+
 // APIRegisterForLineOutput /v2/register/line [POST]
 type APIRegisterForLineOutput struct {
 	base.Output
@@ -135,6 +140,17 @@ type APILoginForGoogleData struct {
 	APILoginForEmailData
 }
 
+// APILoginForAppleOutput /v2/login/apple [POST]
+type APILoginForAppleOutput struct {
+	base.Output
+	Data  *APILoginForAppleData `json:"data,omitempty"`
+	Token *string                `json:"token,omitempty" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
+
+}
+type APILoginForAppleData struct {
+	APILoginForEmailData
+}
+
 // APILoginForLineOutput /v2/login/line [POST]
 type APILoginForLineOutput struct {
 	base.Output
@@ -187,5 +203,10 @@ type APIRegisterLineAccountValidateOutput struct {
 
 // APIRegisterGoogleAccountValidateOutput /v2/google/google_account/validate [POST]
 type APIRegisterGoogleAccountValidateOutput struct {
+	base.Output
+}
+
+// APIRegisterAppleAccountValidateOutput /v2/google/apple_account/validate [POST]
+type APIRegisterAppleAccountValidateOutput struct {
 	base.Output
 }

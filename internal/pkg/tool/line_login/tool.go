@@ -14,9 +14,9 @@ func New(setting line_login.Setting) Tool {
 	return &tool{setting: setting}
 }
 
-func (t *tool) GetUserIDByAccessToken(accessToken string) (string, error) {
+func (t *tool) GetUserID(authCode string, clientSecret string) (string, error) {
 	param := map[string]interface{}{
-		"access_token": accessToken,
+		"access_token": authCode,
 	}
 	dict, err := util.SendRequest("GET", t.setting.GetVerifyTokenURL(), nil, nil, param)
 	if err != nil {

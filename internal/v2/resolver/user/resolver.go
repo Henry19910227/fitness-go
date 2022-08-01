@@ -3,6 +3,7 @@ package user
 import (
 	"errors"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/apple_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/fb_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/google_login"
@@ -16,6 +17,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	userService "github.com/Henry19910227/fitness-go/internal/v2/service/user"
 	"strconv"
+	"time"
 )
 
 type resolver struct {
@@ -26,6 +28,7 @@ type resolver struct {
 	jwtTool         jwt.Tool
 	fbLoginTool     fb_login.Tool
 	googleLoginTool google_login.Tool
+	appleLoginTool  apple_login.Tool
 	lineLoginTool   line_login.Tool
 	uploadTool      uploader.Tool
 }
@@ -33,11 +36,13 @@ type resolver struct {
 func New(userService userService.Service, otpTool otp.Tool,
 	cryptoTool crypto.Tool, redisTool redis.Tool,
 	jwtTool jwt.Tool, fbLoginTool fb_login.Tool,
-	googleLoginTool google_login.Tool, lineLoginTool line_login.Tool, uploadTool uploader.Tool) Resolver {
+	googleLoginTool google_login.Tool, appleLoginTool apple_login.Tool,
+	lineLoginTool line_login.Tool, uploadTool uploader.Tool) Resolver {
 	return &resolver{userService: userService, otpTool: otpTool,
 		cryptoTool: cryptoTool, redisTool: redisTool,
 		jwtTool: jwtTool, fbLoginTool: fbLoginTool,
-		googleLoginTool: googleLoginTool, lineLoginTool: lineLoginTool, uploadTool: uploadTool}
+		googleLoginTool: googleLoginTool, appleLoginTool: appleLoginTool,
+		lineLoginTool: lineLoginTool, uploadTool: uploadTool}
 }
 
 func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput) {
@@ -186,7 +191,7 @@ func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (o
 
 func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInput) (output model.APIRegisterForFacebookOutput) {
 	//以access token 取得 fb uid
-	fbUid, err := r.fbLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -239,7 +244,7 @@ func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInp
 
 func (r *resolver) APIRegisterForGoogle(input *model.APIRegisterForGoogleInput) (output model.APIRegisterForGoogleOutput) {
 	//以access token 取得 google uid
-	guid, err := r.googleLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	guid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -290,9 +295,68 @@ func (r *resolver) APIRegisterForGoogle(input *model.APIRegisterForGoogleInput) 
 	return output
 }
 
+func (r *resolver) APIRegisterForApple(input *model.APIRegisterForAppleInput) (output model.APIRegisterForAppleOutput) {
+	//生成 client secret
+	secret, err := r.appleLoginTool.GenerateClientSecret(time.Hour)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//以access token 取得 apple uid
+	guid, err := r.appleLoginTool.GetUserID(input.Body.AccessToken, secret)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//檢查帳號是否重複
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(guid))
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該帳號重複").Error())
+		return output
+	}
+	//檢查暱稱是否重複
+	ok, err = r.nicknameValidate(input.Body.Nickname)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該暱稱重複").Error())
+		return output
+	}
+	//檢查Email是否重複
+	ok, err = r.emailValidate(input.Body.Email)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if !ok {
+		output.Set(code.DataAlreadyExists, errors.New("該信箱重複").Error())
+		return output
+	}
+	//創建用戶
+	table := model.Table{}
+	table.AccountType = util.PointerInt(model.Apple)
+	table.Account = util.PointerString(r.cryptoTool.MD5Encode(guid))
+	table.Nickname = util.PointerString(input.Body.Nickname)
+	table.Email = util.PointerString(input.Body.Email)
+	table.Password = util.PointerString("")
+	_, err = r.userService.Create(&table)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
+}
+
 func (r *resolver) APIRegisterForLine(input *model.APIRegisterForLineInput) (output model.APIRegisterForLineOutput) {
 	//以access token 取得 client id
-	guid, err := r.lineLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	guid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -386,7 +450,7 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 
 func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (output model.APILoginForFacebookOutput) {
 	//以access token 取得 fb uid
-	fbUid, err := r.fbLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -437,7 +501,7 @@ func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (o
 
 func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (output model.APILoginForGoogleOutput) {
 	//以 access token 取得 google uid
-	fbUid, err := r.googleLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	fbUid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -488,7 +552,7 @@ func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (outpu
 
 func (r *resolver) APILoginForLine(input *model.APILoginForLineInput) (output model.APILoginForLineOutput) {
 	//以 access token 取得 uid
-	fbUid, err := r.lineLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	fbUid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -604,7 +668,7 @@ func (r *resolver) APIRegisterEmailAccountValidate(input *model.APIRegisterEmail
 
 func (r *resolver) APIRegisterFacebookAccountValidate(input *model.APIRegisterFacebookAccountValidateInput) (output model.APIRegisterFacebookAccountValidateOutput) {
 	//以access token 取得 fb uid
-	fbUid, err := r.fbLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -625,7 +689,7 @@ func (r *resolver) APIRegisterFacebookAccountValidate(input *model.APIRegisterFa
 
 func (r *resolver) APIRegisterLineAccountValidate(input *model.APIRegisterLineAccountValidateInput) (output model.APIRegisterLineAccountValidateOutput) {
 	//以access token 取得 uid
-	uid, err := r.lineLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	uid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -646,7 +710,7 @@ func (r *resolver) APIRegisterLineAccountValidate(input *model.APIRegisterLineAc
 
 func (r *resolver) APIRegisterGoogleAccountValidate(input *model.APIRegisterGoogleAccountValidateInput) (output model.APIRegisterGoogleAccountValidateOutput) {
 	//以access token 取得 uid
-	uid, err := r.googleLoginTool.GetUserIDByAccessToken(input.Body.AccessToken)
+	uid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken, "")
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

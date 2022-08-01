@@ -1,5 +1,5 @@
 package google_login
 
 type Tool interface {
-	GetUserIDByAccessToken(accessToken string) (string, error)
+	GetUserID(authCode string, clientSecret string) (string, error)
 }

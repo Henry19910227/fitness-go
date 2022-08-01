@@ -93,6 +93,14 @@ type APILoginForGoogleBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 }
 
+// APILoginForAppleInput /v2/login/apple [POST]
+type APILoginForAppleInput struct {
+	Body APILoginForAppleBody
+}
+type APILoginForAppleBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 authorizationCode string
+}
+
 // APILoginForLineInput /v2/login/line [POST]
 type APILoginForLineInput struct {
 	Body APILoginForLineBody
@@ -133,6 +141,16 @@ type APIRegisterForGoogleInput struct {
 }
 type APIRegisterForGoogleBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
+	NicknameRequired
+	EmailRequired
+}
+
+// APIRegisterForAppleInput /v2/register/apple [POST]
+type APIRegisterForAppleInput struct {
+	Body APIRegisterForAppleBody
+}
+type APIRegisterForAppleBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 authorizationCode string
 	NicknameRequired
 	EmailRequired
 }
@@ -200,5 +218,13 @@ type APIRegisterGoogleAccountValidateInput struct {
 	Body APIRegisterGoogleAccountValidateBody
 }
 type APIRegisterGoogleAccountValidateBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
+}
+
+// APIRegisterAppleAccountValidateInput /v2/register/apple_account/validate [POST]
+type APIRegisterAppleAccountValidateInput struct {
+	Body APIRegisterAppleAccountValidateBody
+}
+type APIRegisterAppleAccountValidateBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 }

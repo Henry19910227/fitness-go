@@ -280,6 +280,26 @@ func (c *controller) RegisterForLine(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// RegisterForApple 使用Apple註冊
+// @Summary 使用Apple註冊
+// @Description 使用Apple註冊
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIRegisterForAppleBody true "輸入參數"
+// @Success 200 {object} user.APIRegisterForAppleOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/register/apple [POST]
+func (c *controller) RegisterForApple(ctx *gin.Context) {
+	var input model.APIRegisterForAppleInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIRegisterForApple(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // CreateRegisterOTP 發送OTP
 // @Summary 發送OTP
 // @Description 發送OTP

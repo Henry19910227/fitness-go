@@ -9816,6 +9816,46 @@ var doc = `{
                 }
             }
         },
+        "/v2/register/apple": {
+            "post": {
+                "description": "使用Apple註冊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "使用Apple註冊",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForAppleBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIRegisterForAppleOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/email": {
             "post": {
                 "description": "使用信箱註冊",
@@ -16725,7 +16765,7 @@ var doc = `{
                     "example": "test@gmail.com"
                 },
                 "account_type": {
-                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)",
+                    "description": "帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊/5:Apple註冊)",
                     "type": "integer",
                     "example": 1
                 },
@@ -16851,10 +16891,25 @@ var doc = `{
                     "type": "string",
                     "example": "123.png"
                 },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
                     "example": "2022-06-12 00:00:00"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 165.5
                 },
                 "id": {
                     "description": "帳戶id",
@@ -16865,6 +16920,16 @@ var doc = `{
                     "description": "暱稱",
                     "type": "string",
                     "example": "henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 1
                 },
                 "trainer": {
                     "type": "object",
@@ -16935,6 +17000,11 @@ var doc = `{
                             "example": "2022-06-14 00:00:00"
                         }
                     }
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 50.5
                 }
             }
         },
@@ -16982,10 +17052,25 @@ var doc = `{
                     "type": "string",
                     "example": "123.png"
                 },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
                     "example": "2022-06-12 00:00:00"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 165.5
                 },
                 "id": {
                     "description": "帳戶id",
@@ -16996,6 +17081,16 @@ var doc = `{
                     "description": "暱稱",
                     "type": "string",
                     "example": "henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 1
                 },
                 "trainer": {
                     "type": "object",
@@ -17066,6 +17161,11 @@ var doc = `{
                             "example": "2022-06-14 00:00:00"
                         }
                     }
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 50.5
                 }
             }
         },
@@ -17113,10 +17213,25 @@ var doc = `{
                     "type": "string",
                     "example": "123.png"
                 },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
                     "example": "2022-06-12 00:00:00"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 165.5
                 },
                 "id": {
                     "description": "帳戶id",
@@ -17127,6 +17242,16 @@ var doc = `{
                     "description": "暱稱",
                     "type": "string",
                     "example": "henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 1
                 },
                 "trainer": {
                     "type": "object",
@@ -17197,6 +17322,11 @@ var doc = `{
                             "example": "2022-06-14 00:00:00"
                         }
                     }
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 50.5
                 }
             }
         },
@@ -17244,10 +17374,25 @@ var doc = `{
                     "type": "string",
                     "example": "123.png"
                 },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1991-02-27"
+                },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
                     "example": "2022-06-12 00:00:00"
+                },
+                "experience": {
+                    "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "height": {
+                    "description": "身高",
+                    "type": "number",
+                    "example": 165.5
                 },
                 "id": {
                     "description": "帳戶id",
@@ -17258,6 +17403,16 @@ var doc = `{
                     "description": "暱稱",
                     "type": "string",
                     "example": "henry"
+                },
+                "sex": {
+                    "description": "性別 (m:男/f:女)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "target": {
+                    "description": "目標 (0:未指定/1:減重/2:維持健康/3:增肌)",
+                    "type": "integer",
+                    "example": 1
                 },
                 "trainer": {
                     "type": "object",
@@ -17328,6 +17483,11 @@ var doc = `{
                             "example": "2022-06-14 00:00:00"
                         }
                     }
+                },
+                "weight": {
+                    "description": "體重",
+                    "type": "number",
+                    "example": 50.5
                 }
             }
         },
@@ -17439,6 +17599,46 @@ var doc = `{
             }
         },
         "user.APIRegisterFacebookAccountValidateOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIRegisterForAppleBody": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "email",
+                "nickname"
+            ],
+            "properties": {
+                "access_token": {
+                    "description": "sdk 回傳的 authorizationCode string",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "nickname": {
+                    "description": "暱稱(1~20字元)",
+                    "type": "string",
+                    "example": "henry"
+                }
+            }
+        },
+        "user.APIRegisterForAppleOutput": {
             "type": "object",
             "properties": {
                 "code": {

@@ -4,7 +4,7 @@ type IDField struct {
 	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"10001"` // 帳戶id
 }
 type AccountTypeField struct {
-	AccountType *int `json:"account_type,omitempty" gorm:"column:account_type" example:"1"` // 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)
+	AccountType *int `json:"account_type,omitempty" gorm:"column:account_type" example:"1"` // 帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊/5:Apple註冊)
 }
 type AccountField struct {
 	Account *string `json:"account,omitempty" gorm:"column:account" example:"test@gmail.com"` // 帳號

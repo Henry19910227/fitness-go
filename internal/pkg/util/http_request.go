@@ -13,7 +13,6 @@ func SendRequest(method string, url string, header map[string]string, body map[s
 	if err != nil {
 		return nil, err
 	}
-	reqs.Header.Add("Content-Type", "application/json")
 	if header != nil {
 		for k, v := range header {
 			reqs.Header.Add(k, v)

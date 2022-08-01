@@ -11,6 +11,7 @@ type Controller interface {
 	RegisterForFacebook(ctx *gin.Context)
 	RegisterForGoogle(ctx *gin.Context)
 	RegisterForLine(ctx *gin.Context)
+	RegisterForApple(ctx *gin.Context)
 	LoginForEmail(ctx *gin.Context)
 	LoginForFacebook(ctx *gin.Context)
 	LoginForGoogle(ctx *gin.Context)

@@ -6,5 +6,6 @@ const (
 	Facebook int = 2 //Facebook註冊
 	Google int = 3 //Google註冊
 	Line int = 4 //Line註冊
+	Apple int = 5 //Apple註冊
 )
 

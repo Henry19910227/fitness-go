@@ -14,9 +14,9 @@ func New(setting fb_login.Setting) Tool {
 	return &tool{setting: setting}
 }
 
-func (t *tool) GetUserIDByAccessToken(accessToken string) (string, error) {
+func (t *tool) GetUserID(authCode string, clientSecret string) (string, error) {
 	param := map[string]interface{}{
-		"input_token":  accessToken,
+		"input_token":  authCode,
 		"access_token": t.setting.GetAppID() + "|" + t.setting.GetAppSecret(),
 	}
 	dict, err := util.SendRequest("GET", t.setting.GetDebugTokenURL(), nil, nil, param)

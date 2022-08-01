@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/apple_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/fb_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/google_login"
@@ -22,6 +23,7 @@ func NewResolver(db *gorm.DB) Resolver {
 	fbLoginTool := fb_login.NewTool()
 	googleLoginTool := google_login.NewTool()
 	lineLoginTool := line_login.NewTool()
+	appleLoginTool := apple_login.NewTool()
 	uploadTool := uploader.NewUserAvatarTool()
-	return New(userSvc, otpTool, cryptoTool, redisTool, jwtTool, fbLoginTool, googleLoginTool, lineLoginTool, uploadTool)
+	return New(userSvc, otpTool, cryptoTool, redisTool, jwtTool, fbLoginTool, googleLoginTool, appleLoginTool, lineLoginTool, uploadTool)
 }

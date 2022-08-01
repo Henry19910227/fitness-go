@@ -66,7 +66,8 @@ func (t *tool) VerifyAppleReceiptAPI(receiptData string) (*model.IAPVerifyReceip
 		"password":                 t.setting.GetPassword(),
 		"exclude-old-transactions": 1,
 	}
-	result, err := util.SendRequest("POST", t.setting.GetProductURL(), nil, body, nil)
+	header := map[string]string{"Content-Type": "application/json"}
+	result, err := util.SendRequest("POST", t.setting.GetProductURL(), header, body, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +77,7 @@ func (t *tool) VerifyAppleReceiptAPI(receiptData string) (*model.IAPVerifyReceip
 	}
 	//apple server 測試區驗證收據
 	if response.Status == 21007 {
-		result, err := util.SendRequest("POST", t.setting.GetSandboxURL(), nil, body, nil)
+		result, err := util.SendRequest("POST", t.setting.GetSandboxURL(), header, body, nil)
 		if err != nil {
 			return nil, err
 		}
