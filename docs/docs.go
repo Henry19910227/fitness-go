@@ -10381,6 +10381,40 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/bank_account": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練個人銀行帳戶",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練個人_v2"
+                ],
+                "summary": "獲取教練個人銀行帳戶",
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/bank_account.APIGetTrainerBankAccountOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/profile": {
             "get": {
                 "security": [
@@ -10742,6 +10776,64 @@ var doc = `{
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "bank_account.APIGetTrainerBankAccountData": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "分行",
+                    "type": "string",
+                    "example": "南京分行"
+                },
+                "account_image": {
+                    "description": "帳戶照片",
+                    "type": "string",
+                    "example": "123.png"
+                },
+                "account_name": {
+                    "description": "戶名",
+                    "type": "string",
+                    "example": "王小明"
+                },
+                "bank_code": {
+                    "description": "銀行代號",
+                    "type": "string",
+                    "example": "009"
+                },
+                "branch": {
+                    "description": "分行",
+                    "type": "string",
+                    "example": "南京分行"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                }
+            }
+        },
+        "bank_account.APIGetTrainerBankAccountOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/bank_account.APIGetTrainerBankAccountData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },
