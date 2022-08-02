@@ -6,4 +6,5 @@ import (
 
 type Controller interface {
 	GetTrainerBankAccount(ctx *gin.Context)
+	UpdateTrainerBankAccount(ctx *gin.Context)
 }

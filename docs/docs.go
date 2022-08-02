@@ -10388,7 +10388,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取教練個人銀行帳戶",
+                "description": "查看銀行帳戶圖片 : {Base URL}/v2/resource/bank_account/image/{Filename}",
                 "consumes": [
                     "application/json"
                 ],
@@ -10404,6 +10404,70 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/bank_account.APIGetTrainerBankAccountOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新教練個人銀行帳戶",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練個人_v2"
+                ],
+                "summary": "更新教練個人銀行帳戶",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "戶名",
+                        "name": "account_name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "銀行代號",
+                        "name": "bank_code",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "分行",
+                        "name": "branch",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "帳號",
+                        "name": "account",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "帳戶照片",
+                        "name": "account_image",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
                         }
                     },
                     "400": {
@@ -10783,9 +10847,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "account": {
-                    "description": "分行",
+                    "description": "帳號",
                     "type": "string",
-                    "example": "南京分行"
+                    "example": "005321423"
                 },
                 "account_image": {
                     "description": "帳戶照片",

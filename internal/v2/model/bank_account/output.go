@@ -26,3 +26,8 @@ type APIGetTrainerBankAccountData struct {
 	CreateAtField
 	UpdateAtField
 }
+
+// APIUpdateTrainerBankAccountOutput /v2/trainer/bank_account [GET]
+type APIUpdateTrainerBankAccountOutput struct {
+	base.Output
+}

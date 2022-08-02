@@ -13,4 +13,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := bank_account.NewController(orm.Shared().DB())
 	midd := middleware.NewTokenMiddleware(redis.Shared())
 	v2.GET("/trainer/bank_account", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerBankAccount)
+	v2.PATCH("/trainer/bank_account", midd.Verify([]global.Role{global.UserRole}), controller.UpdateTrainerBankAccount)
 }

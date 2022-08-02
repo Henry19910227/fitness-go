@@ -16,7 +16,7 @@ type BranchField struct {
 	Branch *string `json:"branch,omitempty" gorm:"column:branch" example:"南京分行"` // 分行
 }
 type AccountField struct {
-	Account *string `json:"account,omitempty" gorm:"column:account" example:"南京分行"` // 分行
+	Account *string `json:"account,omitempty" gorm:"column:account" example:"005321423"` // 帳號
 }
 type CreateAtField struct {
 	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at" example:"2022-06-14 00:00:00"` //創建時間

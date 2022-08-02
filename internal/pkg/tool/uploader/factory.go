@@ -37,3 +37,7 @@ func NewReviewImageTool() Tool {
 func NewBannerImageTool() Tool {
 	return New(setting.NewBannerImage())
 }
+
+func NewAccountImageTool() Tool {
+	return New(setting.NewAccountImage())
+}
