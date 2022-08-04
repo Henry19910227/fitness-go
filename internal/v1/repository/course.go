@@ -311,6 +311,7 @@ func (c *course) FindCourseProductSummaries(param model.FindCourseProductSummari
 		Preload("Sale.ProductLabel").
 		Preload("Review").
 		Joins("INNER JOIN users ON courses.user_id = users.id").
+		Joins("INNER JOIN trainers ON courses.user_id = trainers.user_id").
 		Joins("LEFT JOIN review_statistics AS review ON courses.id = review.course_id").
 		Where(query, params...)
 	//排序
