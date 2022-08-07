@@ -133,6 +133,7 @@ type APIRegisterForFacebookBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 	NicknameRequired
 	EmailRequired
+	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
 // APIRegisterForGoogleInput /v2/register/google [POST]
@@ -143,6 +144,7 @@ type APIRegisterForGoogleBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 	NicknameRequired
 	EmailRequired
+	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
 // APIRegisterForAppleInput /v2/register/apple [POST]
@@ -153,6 +155,7 @@ type APIRegisterForAppleBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 authorizationCode string
 	NicknameRequired
 	EmailRequired
+	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
 // APIRegisterForLineInput /v2/register/line [POST]
@@ -163,6 +166,7 @@ type APIRegisterForLineBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
 	NicknameRequired
 	EmailRequired
+	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
 // APICreateOTPInput /v2/otp [POST]

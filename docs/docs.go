@@ -18043,7 +18043,8 @@ var doc = `{
             "required": [
                 "access_token",
                 "email",
-                "nickname"
+                "nickname",
+                "otp_code"
             ],
             "properties": {
                 "access_token": {
@@ -18060,6 +18061,11 @@ var doc = `{
                     "description": "暱稱(1~20字元)",
                     "type": "string",
                     "example": "henry"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
                 }
             }
         },
@@ -18129,7 +18135,8 @@ var doc = `{
             "required": [
                 "access_token",
                 "email",
-                "nickname"
+                "nickname",
+                "otp_code"
             ],
             "properties": {
                 "access_token": {
@@ -18146,6 +18153,11 @@ var doc = `{
                     "description": "暱稱(1~20字元)",
                     "type": "string",
                     "example": "henry"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
                 }
             }
         },
@@ -18169,7 +18181,8 @@ var doc = `{
             "required": [
                 "access_token",
                 "email",
-                "nickname"
+                "nickname",
+                "otp_code"
             ],
             "properties": {
                 "access_token": {
@@ -18186,6 +18199,11 @@ var doc = `{
                     "description": "暱稱(1~20字元)",
                     "type": "string",
                     "example": "henry"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
                 }
             }
         },
@@ -18209,7 +18227,8 @@ var doc = `{
             "required": [
                 "access_token",
                 "email",
-                "nickname"
+                "nickname",
+                "otp_code"
             ],
             "properties": {
                 "access_token": {
@@ -18226,6 +18245,11 @@ var doc = `{
                     "description": "暱稱(1~20字元)",
                     "type": "string",
                     "example": "henry"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
                 }
             }
         },

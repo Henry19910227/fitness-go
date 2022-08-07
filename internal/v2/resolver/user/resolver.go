@@ -190,6 +190,11 @@ func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (o
 }
 
 func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInput) (output model.APIRegisterForFacebookOutput) {
+	//檢查驗證碼
+	if !r.otpTool.Validate(input.Body.OTPCode, input.Body.Email) {
+		output.Set(code.BadRequest, errors.New("無效的驗證碼").Error())
+		return output
+	}
 	//以access token 取得 fb uid
 	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
@@ -243,6 +248,11 @@ func (r *resolver) APIRegisterForFacebook(input *model.APIRegisterForFacebookInp
 }
 
 func (r *resolver) APIRegisterForGoogle(input *model.APIRegisterForGoogleInput) (output model.APIRegisterForGoogleOutput) {
+	//檢查驗證碼
+	if !r.otpTool.Validate(input.Body.OTPCode, input.Body.Email) {
+		output.Set(code.BadRequest, errors.New("無效的驗證碼").Error())
+		return output
+	}
 	//以access token 取得 google uid
 	guid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
@@ -296,6 +306,11 @@ func (r *resolver) APIRegisterForGoogle(input *model.APIRegisterForGoogleInput) 
 }
 
 func (r *resolver) APIRegisterForApple(input *model.APIRegisterForAppleInput) (output model.APIRegisterForAppleOutput) {
+	//檢查驗證碼
+	if !r.otpTool.Validate(input.Body.OTPCode, input.Body.Email) {
+		output.Set(code.BadRequest, errors.New("無效的驗證碼").Error())
+		return output
+	}
 	//生成 client secret
 	secret, err := r.appleLoginTool.GenerateClientSecret(time.Hour)
 	if err != nil {
@@ -355,6 +370,11 @@ func (r *resolver) APIRegisterForApple(input *model.APIRegisterForAppleInput) (o
 }
 
 func (r *resolver) APIRegisterForLine(input *model.APIRegisterForLineInput) (output model.APIRegisterForLineOutput) {
+	//檢查驗證碼
+	if !r.otpTool.Validate(input.Body.OTPCode, input.Body.Email) {
+		output.Set(code.BadRequest, errors.New("無效的驗證碼").Error())
+		return output
+	}
 	//以access token 取得 client id
 	guid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
