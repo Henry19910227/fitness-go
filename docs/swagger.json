@@ -10370,7 +10370,7 @@
                         "fitness_token": []
                     }
                 ],
-                "description": "查看銀行帳戶圖片 : {Base URL}/v2/resource/bank_account/image/{Filename}",
+                "description": "查看銀行帳戶圖片 : {Base URL}/v2/resource/trainer/account_image/{Filename}",
                 "consumes": [
                     "application/json"
                 ],

@@ -20,7 +20,7 @@ func New(resolver bank_account.Resolver) Controller {
 
 // GetTrainerBankAccount 獲取教練個人銀行帳戶
 // @Summary 獲取教練個人銀行帳戶
-// @Description 查看銀行帳戶圖片 : {Base URL}/v2/resource/bank_account/image/{Filename}
+// @Description 查看銀行帳戶圖片 : {Base URL}/v2/resource/trainer/account_image/{Filename}
 // @Tags 教練個人_v2
 // @Accept json
 // @Produce json
