@@ -468,6 +468,29 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 	return output
 }
 
+func (r *resolver) APIVerifyAppleSubscribe(input *orderModel.APIVerifyAppleSubscribeInput) (output orderModel.APIVerifyAppleSubscribeOutput) {
+	// 驗證是否是原先訂閱用戶
+	orderListInput := orderModel.ListInput{}
+	orderListInput.OriginalTransactionID = util.PointerString(input.Body.OriginalTransactionID)
+	orderListInput.OrderField = "create_at"
+	orderListInput.OrderType = order_by.DESC
+	orderListInput.Size = 1
+	orderListInput.Page = 1
+	orderOutputs, _, err := r.orderService.List(&orderListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(orderOutputs) > 0 {
+		if util.OnNilJustReturnInt64(orderOutputs[0].UserID, 0) != input.UserID {
+			output.Set(code.BadRequest, "無法訂閱，此 Apple ID 已綁定其他帳戶")
+			return output
+		}
+	}
+	output.Set(code.Success, "可進行訂閱")
+	return output
+}
+
 func (r *resolver) APIGetCMSOrders(input *orderModel.APIGetCMSOrdersInput) (output orderModel.APIGetCMSOrdersOutput) {
 	// parser input
 	param := orderModel.ListInput{}

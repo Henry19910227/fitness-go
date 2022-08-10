@@ -108,6 +108,28 @@ func (c *controller) AppStoreNotification(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// VerifyAppleSubscribe 驗證帳戶是否允許訂閱
+// @Summary 驗證帳戶是否允許訂閱
+// @Description 在創建訂閱訂單前，確認該帳戶是否可訂閱的API
+// @Tags 支付_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body order.APIVerifyAppleSubscribeBody true "輸入參數"
+// @Success 200 {object} order.APIVerifyAppleSubscribeOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/verify_apple_subscribe [POST]
+func (c *controller) VerifyAppleSubscribe(ctx *gin.Context) {
+	input := model.APIVerifyAppleSubscribeInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIVerifyAppleSubscribe(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetCMSOrders 獲取訂單列表
 // @Summary 獲取訂單列表
 // @Description 獲取訂單列表

@@ -7,5 +7,6 @@ type Controller interface {
 	CreateSubscribeOrder(ctx *gin.Context)
 	VerifyAppleReceipt(ctx *gin.Context)
 	AppStoreNotification(ctx *gin.Context)
+	VerifyAppleSubscribe(ctx *gin.Context)
 	GetCMSOrders(ctx *gin.Context)
 }

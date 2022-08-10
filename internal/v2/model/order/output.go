@@ -122,3 +122,8 @@ type APIVerifyAppleReceiptOutput struct {
 type APIAppStoreNotificationOutput struct {
 	base.Output
 }
+
+// APIVerifyAppleSubscribeOutput /v2/verify_apple_payment [POST]
+type APIVerifyAppleSubscribeOutput struct {
+	base.Output
+}

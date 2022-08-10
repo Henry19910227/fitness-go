@@ -4373,6 +4373,26 @@ definitions:
         example: message..
         type: string
     type: object
+  order.APIVerifyAppleSubscribeBody:
+    properties:
+      original_transaction_id:
+        description: 初始交易id
+        example: "1000000968276600"
+        type: string
+    required:
+    - original_transaction_id
+    type: object
+  order.APIVerifyAppleSubscribeOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   order.CMSUserOrdersAPI:
     properties:
       course_name:
@@ -13284,6 +13304,34 @@ paths:
       security:
       - fitness_token: []
       summary: 驗證apple收據
+      tags:
+      - 支付_v2
+  /v2/verify_apple_subscribe:
+    post:
+      consumes:
+      - application/json
+      description: 在創建訂閱訂單前，確認該帳戶是否可訂閱的API
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/order.APIVerifyAppleSubscribeBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/order.APIVerifyAppleSubscribeOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 驗證帳戶是否允許訂閱
       tags:
       - 支付_v2
 securityDefinitions:

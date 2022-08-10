@@ -60,6 +60,15 @@ type APIGetCMSOrdersForm struct {
 	OrderByInput
 }
 
+// APIVerifyAppleSubscribeInput /v2/verify_apple_payment [POST]
+type APIVerifyAppleSubscribeInput struct {
+	UserIDRequired
+	Body APIVerifyAppleSubscribeBody
+}
+type APIVerifyAppleSubscribeBody struct {
+	OriginalTransactionID string `json:"original_transaction_id" binding:"required" example:"1000000968276600"` // 初始交易id
+}
+
 // APIVerifyAppleReceiptInput /v2/verify_apple_receipt [POST]
 type APIVerifyAppleReceiptInput struct {
 	UserIDRequired

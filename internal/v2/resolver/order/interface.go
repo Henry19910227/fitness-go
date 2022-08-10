@@ -12,4 +12,5 @@ type Resolver interface {
 	APIGetCMSOrders(input *model.APIGetCMSOrdersInput) (output model.APIGetCMSOrdersOutput)
 	APIVerifyAppleReceipt(ctx *gin.Context, tx *gorm.DB, input *model.APIVerifyAppleReceiptInput) (output model.APIVerifyAppleReceiptOutput)
 	APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input *model.APIAppStoreNotificationInput) (output model.APIAppStoreNotificationOutput)
+	APIVerifyAppleSubscribe(input *model.APIVerifyAppleSubscribeInput) (output model.APIVerifyAppleSubscribeOutput)
 }

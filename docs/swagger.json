@@ -10733,6 +10733,51 @@
                     }
                 }
             }
+        },
+        "/v2/verify_apple_subscribe": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "在創建訂閱訂單前，確認該帳戶是否可訂閱的API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付_v2"
+                ],
+                "summary": "驗證帳戶是否允許訂閱",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.APIVerifyAppleSubscribeBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/order.APIVerifyAppleSubscribeOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -16505,6 +16550,34 @@
             }
         },
         "order.APIVerifyAppleReceiptOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "order.APIVerifyAppleSubscribeBody": {
+            "type": "object",
+            "required": [
+                "original_transaction_id"
+            ],
+            "properties": {
+                "original_transaction_id": {
+                    "description": "初始交易id",
+                    "type": "string",
+                    "example": "1000000968276600"
+                }
+            }
+        },
+        "order.APIVerifyAppleSubscribeOutput": {
             "type": "object",
             "properties": {
                 "code": {
