@@ -7377,6 +7377,46 @@
                 }
             }
         },
+        "/v2/app_store_notification/v2": {
+            "post": {
+                "description": "app store 訂閱 callback",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付通知_v2"
+                ],
+                "summary": "app store 訂閱 callback",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.APIAppStoreNotificationBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/order.APIAppStoreNotificationOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/banners": {
             "get": {
                 "security": [
@@ -10638,6 +10678,51 @@
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user_subscribe_info.APIGetUserSubscribeInfoOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/verify_apple_receipt": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "驗證apple收據",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付_v2"
+                ],
+                "summary": "驗證apple收據",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.APIVerifyAppleReceiptBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/order.APIVerifyAppleReceiptOutput"
                         }
                     },
                     "400": {
@@ -15952,6 +16037,31 @@
                 }
             }
         },
+        "order.APIAppStoreNotificationBody": {
+            "type": "object",
+            "properties": {
+                "signedPayload": {
+                    "description": "The payload in JSON Web Signature (JWS) format, signed by the App Store",
+                    "type": "string",
+                    "example": "MIJOlgYJKoZIhvcN..."
+                }
+            }
+        },
+        "order.APIAppStoreNotificationOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "order.APICreateCourseOrderBody": {
             "type": "object",
             "required": [
@@ -16372,6 +16482,40 @@
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "order.APIVerifyAppleReceiptBody": {
+            "type": "object",
+            "required": [
+                "order_id",
+                "receipt_data"
+            ],
+            "properties": {
+                "order_id": {
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "receipt_data": {
+                    "description": "收據token",
+                    "type": "string",
+                    "example": "MIJOlgYJKoZIhvcN..."
+                }
+            }
+        },
+        "order.APIVerifyAppleReceiptOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

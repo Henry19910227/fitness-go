@@ -88,12 +88,8 @@ func (t *tool) VerifyAppleReceiptAPI(receiptData string) (*model.IAPVerifyReceip
 	return &response, nil
 }
 
-func (t *tool) GetSubscribeAPI(originalTransactionId string) (*model.IAPSubscribeAPIResponse, error) {
+func (t *tool) GetSubscribeAPI(originalTransactionId string, token string) (*model.IAPSubscribeAPIResponse, error) {
 	url := fmt.Sprintf("%s%s%s", t.setting.GetAppServerAPIURL(), "/inApps/v1/subscriptions/", originalTransactionId)
-	token, err := t.GenerateAppleStoreAPIToken(time.Hour)
-	if err != nil {
-		return nil, err
-	}
 	header := map[string]string{"Authorization": fmt.Sprintf("Bearer %s", token)}
 	dict, err := util.SendRequest("GET", url, header, nil, nil)
 	if err != nil {

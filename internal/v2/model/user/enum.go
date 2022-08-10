@@ -9,3 +9,9 @@ const (
 	Apple int = 5 //Apple註冊
 )
 
+// UserType Enum 用戶類型 (1:一般用戶/2:訂閱用戶)
+const (
+	Normal int = 1
+	Subscribe int = 2
+)
+

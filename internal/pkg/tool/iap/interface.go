@@ -8,5 +8,5 @@ import (
 type Tool interface {
 	GenerateAppleStoreAPIToken(duration time.Duration) (string, error)
 	VerifyAppleReceiptAPI(receiptData string) (*model.IAPVerifyReceiptResponse, error)
-	GetSubscribeAPI(originalTransactionId string) (*model.IAPSubscribeAPIResponse, error)
+	GetSubscribeAPI(originalTransactionId string, token string) (*model.IAPSubscribeAPIResponse, error)
 }

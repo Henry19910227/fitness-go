@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
 )
 
 type PagingInput = paging.Input
@@ -22,6 +23,7 @@ type ListInput struct {
 	OrderTypeOptional
 	OrderStatusOptional
 	order_course.CourseIDOptional
+	receipt.OriginalTransactionIDOptional
 	OrderByInput
 	PagingInput
 	PreloadInput
@@ -56,4 +58,22 @@ type APIGetCMSOrdersForm struct {
 	OrderStatusOptional
 	PagingInput
 	OrderByInput
+}
+
+// APIVerifyAppleReceiptInput /v2/verify_apple_receipt [POST]
+type APIVerifyAppleReceiptInput struct {
+	UserIDRequired
+	Body APIVerifyAppleReceiptBody
+}
+type APIVerifyAppleReceiptBody struct {
+	OrderID     string `json:"order_id" binding:"required" example:"202105201300687423"`      //訂單id
+	ReceiptData string `json:"receipt_data" binding:"required" example:"MIJOlgYJKoZIhvcN..."` // 收據token
+}
+
+// APIAppStoreNotificationInput /v2/app_store_notification/v2 [POST]
+type APIAppStoreNotificationInput struct {
+	Body APIAppStoreNotificationBody
+}
+type APIAppStoreNotificationBody struct {
+	SignedPayload string `json:"signedPayload" example:"MIJOlgYJKoZIhvcN..."` // The payload in JSON Web Signature (JWS) format, signed by the App Store
 }

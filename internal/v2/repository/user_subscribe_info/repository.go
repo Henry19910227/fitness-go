@@ -4,6 +4,7 @@ import (
 	"fmt"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type repository struct {
@@ -12,6 +13,10 @@ type repository struct {
 
 func New(db *gorm.DB) Repository {
 	return &repository{db: db}
+}
+
+func (r *repository) WithTrx(tx *gorm.DB) Repository {
+	return New(tx)
 }
 
 func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
@@ -50,4 +55,12 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	//查詢數據
 	err = db.Find(&outputs).Error
 	return outputs, amount, err
+}
+
+func (r *repository) CreateOrUpdate(item *model.Table) (err error) {
+	err = r.db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "user_id"}},
+		DoUpdates: clause.AssignmentColumns([]string{"order_id", "status", "start_date", "expires_date", "update_at"}),
+	}).Create(&item).Error
+	return err
 }

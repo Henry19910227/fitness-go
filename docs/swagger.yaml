@@ -4015,6 +4015,25 @@ definitions:
         example: success!
         type: string
     type: object
+  order.APIAppStoreNotificationBody:
+    properties:
+      signedPayload:
+        description: The payload in JSON Web Signature (JWS) format, signed by the
+          App Store
+        example: MIJOlgYJKoZIhvcN...
+        type: string
+    type: object
+  order.APIAppStoreNotificationOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   order.APICreateCourseOrderBody:
     properties:
       course_id:
@@ -4328,6 +4347,31 @@ definitions:
         type: string
       paging:
         $ref: '#/definitions/paging.Output'
+    type: object
+  order.APIVerifyAppleReceiptBody:
+    properties:
+      order_id:
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
+      receipt_data:
+        description: 收據token
+        example: MIJOlgYJKoZIhvcN...
+        type: string
+    required:
+    - order_id
+    - receipt_data
+    type: object
+  order.APIVerifyAppleReceiptOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
     type: object
   order.CMSUserOrdersAPI:
     properties:
@@ -11087,6 +11131,32 @@ paths:
       summary: 上傳訓練組前導語音
       tags:
       - WorkoutSet_v1
+  /v2/app_store_notification/v2:
+    post:
+      consumes:
+      - application/json
+      description: app store 訂閱 callback
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/order.APIAppStoreNotificationBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/order.APIAppStoreNotificationOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: app store 訂閱 callback
+      tags:
+      - 支付通知_v2
   /v2/banners:
     get:
       consumes:
@@ -13188,6 +13258,34 @@ paths:
       summary: 獲取用戶訂閱資訊
       tags:
       - 用戶個人_v2
+  /v2/verify_apple_receipt:
+    post:
+      consumes:
+      - application/json
+      description: 驗證apple收據
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/order.APIVerifyAppleReceiptBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/order.APIVerifyAppleReceiptOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 驗證apple收據
+      tags:
+      - 支付_v2
 securityDefinitions:
   fitness_token:
     in: header

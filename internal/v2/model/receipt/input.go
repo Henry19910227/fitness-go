@@ -10,8 +10,14 @@ type PagingInput = paging.Input
 type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
 
+type FindInput struct {
+	IDOptional
+}
+
 type ListInput struct {
 	OrderIDOptional
+	TransactionIDOptional
+	OriginalTransactionIDOptional
 	PreloadInput
 	OrderByInput
 	PagingInput

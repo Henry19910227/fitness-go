@@ -23,7 +23,12 @@ func TestTool_VerifyAppleReceiptAPI(t *testing.T) {
 
 func TestTool_GetSubscribeAPI(t *testing.T) {
 	tool := NewTool()
-	response, err := tool.GetSubscribeAPI("2000000100820920")
+	//產出token
+	token, err := tool.GenerateAppleStoreAPIToken(time.Hour)
+	assert.NoError(t, err)
+	assert.Equal(t, true, len(token) > 0)
+	//以 original_transactionId 取得訂閱資訊
+	response, err := tool.GetSubscribeAPI("2000000100820920", token)
 	assert.NoError(t, err)
 	assert.Equal(t, true, len(response.Data) > 0)
 }

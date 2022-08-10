@@ -112,3 +112,13 @@ type APIGetCMSOrdersData []*struct {
 		} `json:"subscribe_plan,omitempty"`
 	} `json:"order_subscribe_plan,omitempty"`
 }
+
+// APIVerifyAppleReceiptOutput /v2/verify_apple_receipt [POST]
+type APIVerifyAppleReceiptOutput struct {
+	base.Output
+}
+
+// APIAppStoreNotificationOutput /v2/app_store_notification/v2 [POST]
+type APIAppStoreNotificationOutput struct {
+	base.Output
+}

@@ -62,6 +62,52 @@ func (c *controller) CreateSubscribeOrder(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// VerifyAppleReceipt 驗證apple收據
+// @Summary 驗證apple收據
+// @Description 驗證apple收據
+// @Tags 支付_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body order.APIVerifyAppleReceiptBody true "輸入參數"
+// @Success 200 {object} order.APIVerifyAppleReceiptOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/verify_apple_receipt [POST]
+func (c *controller) VerifyAppleReceipt(ctx *gin.Context) {
+	input := model.APIVerifyAppleReceiptInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIVerifyAppleReceipt(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// AppStoreNotification app store 訂閱 callback
+// @Summary app store 訂閱 callback
+// @Description app store 訂閱 callback
+// @Tags 支付通知_v2
+// @Accept json
+// @Produce json
+// @Param json_body body order.APIAppStoreNotificationBody true "輸入參數"
+// @Success 200 {object} order.APIAppStoreNotificationOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/app_store_notification/v2 [POST]
+func (c *controller) AppStoreNotification(ctx *gin.Context) {
+	input := model.APIAppStoreNotificationInput{}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIAppStoreNotification(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
+	if output.Code != 0 {
+		ctx.JSON(http.StatusBadRequest, output)
+		return
+	}
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetCMSOrders 獲取訂單列表
 // @Summary 獲取訂單列表
 // @Description 獲取訂單列表

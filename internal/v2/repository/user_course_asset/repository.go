@@ -14,6 +14,10 @@ func New(db *gorm.DB) Repository {
 	return &repository{db: db}
 }
 
+func (r *repository) WithTrx(tx *gorm.DB) Repository {
+	return New(tx)
+}
+
 func (r repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
 	// 加入 user_id 篩選條件
@@ -49,3 +53,10 @@ func (r repository) List(input *model.ListInput) (outputs []*model.Output, amoun
 	return outputs, amount, err
 }
 
+func (r *repository) Create(item *model.Table) (id int64, err error) {
+	err = r.db.Model(&model.Table{}).Create(&item).Error
+	if err != nil {
+		return 0, err
+	}
+	return *item.ID, err
+}

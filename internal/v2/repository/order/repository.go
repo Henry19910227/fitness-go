@@ -66,6 +66,11 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 		db = db.Joins("INNER JOIN order_courses ON orders.id = order_courses.order_id")
 		db = db.Where("order_courses.course_id = ?", *input.CourseID)
 	}
+	//加入 OriginalTransactionID 篩選條件
+	if input.OriginalTransactionID != nil {
+		db = db.Joins("INNER JOIN receipts ON receipts.order_id = orders.id")
+		db = db.Where("receipts.original_transaction_id = ?", *input.OriginalTransactionID)
+	}
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
@@ -80,6 +85,8 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	}
 	// Count
 	db = db.Count(&amount)
+	// Select
+	db = db.Select("orders.*")
 	// Paging
 	if input.Page > 0 && input.Size > 0 {
 		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
@@ -91,4 +98,9 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	//查詢數據
 	err = db.Find(&outputs).Error
 	return outputs, amount, err
+}
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
+	return err
 }
