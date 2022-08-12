@@ -15,3 +15,7 @@ type TransactionIDOptional struct {
 type OriginalTransactionIDOptional struct {
 	OriginalTransactionID *string `json:"original_transaction_id,omitempty" binding:"omitempty" example:"1000000968276600"` // 初始交易id
 }
+
+type PaymentTypeOptional struct {
+	PaymentType *int `json:"payment_type,omitempty" binding:"omitempty" example:"1"` //支付方式(1:apple內購/2:google內購)
+}

@@ -28,6 +28,12 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 	if input.IsDeleted != nil {
 		db = db.Where("is_deleted = ?", *input.IsDeleted)
 	}
+	//Preload
+	if len(input.Preloads) > 0 {
+		for _, preload := range input.Preloads {
+			db = db.Preload(preload.Field)
+		}
+	}
 	//查詢數據
 	err = db.First(&output).Error
 	return output, err

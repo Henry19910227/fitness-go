@@ -15,7 +15,9 @@ type FindInput struct {
 }
 
 type ListInput struct {
+	UserID *int64 `json:"user_id,omitempty" binding:"omitempty" example:"10001"` // 用戶 id
 	OrderIDOptional
+	PaymentTypeOptional
 	TransactionIDOptional
 	OriginalTransactionIDOptional
 	PreloadInput

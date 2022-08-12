@@ -64,3 +64,9 @@ func (r *repository) CreateOrUpdate(item *model.Table) (err error) {
 	}).Create(&item).Error
 	return err
 }
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("user_id = ?", *item.UserID).Save(item).Error
+	return err
+}
+

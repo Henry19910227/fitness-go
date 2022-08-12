@@ -29,6 +29,7 @@ type ListInput struct {
 type FindInput struct {
 	IDOptional
 	IsDeletedOptional
+	PreloadInput
 }
 
 // APIUpdatePasswordInput /v2/password [PATCH]
