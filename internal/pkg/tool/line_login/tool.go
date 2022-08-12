@@ -24,7 +24,7 @@ func (t *tool) GetUserID(authCode string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	errorValue, ok := resp["error"].(string)
+	errorValue, ok := resp["error_description"].(string)
 	if ok {
 		return "", errors.New(errorValue)
 	}
