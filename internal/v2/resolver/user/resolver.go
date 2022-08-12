@@ -502,41 +502,52 @@ func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (o
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	//parser input
+	//獲取user資訊
 	listInput := model.ListInput{}
 	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
 	listInput.IsDeleted = util.PointerInt(0)
-	listInput.Preloads = []*preloadModel.Preload{
-		{Field: "Trainer"},
-		{Field: "UserSubscribeInfo"},
-	}
-	if err := util.Parser(input.Body, &listInput); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	datas, _, err := r.userService.List(&listInput)
+	userOutputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	if len(datas) == 0 {
-		output.Set(code.BadRequest, errors.New("帳號或密碼錯誤").Error())
+	if len(userOutputs) == 0 {
+		output.Set(code.BadRequest, errors.New("查無此用戶").Error())
 		return output
 	}
-	data := model.APILoginForFacebookData{}
-	if err := util.Parser(datas[0], &data); err != nil {
+	//更新當前訂閱狀態
+	if err := r.updateUserSubscribeInfo(util.OnNilJustReturnInt64(userOutputs[0].ID, 0)); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//取得更新後的user
+	findInput := model.FindInput{}
+	findInput.ID = userOutputs[0].ID
+	findInput.IsDeleted = util.PointerInt(0)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "UserSubscribeInfo"},
+	}
+	userOutput, err := r.userService.Find(&findInput)
+	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//產生token
-	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(data.ID, 0))
+	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(userOutput.ID, 0))
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//設置token過期時間
-	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(data.ID, 0)))
+	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(userOutput.ID, 0)))
 	if err := r.redisTool.SetEX(key, token, r.jwtTool.GetExpire()); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//Parser Output
+	data := model.APILoginForFacebookData{}
+	if err := util.Parser(userOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
