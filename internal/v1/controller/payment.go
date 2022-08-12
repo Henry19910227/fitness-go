@@ -131,7 +131,7 @@ func (p *Payment) CreateSubscribeOrder(c *gin.Context) {
 }
 
 // VerifyAppleReceipt 驗證apple收據
-// @Summary 驗證apple收據
+// @Summary 驗證apple收據 (/v2/verify_apple_receipt [POST] 替代)
 // @Description 驗證apple收據
 // @Tags Payment_v1
 // @Accept json

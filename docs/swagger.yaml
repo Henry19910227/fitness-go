@@ -10346,7 +10346,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 驗證apple收據
+      summary: 驗證apple收據 (/v2/verify_apple_receipt [POST] 替代)
       tags:
       - Payment_v1
   /v1/verify_google_receipt:
