@@ -6033,7 +6033,7 @@ var doc = `{
                 "tags": [
                     "Payment_v1"
                 ],
-                "summary": "驗證apple收據",
+                "summary": "驗證apple收據 (/v2/verify_apple_receipt [POST] 替代)",
                 "parameters": [
                     {
                         "description": "輸入參數",
