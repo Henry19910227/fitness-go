@@ -113,10 +113,10 @@ AppleLogin:
       BundleID: com.henry.LoginDemo
       DebugTokenURL: https://appleid.apple.com/auth/token
     Release:
-      KeyName: AuthKey_ZN742MYSF4.p8
-      TeamID: 4FN8272Q62
-      KeyID: ZN742MYSF4
-      BundleID: com.henry.LoginDemo
+      KeyName: AuthKey_278SQ8L8UK.p8
+      TeamID: WDC8UY2P7F
+      KeyID: 278SQ8L8UK
+      BundleID: com.fitopia.hub
       DebugTokenURL: https://appleid.apple.com/auth/token
 LineLogin:
     VerifyTokenURL: https://api.line.me/oauth2/v2.1/verify
