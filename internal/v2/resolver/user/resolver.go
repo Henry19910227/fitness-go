@@ -497,14 +497,14 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 
 func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (output model.APILoginForFacebookOutput) {
 	//以access token 取得 fb uid
-	fbUid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken)
+	uid, err := r.fbLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//獲取user資訊
 	listInput := model.ListInput{}
-	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
+	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(uid))
 	listInput.IsDeleted = util.PointerInt(0)
 	userOutputs, _, err := r.userService.List(&listInput)
 	if err != nil {
@@ -559,14 +559,14 @@ func (r *resolver) APILoginForFacebook(input *model.APILoginForFacebookInput) (o
 
 func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (output model.APILoginForGoogleOutput) {
 	//以 access token 取得 google uid
-	fbUid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken)
+	uid, err := r.googleLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//獲取user資訊
 	listInput := model.ListInput{}
-	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
+	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(uid))
 	listInput.IsDeleted = util.PointerInt(0)
 	if err := util.Parser(input.Body, &listInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -625,14 +625,14 @@ func (r *resolver) APILoginForGoogle(input *model.APILoginForGoogleInput) (outpu
 
 func (r *resolver) APILoginForLine(input *model.APILoginForLineInput) (output model.APILoginForLineOutput) {
 	//以 access token 取得 uid
-	fbUid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken)
+	uid, err := r.lineLoginTool.GetUserID(input.Body.AccessToken)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//獲取user資訊
 	listInput := model.ListInput{}
-	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(fbUid))
+	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(uid))
 	listInput.IsDeleted = util.PointerInt(0)
 	userOutputs, _, err := r.userService.List(&listInput)
 	if err != nil {
@@ -698,41 +698,52 @@ func (r *resolver) APILoginForApple(input *model.APILoginForAppleInput) (output 
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	//parser input
+	//獲取user資訊
 	listInput := model.ListInput{}
 	listInput.Account = util.PointerString(r.cryptoTool.MD5Encode(uid))
 	listInput.IsDeleted = util.PointerInt(0)
-	listInput.Preloads = []*preloadModel.Preload{
-		{Field: "Trainer"},
-		{Field: "UserSubscribeInfo"},
-	}
-	if err := util.Parser(input.Body, &listInput); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	datas, _, err := r.userService.List(&listInput)
+	userOutputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	if len(datas) == 0 {
-		output.Set(code.BadRequest, errors.New("帳號或密碼錯誤").Error())
+	if len(userOutputs) == 0 {
+		output.Set(code.BadRequest, errors.New("查無此用戶").Error())
 		return output
 	}
-	data := model.APILoginForAppleData{}
-	if err := util.Parser(datas[0], &data); err != nil {
+	//更新當前訂閱狀態
+	if err := r.updateUserSubscribeInfo(util.OnNilJustReturnInt64(userOutputs[0].ID, 0)); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//取得更新後的user
+	findInput := model.FindInput{}
+	findInput.ID = userOutputs[0].ID
+	findInput.IsDeleted = util.PointerInt(0)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "UserSubscribeInfo"},
+	}
+	userOutput, err := r.userService.Find(&findInput)
+	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//產生token
-	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(data.ID, 0))
+	token, err := r.jwtTool.GenerateUserToken(util.OnNilJustReturnInt64(userOutput.ID, 0))
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//設置token過期時間
-	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(data.ID, 0)))
+	key := jwt.UserTokenPrefix + "." + strconv.Itoa(int(util.OnNilJustReturnInt64(userOutput.ID, 0)))
 	if err := r.redisTool.SetEX(key, token, r.jwtTool.GetExpire()); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//Parser output
+	data := model.APILoginForAppleData{}
+	if err := util.Parser(userOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
