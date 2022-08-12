@@ -120,6 +120,11 @@ AppleLogin:
       DebugTokenURL: https://appleid.apple.com/auth/token
 LineLogin:
     VerifyTokenURL: https://api.line.me/oauth2/v2.1/verify
+    ProfileURL: https://api.line.me/v2/profile
+    Debug:
+      ClientID: 1657378278
+    Release:
+      ClientID: 1657326779
 Swagger:
     Debug:
       Protocol: http

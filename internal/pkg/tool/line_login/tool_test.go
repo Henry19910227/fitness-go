@@ -6,9 +6,9 @@ import (
 )
 
 func TestTool_GetClientIDByAccessToken(t *testing.T) {
-	accessToken := "eyJhbGciOiJIUzI1NiJ9.R6OpXX6cEtCl983HtZ7UlYf9zQU1yIosbVJNVY3rPfWM2GmDMskqEyyyX3YMe9arzb1VGOe1wQsSC6V6Y2V-Dt-8g2yLY3DKupvdkd82YUNmbF1_1LsxPh37ZipngO03Modt5YBpl9GiU2sUn0sQ2HNNdq32a1lZZcvF5edkoBM.XPIk9tR2wqSeqbXCsSscIB8c_dNqHQGoomelXs9Mrn8"
+	accessToken := "eyJhbGciOiJIUzI1NiJ9.nulxNAqmNAsu-mjO4ixndWDoOzCv4Rm12yg9M6o0up4DIik3xLfKQKp2SOUr3CtofE5iufzduKY9XosMgCxR_RC4rA_7g0gnbwWVr5DGom-5T4xvUtyAwvNRkhC5mVOtBYAs_sBGhAquWGRiTuwI-xiLz8ZptiVDAKy2tVrK7ow.m3AUNqIu1TMdN48pYnlqZJUaggGUJFM9ZUdiA4POwag"
 	tool := NewTool()
-	uid, err := tool.GetUserID(accessToken, "")
+	uid, err := tool.GetUserID(accessToken)
 	assert.NoError(t, err)
-	assert.Equal(t, "1657326779", uid)
+	assert.Equal(t, "U4c93579de5ed302ef1fd0421ae4456e7", uid)
 }

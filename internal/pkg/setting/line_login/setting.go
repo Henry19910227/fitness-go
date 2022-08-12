@@ -18,3 +18,14 @@ func New() Setting {
 func (s *setting) GetVerifyTokenURL() string {
 	return s.vp.GetString("LineLogin.VerifyTokenURL")
 }
+
+func (s *setting) GetProfileURL() string {
+	return s.vp.GetString("LineLogin.ProfileURL")
+}
+
+func (s *setting) GetClientID() string {
+	if s.mode == "debug" {
+		return s.vp.GetString("LineLogin.Debug.ClientID")
+	}
+	return s.vp.GetString("LineLogin.Release.ClientID")
+}
