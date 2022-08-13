@@ -1,6 +1,7 @@
 package order
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iab"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iap"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/order"
@@ -29,10 +30,11 @@ func NewResolver(db *gorm.DB) Resolver {
 	userService := user.NewService(db)
 	subscribeLogService := subscribe_log.NewService(db)
 	iapTool := iap.NewTool()
+	iabTool := iab.NewTool()
 	return New(orderService, courseService,
 		orderCourseService, courseAssetService,
 		subscribeInfoService, orderSubscribePlanService,
 		receiptService, purchaseLogService,
 		subscribePlanService, userService,
-		subscribeLogService, iapTool)
+		subscribeLogService, iapTool, iabTool)
 }

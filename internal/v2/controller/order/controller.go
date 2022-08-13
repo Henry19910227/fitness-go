@@ -84,6 +84,28 @@ func (c *controller) VerifyAppleReceipt(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// VerifyGoogleReceipt 驗證google收據
+// @Summary 驗證google收據
+// @Description 驗證google收據
+// @Tags 支付_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body order.APIVerifyGoogleReceiptBody true "輸入參數"
+// @Success 200 {object} order.APIVerifyGoogleReceiptOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/verify_google_receipt [POST]
+func (c *controller) VerifyGoogleReceipt(ctx *gin.Context) {
+	input := model.APIVerifyGoogleReceiptInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIVerifyGoogleReceipt(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // AppStoreNotification app store 訂閱 callback
 // @Summary app store 訂閱 callback
 // @Description app store 訂閱 callback

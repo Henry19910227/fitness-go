@@ -118,6 +118,11 @@ type APIVerifyAppleReceiptOutput struct {
 	base.Output
 }
 
+// APIVerifyGoogleReceiptOutput /v2/verify_google_receipt [POST]
+type APIVerifyGoogleReceiptOutput struct {
+	base.Output
+}
+
 // APIAppStoreNotificationOutput /v2/app_store_notification/v2 [POST]
 type APIAppStoreNotificationOutput struct {
 	base.Output

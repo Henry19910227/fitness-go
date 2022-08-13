@@ -4,11 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iab"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iap"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v1/dto"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	iabModel "github.com/Henry19910227/fitness-go/internal/v2/model/iab"
 	iapModel "github.com/Henry19910227/fitness-go/internal/v2/model/iap"
 	orderModel "github.com/Henry19910227/fitness-go/internal/v2/model/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -22,8 +24,6 @@ import (
 	userModel "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	courseAssetModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_course_asset"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
-	"github.com/gin-gonic/gin"
-
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/order_course"
@@ -35,6 +35,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user_course_asset"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user_subscribe_info"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
 	"strings"
@@ -54,6 +55,7 @@ type resolver struct {
 	userService               user.Service
 	subscribeLogService       subscribe_log.Service
 	iapTool                   iap.Tool
+	iabTool                   iab.Tool
 }
 
 func New(orderService order.Service, courseService course.Service,
@@ -61,13 +63,13 @@ func New(orderService order.Service, courseService course.Service,
 	subscribeInfoService user_subscribe_info.Service, orderSubscribePlanService order_subscribe_plan.Service,
 	receiptService receipt.Service, purchaseLogService purchase_log.Service,
 	subscribePlanService subscribe_plan.Service, userService user.Service,
-	subscribeLogService subscribe_log.Service, iapTool iap.Tool) Resolver {
+	subscribeLogService subscribe_log.Service, iapTool iap.Tool, iabTool iab.Tool) Resolver {
 	return &resolver{orderService: orderService, courseService: courseService,
 		orderCourserService: orderCourserService, courseAssetService: courseAssetService,
 		subscribeInfoService: subscribeInfoService, orderSubscribePlanService: orderSubscribePlanService,
 		receiptService: receiptService, purchaseLogService: purchaseLogService,
 		subscribePlanService: subscribePlanService, userService: userService,
-		subscribeLogService: subscribeLogService, iapTool: iapTool}
+		subscribeLogService: subscribeLogService, iapTool: iapTool, iabTool: iabTool}
 }
 
 func (r *resolver) APICreateCourseOrder(tx *gorm.DB, input *orderModel.APICreateCourseOrderInput) (output orderModel.APICreateCourseOrderOutput) {
@@ -341,6 +343,60 @@ func (r *resolver) APIVerifyAppleReceipt(ctx *gin.Context, tx *gorm.DB, input *o
 	return output
 }
 
+func (r *resolver) APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *orderModel.APIVerifyGoogleReceiptInput) (output orderModel.APIVerifyGoogleReceiptOutput) {
+	findInput := orderModel.FindInput{}
+	findInput.ID = util.PointerString(input.Body.OrderID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "OrderCourse.Course"},
+		{Field: "OrderCourse.SaleItem.ProductLabel"},
+		{Field: "OrderSubscribePlan.SubscribePlan.ProductLabel"},
+	}
+	orderOutput, err := r.orderService.Find(&findInput)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if util.OnNilJustReturnInt64(orderOutput.UserID, 0) != input.UserID {
+		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+"無效的訂單，此訂單非該用戶創建")
+		output.Set(code.BadRequest, "無效的訂單，此訂單非該用戶創建")
+		return output
+	}
+	//產出 auth token
+	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+	//獲取API Token
+	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
+	if util.OnNilJustReturnInt(orderOutput.Type, 0) == orderModel.BuyCourse {
+		response, err := r.iabTool.APIGetProducts(input.Body.ProductID, input.Body.ReceiptData, token)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+		}
+		if err := r.handleBuyCourseTradeForGoogle(tx, orderOutput, response); err != nil {
+			logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		output.Set(code.Success, "success")
+		return output
+	}
+	if util.OnNilJustReturnInt(orderOutput.Type, 0) == orderModel.Subscribe {
+		response, err := r.iabTool.APIGetSubscription(input.Body.ProductID, input.Body.ReceiptData, token)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+		}
+		if err := r.handleSubscribeTradeForGoogle(tx, orderOutput, response); err != nil {
+			logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		output.Set(code.Success, "success")
+		return output
+	}
+	logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+"訂單類型錯誤")
+	output.Set(code.BadRequest, "訂單類型錯誤")
+	return output
+}
+
 func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input *orderModel.APIAppStoreNotificationInput) (output orderModel.APIAppStoreNotificationOutput) {
 	//解析字串
 	response := dto.NewIAPNotificationResponse(strings.Split(input.Body.SignedPayload, ".")[1])
@@ -584,6 +640,64 @@ func (r *resolver) handleBuyCourseTradeForApple(tx *gorm.DB, order *orderModel.O
 	return nil
 }
 
+func (r *resolver) handleBuyCourseTradeForGoogle(tx *gorm.DB, order *orderModel.Output, response *iabModel.IABProductAPIResponse) error {
+	//驗證收據格式
+	if response.PurchaseState != 0 {
+		return errors.New("尚未購買")
+	}
+	//驗證收據是否已被使用
+	receiptListInput := receiptModel.ListInput{}
+	receiptListInput.OriginalTransactionID = util.PointerString(response.OrderId)
+	receiptOutputs, _, err := r.receiptService.List(&receiptListInput)
+	if err != nil {
+		return err
+	}
+	if len(receiptOutputs) > 0 {
+		return errors.New("此收據已有支付記錄")
+	}
+	defer tx.Rollback()
+	//創建收據
+	receiptTable := receiptModel.Table{}
+	receiptTable.OrderID = order.ID
+	receiptTable.PaymentType = util.PointerInt(receiptModel.IAB)
+	receiptTable.OriginalTransactionID = util.PointerString(response.OrderId)
+	receiptTable.TransactionID = util.PointerString(response.OrderId)
+	receiptTable.ReceiptToken = util.PointerString("")
+	receiptTable.ProductID = order.OrderCourse.SaleItem.ProductLabel.ProductID
+	receiptTable.Quantity = util.PointerInt(1)
+	_, err = r.receiptService.Tx(tx).CreateOrUpdate(&receiptTable)
+	if err != nil {
+		return err
+	}
+	//創建購買紀錄
+	logTable := purchaseLogModel.Table{}
+	logTable.UserID = order.UserID
+	logTable.OrderID = order.ID
+	logTable.Type = util.PointerInt(purchaseLogModel.Buy)
+	_, err = r.purchaseLogService.Tx(tx).Create(&logTable)
+	if err != nil {
+		return err
+	}
+	//創建購買資源
+	assetTable := courseAssetModel.Table{}
+	assetTable.UserID = order.UserID
+	assetTable.CourseID = order.OrderCourse.CourseID
+	assetTable.Available = util.PointerInt(1)
+	_, err = r.courseAssetService.Tx(tx).Create(&assetTable)
+	if err != nil {
+		return err
+	}
+	//更新訂單狀態
+	orderTable := orderModel.Table{}
+	orderTable.ID = order.ID
+	orderTable.OrderStatus = util.PointerInt(orderModel.Success)
+	if err := r.orderService.Tx(tx).Update(&orderTable); err != nil {
+		return err
+	}
+	tx.Commit()
+	return nil
+}
+
 func (r *resolver) handleSubscribeTradeForApple(tx *gorm.DB, order *orderModel.Output, response *iapModel.IAPVerifyReceiptResponse) error {
 	// 驗證收據格式
 	if len(response.LatestReceiptInfo) == 0 || len(response.PendingRenewalInfo) == 0 {
@@ -655,6 +769,104 @@ func (r *resolver) handleSubscribeTradeForApple(tx *gorm.DB, order *orderModel.O
 	// 4.更新用戶類型
 	var userType = userModel.Subscribe
 	if len(response.PendingRenewalInfo[0].ExpirationIntent) > 0 {
+		userType = userModel.Normal
+	}
+	userTable := userModel.Table{}
+	userTable.ID = order.UserID
+	userTable.UserType = util.PointerInt(userType)
+	if err := r.userService.Tx(tx).Update(&userTable); err != nil {
+		return err
+	}
+	// 5.更新訂單狀態
+	orderTable := orderModel.Table{}
+	orderTable.ID = order.ID
+	orderTable.OrderStatus = util.PointerInt(orderModel.Success)
+	if err := r.orderService.Tx(tx).Update(&orderTable); err != nil {
+		return err
+	}
+	tx.Commit()
+	return nil
+}
+
+func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, order *orderModel.Output, response *iabModel.IABSubscriptionAPIResponse) error {
+	// 驗證是否是原先訂閱用戶
+	orderListInput := orderModel.ListInput{}
+	orderListInput.OriginalTransactionID = util.PointerString(response.OrderId)
+	orderListInput.OrderField = "create_at"
+	orderListInput.OrderType = order_by.DESC
+	orderListInput.Size = 1
+	orderListInput.Page = 1
+	orderOutputs, _, err := r.orderService.List(&orderListInput)
+	if err != nil {
+		return err
+	}
+	if len(orderOutputs) > 0 {
+		if util.OnNilJustReturnInt64(orderOutputs[0].UserID, 0) != util.OnNilJustReturnInt64(order.UserID, 0) {
+			return errors.New("驗證失敗(與原先訂閱用戶不符)")
+		}
+	}
+	// 獲取訂閱項目資訊
+	findPlanInput := subscribePlanModel.FindInput{}
+	findPlanInput.ProductID = order.OrderCourse.SaleItem.ProductLabel.ProductID
+	subscribePlanOutput, err := r.subscribePlanService.Find(&findPlanInput)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	// 回傳的訂單如遇到 GPA.3331-2251-2804-48618..4
+	// OriginalTransactionID = 只留下'..'前的訂單編號 GPA.3331-2251-2804-48618
+	// TransactionID = 完整的訂單編號 GPA.3331-2251-2804-48618
+	originalTransactionID := response.OrderId
+	transactionID := response.OrderId
+	transactionIDs := strings.Split(response.OrderId, "..")
+	if len(transactionIDs) > 1 {
+		originalTransactionID = transactionIDs[0]
+	}
+	// 1.儲存收據
+	receiptTable := receiptModel.Table{}
+	receiptTable.OrderID = order.ID
+	receiptTable.PaymentType = util.PointerInt(receiptModel.IAB)
+	receiptTable.OriginalTransactionID = util.PointerString(originalTransactionID)
+	receiptTable.TransactionID = util.PointerString(transactionID)
+	receiptTable.ReceiptToken = util.PointerString("")
+	receiptTable.ProductID = order.OrderCourse.SaleItem.ProductLabel.ProductID
+	receiptTable.Quantity = util.PointerInt(1)
+	_, err = r.receiptService.Tx(tx).CreateOrUpdate(&receiptTable)
+	if err != nil {
+		return err
+	}
+	// 2.修改訂單訂閱項目(升級or降級狀態)
+	orderSubscribePlanTable := orderSubscribePlanModel.Table{}
+	orderSubscribePlanTable.OrderID = order.ID
+	orderSubscribePlanTable.SubscribePlanID = subscribePlanOutput.ID
+	if err := r.orderSubscribePlanService.Tx(tx).Update(&orderSubscribePlanTable); err != nil {
+		return err
+	}
+	// 3.更新用戶訂閱狀態
+	var subscribeStatus = subscribeInfoModel.ValidSubscribe
+	if response.PaymentState == 1 || response.PaymentState == 2 {
+		subscribeStatus = subscribeInfoModel.NoneSubscribe
+	}
+	subscribeInfoTable := subscribeInfoModel.Table{}
+	subscribeInfoTable.UserID = order.UserID
+	subscribeInfoTable.OrderID = order.ID
+	subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
+	startTimeMillis, err := strconv.ParseInt(response.StartTimeMillis, 10, 64)
+	if err != nil {
+		return nil
+	}
+	expiryTimeMillis, err := strconv.ParseInt(response.ExpiryTimeMillis, 10, 64)
+	if err != nil {
+		return nil
+	}
+	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
+	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
+	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
+		return err
+	}
+	// 4.更新用戶類型
+	var userType = userModel.Subscribe
+	if response.PaymentState == 1 || response.PaymentState == 2 {
 		userType = userModel.Normal
 	}
 	userTable := userModel.Table{}

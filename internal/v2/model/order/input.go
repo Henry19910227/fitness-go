@@ -79,6 +79,17 @@ type APIVerifyAppleReceiptBody struct {
 	ReceiptData string `json:"receipt_data" binding:"required" example:"MIJOlgYJKoZIhvcN..."` // 收據token
 }
 
+// APIVerifyGoogleReceiptInput /v2/verify_google_receipt [POST]
+type APIVerifyGoogleReceiptInput struct {
+	UserIDRequired
+	Body APIVerifyGoogleReceiptBody
+}
+type APIVerifyGoogleReceiptBody struct {
+	OrderID     string `json:"order_id" binding:"required" example:"202105201300687423"`      // 訂單id
+	ProductID   string `json:"product_id" binding:"required" example:"com.fitness.xxx"`		  // 產品id
+	ReceiptData string `json:"receipt_data" binding:"required" example:"MIJOlgYJKoZIhvcN..."` // 收據token
+}
+
 // APIAppStoreNotificationInput /v2/app_store_notification/v2 [POST]
 type APIAppStoreNotificationInput struct {
 	Body APIAppStoreNotificationBody
