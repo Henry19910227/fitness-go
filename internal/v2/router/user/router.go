@@ -24,6 +24,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.POST("/login/line", controller.LoginForLine)
 	v2.POST("/login/apple", controller.LoginForApple)
 	v2.POST("/logout", midd.Verify([]global.Role{global.UserRole}), controller.Logout)
+	v2.POST("/apple_refresh_token", controller.GetAppleRefreshToken)
 	v2.POST("/register/email", controller.RegisterForEmail)
 	v2.POST("/register/facebook", controller.RegisterForFacebook)
 	v2.POST("/register/google", controller.RegisterForGoogle)

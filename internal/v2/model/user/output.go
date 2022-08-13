@@ -57,6 +57,15 @@ type APIGetUserProfileData struct {
 	UpdateAtField
 }
 
+// APIGetAppleRefreshTokenOutput /v2/apple_refresh_token [POST]
+type APIGetAppleRefreshTokenOutput struct {
+	base.Output
+	Data *APIGetAppleRefreshTokenData `json:"data,omitempty"`
+}
+type APIGetAppleRefreshTokenData struct {
+	RefreshToken string `json:"refresh_token" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // 用於apple註冊與登入的刷新令牌
+}
+
 // APIRegisterForEmailOutput /v2/register/email [POST]
 type APIRegisterForEmailOutput struct {
 	base.Output

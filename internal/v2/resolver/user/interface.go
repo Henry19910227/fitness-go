@@ -7,6 +7,7 @@ type Resolver interface {
 	APIUpdateUserProfile(input *model.APIUpdateUserProfileInput) (output model.APIUpdateUserProfileOutput)
 	APIUpdateUserAvatar(input *model.APIUpdateUserAvatarInput) (output model.APIUpdateUserAvatarOutput)
 	APIGetUserProfile(input *model.APIGetUserProfileInput) (output model.APIGetUserProfileOutput)
+	APIGetAppleRefreshToken(input *model.APIGetAppleRefreshTokenInput) (output model.APIGetAppleRefreshTokenOutput)
 	APIRegisterForEmail(input *model.APIRegisterForEmailInput) (output model.APIRegisterForEmailOutput)
 	APIRegisterForFacebook(input *model.APIRegisterForFacebookInput) (output model.APIRegisterForFacebookOutput)
 	APIRegisterForGoogle(input *model.APIRegisterForGoogleInput) (output model.APIRegisterForGoogleOutput)
