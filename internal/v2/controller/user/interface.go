@@ -7,6 +7,7 @@ type Controller interface {
 	UpdateUserProfile(ctx *gin.Context)
 	UpdateUserAvatar(ctx *gin.Context)
 	GetUserProfile(ctx *gin.Context)
+	GetAppleRefreshToken(ctx *gin.Context)
 	RegisterForEmail(ctx *gin.Context)
 	RegisterForFacebook(ctx *gin.Context)
 	RegisterForGoogle(ctx *gin.Context)

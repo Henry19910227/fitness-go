@@ -54,12 +54,44 @@ func (t *tool) GenerateClientSecret(duration time.Duration) (string, error) {
 	return secret, nil
 }
 
-func (t *tool) GetUserID(authCode string, clientSecret string) (string, error) {
+func (t *tool) APIGetRefreshToken(authCode string, clientSecret string) (string, error) {
 	param := map[string]interface{}{
 		"client_id":     t.setting.GetBundleID(),
 		"client_secret": clientSecret,
 		"code":          authCode,
 		"grant_type":    "authorization_code",
+	}
+	header := map[string]string{"Content-Type": "application/x-www-form-urlencoded"}
+	dict, err := util.SendRequest("POST", t.setting.GetDebugTokenURL(), header, nil, param)
+	if err != nil {
+		return "", err
+	}
+	errorValue, ok := dict["error"].(string)
+	if ok {
+		return "", errors.New(errorValue)
+	}
+	//驗證效期
+	exp, ok := dict["expires_in"].(float64)
+	if !ok {
+		return "", errors.New("invalid token")
+	}
+	if exp <= 0 {
+		return "", errors.New("token expired")
+	}
+	//以 IdToken 取得 jwtClaims
+	refreshToken, ok := dict["refresh_token"].(string)
+	if !ok {
+		return "", errors.New("invalid token")
+	}
+	return refreshToken, nil
+}
+
+func (t *tool) APIGetUserID(refreshToken string, clientSecret string) (string, error) {
+	param := map[string]interface{}{
+		"client_id":     t.setting.GetBundleID(),
+		"client_secret": clientSecret,
+		"refresh_token": refreshToken,
+		"grant_type":  "refresh_token",
 	}
 	header := map[string]string{"Content-Type": "application/x-www-form-urlencoded"}
 	dict, err := util.SendRequest("POST", t.setting.GetDebugTokenURL(), header, nil, param)

@@ -148,6 +148,26 @@ func (r *resolver) APIGetUserProfile(input *model.APIGetUserProfileInput) (outpu
 	return output
 }
 
+func (r *resolver) APIGetAppleRefreshToken(input *model.APIGetAppleRefreshTokenInput) (output model.APIGetAppleRefreshTokenOutput) {
+	//生成 client secret
+	secret, err := r.appleLoginTool.GenerateClientSecret(time.Hour)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//獲取 refresh token
+	refreshToken, err := r.appleLoginTool.APIGetRefreshToken(input.Body.AccessToken, secret)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = &model.APIGetAppleRefreshTokenData{
+		RefreshToken: refreshToken,
+	}
+	return output
+}
+
 func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (output model.APIRegisterForEmailOutput) {
 	//檢查驗證碼
 	if !r.otpTool.Validate(input.Body.OTPCode, input.Body.Email) {
@@ -328,14 +348,14 @@ func (r *resolver) APIRegisterForApple(input *model.APIRegisterForAppleInput) (o
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	//以access token 取得 apple uid
-	guid, err := r.appleLoginTool.GetUserID(input.Body.AccessToken, secret)
+	//以 refresh token 取得 uid
+	uid, err := r.appleLoginTool.APIGetUserID(input.Body.RefreshToken, secret)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//檢查帳號是否重複
-	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(guid))
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(uid))
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -367,7 +387,7 @@ func (r *resolver) APIRegisterForApple(input *model.APIRegisterForAppleInput) (o
 	//創建用戶
 	table := model.Table{}
 	table.AccountType = util.PointerInt(model.Apple)
-	table.Account = util.PointerString(r.cryptoTool.MD5Encode(guid))
+	table.Account = util.PointerString(r.cryptoTool.MD5Encode(uid))
 	table.Nickname = util.PointerString(input.Body.Nickname)
 	table.Email = util.PointerString(input.Body.Email)
 	table.Password = util.PointerString("")
@@ -692,8 +712,8 @@ func (r *resolver) APILoginForApple(input *model.APILoginForAppleInput) (output 
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	//以 access token 取得 uid
-	uid, err := r.appleLoginTool.GetUserID(input.Body.AccessToken, secret)
+	//以 refresh token 取得 uid
+	uid, err := r.appleLoginTool.APIGetUserID(input.Body.RefreshToken, secret)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -882,8 +902,20 @@ func (r *resolver) APIRegisterGoogleAccountValidate(input *model.APIRegisterGoog
 }
 
 func (r *resolver) APIRegisterAppleAccountValidate(input *model.APIRegisterAppleAccountValidateInput) (output model.APIRegisterAppleAccountValidateOutput) {
+	//生成 client secret
+	secret, err := r.appleLoginTool.GenerateClientSecret(time.Hour)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//以 refresh token 取得 uid
+	uid, err := r.appleLoginTool.APIGetUserID(input.Body.RefreshToken, secret)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	//檢查帳號是否重複
-	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(input.Body.UserIDToken))
+	ok, err := r.accountValidate(r.cryptoTool.MD5Encode(uid))
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -892,7 +924,7 @@ func (r *resolver) APIRegisterAppleAccountValidate(input *model.APIRegisterApple
 		output.Set(code.DataAlreadyExists, errors.New("該帳號已註冊").Error())
 		return output
 	}
-	output.SetStatus(code.Success)
+	output.Set(code.Success, "該帳號可註冊")
 	return output
 }
 

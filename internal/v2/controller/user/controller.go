@@ -220,6 +220,26 @@ func (c *controller) Logout(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// GetAppleRefreshToken 獲取 apple refresh token
+// @Summary 獲取 apple refresh token
+// @Description 獲取 apple refresh token 用於註冊與登入
+// @Tags 註冊_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIGetAppleRefreshTokenBody true "輸入參數"
+// @Success 200 {object} user.APIGetAppleRefreshTokenOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/apple_refresh_token [POST]
+func (c *controller) GetAppleRefreshToken(ctx *gin.Context) {
+	var input model.APIGetAppleRefreshTokenInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetAppleRefreshToken(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // RegisterForEmail 使用信箱註冊
 // @Summary 使用信箱註冊
 // @Description 使用信箱註冊

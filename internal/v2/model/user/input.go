@@ -78,6 +78,14 @@ type APILoginForEmailBody struct {
 	PasswordRequired
 }
 
+// APIGetAppleRefreshTokenInput /v2/apple_refresh_token [POST]
+type APIGetAppleRefreshTokenInput struct {
+	Body APIGetAppleRefreshTokenBody
+}
+type APIGetAppleRefreshTokenBody struct {
+	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // apple sdk 回傳的 authorizationCode
+}
+
 // APILoginForFacebookInput /v2/login/facebook [POST]
 type APILoginForFacebookInput struct {
 	Body APILoginForFacebookBody
@@ -99,7 +107,7 @@ type APILoginForAppleInput struct {
 	Body APILoginForAppleBody
 }
 type APILoginForAppleBody struct {
-	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 authorizationCode string
+	RefreshToken string `json:"refresh_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // refresh token
 }
 
 // APILoginForLineInput /v2/login/line [POST]
@@ -153,7 +161,7 @@ type APIRegisterForAppleInput struct {
 	Body APIRegisterForAppleBody
 }
 type APIRegisterForAppleBody struct {
-	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 authorizationCode string
+	RefreshToken string `json:"refresh_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // refresh token
 	NicknameRequired
 	EmailRequired
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
@@ -231,5 +239,5 @@ type APIRegisterAppleAccountValidateInput struct {
 	Body APIRegisterAppleAccountValidateBody
 }
 type APIRegisterAppleAccountValidateBody struct {
-	UserIDToken string `json:"user_id_token" binding:"required" example:"0007.d5.5w4e1"` // sdk 回傳的 userID token string
+	RefreshToken string `json:"refresh_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // 透過 authorizationCode 取得的 refresh token
 }

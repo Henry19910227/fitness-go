@@ -7435,6 +7435,46 @@ var doc = `{
                 }
             }
         },
+        "/v2/apple_refresh_token": {
+            "post": {
+                "description": "獲取 apple refresh token 用於註冊與登入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "註冊_v2"
+                ],
+                "summary": "獲取 apple refresh token",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIGetAppleRefreshTokenBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIGetAppleRefreshTokenOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/banners": {
             "get": {
                 "security": [
@@ -17209,6 +17249,47 @@ var doc = `{
                 }
             }
         },
+        "user.APIGetAppleRefreshTokenBody": {
+            "type": "object",
+            "required": [
+                "access_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "description": "apple sdk 回傳的 authorizationCode",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                }
+            }
+        },
+        "user.APIGetAppleRefreshTokenData": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "description": "用於apple註冊與登入的刷新令牌",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
+                }
+            }
+        },
+        "user.APIGetAppleRefreshTokenOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/user.APIGetAppleRefreshTokenData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "user.APIGetUserProfileData": {
             "type": "object",
             "properties": {
@@ -17320,11 +17401,11 @@ var doc = `{
         "user.APILoginForAppleBody": {
             "type": "object",
             "required": [
-                "access_token"
+                "refresh_token"
             ],
             "properties": {
-                "access_token": {
-                    "description": "sdk 回傳的 authorizationCode string",
+                "refresh_token": {
+                    "description": "refresh token",
                     "type": "string",
                     "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
                 }
@@ -18146,13 +18227,13 @@ var doc = `{
         "user.APIRegisterAppleAccountValidateBody": {
             "type": "object",
             "required": [
-                "user_id_token"
+                "refresh_token"
             ],
             "properties": {
-                "user_id_token": {
-                    "description": "sdk 回傳的 userID token string",
+                "refresh_token": {
+                    "description": "透過 authorizationCode 取得的 refresh token",
                     "type": "string",
-                    "example": "0007.d5.5w4e1"
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
                 }
             }
         },
@@ -18258,17 +18339,12 @@ var doc = `{
         "user.APIRegisterForAppleBody": {
             "type": "object",
             "required": [
-                "access_token",
                 "email",
                 "nickname",
-                "otp_code"
+                "otp_code",
+                "refresh_token"
             ],
             "properties": {
-                "access_token": {
-                    "description": "sdk 回傳的 authorizationCode string",
-                    "type": "string",
-                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
-                },
                 "email": {
                     "description": "信箱",
                     "type": "string",
@@ -18283,6 +18359,11 @@ var doc = `{
                     "description": "信箱驗證碼",
                     "type": "string",
                     "example": "531476"
+                },
+                "refresh_token": {
+                    "description": "refresh token",
+                    "type": "string",
+                    "example": "EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"
                 }
             }
         },
