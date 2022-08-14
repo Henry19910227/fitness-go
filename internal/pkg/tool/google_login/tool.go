@@ -41,7 +41,7 @@ func (t *tool) GetUserID(authCode string) (string, error) {
 	if !ok {
 		return "", errors.New("invalid token")
 	}
-	if aud != t.setting.GetClientID() {
+	if aud != t.setting.GetIOSClientID() && aud != t.setting.GetAndroidClientID() {
 		return "", errors.New("aud error")
 	}
 	//驗證效期
