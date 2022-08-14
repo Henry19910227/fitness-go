@@ -99,12 +99,17 @@ FBLogin:
       DebugTokenURL: https://graph.facebook.com/debug_token
 GoogleLogin:
     Iss: https://accounts.google.com
+    DebugTokenURL: https://oauth2.googleapis.com/tokeninfo
     Debug:
-      ClientID: 376527343165-tu7fr7epqgqc1c1mf2gbqppsn056alf8.apps.googleusercontent.com
-      DebugTokenURL: https://oauth2.googleapis.com/tokeninfo
+      iOS:
+        ClientID: 376527343165-tu7fr7epqgqc1c1mf2gbqppsn056alf8.apps.googleusercontent.com
+      Android:
+        ClientID: 376527343165-tu7fr7epqgqc1c1mf2gbqppsn056alf8.apps.googleusercontent.com
     Release:
-      ClientID: 376527343165-tu7fr7epqgqc1c1mf2gbqppsn056alf8.apps.googleusercontent.com
-      DebugTokenURL: https://oauth2.googleapis.com/tokeninfo
+      iOS:
+        ClientID: 376527343165-j5ncprbdbunqevfqq21nulgirs74nqlb.apps.googleusercontent.com
+      Android:
+        ClientID: 376527343165-dsk9555ua5ku7i3nf1g7jqf3olfqgh2q.apps.googleusercontent.com
 AppleLogin:
     Debug:
       KeyName: AuthKey_ZN742MYSF4.p8 # Account/Certificates,IDs & Profiles/Keys

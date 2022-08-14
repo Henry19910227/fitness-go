@@ -1,7 +1,8 @@
 package google_login
 
 type Setting interface {
-	GetClientID() string
+	GetAndroidClientID() string
+	GetIOSClientID() string
 	GetIss() string
 	GetDebugTokenURL() string
 }

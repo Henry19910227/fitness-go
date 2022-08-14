@@ -15,11 +15,18 @@ func New() Setting {
 	return &setting{vp: vp.Shared(), mode: build.RunMode()}
 }
 
-func (s *setting) GetClientID() string {
+func (s *setting) GetAndroidClientID() string {
 	if s.mode == "debug" {
-		return s.vp.GetString("GoogleLogin.Debug.ClientID")
+		return s.vp.GetString("GoogleLogin.Debug.Android.ClientID")
 	}
-	return s.vp.GetString("GoogleLogin.Release.ClientID")
+	return s.vp.GetString("GoogleLogin.Release.Android.ClientID")
+}
+
+func (s *setting) GetIOSClientID() string {
+	if s.mode == "debug" {
+		return s.vp.GetString("GoogleLogin.Debug.iOS.ClientID")
+	}
+	return s.vp.GetString("GoogleLogin.Release.iOS.ClientID")
 }
 
 func (s *setting) GetIss() string {
@@ -31,7 +38,7 @@ func (s *setting) GetIss() string {
 
 func (s *setting) GetDebugTokenURL() string {
 	if s.mode == "debug" {
-		return s.vp.GetString("GoogleLogin.Debug.DebugTokenURL")
+		return s.vp.GetString("GoogleLogin.DebugTokenURL")
 	}
-	return s.vp.GetString("GoogleLogin.Release.DebugTokenURL")
+	return s.vp.GetString("GoogleLogin.DebugTokenURL")
 }
