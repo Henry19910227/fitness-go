@@ -364,8 +364,18 @@ func (r *resolver) APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *
 	}
 	//產出 auth token
 	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	//獲取API Token
 	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	if util.OnNilJustReturnInt(orderOutput.Type, 0) == orderModel.BuyCourse {
 		response, err := r.iabTool.APIGetProducts(input.Body.ProductID, input.Body.ReceiptData, token)
 		if err != nil {
@@ -416,7 +426,7 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 		return output
 	}
 	//存取 subscribe log
-	subscribeLogType := subscribeLogModel.GetType(response.NotificationType, response.Subtype)
+	subscribeLogType := subscribeLogModel.GetTypeByIAPType(response.NotificationType, response.Subtype)
 	subscribeLogTable := subscribeLogModel.Table{}
 	subscribeLogTable.OriginalTransactionID = util.PointerString(response.Data.SignedTransactionInfo.OriginalTransactionId)
 	subscribeLogTable.TransactionID = util.PointerString(response.Data.SignedTransactionInfo.TransactionId)
@@ -478,6 +488,7 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 	orderSubscribePlanTable.OrderID = orderOutputs[0].ID
 	orderSubscribePlanTable.SubscribePlanID = subscribePlanOutput.ID
 	if err := r.orderSubscribePlanService.Tx(tx).Update(&orderSubscribePlanTable); err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
@@ -492,6 +503,169 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 	subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
 	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(response.Data.SignedTransactionInfo.PurchaseDate / 1000).Format("2006-01-02 15:04:05"))
 	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(response.Data.SignedTransactionInfo.ExpiresDate / 1000).Format("2006-01-02 15:04:05"))
+	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
+		logger.Shared().Error(ctx, "APIAppStoreNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 4.更新用戶類型
+	var userType = userModel.Subscribe
+	if subscribeLogType == subscribeLogModel.Expired || subscribeLogType == subscribeLogModel.Refund {
+		userType = userModel.Normal
+	}
+	userTable := userModel.Table{}
+	userTable.ID = orderOutputs[0].UserID
+	userTable.UserType = util.PointerInt(userType)
+	if err := r.userService.Tx(tx).Update(&userTable); err != nil {
+		logger.Shared().Error(ctx, "APIAppStoreNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 5.更新訂單狀態
+	orderTable := orderModel.Table{}
+	orderTable.ID = orderOutputs[0].ID
+	orderTable.OrderStatus = util.PointerInt(orderModel.Success)
+	if err := r.orderService.Tx(tx).Update(&orderTable); err != nil {
+		logger.Shared().Error(ctx, "APIAppStoreNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, input *orderModel.APIGooglePlayNotificationInput) (output orderModel.APIGooglePlayNotificationOutput) {
+	//解析字串
+	notificationResp := iabModel.NewIABSubscribeNotificationResponse(input.Body.Message.Data)
+	if notificationResp == nil {
+		logger.Shared().Error(ctx, "iab notification decode error")
+		output.Set(code.BadRequest, "iab notification decode error")
+		return output
+	}
+	if notificationResp.SubscriptionNotification == nil {
+		logger.Shared().Error(ctx, "iab notification decode error")
+		output.Set(code.BadRequest, "iab notification decode error")
+		return output
+	}
+	//產出 auth token
+	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//獲取API Token
+	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//驗證收據
+	response, err := r.iabTool.APIGetSubscription(notificationResp.SubscriptionNotification.SubscriptionId, notificationResp.SubscriptionNotification.PurchaseToken, token)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//獲取 originalTransactionID 與 transactionID
+	originalTransactionID := response.OrderId
+	transactionID := response.OrderId
+	transactionIDs := strings.Split(response.OrderId, "..")
+	if len(transactionIDs) > 1 {
+		originalTransactionID = transactionIDs[0]
+	}
+	//存取 subscribe log
+	startTimeMillis, err := strconv.ParseInt(response.StartTimeMillis, 10, 64)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	expiryTimeMillis, err := strconv.ParseInt(response.ExpiryTimeMillis, 10, 64)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	subscribeLogTable := subscribeLogModel.Table{}
+	subscribeLogTable.OriginalTransactionID = util.PointerString(originalTransactionID)
+	subscribeLogTable.TransactionID = util.PointerString(transactionID)
+	subscribeLogTable.PurchaseDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
+	subscribeLogTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
+	subscribeLogTable.Type = util.PointerString(subscribeLogModel.GetTypeByIABType(notificationResp.SubscriptionNotification.NotificationType))
+	subscribeLogTable.Msg = util.PointerString(subscribeLogModel.GetMsgByIABType(notificationResp.SubscriptionNotification.NotificationType))
+	_, err = r.subscribeLogService.CreateOrUpdate(&subscribeLogTable)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 獲取訂閱項目資訊
+	findPlanInput := subscribePlanModel.FindInput{}
+	findPlanInput.ProductID = util.PointerString(notificationResp.SubscriptionNotification.SubscriptionId)
+	subscribePlanOutput, err := r.subscribePlanService.Find(&findPlanInput)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢 OriginalTransactionId 關聯訂單
+	orderListInput := orderModel.ListInput{}
+	orderListInput.OriginalTransactionID = util.PointerString(originalTransactionID)
+	orderListInput.Size = 1
+	orderListInput.Page = 1
+	orderListInput.OrderField = "create_at"
+	orderListInput.OrderType = order_by.DESC
+	orderOutputs, _, err := r.orderService.List(&orderListInput)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(orderOutputs) == 0 {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+"查無關聯訂單")
+		output.Set(code.BadRequest, "查無關聯訂單")
+		return output
+	}
+	defer tx.Rollback()
+	// 1.儲存收據
+	receiptTable := receiptModel.Table{}
+	receiptTable.OrderID = orderOutputs[0].ID
+	receiptTable.PaymentType = util.PointerInt(receiptModel.IAB)
+	receiptTable.ReceiptToken = util.PointerString("")
+	receiptTable.OriginalTransactionID = util.PointerString(originalTransactionID)
+	receiptTable.TransactionID = util.PointerString(transactionID)
+	receiptTable.ProductID = util.PointerString(notificationResp.SubscriptionNotification.SubscriptionId)
+	receiptTable.Quantity = util.PointerInt(1)
+	_, err = r.receiptService.Tx(tx).CreateOrUpdate(&receiptTable)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 2.修改訂單訂閱項目(升級or降級狀態)
+	orderSubscribePlanTable := orderSubscribePlanModel.Table{}
+	orderSubscribePlanTable.OrderID = orderOutputs[0].ID
+	orderSubscribePlanTable.SubscribePlanID = subscribePlanOutput.ID
+	if err := r.orderSubscribePlanService.Tx(tx).Update(&orderSubscribePlanTable); err != nil {
+		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 3.更新用戶訂閱狀態
+	subscribeLogType := subscribeLogModel.GetTypeByIABType(notificationResp.SubscriptionNotification.NotificationType)
+	var subscribeStatus = subscribeInfoModel.ValidSubscribe
+	if subscribeLogType == subscribeLogModel.Expired || subscribeLogType == subscribeLogModel.Refund {
+		subscribeStatus = subscribeInfoModel.NoneSubscribe
+	}
+	subscribeInfoTable := subscribeInfoModel.Table{}
+	subscribeInfoTable.UserID = orderOutputs[0].UserID
+	subscribeInfoTable.OrderID = orderOutputs[0].ID
+	subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
+	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
+	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
 	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
 		logger.Shared().Error(ctx, "APIAppStoreNotification："+err.Error())
 		output.Set(code.BadRequest, err.Error())

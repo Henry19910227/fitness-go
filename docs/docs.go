@@ -7397,7 +7397,7 @@ var doc = `{
         },
         "/v2/app_store_notification/v2": {
             "post": {
-                "description": "app store 訂閱 callback",
+                "description": "app store 訂閱週期通知",
                 "consumes": [
                     "application/json"
                 ],
@@ -7407,7 +7407,7 @@ var doc = `{
                 "tags": [
                     "支付通知_v2"
                 ],
-                "summary": "app store 訂閱 callback",
+                "summary": "app store 訂閱週期通知",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -9583,6 +9583,46 @@ var doc = `{
                 }
             }
         },
+        "/v2/google_play_notification": {
+            "post": {
+                "description": "app store 訂閱週期通知",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付通知_v2"
+                ],
+                "summary": "app store 訂閱週期通知",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.APIGooglePlayNotificationBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/order.APIGooglePlayNotificationOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/login/apple": {
             "post": {
                 "description": "使用Apple登入",
@@ -10826,6 +10866,51 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/order.APIVerifyAppleSubscribeOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/verify_google_receipt": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "驗證google收據",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付_v2"
+                ],
+                "summary": "驗證google收據",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.APIVerifyGoogleReceiptBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/order.APIVerifyGoogleReceiptOutput"
                         }
                     },
                     "400": {
@@ -16588,6 +16673,40 @@ var doc = `{
                 }
             }
         },
+        "order.APIGooglePlayNotificationBody": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "type": "string"
+                        },
+                        "messageId": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "subscription": {
+                    "type": "string"
+                }
+            }
+        },
+        "order.APIGooglePlayNotificationOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "order.APIVerifyAppleReceiptBody": {
             "type": "object",
             "required": [
@@ -16636,6 +16755,46 @@ var doc = `{
             }
         },
         "order.APIVerifyAppleSubscribeOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "order.APIVerifyGoogleReceiptBody": {
+            "type": "object",
+            "required": [
+                "order_id",
+                "product_id",
+                "receipt_data"
+            ],
+            "properties": {
+                "order_id": {
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
+                },
+                "product_id": {
+                    "description": "產品id",
+                    "type": "string",
+                    "example": "com.fitness.xxx"
+                },
+                "receipt_data": {
+                    "description": "收據token",
+                    "type": "string",
+                    "example": "MIJOlgYJKoZIhvcN..."
+                }
+            }
+        },
+        "order.APIVerifyGoogleReceiptOutput": {
             "type": "object",
             "properties": {
                 "code": {

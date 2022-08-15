@@ -106,9 +106,9 @@ func (c *controller) VerifyGoogleReceipt(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// AppStoreNotification app store 訂閱 callback
-// @Summary app store 訂閱 callback
-// @Description app store 訂閱 callback
+// AppStoreNotification app store 訂閱週期通知
+// @Summary app store 訂閱週期通知
+// @Description app store 訂閱週期通知
 // @Tags 支付通知_v2
 // @Accept json
 // @Produce json
@@ -123,6 +123,30 @@ func (c *controller) AppStoreNotification(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIAppStoreNotification(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
+	if output.Code != 0 {
+		ctx.JSON(http.StatusBadRequest, output)
+		return
+	}
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GooglePlayNotification google play 訂閱週期通知
+// @Summary app store 訂閱週期通知
+// @Description app store 訂閱週期通知
+// @Tags 支付通知_v2
+// @Accept json
+// @Produce json
+// @Param json_body body order.APIGooglePlayNotificationBody true "輸入參數"
+// @Success 200 {object} order.APIGooglePlayNotificationOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/google_play_notification [POST]
+func (c *controller) GooglePlayNotification(ctx *gin.Context) {
+	input := model.APIGooglePlayNotificationInput{}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGooglePlayNotification(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
 	if output.Code != 0 {
 		ctx.JSON(http.StatusBadRequest, output)
 		return

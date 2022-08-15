@@ -8,6 +8,7 @@ type Controller interface {
 	VerifyAppleReceipt(ctx *gin.Context)
 	VerifyGoogleReceipt(ctx *gin.Context)
 	AppStoreNotification(ctx *gin.Context)
+	GooglePlayNotification(ctx *gin.Context)
 	VerifyAppleSubscribe(ctx *gin.Context)
 	GetCMSOrders(ctx *gin.Context)
 }

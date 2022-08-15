@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/fb_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/google_login"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iab"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iap"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/jwt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/line_login"
@@ -40,6 +41,7 @@ type resolver struct {
 	lineLoginTool        line_login.Tool
 	uploadTool           uploader.Tool
 	iapTool              iap.Tool
+	iabTool              iab.Tool
 }
 
 func New(userService user.Service, receiptService receipt.Service,
@@ -47,13 +49,15 @@ func New(userService user.Service, receiptService receipt.Service,
 	cryptoTool crypto.Tool, redisTool redis.Tool,
 	jwtTool jwt.Tool, fbLoginTool fb_login.Tool,
 	googleLoginTool google_login.Tool, appleLoginTool apple_login.Tool,
-	lineLoginTool line_login.Tool, uploadTool uploader.Tool, iapTool iap.Tool) Resolver {
+	lineLoginTool line_login.Tool, uploadTool uploader.Tool,
+	iapTool iap.Tool, iabTool iab.Tool) Resolver {
 	return &resolver{userService: userService, receiptService: receiptService,
 		subscribeInfoService: subscribeInfoService, otpTool: otpTool,
 		cryptoTool: cryptoTool, redisTool: redisTool,
 		jwtTool: jwtTool, fbLoginTool: fbLoginTool,
 		googleLoginTool: googleLoginTool, appleLoginTool: appleLoginTool,
-		lineLoginTool: lineLoginTool, uploadTool: uploadTool, iapTool: iapTool}
+		lineLoginTool: lineLoginTool, uploadTool: uploadTool,
+		iapTool: iapTool, iabTool: iabTool}
 }
 
 func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput) {
@@ -1005,11 +1009,11 @@ func (r *resolver) updateUserSubscribeInfo(userID int64) error {
 	if len(receiptOutputs) == 0 {
 		return nil
 	}
-	// 驗證iap訂閱狀態
+	// 同步iap訂閱狀態
 	if util.OnNilJustReturnInt(receiptOutputs[0].PaymentType, 0) == receiptModel.IAP {
 		_ = r.updateUserSubscribeInfoForIAP(userID, util.OnNilJustReturnString(receiptOutputs[0].OriginalTransactionID, ""))
 	}
-	// TODO:驗證iab訂閱狀態
+	// TODO:同步iab訂閱狀態
 	return nil
 }
 
@@ -1038,6 +1042,39 @@ func (r *resolver) updateUserSubscribeInfoForIAP(userID int64, originalTransacti
 				}
 				return nil
 			}
+		}
+	}
+	return nil
+}
+
+func (r *resolver) updateUserSubscribeInfoForIAB(userID int64, productID string, receiptToken string) error {
+	//產出 auth token
+	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+	if err != nil {
+		return err
+	}
+	//獲取API Token
+	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
+	if err != nil {
+		return err
+	}
+	//驗證收據
+	response, _ := r.iabTool.APIGetSubscription(productID, receiptToken, token)
+	if response != nil {
+		subscribeStatus := subscribeInfoModel.NoneSubscribe
+		if response.PaymentState == 1 || response.PaymentState == 2 { // 當前訂閱尚未過期
+			subscribeStatus = subscribeInfoModel.ValidSubscribe
+		}
+		//更新 user_subscribe_info
+		startTimeMillis, _ := strconv.ParseInt(response.StartTimeMillis, 10, 64)
+		expiryTimeMillis, _ := strconv.ParseInt(response.ExpiryTimeMillis, 10, 64)
+		subscribeInfoTable := subscribeInfoModel.Table{}
+		subscribeInfoTable.UserID = util.PointerInt64(userID)
+		subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
+		subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
+		subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
+		if err := r.subscribeInfoService.Update(&subscribeInfoTable); err != nil {
+			return err
 		}
 	}
 	return nil

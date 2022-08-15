@@ -86,7 +86,7 @@ type APIVerifyGoogleReceiptInput struct {
 }
 type APIVerifyGoogleReceiptBody struct {
 	OrderID     string `json:"order_id" binding:"required" example:"202105201300687423"`      // 訂單id
-	ProductID   string `json:"product_id" binding:"required" example:"com.fitness.xxx"`		  // 產品id
+	ProductID   string `json:"product_id" binding:"required" example:"com.fitness.xxx"`       // 產品id
 	ReceiptData string `json:"receipt_data" binding:"required" example:"MIJOlgYJKoZIhvcN..."` // 收據token
 }
 
@@ -96,4 +96,16 @@ type APIAppStoreNotificationInput struct {
 }
 type APIAppStoreNotificationBody struct {
 	SignedPayload string `json:"signedPayload" example:"MIJOlgYJKoZIhvcN..."` // The payload in JSON Web Signature (JWS) format, signed by the App Store
+}
+
+// APIGooglePlayNotificationInput /v2/google_play_notification [POST]
+type APIGooglePlayNotificationInput struct {
+	Body APIGooglePlayNotificationBody
+}
+type APIGooglePlayNotificationBody struct {
+	Message struct {
+		Data      string `json:"data"`
+		MessageID string `json:"messageId"`
+	} `json:"message"`
+	Subscription string `json:"subscription"`
 }

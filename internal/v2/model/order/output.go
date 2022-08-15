@@ -128,6 +128,11 @@ type APIAppStoreNotificationOutput struct {
 	base.Output
 }
 
+// APIGooglePlayNotificationOutput /v2/google_play_notification [POST]
+type APIGooglePlayNotificationOutput struct {
+	base.Output
+}
+
 // APIVerifyAppleSubscribeOutput /v2/verify_apple_payment [POST]
 type APIVerifyAppleSubscribeOutput struct {
 	base.Output

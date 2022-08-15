@@ -14,28 +14,3 @@ const (
 	RenewEnable     string = "renew_enable"     // 啟用續訂
 	RenewDisable    string = "renew_disable"    // 取消續訂
 )
-
-func GetType(notificationType string, subtype string) string {
-	if notificationType == "SUBSCRIBED" && subtype == "INITIAL_BUY" {
-		return InitialBuy
-	} else if notificationType == "SUBSCRIBED" && subtype == "RESUBSCRIBE" {
-		return Resubscribe
-	} else if notificationType == "DID_RENEW" {
-		return Renew
-	} else if notificationType == "EXPIRED" {
-		return Expired
-	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "UPGRADE" {
-		return Upgrade
-	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "DOWNGRADE" {
-		return Downgrade
-	} else if notificationType == "DID_CHANGE_RENEWAL_PREF" && subtype == "" {
-		return DowngradeCancel
-	} else if notificationType == "REFUND" {
-		return Refund
-	} else if notificationType == "DID_CHANGE_RENEWAL_STATUS" && subtype == "AUTO_RENEW_ENABLED" {
-		return RenewEnable
-	} else if notificationType == "DID_CHANGE_RENEWAL_STATUS" && subtype == "AUTO_RENEW_DISABLED" {
-		return RenewDisable
-	}
-	return Unknown
-}
