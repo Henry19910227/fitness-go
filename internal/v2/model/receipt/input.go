@@ -20,6 +20,7 @@ type ListInput struct {
 	PaymentTypeOptional
 	TransactionIDOptional
 	OriginalTransactionIDOptional
+	HaveReceiptToken *int `json:"have_receipt_token,omitempty" binding:"omitempty" example:"1"` // 是否擁有 ReceiptToken(0:否/1:是)
 	PreloadInput
 	OrderByInput
 	PagingInput

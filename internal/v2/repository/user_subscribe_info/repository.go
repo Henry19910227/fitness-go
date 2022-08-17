@@ -60,7 +60,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 func (r *repository) CreateOrUpdate(item *model.Table) (err error) {
 	err = r.db.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "user_id"}},
-		DoUpdates: clause.AssignmentColumns([]string{"order_id", "status", "start_date", "expires_date", "update_at"}),
+		DoUpdates: clause.AssignmentColumns([]string{"order_id", "status", "payment_type", "start_date", "expires_date", "update_at"}),
 	}).Create(&item).Error
 	return err
 }
@@ -69,4 +69,3 @@ func (r *repository) Update(item *model.Table) (err error) {
 	err = r.db.Model(&model.Table{}).Where("user_id = ?", *item.UserID).Save(item).Error
 	return err
 }
-

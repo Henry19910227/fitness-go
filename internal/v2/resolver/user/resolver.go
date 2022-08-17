@@ -985,19 +985,34 @@ func (r *resolver) updateUserSubscribeInfo(userID int64) error {
 	}
 	//驗證訂閱日期是否過期
 	expiresTime, err := time.Parse("2006-01-02 15:04:05", util.OnNilJustReturnString(infoOutputs[0].ExpiresDate, ""))
-	if err == nil {
-		if time.Now().Unix() > expiresTime.Unix() {
-			subscribeInfoTable := subscribeInfoModel.Table{}
-			subscribeInfoTable.UserID = util.PointerInt64(userID)
-			subscribeInfoTable.Status = util.PointerInt(subscribeInfoModel.NoneSubscribe)
-			if err := r.subscribeInfoService.Update(&subscribeInfoTable); err != nil {
-				return err
-			}
-		}
+	if err != nil {
+		return err
 	}
-	//更新訂閱資訊
+	if time.Now().Unix() <= expiresTime.Unix() {
+		return nil
+	}
+	subscribeInfoTable := subscribeInfoModel.Table{}
+	subscribeInfoTable.UserID = util.PointerInt64(userID)
+	subscribeInfoTable.Status = util.PointerInt(subscribeInfoModel.NoneSubscribe)
+	if err := r.subscribeInfoService.Update(&subscribeInfoTable); err != nil {
+		return err
+	}
+	// 同步iap訂閱狀態
+	if util.OnNilJustReturnInt(infoOutputs[0].PaymentType, 0) == receiptModel.IAP {
+		_ = r.updateUserSubscribeInfoForIAP(infoOutputs[0])
+	}
+	// 同步iab訂閱狀態
+	if util.OnNilJustReturnInt(infoOutputs[0].PaymentType, 0) == receiptModel.IAB {
+		_ = r.updateUserSubscribeInfoForIAB(infoOutputs[0])
+	}
+	return nil
+}
+
+func (r *resolver) updateUserSubscribeInfoForIAP(subscribeInfo *subscribeInfoModel.Output) error {
+	//查詢收據資料
 	receiptListInput := receiptModel.ListInput{}
-	receiptListInput.OrderID = infoOutputs[0].OrderID
+	receiptListInput.OrderID = subscribeInfo.OrderID
+	receiptListInput.PaymentType = util.PointerInt(receiptModel.IAP)
 	receiptListInput.Page = 1
 	receiptListInput.Size = 1
 	receiptListInput.OrderType = orderBy.DESC
@@ -1009,20 +1024,12 @@ func (r *resolver) updateUserSubscribeInfo(userID int64) error {
 	if len(receiptOutputs) == 0 {
 		return nil
 	}
-	// 同步iap訂閱狀態
-	if util.OnNilJustReturnInt(receiptOutputs[0].PaymentType, 0) == receiptModel.IAP {
-		_ = r.updateUserSubscribeInfoForIAP(userID, util.OnNilJustReturnString(receiptOutputs[0].OriginalTransactionID, ""))
-	}
-	// TODO:同步iab訂閱狀態
-	return nil
-}
-
-func (r *resolver) updateUserSubscribeInfoForIAP(userID int64, originalTransactionID string) error {
+	// 查詢並同步當前線上IAP訂閱狀態
 	token, err := r.iapTool.GenerateAppleStoreAPIToken(time.Hour)
 	if err != nil {
 		return err
 	}
-	response, _ := r.iapTool.GetSubscribeAPI(originalTransactionID, token)
+	response, _ := r.iapTool.GetSubscribeAPI(util.OnNilJustReturnString(receiptOutputs[0].OriginalTransactionID, ""), token)
 	if response != nil {
 		if len(response.Data) > 0 {
 			if len(response.Data[0].LastTransactions) > 0 {
@@ -1033,7 +1040,7 @@ func (r *resolver) updateUserSubscribeInfoForIAP(userID int64, originalTransacti
 				}
 				//更新 user_subscribe_info
 				subscribeInfoTable := subscribeInfoModel.Table{}
-				subscribeInfoTable.UserID = util.PointerInt64(userID)
+				subscribeInfoTable.UserID = subscribeInfo.UserID
 				subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
 				subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(response.Data[0].LastTransactions[0].SignedTransactionInfo.PurchaseDate / 1000).Format("2006-01-02 15:04:05"))
 				subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(response.Data[0].LastTransactions[0].SignedTransactionInfo.ExpiresDate / 1000).Format("2006-01-02 15:04:05"))
@@ -1047,7 +1054,23 @@ func (r *resolver) updateUserSubscribeInfoForIAP(userID int64, originalTransacti
 	return nil
 }
 
-func (r *resolver) updateUserSubscribeInfoForIAB(userID int64, productID string, receiptToken string) error {
+func (r *resolver) updateUserSubscribeInfoForIAB(subscribeInfo *subscribeInfoModel.Output) error {
+	//查詢收據資料
+	receiptListInput := receiptModel.ListInput{}
+	receiptListInput.OrderID = subscribeInfo.OrderID
+	receiptListInput.PaymentType = util.PointerInt(receiptModel.IAB)
+	receiptListInput.HaveReceiptToken = util.PointerInt(1)
+	receiptListInput.Page = 1
+	receiptListInput.Size = 1
+	receiptListInput.OrderType = orderBy.DESC
+	receiptListInput.OrderField = "create_at"
+	receiptOutputs, _, err := r.receiptService.List(&receiptListInput)
+	if err != nil {
+		return err
+	}
+	if len(receiptOutputs) == 0 {
+		return nil
+	}
 	//產出 auth token
 	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
 	if err != nil {
@@ -1058,18 +1081,29 @@ func (r *resolver) updateUserSubscribeInfoForIAB(userID int64, productID string,
 	if err != nil {
 		return err
 	}
-	//驗證收據
-	response, _ := r.iabTool.APIGetSubscription(productID, receiptToken, token)
+	// 查詢並同步當前線上IAB訂閱狀態
+	productID := util.OnNilJustReturnString(receiptOutputs[0].ProductID, "")
+	receiptToken := util.OnNilJustReturnString(receiptOutputs[0].ReceiptToken, "")
+	response, err := r.iabTool.APIGetSubscription(productID, receiptToken, token)
+	if err != nil {
+		return err
+	}
 	if response != nil {
 		subscribeStatus := subscribeInfoModel.NoneSubscribe
 		if response.PaymentState == 1 || response.PaymentState == 2 { // 當前訂閱尚未過期
 			subscribeStatus = subscribeInfoModel.ValidSubscribe
 		}
 		//更新 user_subscribe_info
-		startTimeMillis, _ := strconv.ParseInt(response.StartTimeMillis, 10, 64)
-		expiryTimeMillis, _ := strconv.ParseInt(response.ExpiryTimeMillis, 10, 64)
+		startTimeMillis, err := strconv.ParseInt(response.StartTimeMillis, 10, 64)
+		if err != nil {
+			return err
+		}
+		expiryTimeMillis, err := strconv.ParseInt(response.ExpiryTimeMillis, 10, 64)
+		if err != nil {
+			return err
+		}
 		subscribeInfoTable := subscribeInfoModel.Table{}
-		subscribeInfoTable.UserID = util.PointerInt64(userID)
+		subscribeInfoTable.UserID = subscribeInfo.UserID
 		subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
 		subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
 		subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))

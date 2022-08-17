@@ -501,6 +501,7 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 	subscribeInfoTable.UserID = orderOutputs[0].UserID
 	subscribeInfoTable.OrderID = orderOutputs[0].ID
 	subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
+	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAP)
 	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(response.Data.SignedTransactionInfo.PurchaseDate / 1000).Format("2006-01-02 15:04:05"))
 	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(response.Data.SignedTransactionInfo.ExpiresDate / 1000).Format("2006-01-02 15:04:05"))
 	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
@@ -664,6 +665,7 @@ func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, inpu
 	subscribeInfoTable.UserID = orderOutputs[0].UserID
 	subscribeInfoTable.OrderID = orderOutputs[0].ID
 	subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
+	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAB)
 	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
 	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
 	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
@@ -935,6 +937,7 @@ func (r *resolver) handleSubscribeTradeForApple(tx *gorm.DB, order *orderModel.O
 	subscribeInfoTable.UserID = order.UserID
 	subscribeInfoTable.OrderID = order.ID
 	subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
+	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAP)
 	subscribeInfoTable.StartDate = util.PointerString(item.PurchaseDate.Format("2006-01-02 15:04:05"))
 	subscribeInfoTable.ExpiresDate = util.PointerString(item.ExpiresDate.Format("2006-01-02 15:04:05"))
 	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
@@ -1025,6 +1028,7 @@ func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, order *orderModel.
 	subscribeInfoTable.UserID = order.UserID
 	subscribeInfoTable.OrderID = order.ID
 	subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
+	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAB)
 	startTimeMillis, err := strconv.ParseInt(response.StartTimeMillis, 10, 64)
 	if err != nil {
 		return nil

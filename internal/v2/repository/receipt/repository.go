@@ -42,6 +42,14 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.PaymentType != nil {
 		db = db.Where("receipts.payment_type = ?", *input.PaymentType)
 	}
+	// HaveReceiptToken 篩選條件
+	if input.HaveReceiptToken != nil {
+		if *input.HaveReceiptToken > 0 {
+			db = db.Where("LENGTH(receipts.receipt_token) > 0")
+		} else {
+			db = db.Where("LENGTH(receipts.receipt_token) = 0")
+		}
+	}
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
