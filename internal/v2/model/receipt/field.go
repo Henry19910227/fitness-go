@@ -7,7 +7,7 @@ type OrderIDField struct {
 	OrderID *string `json:"order_id,omitempty" gorm:"column:order_id" example:"20220215104747115283"` //訂單id
 }
 type PaymentTypeField struct {
-	PaymentType *int `json:"payment_type,omitempty" gorm:"column:payment_type" example:"1"` //支付方式(1:apple內購/2:google內購)
+	PaymentType *int `json:"payment_type,omitempty" gorm:"column:payment_type" example:"1"` //支付方式(0:尚未指定/1:apple內購/2:google內購)
 }
 type ReceiptTokenField struct {
 	ReceiptToken *string `json:"receipt_token,omitempty" gorm:"column:receipt_token" example:"XXXX"` // 收據token

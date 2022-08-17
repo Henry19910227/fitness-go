@@ -9,6 +9,9 @@ type OrderIDField struct {
 type StatusField struct {
 	Status *int `json:"status,omitempty" gorm:"column:status" example:"1"` // 會員狀態(0:無會員狀態/1:付費會員狀態)
 }
+type PaymentTypeField struct {
+	PaymentType *int `json:"payment_type,omitempty" gorm:"column:payment_type" example:"1"` //支付方式(0:尚未指定/1:apple內購/2:google內購)
+}
 type StartDateField struct {
 	StartDate *string `json:"start_date,omitempty" gorm:"column:start_date" example:"2022-07-11 11:00:00"` // 訂閱開始日期
 }
@@ -23,10 +26,12 @@ type Table struct {
 	UserIDField
 	OrderIDField
 	StatusField
+	PaymentTypeField
 	StartDateField
 	ExpiresDateField
 	UpdateAtField
 }
+
 func (Table) TableName() string {
 	return "user_subscribe_infos"
 }
