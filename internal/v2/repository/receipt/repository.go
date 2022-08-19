@@ -2,6 +2,7 @@ package receipt
 
 import (
 	"fmt"
+	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -80,9 +81,13 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 }
 
 func (r *repository) CreateOrUpdate(item *model.Table) (id *int64, err error) {
+	values := make([]string, 0)
+	if len(util.OnNilJustReturnString(item.ReceiptToken, "")) > 0 {
+		values = append(values, "receipt_token")
+	}
 	err = r.db.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "order_id"}, {Name: "original_transaction_id"}, {Name: "transaction_id"}},
-		DoUpdates: clause.AssignmentColumns([]string{"receipt_token"}),
+		DoUpdates: clause.AssignmentColumns(values),
 	}).Create(&item).Error
 	if err != nil {
 		return nil, err

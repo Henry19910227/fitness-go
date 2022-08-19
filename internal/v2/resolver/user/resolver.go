@@ -983,14 +983,16 @@ func (r *resolver) updateUserSubscribeInfo(userID int64) error {
 	if len(infoOutputs) == 0 {
 		return nil
 	}
-	//驗證訂閱日期是否過期
-	expiresTime, err := time.Parse("2006-01-02 15:04:05", util.OnNilJustReturnString(infoOutputs[0].ExpiresDate, ""))
-	if err != nil {
-		return err
-	}
-	if time.Now().Unix() <= expiresTime.Unix() {
+	// 驗證訂閱狀態是否正常(帳號在效期內且狀態為訂閱狀態 or 帳號過期且狀態為非訂閱狀態)
+	nowUnix := time.Now().Unix()
+	expiresUnix := util.DateStringToTime(util.OnNilJustReturnString(infoOutputs[0].ExpiresDate, "")).Unix()
+	if nowUnix <= expiresUnix && util.OnNilJustReturnInt(infoOutputs[0].Status, 0) > 0 {
 		return nil
 	}
+	if nowUnix >= expiresUnix && util.OnNilJustReturnInt(infoOutputs[0].Status, 0) == 0 {
+		return nil
+	}
+	// 帳號訂閱狀態不正常則同步線上 iap or iab 訂閱狀態
 	subscribeInfoTable := subscribeInfoModel.Table{}
 	subscribeInfoTable.UserID = util.PointerInt64(userID)
 	subscribeInfoTable.Status = util.PointerInt(subscribeInfoModel.NoneSubscribe)
@@ -1105,8 +1107,8 @@ func (r *resolver) updateUserSubscribeInfoForIAB(subscribeInfo *subscribeInfoMod
 		subscribeInfoTable := subscribeInfoModel.Table{}
 		subscribeInfoTable.UserID = subscribeInfo.UserID
 		subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
-		subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
-		subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
+		subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis / 1000).Format("2006-01-02 15:04:05"))
+		subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis / 1000).Format("2006-01-02 15:04:05"))
 		if err := r.subscribeInfoService.Update(&subscribeInfoTable); err != nil {
 			return err
 		}

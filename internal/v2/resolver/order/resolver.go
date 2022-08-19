@@ -73,6 +73,7 @@ func New(orderService order.Service, courseService course.Service,
 }
 
 func (r *resolver) APICreateCourseOrder(tx *gorm.DB, input *orderModel.APICreateCourseOrderInput) (output orderModel.APICreateCourseOrderOutput) {
+	defer tx.Rollback()
 	// 檢查是此課表是否已購買
 	findAssetsInput := courseAssetModel.ListInput{}
 	findAssetsInput.UserID = util.PointerInt64(input.UserID)
@@ -134,7 +135,6 @@ func (r *resolver) APICreateCourseOrder(tx *gorm.DB, input *orderModel.APICreate
 	// 產出訂單流水號
 	orderID := time.Now().Format("20060102150405") + strconv.Itoa(int(util.RandRange(100000, 999999)))
 	// 創建課表訂單
-	defer tx.Rollback()
 	table := orderModel.Table{}
 	table.ID = util.PointerString(orderID)
 	table.UserID = util.PointerInt64(input.UserID)
@@ -180,6 +180,7 @@ func (r *resolver) APICreateCourseOrder(tx *gorm.DB, input *orderModel.APICreate
 }
 
 func (r *resolver) APICreateSubscribeOrder(tx *gorm.DB, input *orderModel.APICreateSubscribeOrderInput) (output orderModel.APICreateSubscribeOrderOutput) {
+	defer tx.Rollback()
 	// 檢查目前是否已訂閱
 	subscribeListInput := subscribeInfoModel.ListInput{}
 	subscribeListInput.UserID = util.PointerInt64(input.UserID)
@@ -242,7 +243,6 @@ func (r *resolver) APICreateSubscribeOrder(tx *gorm.DB, input *orderModel.APICre
 	// 產出訂單流水號
 	orderID := time.Now().Format("20060102150405") + strconv.Itoa(int(util.RandRange(100000, 999999)))
 	// 創建訂閱訂單
-	defer tx.Rollback()
 	table := orderModel.Table{}
 	table.ID = util.PointerString(orderID)
 	table.UserID = util.PointerInt64(input.UserID)
@@ -344,6 +344,7 @@ func (r *resolver) APIVerifyAppleReceipt(ctx *gin.Context, tx *gorm.DB, input *o
 }
 
 func (r *resolver) APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *orderModel.APIVerifyGoogleReceiptInput) (output orderModel.APIVerifyGoogleReceiptOutput) {
+	defer tx.Rollback()
 	findInput := orderModel.FindInput{}
 	findInput.ID = util.PointerString(input.Body.OrderID)
 	findInput.Preloads = []*preloadModel.Preload{
@@ -365,14 +366,14 @@ func (r *resolver) APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *
 	//產出 auth token
 	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
 	if err != nil {
-		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	//獲取API Token
 	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
 	if err != nil {
-		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
@@ -382,7 +383,7 @@ func (r *resolver) APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *
 			output.Set(code.BadRequest, err.Error())
 		}
 		if err := r.handleBuyCourseTradeForGoogle(tx, orderOutput, response); err != nil {
-			logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+			logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
 			output.Set(code.BadRequest, err.Error())
 			return output
 		}
@@ -393,9 +394,10 @@ func (r *resolver) APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *
 		response, err := r.iabTool.APIGetSubscription(input.Body.ProductID, input.Body.ReceiptData, token)
 		if err != nil {
 			output.Set(code.BadRequest, err.Error())
+			return output
 		}
-		if err := r.handleSubscribeTradeForGoogle(tx, orderOutput, response); err != nil {
-			logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+		if err := r.handleSubscribeTradeForGoogle(tx, input.Body.ProductID, orderOutput, response, input.Body.ReceiptData); err != nil {
+			logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
 			output.Set(code.BadRequest, err.Error())
 			return output
 		}
@@ -467,7 +469,6 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 		output.Set(code.BadRequest, "查無關聯訂單")
 		return output
 	}
-	defer tx.Rollback()
 	// 1.儲存收據
 	receiptTable := receiptModel.Table{}
 	receiptTable.OrderID = orderOutputs[0].ID
@@ -537,6 +538,8 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 }
 
 func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, input *orderModel.APIGooglePlayNotificationInput) (output orderModel.APIGooglePlayNotificationOutput) {
+	fmt.Println(input.Body.Message.Data)
+	defer tx.Rollback()
 	//解析字串
 	notificationResp := iabModel.NewIABSubscribeNotificationResponse(input.Body.Message.Data)
 	if notificationResp == nil {
@@ -593,8 +596,8 @@ func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, inpu
 	subscribeLogTable := subscribeLogModel.Table{}
 	subscribeLogTable.OriginalTransactionID = util.PointerString(originalTransactionID)
 	subscribeLogTable.TransactionID = util.PointerString(transactionID)
-	subscribeLogTable.PurchaseDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
-	subscribeLogTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
+	subscribeLogTable.PurchaseDate = util.PointerString(util.UnixToTime(startTimeMillis / 1000).Format("2006-01-02 15:04:05"))
+	subscribeLogTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis / 1000).Format("2006-01-02 15:04:05"))
 	subscribeLogTable.Type = util.PointerString(subscribeLogModel.GetTypeByIABType(notificationResp.SubscriptionNotification.NotificationType))
 	subscribeLogTable.Msg = util.PointerString(subscribeLogModel.GetMsgByIABType(notificationResp.SubscriptionNotification.NotificationType))
 	_, err = r.subscribeLogService.CreateOrUpdate(&subscribeLogTable)
@@ -630,7 +633,6 @@ func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, inpu
 		output.Set(code.BadRequest, "查無關聯訂單")
 		return output
 	}
-	defer tx.Rollback()
 	// 1.儲存收據
 	receiptTable := receiptModel.Table{}
 	receiptTable.OrderID = orderOutputs[0].ID
@@ -666,8 +668,8 @@ func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, inpu
 	subscribeInfoTable.OrderID = orderOutputs[0].ID
 	subscribeInfoTable.Status = util.PointerInt(subscribeStatus)
 	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAB)
-	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
-	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
+	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis / 1000).Format("2006-01-02 15:04:05"))
+	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis / 1000).Format("2006-01-02 15:04:05"))
 	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
 		logger.Shared().Error(ctx, "APIAppStoreNotification："+err.Error())
 		output.Set(code.BadRequest, err.Error())
@@ -754,6 +756,7 @@ func (r *resolver) APIGetCMSOrders(input *orderModel.APIGetCMSOrdersInput) (outp
 }
 
 func (r *resolver) handleBuyCourseTradeForApple(tx *gorm.DB, order *orderModel.Output, response *iapModel.IAPVerifyReceiptResponse) error {
+	defer tx.Rollback()
 	//驗證收據格式
 	if len(response.Receipt.InApp) == 0 {
 		return errors.New("無效的收據(無InApp參數)")
@@ -772,7 +775,6 @@ func (r *resolver) handleBuyCourseTradeForApple(tx *gorm.DB, order *orderModel.O
 	if len(receiptOutputs) > 0 {
 		return errors.New("此收據已有支付記錄")
 	}
-	defer tx.Rollback()
 	//創建收據
 	quantity, _ := strconv.Atoi(item.Quantity)
 	receiptTable := receiptModel.Table{}
@@ -817,6 +819,7 @@ func (r *resolver) handleBuyCourseTradeForApple(tx *gorm.DB, order *orderModel.O
 }
 
 func (r *resolver) handleBuyCourseTradeForGoogle(tx *gorm.DB, order *orderModel.Output, response *iabModel.IABProductAPIResponse) error {
+	defer tx.Rollback()
 	//驗證收據格式
 	if response.PurchaseState != 0 {
 		return errors.New("尚未購買")
@@ -831,7 +834,6 @@ func (r *resolver) handleBuyCourseTradeForGoogle(tx *gorm.DB, order *orderModel.
 	if len(receiptOutputs) > 0 {
 		return errors.New("此收據已有支付記錄")
 	}
-	defer tx.Rollback()
 	//創建收據
 	receiptTable := receiptModel.Table{}
 	receiptTable.OrderID = order.ID
@@ -875,6 +877,7 @@ func (r *resolver) handleBuyCourseTradeForGoogle(tx *gorm.DB, order *orderModel.
 }
 
 func (r *resolver) handleSubscribeTradeForApple(tx *gorm.DB, order *orderModel.Output, response *iapModel.IAPVerifyReceiptResponse) error {
+	defer tx.Rollback()
 	// 驗證收據格式
 	if len(response.LatestReceiptInfo) == 0 || len(response.PendingRenewalInfo) == 0 {
 		return errors.New("無效的收據(無LatestReceiptInfo或PendingRenewalInfo參數)")
@@ -906,7 +909,6 @@ func (r *resolver) handleSubscribeTradeForApple(tx *gorm.DB, order *orderModel.O
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
 	// 1.儲存收據
 	quantity, _ := strconv.Atoi(item.Quantity)
 	receiptTable := receiptModel.Table{}
@@ -965,10 +967,20 @@ func (r *resolver) handleSubscribeTradeForApple(tx *gorm.DB, order *orderModel.O
 	return nil
 }
 
-func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, order *orderModel.Output, response *iabModel.IABSubscriptionAPIResponse) error {
+func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, productID string, order *orderModel.Output, response *iabModel.IABSubscriptionAPIResponse, receiptToken string) error {
+	defer tx.Rollback()
+	// 回傳的訂單如遇到 GPA.3331-2251-2804-48618..4
+	// OriginalTransactionID = 只留下'..'前的訂單編號 GPA.3331-2251-2804-48618
+	// TransactionID = 完整的訂單編號 GPA.3331-2251-2804-48618
+	originalTransactionID := response.OrderId
+	transactionID := response.OrderId
+	transactionIDs := strings.Split(response.OrderId, "..")
+	if len(transactionIDs) > 1 {
+		originalTransactionID = transactionIDs[0]
+	}
 	// 驗證是否是原先訂閱用戶
 	orderListInput := orderModel.ListInput{}
-	orderListInput.OriginalTransactionID = util.PointerString(response.OrderId)
+	orderListInput.OriginalTransactionID = util.PointerString(originalTransactionID)
 	orderListInput.OrderField = "create_at"
 	orderListInput.OrderType = order_by.DESC
 	orderListInput.Size = 1
@@ -984,20 +996,10 @@ func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, order *orderModel.
 	}
 	// 獲取訂閱項目資訊
 	findPlanInput := subscribePlanModel.FindInput{}
-	findPlanInput.ProductID = order.OrderCourse.SaleItem.ProductLabel.ProductID
+	findPlanInput.ProductID = util.PointerString(productID)
 	subscribePlanOutput, err := r.subscribePlanService.Find(&findPlanInput)
 	if err != nil {
 		return err
-	}
-	defer tx.Rollback()
-	// 回傳的訂單如遇到 GPA.3331-2251-2804-48618..4
-	// OriginalTransactionID = 只留下'..'前的訂單編號 GPA.3331-2251-2804-48618
-	// TransactionID = 完整的訂單編號 GPA.3331-2251-2804-48618
-	originalTransactionID := response.OrderId
-	transactionID := response.OrderId
-	transactionIDs := strings.Split(response.OrderId, "..")
-	if len(transactionIDs) > 1 {
-		originalTransactionID = transactionIDs[0]
 	}
 	// 1.儲存收據
 	receiptTable := receiptModel.Table{}
@@ -1005,8 +1007,8 @@ func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, order *orderModel.
 	receiptTable.PaymentType = util.PointerInt(receiptModel.IAB)
 	receiptTable.OriginalTransactionID = util.PointerString(originalTransactionID)
 	receiptTable.TransactionID = util.PointerString(transactionID)
-	receiptTable.ReceiptToken = util.PointerString("")
-	receiptTable.ProductID = order.OrderCourse.SaleItem.ProductLabel.ProductID
+	receiptTable.ReceiptToken = util.PointerString(receiptToken)
+	receiptTable.ProductID = util.PointerString(productID)
 	receiptTable.Quantity = util.PointerInt(1)
 	_, err = r.receiptService.Tx(tx).CreateOrUpdate(&receiptTable)
 	if err != nil {
@@ -1020,9 +1022,9 @@ func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, order *orderModel.
 		return err
 	}
 	// 3.更新用戶訂閱狀態
-	var subscribeStatus = subscribeInfoModel.ValidSubscribe
+	var subscribeStatus = subscribeInfoModel.NoneSubscribe
 	if response.PaymentState == 1 || response.PaymentState == 2 {
-		subscribeStatus = subscribeInfoModel.NoneSubscribe
+		subscribeStatus = subscribeInfoModel.ValidSubscribe
 	}
 	subscribeInfoTable := subscribeInfoModel.Table{}
 	subscribeInfoTable.UserID = order.UserID
@@ -1037,8 +1039,8 @@ func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, order *orderModel.
 	if err != nil {
 		return nil
 	}
-	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis).Format("2006-01-02 15:04:05"))
-	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis).Format("2006-01-02 15:04:05"))
+	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis / 1000).Format("2006-01-02 15:04:05"))
+	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis / 1000).Format("2006-01-02 15:04:05"))
 	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
 		return err
 	}
