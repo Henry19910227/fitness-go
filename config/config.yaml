@@ -133,6 +133,16 @@ LineLogin:
       ClientID: 1657378278
     Release:
       ClientID: 1657326779
+Mail:
+    SMTPHostName: smtp.gmail.com
+    Debug:
+      Port: 587
+      Sender: toyokoyo199@gmail.com
+      Password: qedvgrldwmeivfqw
+    Release:
+      Port: 587
+      Sender: toyokoyo199@gmail.com
+      Password: qedvgrldwmeivfqw
 Swagger:
     Debug:
       Protocol: http
