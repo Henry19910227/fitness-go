@@ -717,7 +717,28 @@ func (r *resolver) APIVerifyAppleSubscribe(input *orderModel.APIVerifyAppleSubsc
 	}
 	if len(orderOutputs) > 0 {
 		if util.OnNilJustReturnInt64(orderOutputs[0].UserID, 0) != input.UserID {
-			output.Set(code.BadRequest, "無法訂閱，此 Apple ID 已綁定其他帳戶")
+			findUserInput := userModel.FindInput{}
+			findUserInput.ID = orderOutputs[0].UserID
+			userOutput, err := r.userService.Find(&findUserInput)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			var accountType string
+			switch util.OnNilJustReturnInt(userOutput.AccountType, 0) {
+			case userModel.Email:
+				accountType = "Email"
+			case userModel.Facebook:
+				accountType = "Facebook"
+			case userModel.Google:
+				accountType = "Google"
+			case userModel.Line:
+				accountType = "Line"
+			case userModel.Apple:
+				accountType = "Apple"
+			}
+			msg := fmt.Sprintf("此 Apple ID 已綁定 %v 信箱( %v 註冊)", util.OnNilJustReturnString(userOutput.Email, ""), accountType)
+			output.Set(code.BadRequest, msg)
 			return output
 		}
 	}
