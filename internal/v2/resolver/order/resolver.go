@@ -410,6 +410,7 @@ func (r *resolver) APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *
 }
 
 func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input *orderModel.APIAppStoreNotificationInput) (output orderModel.APIAppStoreNotificationOutput) {
+	defer tx.Rollback()
 	//解析字串
 	response := dto.NewIAPNotificationResponse(strings.Split(input.Body.SignedPayload, ".")[1])
 	if response == nil {
@@ -538,7 +539,6 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 }
 
 func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, input *orderModel.APIGooglePlayNotificationInput) (output orderModel.APIGooglePlayNotificationOutput) {
-	fmt.Println(input.Body.Message.Data)
 	defer tx.Rollback()
 	//解析字串
 	notificationResp := iabModel.NewIABSubscribeNotificationResponse(input.Body.Message.Data)
