@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS user_subscribe_infos (
     `expires_date`      DATETIME NOT NULL DEFAULT NOW() COMMENT '訂閱過期日期',
     `update_at`         DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
     CONSTRAINT `fk_subscribe_infos_user_id_to_users_id` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_subscribe_infos_order_id_to_orders_id` FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE SET NULL
+    CONSTRAINT `fk_subscribe_infos_order_id_to_orders_id` FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

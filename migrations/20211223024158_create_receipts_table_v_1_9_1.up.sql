@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS receipts (
     `create_at`                 DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     INDEX(transaction_id),
     UNIQUE KEY `unique_receipts` (`order_id`,`original_transaction_id`,`transaction_id`),
-    CONSTRAINT fk_receipts_order_id_to_orders_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE SET NULL
+    CONSTRAINT fk_receipts_order_id_to_orders_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;
