@@ -7,7 +7,7 @@ type UserIDRequired struct {
 	UserID int64 `json:"user_id,omitempty" gorm:"column:user_id"  binding:"required" example:"10001"` // 用戶 id
 }
 type SaleTypeRequired struct {
-	SaleType int `json:"sale_type,omitempty" form:"sale_type" gorm:"column:sale_type" binding:"required,oneof=1 2 3" example:"3"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+	SaleType int `json:"sale_type,omitempty" form:"sale_type" gorm:"column:sale_type" binding:"required,oneof=1 2 3" example:"3"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
 }
 type SaleIDRequired struct {
 	SaleID int64 `json:"sale_id,omitempty" gorm:"column:sale_id" example:"3"` // 銷售 id
