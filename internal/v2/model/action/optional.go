@@ -10,7 +10,7 @@ type TypeOptional struct {
 	Type int `json:"type,omitempty" binding:"omitempty,oneof=1 2 3 4 5" example:"1"` //紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
 }
 type SourceOptional struct {
-	Source *int `json:"source,omitempty"` //動作來源(1:平台動作/2:教練動作)
+	Source *int `json:"source,omitempty"` //動作來源(1:系統動作/2:教練動作/2:學員動作
 }
 type CategoryOptional struct {
 	Category *int `json:"category,omitempty" binding:"omitempty,oneof=1 2 3 4 5" example:"1234.mp4"` //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)

@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS actions (
     `id` INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '動作id',
     `course_id` INT(11) UNSIGNED COMMENT '課表id',
     `name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '動作名稱',
-    `source` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '動作來源(1:系統動作/2:教練自創動作)',
+    `source` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '動作來源(1:系統動作/2:教練動作/2:學員動作)',
     `type` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)',
     `category` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)',
     `body` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)',
