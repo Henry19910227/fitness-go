@@ -22,7 +22,7 @@ func NewResolver(db *gorm.DB) Resolver {
 	userService := user.NewService(db)
 	receiptService := receipt.NewService(db)
 	subscribeInfoService := user_subscribe_info.NewService(db)
-	otpTool := otp.New()
+	otpTool := otp.NewTool()
 	cryptoTool := crypto.New()
 	redisTool := redis.Shared()
 	jwtTool := jwt.NewTool()

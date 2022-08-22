@@ -10438,6 +10438,126 @@
                 }
             }
         },
+        "/v2/reset_password/otp": {
+            "post": {
+                "description": "發送重設密碼的OTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "忘記密碼_v2"
+                ],
+                "summary": "發送重設密碼的OTP",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APICreateResetOTPBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APICreateResetOTPOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/reset_password/otp_validate": {
+            "post": {
+                "description": "驗證重設密碼的OTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "忘記密碼_v2"
+                ],
+                "summary": "驗證重設密碼的OTP",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIResetOTPValidateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIResetOTPValidateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/reset_password/password": {
+            "patch": {
+                "description": "重設密碼",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "忘記密碼_v2"
+                ],
+                "summary": "重設密碼",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.APIUpdateResetPasswordBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user.APIUpdateResetPasswordOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/subscribe_order": {
             "post": {
                 "security": [
@@ -16973,7 +17093,7 @@
                                 "example": "1000000968276600"
                             },
                             "payment_type": {
-                                "description": "支付方式(1:apple內購/2:google內購)",
+                                "description": "支付方式(0:尚未指定/1:apple內購/2:google內購)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17382,6 +17502,47 @@
                 },
                 "data": {
                     "$ref": "#/definitions/user.APICreateRegisterOTPData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APICreateResetOTPBody": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                }
+            }
+        },
+        "user.APICreateResetOTPData": {
+            "type": "object",
+            "properties": {
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "254235"
+                }
+            }
+        },
+        "user.APICreateResetOTPOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/user.APICreateResetOTPData"
                 },
                 "msg": {
                     "description": "訊息",
@@ -18791,6 +18952,40 @@
                 }
             }
         },
+        "user.APIResetOTPValidateBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "otp_code"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
+                }
+            }
+        },
+        "user.APIResetOTPValidateOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "user.APIUpdatePasswordBody": {
             "type": "object",
             "required": [
@@ -18811,6 +19006,46 @@
             }
         },
         "user.APIUpdatePasswordOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user.APIUpdateResetPasswordBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "otp_code",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "otp_code": {
+                    "description": "信箱驗證碼",
+                    "type": "string",
+                    "example": "531476"
+                },
+                "password": {
+                    "description": "密碼",
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "user.APIUpdateResetPasswordOutput": {
             "type": "object",
             "properties": {
                 "code": {

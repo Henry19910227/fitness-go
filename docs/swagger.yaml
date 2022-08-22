@@ -4584,7 +4584,7 @@ definitions:
               example: "1000000968276600"
               type: string
             payment_type:
-              description: 支付方式(1:apple內購/2:google內購)
+              description: 支付方式(0:尚未指定/1:apple內購/2:google內購)
               example: 1
               type: integer
             product_label:
@@ -4890,6 +4890,35 @@ definitions:
         type: integer
       data:
         $ref: '#/definitions/user.APICreateRegisterOTPData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  user.APICreateResetOTPBody:
+    properties:
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+    required:
+    - email
+    type: object
+  user.APICreateResetOTPData:
+    properties:
+      otp_code:
+        description: 信箱驗證碼
+        example: "254235"
+        type: string
+    type: object
+  user.APICreateResetOTPOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/user.APICreateResetOTPData'
       msg:
         description: 訊息
         example: message..
@@ -5954,6 +5983,31 @@ definitions:
         example: message..
         type: string
     type: object
+  user.APIResetOTPValidateBody:
+    properties:
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      otp_code:
+        description: 信箱驗證碼
+        example: "531476"
+        type: string
+    required:
+    - email
+    - otp_code
+    type: object
+  user.APIResetOTPValidateOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   user.APIUpdatePasswordBody:
     properties:
       old_password:
@@ -5969,6 +6023,36 @@ definitions:
     - password
     type: object
   user.APIUpdatePasswordOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  user.APIUpdateResetPasswordBody:
+    properties:
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      otp_code:
+        description: 信箱驗證碼
+        example: "531476"
+        type: string
+      password:
+        description: 密碼
+        example: "12345678"
+        type: string
+    required:
+    - email
+    - otp_code
+    - password
+    type: object
+  user.APIUpdateResetPasswordOutput:
     properties:
       code:
         description: 狀態碼
@@ -13205,6 +13289,84 @@ paths:
       summary: 驗證暱稱是否可使用
       tags:
       - 註冊_v2
+  /v2/reset_password/otp:
+    post:
+      consumes:
+      - application/json
+      description: 發送重設密碼的OTP
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APICreateResetOTPBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APICreateResetOTPOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 發送重設密碼的OTP
+      tags:
+      - 忘記密碼_v2
+  /v2/reset_password/otp_validate:
+    post:
+      consumes:
+      - application/json
+      description: 驗證重設密碼的OTP
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIResetOTPValidateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIResetOTPValidateOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 驗證重設密碼的OTP
+      tags:
+      - 忘記密碼_v2
+  /v2/reset_password/password:
+    patch:
+      consumes:
+      - application/json
+      description: 重設密碼
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/user.APIUpdateResetPasswordBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/user.APIUpdateResetPasswordOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      summary: 重設密碼
+      tags:
+      - 忘記密碼_v2
   /v2/subscribe_order:
     post:
       consumes:

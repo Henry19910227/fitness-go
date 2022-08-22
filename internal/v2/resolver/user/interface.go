@@ -27,4 +27,7 @@ type Resolver interface {
 	APIRegisterLineAccountValidate(input *model.APIRegisterLineAccountValidateInput) (output model.APIRegisterLineAccountValidateOutput)
 	APIRegisterGoogleAccountValidate(input *model.APIRegisterGoogleAccountValidateInput) (output model.APIRegisterGoogleAccountValidateOutput)
 	APIRegisterAppleAccountValidate(input *model.APIRegisterAppleAccountValidateInput) (output model.APIRegisterAppleAccountValidateOutput)
+	APICreateResetOTP(input *model.APICreateResetOTPInput) (output model.APICreateResetOTPOutput)
+	APIResetOTPValidate(input *model.APIResetOTPValidateInput) (output model.APIResetOTPValidateOutput)
+	APIUpdateResetPassword(input *model.APIUpdateResetPasswordInput) (output model.APIUpdateResetPasswordOutput)
 }

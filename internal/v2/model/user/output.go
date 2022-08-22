@@ -153,7 +153,7 @@ type APILoginForGoogleData struct {
 type APILoginForAppleOutput struct {
 	base.Output
 	Data  *APILoginForAppleData `json:"data,omitempty"`
-	Token *string                `json:"token,omitempty" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
+	Token *string               `json:"token,omitempty" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6I"` // Token
 
 }
 type APILoginForAppleData struct {
@@ -217,5 +217,24 @@ type APIRegisterGoogleAccountValidateOutput struct {
 
 // APIRegisterAppleAccountValidateOutput /v2/google/apple_account/validate [POST]
 type APIRegisterAppleAccountValidateOutput struct {
+	base.Output
+}
+
+// APICreateResetOTPOutput /v2/reset_password/otp [POST]
+type APICreateResetOTPOutput struct {
+	base.Output
+	Data *APICreateResetOTPData `json:"data,omitempty"`
+}
+type APICreateResetOTPData struct {
+	Code string `json:"otp_code" example:"254235"` // 信箱驗證碼
+}
+
+// APIResetOTPValidateOutput /v2/reset_password/otp_validate [POST]
+type APIResetOTPValidateOutput struct {
+	base.Output
+}
+
+// APIUpdateResetPasswordOutput /v2/reset_password/password [PATCH]
+type APIUpdateResetPasswordOutput struct {
 	base.Output
 }
