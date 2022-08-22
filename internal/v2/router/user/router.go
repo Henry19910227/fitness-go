@@ -38,4 +38,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.POST("/register/apple_account/validate", controller.RegisterAppleAccountValidate)
 	v2.POST("/register/nickname/validate", controller.RegisterNicknameValidate)
 	v2.POST("/register/email/validate", controller.RegisterEmailValidate)
+	v2.POST("/reset_password/otp", controller.CreateResetOTP)
+	v2.POST("/reset_password/otp_validate", controller.ResetOTPValidate)
+	v2.PATCH("/reset_password/password", controller.UpdateResetPassword)
 }

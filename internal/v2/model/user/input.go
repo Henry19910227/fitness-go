@@ -241,3 +241,30 @@ type APIRegisterAppleAccountValidateInput struct {
 type APIRegisterAppleAccountValidateBody struct {
 	RefreshToken string `json:"refresh_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // 透過 authorizationCode 取得的 refresh token
 }
+
+// APICreateResetOTPInput /v2/reset_password/otp [POST]
+type APICreateResetOTPInput struct {
+	Body APICreateResetOTPBody
+}
+type APICreateResetOTPBody struct {
+	Email string `json:"email" binding:"required,email" example:"henry@gmail.com"` // 信箱
+}
+
+// APIResetOTPValidateInput /v2/reset_password/otp_validate [POST]
+type APIResetOTPValidateInput struct {
+	Body APIResetOTPValidateBody
+}
+type APIResetOTPValidateBody struct {
+	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"`      // 信箱驗證碼
+	Email   string `json:"email" binding:"required,email" example:"henry@gmail.com"` // 信箱
+}
+
+// APIUpdateResetPasswordInput /v2/reset_password/password [PATCH]
+type APIUpdateResetPasswordInput struct {
+	Body APIUpdateResetPasswordBody
+}
+type APIUpdateResetPasswordBody struct {
+	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"`      // 信箱驗證碼
+	Email   string `json:"email" binding:"required,email" example:"henry@gmail.com"` // 信箱
+	PasswordRequired
+}

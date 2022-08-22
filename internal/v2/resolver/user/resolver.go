@@ -932,6 +932,88 @@ func (r *resolver) APIRegisterAppleAccountValidate(input *model.APIRegisterApple
 	return output
 }
 
+func (r *resolver) APICreateResetOTP(input *model.APICreateResetOTPInput) (output model.APICreateResetOTPOutput) {
+	//驗證權限
+	listInput := model.ListInput{}
+	listInput.Email = util.PointerString(input.Body.Email)
+	listInput.Page = 1
+	listInput.Size = 1
+	listInput.OrderField = "create_at"
+	listInput.OrderType = orderBy.DESC
+	userOutputs, _, err := r.userService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(userOutputs) == 0 {
+		output.Set(code.BadRequest, "查無此帳戶")
+		return output
+	}
+	if util.OnNilJustReturnInt(userOutputs[0].AccountType, 0) != model.Email {
+		output.Set(code.PermissionDenied, "非信箱註冊帳戶")
+		return output
+	}
+	//產生otp碼
+	otp, err := r.otpTool.Generate(input.Body.Email)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	data := model.APICreateResetOTPData{}
+	data.Code = otp
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIResetOTPValidate(input *model.APIResetOTPValidateInput) (output model.APIResetOTPValidateOutput) {
+	//檢查驗證碼
+	if !r.otpTool.Validate(input.Body.OTPCode, input.Body.Email) {
+		output.Set(code.BadRequest, errors.New("無效的驗證碼").Error())
+		return output
+	}
+	output.Set(code.Success, "驗證成功!")
+	return output
+}
+
+func (r *resolver) APIUpdateResetPassword(input *model.APIUpdateResetPasswordInput) (output model.APIUpdateResetPasswordOutput) {
+	//驗證權限
+	listInput := model.ListInput{}
+	listInput.Email = util.PointerString(input.Body.Email)
+	listInput.Page = 1
+	listInput.Size = 1
+	listInput.OrderField = "create_at"
+	listInput.OrderType = orderBy.DESC
+	userOutputs, _, err := r.userService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(userOutputs) == 0 {
+		output.Set(code.BadRequest, "查無此帳戶")
+		return output
+	}
+	if util.OnNilJustReturnInt(userOutputs[0].AccountType, 0) != model.Email {
+		output.Set(code.PermissionDenied, "無法修改非Email註冊的帳戶密碼")
+		return output
+	}
+	//檢查驗證碼
+	if !r.otpTool.Validate(input.Body.OTPCode, input.Body.Email) {
+		output.Set(code.BadRequest, "無效的驗證碼")
+		return output
+	}
+	//修改密碼
+	userTable := model.Table{}
+	userTable.ID = userOutputs[0].ID
+	userTable.Password = util.PointerString(input.Body.Password)
+	if err := r.userService.Update(&userTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "驗證成功!")
+	return output
+}
+
 func (r *resolver) nicknameValidate(nickname string) (bool, error) {
 	//檢查帳號是否重複
 	listInput := model.ListInput{}

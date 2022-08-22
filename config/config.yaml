@@ -143,6 +143,11 @@ Mail:
       Port: 587
       Sender: toyokoyo199@gmail.com
       Password: qedvgrldwmeivfqw
+OTP:
+    Debug:
+      Period: 300
+    Release:
+      Period: 300
 Swagger:
     Debug:
       Protocol: http

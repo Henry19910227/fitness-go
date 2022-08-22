@@ -1,6 +1,8 @@
 package user
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type Controller interface {
 	UpdatePassword(ctx *gin.Context)
@@ -27,4 +29,7 @@ type Controller interface {
 	RegisterAppleAccountValidate(ctx *gin.Context)
 	RegisterNicknameValidate(ctx *gin.Context)
 	RegisterEmailValidate(ctx *gin.Context)
+	CreateResetOTP(ctx *gin.Context)
+	ResetOTPValidate(ctx *gin.Context)
+	UpdateResetPassword(ctx *gin.Context)
 }

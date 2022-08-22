@@ -499,3 +499,63 @@ func (c *controller) RegisterEmailValidate(ctx *gin.Context) {
 	output := c.resolver.APIRegisterEmailValidate(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// CreateResetOTP 發送重設密碼的OTP
+// @Summary 發送重設密碼的OTP
+// @Description 發送重設密碼的OTP
+// @Tags 忘記密碼_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APICreateResetOTPBody true "輸入參數"
+// @Success 200 {object} user.APICreateResetOTPOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/reset_password/otp [POST]
+func (c *controller) CreateResetOTP(ctx *gin.Context) {
+	var input model.APICreateResetOTPInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateResetOTP(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// ResetOTPValidate 驗證重設密碼的OTP
+// @Summary 驗證重設密碼的OTP
+// @Description 驗證重設密碼的OTP
+// @Tags 忘記密碼_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIResetOTPValidateBody true "輸入參數"
+// @Success 200 {object} user.APIResetOTPValidateOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/reset_password/otp_validate [POST]
+func (c *controller) ResetOTPValidate(ctx *gin.Context) {
+	var input model.APIResetOTPValidateInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIResetOTPValidate(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateResetPassword 重設密碼
+// @Summary 重設密碼
+// @Description 重設密碼
+// @Tags 忘記密碼_v2
+// @Accept json
+// @Produce json
+// @Param json_body body user.APIUpdateResetPasswordBody true "輸入參數"
+// @Success 200 {object} user.APIUpdateResetPasswordOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/reset_password/password [PATCH]
+func (c *controller) UpdateResetPassword(ctx *gin.Context) {
+	var input model.APIUpdateResetPasswordInput
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateResetPassword(&input)
+	ctx.JSON(http.StatusOK, output)
+}
