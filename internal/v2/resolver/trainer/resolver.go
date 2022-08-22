@@ -12,7 +12,7 @@ import (
 
 type resolver struct {
 	trainerService trainerService.Service
-	uploadTool    uploader.Tool
+	uploadTool     uploader.Tool
 }
 
 func New(trainerService trainerService.Service, uploadTool uploader.Tool) Resolver {
@@ -20,16 +20,24 @@ func New(trainerService trainerService.Service, uploadTool uploader.Tool) Resolv
 }
 
 func (r *resolver) APIGetTrainerProfile(input *model.APIGetTrainerProfileInput) (output model.APIGetTrainerProfileOutput) {
-	findInput := model.FindInput{}
-	findInput.UserID = util.PointerInt64(input.UserID)
-	findInput.Preloads = []*preload.Preload{{Field: "TrainerStatistic"}, {Field: "Certificates"}, {Field: "TrainerAlbums"}}
-	outputData, err := r.trainerService.Find(&findInput)
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.Preloads = []*preload.Preload{{Field: "TrainerStatistic"}, {Field: "Certificates"}, {Field: "TrainerAlbums"}}
+	listInput.Size = 1
+	listInput.Page = 1
+	listInput.OrderField = "create_at"
+	listInput.OrderType = order_by.DESC
+	trainerOutputs, _, err := r.trainerService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	if len(trainerOutputs) == 0 {
+		output.Set(code.DataNotFound, "查無資料")
+		return output
+	}
 	data := model.APIGetTrainerProfileData{}
-	if err := util.Parser(outputData, &data); err != nil {
+	if err := util.Parser(trainerOutputs[0], &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}

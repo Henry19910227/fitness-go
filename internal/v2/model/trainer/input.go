@@ -16,6 +16,13 @@ type FindInput struct {
 	PreloadInput
 }
 
+type ListInput struct {
+	UserIDOptional
+	PreloadInput
+	PagingInput
+	OrderByInput
+}
+
 type FavoriteListInput struct {
 	UserIDOptional
 	PagingInput
