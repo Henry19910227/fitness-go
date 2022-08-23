@@ -4521,6 +4521,35 @@ definitions:
     - page
     - size
     type: object
+  plan.APICreatePersonalPlanBody:
+    properties:
+      name:
+        description: 計畫名稱
+        example: 減脂計畫
+        type: string
+    required:
+    - name
+    type: object
+  plan.APICreatePersonalPlanData:
+    properties:
+      id:
+        description: 計畫id
+        example: 1
+        type: integer
+    type: object
+  plan.APICreatePersonalPlanOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/plan.APICreatePersonalPlanData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   plan.APIGetCMSPlansOutput:
     properties:
       code:
@@ -13038,6 +13067,40 @@ paths:
       security:
       - fitness_token: []
       summary: 創建個人課表
+      tags:
+      - 用戶個人課表_v2
+  /v2/personal/course/{course_id}/plan:
+    post:
+      consumes:
+      - application/json
+      description: 創建個人課表計畫
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/plan.APICreatePersonalPlanBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/plan.APICreatePersonalPlanOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 創建個人課表計畫
       tags:
       - 用戶個人課表_v2
   /v2/register/apple:

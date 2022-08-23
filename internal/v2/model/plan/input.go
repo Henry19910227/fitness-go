@@ -28,3 +28,16 @@ type APIGetCMSPlansInput struct {
 	PagingInput
 	OrderByInput
 }
+
+// APICreatePersonalPlanInput /v2/personal/course/{course_id}/plan [POST]
+type APICreatePersonalPlanInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APICreatePersonalPlanUri
+	Body   APICreatePersonalPlanBody
+}
+type APICreatePersonalPlanUri struct {
+	CourseIDRequired
+}
+type APICreatePersonalPlanBody struct {
+	NameRequired
+}

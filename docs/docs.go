@@ -10021,6 +10021,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/personal/course/{course_id}/plan": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人課表計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "創建個人課表計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/plan.APICreatePersonalPlanBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APICreatePersonalPlanOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/apple": {
             "post": {
                 "description": "使用Apple註冊",
@@ -17072,6 +17124,47 @@ var doc = `{
                     "description": "總頁數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "plan.APICreatePersonalPlanBody": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "description": "計畫名稱",
+                    "type": "string",
+                    "example": "減脂計畫"
+                }
+            }
+        },
+        "plan.APICreatePersonalPlanData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "計畫id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "plan.APICreatePersonalPlanOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/plan.APICreatePersonalPlanData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

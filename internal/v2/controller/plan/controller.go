@@ -8,6 +8,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/plan"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -59,5 +60,32 @@ func (c *controller) GetCMSPlans(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetCMSPlans(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// CreatePersonalPlan 創建個人課表計畫
+// @Summary 創建個人課表計畫
+// @Description 創建個人課表計畫
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Param json_body body plan.APICreatePersonalPlanBody true "輸入參數"
+// @Success 200 {object} plan.APICreatePersonalPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/personal/course/{course_id}/plan [POST]
+func (c *controller) CreatePersonalPlan(ctx *gin.Context) {
+	var input model.APICreatePersonalPlanInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreatePersonalPlan(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }

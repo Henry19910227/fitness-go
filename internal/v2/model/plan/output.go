@@ -43,3 +43,12 @@ type APIGetCMSPlansData []*struct {
 		workout.UpdateAtField
 	} `json:"workouts,omitempty"`
 }
+
+// APICreatePersonalPlanOutput /v2/personal/course/{course_id}/plan [POST]
+type APICreatePersonalPlanOutput struct {
+	base.Output
+	Data *APICreatePersonalPlanData `json:"data,omitempty"`
+}
+type APICreatePersonalPlanData struct {
+	IDField
+}
