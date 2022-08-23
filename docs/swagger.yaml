@@ -105,7 +105,7 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 動作來源(1:系統動作/2:教練自創動作)
+              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 2
               type: integer
             status:
@@ -564,6 +564,40 @@ definitions:
         example: 18.5
         type: number
     type: object
+  course.APICreatePersonalCourseBody:
+    properties:
+      name:
+        description: 課表名稱
+        example: 增肌課表
+        type: string
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+    required:
+    - name
+    - schedule_type
+    type: object
+  course.APICreatePersonalCourseData:
+    properties:
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+    type: object
+  course.APICreatePersonalCourseOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/course.APICreatePersonalCourseData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   course.APIGetCMSCourseData:
     properties:
       body_target:
@@ -645,7 +679,7 @@ definitions:
             type: object
         type: object
       sale_type:
-        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
         example: 3
         type: integer
       schedule_type:
@@ -734,7 +768,7 @@ definitions:
                   type: object
               type: object
             sale_type:
-              description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+              description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
               example: 3
               type: integer
             schedule_type:
@@ -813,7 +847,7 @@ definitions:
               - score_total
               type: object
             sale_type:
-              description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
+              description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
               example: 3
               type: integer
             schedule_type:
@@ -6764,7 +6798,7 @@ definitions:
                   example: 划船機
                   type: string
                 source:
-                  description: 動作來源(1:系統動作/2:教練自創動作)
+                  description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
                   example: 2
                   type: integer
                 type:
@@ -12977,6 +13011,35 @@ paths:
       summary: 修改密碼
       tags:
       - 用戶個人_v2
+  /v2/personal/course:
+    post:
+      consumes:
+      - application/json
+      description: 創建個人課表
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/course.APICreatePersonalCourseBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied(需訂閱權限)
+          schema:
+            $ref: '#/definitions/course.APICreatePersonalCourseOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 創建個人課表
+      tags:
+      - 用戶個人課表_v2
   /v2/register/apple:
     post:
       consumes:

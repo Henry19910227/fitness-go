@@ -9976,6 +9976,51 @@ var doc = `{
                 }
             }
         },
+        "/v2/personal/course": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "創建個人課表",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/course.APICreatePersonalCourseBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)",
+                        "schema": {
+                            "$ref": "#/definitions/course.APICreatePersonalCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/apple": {
             "post": {
                 "description": "使用Apple註冊",
@@ -11181,7 +11226,7 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "動作來源(1:系統動作/2:教練自創動作)",
+                                "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
                                 "type": "integer",
                                 "example": 2
                             },
@@ -11796,6 +11841,53 @@ var doc = `{
                 }
             }
         },
+        "course.APICreatePersonalCourseBody": {
+            "type": "object",
+            "required": [
+                "name",
+                "schedule_type"
+            ],
+            "properties": {
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
+        "course.APICreatePersonalCourseData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
+        "course.APICreatePersonalCourseOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/course.APICreatePersonalCourseData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "course.APIGetCMSCourseData": {
             "type": "object",
             "properties": {
@@ -11900,7 +11992,7 @@ var doc = `{
                     }
                 },
                 "sale_type": {
-                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
                     "type": "integer",
                     "example": 3
                 },
@@ -12018,7 +12110,7 @@ var doc = `{
                                 }
                             },
                             "sale_type": {
-                                "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                                "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
                                 "type": "integer",
                                 "example": 3
                             },
@@ -12123,7 +12215,7 @@ var doc = `{
                                 }
                             },
                             "sale_type": {
-                                "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                                "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
                                 "type": "integer",
                                 "example": 3
                             },
@@ -20012,7 +20104,7 @@ var doc = `{
                                         "example": "划船機"
                                     },
                                     "source": {
-                                        "description": "動作來源(1:系統動作/2:教練自創動作)",
+                                        "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
                                         "type": "integer",
                                         "example": 2
                                     },

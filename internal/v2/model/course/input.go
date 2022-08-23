@@ -77,3 +77,13 @@ type APIUpdateCMSCourseCoverInput struct {
 	CoverNamed string
 	File       multipart.File
 }
+
+// APICreatePersonalCourseInput /v2/personal/course [POST]
+type APICreatePersonalCourseInput struct {
+	UserIDRequired
+	Body APICreatePersonalCourseBody
+}
+type APICreatePersonalCourseBody struct {
+	NameRequired
+	ScheduleTypeRequired
+}

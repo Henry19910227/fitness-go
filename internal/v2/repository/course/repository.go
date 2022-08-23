@@ -14,6 +14,18 @@ func New(db *gorm.DB) Repository {
 	return &repository{db: db}
 }
 
+func (r *repository) WithTrx(tx *gorm.DB) Repository {
+	return New(tx)
+}
+
+func (r *repository) Create(item *model.Table) (id int64, err error) {
+	err = r.db.Model(&model.Table{}).Create(&item).Error
+	if err != nil {
+		return 0, err
+	}
+	return *item.ID, err
+}
+
 func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)

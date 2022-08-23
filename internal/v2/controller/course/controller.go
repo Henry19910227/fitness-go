@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/course"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -168,5 +169,32 @@ func (c *controller) UpdateCMSCoursesCover(ctx *gin.Context) {
 	input.CoverNamed = fileHeader.Filename
 	input.File = file
 	output := c.resolver.APIUpdateCMSCourseCover(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// CreatePersonalCourse 創建個人課表
+// @Summary 創建個人課表
+// @Description 創建個人課表
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body course.APICreatePersonalCourseBody true "輸入參數"
+// @Success 200 {object} course.APICreatePersonalCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/personal/course [POST]
+func (c *controller) CreatePersonalCourse(ctx *gin.Context) {
+	var input model.APICreatePersonalCourseInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if input.Body.ScheduleType == model.SingleWorkout {
+		output := c.resolver.APICreatePersonalSingleWorkoutCourse(ctx.MustGet("tx").(*gorm.DB), &input)
+		ctx.JSON(http.StatusOK, output)
+		return
+	}
+	output := c.resolver.APICreatePersonalCourse(&input)
 	ctx.JSON(http.StatusOK, output)
 }

@@ -36,6 +36,7 @@ func (m *middleware) Verify(roles []global.Role) gin.HandlerFunc {
 		uid, err := m.jwtTool.GetIDByToken(header.Token)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, output.InvalidToken())
+			ctx.Abort()
 			return
 		}
 		role, err := m.jwtTool.GetRoleByToken(header.Token)
@@ -68,6 +69,7 @@ func (m *middleware) Verify(roles []global.Role) gin.HandlerFunc {
 		}
 		ctx.Set("uid", uid)
 		ctx.Set("role", role)
+		ctx.Next()
 	}
 }
 
@@ -79,4 +81,3 @@ func containRole(role global.Role, roles []global.Role) bool {
 	}
 	return false
 }
-

@@ -8,18 +8,27 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
+	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type resolver struct {
-	courseService courseService.Service
-	uploadTool    uploader.Tool
+	courseService  courseService.Service
+	planService    plan.Service
+	workoutService workout.Service
+	uploadTool     uploader.Tool
 }
 
-func New(courseService courseService.Service, uploadTool uploader.Tool) Resolver {
-	return &resolver{courseService: courseService, uploadTool: uploadTool}
+func New(courseService courseService.Service, planService plan.Service,
+	workoutService workout.Service, uploadTool uploader.Tool) Resolver {
+	return &resolver{courseService: courseService, planService: planService,
+		workoutService: workoutService, uploadTool: uploadTool}
 }
 
 func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput) {
@@ -146,5 +155,102 @@ func (r *resolver) APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverI
 	}
 	output.SetStatus(code.Success)
 	output.Data = util.PointerString(fileNamed)
+	return output
+}
+
+func (r *resolver) APICreatePersonalCourse(input *model.APICreatePersonalCourseInput) (output model.APICreatePersonalCourseOutput) {
+	table := model.Table{}
+	table.UserID = util.PointerInt64(input.UserID)
+	table.SaleType = util.PointerInt(model.SaleTypePersonal)
+	table.ScheduleType = util.PointerInt(model.MultiplePlan)
+	table.CourseStatus = util.PointerInt(model.Preparing)
+	table.Category = util.PointerInt(0)
+	table.Cover = util.PointerString("")
+	table.Intro = util.PointerString("")
+	table.Food = util.PointerString("")
+	table.Level = util.PointerInt(0)
+	table.Suit = util.PointerString("")
+	table.Equipment = util.PointerString("")
+	table.Place = util.PointerString("")
+	table.TrainTarget = util.PointerString("")
+	table.BodyTarget = util.PointerString("")
+	table.Notice = util.PointerString("")
+	table.PlanCount = util.PointerInt(0)
+	table.WorkoutCount = util.PointerInt(0)
+	if err := util.Parser(input.Body, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	courseID, err := r.courseService.Create(&table)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APICreatePersonalCourseData{}
+	data.ID = util.PointerInt64(courseID)
+	output.Data = &data
+	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APICreatePersonalSingleWorkoutCourse(tx *gorm.DB, input *model.APICreatePersonalCourseInput) (output model.APICreatePersonalCourseOutput) {
+	defer tx.Rollback()
+	//創建單一訓練課表
+	table := model.Table{}
+	table.UserID = util.PointerInt64(input.UserID)
+	table.SaleType = util.PointerInt(model.SaleTypePersonal)
+	table.ScheduleType = util.PointerInt(model.MultiplePlan)
+	table.CourseStatus = util.PointerInt(model.Preparing)
+	table.Category = util.PointerInt(0)
+	table.Cover = util.PointerString("")
+	table.Intro = util.PointerString("")
+	table.Food = util.PointerString("")
+	table.Level = util.PointerInt(0)
+	table.Suit = util.PointerString("")
+	table.Equipment = util.PointerString("")
+	table.Place = util.PointerString("")
+	table.TrainTarget = util.PointerString("")
+	table.BodyTarget = util.PointerString("")
+	table.Notice = util.PointerString("")
+	table.PlanCount = util.PointerInt(1)
+	table.WorkoutCount = util.PointerInt(1)
+	if err := util.Parser(input.Body, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	courseID, err := r.courseService.Tx(tx).Create(&table)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//創建單一計畫
+	planTable := planModel.Table{}
+	planTable.Name = util.PointerString("單一計畫")
+	planTable.CourseID = util.PointerInt64(courseID)
+	planTable.WorkoutCount = util.PointerInt(1)
+	planID, err := r.planService.Tx(tx).Create(&planTable)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//創建單一訓練
+	workoutTable := workoutModel.Table{}
+	workoutTable.PlanID = util.PointerInt64(planID)
+	workoutTable.Name = util.PointerString("單一訓練")
+	workoutTable.Equipment = util.PointerString("")
+	workoutTable.StartAudio = util.PointerString("")
+	workoutTable.EndAudio = util.PointerString("")
+	workoutTable.WorkoutSetCount = util.PointerInt(0)
+	_, err = r.workoutService.Tx(tx).Create(&workoutTable)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	//Parser Output
+	data := model.APICreatePersonalCourseData{}
+	data.ID = util.PointerInt64(courseID)
+	output.Data = &data
+	output.SetStatus(code.Success)
 	return output
 }

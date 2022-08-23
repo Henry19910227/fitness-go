@@ -1,6 +1,8 @@
 package course
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type Controller interface {
 	GetFavoriteCourses(ctx *gin.Context)
@@ -8,4 +10,5 @@ type Controller interface {
 	GetCMSCourse(ctx *gin.Context)
 	UpdateCMSCoursesStatus(ctx *gin.Context)
 	UpdateCMSCoursesCover(ctx *gin.Context)
+	CreatePersonalCourse(ctx *gin.Context)
 }

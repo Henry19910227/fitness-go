@@ -118,3 +118,12 @@ type APIUpdateCMSCourseCoverOutput struct {
 	base.Output
 	Data *string `json:"data,omitempty" example:"123.jpg"`
 }
+
+// APICreatePersonalCourseOutput /v2/personal/course [POST]
+type APICreatePersonalCourseOutput struct {
+	base.Output
+	Data *APICreatePersonalCourseData `json:"data,omitempty"`
+}
+type APICreatePersonalCourseData struct {
+	IDField
+}
