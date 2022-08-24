@@ -30,6 +30,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_subscribe_info"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/workout"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
@@ -197,6 +198,7 @@ func main() {
 	v2 := baseGroup.Group("/v2")
 	course.SetRoute(v2)
 	plan.SetRoute(v2)
+	workout.SetRoute(v2)
 	workoutSet.SetRoute(v2)
 	food.SetRoute(v2)
 	food_category.SetRoute(v2)

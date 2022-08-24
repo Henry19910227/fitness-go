@@ -19,6 +19,7 @@ type GenerateInput struct {
 
 type FindInput struct {
 	IDOptional
+	PlanID *int64 `json:"plan_id,omitempty"` // 計畫 id
 	PreloadInput
 }
 

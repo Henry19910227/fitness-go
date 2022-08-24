@@ -26,6 +26,21 @@ func (r *repository) Create(item *model.Table) (id int64, err error) {
 	return *item.ID, err
 }
 
+func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
+	db := r.db.Model(&model.Output{})
+	if input.ID != nil {
+		db = db.Where("id = ?", *input.ID)
+	}
+	//查詢數據
+	err = db.First(&output).Error
+	return output, err
+}
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
+	return err
+}
+
 func (r *repository) List(input *model.ListInput) (output []*model.Output, amount int64, err error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)

@@ -27,23 +27,26 @@ func (r *repository) Create(item *model.Table) (id int64, err error) {
 }
 
 func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
-	query := "1=1 "
-	params := make([]interface{}, 0)
+	db := r.db.Model(&model.Output{})
 	//加入 id 篩選條件
 	if input.ID != nil {
-		query += "AND id = ? "
-		params = append(params, *input.ID)
+		db = db.Where("courses.id = ?", *input.ID)
 	}
-	db := r.db.Model(&model.Output{})
-	db = db.Where(query, params...)
+	//加入 plan_id 篩選條件
+	if input.PlanID != nil {
+		db = db.Joins("INNER JOIN plans ON courses.id = plans.course_id")
+		db = db.Where("plans.id = ?", *input.PlanID)
+	}
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
 			db = db.Preload(preload.Field)
 		}
 	}
+	// Select
+	db = db.Select("courses.*")
 	//查詢數據
-	err = db.Take(&output).Error
+	err = db.First(&output).Error
 	return output, err
 }
 

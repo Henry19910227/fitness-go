@@ -16,6 +16,10 @@ type GenerateInput struct {
 	CourseID   []*base.GenerateSetting
 }
 
+type FindInput struct {
+	IDField
+}
+
 type ListInput struct {
 	CourseIDField
 	PagingInput

@@ -13,7 +13,7 @@ type Output struct {
 	WorkoutCountField
 	CreateAtField
 	UpdateAtField
-	Workout []*workout.Table `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"` // 訓練
+	Workout []*workout.Output `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"` // 訓練
 }
 
 func (Output) TableName() string {
