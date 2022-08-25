@@ -49,6 +49,11 @@ func (r *repository) Update(item *model.Table) (err error) {
 	return err
 }
 
+func (r *repository) Delete(input *model.DeleteInput) (err error) {
+	err = r.db.Where("id = ?", input.ID).Delete(&model.Table{}).Error
+	return err
+}
+
 func (r *repository) List(input *model.ListInput) (output []*model.Output, amount int64, err error) {
 	query := "1=1 "
 	params := make([]interface{}, 0)

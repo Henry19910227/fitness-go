@@ -8,4 +8,5 @@ import (
 type Resolver interface {
 	APIGetCMSPlans(input *model.APIGetCMSPlansInput) interface{}
 	APICreatePersonalPlan(tx *gorm.DB, input *model.APICreatePersonalPlanInput) (output model.APICreatePersonalPlanOutput)
+	APIDeletePersonalPlan(tx *gorm.DB, input *model.APIDeletePersonalPlanInput) (output model.APIDeletePersonalPlanOutput)
 }

@@ -89,3 +89,25 @@ func (c *controller) CreatePersonalPlan(ctx *gin.Context) {
 	output := c.resolver.APICreatePersonalPlan(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// DeletePersonalPlan 刪除個人課表計畫
+// @Summary 刪除個人課表計畫
+// @Description 刪除個人課表計畫
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param plan_id path int64 true "計畫id"
+// @Success 200 {object} plan.APIDeletePersonalPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/personal/plan/{plan_id} [DELETE]
+func (c *controller) DeletePersonalPlan(ctx *gin.Context) {
+	var input model.APIDeletePersonalPlanInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeletePersonalPlan(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}

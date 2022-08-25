@@ -4550,6 +4550,17 @@ definitions:
         example: message..
         type: string
     type: object
+  plan.APIDeletePersonalPlanOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   plan.APIGetCMSPlansOutput:
     properties:
       code:
@@ -13139,6 +13150,34 @@ paths:
       security:
       - fitness_token: []
       summary: 創建個人課表計畫
+      tags:
+      - 用戶個人課表_v2
+  /v2/personal/plan/{plan_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除個人課表計畫
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/plan.APIDeletePersonalPlanOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除個人課表計畫
       tags:
       - 用戶個人課表_v2
   /v2/personal/plan/{plan_id}/workout:

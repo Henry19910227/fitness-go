@@ -14,5 +14,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := workout.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.POST("/personal/plan/:plan_id/workout", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreatePersonalWorkout)
-	v2.POST("/personal/workout/:workout_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeletePersonalWorkout)
+	v2.DELETE("/personal/workout/:workout_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeletePersonalWorkout)
 }

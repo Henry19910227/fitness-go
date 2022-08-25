@@ -21,6 +21,10 @@ type FindInput struct {
 	WorkoutID *int64 `json:"workout_id,omitempty"` // 訓練 id
 }
 
+type DeleteInput struct {
+	IDRequired
+}
+
 type ListInput struct {
 	CourseIDField
 	PagingInput
@@ -45,4 +49,13 @@ type APICreatePersonalPlanUri struct {
 }
 type APICreatePersonalPlanBody struct {
 	NameRequired
+}
+
+// APIDeletePersonalPlanInput /v2/personal/workout/{workout_id} [DELETE]
+type APIDeletePersonalPlanInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIDeletePersonalPlanUri
+}
+type APIDeletePersonalPlanUri struct {
+	IDRequired
 }

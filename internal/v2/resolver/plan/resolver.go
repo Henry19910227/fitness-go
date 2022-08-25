@@ -8,18 +8,21 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
-	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
-	planService "github.com/Henry19910227/fitness-go/internal/v2/service/plan"
+	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
 	"gorm.io/gorm"
 )
 
 type resolver struct {
-	planService   planService.Service
-	courseService courseService.Service
+	planService    plan.Service
+	courseService  course.Service
+	workoutService workout.Service
 }
 
-func New(planService planService.Service, courseService courseService.Service) Resolver {
-	return &resolver{planService: planService, courseService: courseService}
+func New(planService plan.Service, courseService course.Service, workoutService workout.Service) Resolver {
+	return &resolver{planService: planService, courseService: courseService, workoutService: workoutService}
 }
 
 func (r *resolver) APIGetCMSPlans(input *model.APIGetCMSPlansInput) interface{} {
@@ -51,7 +54,7 @@ func (r *resolver) APIGetCMSPlans(input *model.APIGetCMSPlansInput) interface{} 
 
 func (r *resolver) APICreatePersonalPlan(tx *gorm.DB, input *model.APICreatePersonalPlanInput) (output model.APICreatePersonalPlanOutput) {
 	defer tx.Rollback()
-	// 驗證權限
+	// 查詢關聯課表
 	findCourseInput := courseModel.FindInput{}
 	findCourseInput.ID = util.PointerInt64(input.Uri.CourseID)
 	courseOutput, err := r.courseService.Find(&findCourseInput)
@@ -59,6 +62,7 @@ func (r *resolver) APICreatePersonalPlan(tx *gorm.DB, input *model.APICreatePers
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	// 驗證權限
 	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) != courseModel.MultiplePlan {
 		output.Set(code.PermissionDenied, "非多計畫類型課表，無法創建資源")
 		return output
@@ -98,6 +102,62 @@ func (r *resolver) APICreatePersonalPlan(tx *gorm.DB, input *model.APICreatePers
 	data := model.APICreatePersonalPlanData{}
 	data.ID = util.PointerInt64(planID)
 	output.Data = &data
+	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIDeletePersonalPlan(tx *gorm.DB, input *model.APIDeletePersonalPlanInput) (output model.APIDeletePersonalPlanOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.PlanID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證計畫刪除權限
+	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout {
+		output.Set(code.PermissionDenied, "非多計畫類型課表，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.PermissionDenied, "非此課表擁有者，無法刪除資源")
+		return output
+	}
+	// 刪除計畫
+	deletePlanInput := model.DeleteInput{}
+	deletePlanInput.ID = input.Uri.ID
+	if err := r.planService.Tx(tx).Delete(&deletePlanInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此課表計畫數量
+	planListInput := model.ListInput{}
+	planListInput.CourseID = courseOutput.ID
+	planOutputs, _, err := r.planService.Tx(tx).List(&planListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此課表訓練數量
+	workoutListInput := workoutModel.ListInput{}
+	workoutListInput.CourseID = courseOutput.ID
+	workoutOutputs, _, err := r.workoutService.Tx(tx).List(&workoutListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新此課表計畫與訓練數量
+	courseTable := courseModel.Table{}
+	courseTable.ID = courseOutput.ID
+	courseTable.PlanCount = util.PointerInt(len(planOutputs))
+	courseTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
+	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
 	output.SetStatus(code.Success)
 	return output
 }
