@@ -18,3 +18,8 @@ type APICreatePersonalWorkoutOutput struct {
 type APICreatePersonalWorkoutData struct {
 	IDField
 }
+
+// APIDeletePersonalWorkoutOutput /v2/personal/workout/{workout_id} [DELETE]
+type APIDeletePersonalWorkoutOutput struct {
+	base.Output
+}

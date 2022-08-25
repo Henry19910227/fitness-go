@@ -1,7 +1,7 @@
 package workout
 
 type IDRequired struct {
-	ID int64 `json:"id" example:"1"` // 訓練 id
+	ID int64 `json:"id" uri:"workout_id" example:"1"` // 訓練 id
 }
 type PlanIDRequired struct {
 	PlanID int64 `json:"plan_id" uri:"plan_id" example:"1"` // 計畫 id

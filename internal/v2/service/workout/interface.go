@@ -11,4 +11,5 @@ type Service interface {
 	Create(item *model.Table) (id int64, err error)
 	Update(item *model.Table) (err error)
 	List(input *model.ListInput) (outputs []*model.Output, page *paging.Output, err error)
+	Delete(input *model.DeleteInput) (err error)
 }

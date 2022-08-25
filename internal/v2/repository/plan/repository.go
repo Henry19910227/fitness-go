@@ -28,9 +28,17 @@ func (r *repository) Create(item *model.Table) (id int64, err error) {
 
 func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
 	db := r.db.Model(&model.Output{})
+	//加入 id 篩選條件
 	if input.ID != nil {
-		db = db.Where("id = ?", *input.ID)
+		db = db.Where("plans.id = ?", *input.ID)
 	}
+	//加入 workout_id 篩選條件
+	if input.WorkoutID != nil {
+		db = db.Joins("INNER JOIN workouts ON plans.id = workouts.plan_id")
+		db = db.Where("workouts.id = ?", *input.WorkoutID)
+	}
+	// Select
+	db = db.Select("plans.*")
 	//查詢數據
 	err = db.First(&output).Error
 	return output, err

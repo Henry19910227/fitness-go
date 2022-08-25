@@ -19,7 +19,8 @@ type GenerateInput struct {
 
 type FindInput struct {
 	IDOptional
-	PlanID *int64 `json:"plan_id,omitempty"` // 計畫 id
+	PlanID    *int64 `json:"plan_id,omitempty"`    // 計畫 id
+	WorkoutID *int64 `json:"workout_id,omitempty"` // 訓練 id
 	PreloadInput
 }
 

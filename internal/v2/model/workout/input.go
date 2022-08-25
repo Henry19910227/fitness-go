@@ -18,6 +18,10 @@ type ListInput struct {
 	PreloadInput
 }
 
+type DeleteInput struct {
+	IDRequired
+}
+
 // APICreatePersonalWorkoutInput /v2/personal/plan/{plan_id}/workout [POST]
 type APICreatePersonalWorkoutInput struct {
 	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
@@ -29,4 +33,13 @@ type APICreatePersonalWorkoutUri struct {
 }
 type APICreatePersonalWorkoutBody struct {
 	NameRequired
+}
+
+// APIDeletePersonalWorkoutInput /v2/personal/workout/{workout_id} [DELETE]
+type APIDeletePersonalWorkoutInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIDeletePersonalWorkoutUri
+}
+type APIDeletePersonalWorkoutUri struct {
+	IDRequired
 }

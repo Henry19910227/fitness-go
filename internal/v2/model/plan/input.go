@@ -18,6 +18,7 @@ type GenerateInput struct {
 
 type FindInput struct {
 	IDField
+	WorkoutID *int64 `json:"workout_id,omitempty"` // 訓練 id
 }
 
 type ListInput struct {

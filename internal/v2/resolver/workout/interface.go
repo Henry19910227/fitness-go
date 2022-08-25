@@ -7,4 +7,5 @@ import (
 
 type Resolver interface {
 	APICreatePersonalWorkout(tx *gorm.DB, input *model.APICreatePersonalWorkoutInput) (output model.APICreatePersonalWorkoutOutput)
+	APIDeletePersonalWorkout(tx *gorm.DB, input *model.APIDeletePersonalWorkoutInput) (output model.APIDeletePersonalWorkoutOutput)
 }
