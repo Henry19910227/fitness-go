@@ -10,16 +10,16 @@ func (Output) TableName() string {
 	return "workouts"
 }
 
-// APICreatePersonalWorkoutOutput /v2/personal/plan/{plan_id}/workout [POST]
-type APICreatePersonalWorkoutOutput struct {
+// APICreateUserWorkoutOutput /v2/user/plan/{plan_id}/workout [POST]
+type APICreateUserWorkoutOutput struct {
 	base.Output
-	Data *APICreatePersonalWorkoutData `json:"data,omitempty"`
+	Data *APICreateUserWorkoutData `json:"data,omitempty"`
 }
-type APICreatePersonalWorkoutData struct {
+type APICreateUserWorkoutData struct {
 	IDField
 }
 
-// APIDeletePersonalWorkoutOutput /v2/personal/workout/{workout_id} [DELETE]
-type APIDeletePersonalWorkoutOutput struct {
+// APIDeleteUserWorkoutOutput /v2/user/workout/{workout_id} [DELETE]
+type APIDeleteUserWorkoutOutput struct {
 	base.Output
 }

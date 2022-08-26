@@ -22,7 +22,7 @@ func New(workoutService workout.Service, planService plan.Service, courseService
 	return &resolver{workoutService: workoutService, planService: planService, courseService: courseService}
 }
 
-func (r *resolver) APICreatePersonalWorkout(tx *gorm.DB, input *model.APICreatePersonalWorkoutInput) (output model.APICreatePersonalWorkoutOutput) {
+func (r *resolver) APICreateUserWorkout(tx *gorm.DB, input *model.APICreateUserWorkoutInput) (output model.APICreateUserWorkoutOutput) {
 	defer tx.Rollback()
 	// 查詢關聯課表
 	findCourseInput := courseModel.FindInput{}
@@ -88,14 +88,14 @@ func (r *resolver) APICreatePersonalWorkout(tx *gorm.DB, input *model.APICreateP
 	}
 	tx.Commit()
 	// Parser Output
-	data := model.APICreatePersonalWorkoutData{}
+	data := model.APICreateUserWorkoutData{}
 	data.ID = util.PointerInt64(workoutID)
 	output.Data = &data
 	output.SetStatus(code.Success)
 	return output
 }
 
-func (r *resolver) APIDeletePersonalWorkout(tx *gorm.DB, input *model.APIDeletePersonalWorkoutInput) (output model.APIDeletePersonalWorkoutOutput) {
+func (r *resolver) APIDeleteUserWorkout(tx *gorm.DB, input *model.APIDeleteUserWorkoutInput) (output model.APIDeleteUserWorkoutOutput) {
 	defer tx.Rollback()
 	// 查詢關聯課表
 	findCourseInput := courseModel.FindInput{}

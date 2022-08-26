@@ -14,6 +14,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := plan.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.GET("/cms/course/:course_id/plans", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSPlans)
-	v2.POST("/personal/course/:course_id/plan", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreatePersonalPlan)
-	v2.DELETE("/personal/plan/:plan_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeletePersonalPlan)
+	v2.POST("/user/course/:course_id/plan", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateUserPlan)
+	v2.DELETE("/user/plan/:plan_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserPlan)
 }

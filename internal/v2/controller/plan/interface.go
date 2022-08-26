@@ -6,6 +6,6 @@ import (
 
 type Controller interface {
 	GetCMSPlans(ctx *gin.Context)
-	CreatePersonalPlan(ctx *gin.Context)
-	DeletePersonalPlan(ctx *gin.Context)
+	CreateUserPlan(ctx *gin.Context)
+	DeleteUserPlan(ctx *gin.Context)
 }

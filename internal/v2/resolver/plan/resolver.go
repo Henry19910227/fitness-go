@@ -52,7 +52,7 @@ func (r *resolver) APIGetCMSPlans(input *model.APIGetCMSPlansInput) interface{} 
 	return output
 }
 
-func (r *resolver) APICreatePersonalPlan(tx *gorm.DB, input *model.APICreatePersonalPlanInput) (output model.APICreatePersonalPlanOutput) {
+func (r *resolver) APICreateUserPlan(tx *gorm.DB, input *model.APICreateUserPlanInput) (output model.APICreateUserPlanOutput) {
 	defer tx.Rollback()
 	// 查詢關聯課表
 	findCourseInput := courseModel.FindInput{}
@@ -99,14 +99,14 @@ func (r *resolver) APICreatePersonalPlan(tx *gorm.DB, input *model.APICreatePers
 	}
 	tx.Commit()
 	// Parser Output
-	data := model.APICreatePersonalPlanData{}
+	data := model.APICreateUserPlanData{}
 	data.ID = util.PointerInt64(planID)
 	output.Data = &data
 	output.SetStatus(code.Success)
 	return output
 }
 
-func (r *resolver) APIDeletePersonalPlan(tx *gorm.DB, input *model.APIDeletePersonalPlanInput) (output model.APIDeletePersonalPlanOutput) {
+func (r *resolver) APIDeleteUserPlan(tx *gorm.DB, input *model.APIDeleteUserPlanInput) (output model.APIDeleteUserPlanOutput) {
 	defer tx.Rollback()
 	// 查詢關聯課表
 	findCourseInput := courseModel.FindInput{}

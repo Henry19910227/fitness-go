@@ -63,7 +63,7 @@ func (c *controller) GetCMSPlans(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// CreatePersonalPlan 創建個人課表計畫
+// CreateUserPlan 創建個人課表計畫
 // @Summary 創建個人課表計畫
 // @Description 創建個人課表計畫
 // @Tags 用戶個人課表_v2
@@ -71,12 +71,12 @@ func (c *controller) GetCMSPlans(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
-// @Param json_body body plan.APICreatePersonalPlanBody true "輸入參數"
-// @Success 200 {object} plan.APICreatePersonalPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Param json_body body plan.APICreateUserPlanBody true "輸入參數"
+// @Success 200 {object} plan.APICreateUserPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/personal/course/{course_id}/plan [POST]
-func (c *controller) CreatePersonalPlan(ctx *gin.Context) {
-	var input model.APICreatePersonalPlanInput
+// @Router /v2/user/course/{course_id}/plan [POST]
+func (c *controller) CreateUserPlan(ctx *gin.Context) {
+	var input model.APICreateUserPlanInput
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
@@ -86,11 +86,11 @@ func (c *controller) CreatePersonalPlan(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APICreatePersonalPlan(ctx.MustGet("tx").(*gorm.DB), &input)
+	output := c.resolver.APICreateUserPlan(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 
-// DeletePersonalPlan 刪除個人課表計畫
+// DeleteUserPlan 刪除個人課表計畫
 // @Summary 刪除個人課表計畫
 // @Description 刪除個人課表計畫
 // @Tags 用戶個人課表_v2
@@ -98,16 +98,16 @@ func (c *controller) CreatePersonalPlan(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
-// @Success 200 {object} plan.APIDeletePersonalPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Success 200 {object} plan.APIDeleteUserPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/personal/plan/{plan_id} [DELETE]
-func (c *controller) DeletePersonalPlan(ctx *gin.Context) {
-	var input model.APIDeletePersonalPlanInput
+// @Router /v2/user/plan/{plan_id} [DELETE]
+func (c *controller) DeleteUserPlan(ctx *gin.Context) {
+	var input model.APIDeleteUserPlanInput
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIDeletePersonalPlan(ctx.MustGet("tx").(*gorm.DB), &input)
+	output := c.resolver.APIDeleteUserPlan(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }

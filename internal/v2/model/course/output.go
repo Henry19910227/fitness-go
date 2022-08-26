@@ -119,11 +119,11 @@ type APIUpdateCMSCourseCoverOutput struct {
 	Data *string `json:"data,omitempty" example:"123.jpg"`
 }
 
-// APICreatePersonalCourseOutput /v2/personal/course [POST]
-type APICreatePersonalCourseOutput struct {
+// APICreateUserCourseOutput /v2/user/course [POST]
+type APICreateUserCourseOutput struct {
 	base.Output
-	Data *APICreatePersonalCourseData `json:"data,omitempty"`
+	Data *APICreateUserCourseData `json:"data,omitempty"`
 }
-type APICreatePersonalCourseData struct {
+type APICreateUserCourseData struct {
 	IDField
 }

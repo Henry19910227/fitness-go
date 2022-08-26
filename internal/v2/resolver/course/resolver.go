@@ -158,7 +158,7 @@ func (r *resolver) APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverI
 	return output
 }
 
-func (r *resolver) APICreatePersonalCourse(input *model.APICreatePersonalCourseInput) (output model.APICreatePersonalCourseOutput) {
+func (r *resolver) APICreateUserCourse(input *model.APICreateUserCourseInput) (output model.APICreateUserCourseOutput) {
 	table := model.Table{}
 	table.UserID = util.PointerInt64(input.UserID)
 	table.SaleType = util.PointerInt(model.SaleTypePersonal)
@@ -186,14 +186,14 @@ func (r *resolver) APICreatePersonalCourse(input *model.APICreatePersonalCourseI
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	data := model.APICreatePersonalCourseData{}
+	data := model.APICreateUserCourseData{}
 	data.ID = util.PointerInt64(courseID)
 	output.Data = &data
 	output.SetStatus(code.Success)
 	return output
 }
 
-func (r *resolver) APICreatePersonalSingleWorkoutCourse(tx *gorm.DB, input *model.APICreatePersonalCourseInput) (output model.APICreatePersonalCourseOutput) {
+func (r *resolver) APICreateUserSingleWorkoutCourse(tx *gorm.DB, input *model.APICreateUserCourseInput) (output model.APICreateUserCourseOutput) {
 	defer tx.Rollback()
 	//創建單一訓練課表
 	table := model.Table{}
@@ -248,7 +248,7 @@ func (r *resolver) APICreatePersonalSingleWorkoutCourse(tx *gorm.DB, input *mode
 	}
 	tx.Commit()
 	//Parser Output
-	data := model.APICreatePersonalCourseData{}
+	data := model.APICreateUserCourseData{}
 	data.ID = util.PointerInt64(courseID)
 	output.Data = &data
 	output.SetStatus(code.Success)

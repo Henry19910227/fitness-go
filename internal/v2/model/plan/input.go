@@ -38,24 +38,24 @@ type APIGetCMSPlansInput struct {
 	OrderByInput
 }
 
-// APICreatePersonalPlanInput /v2/personal/course/{course_id}/plan [POST]
-type APICreatePersonalPlanInput struct {
+// APICreateUserPlanInput /v2/user/course/{course_id}/plan [POST]
+type APICreateUserPlanInput struct {
 	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APICreatePersonalPlanUri
-	Body   APICreatePersonalPlanBody
+	Uri    APICreateUserPlanUri
+	Body   APICreateUserPlanBody
 }
-type APICreatePersonalPlanUri struct {
+type APICreateUserPlanUri struct {
 	CourseIDRequired
 }
-type APICreatePersonalPlanBody struct {
+type APICreateUserPlanBody struct {
 	NameRequired
 }
 
-// APIDeletePersonalPlanInput /v2/personal/workout/{workout_id} [DELETE]
-type APIDeletePersonalPlanInput struct {
+// APIDeleteUserPlanInput /v2/user/workout/{workout_id} [DELETE]
+type APIDeleteUserPlanInput struct {
 	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APIDeletePersonalPlanUri
+	Uri    APIDeleteUserPlanUri
 }
-type APIDeletePersonalPlanUri struct {
+type APIDeleteUserPlanUri struct {
 	IDRequired
 }

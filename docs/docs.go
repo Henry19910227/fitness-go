@@ -9976,241 +9976,6 @@ var doc = `{
                 }
             }
         },
-        "/v2/personal/course": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "創建個人課表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用戶個人課表_v2"
-                ],
-                "summary": "創建個人課表",
-                "parameters": [
-                    {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/course.APICreatePersonalCourseBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)",
-                        "schema": {
-                            "$ref": "#/definitions/course.APICreatePersonalCourseOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/personal/course/{course_id}/plan": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "創建個人課表計畫",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用戶個人課表_v2"
-                ],
-                "summary": "創建個人課表計畫",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表id",
-                        "name": "course_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/plan.APICreatePersonalPlanBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
-                        "schema": {
-                            "$ref": "#/definitions/plan.APICreatePersonalPlanOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/personal/plan/{plan_id}": {
-            "delete": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "刪除個人課表計畫",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用戶個人課表_v2"
-                ],
-                "summary": "刪除個人課表計畫",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "計畫id",
-                        "name": "plan_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
-                        "schema": {
-                            "$ref": "#/definitions/plan.APIDeletePersonalPlanOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/personal/plan/{plan_id}/workout": {
-            "post": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "創建個人課表訓練",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用戶個人課表_v2"
-                ],
-                "summary": "創建個人課表訓練",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "計畫id",
-                        "name": "plan_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "輸入參數",
-                        "name": "json_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/workout.APICreatePersonalWorkoutBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
-                        "schema": {
-                            "$ref": "#/definitions/workout.APICreatePersonalWorkoutOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/personal/workout/{workout_id}": {
-            "delete": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "刪除個人課表訓練",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用戶個人課表_v2"
-                ],
-                "summary": "刪除個人課表訓練",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "訓練id",
-                        "name": "workout_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
-                        "schema": {
-                            "$ref": "#/definitions/workout.APIDeletePersonalWorkoutOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
         "/v2/register/apple": {
             "post": {
                 "description": "使用Apple註冊",
@@ -11031,6 +10796,198 @@ var doc = `{
                 }
             }
         },
+        "/v2/user/course": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "創建個人課表",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/course.APICreateUserCourseBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)",
+                        "schema": {
+                            "$ref": "#/definitions/course.APICreateUserCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/user/course/{course_id}/plan": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人課表計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "創建個人課表計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/plan.APICreateUserPlanBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APICreateUserPlanOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/user/plan/{plan_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除個人課表計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "刪除個人課表計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APIDeleteUserPlanOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/user/plan/{plan_id}/workout": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人課表訓練",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "創建個人課表訓練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/workout.APICreateUserWorkoutBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout.APICreateUserWorkoutOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/profile": {
             "get": {
                 "security": [
@@ -11131,6 +11088,49 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user_subscribe_info.APIGetUserSubscribeInfoOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/user/workout/{workout_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除個人課表訓練",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "刪除個人課表訓練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout.APIDeleteUserWorkoutOutput"
                         }
                     },
                     "400": {
@@ -12031,7 +12031,7 @@ var doc = `{
                 }
             }
         },
-        "course.APICreatePersonalCourseBody": {
+        "course.APICreateUserCourseBody": {
             "type": "object",
             "required": [
                 "name",
@@ -12050,7 +12050,7 @@ var doc = `{
                 }
             }
         },
-        "course.APICreatePersonalCourseData": {
+        "course.APICreateUserCourseData": {
             "type": "object",
             "properties": {
                 "id": {
@@ -12060,7 +12060,7 @@ var doc = `{
                 }
             }
         },
-        "course.APICreatePersonalCourseOutput": {
+        "course.APICreateUserCourseOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -12069,7 +12069,7 @@ var doc = `{
                     "example": 9000
                 },
                 "data": {
-                    "$ref": "#/definitions/course.APICreatePersonalCourseData"
+                    "$ref": "#/definitions/course.APICreateUserCourseData"
                 },
                 "msg": {
                     "description": "訊息",
@@ -17265,7 +17265,7 @@ var doc = `{
                 }
             }
         },
-        "plan.APICreatePersonalPlanBody": {
+        "plan.APICreateUserPlanBody": {
             "type": "object",
             "required": [
                 "name"
@@ -17278,7 +17278,7 @@ var doc = `{
                 }
             }
         },
-        "plan.APICreatePersonalPlanData": {
+        "plan.APICreateUserPlanData": {
             "type": "object",
             "properties": {
                 "id": {
@@ -17288,7 +17288,7 @@ var doc = `{
                 }
             }
         },
-        "plan.APICreatePersonalPlanOutput": {
+        "plan.APICreateUserPlanOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -17297,7 +17297,7 @@ var doc = `{
                     "example": 9000
                 },
                 "data": {
-                    "$ref": "#/definitions/plan.APICreatePersonalPlanData"
+                    "$ref": "#/definitions/plan.APICreateUserPlanData"
                 },
                 "msg": {
                     "description": "訊息",
@@ -17306,7 +17306,7 @@ var doc = `{
                 }
             }
         },
-        "plan.APIDeletePersonalPlanOutput": {
+        "plan.APIDeleteUserPlanOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -20293,7 +20293,7 @@ var doc = `{
                 }
             }
         },
-        "workout.APICreatePersonalWorkoutBody": {
+        "workout.APICreateUserWorkoutBody": {
             "type": "object",
             "properties": {
                 "name": {
@@ -20303,7 +20303,7 @@ var doc = `{
                 }
             }
         },
-        "workout.APICreatePersonalWorkoutData": {
+        "workout.APICreateUserWorkoutData": {
             "type": "object",
             "properties": {
                 "id": {
@@ -20313,7 +20313,7 @@ var doc = `{
                 }
             }
         },
-        "workout.APICreatePersonalWorkoutOutput": {
+        "workout.APICreateUserWorkoutOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -20322,7 +20322,7 @@ var doc = `{
                     "example": 9000
                 },
                 "data": {
-                    "$ref": "#/definitions/workout.APICreatePersonalWorkoutData"
+                    "$ref": "#/definitions/workout.APICreateUserWorkoutData"
                 },
                 "msg": {
                     "description": "訊息",
@@ -20331,7 +20331,7 @@ var doc = `{
                 }
             }
         },
-        "workout.APIDeletePersonalWorkoutOutput": {
+        "workout.APIDeleteUserWorkoutOutput": {
             "type": "object",
             "properties": {
                 "code": {

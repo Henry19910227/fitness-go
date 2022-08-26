@@ -44,16 +44,16 @@ type APIGetCMSPlansData []*struct {
 	} `json:"workouts,omitempty"`
 }
 
-// APICreatePersonalPlanOutput /v2/personal/course/{course_id}/plan [POST]
-type APICreatePersonalPlanOutput struct {
+// APICreateUserPlanOutput /v2/user/course/{course_id}/plan [POST]
+type APICreateUserPlanOutput struct {
 	base.Output
-	Data *APICreatePersonalPlanData `json:"data,omitempty"`
+	Data *APICreateUserPlanData `json:"data,omitempty"`
 }
-type APICreatePersonalPlanData struct {
+type APICreateUserPlanData struct {
 	IDField
 }
 
-// APIDeletePersonalPlanOutput /v2/personal/workout/{workout_id} [DELETE]
-type APIDeletePersonalPlanOutput struct {
+// APIDeleteUserPlanOutput /v2/user/plan/{plan_id} [DELETE]
+type APIDeleteUserPlanOutput struct {
 	base.Output
 }

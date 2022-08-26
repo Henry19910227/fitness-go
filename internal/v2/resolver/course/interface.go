@@ -13,6 +13,6 @@ type Resolver interface {
 	APIGetCMSCourse(ctx *gin.Context, input *model.APIGetCMSCourseInput) interface{}
 	APIUpdateCMSCoursesStatus(input *model.APIUpdateCMSCoursesStatusInput) (output base.Output)
 	APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverInput) (output model.APIUpdateCMSCourseCoverOutput)
-	APICreatePersonalCourse(input *model.APICreatePersonalCourseInput) (output model.APICreatePersonalCourseOutput)
-	APICreatePersonalSingleWorkoutCourse(tx *gorm.DB, input *model.APICreatePersonalCourseInput) (output model.APICreatePersonalCourseOutput)
+	APICreateUserCourse(input *model.APICreateUserCourseInput) (output model.APICreateUserCourseOutput)
+	APICreateUserSingleWorkoutCourse(tx *gorm.DB, input *model.APICreateUserCourseInput) (output model.APICreateUserCourseOutput)
 }

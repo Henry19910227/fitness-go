@@ -80,12 +80,12 @@ type APIUpdateCMSCourseCoverInput struct {
 	File       multipart.File
 }
 
-// APICreatePersonalCourseInput /v2/personal/course [POST]
-type APICreatePersonalCourseInput struct {
+// APICreateUserCourseInput /v2/user/course [POST]
+type APICreateUserCourseInput struct {
 	UserIDRequired
-	Body APICreatePersonalCourseBody
+	Body APICreateUserCourseBody
 }
-type APICreatePersonalCourseBody struct {
+type APICreateUserCourseBody struct {
 	NameRequired
 	ScheduleTypeRequired
 }

@@ -22,24 +22,24 @@ type DeleteInput struct {
 	IDRequired
 }
 
-// APICreatePersonalWorkoutInput /v2/personal/plan/{plan_id}/workout [POST]
-type APICreatePersonalWorkoutInput struct {
+// APICreateUserWorkoutInput /v2/user/plan/{plan_id}/workout [POST]
+type APICreateUserWorkoutInput struct {
 	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APICreatePersonalWorkoutUri
-	Body   APICreatePersonalWorkoutBody
+	Uri    APICreateUserWorkoutUri
+	Body   APICreateUserWorkoutBody
 }
-type APICreatePersonalWorkoutUri struct {
+type APICreateUserWorkoutUri struct {
 	PlanIDRequired
 }
-type APICreatePersonalWorkoutBody struct {
+type APICreateUserWorkoutBody struct {
 	NameRequired
 }
 
-// APIDeletePersonalWorkoutInput /v2/personal/workout/{workout_id} [DELETE]
-type APIDeletePersonalWorkoutInput struct {
+// APIDeleteUserWorkoutInput /v2/user/workout/{workout_id} [DELETE]
+type APIDeleteUserWorkoutInput struct {
 	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APIDeletePersonalWorkoutUri
+	Uri    APIDeleteUserWorkoutUri
 }
-type APIDeletePersonalWorkoutUri struct {
+type APIDeleteUserWorkoutUri struct {
 	IDRequired
 }
