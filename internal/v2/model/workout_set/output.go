@@ -50,3 +50,8 @@ type APIGetCMSWorkoutSetsData []*struct {
 		action.UpdateAtField
 	} `json:"action,omitempty"`
 }
+
+// APICreateUserWorkoutSetsOutput /v2/user/workout/{workout_id}/workout_sets [POST]
+type APICreateUserWorkoutSetsOutput struct {
+	base.Output
+}

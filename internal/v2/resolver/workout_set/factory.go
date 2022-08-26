@@ -1,11 +1,15 @@
 package workout_set
 
 import (
-	workoutSetService "github.com/Henry19910227/fitness-go/internal/v2/service/workout_set"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/action"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set"
 	"gorm.io/gorm"
 )
 
 func NewResolver(db *gorm.DB) Resolver {
-	workoutSetSVC := workoutSetService.NewService(db)
-	return New(workoutSetSVC)
+	workoutSetService := workout_set.NewService(db)
+	workoutService := workout.NewService(db)
+	actionService := action.NewService(db)
+	return New(workoutSetService, workoutService, actionService)
 }

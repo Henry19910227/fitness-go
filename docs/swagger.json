@@ -11124,6 +11124,58 @@
                 }
             }
         },
+        "/v2/user/workout/{workout_id}/workout_sets": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "創建個人訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APICreateUserWorkoutSetsBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APICreateUserWorkoutSetsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/verify_apple_receipt": {
             "post": {
                 "security": [
@@ -11398,7 +11450,7 @@
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
+                                "description": "動作來源(1:系統動作/2:教練動作/3:學員動作)",
                                 "type": "integer",
                                 "example": 2
                             },
@@ -20328,6 +20380,41 @@
                 }
             }
         },
+        "workout_set.APICreateUserWorkoutSetsBody": {
+            "type": "object",
+            "required": [
+                "action_ids"
+            ],
+            "properties": {
+                "action_ids": {
+                    "description": "動作id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "example": [
+                        1,
+                        10,
+                        15
+                    ]
+                }
+            }
+        },
+        "workout_set.APICreateUserWorkoutSetsOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "workout_set.APIGetCMSWorkoutSetsOutput": {
             "type": "object",
             "properties": {
@@ -20385,7 +20472,7 @@
                                         "example": "划船機"
                                     },
                                     "source": {
-                                        "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
+                                        "description": "動作來源(1:系統動作/2:教練動作/3:學員動作)",
                                         "type": "integer",
                                         "example": 2
                                     },

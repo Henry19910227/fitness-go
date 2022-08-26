@@ -16,6 +16,8 @@ type FindInput struct {
 }
 
 type ListInput struct {
+	IDs []int64 `json:"ids"` //動作id
+	TypeOptional
 	SourceOptional
 	PagingInput
 	OrderByInput

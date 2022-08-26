@@ -18,7 +18,8 @@ type GenerateInput struct {
 }
 
 type ListInput struct {
-	WorkoutIDField
+	WorkoutIDOptional
+	TypeOptional
 	PagingInput
 	PreloadInput
 }
@@ -26,4 +27,17 @@ type ListInput struct {
 type APIGetCMSWorkoutSetsInput struct {
 	WorkoutIDField
 	PagingInput
+}
+
+// APICreateUserWorkoutSetsInput /v2/user/workout/{workout_id}/workout_sets [POST]
+type APICreateUserWorkoutSetsInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APICreateUserWorkoutSetsUri
+	Body   APICreateUserWorkoutSetsBody
+}
+type APICreateUserWorkoutSetsUri struct {
+	WorkoutIDRequired
+}
+type APICreateUserWorkoutSetsBody struct {
+	ActionIDs []int64 `json:"action_ids" binding:"required,workout_set_action_ids" example:"1,10,15"` // 動作id
 }

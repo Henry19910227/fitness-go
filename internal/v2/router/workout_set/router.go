@@ -5,12 +5,14 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/controller/workout_set"
-	middleware "github.com/Henry19910227/fitness-go/internal/v2/middleware/token"
+	"github.com/Henry19910227/fitness-go/internal/v2/middleware"
+	tokenMiddleware "github.com/Henry19910227/fitness-go/internal/v2/middleware/token"
 	"github.com/gin-gonic/gin"
 )
 
-func SetRoute(baseGroup *gin.RouterGroup) {
+func SetRoute(v2 *gin.RouterGroup) {
 	controller := workoutSet.NewController(orm.Shared().DB())
-	midd := middleware.NewTokenMiddleware(redis.Shared())
-	baseGroup.GET("/cms/workout/:workout_id/workout_sets", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSWorkoutSets)
+	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
+	v2.POST("/user/workout/:workout_id/workout_sets", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateUserWorkoutSets)
+	v2.GET("/cms/workout/:workout_id/workout_sets", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSWorkoutSets)
 }

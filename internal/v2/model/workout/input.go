@@ -18,6 +18,10 @@ type ListInput struct {
 	PreloadInput
 }
 
+type FindInput struct {
+	IDOptional
+}
+
 type DeleteInput struct {
 	IDRequired
 }

@@ -26,6 +26,15 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
+	// ID List 篩選條件
+	if len(input.IDs) > 0 {
+		db = db.Where("id IN (?)", input.IDs)
+	}
+	// Type 篩選條件
+	if input.Type != nil {
+		db = db.Where("type = ?", *input.Type)
+	}
+	// Source 篩選條件
 	if input.Source != nil {
 		db = db.Where("source = ?", *input.Source)
 	}
