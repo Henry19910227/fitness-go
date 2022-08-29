@@ -16,4 +16,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/cms/course/:course_id/plans", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSPlans)
 	v2.POST("/user/course/:course_id/plan", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateUserPlan)
 	v2.DELETE("/user/plan/:plan_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserPlan)
+	v2.GET("/user/course/:course_id/plans/", midd.Verify([]global.Role{global.UserRole}), controller.GetUserPlans)
 }

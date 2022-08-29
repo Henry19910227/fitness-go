@@ -10875,6 +10875,49 @@
                 }
             }
         },
+        "/v2/user/course/{course_id}/plans": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取用戶個人計畫列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "獲取用戶個人計畫列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APIGetUserPlansOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/courses": {
             "get": {
                 "security": [
@@ -17710,6 +17753,69 @@
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "plan.APIGetUserPlansOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "計畫id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "description": "計畫名稱",
+                                "type": "string",
+                                "example": "第一週增肌計畫"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "user_plan_statistic": {
+                                "type": "object",
+                                "properties": {
+                                    "duration": {
+                                        "description": "總花費時間(秒)",
+                                        "type": "integer",
+                                        "example": 60
+                                    },
+                                    "finish_workout_count": {
+                                        "description": "完成訓練數量(去除重複)",
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                }
+                            },
+                            "workout_count": {
+                                "description": "訓練數量",
+                                "type": "integer",
+                                "example": 10
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

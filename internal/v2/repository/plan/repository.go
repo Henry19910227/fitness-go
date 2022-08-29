@@ -55,16 +55,11 @@ func (r *repository) Delete(input *model.DeleteInput) (err error) {
 }
 
 func (r *repository) List(input *model.ListInput) (output []*model.Output, amount int64, err error) {
-	query := "1=1 "
-	params := make([]interface{}, 0)
+	db := r.db.Model(&model.Output{})
 	//加入 id 篩選條件
 	if input.CourseID != nil {
-		query += "AND course_id = ? "
-		params = append(params, *input.CourseID)
+		db = db.Where("course_id = ?", *input.CourseID)
 	}
-
-	db := r.db.Model(&model.Output{})
-	db = db.Where(query, params...)
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
@@ -74,7 +69,7 @@ func (r *repository) List(input *model.ListInput) (output []*model.Output, amoun
 				})
 				continue
 			}
-			db = db.Preload(preload.Field)
+			db = db.Preload(preload.Field, preload.Conditions...)
 		}
 	}
 	// Count

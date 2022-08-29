@@ -111,3 +111,26 @@ func (c *controller) DeleteUserPlan(ctx *gin.Context) {
 	output := c.resolver.APIDeleteUserPlan(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetUserPlans 獲取用戶個人計畫列表
+// @Summary 獲取用戶個人計畫列表
+// @Description 獲取用戶個人計畫列表
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} plan.APIGetUserPlansOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/course/{course_id}/plans [GET]
+func (c *controller) GetUserPlans(ctx *gin.Context) {
+	input := model.APIGetUserPlansInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetUserPlans(&input)
+	ctx.JSON(http.StatusOK, output)
+	return
+}

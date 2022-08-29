@@ -59,3 +59,12 @@ type APIDeleteUserPlanInput struct {
 type APIDeleteUserPlanUri struct {
 	IDRequired
 }
+
+// APIGetUserPlansInput /v2/user/course/{course_id}/plans [GET]
+type APIGetUserPlansInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIGetUserPlansUri
+}
+type APIGetUserPlansUri struct {
+	CourseIDRequired
+}

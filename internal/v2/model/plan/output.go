@@ -3,6 +3,7 @@ package plan
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_plan_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 )
 
@@ -13,7 +14,8 @@ type Output struct {
 	WorkoutCountField
 	CreateAtField
 	UpdateAtField
-	Workout []*workout.Output `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"` // 訓練
+	Workout           []*workout.Output           `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"`            // 訓練
+	UserPlanStatistic *user_plan_statistic.Output `json:"user_plan_statistic,omitempty" gorm:"foreignKey:plan_id;references:id"` // 計畫統計
 }
 
 func (Output) TableName() string {
@@ -56,4 +58,21 @@ type APICreateUserPlanData struct {
 // APIDeleteUserPlanOutput /v2/user/plan/{plan_id} [DELETE]
 type APIDeleteUserPlanOutput struct {
 	base.Output
+}
+
+// APIGetUserPlansOutput /v2/user/course/{course_id}/plans [GET]
+type APIGetUserPlansOutput struct {
+	base.Output
+	Data APIGetUserPlansData `json:"data"`
+}
+type APIGetUserPlansData []*struct {
+	IDField
+	NameField
+	WorkoutCountField
+	CreateAtField
+	UpdateAtField
+	UserPlanStatistic *struct {
+		user_plan_statistic.DurationField
+		user_plan_statistic.FinishWorkoutCountField
+	} `json:"user_plan_statistic,omitempty"`
 }

@@ -8,4 +8,5 @@ type Controller interface {
 	GetCMSPlans(ctx *gin.Context)
 	CreateUserPlan(ctx *gin.Context)
 	DeleteUserPlan(ctx *gin.Context)
+	GetUserPlans(ctx *gin.Context)
 }

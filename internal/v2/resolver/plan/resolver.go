@@ -157,3 +157,25 @@ func (r *resolver) APIDeleteUserPlan(tx *gorm.DB, input *model.APIDeleteUserPlan
 	output.SetStatus(code.Success)
 	return output
 }
+
+func (r *resolver) APIGetUserPlans(input *model.APIGetUserPlansInput) (output model.APIGetUserPlansOutput) {
+	listInput := model.ListInput{}
+	listInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "UserPlanStatistic", Conditions: []interface{}{"user_id = ?", input.UserID}},
+	}
+	planOutputs, _, err := r.planService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetUserPlansData{}
+	if err := util.Parser(planOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = data
+	return output
+}
