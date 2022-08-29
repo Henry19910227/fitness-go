@@ -198,3 +198,38 @@ func (c *controller) CreateUserCourse(ctx *gin.Context) {
 	output := c.resolver.APICreateUserCourse(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetUserCourses 獲取用戶個人課表列表
+// @Summary 獲取用戶個人課表列表
+// @Description 獲取用戶個人課表列表
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param type query int false "搜尋類別(1:進行中課表/2:付費課表/3:個人課表)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} course.APIGetUserCoursesOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/courses [GET]
+func (c *controller) GetUserCourses(ctx *gin.Context) {
+	input := model.APIGetUserCoursesInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if input.Query.Type == 1 {
+		output := c.resolver.APIGetUserProgressCourses(&input)
+		ctx.JSON(http.StatusOK, output)
+		return
+	}
+	if input.Query.Type == 2 {
+		output := c.resolver.APIGetUserChargeCourses(&input)
+		ctx.JSON(http.StatusOK, output)
+		return
+	}
+	output := c.resolver.APIGetUserPersonalCourses(&input)
+	ctx.JSON(http.StatusOK, output)
+	return
+}

@@ -886,6 +886,127 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  course.APIGetUserCoursesOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            category:
+              description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+              example: 1
+              type: integer
+            course_status:
+              description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+              example: 3
+              type: integer
+            cover:
+              description: 課表封面
+              example: abc.png
+              type: string
+            create_at:
+              description: 創建時間
+              example: "2022-06-12 00:00:00"
+              type: string
+            id:
+              description: 課表 id
+              example: 2
+              type: integer
+            name:
+              description: 課表名稱
+              example: 增肌課表
+              type: string
+            plan_count:
+              description: 計畫總數
+              example: 10
+              type: integer
+            review_statistic:
+              properties:
+                amount:
+                  description: 評分筆數
+                  example: 10
+                  type: integer
+                score_total:
+                  description: 評分累積
+                  example: 100
+                  type: integer
+              required:
+              - amount
+              - score_total
+              type: object
+            sale_item:
+              properties:
+                id:
+                  description: 銷售id
+                  example: 1
+                  type: integer
+                name:
+                  description: 銷售名稱
+                  example: '銅級課表 '
+                  type: string
+                product_label:
+                  properties:
+                    id:
+                      description: 產品標籤id
+                      example: 1
+                      type: integer
+                    product_id:
+                      description: 產品id
+                      example: com.fitness.gold_member_month
+                      type: string
+                    twd:
+                      description: 台幣價格
+                      example: 500
+                      type: integer
+                  type: object
+              type: object
+            sale_type:
+              description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
+              example: 3
+              type: integer
+            schedule_type:
+              description: 排課類別(1:單一訓練/2:多項計畫)
+              example: 2
+              type: integer
+            trainer:
+              properties:
+                avatar:
+                  description: 教練大頭照
+                  example: abc.png
+                  type: string
+                nickname:
+                  description: 教練暱稱
+                  example: Henry
+                  type: string
+                skill:
+                  description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+                  example: 1,4
+                  type: string
+                user_id:
+                  description: 用戶id
+                  example: 10001
+                  type: integer
+              type: object
+            update_at:
+              description: 更新時間
+              example: "2022-06-12 00:00:00"
+              type: string
+            workout_count:
+              description: 訓練總數
+              example: 50
+              type: integer
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
+    type: object
   course.APIUpdateCMSCourseCoverOutput:
     properties:
       code:
@@ -13695,6 +13816,42 @@ paths:
       security:
       - fitness_token: []
       summary: 創建個人課表計畫
+      tags:
+      - 用戶個人課表_v2
+  /v2/user/courses:
+    get:
+      consumes:
+      - application/json
+      description: 獲取用戶個人課表列表
+      parameters:
+      - description: 搜尋類別(1:進行中課表/2:付費課表/3:個人課表)
+        in: query
+        name: type
+        type: integer
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/course.APIGetUserCoursesOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取用戶個人課表列表
       tags:
       - 用戶個人課表_v2
   /v2/user/plan/{plan_id}:

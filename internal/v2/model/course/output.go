@@ -127,3 +127,42 @@ type APICreateUserCourseOutput struct {
 type APICreateUserCourseData struct {
 	IDField
 }
+
+// APIGetUserCoursesOutput /v2/user/courses [GET]
+type APIGetUserCoursesOutput struct {
+	base.Output
+	Data   APIGetUserCoursesData `json:"data"`
+	Paging *paging.Output        `json:"paging,omitempty"`
+}
+type APIGetUserCoursesData []*struct {
+	IDField
+	SaleTypeField
+	CourseStatusField
+	CategoryField
+	ScheduleTypeField
+	NameField
+	CoverField
+	PlanCountField
+	WorkoutCountField
+	CreateAtField
+	UpdateAtField
+	Trainer *struct {
+		trainer.UserIDField
+		trainer.AvatarField
+		trainer.NicknameField
+		trainer.SkillField
+	} `json:"trainer,omitempty"`
+	SaleItem *struct {
+		saleItem.IDField
+		saleItem.NameField
+		ProductLabel *struct {
+			productLabel.IDField
+			productLabel.ProductIDField
+			productLabel.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+	ReviewStatistic struct {
+		review_statistic.ScoreTotalRequired
+		review_statistic.AmountRequired
+	} `json:"review_statistic"`
+}

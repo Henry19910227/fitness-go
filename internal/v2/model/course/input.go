@@ -27,6 +27,7 @@ type FindInput struct {
 
 type ListInput struct {
 	IDOptional
+	UserIDOptional
 	NameOptional
 	CourseStatusOptional
 	SaleTypeOptional
@@ -39,6 +40,20 @@ type ListInput struct {
 
 type FavoriteListInput struct {
 	UserIDOptional
+	PagingInput
+	PreloadInput
+	OrderByInput
+}
+
+type ProgressListInput struct {
+	UserIDRequired
+	PagingInput
+	PreloadInput
+	OrderByInput
+}
+
+type ChargeListInput struct {
+	UserIDRequired
 	PagingInput
 	PreloadInput
 	OrderByInput
@@ -79,6 +94,16 @@ type APIUpdateCMSCourseCoverInput struct {
 	IDRequired
 	CoverNamed string
 	File       multipart.File
+}
+
+// APIGetUserCoursesInput /v2/user/courses [GET]
+type APIGetUserCoursesInput struct {
+	UserIDRequired
+	Query APIGetUserCoursesQuery
+}
+type APIGetUserCoursesQuery struct {
+	Type int `form:"type" binding:"required,oneof=1 2 3" example:"1"` // 搜尋類別(1:進行中課表/2:付費課表/3:個人課表)
+	PagingInput
 }
 
 // APICreateUserCourseInput /v2/user/course [POST]

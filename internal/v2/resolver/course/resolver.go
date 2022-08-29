@@ -254,3 +254,95 @@ func (r *resolver) APICreateUserSingleWorkoutCourse(tx *gorm.DB, input *model.AP
 	output.SetStatus(code.Success)
 	return output
 }
+
+func (r *resolver) APIGetUserPersonalCourses(input *model.APIGetUserCoursesInput) (output model.APIGetUserCoursesOutput) {
+	// 查詢個人課表
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.SaleType = util.PointerInt(model.SaleTypePersonal)
+	listInput.OrderField = "create_at"
+	listInput.OrderType = order_by.DESC
+	if err := util.Parser(input.Query, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	courseOutputs, page, err := r.courseService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetUserCoursesData{}
+	if err := util.Parser(courseOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
+	return output
+}
+
+func (r *resolver) APIGetUserProgressCourses(input *model.APIGetUserCoursesInput) (output model.APIGetUserCoursesOutput) {
+	// 查詢進行中課表
+	listInput := model.ProgressListInput{}
+	listInput.UserID = input.UserID
+	listInput.OrderField = "update_at"
+	listInput.OrderType = order_by.DESC
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "ReviewStatistic"},
+		{Field: "SaleItem.ProductLabel"},
+	}
+	if err := util.Parser(input.Query, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	courseOutputs, page, err := r.courseService.ProgressList(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetUserCoursesData{}
+	if err := util.Parser(courseOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
+	return output
+}
+
+func (r *resolver) APIGetUserChargeCourses(input *model.APIGetUserCoursesInput) (output model.APIGetUserCoursesOutput) {
+	// 查詢進行中課表
+	listInput := model.ChargeListInput{}
+	listInput.UserID = input.UserID
+	listInput.OrderField = "create_at"
+	listInput.OrderType = order_by.DESC
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "ReviewStatistic"},
+		{Field: "SaleItem.ProductLabel"},
+	}
+	if err := util.Parser(input.Query, &listInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	courseOutputs, page, err := r.courseService.ChargeList(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetUserCoursesData{}
+	if err := util.Parser(courseOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
+	return output
+}
