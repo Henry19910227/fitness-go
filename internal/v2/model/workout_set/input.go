@@ -17,11 +17,19 @@ type GenerateInput struct {
 	WorkoutID  []*base.GenerateSetting
 }
 
+type FindInput struct {
+	IDOptional
+}
+
 type ListInput struct {
 	WorkoutIDOptional
 	TypeOptional
 	PagingInput
 	PreloadInput
+}
+
+type DeleteInput struct {
+	IDRequired
 }
 
 type APIGetCMSWorkoutSetsInput struct {
@@ -40,4 +48,13 @@ type APICreateUserWorkoutSetsUri struct {
 }
 type APICreateUserWorkoutSetsBody struct {
 	ActionIDs []int64 `json:"action_ids" binding:"required,workout_set_action_ids" example:"1,10,15"` // 動作id
+}
+
+// APIDeleteUserWorkoutSetInput /v2/user/workout_set_is/{workout_set_id} [POST]
+type APIDeleteUserWorkoutSetInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIDeleteUserWorkoutSetUri
+}
+type APIDeleteUserWorkoutSetUri struct {
+	IDRequired
 }

@@ -57,14 +57,14 @@ func (r *resolver) APICreateUserPlan(tx *gorm.DB, input *model.APICreateUserPlan
 	// 查詢關聯課表
 	findCourseInput := courseModel.FindInput{}
 	findCourseInput.ID = util.PointerInt64(input.Uri.CourseID)
-	courseOutput, err := r.courseService.Find(&findCourseInput)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	// 驗證權限
-	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) != courseModel.MultiplePlan {
-		output.Set(code.PermissionDenied, "非多計畫類型課表，無法創建資源")
+	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout && util.OnNilJustReturnInt(courseOutput.PlanCount, 0) >= 1 {
+		output.Set(code.BadRequest, "已達計畫數量上限，無法創建資源")
 		return output
 	}
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
@@ -117,10 +117,6 @@ func (r *resolver) APIDeleteUserPlan(tx *gorm.DB, input *model.APIDeleteUserPlan
 		return output
 	}
 	// 驗證計畫刪除權限
-	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout {
-		output.Set(code.PermissionDenied, "非多計畫類型課表，無法刪除資源")
-		return output
-	}
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
 		output.Set(code.PermissionDenied, "非此課表擁有者，無法刪除資源")
 		return output

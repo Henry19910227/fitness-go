@@ -55,3 +55,8 @@ type APIGetCMSWorkoutSetsData []*struct {
 type APICreateUserWorkoutSetsOutput struct {
 	base.Output
 }
+
+// APIDeleteUserWorkoutSetOutput /v2/user/workout_set_is/{workout_set_id} [Delete]
+type APIDeleteUserWorkoutSetOutput struct {
+	base.Output
+}

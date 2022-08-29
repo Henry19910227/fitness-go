@@ -33,6 +33,11 @@ func (s *service) Create(items []*model.Table) (ids []int64, err error) {
 	return ids, err
 }
 
+func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {
+	output, err = s.repository.Find(input)
+	return output, err
+}
+
 func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
 	output, amount, err := s.repository.List(input)
 	if err != nil {
@@ -45,3 +50,9 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 	page.Size = input.Size
 	return output, page, err
 }
+
+func (s *service) Delete(input *model.DeleteInput) (err error) {
+	err = s.repository.Delete(input)
+	return err
+}
+

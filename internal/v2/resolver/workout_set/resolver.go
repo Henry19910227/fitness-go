@@ -5,10 +5,12 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	actionModel "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/action"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set"
 	"gorm.io/gorm"
@@ -17,20 +19,34 @@ import (
 type resolver struct {
 	workoutSetService workout_set.Service
 	workoutService workout.Service
+	courseService course.Service
 	actionService action.Service
 }
 
-func New(workoutSetService workout_set.Service, workoutService workout.Service, actionService action.Service) Resolver {
-	return &resolver{workoutSetService: workoutSetService, workoutService: workoutService, actionService: actionService}
+func New(workoutSetService workout_set.Service, workoutService workout.Service, courseService course.Service, actionService action.Service) Resolver {
+	return &resolver{workoutSetService: workoutSetService, workoutService: workoutService, courseService: courseService, actionService: actionService}
 }
 
 func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateUserWorkoutSetsInput) (output model.APICreateUserWorkoutSetsOutput) {
 	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.PermissionDenied, "非此課表擁有者，無法創建資源")
+		return output
+	}
 	// 驗證動作權限
 	actionListInput := actionModel.ListInput{}
 	actionListInput.IDs = input.Body.ActionIDs
 	actionListInput.Type = util.PointerInt(1)
-	actionOutputs, _, err := r.actionService.List(&actionListInput)
+	actionOutputs, _, err := r.actionService.Tx(tx).List(&actionListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -45,7 +61,7 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 			return output
 		}
 	}
-	// 添加動作組
+	// 添加訓練組
 	setTables := make([]*model.Table, 0)
 	for _, actionID := range input.Body.ActionIDs {
 		setTable := model.Table{}
@@ -85,6 +101,64 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	tx.Commit()
+	// Parser Output
+	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIDeleteUserWorkoutSet(tx *gorm.DB, input *model.APIDeleteUserWorkoutSetInput) (output model.APIDeleteUserWorkoutSetOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutSetID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢訓練
+	findSetInput := model.FindInput{}
+	findSetInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutSetOutput, err := r.workoutSetService.Tx(tx).Find(&findSetInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.PermissionDenied, "非此課表擁有者，無法刪除資源")
+		return output
+	}
+	// 刪除訓練組
+	deleteSetInput := model.DeleteInput{}
+	deleteSetInput.ID = input.Uri.ID
+	if err := r.workoutSetService.Tx(tx).Delete(&deleteSetInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此訓練的訓練組數量
+	setListInput := model.ListInput{}
+	setListInput.WorkoutID = workoutSetOutput.WorkoutID
+	setListInput.Type = util.PointerInt(1)
+	setOutputs, _, err := r.workoutSetService.Tx(tx).List(&setListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新此訓練的訓練組數量
+	workoutTable := workoutModel.Table{}
+	workoutTable.ID = workoutSetOutput.WorkoutID
+	workoutTable.WorkoutSetCount = util.PointerInt(len(setOutputs))
+	if err := r.workoutService.Tx(tx).Update(&workoutTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除 start audio 檔案
+	_ = r.startAudioTool.Delete(util.OnNilJustReturnString(workoutSetOutput.StartAudio, ""))
+	// 刪除 progress audio 檔案
+	_ = r.ProgressAudioTool.Delete(util.OnNilJustReturnString(workoutSetOutput.ProgressAudio, ""))
+
 	tx.Commit()
 	// Parser Output
 	output.Set(code.Success, "success")

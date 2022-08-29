@@ -33,8 +33,8 @@ func (r *resolver) APICreateUserWorkout(tx *gorm.DB, input *model.APICreateUserW
 		return output
 	}
 	// 驗證課表刪除權限
-	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout {
-		output.Set(code.PermissionDenied, "單一訓練課表，無法創建資源")
+	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout && util.OnNilJustReturnInt(courseOutput.WorkoutCount, 0) >= 1 {
+		output.Set(code.BadRequest, "已達計畫數量上限，無法創建資源")
 		return output
 	}
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
@@ -105,10 +105,10 @@ func (r *resolver) APIDeleteUserWorkout(tx *gorm.DB, input *model.APIDeleteUserW
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	// 查詢關聯計畫
-	findPlanInput := planModel.FindInput{}
-	findPlanInput.WorkoutID = util.PointerInt64(input.Uri.ID)
-	planOutput, err := r.planService.Tx(tx).Find(&findPlanInput)
+	// 查詢訓練
+	findWorkoutInput := model.FindInput{}
+	findWorkoutInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutOutput, err := r.workoutService.Tx(tx).Find(&findWorkoutInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -147,7 +147,7 @@ func (r *resolver) APIDeleteUserWorkout(tx *gorm.DB, input *model.APIDeleteUserW
 	}
 	// 查詢此計畫訓練數量
 	workoutListInput = model.ListInput{}
-	workoutListInput.PlanID = planOutput.ID
+	workoutListInput.PlanID = workoutOutput.PlanID
 	workoutOutputs, _, err = r.workoutService.Tx(tx).List(&workoutListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -155,7 +155,7 @@ func (r *resolver) APIDeleteUserWorkout(tx *gorm.DB, input *model.APIDeleteUserW
 	}
 	// 更新此計畫訓練數量
 	planTable := planModel.Table{}
-	planTable.ID = planOutput.ID
+	planTable.ID = workoutOutput.PlanID
 	planTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
 	if err := r.planService.Tx(tx).Update(&planTable); err != nil {
 		output.Set(code.BadRequest, err.Error())

@@ -18,6 +18,17 @@ func (r *repository) WithTrx(tx *gorm.DB) Repository {
 	return New(tx)
 }
 
+func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
+	db := r.db.Model(&model.Output{})
+	//加入 id 篩選條件
+	if input.ID != nil {
+		db = db.Where("id = ?", *input.ID)
+	}
+	//查詢數據
+	err = db.First(&output).Error
+	return output, err
+}
+
 func (r *repository) Create(items []*model.Table) (ids []int64, err error) {
 	err = r.db.Model(&model.Table{}).Create(items).Error
 	for _, item := range items{
@@ -59,4 +70,9 @@ func (r *repository) List(input *model.ListInput) (output []*model.Output, amoun
 	// 查詢數據
 	err = db.Find(&output).Error
 	return output, amount, err
+}
+
+func (r *repository) Delete(input *model.DeleteInput) (err error) {
+	err = r.db.Where("id = ?", input.ID).Delete(&model.Table{}).Error
+	return err
 }

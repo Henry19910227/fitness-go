@@ -28,6 +28,11 @@ func (s *service) Create(item *model.Table) (id int64, err error) {
 	return id, err
 }
 
+func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {
+	output, err = s.repository.Find(input)
+	return output, err
+}
+
 func (s *service) Update(item *model.Table) (err error) {
 	input := model.FindInput{}
 	input.ID = item.ID

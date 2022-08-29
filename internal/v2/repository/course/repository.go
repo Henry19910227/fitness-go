@@ -43,6 +43,13 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 		db = db.Joins("INNER JOIN workouts ON plans.id = workouts.plan_id")
 		db = db.Where("workouts.id = ?", *input.WorkoutID)
 	}
+	//加入 workout_set_id 篩選條件
+	if input.WorkoutSetID != nil {
+		db = db.Joins("INNER JOIN plans ON courses.id = plans.course_id")
+		db = db.Joins("INNER JOIN workouts ON plans.id = workouts.plan_id")
+		db = db.Joins("INNER JOIN workout_sets ON workouts.id = workout_sets.workout_id")
+		db = db.Where("workout_sets.id = ?", *input.WorkoutSetID)
+	}
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
