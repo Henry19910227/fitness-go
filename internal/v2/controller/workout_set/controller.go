@@ -68,6 +68,28 @@ func (c *controller) DeleteUserWorkoutSet(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// GetUserWorkoutSets 獲取用戶個人訓練組列表
+// @Summary 獲取用戶個人訓練組列表
+// @Description 獲取用戶個人訓練組列表
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_id path int64 true "訓練id"
+// @Success 200 {object} workout_set.APIGetUserWorkoutSetsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/workout/{workout_id}/workout_sets [GET]
+func (c *controller) GetUserWorkoutSets(ctx *gin.Context) {
+	var input model.APIGetUserWorkoutSetsInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetUserWorkoutSets(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetCMSWorkoutSets 獲取訓練組列表
 // @Summary 獲取訓練組列表
 // @Description 獲取訓練組列表

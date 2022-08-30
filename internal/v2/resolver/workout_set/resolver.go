@@ -18,9 +18,9 @@ import (
 
 type resolver struct {
 	workoutSetService workout_set.Service
-	workoutService workout.Service
-	courseService course.Service
-	actionService action.Service
+	workoutService    workout.Service
+	courseService     course.Service
+	actionService     action.Service
 }
 
 func New(workoutSetService workout_set.Service, workoutService workout.Service, courseService course.Service, actionService action.Service) Resolver {
@@ -55,7 +55,7 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 		output.Set(code.BadRequest, "含有不合法動作")
 		return output
 	}
-	for _, actionOutput := range actionOutputs{
+	for _, actionOutput := range actionOutputs {
 		if util.OnNilJustReturnInt(actionOutput.Source, 0) == actionModel.SourceTrainer {
 			output.Set(code.PermissionDenied, "不可添加教練動作")
 			return output
@@ -162,6 +162,29 @@ func (r *resolver) APIDeleteUserWorkoutSet(tx *gorm.DB, input *model.APIDeleteUs
 	tx.Commit()
 	// Parser Output
 	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIGetUserWorkoutSets(input *model.APIGetUserWorkoutSetsInput) (output model.APIGetUserWorkoutSetsOutput) {
+	// 查詢
+	listInput := model.ListInput{}
+	listInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Action"},
+	}
+	setOutputs, _, err := r.workoutSetService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetUserWorkoutSetsData{}
+	if err := util.Parser(setOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = data
 	return output
 }
 

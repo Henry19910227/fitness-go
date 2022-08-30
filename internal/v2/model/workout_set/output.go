@@ -60,3 +60,38 @@ type APICreateUserWorkoutSetsOutput struct {
 type APIDeleteUserWorkoutSetOutput struct {
 	base.Output
 }
+
+// APIGetUserWorkoutSetsOutput /v2/user/workout/{workout_id}/workout_sets [GET]
+type APIGetUserWorkoutSetsOutput struct {
+	base.Output
+	Data APIGetUserWorkoutSetsData `json:"data"`
+}
+type APIGetUserWorkoutSetsData []*struct {
+	IDField
+	TypeField
+	AutoNextField
+	StartAudioField
+	ProgressAudioField
+	RemarkField
+	WeightField
+	RepsField
+	DistanceField
+	DurationField
+	InclineField
+	CreateAtField
+	UpdateAtField
+	Action *struct {
+		action.IDField
+		action.NameField
+		action.SourceField
+		action.TypeField
+		action.CategoryField
+		action.BodyField
+		action.EquipmentField
+		action.IntroField
+		action.CoverField
+		action.VideoField
+		action.CreateAtField
+		action.UpdateAtField
+	} `json:"action,omitempty"`
+}
