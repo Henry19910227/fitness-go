@@ -51,7 +51,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
-			db = db.Preload(preload.Field)
+			db = db.Preload(preload.Field, preload.Conditions...)
 		}
 	}
 	// Count

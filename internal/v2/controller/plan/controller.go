@@ -132,5 +132,4 @@ func (c *controller) GetUserPlans(ctx *gin.Context) {
 	}
 	output := c.resolver.APIGetUserPlans(&input)
 	ctx.JSON(http.StatusOK, output)
-	return
 }

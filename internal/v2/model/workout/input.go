@@ -47,3 +47,12 @@ type APIDeleteUserWorkoutInput struct {
 type APIDeleteUserWorkoutUri struct {
 	IDRequired
 }
+
+// APIGetUserWorkoutsInput /v2/user/plan/{plan_is}/workouts [GET]
+type APIGetUserWorkoutsInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIGetUserPlansUri
+}
+type APIGetUserPlansUri struct {
+	PlanIDRequired
+}

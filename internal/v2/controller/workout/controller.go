@@ -66,3 +66,25 @@ func (c *controller) DeleteUserWorkout(ctx *gin.Context) {
 	output := c.resolver.APIDeleteUserWorkout(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetUserWorkouts 獲取用戶個人訓練列表
+// @Summary 獲取用戶個人訓練列表
+// @Description 獲取用戶個人訓練列表
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param plan_id path int64 true "計畫id"
+// @Success 200 {object} workout.APIGetUserWorkoutsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/plan/{plan_id}/workouts [GET]
+func (c *controller) GetUserWorkouts(ctx *gin.Context) {
+	input := model.APIGetUserWorkoutsInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetUserWorkouts(&input)
+	ctx.JSON(http.StatusOK, output)
+}

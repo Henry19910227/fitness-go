@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
+	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
@@ -168,5 +169,41 @@ func (r *resolver) APIDeleteUserWorkout(tx *gorm.DB, input *model.APIDeleteUserW
 
 	tx.Commit()
 	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIGetUserWorkouts(input *model.APIGetUserWorkoutsInput) (output model.APIGetUserWorkoutsOutput) {
+	listInput := model.ListInput{}
+	listInput.PlanID = util.PointerInt64(input.Uri.PlanID)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "WorkoutLogs", Conditions: []interface{}{"user_id = ?", input.UserID}},
+	}
+	workoutOutputs, _, err := r.workoutService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// output 轉換成 data item
+	dataItems := make([]*model.APIGetUserWorkoutsDataItem, 0)
+	for _, workoutOutput := range workoutOutputs {
+		dataItem := model.APIGetUserWorkoutsDataItem{}
+		if err := util.Parser(workoutOutput, &dataItem); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		dataItem.Finish = util.PointerInt(0)
+		if len(*workoutOutput.WorkoutLogs) > 0 {
+			dataItem.Finish = util.PointerInt(1)
+		}
+		dataItems = append(dataItems, &dataItem)
+	}
+	// parser output
+	data := model.APIGetUserWorkoutsData{}
+	if err := util.Parser(dataItems, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = data
 	return output
 }

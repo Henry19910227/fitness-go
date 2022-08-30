@@ -7000,6 +7000,58 @@ definitions:
         example: message..
         type: string
     type: object
+  workout.APIGetUserWorkoutsOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            end_audio:
+              description: 結束語音
+              example: 123.mp3
+              type: string
+            equipment:
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
+            finish:
+              description: 是否完成(0:未完成/2:已完成)
+              example: 1
+              type: integer
+            id:
+              description: 訓練 id
+              example: 1
+              type: integer
+            name:
+              description: 訓練名稱
+              example: 腿部訓練
+              type: string
+            start_audio:
+              description: 前導語音
+              example: 123.mp3
+              type: string
+            update_at:
+              description: 更新時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            workout_set_count:
+              description: 動作組數
+              example: 10
+              type: integer
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   workout_set.APICreateUserWorkoutSetsBody:
     properties:
       action_ids:
@@ -14007,6 +14059,33 @@ paths:
       security:
       - fitness_token: []
       summary: 創建個人課表訓練
+      tags:
+      - 用戶個人課表_v2
+  /v2/user/plan/{plan_id}/workouts:
+    get:
+      consumes:
+      - application/json
+      description: 獲取用戶個人訓練列表
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/workout.APIGetUserWorkoutsOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取用戶個人訓練列表
       tags:
       - 用戶個人課表_v2
   /v2/user/profile:
