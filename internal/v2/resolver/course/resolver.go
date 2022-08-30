@@ -316,7 +316,7 @@ func (r *resolver) APIGetUserProgressCourses(input *model.APIGetUserCoursesInput
 }
 
 func (r *resolver) APIGetUserChargeCourses(input *model.APIGetUserCoursesInput) (output model.APIGetUserCoursesOutput) {
-	// 查詢進行中課表
+	// 查詢付費課表
 	listInput := model.ChargeListInput{}
 	listInput.UserID = input.UserID
 	listInput.OrderField = "create_at"
@@ -344,5 +344,34 @@ func (r *resolver) APIGetUserChargeCourses(input *model.APIGetUserCoursesInput) 
 	output.Set(code.Success, "success")
 	output.Paging = page
 	output.Data = data
+	return output
+}
+
+func (r *resolver) APIDeleteUserCourse(input *model.APIDeleteUserCourseInput) (output model.APIDeleteUserCourseOutput) {
+	// 查詢課表資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非課表擁有者，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != model.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法刪除資源")
+		return output
+	}
+	// 刪除課表
+	deleteInput := model.DeleteInput{}
+	deleteInput.ID = input.Uri.ID
+	if err := r.courseService.Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
 	return output
 }

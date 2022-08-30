@@ -26,6 +26,11 @@ func (r *repository) Create(item *model.Table) (id int64, err error) {
 	return *item.ID, err
 }
 
+func (r *repository) Delete(input *model.DeleteInput) (err error) {
+	err = r.db.Where("id = ?", input.ID).Delete(&model.Table{}).Error
+	return err
+}
+
 func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
 	db := r.db.Model(&model.Output{})
 	//加入 id 篩選條件

@@ -166,3 +166,8 @@ type APIGetUserCoursesData []*struct {
 		review_statistic.AmountRequired
 	} `json:"review_statistic"`
 }
+
+// APIDeleteUserCourseOutput /v2/user/course [DELETE]
+type APIDeleteUserCourseOutput struct {
+	base.Output
+}

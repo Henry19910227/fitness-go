@@ -39,7 +39,7 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 	}
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.PermissionDenied, "非此課表擁有者，無法創建資源")
+		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
 		return output
 	}
 	// 驗證動作權限
@@ -127,7 +127,7 @@ func (r *resolver) APIDeleteUserWorkoutSet(tx *gorm.DB, input *model.APIDeleteUs
 	}
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.PermissionDenied, "非此課表擁有者，無法刪除資源")
+		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
 		return output
 	}
 	// 刪除訓練組

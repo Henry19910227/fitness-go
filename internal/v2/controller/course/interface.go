@@ -12,4 +12,5 @@ type Controller interface {
 	UpdateCMSCoursesCover(ctx *gin.Context)
 	CreateUserCourse(ctx *gin.Context)
 	GetUserCourses(ctx *gin.Context)
+	DeleteUserCourse(ctx *gin.Context)
 }

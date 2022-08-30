@@ -11,15 +11,16 @@ import (
 	"net/http"
 )
 
-func SetRoute(baseGroup *gin.RouterGroup) {
+func SetRoute(v2 *gin.RouterGroup) {
 	controller := course.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
-	baseGroup.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
-	baseGroup.GET("/favorite/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetFavoriteCourses)
-	baseGroup.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)
-	baseGroup.GET("/cms/course/:course_id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
-	baseGroup.PATCH("/cms/courses/course_status", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesStatus)
-	baseGroup.PATCH("/cms/course/:course_id/cover", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesCover)
-	baseGroup.GET("/user/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetUserCourses)
-	baseGroup.POST("/user/course", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateUserCourse)
+	v2.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
+	v2.GET("/favorite/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetFavoriteCourses)
+	v2.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)
+	v2.GET("/cms/course/:course_id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
+	v2.PATCH("/cms/courses/course_status", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesStatus)
+	v2.PATCH("/cms/course/:course_id/cover", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesCover)
+	v2.GET("/user/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetUserCourses)
+	v2.POST("/user/course", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateUserCourse)
+	v2.DELETE("/user/course/:course_id", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserCourse)
 }

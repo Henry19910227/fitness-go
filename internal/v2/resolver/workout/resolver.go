@@ -39,7 +39,7 @@ func (r *resolver) APICreateUserWorkout(tx *gorm.DB, input *model.APICreateUserW
 		return output
 	}
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.PermissionDenied, "非課表擁有者，無法創建資源")
+		output.Set(code.BadRequest, "非課表擁有者，無法創建資源")
 		return output
 	}
 	// 創建訓練
@@ -116,11 +116,11 @@ func (r *resolver) APIDeleteUserWorkout(tx *gorm.DB, input *model.APIDeleteUserW
 	}
 	// 驗證課表刪除權限
 	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout {
-		output.Set(code.PermissionDenied, "單一訓練課表，無法刪除資源")
+		output.Set(code.BadRequest, "單一訓練課表，無法刪除資源")
 		return output
 	}
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.PermissionDenied, "非課表擁有者，無法刪除資源")
+		output.Set(code.BadRequest, "非課表擁有者，無法刪除資源")
 		return output
 	}
 	// 刪除訓練

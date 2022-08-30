@@ -68,7 +68,7 @@ func (r *resolver) APICreateUserPlan(tx *gorm.DB, input *model.APICreateUserPlan
 		return output
 	}
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.PermissionDenied, "非此課表擁有者，無法創建資源")
+		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
 		return output
 	}
 	// 創建計畫
@@ -118,7 +118,7 @@ func (r *resolver) APIDeleteUserPlan(tx *gorm.DB, input *model.APIDeleteUserPlan
 	}
 	// 驗證計畫刪除權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.PermissionDenied, "非此課表擁有者，無法刪除資源")
+		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
 		return output
 	}
 	// 刪除計畫
@@ -191,7 +191,7 @@ func (r *resolver) APIUpdateUserPlan(input *model.APIUpdateUserPlanInput) (outpu
 	}
 	// 驗證計畫刪除權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.PermissionDenied, "非此課表擁有者，無法刪除資源")
+		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
 		return output
 	}
 	// 修改計畫

@@ -25,6 +25,10 @@ type FindInput struct {
 	PreloadInput
 }
 
+type DeleteInput struct {
+	IDRequired
+}
+
 type ListInput struct {
 	IDOptional
 	UserIDOptional
@@ -114,4 +118,13 @@ type APICreateUserCourseInput struct {
 type APICreateUserCourseBody struct {
 	NameRequired
 	ScheduleTypeRequired
+}
+
+// APIDeleteUserCourseInput /v2/user/course [DELETE]
+type APIDeleteUserCourseInput struct {
+	UserIDRequired
+	Uri APIDeleteUserCourseUri
+}
+type APIDeleteUserCourseUri struct {
+	IDRequired
 }

@@ -233,3 +233,25 @@ func (c *controller) GetUserCourses(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 	return
 }
+
+// DeleteUserCourse 刪除個人課表
+// @Summary 刪除個人課表
+// @Description 刪除個人課表
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} course.APIDeleteUserCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/course/{course_id} [DELETE]
+func (c *controller) DeleteUserCourse(ctx *gin.Context) {
+	var input model.APIDeleteUserCourseInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteUserCourse(&input)
+	ctx.JSON(http.StatusOK, output)
+}
