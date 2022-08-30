@@ -68,3 +68,16 @@ type APIGetUserPlansInput struct {
 type APIGetUserPlansUri struct {
 	CourseIDRequired
 }
+
+// APIUpdateUserPlanInput /v2/user/plan/{plan_id} [PATCH]
+type APIUpdateUserPlanInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIUpdateUserPlanUri
+	Body   APIUpdateUserPlanBody
+}
+type APIUpdateUserPlanUri struct {
+	IDRequired
+}
+type APIUpdateUserPlanBody struct {
+	NameRequired
+}

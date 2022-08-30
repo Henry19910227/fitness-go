@@ -76,3 +76,8 @@ type APIGetUserPlansData []*struct {
 		user_plan_statistic.FinishWorkoutCountField
 	} `json:"user_plan_statistic,omitempty"`
 }
+
+// APIUpdateUserPlanOutput /v2/user/plan/{plan_id} [PATCH]
+type APIUpdateUserPlanOutput struct {
+	base.Output
+}

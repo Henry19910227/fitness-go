@@ -179,3 +179,29 @@ func (r *resolver) APIGetUserPlans(input *model.APIGetUserPlansInput) (output mo
 	output.Data = data
 	return output
 }
+
+func (r *resolver) APIUpdateUserPlan(input *model.APIUpdateUserPlanInput) (output model.APIUpdateUserPlanOutput) {
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.PlanID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證計畫刪除權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.PermissionDenied, "非此課表擁有者，無法刪除資源")
+		return output
+	}
+	// 修改計畫
+	planTable := model.Table{}
+	planTable.ID = util.PointerInt64(input.Uri.ID)
+	planTable.Name = util.PointerString(input.Body.Name)
+	if err := r.planService.Update(&planTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}

@@ -63,7 +63,7 @@ func (c *controller) GetCMSPlans(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// CreateUserPlan 創建個人課表計畫
+// CreateUserPlan 創建個人計畫
 // @Summary 創建個人課表計畫
 // @Description 創建個人課表計畫
 // @Tags 用戶個人課表_v2
@@ -90,7 +90,7 @@ func (c *controller) CreateUserPlan(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// DeleteUserPlan 刪除個人課表計畫
+// DeleteUserPlan 刪除個人計畫
 // @Summary 刪除個人課表計畫
 // @Description 刪除個人課表計畫
 // @Tags 用戶個人課表_v2
@@ -131,5 +131,32 @@ func (c *controller) GetUserPlans(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetUserPlans(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateUserPlan 更新個人計畫
+// @Summary 更新個人計畫
+// @Description 更新個人計畫
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param plan_id path int64 true "計畫id"
+// @Param json_body body plan.APIUpdateUserPlanBody true "輸入參數"
+// @Success 200 {object} plan.APIUpdateUserPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/plan/{plan_id} [PATCH]
+func (c *controller) UpdateUserPlan(ctx *gin.Context) {
+	input := model.APIUpdateUserPlanInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateUserPlan(&input)
 	ctx.JSON(http.StatusOK, output)
 }

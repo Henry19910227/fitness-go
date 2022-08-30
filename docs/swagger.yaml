@@ -4804,6 +4804,26 @@ definitions:
         example: message..
         type: string
     type: object
+  plan.APIUpdateUserPlanBody:
+    properties:
+      name:
+        description: 計畫名稱
+        example: 減脂計畫
+        type: string
+    required:
+    - name
+    type: object
+  plan.APIUpdateUserPlanOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   receipt.APIGetCMSOrderReceiptsOutput:
     properties:
       code:
@@ -14144,6 +14164,39 @@ paths:
       security:
       - fitness_token: []
       summary: 刪除個人課表計畫
+      tags:
+      - 用戶個人課表_v2
+    patch:
+      consumes:
+      - application/json
+      description: 更新個人計畫
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/plan.APIUpdateUserPlanBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/plan.APIUpdateUserPlanOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 更新個人計畫
       tags:
       - 用戶個人課表_v2
   /v2/user/plan/{plan_id}/workout:
