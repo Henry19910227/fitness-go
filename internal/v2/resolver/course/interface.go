@@ -20,4 +20,5 @@ type Resolver interface {
 	APIGetUserChargeCourses(input *model.APIGetUserCoursesInput) (output model.APIGetUserCoursesOutput)
 	APIDeleteUserCourse(input *model.APIDeleteUserCourseInput) (output model.APIDeleteUserCourseOutput)
 	APIUpdateUserCourse(input *model.APIUpdateUserCourseInput) (output model.APIUpdateUserCourseOutput)
+	APIGetUserCourse(input *model.APIGetUserCourseInput) (output model.APIGetUserCourseOutput)
 }

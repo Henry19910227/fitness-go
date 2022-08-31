@@ -404,3 +404,27 @@ func (r *resolver) APIUpdateUserCourse(input *model.APIUpdateUserCourseInput) (o
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIGetUserCourse(input *model.APIGetUserCourseInput) (output model.APIGetUserCourseOutput) {
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "UserCourseStatistic", Conditions: []interface{}{"user_id = ?", input.UserID}},
+	}
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetUserCourseData{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}

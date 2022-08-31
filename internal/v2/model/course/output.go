@@ -7,13 +7,15 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/review_statistic"
 	saleItem "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_course_statistic"
 )
 
 type Output struct {
 	Table
-	Trainer         *trainer.Output          `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"`       // 教練
-	SaleItem        *saleItem.Output         `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`          // 銷售項目
-	ReviewStatistic *review_statistic.Output `json:"review_statistic,omitempty" gorm:"foreignKey:course_id;references:id"` // 評分統計
+	Trainer             *trainer.Output               `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"`            // 教練
+	SaleItem            *saleItem.Output              `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`               // 銷售項目
+	ReviewStatistic     *review_statistic.Output      `json:"review_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`      // 評分統計
+	UserCourseStatistic *user_course_statistic.Output `json:"user_course_statistic,omitempty" gorm:"foreignKey:course_id;references:id"` // 評分統計
 }
 
 func (Output) TableName() string {
@@ -167,12 +169,50 @@ type APIGetUserCoursesData []*struct {
 	} `json:"review_statistic"`
 }
 
-// APIDeleteUserCourseOutput /v2/user/course [DELETE]
+// APIDeleteUserCourseOutput /v2/user/course/{course_id} [DELETE]
 type APIDeleteUserCourseOutput struct {
 	base.Output
 }
 
-// APIUpdateUserCourseOutput /v2/user/course [UPDATE]
+// APIUpdateUserCourseOutput /v2/user/course/{course_id} [UPDATE]
 type APIUpdateUserCourseOutput struct {
 	base.Output
+}
+
+// APIGetUserCourseOutput /v2/user/course/{course_id} [GET]
+type APIGetUserCourseOutput struct {
+	base.Output
+	Data *APIGetUserCourseData `json:"data,omitempty"`
+}
+type APIGetUserCourseData struct {
+	IDField
+	SaleTypeField
+	CourseStatusField
+	CategoryField
+	ScheduleTypeField
+	NameField
+	CoverField
+	PlanCountField
+	WorkoutCountField
+	CreateAtField
+	UpdateAtField
+	Trainer *struct {
+		trainer.UserIDField
+		trainer.AvatarField
+		trainer.NicknameField
+		trainer.SkillField
+	} `json:"trainer,omitempty"`
+	SaleItem *struct {
+		saleItem.IDField
+		saleItem.NameField
+		ProductLabel *struct {
+			productLabel.IDField
+			productLabel.ProductIDField
+			productLabel.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+	UserCourseStatistic *struct {
+		user_course_statistic.FinishWorkoutCountField
+		user_course_statistic.DurationField
+	} `json:"user_course_statistic,omitempty"`
 }

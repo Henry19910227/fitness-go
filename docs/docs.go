@@ -10842,6 +10842,47 @@ var doc = `{
             }
         },
         "/v2/user/course/{course_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取個人課表詳細",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "獲取個人課表詳細",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetUserCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -10902,6 +10943,13 @@ var doc = `{
                 "summary": "更新個人課表",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "輸入參數",
                         "name": "json_body",
                         "in": "body",
@@ -10909,13 +10957,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/course.APIUpdateUserCourseBody"
                         }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "課表id",
-                        "name": "course_id",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -12890,6 +12931,159 @@ var doc = `{
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "course.APIGetUserCourseData": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 10
+                },
+                "sale_item": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "description": "銷售id",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "name": {
+                            "description": "銷售名稱",
+                            "type": "string",
+                            "example": "銅級課表 "
+                        },
+                        "product_label": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "產品標籤id",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "product_id": {
+                                    "description": "產品id",
+                                    "type": "string",
+                                    "example": "com.fitness.gold_member_month"
+                                },
+                                "twd": {
+                                    "description": "台幣價格",
+                                    "type": "integer",
+                                    "example": 500
+                                }
+                            }
+                        }
+                    }
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "trainer": {
+                    "type": "object",
+                    "properties": {
+                        "avatar": {
+                            "description": "教練大頭照",
+                            "type": "string",
+                            "example": "abc.png"
+                        },
+                        "nickname": {
+                            "description": "教練暱稱",
+                            "type": "string",
+                            "example": "Henry"
+                        },
+                        "skill": {
+                            "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                            "type": "string",
+                            "example": "1,4"
+                        },
+                        "user_id": {
+                            "description": "用戶id",
+                            "type": "integer",
+                            "example": 10001
+                        }
+                    }
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "user_course_statistic": {
+                    "type": "object",
+                    "properties": {
+                        "duration": {
+                            "description": "總花費時間(秒)",
+                            "type": "integer",
+                            "example": 60
+                        },
+                        "finish_workout_count": {
+                            "description": "完成訓練數量(去除重複)",
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 50
+                }
+            }
+        },
+        "course.APIGetUserCourseOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/course.APIGetUserCourseData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

@@ -263,8 +263,8 @@ func (c *controller) DeleteUserCourse(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param json_body body course.APIUpdateUserCourseBody true "輸入參數"
 // @Param course_id path int64 true "課表id"
+// @Param json_body body course.APIUpdateUserCourseBody true "輸入參數"
 // @Success 200 {object} course.APIUpdateUserCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/user/course/{course_id} [PATCH]
@@ -280,5 +280,27 @@ func (c *controller) UpdateUserCourse(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIUpdateUserCourse(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetUserCourse 獲取個人課表詳細
+// @Summary 獲取個人課表詳細
+// @Description 獲取個人課表詳細
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} course.APIGetUserCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/course/{course_id} [GET]
+func (c *controller) GetUserCourse(ctx *gin.Context) {
+	var input model.APIGetUserCourseInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetUserCourse(&input)
 	ctx.JSON(http.StatusOK, output)
 }

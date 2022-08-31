@@ -58,7 +58,7 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
-			db = db.Preload(preload.Field)
+			db = db.Preload(preload.Field, preload.Conditions...)
 		}
 	}
 	// Select
@@ -99,13 +99,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	//Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
-			if preload.OrderBy != nil {
-				db = db.Preload(preload.Field, func(db *gorm.DB) *gorm.DB {
-					return db.Order(fmt.Sprintf("%s %s", input.OrderField, input.OrderType))
-				})
-				continue
-			}
-			db = db.Preload(preload.Field)
+			db = db.Preload(preload.Field, preload.Conditions...)
 		}
 	}
 	// Count

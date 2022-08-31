@@ -120,7 +120,7 @@ type APICreateUserCourseBody struct {
 	ScheduleTypeRequired
 }
 
-// APIDeleteUserCourseInput /v2/user/course [DELETE]
+// APIDeleteUserCourseInput /v2/user/course/{course_id} [DELETE]
 type APIDeleteUserCourseInput struct {
 	UserIDRequired
 	Uri APIDeleteUserCourseUri
@@ -129,7 +129,7 @@ type APIDeleteUserCourseUri struct {
 	IDRequired
 }
 
-// APIUpdateUserCourseInput /v2/user/course [UPDATE]
+// APIUpdateUserCourseInput /v2/user/course/{course_id} [UPDATE]
 type APIUpdateUserCourseInput struct {
 	UserIDRequired
 	Uri  APIUpdateUserCourseUri
@@ -140,4 +140,13 @@ type APIUpdateUserCourseUri struct {
 }
 type APIUpdateUserCourseBody struct {
 	NameOptional
+}
+
+// APIGetUserCourseInput /v2/user/course/{course_id} [GET]
+type APIGetUserCourseInput struct {
+	UserIDRequired
+	Uri APIGetUserCourseUri
+}
+type APIGetUserCourseUri struct {
+	IDRequired
 }
