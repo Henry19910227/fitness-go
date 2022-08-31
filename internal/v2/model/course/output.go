@@ -171,3 +171,8 @@ type APIGetUserCoursesData []*struct {
 type APIDeleteUserCourseOutput struct {
 	base.Output
 }
+
+// APIUpdateUserCourseOutput /v2/user/course [UPDATE]
+type APIUpdateUserCourseOutput struct {
+	base.Output
+}

@@ -19,8 +19,8 @@ type GenerateInput struct {
 
 type FindInput struct {
 	IDOptional
-	PlanID    *int64 `json:"plan_id,omitempty"`    // 計畫 id
-	WorkoutID *int64 `json:"workout_id,omitempty"` // 訓練 id
+	PlanID       *int64 `json:"plan_id,omitempty"`        // 計畫 id
+	WorkoutID    *int64 `json:"workout_id,omitempty"`     // 訓練 id
 	WorkoutSetID *int64 `json:"workout_set_id,omitempty"` // 訓練組 id
 	PreloadInput
 }
@@ -127,4 +127,17 @@ type APIDeleteUserCourseInput struct {
 }
 type APIDeleteUserCourseUri struct {
 	IDRequired
+}
+
+// APIUpdateUserCourseInput /v2/user/course [UPDATE]
+type APIUpdateUserCourseInput struct {
+	UserIDRequired
+	Uri  APIUpdateUserCourseUri
+	Body APIUpdateUserCourseBody
+}
+type APIUpdateUserCourseUri struct {
+	IDRequired
+}
+type APIUpdateUserCourseBody struct {
+	NameOptional
 }
