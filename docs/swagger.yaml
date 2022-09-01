@@ -7217,6 +7217,17 @@ definitions:
         example: message..
         type: string
     type: object
+  workout.APIUpdateUserWorkoutOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   workout_set.APICreateUserWorkoutSetsBody:
     properties:
       action_ids:
@@ -14436,7 +14447,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 創建個人課表訓練
+      description: 創建個人訓練
       parameters:
       - description: 計畫id
         in: path
@@ -14463,7 +14474,7 @@ paths:
             $ref: '#/definitions/base.Output'
       security:
       - fitness_token: []
-      summary: 創建個人課表訓練
+      summary: 創建個人訓練
       tags:
       - 用戶個人課表_v2
   /v2/user/plan/{plan_id}/workouts:
@@ -14566,7 +14577,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 刪除個人課表訓練
+      description: 刪除個人訓練
       parameters:
       - description: 訓練id
         in: path
@@ -14587,7 +14598,51 @@ paths:
             $ref: '#/definitions/base.Output'
       security:
       - fitness_token: []
-      summary: 刪除個人課表訓練
+      summary: 刪除個人訓練
+      tags:
+      - 用戶個人課表_v2
+    patch:
+      consumes:
+      - application/json
+      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔
+        : {Base URL}/v2/resource/workout/end_audio/{Filename}'
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 訓練名稱
+        in: formData
+        name: name
+        type: string
+      - description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        in: formData
+        name: equipment
+        type: string
+      - description: 訓練前導音檔
+        in: formData
+        name: start_audio
+        type: file
+      - description: 訓練結束音檔
+        in: formData
+        name: end_audio
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/workout.APIUpdateUserWorkoutOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 更新個人訓練
       tags:
       - 用戶個人課表_v2
   /v2/user/workout/{workout_id}/workout_sets:

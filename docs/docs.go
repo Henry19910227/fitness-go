@@ -11226,7 +11226,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "創建個人課表訓練",
+                "description": "創建個人訓練",
                 "consumes": [
                     "application/json"
                 ],
@@ -11236,7 +11236,7 @@ var doc = `{
                 "tags": [
                     "用戶個人課表_v2"
                 ],
-                "summary": "創建個人課表訓練",
+                "summary": "創建個人訓練",
                 "parameters": [
                     {
                         "type": "integer",
@@ -11432,7 +11432,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "刪除個人課表訓練",
+                "description": "刪除個人訓練",
                 "consumes": [
                     "application/json"
                 ],
@@ -11442,7 +11442,7 @@ var doc = `{
                 "tags": [
                     "用戶個人課表_v2"
                 ],
-                "summary": "刪除個人課表訓練",
+                "summary": "刪除個人訓練",
                 "parameters": [
                     {
                         "type": "integer",
@@ -11457,6 +11457,71 @@ var doc = `{
                         "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
                         "schema": {
                             "$ref": "#/definitions/workout.APIDeleteUserWorkoutOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔 : {Base URL}/v2/resource/workout/end_audio/{Filename}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "更新個人訓練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "訓練名稱",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                        "name": "equipment",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "訓練前導音檔",
+                        "name": "start_audio",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "訓練結束音檔",
+                        "name": "end_audio",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout.APIUpdateUserWorkoutOutput"
                         }
                     },
                     "400": {
@@ -21312,6 +21377,21 @@ var doc = `{
                             }
                         }
                     }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout.APIUpdateUserWorkoutOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",

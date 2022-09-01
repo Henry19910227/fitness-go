@@ -2,6 +2,7 @@ package workout
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
@@ -17,10 +18,12 @@ type resolver struct {
 	workoutService workout.Service
 	planService    plan.Service
 	courseService  course.Service
+	startAudioTool uploader.Tool
+	endAudioTool uploader.Tool
 }
 
-func New(workoutService workout.Service, planService plan.Service, courseService course.Service) Resolver {
-	return &resolver{workoutService: workoutService, planService: planService, courseService: courseService}
+func New(workoutService workout.Service, planService plan.Service, courseService course.Service, startAudioTool uploader.Tool, endAudioTool uploader.Tool) Resolver {
+	return &resolver{workoutService: workoutService, planService: planService, courseService: courseService, startAudioTool: startAudioTool, endAudioTool: endAudioTool}
 }
 
 func (r *resolver) APICreateUserWorkout(tx *gorm.DB, input *model.APICreateUserWorkoutInput) (output model.APICreateUserWorkoutOutput) {
@@ -205,5 +208,87 @@ func (r *resolver) APIGetUserWorkouts(input *model.APIGetUserWorkoutsInput) (out
 	}
 	output.Set(code.Success, "success")
 	output.Data = data
+	return output
+}
+
+func (r *resolver) APIUpdateUserWorkout(tx *gorm.DB, input *model.APIUpdateUserWorkoutInput) (output model.APIUpdateUserWorkoutOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法修改資源")
+		return output
+	}
+	// 查詢訓練資訊
+	findWorkoutInput := model.FindInput{}
+	findWorkoutInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutOutput, err := r.workoutService.Tx(tx).Find(&findWorkoutInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 修改訓練
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := r.workoutService.Tx(tx).Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 上傳 start audio
+	if input.Form.StartAudio != nil {
+		// 儲存新 start audio
+		startAudioNamed, err := r.startAudioTool.Save(input.Form.StartAudio.Data, input.Form.StartAudio.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.StartAudio = util.PointerString(startAudioNamed)
+		if err := r.workoutService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊 start audio
+		_ = r.startAudioTool.Delete(util.OnNilJustReturnString(workoutOutput.StartAudio, ""))
+	}
+	// 上傳 end audio
+	if input.Form.EndAudio != nil {
+		// 儲存新 end audio
+		endAudioNamed, err := r.endAudioTool.Save(input.Form.EndAudio.Data, input.Form.EndAudio.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.EndAudio = util.PointerString(endAudioNamed)
+		if err := r.workoutService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊 end audio
+		_ = r.endAudioTool.Delete(util.OnNilJustReturnString(workoutOutput.EndAudio, ""))
+	}
+	tx.Commit()
+	// parser output
+	output.Set(code.Success, "success")
 	return output
 }

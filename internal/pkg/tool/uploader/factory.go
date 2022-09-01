@@ -41,3 +41,11 @@ func NewBannerImageTool() Tool {
 func NewAccountImageTool() Tool {
 	return New(setting.NewAccountImage())
 }
+
+func NewWorkoutStartAudioTool() Tool {
+	return New(setting.NewWorkoutStartAudio())
+}
+
+func NewWorkoutEndAudioTool() Tool {
+	return New(setting.NewWorkoutEndAudio())
+}

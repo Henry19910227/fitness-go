@@ -47,3 +47,8 @@ type APIGetUserWorkoutsDataItem struct {
 	CreateAtField
 	UpdateAtField
 }
+
+// APIUpdateUserWorkoutOutput /v2/user/workout/{workout_id} [PATCH]
+type APIUpdateUserWorkoutOutput struct {
+	base.Output
+}
