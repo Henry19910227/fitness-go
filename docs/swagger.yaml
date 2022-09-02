@@ -7286,6 +7286,17 @@ definitions:
         example: message..
         type: string
     type: object
+  workout_set.APIDeleteUserWorkoutSetStartAudioOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   workout_set.APIGetCMSWorkoutSetsOutput:
     properties:
       code:
@@ -14884,6 +14895,34 @@ paths:
       security:
       - fitness_token: []
       summary: 更新個人訓練組
+      tags:
+      - 用戶個人課表_v2
+  /v2/user/workout_set/{workout_set_id}/start_audio:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除個人訓練組前導語音
+      parameters:
+      - description: 訓練組id
+        in: path
+        name: workout_set_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/workout_set.APIDeleteUserWorkoutSetStartAudioOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除個人訓練組前導語音
       tags:
       - 用戶個人課表_v2
   /v2/verify_apple_receipt:

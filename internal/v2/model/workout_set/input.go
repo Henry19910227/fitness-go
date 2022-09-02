@@ -89,3 +89,12 @@ type APIUpdateUserWorkoutSetForm struct {
 	StartAudio    *file.Input
 	ProgressAudio *file.Input
 }
+
+// APIDeleteUserWorkoutSetStartAudioInput /v2/user/workout_set/{workout_set_id}/start_audio [DELETE]
+type APIDeleteUserWorkoutSetStartAudioInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIDeleteUserWorkoutSetStartAudioUri
+}
+type APIDeleteUserWorkoutSetStartAudioUri struct {
+	IDRequired
+}
