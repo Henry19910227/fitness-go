@@ -11515,6 +11515,49 @@
                 }
             }
         },
+        "/v2/user/workout/{workout_id}/start_audio": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除個人訓練前導語音",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "刪除個人訓練前導語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout.APIDeleteUserWorkoutOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/workout/{workout_id}/workout_sets": {
             "get": {
                 "security": [
