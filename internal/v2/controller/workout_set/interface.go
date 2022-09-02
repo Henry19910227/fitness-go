@@ -7,6 +7,7 @@ type Controller interface {
 	DeleteUserWorkoutSet(ctx *gin.Context)
 	UpdateUserWorkoutSet(ctx *gin.Context)
 	DeleteUserWorkoutSetStartAudio(ctx *gin.Context)
+	DeleteUserWorkoutSetProgressAudio(ctx *gin.Context)
 	GetUserWorkoutSets(ctx *gin.Context)
 	GetCMSWorkoutSets(ctx *gin.Context)
 }

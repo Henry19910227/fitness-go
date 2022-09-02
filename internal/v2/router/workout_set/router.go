@@ -20,6 +20,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.DELETE("/user/workout_set/:workout_set_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserWorkoutSet)
 	v2.PATCH("/user/workout_set/:workout_set_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserWorkoutSet)
 	v2.DELETE("/user/workout_set/:workout_set_id/start_audio", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserWorkoutSetStartAudio)
+	v2.DELETE("/user/workout_set/:workout_set_id/progress_audio", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserWorkoutSetProgressAudio)
 	v2.GET("/user/workout/:workout_id/workout_sets", midd.Verify([]global.Role{global.UserRole}), controller.GetUserWorkoutSets)
 	v2.GET("/cms/workout/:workout_id/workout_sets", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSWorkoutSets)
 }

@@ -98,3 +98,12 @@ type APIDeleteUserWorkoutSetStartAudioInput struct {
 type APIDeleteUserWorkoutSetStartAudioUri struct {
 	IDRequired
 }
+
+// APIDeleteUserWorkoutSetProgressAudioInput /v2/user/workout_set/{workout_set_id}/progress_audio [DELETE]
+type APIDeleteUserWorkoutSetProgressAudioInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIDeleteUserWorkoutSetProgressAudioUri
+}
+type APIDeleteUserWorkoutSetProgressAudioUri struct {
+	IDRequired
+}

@@ -162,6 +162,28 @@ func (c *controller) DeleteUserWorkoutSetStartAudio(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// DeleteUserWorkoutSetProgressAudio 刪除個人訓練組進行中語音
+// @Summary 刪除個人訓練組進行中語音
+// @Description 刪除個人訓練組進行中語音
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_set_id path int64 true "訓練組id"
+// @Success 200 {object} workout_set.APIDeleteUserWorkoutSetProgressAudioOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/workout_set/{workout_set_id}/progress_audio [DELETE]
+func (c *controller) DeleteUserWorkoutSetProgressAudio(ctx *gin.Context) {
+	var input model.APIDeleteUserWorkoutSetProgressAudioInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteUserWorkoutSetProgressAudio(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetCMSWorkoutSets 獲取訓練組列表
 // @Summary 獲取訓練組列表
 // @Description 獲取訓練組列表

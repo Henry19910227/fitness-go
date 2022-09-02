@@ -10,6 +10,7 @@ type Resolver interface {
 	APIDeleteUserWorkoutSet(tx *gorm.DB, input *model.APIDeleteUserWorkoutSetInput) (output model.APIDeleteUserWorkoutSetOutput)
 	APIUpdateUserWorkoutSet(tx *gorm.DB, input *model.APIUpdateUserWorkoutSetInput) (output model.APIUpdateUserWorkoutSetOutput)
 	APIDeleteUserWorkoutSetStartAudio(input *model.APIDeleteUserWorkoutSetStartAudioInput) (output model.APIDeleteUserWorkoutSetStartAudioOutput)
+	APIDeleteUserWorkoutSetProgressAudio(input *model.APIDeleteUserWorkoutSetProgressAudioInput) (output model.APIDeleteUserWorkoutSetProgressAudioOutput)
 	APIGetUserWorkoutSets(input *model.APIGetUserWorkoutSetsInput) (output model.APIGetUserWorkoutSetsOutput)
 	APIGetCMSWorkoutSets(input *model.APIGetCMSWorkoutSetsInput) interface{}
 }

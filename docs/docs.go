@@ -11850,6 +11850,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/user/workout_set/{workout_set_id}/progress_audio": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除個人訓練組進行中語音",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "刪除個人訓練組進行中語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APIDeleteUserWorkoutSetProgressAudioOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/workout_set/{workout_set_id}/start_audio": {
             "delete": {
                 "security": [
@@ -21690,6 +21733,21 @@ var doc = `{
             }
         },
         "workout_set.APIDeleteUserWorkoutSetOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set.APIDeleteUserWorkoutSetProgressAudioOutput": {
             "type": "object",
             "properties": {
                 "code": {
