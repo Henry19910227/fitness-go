@@ -325,3 +325,40 @@ func (r *resolver) APIDeleteUserWorkoutStartAudio(input *model.APIDeleteUserWork
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIDeleteUserWorkoutEndAudio(input *model.APIDeleteUserWorkoutEndAudioInput) (output model.APIDeleteUserWorkoutEndAudioOutput) {
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
+		return output
+	}
+	// 查詢訓練資訊
+	findWorkoutInput := model.FindInput{}
+	findWorkoutInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutOutput, err := r.workoutService.Find(&findWorkoutInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 修改訓練
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	table.EndAudio = util.PointerString("")
+	if err := r.workoutService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除音檔
+	_ = r.endAudioTool.Delete(util.OnNilJustReturnString(workoutOutput.EndAudio, ""))
+	// parser output
+	output.Set(code.Success, "success")
+	return output
+}

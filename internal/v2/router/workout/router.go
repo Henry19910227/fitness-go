@@ -21,4 +21,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/user/plan/:plan_id/workouts", midd.Verify([]global.Role{global.UserRole}), controller.GetUserWorkouts)
 	v2.PATCH("/user/workout/:workout_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserWorkout)
 	v2.DELETE("/user/workout/:workout_id/start_audio", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserWorkoutStartAudio)
+	v2.DELETE("/user/workout/:workout_id/end_audio", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserWorkoutEndAudio)
 }

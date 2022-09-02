@@ -5,24 +5,24 @@ import (
 	"github.com/spf13/viper"
 )
 
-var workoutEndAudioPath = "/workout/end_audio"
+var workoutStartAudioPath = "/workout/start_audio"
 
-type workoutEndAudioSetting struct {
+type workoutStartAudioSetting struct {
 	vp *viper.Viper
 }
 
-func NewWorkoutEndAudio() Setting {
-	return &workoutEndAudioSetting{vp: vp.Shared()}
+func NewWorkoutStartAudio() Setting {
+	return &workoutStartAudioSetting{vp: vp.Shared()}
 }
 
-func (c *workoutEndAudioSetting) AllowExts() []string {
+func (c *workoutStartAudioSetting) AllowExts() []string {
 	return c.vp.GetStringSlice("Upload.UploadAudioAllowExt")
 }
 
-func (c *workoutEndAudioSetting) MaxSize() int {
+func (c *workoutStartAudioSetting) MaxSize() int {
 	return c.vp.GetInt("Upload.UploadAudioMaxSize")
 }
 
-func (c *workoutEndAudioSetting) FilePath() string {
-	return c.vp.GetString("Resource.RootPath") + workoutEndAudioPath
+func (c *workoutStartAudioSetting) FilePath() string {
+	return c.vp.GetString("Resource.RootPath") + workoutStartAudioPath
 }

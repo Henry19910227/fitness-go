@@ -57,3 +57,8 @@ type APIUpdateUserWorkoutOutput struct {
 type APIDeleteUserWorkoutStartAudioOutput struct {
 	base.Output
 }
+
+// APIDeleteUserWorkoutEndAudioOutput /v2/user/workout/{workout_id}/end_audio [DELETE]
+type APIDeleteUserWorkoutEndAudioOutput struct {
+	base.Output
+}

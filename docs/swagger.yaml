@@ -7154,7 +7154,29 @@ definitions:
         example: message..
         type: string
     type: object
+  workout.APIDeleteUserWorkoutEndAudioOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   workout.APIDeleteUserWorkoutOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  workout.APIDeleteUserWorkoutStartAudioOutput:
     properties:
       code:
         description: 狀態碼
@@ -14645,6 +14667,34 @@ paths:
       summary: 更新個人訓練
       tags:
       - 用戶個人課表_v2
+  /v2/user/workout/{workout_id}/end_audio:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除個人訓練結束語音
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/workout.APIDeleteUserWorkoutEndAudioOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除個人訓練結束語音
+      tags:
+      - 用戶個人課表_v2
   /v2/user/workout/{workout_id}/start_audio:
     delete:
       consumes:
@@ -14663,7 +14713,7 @@ paths:
           description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
             denied
           schema:
-            $ref: '#/definitions/workout.APIDeleteUserWorkoutOutput'
+            $ref: '#/definitions/workout.APIDeleteUserWorkoutStartAudioOutput'
         "400":
           description: 失敗!
           schema:
