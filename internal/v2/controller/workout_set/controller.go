@@ -3,6 +3,7 @@ package workout_set
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/resolver/workout_set"
@@ -65,6 +66,55 @@ func (c *controller) DeleteUserWorkoutSet(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIDeleteUserWorkoutSet(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateUserWorkoutSet 更新個人訓練組
+// @Summary 更新個人訓練組
+// @Description 前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3 進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_set_id path int64 true "訓練組id"
+// @Param auto_next formData string false "自動下一組(Y:是/N:否)"
+// @Param remark formData string false "備註(1~40)"
+// @Param weight formData float64 false "重量(公斤 0.01~999.99)"
+// @Param reps formData int false "次數(1~999)"
+// @Param distance formData float64 false "距離(公里 0.01~999.99)"
+// @Param duration formData int false "時長(秒 1~38439)"
+// @Param incline formData float64 false "坡度(0.01~999.99)"
+// @Param start_audio formData file false "訓練前導音檔"
+// @Param progress_audio formData file false "訓練中音檔"
+// @Success 200 {object} workout_set.APIUpdateUserWorkoutSetOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/workout_set/{workout_set_id} [PATCH]
+func (c *controller) UpdateUserWorkoutSet(ctx *gin.Context) {
+	input := model.APIUpdateUserWorkoutSetInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBind(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	//獲取訓練前導音檔
+	file, fileHeader, _ := ctx.Request.FormFile("start_audio")
+	if file != nil {
+		input.Form.StartAudio = &fileModel.Input{}
+		input.Form.StartAudio.Named = fileHeader.Filename
+		input.Form.StartAudio.Data = file
+	}
+	//獲取訓練中音檔
+	file, fileHeader, _ = ctx.Request.FormFile("progress_audio")
+	if file != nil {
+		input.Form.ProgressAudio = &fileModel.Input{}
+		input.Form.ProgressAudio.Named = fileHeader.Filename
+		input.Form.ProgressAudio.Data = file
+	}
+	output := c.resolver.APIUpdateUserWorkoutSet(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 

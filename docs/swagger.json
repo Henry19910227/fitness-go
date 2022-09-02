@@ -11735,6 +11735,101 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3 進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "更新個人訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "自動下一組(Y:是/N:否)",
+                        "name": "auto_next",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "備註(1~40)",
+                        "name": "remark",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "description": "重量(公斤 0.01~999.99)",
+                        "name": "weight",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "次數(1~999)",
+                        "name": "reps",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "description": "距離(公里 0.01~999.99)",
+                        "name": "distance",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "時長(秒 1~38439)",
+                        "name": "duration",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "description": "坡度(0.01~999.99)",
+                        "name": "incline",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "訓練前導音檔",
+                        "name": "start_audio",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "訓練中音檔",
+                        "name": "progress_audio",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APIUpdateUserWorkoutSetOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
             }
         },
         "/v2/verify_apple_receipt": {
@@ -21849,6 +21944,21 @@
                             }
                         }
                     }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set.APIUpdateUserWorkoutSetOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",

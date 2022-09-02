@@ -38,6 +38,29 @@ func (s *service) Find(input *model.FindInput) (output *model.Output, err error)
 	return output, err
 }
 
+func (s *service) Update(item *model.Table) (err error) {
+	input := model.FindInput{}
+	input.ID = item.ID
+	output, err := s.repository.Find(&input)
+	if err != nil {
+		return err
+	}
+	// 將output轉換為table
+	var table model.Table
+	err = util.Parser(output, &table)
+	if err != nil {
+		return err
+	}
+	// 將須更新的值映射到table
+	err = util.Parser(item, &table)
+	if err != nil {
+		return err
+	}
+	// 更新資料
+	err = s.repository.Update(&table)
+	return err
+}
+
 func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
 	output, amount, err := s.repository.List(input)
 	if err != nil {
@@ -55,4 +78,3 @@ func (s *service) Delete(input *model.DeleteInput) (err error) {
 	err = s.repository.Delete(input)
 	return err
 }
-

@@ -223,7 +223,7 @@ func (r *resolver) APIUpdateUserWorkout(tx *gorm.DB, input *model.APIUpdateUserW
 	}
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.BadRequest, "非此課表擁有者，無法修改資源")
+		output.Set(code.BadRequest, "非此訓練擁有者，無法修改資源")
 		return output
 	}
 	// 查詢訓練資訊

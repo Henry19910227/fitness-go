@@ -7526,6 +7526,17 @@ definitions:
         example: message..
         type: string
     type: object
+  workout_set.APIUpdateUserWorkoutSetOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
 info:
   contact: {}
   description: 健身平台 api
@@ -14809,6 +14820,70 @@ paths:
       security:
       - fitness_token: []
       summary: 刪除個人訓練組
+      tags:
+      - 用戶個人課表_v2
+    patch:
+      consumes:
+      - application/json
+      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3
+        進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
+      parameters:
+      - description: 訓練組id
+        in: path
+        name: workout_set_id
+        required: true
+        type: integer
+      - description: 自動下一組(Y:是/N:否)
+        in: formData
+        name: auto_next
+        type: string
+      - description: 備註(1~40)
+        in: formData
+        name: remark
+        type: string
+      - description: 重量(公斤 0.01~999.99)
+        in: formData
+        name: weight
+        type: number
+      - description: 次數(1~999)
+        in: formData
+        name: reps
+        type: integer
+      - description: 距離(公里 0.01~999.99)
+        in: formData
+        name: distance
+        type: number
+      - description: 時長(秒 1~38439)
+        in: formData
+        name: duration
+        type: integer
+      - description: 坡度(0.01~999.99)
+        in: formData
+        name: incline
+        type: number
+      - description: 訓練前導音檔
+        in: formData
+        name: start_audio
+        type: file
+      - description: 訓練中音檔
+        in: formData
+        name: progress_audio
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/workout_set.APIUpdateUserWorkoutSetOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 更新個人訓練組
       tags:
       - 用戶個人課表_v2
   /v2/verify_apple_receipt:

@@ -49,3 +49,11 @@ func NewWorkoutStartAudioTool() Tool {
 func NewWorkoutEndAudioTool() Tool {
 	return New(setting.NewWorkoutEndAudio())
 }
+
+func NewWorkoutSetStartAudioTool() Tool {
+	return New(setting.NewWorkoutSetStartAudio())
+}
+
+func NewWorkoutSetProgressAudioTool() Tool {
+	return New(setting.NewWorkoutSetProgressAudio())
+}

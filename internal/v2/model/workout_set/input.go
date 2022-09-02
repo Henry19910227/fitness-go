@@ -2,6 +2,7 @@ package workout_set
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -66,4 +67,25 @@ type APIGetUserWorkoutSetsInput struct {
 }
 type APIGetUserWorkoutSetsUri struct {
 	WorkoutIDRequired
+}
+
+// APIUpdateUserWorkoutSetInput /v2/user/workout_set/{workout_set_id} [PATCH]
+type APIUpdateUserWorkoutSetInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIUpdateUserWorkoutSetUri
+	Form   APIUpdateUserWorkoutSetForm
+}
+type APIUpdateUserWorkoutSetUri struct {
+	IDRequired
+}
+type APIUpdateUserWorkoutSetForm struct {
+	AutoNextOptional
+	RemarkOptional
+	WeightOptional
+	RepsOptional
+	DistanceOptional
+	DurationOptional
+	InclineOptional
+	StartAudio    *file.Input
+	ProgressAudio *file.Input
 }

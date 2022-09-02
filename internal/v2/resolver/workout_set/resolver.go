@@ -2,6 +2,7 @@ package workout_set
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	actionModel "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -21,10 +22,16 @@ type resolver struct {
 	workoutService    workout.Service
 	courseService     course.Service
 	actionService     action.Service
+	startAudioTool    uploader.Tool
+	ProgressAudioTool uploader.Tool
 }
 
-func New(workoutSetService workout_set.Service, workoutService workout.Service, courseService course.Service, actionService action.Service) Resolver {
-	return &resolver{workoutSetService: workoutSetService, workoutService: workoutService, courseService: courseService, actionService: actionService}
+func New(workoutSetService workout_set.Service, workoutService workout.Service,
+	courseService course.Service, actionService action.Service,
+	startAudioTool uploader.Tool, ProgressAudioTool uploader.Tool) Resolver {
+	return &resolver{workoutSetService: workoutSetService, workoutService: workoutService,
+		courseService: courseService, actionService: actionService,
+		startAudioTool: startAudioTool, ProgressAudioTool: ProgressAudioTool}
 }
 
 func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateUserWorkoutSetsInput) (output model.APICreateUserWorkoutSetsOutput) {
@@ -185,6 +192,84 @@ func (r *resolver) APIGetUserWorkoutSets(input *model.APIGetUserWorkoutSetsInput
 	}
 	output.Set(code.Success, "success")
 	output.Data = data
+	return output
+}
+
+func (r *resolver) APIUpdateUserWorkoutSet(tx *gorm.DB, input *model.APIUpdateUserWorkoutSetInput) (output model.APIUpdateUserWorkoutSetOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutSetID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此訓練組擁有者，無法修改資源")
+		return output
+	}
+	// 查詢訓練組資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutSetOutput, err := r.workoutSetService.Tx(tx).Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 修改訓練組
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := r.workoutSetService.Tx(tx).Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 上傳 start audio
+	if input.Form.StartAudio != nil {
+		// 儲存 start audio
+		startAudioNamed, err := r.startAudioTool.Save(input.Form.StartAudio.Data, input.Form.StartAudio.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練組
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.StartAudio = util.PointerString(startAudioNamed)
+		if err := r.workoutSetService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊的 start audio
+		_ = r.startAudioTool.Delete(util.OnNilJustReturnString(workoutSetOutput.StartAudio, ""))
+	}
+	// 上傳 progress audio
+	if input.Form.ProgressAudio != nil {
+		// 儲存 progress audio
+		endAudioNamed, err := r.ProgressAudioTool.Save(input.Form.ProgressAudio.Data, input.Form.ProgressAudio.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練組
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.ProgressAudio = util.PointerString(endAudioNamed)
+		if err := r.workoutSetService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊的 progress audio
+		_ = r.ProgressAudioTool.Delete(util.OnNilJustReturnString(workoutSetOutput.ProgressAudio, ""))
+	}
+	tx.Commit()
+	// parser output
+	output.Set(code.Success, "success")
 	return output
 }
 

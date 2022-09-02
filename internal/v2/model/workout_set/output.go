@@ -95,3 +95,8 @@ type APIGetUserWorkoutSetsData []*struct {
 		action.UpdateAtField
 	} `json:"action,omitempty"`
 }
+
+// APIUpdateUserWorkoutSetOutput /v2/user/workout_set/{workout_set_id} [PATCH]
+type APIUpdateUserWorkoutSetOutput struct {
+	base.Output
+}

@@ -1,6 +1,7 @@
 package workout_set
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
@@ -13,5 +14,7 @@ func NewResolver(db *gorm.DB) Resolver {
 	workoutService := workout.NewService(db)
 	courseService := course.NewService(db)
 	actionService := action.NewService(db)
-	return New(workoutSetService, workoutService, courseService, actionService)
+	startAudioTool := uploader.NewWorkoutSetStartAudioTool()
+	progressAudioTool := uploader.NewWorkoutSetProgressAudioTool()
+	return New(workoutSetService, workoutService, courseService, actionService, startAudioTool, progressAudioTool)
 }

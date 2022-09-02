@@ -31,7 +31,7 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 
 func (r *repository) Create(items []*model.Table) (ids []int64, err error) {
 	err = r.db.Model(&model.Table{}).Create(items).Error
-	for _, item := range items{
+	for _, item := range items {
 		if item.ID != nil {
 			ids = append(ids, *item.ID)
 		}
@@ -70,6 +70,11 @@ func (r *repository) List(input *model.ListInput) (output []*model.Output, amoun
 	// 查詢數據
 	err = db.Find(&output).Error
 	return output, amount, err
+}
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
+	return err
 }
 
 func (r *repository) Delete(input *model.DeleteInput) (err error) {
