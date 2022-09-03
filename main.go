@@ -32,6 +32,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_subscribe_info"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/workout"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/workout_set_order"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
@@ -200,6 +201,7 @@ func main() {
 	plan.SetRoute(v2)
 	workout.SetRoute(v2)
 	workoutSet.SetRoute(v2)
+	workout_set_order.SetRoute(v2)
 	food.SetRoute(v2)
 	food_category.SetRoute(v2)
 	meal.SetRoute(v2)

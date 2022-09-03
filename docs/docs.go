@@ -11619,6 +11619,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/user/workout/{workout_id}/workout_set_orders": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新用戶個人訓練組排序",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "更新用戶個人訓練組排序",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/workout_set_order.APIUpdateUserWorkoutSetOrderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set_order.APIUpdateUserWorkoutSetOrdersOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/workout/{workout_id}/workout_sets": {
             "get": {
                 "security": [
@@ -22087,6 +22139,48 @@ var doc = `{
             }
         },
         "workout_set.APIUpdateUserWorkoutSetOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set_order.APIUpdateUserWorkoutSetOrderBody": {
+            "type": "object",
+            "required": [
+                "workout_set_orders"
+            ],
+            "properties": {
+                "workout_set_orders": {
+                    "description": "訓練組排序",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "seq": {
+                                "description": "排序號",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "workout_set_id": {
+                                "description": "訓練組id",
+                                "type": "integer",
+                                "example": 1
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "workout_set_order.APIUpdateUserWorkoutSetOrdersOutput": {
             "type": "object",
             "properties": {
                 "code": {

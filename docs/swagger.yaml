@@ -7555,6 +7555,36 @@ definitions:
         example: message..
         type: string
     type: object
+  workout_set_order.APIUpdateUserWorkoutSetOrderBody:
+    properties:
+      workout_set_orders:
+        description: 訓練組排序
+        items:
+          properties:
+            seq:
+              description: 排序號
+              example: 1
+              type: integer
+            workout_set_id:
+              description: 訓練組id
+              example: 1
+              type: integer
+          type: object
+        type: array
+    required:
+    - workout_set_orders
+    type: object
+  workout_set_order.APIUpdateUserWorkoutSetOrdersOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
 info:
   contact: {}
   description: 健身平台 api
@@ -14724,6 +14754,39 @@ paths:
       security:
       - fitness_token: []
       summary: 刪除個人訓練前導語音
+      tags:
+      - 用戶個人課表_v2
+  /v2/user/workout/{workout_id}/workout_set_orders:
+    put:
+      consumes:
+      - application/json
+      description: 更新用戶個人訓練組排序
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/workout_set_order.APIUpdateUserWorkoutSetOrderBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/workout_set_order.APIUpdateUserWorkoutSetOrdersOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 更新用戶個人訓練組排序
       tags:
       - 用戶個人課表_v2
   /v2/user/workout/{workout_id}/workout_sets:
