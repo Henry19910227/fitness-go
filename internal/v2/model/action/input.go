@@ -57,3 +57,19 @@ type APIUpdateCMSActionForm struct {
 type APIUpdateCMSActionUri struct {
 	IDRequired
 }
+
+// APICreateUserActionInput /v2/user/action [POST] 新增個人動作 API
+type APICreateUserActionInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Cover *file.Input
+	Video *file.Input
+	Form APICreateUserActionForm
+}
+type APICreateUserActionForm struct {
+	NameRequired
+	TypeRequired
+	CategoryRequired
+	BodyRequired
+	EquipmentRequired
+	IntroRequired
+}

@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/action"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -17,6 +18,53 @@ type controller struct {
 
 func New(resolver action.Resolver) Controller {
 	return &controller{resolver: resolver}
+}
+
+// CreateUserAction 新增個人動作
+// @Summary 新增個人動作
+// @Description 查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param name formData int true "動作名稱(1~20字元)"`
+// @Param type formData int true "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)"`
+// @Param category formData int true "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"`
+// @Param body formData int true "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"`
+// @Param equipment formData int true "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"`
+// @Param intro formData string true "動作介紹(1~400字元)"`
+// @Param cover formData file true "課表封面照"
+// @Param video formData file false "影片檔"
+// @Success 200 {object} action.APICreateUserActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/action [POST]
+func (c *controller) CreateUserAction(ctx *gin.Context) {
+	input := model.APICreateUserActionInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBind(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	//獲取封面圖
+	file, fileHeader, err := ctx.Request.FormFile("cover")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if file != nil {
+		input.Cover = &fileModel.Input{}
+		input.Cover.Named = fileHeader.Filename
+		input.Cover.Data = file
+	}
+	//獲取訓練影片
+	file, fileHeader, _ = ctx.Request.FormFile("video")
+	if file != nil {
+		input.Video = &fileModel.Input{}
+		input.Video.Named = fileHeader.Filename
+		input.Video.Data = file
+	}
+	output := c.resolver.APICreateUserAction(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
 }
 
 // GetCMSActions 獲取動作列表

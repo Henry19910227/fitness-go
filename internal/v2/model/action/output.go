@@ -54,3 +54,12 @@ type APICreateCMSActionData struct {
 	CreateAtField
 	UpdateAtField
 }
+
+// APICreateUserActionOutput /v2/user/action [POST] 新增個人動作 API
+type APICreateUserActionOutput struct {
+	base.Output
+	Data *APICreateUserActionData `json:"data,omitempty"`
+}
+type APICreateUserActionData struct {
+	IDField
+}

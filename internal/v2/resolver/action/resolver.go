@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	actionService "github.com/Henry19910227/fitness-go/internal/v2/service/action"
+	"gorm.io/gorm"
 )
 
 type resolver struct {
@@ -18,6 +19,60 @@ type resolver struct {
 
 func New(actionService actionService.Service, coverUploadTool uploader.Tool, videoUploadTool uploader.Tool) Resolver {
 	return &resolver{actionService: actionService, coverUploadTool: coverUploadTool, videoUploadTool: videoUploadTool}
+}
+
+func (r *resolver) APICreateUserAction(tx *gorm.DB, input *model.APICreateUserActionInput) (output model.APICreateUserActionOutput) {
+	defer tx.Rollback()
+	table := model.Table{}
+	table.Source = util.PointerInt(model.SourceUser)
+	table.Cover = util.PointerString("")
+	table.Video = util.PointerString("")
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	actionOutput, err := r.actionService.Tx(tx).Create(&table)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if input.Video != nil {
+		videoNamed, err := r.videoUploadTool.Save(input.Video.Data, input.Video.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練組
+		table := model.Table{}
+		table.ID = actionOutput.ID
+		table.Video = util.PointerString(videoNamed)
+		if err := r.actionService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
+	if input.Cover != nil {
+		coverNamed, err := r.coverUploadTool.Save(input.Cover.Data, input.Cover.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練組
+		table := model.Table{}
+		table.ID = actionOutput.ID
+		table.Cover = util.PointerString(coverNamed)
+		if err := r.actionService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
+	tx.Commit()
+	// parser output
+	data := model.APICreateUserActionData{}
+	data.ID = actionOutput.ID
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
 }
 
 func (r *resolver) APIGetCMSActions(input *model.APIGetCMSActionsInput) (output model.APIGetCMSActionsOutput) {
