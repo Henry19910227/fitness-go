@@ -9,6 +9,8 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	actionService "github.com/Henry19910227/fitness-go/internal/v2/service/action"
 	"gorm.io/gorm"
+	"strconv"
+	"strings"
 )
 
 type resolver struct {
@@ -141,6 +143,90 @@ func (r *resolver) APIUpdateUserAction(tx *gorm.DB, input *model.APIUpdateUserAc
 	tx.Commit()
 	// parser output
 	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (output model.APIGetUserActionsOutput) {
+	// parser input
+	var sourceList []int
+	if input.Query.Source != nil {
+		if strings.Contains(*input.Query.Source, "2") {
+			output.Set(code.BadRequest, "搜索內容不可包含教練動作")
+			return output
+		}
+		for _, item := range strings.Split(*input.Query.Source, ",") {
+			opt, err := strconv.Atoi(item)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			sourceList = append(sourceList, opt)
+		}
+	} else {
+		sourceList = []int{1, 3}
+	}
+
+	var categoryList []int
+	if input.Query.Category != nil {
+		for _, item := range strings.Split(*input.Query.Category, ",") {
+			opt, err := strconv.Atoi(item)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			categoryList = append(categoryList, opt)
+		}
+	}
+
+	var bodyList []int
+	if input.Query.Body != nil {
+		for _, item := range strings.Split(*input.Query.Body, ",") {
+			opt, err := strconv.Atoi(item)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			bodyList = append(bodyList, opt)
+		}
+	}
+
+	var equipmentList []int
+	if input.Query.Equipment != nil {
+		for _, item := range strings.Split(*input.Query.Equipment, ",") {
+			opt, err := strconv.Atoi(item)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			equipmentList = append(equipmentList, opt)
+		}
+	}
+	// 查詢動作
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.Name = input.Query.Name
+	listInput.SourceList = sourceList
+	listInput.CategoryList = categoryList
+	listInput.EquipmentList = equipmentList
+	listInput.BodyList = bodyList
+	listInput.Size = input.Query.Size
+	listInput.Page = input.Query.Page
+	listInput.OrderField = "create_at"
+	listInput.OrderType = order_by.DESC
+	actionOutputs, page, err := r.actionService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetUserActionsData{}
+	if err := util.Parser(actionOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = &data
 	return output
 }
 

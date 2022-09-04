@@ -39,6 +39,19 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 	return output, page, err
 }
 
+func (s *service) UserActionList(input *model.UserActionListInput) (outputs []*model.Output, page *paging.Output, err error) {
+	output, amount, err := s.repository.UserActionList(input)
+	if err != nil {
+		return output, page, err
+	}
+	page = &paging.Output{}
+	page.TotalCount = int(amount)
+	page.TotalPage = util.Pagination(int(amount), input.Size)
+	page.Page = input.Page
+	page.Size = input.Size
+	return output, page, err
+}
+
 func (s *service) Create(item *model.Table) (output *model.Output, err error) {
 	item.Status = util.PointerInt(1)
 	item.IsDeleted = util.PointerInt(0)

@@ -68,3 +68,25 @@ type APICreateUserActionData struct {
 type APIUpdateUserActionOutput struct {
 	base.Output
 }
+
+// APIGetUserActionsOutput /v2/user/actions [GET] 獲取個人動作庫 API
+type APIGetUserActionsOutput struct {
+	base.Output
+	Data   *APIGetUserActionsData `json:"data,omitempty"`
+	Paging *paging.Output         `json:"paging,omitempty"`
+}
+type APIGetUserActionsData []*struct {
+	IDField
+	NameField
+	SourceField
+	TypeField
+	CategoryField
+	BodyField
+	EquipmentField
+	IntroField
+	CoverField
+	VideoField
+	StatusField
+	CreateAtField
+	UpdateAtField
+}
