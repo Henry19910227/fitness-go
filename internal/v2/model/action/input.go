@@ -73,3 +73,22 @@ type APICreateUserActionForm struct {
 	EquipmentRequired
 	IntroRequired
 }
+
+// APIUpdateUserActionInput /v2/user/action/{action_id} [PATCH] 修改個人動作 API
+type APIUpdateUserActionInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Cover *file.Input
+	Video *file.Input
+	Form APIUpdateUserActionForm
+	Uri APIUpdateUserActionUri
+}
+type APIUpdateUserActionForm struct {
+	NameOptional
+	CategoryOptional
+	BodyOptional
+	EquipmentOptional
+	IntroOptional
+}
+type APIUpdateUserActionUri struct {
+	IDRequired
+}

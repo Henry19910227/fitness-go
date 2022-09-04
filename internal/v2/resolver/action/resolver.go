@@ -24,6 +24,7 @@ func New(actionService actionService.Service, coverUploadTool uploader.Tool, vid
 func (r *resolver) APICreateUserAction(tx *gorm.DB, input *model.APICreateUserActionInput) (output model.APICreateUserActionOutput) {
 	defer tx.Rollback()
 	table := model.Table{}
+	table.UserID = util.PointerInt64(input.UserID)
 	table.Source = util.PointerInt(model.SourceUser)
 	table.Cover = util.PointerString("")
 	table.Video = util.PointerString("")
@@ -72,6 +73,74 @@ func (r *resolver) APICreateUserAction(tx *gorm.DB, input *model.APICreateUserAc
 	data.ID = actionOutput.ID
 	output.Set(code.Success, "success")
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIUpdateUserAction(tx *gorm.DB, input *model.APIUpdateUserActionInput) (output model.APIUpdateUserActionOutput) {
+	defer tx.Rollback()
+	// 查詢動作資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	actionOutput, err := r.actionService.Tx(tx).Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(actionOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此動作擁有者，無法修改資源")
+		return output
+	}
+	// 更新動作
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := r.actionService.Tx(tx).Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if input.Video != nil {
+		// 儲存影片
+		videoNamed, err := r.videoUploadTool.Save(input.Video.Data, input.Video.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改動作影片
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.Video = util.PointerString(videoNamed)
+		if err := r.actionService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊影片
+		_ = r.videoUploadTool.Delete(util.OnNilJustReturnString(actionOutput.Video, ""))
+	}
+	if input.Cover != nil {
+		// 儲存封面
+		coverNamed, err := r.coverUploadTool.Save(input.Cover.Data, input.Cover.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改封面
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.Cover = util.PointerString(coverNamed)
+		if err := r.actionService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊封面
+		_ = r.coverUploadTool.Delete(util.OnNilJustReturnString(actionOutput.Cover, ""))
+	}
+	tx.Commit()
+	// parser output
+	output.Set(code.Success, "success")
 	return output
 }
 

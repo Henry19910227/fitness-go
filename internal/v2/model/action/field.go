@@ -3,6 +3,9 @@ package action
 type IDField struct {
 	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"1"` //動作id
 }
+type UserIDField struct {
+	UserID *int64 `json:"user_id,omitempty" gorm:"column:user_id" example:"10001"` // 用戶id
+}
 type CourseIDField struct {
 	CourseID *int64 `json:"course_id,omitempty" gorm:"column:course_id" example:"10"` //課表id
 }
@@ -48,6 +51,7 @@ type UpdateAtField struct {
 
 type Table struct {
 	IDField
+	UserIDField
 	CourseIDField
 	NameField
 	SourceField

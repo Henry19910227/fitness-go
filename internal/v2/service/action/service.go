@@ -21,6 +21,11 @@ func (s *service) Tx(tx *gorm.DB) Service {
 	return NewService(tx)
 }
 
+func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {
+	output, err = s.repository.Find(input)
+	return output, err
+}
+
 func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
 	output, amount, err := s.repository.List(input)
 	if err != nil {

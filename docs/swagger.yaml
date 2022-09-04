@@ -153,6 +153,17 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  action.APIUpdateUserActionOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   bank_account.APIGetTrainerBankAccountData:
     properties:
       account:
@@ -14288,6 +14299,61 @@ paths:
       security:
       - fitness_token: []
       summary: 新增個人動作
+      tags:
+      - 用戶個人課表_v2
+  /v2/user/action/{action_id}:
+    patch:
+      consumes:
+      - application/json
+      description: 更新個人動作
+      parameters:
+      - description: 動作 id
+        in: path
+        name: action_id
+        required: true
+        type: integer
+      - description: 動作名稱(1~20字元)
+        in: formData
+        name: name
+        type: string
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: formData
+        name: category
+        type: integer
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: formData
+        name: body
+        type: integer
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        in: formData
+        name: equipment
+        type: integer
+      - description: 動作介紹(1~400字元)
+        in: formData
+        name: intro
+        type: string
+      - description: 課表封面照
+        in: formData
+        name: cover
+        type: file
+      - description: 影片檔
+        in: formData
+        name: video
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          schema:
+            $ref: '#/definitions/action.APIUpdateUserActionOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 更新個人動作
       tags:
       - 用戶個人課表_v2
   /v2/user/avatar:

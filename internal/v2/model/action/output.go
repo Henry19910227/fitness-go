@@ -63,3 +63,8 @@ type APICreateUserActionOutput struct {
 type APICreateUserActionData struct {
 	IDField
 }
+
+// APIUpdateUserActionOutput /v2/user/action/{action_id} [PATCH] 修改個人動作 API
+type APIUpdateUserActionOutput struct {
+	base.Output
+}
