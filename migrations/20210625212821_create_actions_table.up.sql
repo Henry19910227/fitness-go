@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS actions (
     `id` INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '動作id',
+    `user_id` INT(11) UNSIGNED COMMENT '用戶 id',
     `course_id` INT(11) UNSIGNED COMMENT '課表id',
     `name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '動作名稱',
     `source` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '動作來源(1:系統動作/2:教練動作/3:學員動作)',
@@ -14,5 +15,6 @@ CREATE TABLE IF NOT EXISTS actions (
     `is_deleted` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否刪除',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
     `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
-    CONSTRAINT fk_actions_course_id_to_courses_id FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE SET NULL
+    CONSTRAINT fk_actions_course_id_to_courses_id FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE SET NULL,
+    CONSTRAINT fk_actions_user_id_to_users_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8mb4 AUTO_INCREMENT = 1;
