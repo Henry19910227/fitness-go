@@ -142,6 +142,28 @@ func (c *controller) GetUserActions(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// DeleteUserAction 刪除個人動作
+// @Summary 刪除個人動作
+// @Description 刪除個人動作
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作id"
+// @Success 200 {object} action.APIDeleteUserActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/action/{action_id} [DELETE]
+func (c *controller) DeleteUserAction(ctx *gin.Context) {
+	var input model.APIDeleteUserActionInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteUserAction(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // DeleteUserActionVideo 刪除個人動作影片
 // @Summary 刪除個人動作影片
 // @Description 刪除個人動作影片

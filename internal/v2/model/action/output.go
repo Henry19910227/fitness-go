@@ -91,6 +91,11 @@ type APIGetUserActionsData []*struct {
 	UpdateAtField
 }
 
+// APIDeleteUserActionOutput /v2/user/action/{action_id} [DELETE]
+type APIDeleteUserActionOutput struct {
+	base.Output
+}
+
 // APIDeleteUserActionVideoOutput /v2/user/action/{action_id}/video [DELETE]
 type APIDeleteUserActionVideoOutput struct {
 	base.Output
