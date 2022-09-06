@@ -90,3 +90,8 @@ type APIGetUserActionsData []*struct {
 	CreateAtField
 	UpdateAtField
 }
+
+// APIDeleteUserActionVideoOutput /v2/user/action/{action_id}/video [DELETE]
+type APIDeleteUserActionVideoOutput struct {
+	base.Output
+}

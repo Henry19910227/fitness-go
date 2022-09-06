@@ -89,6 +89,10 @@ func (r *resolver) APIUpdateUserAction(tx *gorm.DB, input *model.APIUpdateUserAc
 		return output
 	}
 	// 驗證權限
+	if util.OnNilJustReturnInt(actionOutput.Source, 0) != model.SourceUser {
+		output.Set(code.BadRequest, "非此個人類型動作，無法修改資源")
+		return output
+	}
 	if util.OnNilJustReturnInt64(actionOutput.UserID, 0) != input.UserID {
 		output.Set(code.BadRequest, "非此動作擁有者，無法修改資源")
 		return output
@@ -227,6 +231,39 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 	output.Set(code.Success, "success")
 	output.Paging = page
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIDeleteUserActionVideo(input *model.APIDeleteUserActionVideoInput) (output model.APIDeleteUserActionVideoOutput) {
+	// 查詢動作資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	actionOutput, err := r.actionService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt(actionOutput.Source, 0) != model.SourceUser {
+		output.Set(code.BadRequest, "非此個人類型動作，無法修改資源")
+		return output
+	}
+	if util.OnNilJustReturnInt64(actionOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此動作擁有者，無法修改資源")
+		return output
+	}
+	// 修改訓練組
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	table.Video = util.PointerString("")
+	if err := r.actionService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除影片
+	_ = r.videoUploadTool.Delete(util.OnNilJustReturnString(actionOutput.Video, ""))
+
+	output.Set(code.Success, "success")
 	return output
 }
 
