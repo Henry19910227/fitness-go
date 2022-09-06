@@ -123,3 +123,12 @@ type APIGetUserActionsQuery struct {
 	Equipment *string `json:"equipment,omitempty" form:"equipment" binding:"omitempty,action_equipment" example:"1,3,5"`  //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
 	PagingInput
 }
+
+// APIDeleteUserActionVideoInput /v2/user/action/{action_id}/video
+type APIDeleteUserActionVideoInput struct {
+	UserIDRequired
+	Uri APIDeleteUserActionVideoUri
+}
+type APIDeleteUserActionVideoUri struct {
+	IDRequired
+}
