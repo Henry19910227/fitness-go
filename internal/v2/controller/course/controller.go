@@ -304,3 +304,27 @@ func (c *controller) GetUserCourse(ctx *gin.Context) {
 	output := c.resolver.APIGetUserCourse(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetTrainerCourses 獲取教練課表列表
+// @Summary 獲取教練課表列表
+// @Description 獲取教練課表列表
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_status query int false "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} course.APIGetTrainerCoursesOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/courses [GET]
+func (c *controller) GetTrainerCourses(ctx *gin.Context) {
+	var input model.APIGetTrainerCoursesInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetTrainerCourses(&input)
+	ctx.JSON(http.StatusOK, output)
+}

@@ -428,3 +428,28 @@ func (r *resolver) APIGetUserCourse(input *model.APIGetUserCourseInput) (output 
 	output.Data = &data
 	return output
 }
+
+func (r *resolver) APIGetTrainerCourses(input *model.APIGetTrainerCoursesInput) (output model.APIGetTrainerCoursesOutput) {
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.CourseStatus = util.PointerInt(input.Query.CourseStatus)
+	listInput.Size = input.Query.Size
+	listInput.Page = input.Query.Page
+	listInput.OrderField = "create_at"
+	listInput.OrderType = order_by.DESC
+	courseOutputs, page, err := r.courseService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetTrainerCoursesData{}
+	if err := util.Parser(courseOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = &data
+	return output
+}

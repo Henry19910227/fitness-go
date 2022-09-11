@@ -10719,6 +10719,62 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/courses": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練課表列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "獲取教練課表列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                        "name": "course_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetTrainerCoursesOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/profile": {
             "get": {
                 "security": [
@@ -13850,6 +13906,92 @@ var doc = `{
                                         "example": 10001
                                     }
                                 }
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-12 00:00:00"
+                            },
+                            "workout_count": {
+                                "description": "訓練總數",
+                                "type": "integer",
+                                "example": 50
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "course.APIGetTrainerCoursesOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "category": {
+                                "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "course_status": {
+                                "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                                "type": "integer",
+                                "example": 3
+                            },
+                            "cover": {
+                                "description": "課表封面",
+                                "type": "string",
+                                "example": "abc.png"
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-12 00:00:00"
+                            },
+                            "id": {
+                                "description": "課表 id",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "level": {
+                                "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                                "type": "integer",
+                                "example": 4
+                            },
+                            "name": {
+                                "description": "課表名稱",
+                                "type": "string",
+                                "example": "增肌課表"
+                            },
+                            "plan_count": {
+                                "description": "計畫總數",
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "sale_type": {
+                                "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
+                                "type": "integer",
+                                "example": 3
+                            },
+                            "schedule_type": {
+                                "description": "排課類別(1:單一訓練/2:多項計畫)",
+                                "type": "integer",
+                                "example": 2
                             },
                             "update_at": {
                                 "description": "更新時間",

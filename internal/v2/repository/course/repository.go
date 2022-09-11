@@ -75,7 +75,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 		db = db.Where("id = ?", *input.ID)
 	}
 	// user_id 篩選條件
-	if input.ID != nil {
+	if input.UserID != nil {
 		db = db.Where("user_id = ?", *input.UserID)
 	}
 	// name 篩選條件

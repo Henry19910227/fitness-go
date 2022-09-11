@@ -216,3 +216,24 @@ type APIGetUserCourseData struct {
 		user_course_statistic.DurationField
 	} `json:"user_course_statistic,omitempty"`
 }
+
+// APIGetTrainerCoursesOutput /v2/trainer/courses [GET]
+type APIGetTrainerCoursesOutput struct {
+	base.Output
+	Data   *APIGetTrainerCoursesData `json:"data,omitempty"`
+	Paging *paging.Output            `json:"paging,omitempty"`
+}
+type APIGetTrainerCoursesData []*struct {
+	IDField
+	SaleTypeField
+	CourseStatusField
+	CategoryField
+	ScheduleTypeField
+	NameField
+	CoverField
+	LevelField
+	PlanCountField
+	WorkoutCountField
+	CreateAtField
+	UpdateAtField
+}
