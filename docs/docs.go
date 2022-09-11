@@ -11959,6 +11959,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/user/workout/{workout_id}/workout_log": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人訓練紀錄",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "創建個人訓練紀錄",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/workout_log.APICreateUserWorkoutLogBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_log.APICreateUserWorkoutLogOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/workout/{workout_id}/workout_set_orders": {
             "put": {
                 "security": [
@@ -22245,6 +22297,198 @@ var doc = `{
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_log.APICreateUserWorkoutLogBody": {
+            "type": "object",
+            "required": [
+                "duration"
+            ],
+            "properties": {
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "intensity": {
+                    "description": "訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "place": {
+                    "description": "地點(0:未指定/1:住家/2:健身房/3:戶外)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "workout_set_logs": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "distance",
+                            "duration",
+                            "incline",
+                            "reps",
+                            "weight",
+                            "workout_set_id"
+                        ],
+                        "properties": {
+                            "distance": {
+                                "description": "距離(公里)",
+                                "type": "number",
+                                "example": 2.5
+                            },
+                            "duration": {
+                                "description": "時長(秒)",
+                                "type": "integer",
+                                "example": 30
+                            },
+                            "incline": {
+                                "description": "坡度",
+                                "type": "number",
+                                "example": 10.5
+                            },
+                            "reps": {
+                                "description": "次數",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "weight": {
+                                "description": "體重(公斤)",
+                                "type": "number",
+                                "example": 50.5
+                            },
+                            "workout_set_id": {
+                                "description": "訓練組id",
+                                "type": "integer",
+                                "example": 1
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "workout_log.APICreateUserWorkoutLogOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "distance": {
+                                "description": "距離(公里)",
+                                "type": "number",
+                                "example": 2.5
+                            },
+                            "duration": {
+                                "description": "時長(秒)",
+                                "type": "integer",
+                                "example": 30
+                            },
+                            "incline": {
+                                "description": "坡度",
+                                "type": "number",
+                                "example": 10.5
+                            },
+                            "new_record": {
+                                "description": "是否是新紀錄(0:否/1:是)",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "reps": {
+                                "description": "次數",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "weight": {
+                                "description": "體重(公斤)",
+                                "type": "number",
+                                "example": 50.5
+                            },
+                            "workout_set": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "description": "動作id",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "description": "動作名稱",
+                                                "type": "string",
+                                                "example": "划船機"
+                                            },
+                                            "source": {
+                                                "description": "動作來源(1:系統動作/2:教練動作/3:學員動作)",
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "type": {
+                                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        }
+                                    },
+                                    "distance": {
+                                        "description": "距離(公里)",
+                                        "type": "number",
+                                        "example": 2.5
+                                    },
+                                    "duration": {
+                                        "description": "時長(秒)",
+                                        "type": "integer",
+                                        "example": 30
+                                    },
+                                    "id": {
+                                        "description": "訓練 id",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "incline": {
+                                        "description": "坡度",
+                                        "type": "number",
+                                        "example": 10.5
+                                    },
+                                    "reps": {
+                                        "description": "次數",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "type": {
+                                        "description": "動作類別(1:動作/2:休息)",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "weight": {
+                                        "description": "重量(公斤)",
+                                        "type": "number",
+                                        "example": 50.5
+                                    }
+                                }
+                            },
+                            "workout_set_id": {
+                                "description": "訓練組id",
+                                "type": "integer",
+                                "example": 1
+                            }
+                        }
+                    }
                 },
                 "msg": {
                     "description": "訊息",

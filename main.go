@@ -31,6 +31,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_subscribe_info"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/workout"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/workout_log"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/workout_set_order"
 	"github.com/gin-gonic/gin"
@@ -200,6 +201,7 @@ func main() {
 	course.SetRoute(v2)
 	plan.SetRoute(v2)
 	workout.SetRoute(v2)
+	workout_log.SetRoute(v2)
 	workoutSet.SetRoute(v2)
 	workout_set_order.SetRoute(v2)
 	food.SetRoute(v2)
