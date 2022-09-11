@@ -15,6 +15,13 @@ func (Output) TableName() string {
 	return "workout_sets"
 }
 
+func (o Output) ActionOnSafe() action.Output {
+	if o.Action != nil {
+		return *o.Action
+	}
+	return action.Output{}
+}
+
 // APIGetCMSWorkoutSetsOutput v2/cms/workout/{workout_id}/workout_sets [GET] 獲取訓練組列表 API
 type APIGetCMSWorkoutSetsOutput struct {
 	base.Output
