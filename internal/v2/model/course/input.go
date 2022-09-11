@@ -150,3 +150,13 @@ type APIGetUserCourseInput struct {
 type APIGetUserCourseUri struct {
 	IDRequired
 }
+
+// APIGetTrainerCoursesInput /v2/trainer/courses [GET]
+type APIGetTrainerCoursesInput struct {
+	UserIDRequired
+	Query APIGetTrainerCoursesQuery
+}
+type APIGetTrainerCoursesQuery struct {
+	CourseStatusOptional
+	PagingInput
+}
