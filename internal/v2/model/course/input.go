@@ -160,3 +160,15 @@ type APIGetTrainerCoursesQuery struct {
 	CourseStatusOptional
 	PagingInput
 }
+
+// APICreateTrainerCourseInput /v2/trainer/course [POST]
+type APICreateTrainerCourseInput struct {
+	UserIDRequired
+	Body APICreateTrainerCourseBody
+}
+type APICreateTrainerCourseBody struct {
+	NameRequired
+	CategoryRequired
+	LevelRequired
+	ScheduleTypeRequired
+}

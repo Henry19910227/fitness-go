@@ -328,3 +328,30 @@ func (c *controller) GetTrainerCourses(ctx *gin.Context) {
 	output := c.resolver.APIGetTrainerCourses(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// CreateTrainerCourse 創建教練課表
+// @Summary 創建教練課表
+// @Description 創建教練課表
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body course.APICreateTrainerCourseBody true "輸入參數"
+// @Success 200 {object} course.APICreateTrainerCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/course [POST]
+func (c *controller) CreateTrainerCourse(ctx *gin.Context) {
+	var input model.APICreateTrainerCourseInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if input.Body.ScheduleType == model.SingleWorkout {
+		output := c.resolver.APICreateTrainerSingleWorkoutCourse(ctx.MustGet("tx").(*gorm.DB), &input)
+		ctx.JSON(http.StatusOK, output)
+		return
+	}
+	output := c.resolver.APICreateTrainerCourse(&input)
+	ctx.JSON(http.StatusOK, output)
+}

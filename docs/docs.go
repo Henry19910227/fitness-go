@@ -10719,6 +10719,51 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/course": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建教練課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "創建教練課表",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/course.APICreateTrainerCourseBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)",
+                        "schema": {
+                            "$ref": "#/definitions/course.APICreateTrainerCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/courses": {
             "get": {
                 "security": [
@@ -13486,6 +13531,65 @@ var doc = `{
                     "description": "數值",
                     "type": "number",
                     "example": 18.5
+                }
+            }
+        },
+        "course.APICreateTrainerCourseBody": {
+            "type": "object",
+            "required": [
+                "category",
+                "level",
+                "name",
+                "schedule_type"
+            ],
+            "properties": {
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
+        "course.APICreateTrainerCourseData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
+        "course.APICreateTrainerCourseOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/course.APICreateTrainerCourseData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

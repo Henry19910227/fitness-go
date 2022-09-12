@@ -237,3 +237,12 @@ type APIGetTrainerCoursesData []*struct {
 	CreateAtField
 	UpdateAtField
 }
+
+// APICreateTrainerCourseOutput /v2/trainer/course [POST]
+type APICreateTrainerCourseOutput struct {
+	base.Output
+	Data *APICreateTrainerCourseData `json:"data,omitempty"`
+}
+type APICreateTrainerCourseData struct {
+	IDField
+}
