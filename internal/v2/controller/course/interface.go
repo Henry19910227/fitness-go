@@ -17,4 +17,5 @@ type Controller interface {
 	GetUserCourse(ctx *gin.Context)
 
 	GetTrainerCourses(ctx *gin.Context)
+	CreateTrainerCourse(ctx *gin.Context)
 }
