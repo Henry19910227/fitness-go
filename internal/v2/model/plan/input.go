@@ -81,3 +81,16 @@ type APIUpdateUserPlanUri struct {
 type APIUpdateUserPlanBody struct {
 	NameRequired
 }
+
+// APICreateTrainerPlanInput /v2/trainer/course/{course_id}/plan [POST]
+type APICreateTrainerPlanInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APICreateTrainerPlanUri
+	Body   APICreateTrainerPlanBody
+}
+type APICreateTrainerPlanUri struct {
+	CourseIDRequired
+}
+type APICreateTrainerPlanBody struct {
+	NameRequired
+}

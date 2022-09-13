@@ -10746,6 +10746,58 @@
                 }
             }
         },
+        "/v2/trainer/course/{course_id}/plan": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人教練計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "創建個人教練計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/plan.APICreateTrainerPlanBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APICreateTrainerPlanOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/courses": {
             "get": {
                 "security": [
@@ -19245,6 +19297,47 @@
                     "description": "總頁數",
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "plan.APICreateTrainerPlanBody": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "description": "計畫名稱",
+                    "type": "string",
+                    "example": "減脂計畫"
+                }
+            }
+        },
+        "plan.APICreateTrainerPlanData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "計畫id",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "plan.APICreateTrainerPlanOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/plan.APICreateTrainerPlanData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },

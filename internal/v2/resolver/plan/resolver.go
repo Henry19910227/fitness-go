@@ -205,3 +205,57 @@ func (r *resolver) APIUpdateUserPlan(input *model.APIUpdateUserPlanInput) (outpu
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APICreateTrainerPlan(tx *gorm.DB, input *model.APICreateTrainerPlanInput) (output model.APICreateTrainerPlanOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.ID = util.PointerInt64(input.Uri.CourseID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout && util.OnNilJustReturnInt(courseOutput.PlanCount, 0) >= 1 {
+		output.Set(code.BadRequest, "已達計畫數量上限，無法創建資源")
+		return output
+	}
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
+		return output
+	}
+	// 創建計畫
+	planTable := model.Table{}
+	planTable.CourseID = util.PointerInt64(input.Uri.CourseID)
+	planTable.Name = util.PointerString(input.Body.Name)
+	planTable.WorkoutCount = util.PointerInt(0)
+	planID, err := r.planService.Tx(tx).Create(&planTable)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢該課表下計畫個數
+	planListInput := model.ListInput{}
+	planListInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+	planOutputs, _, err := r.planService.Tx(tx).List(&planListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新課表計畫個數
+	courseTable := courseModel.Table{}
+	courseTable.ID = util.PointerInt64(input.Uri.CourseID)
+	courseTable.PlanCount = util.PointerInt(len(planOutputs))
+	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// Parser Output
+	data := model.APICreateTrainerPlanData{}
+	data.ID = util.PointerInt64(planID)
+	output.Data = &data
+	output.SetStatus(code.Success)
+	return output
+}
