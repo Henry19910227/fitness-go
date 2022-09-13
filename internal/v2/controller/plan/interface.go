@@ -10,4 +10,6 @@ type Controller interface {
 	DeleteUserPlan(ctx *gin.Context)
 	GetUserPlans(ctx *gin.Context)
 	UpdateUserPlan(ctx *gin.Context)
+
+	CreateTrainerPlan(ctx *gin.Context)
 }

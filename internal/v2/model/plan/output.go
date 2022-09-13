@@ -81,3 +81,12 @@ type APIGetUserPlansData []*struct {
 type APIUpdateUserPlanOutput struct {
 	base.Output
 }
+
+// APICreateTrainerPlanOutput /v2/trainer/course/{course_id}/plan [POST]
+type APICreateTrainerPlanOutput struct {
+	base.Output
+	Data *APICreateTrainerPlanData `json:"data,omitempty"`
+}
+type APICreateTrainerPlanData struct {
+	IDField
+}

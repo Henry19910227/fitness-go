@@ -160,3 +160,30 @@ func (c *controller) UpdateUserPlan(ctx *gin.Context) {
 	output := c.resolver.APIUpdateUserPlan(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// CreateTrainerPlan 創建教練計畫
+// @Summary 創建個人教練計畫
+// @Description 創建個人教練計畫
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Param json_body body plan.APICreateTrainerPlanBody true "輸入參數"
+// @Success 200 {object} plan.APICreateTrainerPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/course/{course_id}/plan [POST]
+func (c *controller) CreateTrainerPlan(ctx *gin.Context) {
+	var input model.APICreateTrainerPlanInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateTrainerPlan(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}

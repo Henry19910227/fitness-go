@@ -11,4 +11,6 @@ type Resolver interface {
 	APIDeleteUserPlan(tx *gorm.DB, input *model.APIDeleteUserPlanInput) (output model.APIDeleteUserPlanOutput)
 	APIGetUserPlans(input *model.APIGetUserPlansInput) (output model.APIGetUserPlansOutput)
 	APIUpdateUserPlan(input *model.APIUpdateUserPlanInput) (output model.APIUpdateUserPlanOutput)
+
+	APICreateTrainerPlan(tx *gorm.DB, input *model.APICreateTrainerPlanInput) (output model.APICreateTrainerPlanOutput)
 }
