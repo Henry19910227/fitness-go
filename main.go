@@ -31,6 +31,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_subscribe_info"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_subscribe_monthly_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/user_unsubscribe_monthly_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/workout"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/workout_log"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
@@ -222,6 +223,7 @@ func main() {
 	user_subscribe_info.SetRoute(v2)
 	bank_account.SetRoute(v2)
 	user_subscribe_monthly_statistic.SetRoute(v2)
+	user_unsubscribe_monthly_statistic.SetRoute(v2)
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }
 
