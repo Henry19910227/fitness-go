@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS user_register_monthly_statistics;
