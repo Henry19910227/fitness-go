@@ -13,31 +13,31 @@ type TotalField struct {
 	Total *int `json:"total,omitempty" gorm:"column:total" example:"1000"` //當月總創建數
 }
 type FreeField struct {
-	Free *int `json:"free,omitempty" gorm:"column:free" example:"200"` //免費課表訓練數
+	Free *int `json:"free,omitempty" gorm:"column:free" example:"200"` //免費課表創建數
 }
 type SubscribeField struct {
-	Subscribe *int `json:"subscribe,omitempty" gorm:"column:subscribe" example:"400"` //訂閱課表訓練數
+	Subscribe *int `json:"subscribe,omitempty" gorm:"column:subscribe" example:"400"` //訂閱課表創建數
 }
 type ChargeField struct {
-	Charge *int `json:"charge,omitempty" gorm:"column:charge" example:"400"` //付費課表訓練數
+	Charge *int `json:"charge,omitempty" gorm:"column:charge" example:"400"` //付費課表創建數
 }
 type AerobicField struct {
-	Aerobic *int `json:"aerobic,omitempty" gorm:"column:charge" example:"100"` //有氧課表訓練數
+	Aerobic *int `json:"aerobic,omitempty" gorm:"column:charge" example:"100"` //有氧課表創建數
 }
 type IntervalTrainingField struct {
-	IntervalTraining *int `json:"interval_training,omitempty" gorm:"column:interval_training" example:"100"` //間歇肌力訓練課表訓練數
+	IntervalTraining *int `json:"interval_training,omitempty" gorm:"column:interval_training" example:"100"` //間歇肌力訓練課表創建數
 }
 type WeightTrainingField struct {
-	WeightTraining *int `json:"weight_training,omitempty" gorm:"column:weight_training" example:"200"` //重量訓練課表訓練數
+	WeightTraining *int `json:"weight_training,omitempty" gorm:"column:weight_training" example:"200"` //重量訓練課表創建數
 }
 type ResistanceTrainingField struct {
-	ResistanceTraining *int `json:"resistance_training,omitempty" gorm:"column:resistance_training" example:"200"` //阻力訓練課表訓練數
+	ResistanceTraining *int `json:"resistance_training,omitempty" gorm:"column:resistance_training" example:"200"` //阻力訓練課表創建數
 }
 type BodyweightTrainingField struct {
-	BodyweightTraining *int `json:"bodyweight_training,omitempty" gorm:"column:bodyweight_training" example:"200"` //徒手訓練課表訓練數
+	BodyweightTraining *int `json:"bodyweight_training,omitempty" gorm:"column:bodyweight_training" example:"200"` //徒手訓練課表創建數
 }
 type OtherTrainingField struct {
-	OtherTraining *int `json:"other_training,omitempty" gorm:"column:other_training" example:"200"` //付費課表訓練數
+	OtherTraining *int `json:"other_training,omitempty" gorm:"column:other_training" example:"200"` //付費課表創建數
 }
 type CreateAtField struct {
 	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at" example:"2022-06-14 00:00:00"` //創建時間

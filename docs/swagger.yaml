@@ -1417,15 +1417,15 @@ definitions:
   course_create_monthly_statistic.APIGetCMSCourseCreateStatisticData:
     properties:
       aerobic:
-        description: 有氧課表訓練數
+        description: 有氧課表創建數
         example: 100
         type: integer
       bodyweight_training:
-        description: 徒手訓練課表訓練數
+        description: 徒手訓練課表創建數
         example: 200
         type: integer
       charge:
-        description: 付費課表訓練數
+        description: 付費課表創建數
         example: 400
         type: integer
       create_at:
@@ -1433,7 +1433,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       free:
-        description: 免費課表訓練數
+        description: 免費課表創建數
         example: 200
         type: integer
       id:
@@ -1441,7 +1441,7 @@ definitions:
         example: 1
         type: integer
       interval_training:
-        description: 間歇肌力訓練課表訓練數
+        description: 間歇肌力訓練課表創建數
         example: 100
         type: integer
       month:
@@ -1449,15 +1449,15 @@ definitions:
         example: 12
         type: integer
       other_training:
-        description: 付費課表訓練數
+        description: 付費課表創建數
         example: 200
         type: integer
       resistance_training:
-        description: 阻力訓練課表訓練數
+        description: 阻力訓練課表創建數
         example: 200
         type: integer
       subscribe:
-        description: 訂閱課表訓練數
+        description: 訂閱課表創建數
         example: 400
         type: integer
       total:
@@ -1469,7 +1469,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       weight_training:
-        description: 重量訓練課表訓練數
+        description: 重量訓練課表創建數
         example: 200
         type: integer
       year:
@@ -1485,6 +1485,82 @@ definitions:
         type: integer
       data:
         $ref: '#/definitions/course_create_monthly_statistic.APIGetCMSCourseCreateStatisticData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticData:
+    properties:
+      aerobic:
+        description: 有氧課表上架數
+        example: 100
+        type: integer
+      bodyweight_training:
+        description: 徒手訓練課表上架數
+        example: 200
+        type: integer
+      charge:
+        description: 付費課表上架數
+        example: 400
+        type: integer
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      free:
+        description: 免費課表上架數
+        example: 200
+        type: integer
+      id:
+        description: 報表id
+        example: 1
+        type: integer
+      interval_training:
+        description: 間歇肌力訓練課表上架數
+        example: 100
+        type: integer
+      month:
+        description: 月份
+        example: 12
+        type: integer
+      other_training:
+        description: 付費課表上架數
+        example: 200
+        type: integer
+      resistance_training:
+        description: 阻力訓練課表上架數
+        example: 200
+        type: integer
+      subscribe:
+        description: 訂閱課表上架數
+        example: 400
+        type: integer
+      total:
+        description: 當月總上架數
+        example: 1000
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      weight_training:
+        description: 重量訓練課表上架數
+        example: 200
+        type: integer
+      year:
+        description: 年份
+        example: 2022
+        type: integer
+    type: object
+  course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticData'
       msg:
         description: 訊息
         example: message..
@@ -13959,6 +14035,38 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取課表創建統計月報表
+      tags:
+      - CMS數據管理_v2
+  /v2/cms/statistic_monthly/course/release:
+    get:
+      consumes:
+      - application/json
+      description: 獲取課表上架統計月報表
+      parameters:
+      - description: 年份
+        in: query
+        name: year
+        required: true
+        type: integer
+      - description: 月份
+        in: query
+        name: month
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取課表上架統計月報表
       tags:
       - CMS數據管理_v2
   /v2/cms/statistic_monthly/user/register:
