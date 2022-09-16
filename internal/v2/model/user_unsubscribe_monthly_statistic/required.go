@@ -4,10 +4,10 @@ type IDRequired struct {
 	ID int64 `json:"id" example:"1"` //報表id
 }
 type YearRequired struct {
-	Year int `json:"year" form:"year" example:"2022"` //年份
+	Year int `json:"year" form:"year" binding:"required,max=2500" example:"2022"` //年份
 }
 type MonthRequired struct {
-	Month int `json:"month" form:"month" example:"12"` //月份
+	Month int `json:"month" form:"month" binding:"required,min=1,max=12" example:"12"` //月份
 }
 type MaleRequired struct {
 	Male int `json:"male" example:"600"` //男性退訂人數
