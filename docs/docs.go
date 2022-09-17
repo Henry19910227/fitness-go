@@ -9255,6 +9255,56 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/statistic_monthly/course/training": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表訓練統計月報表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS數據管理_v2"
+                ],
+                "summary": "獲取課表訓練統計月報表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "年份",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "月份",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course_training_monthly_statistic.APIGetCMSCourseTrainingStatisticOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/statistic_monthly/user/promote": {
             "get": {
                 "security": [
@@ -15038,6 +15088,104 @@ var doc = `{
                 },
                 "data": {
                     "$ref": "#/definitions/course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "course_training_monthly_statistic.APIGetCMSCourseTrainingStatisticData": {
+            "type": "object",
+            "properties": {
+                "aerobic": {
+                    "description": "有氧課表訓練數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "bodyweight_training": {
+                    "description": "徒手訓練課表訓練數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "charge": {
+                    "description": "付費課表訓練數",
+                    "type": "integer",
+                    "example": 400
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "free": {
+                    "description": "免費課表訓練數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "id": {
+                    "description": "報表id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "interval_training": {
+                    "description": "間歇肌力訓練課表訓練數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer",
+                    "example": 12
+                },
+                "other_training": {
+                    "description": "付費課表訓練數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "resistance_training": {
+                    "description": "阻力訓練課表訓練數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "subscribe": {
+                    "description": "訂閱課表訓練數",
+                    "type": "integer",
+                    "example": 400
+                },
+                "total": {
+                    "description": "當月總訓練數",
+                    "type": "integer",
+                    "example": 1000
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "weight_training": {
+                    "description": "重量訓練課表訓練數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer",
+                    "example": 2022
+                }
+            }
+        },
+        "course_training_monthly_statistic.APIGetCMSCourseTrainingStatisticOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/course_training_monthly_statistic.APIGetCMSCourseTrainingStatisticData"
                 },
                 "msg": {
                     "description": "訊息",
