@@ -31,6 +31,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/review_image"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/user_promote_monthly_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_register_monthly_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_subscribe_info"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_subscribe_monthly_statistic"
@@ -230,6 +231,7 @@ func main() {
 	user_register_monthly_statistic.SetRoute(v2)
 	course_create_monthly_statistic.SetRoute(v2)
 	course_release_monthly_statistic.SetRoute(v2)
+	user_promote_monthly_statistic.SetRoute(v2)
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }
 

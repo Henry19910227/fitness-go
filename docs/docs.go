@@ -9255,6 +9255,56 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/statistic_monthly/user/promote": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取用戶晉升教練統計月報表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS數據管理_v2"
+                ],
+                "summary": "獲取用戶晉升教練統計月報表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "年份",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "月份",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/user_promote_monthly_statistic.APIGetCMSUserPromoteStatisticOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/statistic_monthly/user/register": {
             "get": {
                 "security": [
@@ -22113,6 +22163,134 @@ var doc = `{
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "user_promote_monthly_statistic.APIGetCMSUserPromoteStatisticData": {
+            "type": "object",
+            "properties": {
+                "age_13_17": {
+                    "description": "13-17歲註冊人數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "age_18_24": {
+                    "description": "18-24歲註冊人數",
+                    "type": "integer",
+                    "example": 150
+                },
+                "age_25_34": {
+                    "description": "25-34歲註冊人數",
+                    "type": "integer",
+                    "example": 250
+                },
+                "age_35_44": {
+                    "description": "35_44歲註冊人數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "age_45_54": {
+                    "description": "45_54歲註冊人數",
+                    "type": "integer",
+                    "example": 150
+                },
+                "age_55_64": {
+                    "description": "55_64歲註冊人數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "age_65_up": {
+                    "description": "65+歲註冊人數",
+                    "type": "integer",
+                    "example": 50
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "exp_11_15": {
+                    "description": "11-15年經驗晉升教練人數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "exp_16_19": {
+                    "description": "16-19年經驗晉升教練人數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "exp_1_3": {
+                    "description": "1-3年經驗晉升教練人數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "exp_20_up": {
+                    "description": "20+年經驗晉升教練人數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "exp_4_6": {
+                    "description": "4-6年經驗晉升教練人數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "exp_7_10": {
+                    "description": "7-10年經驗晉升教練人數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "female": {
+                    "description": "女性註冊人數",
+                    "type": "integer",
+                    "example": 400
+                },
+                "id": {
+                    "description": "報表id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "male": {
+                    "description": "男性註冊人數",
+                    "type": "integer",
+                    "example": 600
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer",
+                    "example": 12
+                },
+                "total": {
+                    "description": "當月總註冊人數",
+                    "type": "integer",
+                    "example": 1000
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer",
+                    "example": 2022
+                }
+            }
+        },
+        "user_promote_monthly_statistic.APIGetCMSUserPromoteStatisticOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/user_promote_monthly_statistic.APIGetCMSUserPromoteStatisticData"
                 },
                 "msg": {
                     "description": "訊息",
