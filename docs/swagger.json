@@ -9287,6 +9287,63 @@
                 }
             }
         },
+        "/v2/cms/statistic_monthly/course_category/training": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表分類訓練統計月報表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS數據管理_v2"
+                ],
+                "summary": "獲取課表分類訓練統計月報表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                        "name": "category",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "年份",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "月份",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/statistic_monthly/user/promote": {
             "get": {
                 "security": [
@@ -14874,6 +14931,109 @@
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticData": {
+            "type": "object",
+            "properties": {
+                "age_13_17": {
+                    "description": "13-17歲訂閱人數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "age_18_24": {
+                    "description": "18-24歲訂閱人數",
+                    "type": "integer",
+                    "example": 150
+                },
+                "age_25_34": {
+                    "description": "25-34歲訂閱人數",
+                    "type": "integer",
+                    "example": 250
+                },
+                "age_35_44": {
+                    "description": "35_44歲訂閱人數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "age_45_54": {
+                    "description": "45_54歲訂閱人數",
+                    "type": "integer",
+                    "example": 150
+                },
+                "age_55_64": {
+                    "description": "55_64歲訂閱人數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "age_65_up": {
+                    "description": "65+歲訂閱人數",
+                    "type": "integer",
+                    "example": 50
+                },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "female": {
+                    "description": "女性訂閱人數",
+                    "type": "integer",
+                    "example": 400
+                },
+                "id": {
+                    "description": "報表id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "male": {
+                    "description": "男性訂閱人數",
+                    "type": "integer",
+                    "example": 600
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer",
+                    "example": 12
+                },
+                "total": {
+                    "description": "當月總訂閱人數",
+                    "type": "integer",
+                    "example": 1000
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer",
+                    "example": 2022
+                }
+            }
+        },
+        "course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticData"
                 },
                 "msg": {
                     "description": "訊息",
