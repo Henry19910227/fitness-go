@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS user_promote_monthly_statistics;
