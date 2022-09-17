@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS course_training_monthly_statistics;
