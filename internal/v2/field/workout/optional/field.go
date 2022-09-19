@@ -1,4 +1,4 @@
-package workout
+package optional
 
 type IDField struct {
 	ID *int64 `json:"id,omitempty" gorm:"column:id" example:"1"` // 訓練 id
@@ -7,10 +7,10 @@ type PlanIDField struct {
 	PlanID *int64 `json:"plan_id,omitempty" gorm:"column:plan_id" example:"1"` // 計畫 id
 }
 type NameField struct {
-	Name *string `json:"name,omitempty" gorm:"column:name" example:"腿部訓練"` // 訓練名稱
+	Name *string `json:"name,omitempty" form:"name" gorm:"column:name" binding:"omitempty,min=1,max=40" example:"腿部訓練"` // 訓練名稱
 }
 type EquipmentField struct {
-	Equipment *string `json:"equipment,omitempty" gorm:"column:equipment" example:"2,3,6"` // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+	Equipment *string `json:"equipment,omitempty" form:"equipment" gorm:"column:equipment" binding:"omitempty,min=0,max=10" example:"2,3,6"` // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
 }
 type StartAudioField struct {
 	StartAudio *string `json:"start_audio,omitempty" gorm:"column:start_audio" example:"123.mp3"` // 前導語音
@@ -26,20 +26,4 @@ type CreateAtField struct {
 }
 type UpdateAtField struct {
 	UpdateAt *string `json:"update_at,omitempty" gorm:"column:update_at" example:"2022-06-14 00:00:00"` //更新時間
-}
-
-type Table struct {
-	IDField
-	PlanIDField
-	NameField
-	EquipmentField
-	StartAudioField
-	EndAudioField
-	WorkoutSetCountField
-	CreateAtField
-	UpdateAtField
-}
-
-func (Table) TableName() string {
-	return "workouts"
 }

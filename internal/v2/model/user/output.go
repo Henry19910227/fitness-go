@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
@@ -112,12 +113,12 @@ type APILoginForEmailData struct {
 	CreateAtField
 	UpdateAtField
 	Trainer *struct {
-		trainer.NicknameField
-		trainer.AvatarField
-		trainer.TrainerStatusField
-		trainer.TrainerLevelField
-		trainer.CreateAtField
-		trainer.UpdateAtField
+		optional.NicknameField
+		optional.AvatarField
+		optional.TrainerStatusField
+		optional.TrainerLevelField
+		optional.CreateAtField
+		optional.UpdateAtField
 	} `json:"trainer,omitempty"`
 	UserSubscribeInfo *struct {
 		user_subscribe_info.StatusField

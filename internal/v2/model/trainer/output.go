@@ -1,6 +1,7 @@
 package trainer
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/certificate"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -10,9 +11,9 @@ import (
 
 type Output struct {
 	Table
-	TrainerAlbums *[]trainer_albums.Output `json:"trainer_album_photos,omitempty" gorm:"foreignKey:user_id;references:user_id"`
-	Certificates  *[]certificate.Output    `json:"certificates,omitempty" gorm:"foreignKey:user_id;references:user_id"`
-	TrainerStatistic  *trainer_statistic.Output    `json:"trainer_statistic,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	TrainerAlbums    *[]trainer_albums.Output  `json:"trainer_album_photos,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	Certificates     *[]certificate.Output     `json:"certificates,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	TrainerStatistic *trainer_statistic.Output `json:"trainer_statistic,omitempty" gorm:"foreignKey:user_id;references:user_id"`
 }
 
 func (Output) TableName() string {
@@ -26,17 +27,17 @@ type APIGetTrainerProfileOutput struct {
 }
 type APIGetTrainerProfileData struct {
 	Table
-	Certificates []*struct{
+	Certificates []*struct {
 		certificate.IDField
 		certificate.ImageField
 		certificate.NameField
 	} `json:"certificates,omitempty"`
-	TrainerAlbumPhotos []*struct{
+	TrainerAlbumPhotos []*struct {
 		trainer_albums.IDField
 		trainer_albums.PhotoField
 		trainer_albums.CreateAtField
 	} `json:"trainer_album_photos,omitempty"`
-	TrainerStatistic *struct{
+	TrainerStatistic *struct {
 		trainer_statistic.CourseCount
 		trainer_statistic.ReviewScore
 		trainer_statistic.StudentCount
@@ -50,10 +51,10 @@ type APIGetFavoriteTrainersOutput struct {
 	Paging *paging.Output             `json:"paging,omitempty"`
 }
 type APIGetFavoriteTrainersData []*struct {
-	UserIDField
-	NicknameField
-	SkillField
-	AvatarField
+	optional.UserIDField
+	optional.NicknameField
+	optional.SkillField
+	optional.AvatarField
 }
 
 // APIUpdateCMSTrainerAvatarOutput /v2/cms/trainer/{user_id}/avatar [PATCH] 獲取課表詳細 API

@@ -2,7 +2,8 @@ package course
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
-	course2 "github.com/Henry19910227/fitness-go/internal/v2/entity/course"
+	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	courseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -71,10 +72,10 @@ func (c *controller) GetCMSCourses(ctx *gin.Context) {
 	type pagingInput paging.Input
 	type orderByInput orderBy.Input
 	var query struct {
-		course2.IDField
-		course2.NameField
-		course2.CourseStatusField
-		course2.SaleTypeField
+		courseOptional.IDField
+		courseOptional.NameField
+		courseOptional.CourseStatusField
+		courseOptional.SaleTypeField
 		pagingInput
 		orderByInput
 	}
@@ -104,7 +105,7 @@ func (c *controller) GetCMSCourses(ctx *gin.Context) {
 // @Router /v2/cms/course/{course_id} [GET]
 func (c *controller) GetCMSCourse(ctx *gin.Context) {
 	var uri struct {
-		course2.IDField
+		courseOptional.IDField
 	}
 	if err := ctx.ShouldBindUri(&uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
@@ -154,7 +155,7 @@ func (c *controller) UpdateCMSCoursesStatus(ctx *gin.Context) {
 // @Router /v2/cms/course/{course_id}/cover [PATCH]
 func (c *controller) UpdateCMSCoursesCover(ctx *gin.Context) {
 	var uri struct {
-		course2.IDRequired
+		courseRequired.IDField
 	}
 	if err := ctx.ShouldBindUri(&uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))

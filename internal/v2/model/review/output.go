@@ -1,7 +1,7 @@
 package review
 
 import (
-	course2 "github.com/Henry19910227/fitness-go/internal/v2/entity/course"
+	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -36,8 +36,8 @@ type APIGetCMSReviewsData []*struct {
 		user.NicknameField
 	} `json:"user,omitempty"`
 	Course *struct {
-		course2.IDField
-		course2.NameField
+		courseOptional.IDField
+		courseOptional.NameField
 	} `json:"course,omitempty"`
 	Images []*struct {
 		review_image.IDField

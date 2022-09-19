@@ -1,6 +1,7 @@
 package plan
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_plan_statistic"
@@ -35,14 +36,14 @@ type APIGetCMSPlansData []*struct {
 	CreateAtField
 	UpdateAtField
 	Workouts []*struct {
-		workout.IDField
-		workout.NameField
-		workout.EquipmentField
-		workout.StartAudioField
-		workout.EndAudioField
-		workout.WorkoutSetCountField
-		workout.CreateAtField
-		workout.UpdateAtField
+		optional.IDField
+		optional.NameField
+		optional.EquipmentField
+		optional.StartAudioField
+		optional.EndAudioField
+		optional.WorkoutSetCountField
+		optional.CreateAtField
+		optional.UpdateAtField
 	} `json:"workouts,omitempty"`
 }
 

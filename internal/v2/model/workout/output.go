@@ -1,6 +1,7 @@
 package workout
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
 )
@@ -20,7 +21,7 @@ type APICreateUserWorkoutOutput struct {
 	Data *APICreateUserWorkoutData `json:"data,omitempty"`
 }
 type APICreateUserWorkoutData struct {
-	IDField
+	optional.IDField
 }
 
 // APIDeleteUserWorkoutOutput /v2/user/workout/{workout_id} [DELETE]
@@ -37,15 +38,15 @@ type APIGetUserWorkoutsData []*struct {
 	APIGetUserWorkoutsDataItem
 }
 type APIGetUserWorkoutsDataItem struct {
-	IDField
-	NameField
-	EquipmentField
-	StartAudioField
-	EndAudioField
-	WorkoutSetCountField
+	optional.IDField
+	optional.NameField
+	optional.EquipmentField
+	optional.StartAudioField
+	optional.EndAudioField
+	optional.WorkoutSetCountField
 	Finish *int `json:"finish" example:"1"` // 是否完成(0:未完成/2:已完成)
-	CreateAtField
-	UpdateAtField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APIUpdateUserWorkoutOutput /v2/user/workout/{workout_id} [PATCH]

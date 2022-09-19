@@ -2,7 +2,6 @@ package course
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
-	course2 "github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/course"
@@ -22,7 +21,7 @@ func (s *service) Tx(tx *gorm.DB) Service {
 	return NewService(tx)
 }
 
-func (s *service) Create(item *course2.Table) (id int64, err error) {
+func (s *service) Create(item *model.Table) (id int64, err error) {
 	item.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
 	item.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
 	id, err = s.repository.Create(item)
@@ -94,9 +93,9 @@ func (s *service) ChargeList(input *model.ChargeListInput) (outputs []*model.Out
 	return output, page, err
 }
 
-func (s *service) Updates(items []*course2.Table) (err error) {
+func (s *service) Updates(items []*model.Table) (err error) {
 	// 查找須更新的資料
-	itemMap := make(map[int64]*course2.Table)
+	itemMap := make(map[int64]*model.Table)
 	courseIDs := make([]int64, 0)
 	for _, item := range items {
 		courseIDs = append(courseIDs, *item.ID)
@@ -109,7 +108,7 @@ func (s *service) Updates(items []*course2.Table) (err error) {
 		return err
 	}
 	// 將output轉換為table
-	tables := make([]*course2.Table, 0)
+	tables := make([]*model.Table, 0)
 	err = util.Parser(outputs, &tables)
 	if err != nil {
 		return err
@@ -131,7 +130,7 @@ func (s *service) Updates(items []*course2.Table) (err error) {
 	return err
 }
 
-func (s *service) Update(item *course2.Table) (err error) {
+func (s *service) Update(item *model.Table) (err error) {
 	input := model.FindInput{}
 	input.ID = item.ID
 	output, err := s.repository.Find(&input)
@@ -139,7 +138,7 @@ func (s *service) Update(item *course2.Table) (err error) {
 		return err
 	}
 	// 將output轉換為table
-	var table course2.Table
+	var table model.Table
 	err = util.Parser(output, &table)
 	if err != nil {
 		return err
