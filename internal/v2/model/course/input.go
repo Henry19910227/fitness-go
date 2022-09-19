@@ -1,6 +1,7 @@
 package course
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -18,7 +19,7 @@ type GenerateInput struct {
 }
 
 type FindInput struct {
-	IDOptional
+	course.IDOptional
 	PlanID       *int64 `json:"plan_id,omitempty"`        // 計畫 id
 	WorkoutID    *int64 `json:"workout_id,omitempty"`     // 訓練 id
 	WorkoutSetID *int64 `json:"workout_set_id,omitempty"` // 訓練組 id
@@ -26,15 +27,16 @@ type FindInput struct {
 }
 
 type DeleteInput struct {
-	IDRequired
+	course.IDRequired
 }
 
 type ListInput struct {
-	IDOptional
-	UserIDOptional
-	NameOptional
-	CourseStatusOptional
-	SaleTypeOptional
+	course.IDOptional
+	course.UserIDOptional
+	course.NameOptional
+	course.CourseStatusOptional
+	course.SaleTypeOptional
+	SaleTypes           []int // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
 	IgnoredCourseStatus []int // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	IDs                 []int64
 	PagingInput
@@ -43,21 +45,21 @@ type ListInput struct {
 }
 
 type FavoriteListInput struct {
-	UserIDOptional
+	course.UserIDOptional
 	PagingInput
 	PreloadInput
 	OrderByInput
 }
 
 type ProgressListInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	PagingInput
 	PreloadInput
 	OrderByInput
 }
 
 type ChargeListInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	PagingInput
 	PreloadInput
 	OrderByInput
@@ -65,7 +67,7 @@ type ChargeListInput struct {
 
 // APIGetFavoriteCoursesInput /v2/favorite/courses [GET]
 type APIGetFavoriteCoursesInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	Form APIGetFavoriteCoursesForm
 }
 type APIGetFavoriteCoursesForm struct {
@@ -74,35 +76,35 @@ type APIGetFavoriteCoursesForm struct {
 
 // APIGetCMSCoursesInput /v2/cms/courses [GET]
 type APIGetCMSCoursesInput struct {
-	IDOptional
-	NameOptional
-	CourseStatusOptional
-	SaleTypeOptional
+	course.IDOptional
+	course.NameOptional
+	course.CourseStatusOptional
+	course.SaleTypeOptional
 	PagingInput
 	OrderByInput
 }
 
 // APIGetCMSCourseInput /v2/cms/course/{course_id} [GET]
 type APIGetCMSCourseInput struct {
-	IDRequired
+	course.IDRequired
 }
 
 // APIUpdateCMSCoursesStatusInput /v2/cms/courses/course_status [PATCH]
 type APIUpdateCMSCoursesStatusInput struct {
 	IDs []int64 `json:"ids" binding:"required"` // 課表 id
-	CourseStatusRequired
+	course.CourseStatusRequired
 }
 
 // APIUpdateCMSCourseCoverInput /v2/cms/course/{course_id}/cover [PATCH]
 type APIUpdateCMSCourseCoverInput struct {
-	IDRequired
+	course.IDRequired
 	CoverNamed string
 	File       multipart.File
 }
 
 // APIGetUserCoursesInput /v2/user/courses [GET]
 type APIGetUserCoursesInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	Query APIGetUserCoursesQuery
 }
 type APIGetUserCoursesQuery struct {
@@ -112,63 +114,63 @@ type APIGetUserCoursesQuery struct {
 
 // APICreateUserCourseInput /v2/user/course [POST]
 type APICreateUserCourseInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	Body APICreateUserCourseBody
 }
 type APICreateUserCourseBody struct {
-	NameRequired
-	ScheduleTypeRequired
+	course.NameRequired
+	course.ScheduleTypeRequired
 }
 
 // APIDeleteUserCourseInput /v2/user/course/{course_id} [DELETE]
 type APIDeleteUserCourseInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	Uri APIDeleteUserCourseUri
 }
 type APIDeleteUserCourseUri struct {
-	IDRequired
+	course.IDRequired
 }
 
 // APIUpdateUserCourseInput /v2/user/course/{course_id} [UPDATE]
 type APIUpdateUserCourseInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	Uri  APIUpdateUserCourseUri
 	Body APIUpdateUserCourseBody
 }
 type APIUpdateUserCourseUri struct {
-	IDRequired
+	course.IDRequired
 }
 type APIUpdateUserCourseBody struct {
-	NameOptional
+	course.NameOptional
 }
 
 // APIGetUserCourseInput /v2/user/course/{course_id} [GET]
 type APIGetUserCourseInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	Uri APIGetUserCourseUri
 }
 type APIGetUserCourseUri struct {
-	IDRequired
+	course.IDRequired
 }
 
 // APIGetTrainerCoursesInput /v2/trainer/courses [GET]
 type APIGetTrainerCoursesInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	Query APIGetTrainerCoursesQuery
 }
 type APIGetTrainerCoursesQuery struct {
-	CourseStatusOptional
+	course.CourseStatusOptional
 	PagingInput
 }
 
 // APICreateTrainerCourseInput /v2/trainer/course [POST]
 type APICreateTrainerCourseInput struct {
-	UserIDRequired
+	course.UserIDRequired
 	Body APICreateTrainerCourseBody
 }
 type APICreateTrainerCourseBody struct {
-	NameRequired
-	CategoryRequired
-	LevelRequired
-	ScheduleTypeRequired
+	course.NameRequired
+	course.CategoryRequired
+	course.LevelRequired
+	course.ScheduleTypeRequired
 }

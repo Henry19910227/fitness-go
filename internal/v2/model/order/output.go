@@ -1,8 +1,8 @@
 package order
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"

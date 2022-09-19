@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	course2 "github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -83,7 +84,7 @@ func (r *resolver) APICreateUserWorkout(tx *gorm.DB, input *model.APICreateUserW
 		return output
 	}
 	// 更新此課表訓練數量
-	courseTable := courseModel.Table{}
+	courseTable := course2.Table{}
 	courseTable.ID = courseOutput.ID
 	courseTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
 	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {
@@ -142,7 +143,7 @@ func (r *resolver) APIDeleteUserWorkout(tx *gorm.DB, input *model.APIDeleteUserW
 		return output
 	}
 	// 更新此課表訓練數量
-	courseTable := courseModel.Table{}
+	courseTable := course2.Table{}
 	courseTable.ID = courseOutput.ID
 	courseTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
 	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {
