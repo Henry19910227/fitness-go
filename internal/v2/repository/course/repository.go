@@ -2,7 +2,6 @@ package course
 
 import (
 	"fmt"
-	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"gorm.io/gorm"
 )
@@ -19,8 +18,8 @@ func (r *repository) WithTrx(tx *gorm.DB) Repository {
 	return New(tx)
 }
 
-func (r *repository) Create(item *course.Table) (id int64, err error) {
-	err = r.db.Model(&course.Table{}).Create(&item).Error
+func (r *repository) Create(item *model.Table) (id int64, err error) {
+	err = r.db.Model(&model.Table{}).Create(&item).Error
 	if err != nil {
 		return 0, err
 	}
@@ -28,7 +27,7 @@ func (r *repository) Create(item *course.Table) (id int64, err error) {
 }
 
 func (r *repository) Delete(input *model.DeleteInput) (err error) {
-	err = r.db.Where("id = ?", input.ID).Delete(&course.Table{}).Error
+	err = r.db.Where("id = ?", input.ID).Delete(&model.Table{}).Error
 	return err
 }
 
@@ -216,12 +215,12 @@ func (r *repository) ChargeList(input *model.ChargeListInput) (outputs []*model.
 	return outputs, amount, err
 }
 
-func (r *repository) Updates(items []*course.Table) (err error) {
-	err = r.db.Model(&course.Table{}).Save(&items).Error
+func (r *repository) Updates(items []*model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Save(&items).Error
 	return err
 }
 
-func (r *repository) Update(item *course.Table) (err error) {
-	err = r.db.Model(&course.Table{}).Where("id = ?", *item.ID).Save(item).Error
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
 	return err
 }

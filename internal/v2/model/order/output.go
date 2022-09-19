@@ -1,13 +1,13 @@
 package order
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
+	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
+	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/subscribe_plan"
 )
 
@@ -30,17 +30,17 @@ type APICreateCourseOrderData struct {
 	Table
 	OrderCourse *struct {
 		Course *struct {
-			course.IDField
-			course.NameField
+			courseOptional.IDField
+			courseOptional.NameField
 		} `json:"course,omitempty"`
 		SaleItem *struct {
-			sale_item.IDField
-			sale_item.TypeField
+			saleItemOptional.IDField
+			saleItemOptional.TypeField
 			ProductLabel *struct {
-				product_label.IDField
-				product_label.NameField
-				product_label.ProductIDField
-				product_label.TwdField
+				productLabelOptional.IDField
+				productLabelOptional.NameField
+				productLabelOptional.ProductIDField
+				productLabelOptional.TwdField
 			} `json:"product_label,omitempty"`
 		} `json:"sale_item,omitempty"`
 	} `json:"order_course,omitempty"`
@@ -59,10 +59,10 @@ type APICreateSubscribeOrderData struct {
 			subscribe_plan.PeriodField
 			subscribe_plan.NameField
 			ProductLabel *struct {
-				product_label.IDField
-				product_label.NameField
-				product_label.ProductIDField
-				product_label.TwdField
+				productLabelOptional.IDField
+				productLabelOptional.NameField
+				productLabelOptional.ProductIDField
+				productLabelOptional.TwdField
 			} `json:"product_label,omitempty"`
 		} `json:"subscribe_plan,omitempty"`
 	} `json:"order_subscribe_plan,omitempty"`
@@ -84,17 +84,17 @@ type APIGetCMSOrdersData []*struct {
 	UpdateAtField
 	OrderCourse *struct {
 		Course *struct {
-			course.IDField
-			course.NameField
+			courseOptional.IDField
+			courseOptional.NameField
 		} `json:"course,omitempty"`
 		SaleItem *struct {
-			sale_item.IDField
-			sale_item.TypeField
+			saleItemOptional.IDField
+			saleItemOptional.TypeField
 			ProductLabel *struct {
-				product_label.IDField
-				product_label.NameField
-				product_label.ProductIDField
-				product_label.TwdField
+				productLabelOptional.IDField
+				productLabelOptional.NameField
+				productLabelOptional.ProductIDField
+				productLabelOptional.TwdField
 			} `json:"product_label,omitempty"`
 		} `json:"sale_item,omitempty"`
 	} `json:"order_course,omitempty"`
@@ -104,10 +104,10 @@ type APIGetCMSOrdersData []*struct {
 			subscribe_plan.PeriodField
 			subscribe_plan.NameField
 			ProductLabel *struct {
-				product_label.IDField
-				product_label.NameField
-				product_label.ProductIDField
-				product_label.TwdField
+				productLabelOptional.IDField
+				productLabelOptional.NameField
+				productLabelOptional.ProductIDField
+				productLabelOptional.TwdField
 			} `json:"product_label,omitempty"`
 		} `json:"subscribe_plan,omitempty"`
 	} `json:"order_subscribe_plan,omitempty"`

@@ -1,11 +1,13 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
+	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
+	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
+	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
-	productLabel "github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/review_statistic"
 	saleItem "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
@@ -13,7 +15,7 @@ import (
 )
 
 type Output struct {
-	course.Table
+	Table
 	Trainer                    *trainer.Output                       `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"`                    // 教練
 	SaleItem                   *saleItem.Output                      `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`                       // 銷售項目
 	ReviewStatistic            *review_statistic.Output              `json:"review_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`              // 評分統計
@@ -32,21 +34,21 @@ type APIGetFavoriteCoursesOutput struct {
 	Paging *paging.Output            `json:"paging,omitempty"`
 }
 type APIGetFavoriteCoursesData []*struct {
-	course.IDField
-	course.SaleTypeField
-	course.CategoryField
-	course.ScheduleTypeField
-	course.NameField
-	course.CoverField
-	course.LevelField
-	course.TrainTargetField
-	course.PlanCountField
-	course.WorkoutCountField
-	course.CreateAtField
-	course.UpdateAtField
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.LevelField
+	courseOptional.TrainTargetField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
 	Trainer *struct {
-		trainer.UserIDField
-		trainer.NicknameField
+		trainerOptional.UserIDField
+		trainerOptional.NicknameField
 	} `json:"trainer,omitempty"`
 	ReviewStatistic struct {
 		review_statistic.ScoreTotalRequired
@@ -61,23 +63,23 @@ type APIGetCMSCoursesOutput struct {
 	Paging *paging.Output       `json:"paging,omitempty"`
 }
 type APIGetCMSCoursesData []*struct {
-	course.IDField
-	course.NameField
-	course.CourseStatusField
-	course.ScheduleTypeField
-	course.SaleTypeField
-	course.CreateAtField
+	courseOptional.IDField
+	courseOptional.NameField
+	courseOptional.CourseStatusField
+	courseOptional.ScheduleTypeField
+	courseOptional.SaleTypeField
+	courseOptional.CreateAtField
 	Trainer *struct {
-		trainer.UserIDField
-		trainer.NicknameField
+		trainerOptional.UserIDField
+		trainerOptional.NicknameField
 	} `json:"trainer,omitempty"`
 	SaleItem *struct {
-		saleItem.IDField
-		saleItem.NameField
+		saleItemOptional.IDField
+		saleItemOptional.NameField
 		ProductLabel *struct {
-			productLabel.IDField
-			productLabel.ProductIDField
-			productLabel.TwdField
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 }
@@ -88,32 +90,32 @@ type APIGetCMSCourseOutput struct {
 	Data *APIGetCMSCourseData `json:"data,omitempty"`
 }
 type APIGetCMSCourseData struct {
-	course.IDField
-	course.UserIDField
-	course.SaleTypeField
-	course.CourseStatusField
-	course.CategoryField
-	course.ScheduleTypeField
-	course.NameField
-	course.CoverField
-	course.IntroField
-	course.FoodField
-	course.LevelField
-	course.SuitField
-	course.EquipmentField
-	course.PlaceField
-	course.TrainTargetField
-	course.BodyTargetField
-	course.NoticeField
-	course.CreateAtField
-	course.UpdateAtField
+	courseOptional.IDField
+	courseOptional.UserIDField
+	courseOptional.SaleTypeField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.IntroField
+	courseOptional.FoodField
+	courseOptional.LevelField
+	courseOptional.SuitField
+	courseOptional.EquipmentField
+	courseOptional.PlaceField
+	courseOptional.TrainTargetField
+	courseOptional.BodyTargetField
+	courseOptional.NoticeField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
 	SaleItem *struct {
-		saleItem.IDField
-		saleItem.NameField
+		saleItemOptional.IDField
+		saleItemOptional.NameField
 		ProductLabel *struct {
-			productLabel.IDField
-			productLabel.ProductIDField
-			productLabel.TwdField
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 }
@@ -130,7 +132,7 @@ type APICreateUserCourseOutput struct {
 	Data *APICreateUserCourseData `json:"data,omitempty"`
 }
 type APICreateUserCourseData struct {
-	course.IDField
+	courseOptional.IDField
 }
 
 // APIGetUserCoursesOutput /v2/user/courses [GET]
@@ -140,30 +142,30 @@ type APIGetUserCoursesOutput struct {
 	Paging *paging.Output        `json:"paging,omitempty"`
 }
 type APIGetUserCoursesData []*struct {
-	course.IDField
-	course.SaleTypeField
-	course.CourseStatusField
-	course.CategoryField
-	course.ScheduleTypeField
-	course.NameField
-	course.CoverField
-	course.PlanCountField
-	course.WorkoutCountField
-	course.CreateAtField
-	course.UpdateAtField
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
 	Trainer *struct {
-		trainer.UserIDField
-		trainer.AvatarField
-		trainer.NicknameField
-		trainer.SkillField
+		trainerOptional.UserIDField
+		trainerOptional.AvatarField
+		trainerOptional.NicknameField
+		trainerOptional.SkillField
 	} `json:"trainer,omitempty"`
 	SaleItem *struct {
-		saleItem.IDField
-		saleItem.NameField
+		saleItemOptional.IDField
+		saleItemOptional.NameField
 		ProductLabel *struct {
-			productLabel.IDField
-			productLabel.ProductIDField
-			productLabel.TwdField
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 	ReviewStatistic struct {
@@ -188,30 +190,30 @@ type APIGetUserCourseOutput struct {
 	Data *APIGetUserCourseData `json:"data,omitempty"`
 }
 type APIGetUserCourseData struct {
-	course.IDField
-	course.SaleTypeField
-	course.CourseStatusField
-	course.CategoryField
-	course.ScheduleTypeField
-	course.NameField
-	course.CoverField
-	course.PlanCountField
-	course.WorkoutCountField
-	course.CreateAtField
-	course.UpdateAtField
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
 	Trainer *struct {
-		trainer.UserIDField
-		trainer.AvatarField
-		trainer.NicknameField
-		trainer.SkillField
+		trainerOptional.UserIDField
+		trainerOptional.AvatarField
+		trainerOptional.NicknameField
+		trainerOptional.SkillField
 	} `json:"trainer,omitempty"`
 	SaleItem *struct {
-		saleItem.IDField
-		saleItem.NameField
+		saleItemOptional.IDField
+		saleItemOptional.NameField
 		ProductLabel *struct {
-			productLabel.IDField
-			productLabel.ProductIDField
-			productLabel.TwdField
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 	UserCourseStatistic *struct {
@@ -227,18 +229,18 @@ type APIGetTrainerCoursesOutput struct {
 	Paging *paging.Output            `json:"paging,omitempty"`
 }
 type APIGetTrainerCoursesData []*struct {
-	course.IDField
-	course.SaleTypeField
-	course.CourseStatusField
-	course.CategoryField
-	course.ScheduleTypeField
-	course.NameField
-	course.CoverField
-	course.LevelField
-	course.PlanCountField
-	course.WorkoutCountField
-	course.CreateAtField
-	course.UpdateAtField
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.LevelField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
 }
 
 // APICreateTrainerCourseOutput /v2/trainer/course [POST]
@@ -247,5 +249,5 @@ type APICreateTrainerCourseOutput struct {
 	Data *APICreateTrainerCourseData `json:"data,omitempty"`
 }
 type APICreateTrainerCourseData struct {
-	course.IDField
+	courseOptional.IDField
 }

@@ -1,7 +1,8 @@
 package banner
 
 import (
-	course2 "github.com/Henry19910227/fitness-go/internal/v2/entity/course"
+	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -31,12 +32,12 @@ type APIGetBannersData []*struct {
 	CreateAtField
 	UpdateAtField
 	Trainer *struct {
-		trainer.UserIDField
-		trainer.NicknameField
+		trainerOptional.UserIDField
+		trainerOptional.NicknameField
 	} `json:"trainer,omitempty"`
 	Course *struct {
-		course2.IDField
-		course2.NameField
+		courseOptional.IDField
+		courseOptional.NameField
 	} `json:"course,omitempty"`
 }
 
@@ -71,11 +72,11 @@ type APIGetCMSBannersData []*struct {
 	CreateAtField
 	UpdateAtField
 	Trainer *struct {
-		trainer.UserIDField
-		trainer.NicknameField
+		trainerOptional.UserIDField
+		trainerOptional.NicknameField
 	} `json:"trainer,omitempty"`
 	Course *struct {
-		course2.IDField
-		course2.NameField
+		courseOptional.IDField
+		courseOptional.NameField
 	} `json:"course,omitempty"`
 }

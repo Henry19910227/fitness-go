@@ -2,6 +2,7 @@ package trainer
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/required"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/trainer"
@@ -76,7 +77,7 @@ func (c *controller) GetFavoriteTrainers(ctx *gin.Context) {
 // @Router /v2/cms/trainer/{user_id}/avatar [PATCH]
 func (c *controller) UpdateCMSTrainerAvatar(ctx *gin.Context) {
 	var uri struct {
-		model.UserIDRequired
+		required.UserIDField
 	}
 	if err := ctx.ShouldBindUri(&uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))

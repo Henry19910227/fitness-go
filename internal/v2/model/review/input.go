@@ -1,7 +1,7 @@
 package review
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
+	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -22,7 +22,7 @@ type DeleteInput struct {
 }
 
 type ListInput struct {
-	course.NameOptional
+	courseOptional.NameField
 	user.NicknameOptional
 	ScoreOptional
 	PreloadInput
@@ -35,7 +35,7 @@ type APIGetCMSReviewsInput struct {
 	Query APIGetCMSReviewsQuery
 }
 type APIGetCMSReviewsQuery struct {
-	course.NameOptional
+	courseOptional.NameField
 	user.NicknameOptional
 	ScoreOptional
 	OrderByInput

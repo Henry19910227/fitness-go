@@ -3,7 +3,6 @@ package plan
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
-	course2 "github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -91,7 +90,7 @@ func (r *resolver) APICreateUserPlan(tx *gorm.DB, input *model.APICreateUserPlan
 		return output
 	}
 	// 更新課表計畫個數
-	courseTable := course2.Table{}
+	courseTable := courseModel.Table{}
 	courseTable.ID = util.PointerInt64(input.Uri.CourseID)
 	courseTable.PlanCount = util.PointerInt(len(planOutputs))
 	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {
@@ -146,7 +145,7 @@ func (r *resolver) APIDeleteUserPlan(tx *gorm.DB, input *model.APIDeleteUserPlan
 		return output
 	}
 	// 更新此課表計畫與訓練數量
-	courseTable := course2.Table{}
+	courseTable := courseModel.Table{}
 	courseTable.ID = courseOutput.ID
 	courseTable.PlanCount = util.PointerInt(len(planOutputs))
 	courseTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
@@ -245,7 +244,7 @@ func (r *resolver) APICreateTrainerPlan(tx *gorm.DB, input *model.APICreateTrain
 		return output
 	}
 	// 更新課表計畫個數
-	courseTable := course2.Table{}
+	courseTable := courseModel.Table{}
 	courseTable.ID = util.PointerInt64(input.Uri.CourseID)
 	courseTable.PlanCount = util.PointerInt(len(planOutputs))
 	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {

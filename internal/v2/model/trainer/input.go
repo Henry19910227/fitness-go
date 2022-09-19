@@ -1,6 +1,8 @@
 package trainer
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/required"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -12,19 +14,19 @@ type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
 
 type FindInput struct {
-	UserIDOptional
+	optional.UserIDField
 	PreloadInput
 }
 
 type ListInput struct {
-	UserIDOptional
+	optional.UserIDField
 	PreloadInput
 	PagingInput
 	OrderByInput
 }
 
 type FavoriteListInput struct {
-	UserIDOptional
+	optional.UserIDField
 	PagingInput
 	PreloadInput
 	OrderByInput
@@ -32,19 +34,19 @@ type FavoriteListInput struct {
 
 // APIGetTrainerProfileInput /v2/trainer/profile [PATCH]
 type APIGetTrainerProfileInput struct {
-	UserIDRequired
+	required.UserIDField
 }
 
 // APIUpdateCMSTrainerAvatarInput /v2/cms/trainer/avatar [PATCH]
 type APIUpdateCMSTrainerAvatarInput struct {
-	UserIDRequired
+	required.UserIDField
 	CoverNamed string
 	File       multipart.File
 }
 
 // APIGetFavoriteTrainersInput /v2/favorite/trainers [GET]
 type APIGetFavoriteTrainersInput struct {
-	UserIDRequired
+	required.UserIDField
 	Form APIGetFavoriteTrainersForm
 }
 type APIGetFavoriteTrainersForm struct {

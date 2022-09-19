@@ -1,16 +1,16 @@
 package course_training_avg_statistic
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
-	"github.com/Henry19910227/fitness-go/internal/v2/entity/course_training_avg_statistic"
+	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	avgOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course_training_avg_statistic/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
+	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
-	productLabel "github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
-	saleItem "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 )
 
 type Output struct {
-	course_training_avg_statistic.Table
+	Table
 }
 
 func (Output) TableName() string {
@@ -24,21 +24,21 @@ type APIGetCMSCourseTrainingAvgStatisticOutput struct {
 	Paging *paging.Output                           `json:"paging,omitempty"`
 }
 type APIGetCMSCourseTrainingAvgStatisticData []*struct {
-	course.IDField
-	course.NameField
-	course.CourseStatusField
-	course.ScheduleTypeField
-	course.SaleTypeField
+	courseOptional.IDField
+	courseOptional.NameField
+	courseOptional.CourseStatusField
+	courseOptional.ScheduleTypeField
+	courseOptional.SaleTypeField
 	SaleItem *struct {
-		saleItem.IDField
-		saleItem.NameField
+		saleItemOptional.IDField
+		saleItemOptional.NameField
 		ProductLabel *struct {
-			productLabel.IDField
-			productLabel.ProductIDField
-			productLabel.TwdField
+			optional.IDField
+			optional.ProductIDField
+			optional.TwdField
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 	CourseTrainingAvgStatistic struct {
-		course_training_avg_statistic.RateRequired
+		avgOptional.RateField
 	} `json:"course_training_avg_statistic,omitempty"`
 }

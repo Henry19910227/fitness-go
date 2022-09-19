@@ -5,7 +5,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
-	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -126,9 +125,9 @@ func (r *resolver) APIGetCMSCourse(ctx *gin.Context, input *model.APIGetCMSCours
 }
 
 func (r *resolver) APIUpdateCMSCoursesStatus(input *model.APIUpdateCMSCoursesStatusInput) (output base.Output) {
-	tables := make([]*course.Table, 0)
+	tables := make([]*model.Table, 0)
 	for _, courseID := range input.IDs {
-		table := course.Table{}
+		table := model.Table{}
 		table.ID = util.PointerInt64(courseID)
 		table.CourseStatus = &input.CourseStatus
 		tables = append(tables, &table)
@@ -147,7 +146,7 @@ func (r *resolver) APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverI
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	table := course.Table{}
+	table := model.Table{}
 	table.ID = util.PointerInt64(input.ID)
 	table.Cover = util.PointerString(fileNamed)
 	if err := r.courseService.Update(&table); err != nil {
@@ -160,7 +159,7 @@ func (r *resolver) APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverI
 }
 
 func (r *resolver) APICreateUserCourse(input *model.APICreateUserCourseInput) (output model.APICreateUserCourseOutput) {
-	table := course.Table{}
+	table := model.Table{}
 	table.UserID = util.PointerInt64(input.UserID)
 	table.SaleType = util.PointerInt(model.SaleTypePersonal)
 	table.ScheduleType = util.PointerInt(model.MultiplePlan)
@@ -197,7 +196,7 @@ func (r *resolver) APICreateUserCourse(input *model.APICreateUserCourseInput) (o
 func (r *resolver) APICreateUserSingleWorkoutCourse(tx *gorm.DB, input *model.APICreateUserCourseInput) (output model.APICreateUserCourseOutput) {
 	defer tx.Rollback()
 	//創建單一訓練課表
-	table := course.Table{}
+	table := model.Table{}
 	table.UserID = util.PointerInt64(input.UserID)
 	table.SaleType = util.PointerInt(model.SaleTypePersonal)
 	table.ScheduleType = util.PointerInt(model.SingleWorkout)
@@ -392,7 +391,7 @@ func (r *resolver) APIUpdateUserCourse(input *model.APIUpdateUserCourseInput) (o
 		return output
 	}
 	// 修改課表
-	table := course.Table{}
+	table := model.Table{}
 	table.ID = util.PointerInt64(input.Uri.ID)
 	if err := util.Parser(input.Body, &table); err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -456,7 +455,7 @@ func (r *resolver) APIGetTrainerCourses(input *model.APIGetTrainerCoursesInput) 
 }
 
 func (r *resolver) APICreateTrainerCourse(input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput) {
-	table := course.Table{}
+	table := model.Table{}
 	table.UserID = util.PointerInt64(input.UserID)
 	table.SaleType = util.PointerInt(model.SaleTypeNone)
 	table.ScheduleType = util.PointerInt(model.MultiplePlan)
@@ -493,7 +492,7 @@ func (r *resolver) APICreateTrainerCourse(input *model.APICreateTrainerCourseInp
 func (r *resolver) APICreateTrainerSingleWorkoutCourse(tx *gorm.DB, input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput) {
 	defer tx.Rollback()
 	//創建單一訓練課表
-	table := course.Table{}
+	table := model.Table{}
 	table.UserID = util.PointerInt64(input.UserID)
 	table.SaleType = util.PointerInt(model.SaleTypeNone)
 	table.ScheduleType = util.PointerInt(model.SingleWorkout)

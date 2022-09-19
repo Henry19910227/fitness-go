@@ -1,6 +1,7 @@
 package receipt
 
 import (
+	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
@@ -29,9 +30,9 @@ type APIGetCMSOrderReceiptsData []*struct {
 	QuantityField
 	CreateAtField
 	ProductLabel *struct {
-		product_label.IDField
-		product_label.NameField
-		product_label.ProductIDField
-		product_label.TwdField
+		productLabelOptional.IDField
+		productLabelOptional.NameField
+		productLabelOptional.ProductIDField
+		productLabelOptional.TwdField
 	} `json:"product_label,omitempty"`
 }

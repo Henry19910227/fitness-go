@@ -1,6 +1,8 @@
 package workout
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -13,18 +15,18 @@ type OrderByInput = orderBy.Input
 
 type ListInput struct {
 	CourseID *int64 `json:"course_id,omitempty" gorm:"column:course_id" example:"10"` //課表id
-	PlanIDField
+	optional.PlanIDField
 	PagingInput
 	OrderByInput
 	PreloadInput
 }
 
 type FindInput struct {
-	IDOptional
+	optional.IDField
 }
 
 type DeleteInput struct {
-	IDRequired
+	required.IDField
 }
 
 // APICreateUserWorkoutInput /v2/user/plan/{plan_id}/workout [POST]
@@ -34,10 +36,10 @@ type APICreateUserWorkoutInput struct {
 	Body   APICreateUserWorkoutBody
 }
 type APICreateUserWorkoutUri struct {
-	PlanIDRequired
+	required.PlanIDField
 }
 type APICreateUserWorkoutBody struct {
-	NameRequired
+	required.NameField
 }
 
 // APIDeleteUserWorkoutInput /v2/user/workout/{workout_id} [DELETE]
@@ -46,7 +48,7 @@ type APIDeleteUserWorkoutInput struct {
 	Uri    APIDeleteUserWorkoutUri
 }
 type APIDeleteUserWorkoutUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIGetUserWorkoutsInput /v2/user/plan/{plan_is}/workouts [GET]
@@ -55,7 +57,7 @@ type APIGetUserWorkoutsInput struct {
 	Uri    APIGetUserPlansUri
 }
 type APIGetUserPlansUri struct {
-	PlanIDRequired
+	required.PlanIDField
 }
 
 // APIUpdateUserWorkoutInput /v2/user/workout/{workout_id} [PATCH]
@@ -65,11 +67,11 @@ type APIUpdateUserWorkoutInput struct {
 	Form   APIUpdateUserWorkoutForm
 }
 type APIUpdateUserWorkoutUri struct {
-	IDRequired
+	required.IDField
 }
 type APIUpdateUserWorkoutForm struct {
-	EquipmentOptional
-	NameOptional
+	optional.EquipmentField
+	optional.NameField
 	StartAudio *file.Input
 	EndAudio   *file.Input
 }
@@ -80,7 +82,7 @@ type APIDeleteUserWorkoutStartAudioInput struct {
 	Uri    APIDeleteUserWorkoutStartAudioUri
 }
 type APIDeleteUserWorkoutStartAudioUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIDeleteUserWorkoutEndAudioInput /v2/user/workout/{workout_id}/end_audio [DELETE]
@@ -89,5 +91,5 @@ type APIDeleteUserWorkoutEndAudioInput struct {
 	Uri    APIDeleteUserWorkoutEndAudioUri
 }
 type APIDeleteUserWorkoutEndAudioUri struct {
-	IDRequired
+	required.IDField
 }

@@ -3,16 +3,15 @@ package course
 import (
 	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
-	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	"time"
 )
 
-func Generate(input *GenerateInput) []*course.Table {
-	tables := make([]*course.Table, 0)
+func Generate(input *GenerateInput) []*Table {
+	tables := make([]*Table, 0)
 	createDate, _ := time.Parse("2006-01-02 15:04:05", "2021-12-31 00:00:00")
 	for i := 1; i <= input.DataAmount; i++ {
 		createDate = createDate.AddDate(0, 0, 1)
-		table := course.Table{}
+		table := Table{}
 		table.ID = util.PointerInt64(int64(i))
 		table.SaleType = util.PointerInt(1)
 		table.CourseStatus = util.PointerInt(1)
