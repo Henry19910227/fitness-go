@@ -1,7 +1,7 @@
 package review
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/entity/course"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"

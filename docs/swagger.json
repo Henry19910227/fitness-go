@@ -9287,6 +9287,80 @@
                 }
             }
         },
+        "/v2/cms/statistic_monthly/course/training_avg": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表平均訓練率列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS數據管理_v2"
+                ],
+                "summary": "獲取課表平均訓練率列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "課表名稱",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                        "name": "course_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)",
+                        "name": "sale_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course_training_avg_statistic.APIGetCMSCourseTrainingAvgStatisticOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/statistic_monthly/course_category/training": {
             "get": {
                 "security": [
@@ -15235,6 +15309,105 @@
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
+                }
+            }
+        },
+        "course_training_avg_statistic.APIGetCMSCourseTrainingAvgStatisticOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "course_status": {
+                                "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                                "type": "integer",
+                                "example": 3
+                            },
+                            "course_training_avg_statistic": {
+                                "type": "object",
+                                "required": [
+                                    "rate"
+                                ],
+                                "properties": {
+                                    "rate": {
+                                        "description": "平均訓練率",
+                                        "type": "integer",
+                                        "example": 100
+                                    }
+                                }
+                            },
+                            "id": {
+                                "description": "課表 id",
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "name": {
+                                "description": "課表名稱",
+                                "type": "string",
+                                "example": "增肌課表"
+                            },
+                            "sale_item": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "description": "銷售id",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "description": "銷售名稱",
+                                        "type": "string",
+                                        "example": "銅級課表 "
+                                    },
+                                    "product_label": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "description": "產品標籤id",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "product_id": {
+                                                "description": "產品id",
+                                                "type": "string",
+                                                "example": "com.fitness.gold_member_month"
+                                            },
+                                            "twd": {
+                                                "description": "台幣價格",
+                                                "type": "integer",
+                                                "example": 500
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "sale_type": {
+                                "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
+                                "type": "integer",
+                                "example": 3
+                            },
+                            "schedule_type": {
+                                "description": "排課類別(1:單一訓練/2:多項計畫)",
+                                "type": "integer",
+                                "example": 2
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },
