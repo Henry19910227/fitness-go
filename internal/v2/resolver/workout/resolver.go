@@ -285,6 +285,19 @@ func (r *resolver) APIUpdateUserWorkout(tx *gorm.DB, input *model.APIUpdateUserW
 	}
 	tx.Commit()
 	// parser output
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutOutput, err = r.workoutService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIUpdateUserWorkoutData{}
+	if err := util.Parser(workoutOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Data = &data
 	output.Set(code.Success, "success")
 	return output
 }

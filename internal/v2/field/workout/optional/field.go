@@ -10,7 +10,7 @@ type NameField struct {
 	Name *string `json:"name,omitempty" form:"name" gorm:"column:name" binding:"omitempty,min=1,max=40" example:"腿部訓練"` // 訓練名稱
 }
 type EquipmentField struct {
-	Equipment *string `json:"equipment,omitempty" form:"equipment" gorm:"column:equipment" binding:"omitempty,min=0,max=10" example:"2,3,6"` // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+	Equipment *string `json:"equipment,omitempty" form:"equipment" gorm:"column:equipment" binding:"omitempty,equipment,min=0,max=10" example:"2,3,6"` // 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
 }
 type StartAudioField struct {
 	StartAudio *string `json:"start_audio,omitempty" gorm:"column:start_audio" example:"123.mp3"` // 前導語音
