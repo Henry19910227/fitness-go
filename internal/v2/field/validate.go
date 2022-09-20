@@ -1,4 +1,4 @@
-package course
+package field
 
 import (
 	"github.com/gin-gonic/gin/binding"

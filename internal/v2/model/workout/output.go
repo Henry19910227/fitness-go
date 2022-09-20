@@ -52,6 +52,17 @@ type APIGetUserWorkoutsDataItem struct {
 // APIUpdateUserWorkoutOutput /v2/user/workout/{workout_id} [PATCH]
 type APIUpdateUserWorkoutOutput struct {
 	base.Output
+	Data *APIUpdateUserWorkoutData `json:"data,omitempty"`
+}
+type APIUpdateUserWorkoutData struct {
+	optional.IDField
+	optional.NameField
+	optional.EquipmentField
+	optional.StartAudioField
+	optional.EndAudioField
+	optional.WorkoutSetCountField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APIDeleteUserWorkoutStartAudioOutput /v2/user/workout/{workout_id}/start_audio [DELETE]

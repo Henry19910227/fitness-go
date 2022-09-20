@@ -14087,9 +14087,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -14134,9 +14134,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -14304,7 +14304,7 @@ var doc = `{
                 "suit": {
                     "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
                     "type": "string",
-                    "example": "2"
+                    "example": "2,5,7"
                 },
                 "train_target": {
                     "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
@@ -15350,9 +15350,6 @@ var doc = `{
                             },
                             "course_training_avg_statistic": {
                                 "type": "object",
-                                "required": [
-                                    "rate"
-                                ],
                                 "properties": {
                                     "rate": {
                                         "description": "平均訓練率",
@@ -15388,9 +15385,9 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "產品標籤id",
+                                                "description": "課表 id",
                                                 "type": "integer",
-                                                "example": 1
+                                                "example": 2
                                             },
                                             "product_id": {
                                                 "description": "產品id",
@@ -20438,7 +20435,7 @@ var doc = `{
                                         "create_at": {
                                             "description": "創建時間",
                                             "type": "string",
-                                            "example": "2022-06-14 00:00:00"
+                                            "example": "2022-06-12 00:00:00"
                                         },
                                         "end_audio": {
                                             "description": "結束語音",
@@ -20451,14 +20448,14 @@ var doc = `{
                                             "example": "2,3,6"
                                         },
                                         "id": {
-                                            "description": "訓練 id",
+                                            "description": "課表 id",
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 2
                                         },
                                         "name": {
-                                            "description": "訓練名稱",
+                                            "description": "課表名稱",
                                             "type": "string",
-                                            "example": "腿部訓練"
+                                            "example": "增肌課表"
                                         },
                                         "start_audio": {
                                             "description": "前導語音",
@@ -20468,7 +20465,7 @@ var doc = `{
                                         "update_at": {
                                             "description": "更新時間",
                                             "type": "string",
-                                            "example": "2022-06-14 00:00:00"
+                                            "example": "2022-06-12 00:00:00"
                                         },
                                         "workout_set_count": {
                                             "description": "動作組數",
@@ -20861,9 +20858,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -23899,11 +23896,14 @@ var doc = `{
         },
         "workout.APICreateUserWorkoutBody": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
-                    "description": "訓練名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "腿部訓練"
+                    "example": "銅級課表 "
                 }
             }
         },
@@ -23911,9 +23911,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "課表 id",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 }
             }
         },
@@ -23996,7 +23996,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -24014,14 +24014,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "課表 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "name": {
-                                "description": "訓練名稱",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "腿部訓練"
+                                "example": "增肌課表"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -24031,7 +24031,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -24048,6 +24048,51 @@ var doc = `{
                 }
             }
         },
+        "workout.APIUpdateUserWorkoutData": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "end_audio": {
+                    "description": "結束語音",
+                    "type": "string",
+                    "example": "123.mp3"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string",
+                    "example": "123.mp3"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "workout_set_count": {
+                    "description": "動作組數",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
         "workout.APIUpdateUserWorkoutOutput": {
             "type": "object",
             "properties": {
@@ -24055,6 +24100,9 @@ var doc = `{
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/workout.APIUpdateUserWorkoutData"
                 },
                 "msg": {
                     "description": "訊息",
