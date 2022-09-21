@@ -7,6 +7,7 @@ import (
 
 type Resolver interface {
 	APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateUserWorkoutSetsInput) (output model.APICreateUserWorkoutSetsOutput)
+	APICreateUserRestSet(input *model.APICreateUserRestSetInput) (output model.APICreateUserRestSetOutput)
 	APIDeleteUserWorkoutSet(tx *gorm.DB, input *model.APIDeleteUserWorkoutSetInput) (output model.APIDeleteUserWorkoutSetOutput)
 	APIUpdateUserWorkoutSet(tx *gorm.DB, input *model.APIUpdateUserWorkoutSetInput) (output model.APIUpdateUserWorkoutSetOutput)
 	APIDeleteUserWorkoutSetStartAudio(input *model.APIDeleteUserWorkoutSetStartAudioInput) (output model.APIDeleteUserWorkoutSetStartAudioOutput)

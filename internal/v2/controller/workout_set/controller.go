@@ -2,6 +2,7 @@ package workout_set
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -44,6 +45,28 @@ func (c *controller) CreateUserWorkoutSets(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APICreateUserWorkoutSets(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// CreateUserRestSet 創建個人休息組
+// @Summary 創建個人休息組
+// @Description 創建個人休息組
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_id path int64 true "訓練id"
+// @Success 200 {object} workout_set.APICreateUserRestSetOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/workout/{workout_id}/rest_set [POST]
+func (c *controller) CreateUserRestSet(ctx *gin.Context) {
+	var input model.APICreateUserRestSetInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateUserRestSet(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 
@@ -199,7 +222,7 @@ func (c *controller) DeleteUserWorkoutSetProgressAudio(ctx *gin.Context) {
 // @Router /v2/cms/workout/{workout_id}/workout_sets [GET]
 func (c *controller) GetCMSWorkoutSets(ctx *gin.Context) {
 	var uri struct {
-		model.WorkoutIDField
+		optional.WorkoutIDField
 	}
 	if err := ctx.ShouldBindUri(&uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))

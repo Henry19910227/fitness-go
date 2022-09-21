@@ -1,9 +1,9 @@
 package workout_log
 
 import (
+	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_set_log"
 )
 
@@ -32,13 +32,13 @@ type APICreateUserWorkoutLogItem struct {
 	workout_set_log.DurationField
 	NewRecord  *int `json:"new_record" example:"1"` //是否是新紀錄(0:否/1:是)
 	WorkoutSet *struct {
-		workout_set.IDField
-		workout_set.TypeField
-		workout_set.WeightField
-		workout_set.RepsField
-		workout_set.DistanceField
-		workout_set.DurationField
-		workout_set.InclineField
+		workoutSetOptional.IDField
+		workoutSetOptional.TypeField
+		workoutSetOptional.WeightField
+		workoutSetOptional.RepsField
+		workoutSetOptional.DistanceField
+		workoutSetOptional.DurationField
+		workoutSetOptional.InclineField
 		Action *struct {
 			action.IDField
 			action.NameField

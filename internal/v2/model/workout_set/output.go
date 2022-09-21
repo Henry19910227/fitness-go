@@ -1,6 +1,7 @@
 package workout_set
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -29,19 +30,19 @@ type APIGetCMSWorkoutSetsOutput struct {
 	Paging *paging.Output           `json:"paging,omitempty"`
 }
 type APIGetCMSWorkoutSetsData []*struct {
-	IDField
-	TypeField
-	AutoNextField
-	StartAudioField
-	ProgressAudioField
-	RemarkField
-	WeightField
-	RepsField
-	DistanceField
-	DurationField
-	InclineField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.TypeField
+	optional.AutoNextField
+	optional.StartAudioField
+	optional.ProgressAudioField
+	optional.RemarkField
+	optional.WeightField
+	optional.RepsField
+	optional.DistanceField
+	optional.DurationField
+	optional.InclineField
+	optional.CreateAtField
+	optional.UpdateAtField
 	Action *struct {
 		action.IDField
 		action.NameField
@@ -63,6 +64,11 @@ type APICreateUserWorkoutSetsOutput struct {
 	base.Output
 }
 
+// APICreateUserRestSetOutput /v2/user/workout/{workout_id}/rest_set [POST]
+type APICreateUserRestSetOutput struct {
+	base.Output
+}
+
 // APIDeleteUserWorkoutSetOutput /v2/user/workout_set_is/{workout_set_id} [Delete]
 type APIDeleteUserWorkoutSetOutput struct {
 	base.Output
@@ -74,19 +80,19 @@ type APIGetUserWorkoutSetsOutput struct {
 	Data APIGetUserWorkoutSetsData `json:"data"`
 }
 type APIGetUserWorkoutSetsData []*struct {
-	IDField
-	TypeField
-	AutoNextField
-	StartAudioField
-	ProgressAudioField
-	RemarkField
-	WeightField
-	RepsField
-	DistanceField
-	DurationField
-	InclineField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.TypeField
+	optional.AutoNextField
+	optional.StartAudioField
+	optional.ProgressAudioField
+	optional.RemarkField
+	optional.WeightField
+	optional.RepsField
+	optional.DistanceField
+	optional.DurationField
+	optional.InclineField
+	optional.CreateAtField
+	optional.UpdateAtField
 	Action *struct {
 		action.IDField
 		action.NameField
