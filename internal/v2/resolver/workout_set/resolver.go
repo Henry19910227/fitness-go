@@ -114,6 +114,43 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 	return output
 }
 
+func (r *resolver) APICreateUserRestSet(input *model.APICreateUserRestSetInput) (output model.APICreateUserRestSetOutput) {
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+	courseOutput, err := r.courseService.Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
+		return output
+	}
+	// 添加休息組
+	table := model.Table{}
+	table.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+	table.Type = util.PointerInt(2)
+	table.AutoNext = util.PointerString("N")
+	table.Weight = util.PointerFloat64(0)
+	table.Reps = util.PointerInt(0)
+	table.Distance = util.PointerFloat64(0)
+	table.Duration = util.PointerInt(30)
+	table.Incline = util.PointerFloat64(0)
+	table.StartAudio = util.PointerString("")
+	table.ProgressAudio = util.PointerString("")
+	table.Remark = util.PointerString("")
+	_, err = r.workoutSetService.Create([]*model.Table{&table})
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parser Output
+	output.Set(code.Success, "success")
+	return output
+}
+
 func (r *resolver) APIDeleteUserWorkoutSet(tx *gorm.DB, input *model.APIDeleteUserWorkoutSetInput) (output model.APIDeleteUserWorkoutSetOutput) {
 	defer tx.Rollback()
 	// 查詢關聯課表

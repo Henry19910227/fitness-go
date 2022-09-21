@@ -12550,6 +12550,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/user/workout/{workout_id}/rest_set": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "創建個人休息組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "創建個人休息組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APICreateUserRestSetOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/workout/{workout_id}/start_audio": {
             "delete": {
                 "security": [
@@ -14087,9 +14130,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "亨利"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -14134,9 +14177,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "亨利"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -15385,9 +15428,9 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "課表 id",
+                                                "description": "產品標籤id",
                                                 "type": "integer",
-                                                "example": 2
+                                                "example": 1
                                             },
                                             "product_id": {
                                                 "description": "產品id",
@@ -20435,7 +20478,7 @@ var doc = `{
                                         "create_at": {
                                             "description": "創建時間",
                                             "type": "string",
-                                            "example": "2022-06-12 00:00:00"
+                                            "example": "2022-06-14 00:00:00"
                                         },
                                         "end_audio": {
                                             "description": "結束語音",
@@ -20448,9 +20491,9 @@ var doc = `{
                                             "example": "2,3,6"
                                         },
                                         "id": {
-                                            "description": "課表 id",
+                                            "description": "訓練 id",
                                             "type": "integer",
-                                            "example": 2
+                                            "example": 1
                                         },
                                         "name": {
                                             "description": "課表名稱",
@@ -20465,7 +20508,7 @@ var doc = `{
                                         "update_at": {
                                             "description": "更新時間",
                                             "type": "string",
-                                            "example": "2022-06-12 00:00:00"
+                                            "example": "2022-06-14 00:00:00"
                                         },
                                         "workout_set_count": {
                                             "description": "動作組數",
@@ -23901,9 +23944,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "亨利"
                 }
             }
         },
@@ -23911,9 +23954,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
+                    "description": "訓練 id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 }
             }
         },
@@ -23996,7 +24039,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -24014,9 +24057,9 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "訓練 id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
                                 "description": "課表名稱",
@@ -24031,7 +24074,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -24054,7 +24097,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "end_audio": {
                     "description": "結束語音",
@@ -24067,9 +24110,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "訓練 id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "name": {
                     "description": "課表名稱",
@@ -24084,7 +24127,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -24295,6 +24338,21 @@ var doc = `{
                             }
                         }
                     }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set.APICreateUserRestSetOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",
