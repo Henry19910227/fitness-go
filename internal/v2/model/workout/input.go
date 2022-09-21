@@ -1,6 +1,7 @@
 package workout
 
 import (
+	courseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
@@ -31,15 +32,16 @@ type DeleteInput struct {
 
 // APICreateUserWorkoutInput /v2/user/plan/{plan_id}/workout [POST]
 type APICreateUserWorkoutInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APICreateUserWorkoutUri
-	Body   APICreateUserWorkoutBody
+	courseRequired.UserIDField
+	Uri  APICreateUserWorkoutUri
+	Body APICreateUserWorkoutBody
 }
 type APICreateUserWorkoutUri struct {
 	required.PlanIDField
 }
 type APICreateUserWorkoutBody struct {
 	required.NameField
+	WorkoutTemplateID *int64 `json:"workout_template_id" binding:"omitempty" example:"1"` // 訓練模板ID
 }
 
 // APIDeleteUserWorkoutInput /v2/user/workout/{workout_id} [DELETE]

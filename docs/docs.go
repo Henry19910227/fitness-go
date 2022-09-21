@@ -15053,9 +15053,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -20496,9 +20496,9 @@ var doc = `{
                                             "example": 1
                                         },
                                         "name": {
-                                            "description": "課表名稱",
+                                            "description": "產品名稱",
                                             "type": "string",
-                                            "example": "增肌課表"
+                                            "example": "金卡會員(月)"
                                         },
                                         "start_audio": {
                                             "description": "前導語音",
@@ -20901,9 +20901,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -23947,6 +23947,11 @@ var doc = `{
                     "description": "教練本名",
                     "type": "string",
                     "example": "亨利"
+                },
+                "workout_template_id": {
+                    "description": "訓練模板ID",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -24062,9 +24067,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "課表名稱",
+                                "description": "產品名稱",
                                 "type": "string",
-                                "example": "增肌課表"
+                                "example": "金卡會員(月)"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -24115,9 +24120,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "start_audio": {
                     "description": "前導語音",

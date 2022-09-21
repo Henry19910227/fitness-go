@@ -1,7 +1,7 @@
 package required
 
 type IDField struct {
-	ID int64 `json:"id" uri:"course_id" form:"course_id" gorm:"column:id" binding:"required" example:"2"` // 課表 id
+	ID int64 `json:"id" uri:"course_id" uri:"course_id" form:"course_id" gorm:"column:id" binding:"required" example:"2"` // 課表 id
 }
 type UserIDField  struct {
 	UserID int64 `json:"user_id" gorm:"column:user_id" binding:"required" example:"10001"` // 用戶 id
@@ -10,7 +10,7 @@ type SaleTypeField  struct {
 	SaleType int `json:"sale_type" form:"sale_type" gorm:"column:sale_type" binding:"required,oneof=1 2 3 4" example:"3"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
 }
 type SaleIDField  struct {
-	SaleID int64 `json:"sale_id" gorm:"column:sale_id" example:"3"` // 銷售 id
+	SaleID int64 `json:"sale_id" gorm:"column:sale_id" binding:"required" example:"3"` // 銷售 id
 }
 type CourseStatusField  struct {
 	CourseStatus int `json:"course_status" form:"course_status" gorm:"column:course_status" binding:"required,oneof=1 2 3 4 5" example:"3"` // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
@@ -49,20 +49,20 @@ type TrainTargetField  struct {
 	TrainTarget string `json:"train_target" gorm:"column:train_target" binding:"required,train_target,max=5" example:"2,3,4"` // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
 }
 type BodyTargetField  struct {
-	BodyTarget string `json:"body_target" gorm:"column:body_target" example:"4,5"` // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
+	BodyTarget string `json:"body_target" gorm:"column:body_target" binding:"required" example:"4,5"` // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
 }
 type NoticeField  struct {
-	Notice string `json:"notice" gorm:"column:notice" example:"注意關節避免鎖死"` // 注意事項
+	Notice string `json:"notice" gorm:"column:notice" binding:"required" example:"注意關節避免鎖死"` // 注意事項
 }
 type PlanCountField  struct {
-	PlanCount int `json:"plan_count" gorm:"column:plan_count" example:"10"` // 計畫總數
+	PlanCount int `json:"plan_count" gorm:"column:plan_count" binding:"required" example:"10"` // 計畫總數
 }
 type WorkoutCountField  struct {
-	WorkoutCount int `json:"workout_count" gorm:"column:workout_count" example:"50"` // 訓練總數
+	WorkoutCount int `json:"workout_count" gorm:"column:workout_count" binding:"required" example:"50"` // 訓練總數
 }
 type CreateAtField  struct {
-	CreateAt string `json:"create_at" gorm:"column:create_at" example:"2022-06-12 00:00:00"` // 創建時間
+	CreateAt string `json:"create_at" gorm:"column:create_at" binding:"required" example:"2022-06-12 00:00:00"` // 創建時間
 }
 type UpdateAtField  struct {
-	UpdateAt string `json:"update_at" gorm:"column:update_at" example:"2022-06-12 00:00:00"` // 更新時間
+	UpdateAt string `json:"update_at" gorm:"column:update_at" binding:"required" example:"2022-06-12 00:00:00"` // 更新時間
 }
