@@ -42,7 +42,14 @@ func (c *controller) CreateUserWorkout(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APICreateUserWorkout(ctx.MustGet("tx").(*gorm.DB), &input)
+	// 正常創建訓練
+	if input.Body.WorkoutTemplateID == nil {
+		output := c.resolver.APICreateUserWorkout(ctx.MustGet("tx").(*gorm.DB), &input)
+		ctx.JSON(http.StatusOK, output)
+		return
+	}
+	// 使用模板創建訓練
+	output := c.resolver.APICreateUserWorkoutFromTemplate(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 

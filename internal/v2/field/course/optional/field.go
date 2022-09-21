@@ -25,7 +25,7 @@ type NameField struct {
 	Name *string `json:"name,omitempty" gorm:"column:name" form:"name" binding:"omitempty,min=1,max=40" example:"增肌課表"` // 課表名稱
 }
 type CoverField struct {
-	Cover *string `json:"cover,omitempty" gorm:"column:cover" example:"abc.png"` // 課表封面
+	Cover *string `json:"cover,omitempty" gorm:"column:cover" binding:"omitempty" example:"abc.png"` // 課表封面
 }
 type BodyTargetField struct {
 	BodyTarget *string `json:"body_target,omitempty" gorm:"column:body_target" binding:"omitempty,body_target,max=5" example:"4,5"` // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
@@ -55,14 +55,14 @@ type TrainTargetField struct {
 	TrainTarget *string `json:"train_target,omitempty" gorm:"column:train_target" binding:"omitempty,train_target,max=5" example:"2,3,4"` // 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
 }
 type PlanCountField struct {
-	PlanCount *int `json:"plan_count,omitempty" gorm:"column:plan_count" example:"10"` // 計畫總數
+	PlanCount *int `json:"plan_count,omitempty" gorm:"column:plan_count" binding:"omitempty" example:"10"` // 計畫總數
 }
 type WorkoutCountField struct {
-	WorkoutCount *int `json:"workout_count,omitempty" gorm:"column:workout_count" example:"50"` // 訓練總數
+	WorkoutCount *int `json:"workout_count,omitempty" gorm:"column:workout_count" binding:"omitempty" example:"50"` // 訓練總數
 }
 type CreateAtField struct {
-	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at" example:"2022-06-12 00:00:00"` // 創建時間
+	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at" binding:"omitempty" example:"2022-06-12 00:00:00"` // 創建時間
 }
 type UpdateAtField struct {
-	UpdateAt *string `json:"update_at,omitempty" gorm:"column:update_at" example:"2022-06-12 00:00:00"` // 更新時間
+	UpdateAt *string `json:"update_at,omitempty" gorm:"column:update_at" binding:"omitempty" example:"2022-06-12 00:00:00"` // 更新時間
 }
