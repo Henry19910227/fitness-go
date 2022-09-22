@@ -37,6 +37,7 @@ type ListInput struct {
 	optional.NameField
 	optional.CourseStatusField
 	optional.SaleTypeField
+	optional.ScheduleTypeField
 	SaleTypes           []int // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
 	IgnoredCourseStatus []int // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
 	IDs                 []int64
