@@ -10,25 +10,30 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/user_subscribe_info"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 type resolver struct {
-	courseService  courseService.Service
-	planService    plan.Service
-	workoutService workout.Service
-	uploadTool     uploader.Tool
+	courseService        courseService.Service
+	planService          plan.Service
+	workoutService       workout.Service
+	subscribeInfoService user_subscribe_info.Service
+	uploadTool           uploader.Tool
 }
 
 func New(courseService courseService.Service, planService plan.Service,
-	workoutService workout.Service, uploadTool uploader.Tool) Resolver {
+	workoutService workout.Service, subscribeInfoService user_subscribe_info.Service,
+	uploadTool uploader.Tool) Resolver {
 	return &resolver{courseService: courseService, planService: planService,
-		workoutService: workoutService, uploadTool: uploadTool}
+		workoutService: workoutService, subscribeInfoService: subscribeInfoService,
+		uploadTool: uploadTool}
 }
 
 func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput) {
@@ -159,6 +164,37 @@ func (r *resolver) APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverI
 }
 
 func (r *resolver) APICreateUserCourse(input *model.APICreateUserCourseInput) (output model.APICreateUserCourseOutput) {
+	/** 驗證是否能創建 */
+	// 1. 檢查目前創建多計畫課表數量
+	courseListInput := model.ListInput{}
+	courseListInput.UserID = util.PointerInt64(input.UserID)
+	courseListInput.SaleType = util.PointerInt(model.SaleTypePersonal)
+	courseListInput.ScheduleType = util.PointerInt(2)
+	courseOutputs, _, err := r.courseService.List(&courseListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 2. 檢查目前是否已訂閱
+	subscribeListInput := subscribeInfoModel.ListInput{}
+	subscribeListInput.UserID = util.PointerInt64(input.UserID)
+	subscribeListInput.Page = 1
+	subscribeListInput.Size = 1
+	subscribeListOutput, _, err := r.subscribeInfoService.List(&subscribeListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 3. 驗證多計畫課表創建是否達上線
+	if len(subscribeListOutput) == 0 && len(courseOutputs) >= 1 {
+		output.Set(code.PermissionDenied, "多計畫課表創建已達上限(未訂閱)")
+		return output
+	}
+	if util.OnNilJustReturnInt(subscribeListOutput[0].Status, 0) == 0 && len(courseOutputs) >= 1 {
+		output.Set(code.PermissionDenied, "多計畫課表創建已達上限(未訂閱)")
+		return output
+	}
+	// 創建課表
 	table := model.Table{}
 	table.UserID = util.PointerInt64(input.UserID)
 	table.SaleType = util.PointerInt(model.SaleTypePersonal)

@@ -90,6 +90,10 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.SaleType != nil {
 		db = db.Where("sale_type = ?", *input.SaleType)
 	}
+	// schedule_type 篩選條件
+	if input.ScheduleType != nil {
+		db = db.Where("schedule_type = ?", *input.ScheduleType)
+	}
 	if len(input.SaleTypes) > 0 {
 		db = db.Where("sale_type IN (?)", input.SaleTypes)
 	}
