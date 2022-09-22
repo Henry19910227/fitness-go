@@ -43,15 +43,28 @@ type APIGetCMSWorkoutSetsInput struct {
 
 // APICreateUserWorkoutSetsInput /v2/user/workout/{workout_id}/workout_sets [POST]
 type APICreateUserWorkoutSetsInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APICreateUserWorkoutSetsUri
-	Body   APICreateUserWorkoutSetsBody
+	courseRequired.UserIDField
+	Uri  APICreateUserWorkoutSetsUri
+	Body APICreateUserWorkoutSetsBody
 }
 type APICreateUserWorkoutSetsUri struct {
 	required.WorkoutIDField
 }
 type APICreateUserWorkoutSetsBody struct {
 	ActionIDs []int64 `json:"action_ids" binding:"required,workout_set_action_ids" example:"1,10,15"` // 動作id
+}
+
+// APICreateUserWorkoutSetByDuplicateInput /v2/user/workout_set/{workout_set_id}/duplicate [POST]
+type APICreateUserWorkoutSetByDuplicateInput struct {
+	courseRequired.UserIDField
+	Uri  APICreateUserWorkoutSetByDuplicateUri
+	Body APICreateUserWorkoutSetByDuplicateBody
+}
+type APICreateUserWorkoutSetByDuplicateUri struct {
+	required.IDField
+}
+type APICreateUserWorkoutSetByDuplicateBody struct {
+	DuplicateCount int `json:"duplicate_count" binding:"required,min=1,max=5" example:"1"` //複製個數
 }
 
 // APICreateUserRestSetInput /v2/user/workout/{workout_id}/rest_set [POST]
@@ -65,8 +78,8 @@ type APICreateUserRestSetUri struct {
 
 // APIDeleteUserWorkoutSetInput /v2/user/workout_set/{workout_set_id} [POST]
 type APIDeleteUserWorkoutSetInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APIDeleteUserWorkoutSetUri
+	courseRequired.UserIDField
+	Uri APIDeleteUserWorkoutSetUri
 }
 type APIDeleteUserWorkoutSetUri struct {
 	required.IDField
@@ -74,8 +87,8 @@ type APIDeleteUserWorkoutSetUri struct {
 
 // APIGetUserWorkoutSetsInput /v2/user/workout/{workout_id}/workout_sets [GET]
 type APIGetUserWorkoutSetsInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APIGetUserWorkoutSetsUri
+	courseRequired.UserIDField
+	Uri APIGetUserWorkoutSetsUri
 }
 type APIGetUserWorkoutSetsUri struct {
 	required.WorkoutIDField
@@ -83,9 +96,9 @@ type APIGetUserWorkoutSetsUri struct {
 
 // APIUpdateUserWorkoutSetInput /v2/user/workout_set/{workout_set_id} [PATCH]
 type APIUpdateUserWorkoutSetInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APIUpdateUserWorkoutSetUri
-	Form   APIUpdateUserWorkoutSetForm
+	courseRequired.UserIDField
+	Uri  APIUpdateUserWorkoutSetUri
+	Form APIUpdateUserWorkoutSetForm
 }
 type APIUpdateUserWorkoutSetUri struct {
 	required.IDField
@@ -104,8 +117,8 @@ type APIUpdateUserWorkoutSetForm struct {
 
 // APIDeleteUserWorkoutSetStartAudioInput /v2/user/workout_set/{workout_set_id}/start_audio [DELETE]
 type APIDeleteUserWorkoutSetStartAudioInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APIDeleteUserWorkoutSetStartAudioUri
+	courseRequired.UserIDField
+	Uri APIDeleteUserWorkoutSetStartAudioUri
 }
 type APIDeleteUserWorkoutSetStartAudioUri struct {
 	required.IDField
@@ -113,8 +126,8 @@ type APIDeleteUserWorkoutSetStartAudioUri struct {
 
 // APIDeleteUserWorkoutSetProgressAudioInput /v2/user/workout_set/{workout_set_id}/progress_audio [DELETE]
 type APIDeleteUserWorkoutSetProgressAudioInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Uri    APIDeleteUserWorkoutSetProgressAudioUri
+	courseRequired.UserIDField
+	Uri APIDeleteUserWorkoutSetProgressAudioUri
 }
 type APIDeleteUserWorkoutSetProgressAudioUri struct {
 	required.IDField

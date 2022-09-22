@@ -4,6 +4,7 @@ import "github.com/gin-gonic/gin"
 
 type Controller interface {
 	CreateUserWorkoutSets(ctx *gin.Context)
+	CreateUserWorkoutSetByDuplicate(ctx *gin.Context)
 	CreateUserRestSet(ctx *gin.Context)
 	DeleteUserWorkoutSet(ctx *gin.Context)
 	UpdateUserWorkoutSet(ctx *gin.Context)
