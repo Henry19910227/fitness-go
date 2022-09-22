@@ -12971,6 +12971,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/user/workout_set/{workout_set_id}/duplicate": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "複製個人訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用戶個人課表_v2"
+                ],
+                "summary": "複製個人訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APICreateUserWorkoutSetByDuplicateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APICreateUserWorkoutSetByDuplicateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/workout_set/{workout_set_id}/progress_audio": {
             "delete": {
                 "security": [
@@ -14130,9 +14182,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -14177,9 +14229,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -23944,9 +23996,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -24352,6 +24404,34 @@ var doc = `{
             }
         },
         "workout_set.APICreateUserRestSetOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set.APICreateUserWorkoutSetByDuplicateBody": {
+            "type": "object",
+            "required": [
+                "duplicate_count"
+            ],
+            "properties": {
+                "duplicate_count": {
+                    "description": "複製個數",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "workout_set.APICreateUserWorkoutSetByDuplicateOutput": {
             "type": "object",
             "properties": {
                 "code": {
