@@ -1,6 +1,8 @@
 package plan
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/plan/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -17,7 +19,7 @@ type GenerateInput struct {
 }
 
 type FindInput struct {
-	IDField
+	optional.IDField
 	WorkoutID *int64 `json:"workout_id,omitempty"` // 訓練 id
 }
 
@@ -26,14 +28,20 @@ type DeleteInput struct {
 }
 
 type ListInput struct {
-	CourseIDField
+	optional.CourseIDField
 	PagingInput
 	OrderByInput
 	PreloadInput
 }
 
 type APIGetCMSPlansInput struct {
-	CourseIDField
+	Uri APIGetCMSPlansUri
+	Query APIGetCMSPlansQuery
+}
+type APIGetCMSPlansUri struct {
+	required.CourseIDField
+}
+type APIGetCMSPlansQuery struct {
 	PagingInput
 	OrderByInput
 }

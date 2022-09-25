@@ -3,8 +3,6 @@ package plan
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/plan"
 	"github.com/gin-gonic/gin"
@@ -36,26 +34,12 @@ func New(resolver plan.Resolver) Controller {
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/course/{course_id}/plans [GET]
 func (c *controller) GetCMSPlans(ctx *gin.Context) {
-	var uri struct {
-		model.CourseIDField
-	}
-	if err := ctx.ShouldBindUri(&uri); err != nil {
-		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
-		return
-	}
-	type pagingInput paging.Input
-	type orderByInput orderBy.Input
-	var query struct {
-		pagingInput
-		orderByInput
-	}
-	if err := ctx.ShouldBindQuery(&query); err != nil {
-		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
-		return
-	}
 	input := model.APIGetCMSPlansInput{}
-	input.CourseID = uri.CourseID
-	if err := util.Parser(query, &input); err != nil {
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
