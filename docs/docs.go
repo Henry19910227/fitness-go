@@ -11297,6 +11297,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/course/{course_id}/plans": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練課表計畫列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "獲取教練課表計畫列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APIGetTrainerPlansOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/courses": {
             "get": {
                 "security": [
@@ -15105,9 +15148,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "增肌課表"
                 }
             }
         },
@@ -20396,7 +20439,7 @@ var doc = `{
                 "name": {
                     "description": "計畫名稱",
                     "type": "string",
-                    "example": "減脂計畫"
+                    "example": "第一週增肌計畫"
                 }
             }
         },
@@ -20437,7 +20480,7 @@ var doc = `{
                 "name": {
                     "description": "計畫名稱",
                     "type": "string",
-                    "example": "減脂計畫"
+                    "example": "第一週增肌計畫"
                 }
             }
         },
@@ -20548,9 +20591,9 @@ var doc = `{
                                             "example": 1
                                         },
                                         "name": {
-                                            "description": "產品名稱",
+                                            "description": "訓練名稱",
                                             "type": "string",
-                                            "example": "金卡會員(月)"
+                                            "example": "腿部訓練"
                                         },
                                         "start_audio": {
                                             "description": "前導語音",
@@ -20580,6 +20623,69 @@ var doc = `{
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "plan.APIGetTrainerPlansOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "計畫id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "description": "計畫名稱",
+                                "type": "string",
+                                "example": "第一週增肌計畫"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "user_plan_statistic": {
+                                "type": "object",
+                                "properties": {
+                                    "duration": {
+                                        "description": "總花費時間(秒)",
+                                        "type": "integer",
+                                        "example": 60
+                                    },
+                                    "finish_workout_count": {
+                                        "description": "完成訓練數量(去除重複)",
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                }
+                            },
+                            "workout_count": {
+                                "description": "訓練數量",
+                                "type": "integer",
+                                "example": 10
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },
@@ -20655,7 +20761,7 @@ var doc = `{
                 "name": {
                     "description": "計畫名稱",
                     "type": "string",
-                    "example": "減脂計畫"
+                    "example": "第一週增肌計畫"
                 }
             }
         },
@@ -20864,7 +20970,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶id",
+                                "description": "帳戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -20953,9 +21059,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "亨利"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -21031,7 +21137,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "帳戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -23991,14 +24097,11 @@ var doc = `{
         },
         "workout.APICreateUserWorkoutBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "腿部訓練"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -24119,9 +24222,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "訓練名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "腿部訓練"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -24172,9 +24275,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -24362,7 +24465,7 @@ var doc = `{
                                         "example": 30
                                     },
                                     "id": {
-                                        "description": "訓練 id",
+                                        "description": "訓練組 id",
                                         "type": "integer",
                                         "example": 2
                                     },
@@ -24625,7 +24728,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練組 id",
                                 "type": "integer",
                                 "example": 2
                             },
@@ -24781,7 +24884,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練組 id",
                                 "type": "integer",
                                 "example": 2
                             },

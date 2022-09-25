@@ -3,6 +3,9 @@ package course
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
+	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
+	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
+	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -20,9 +23,9 @@ type GenerateInput struct {
 
 type FindInput struct {
 	optional.IDField
-	PlanID       *int64 `json:"plan_id,omitempty"`        // 計畫 id
-	WorkoutID    *int64 `json:"workout_id,omitempty"`     // 訓練 id
-	WorkoutSetID *int64 `json:"workout_set_id,omitempty"` // 訓練組 id
+	planOptional.PlanIDField
+	workoutOptional.WorkoutIDField
+	workoutSetOptional.WorkoutSetIDField
 	PreloadInput
 }
 

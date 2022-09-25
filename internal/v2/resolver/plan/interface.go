@@ -13,4 +13,5 @@ type Resolver interface {
 	APIUpdateUserPlan(input *model.APIUpdateUserPlanInput) (output model.APIUpdateUserPlanOutput)
 
 	APICreateTrainerPlan(tx *gorm.DB, input *model.APICreateTrainerPlanInput) (output model.APICreateTrainerPlanOutput)
+	APIGetTrainerPlans(input *model.APIGetTrainerPlansInput) (output model.APIGetTrainerPlansOutput)
 }

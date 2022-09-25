@@ -12,4 +12,5 @@ type Controller interface {
 	UpdateUserPlan(ctx *gin.Context)
 
 	CreateTrainerPlan(ctx *gin.Context)
+	GetTrainerPlans(ctx *gin.Context)
 }

@@ -87,3 +87,20 @@ type APICreateTrainerPlanOutput struct {
 type APICreateTrainerPlanData struct {
 	planOptional.IDField
 }
+
+// APIGetTrainerPlansOutput /v2/trainer/course/{course_id}/plans [GET]
+type APIGetTrainerPlansOutput struct {
+	base.Output
+	Data *APIGetTrainerPlansData `json:"data,omitempty"`
+}
+type APIGetTrainerPlansData []*struct {
+	planOptional.IDField
+	planOptional.NameField
+	planOptional.WorkoutCountField
+	planOptional.CreateAtField
+	planOptional.UpdateAtField
+	UserPlanStatistic *struct {
+		user_plan_statistic.DurationField
+		user_plan_statistic.FinishWorkoutCountField
+	} `json:"user_plan_statistic,omitempty"`
+}

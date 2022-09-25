@@ -20,4 +20,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.PATCH("/user/plan/:plan_id", midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserPlan)
 
 	v2.POST("/trainer/course/:course_id/plan", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateTrainerPlan)
+	v2.GET("/trainer/course/:course_id/plans", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerPlans)
 }
