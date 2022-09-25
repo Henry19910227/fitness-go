@@ -27,15 +27,16 @@ func New(planService plan.Service, courseService course.Service, workoutService 
 
 func (r *resolver) APIGetCMSPlans(input *model.APIGetCMSPlansInput) interface{} {
 	// parser input
-	param := model.ListInput{}
-	if err := util.Parser(input, &param); err != nil {
+	listInput := model.ListInput{}
+	listInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+	if err := util.Parser(input.Query, &listInput); err != nil {
 		return base.BadRequest(util.PointerString(err.Error()))
 	}
-	param.Preloads = []*preloadModel.Preload{
+	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "Workout", OrderBy: order_by.NewInput("create_at", "DESC")},
 	}
 	// 調用 repo
-	result, page, err := r.planService.List(&param)
+	result, page, err := r.planService.List(&listInput)
 	if err != nil {
 		return base.BadRequest(util.PointerString(err.Error()))
 	}

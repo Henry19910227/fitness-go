@@ -1,7 +1,8 @@
 package plan
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
+	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
+	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_plan_statistic"
@@ -9,12 +10,7 @@ import (
 )
 
 type Output struct {
-	IDField
-	CourseIDField
-	NameField
-	WorkoutCountField
-	CreateAtField
-	UpdateAtField
+	Table
 	Workout           []*workout.Output           `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"`            // 訓練
 	UserPlanStatistic *user_plan_statistic.Output `json:"user_plan_statistic,omitempty" gorm:"foreignKey:plan_id;references:id"` // 計畫統計
 }
@@ -30,20 +26,20 @@ type APIGetCMSPlansOutput struct {
 	Paging *paging.Output     `json:"paging,omitempty"`
 }
 type APIGetCMSPlansData []*struct {
-	IDField
-	NameField
-	WorkoutCountField
-	CreateAtField
-	UpdateAtField
+	planOptional.IDField
+	planOptional.NameField
+	planOptional.WorkoutCountField
+	planOptional.CreateAtField
+	planOptional.UpdateAtField
 	Workouts []*struct {
-		optional.IDField
-		optional.NameField
-		optional.EquipmentField
-		optional.StartAudioField
-		optional.EndAudioField
-		optional.WorkoutSetCountField
-		optional.CreateAtField
-		optional.UpdateAtField
+		workoutOptional.IDField
+		workoutOptional.NameField
+		workoutOptional.EquipmentField
+		workoutOptional.StartAudioField
+		workoutOptional.EndAudioField
+		workoutOptional.WorkoutSetCountField
+		workoutOptional.CreateAtField
+		workoutOptional.UpdateAtField
 	} `json:"workouts,omitempty"`
 }
 
@@ -53,7 +49,7 @@ type APICreateUserPlanOutput struct {
 	Data *APICreateUserPlanData `json:"data,omitempty"`
 }
 type APICreateUserPlanData struct {
-	IDField
+	planOptional.IDField
 }
 
 // APIDeleteUserPlanOutput /v2/user/plan/{plan_id} [DELETE]
@@ -67,11 +63,11 @@ type APIGetUserPlansOutput struct {
 	Data APIGetUserPlansData `json:"data"`
 }
 type APIGetUserPlansData []*struct {
-	IDField
-	NameField
-	WorkoutCountField
-	CreateAtField
-	UpdateAtField
+	planOptional.IDField
+	planOptional.NameField
+	planOptional.WorkoutCountField
+	planOptional.CreateAtField
+	planOptional.UpdateAtField
 	UserPlanStatistic *struct {
 		user_plan_statistic.DurationField
 		user_plan_statistic.FinishWorkoutCountField
@@ -89,5 +85,5 @@ type APICreateTrainerPlanOutput struct {
 	Data *APICreateTrainerPlanData `json:"data,omitempty"`
 }
 type APICreateTrainerPlanData struct {
-	IDField
+	planOptional.IDField
 }
