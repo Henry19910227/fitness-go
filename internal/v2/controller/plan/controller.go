@@ -171,3 +171,25 @@ func (c *controller) CreateTrainerPlan(ctx *gin.Context) {
 	output := c.resolver.APICreateTrainerPlan(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetTrainerPlans 獲取教練課表計畫列表
+// @Summary 獲取教練課表計畫列表
+// @Description 獲取教練課表計畫列表
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} plan.APIGetTrainerPlansOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/course/{course_id}/plans [GET]
+func (c *controller) GetTrainerPlans(ctx *gin.Context) {
+	input := model.APIGetTrainerPlansInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetTrainerPlans(&input)
+	ctx.JSON(http.StatusOK, output)
+}

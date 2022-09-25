@@ -107,6 +107,28 @@ func (r *resolver) APICreateUserPlan(tx *gorm.DB, input *model.APICreateUserPlan
 	return output
 }
 
+func (r *resolver) APIGetTrainerPlans(input *model.APIGetTrainerPlansInput) (output model.APIGetTrainerPlansOutput) {
+	listInput := model.ListInput{}
+	listInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "UserPlanStatistic", Conditions: []interface{}{"user_id = ?", input.UserID}},
+	}
+	planOutputs, _, err := r.planService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetTrainerPlansData{}
+	if err := util.Parser(planOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
 func (r *resolver) APIDeleteUserPlan(tx *gorm.DB, input *model.APIDeleteUserPlanInput) (output model.APIDeleteUserPlanOutput) {
 	defer tx.Rollback()
 	// 查詢關聯課表

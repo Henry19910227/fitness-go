@@ -1,8 +1,10 @@
 package plan
 
 import (
+	courseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/plan/required"
+	userRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -24,7 +26,7 @@ type FindInput struct {
 }
 
 type DeleteInput struct {
-	IDRequired
+	required.IDField
 }
 
 type ListInput struct {
@@ -48,57 +50,66 @@ type APIGetCMSPlansQuery struct {
 
 // APICreateUserPlanInput /v2/user/course/{course_id}/plan [POST]
 type APICreateUserPlanInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	courseRequired.UserIDField
 	Uri    APICreateUserPlanUri
 	Body   APICreateUserPlanBody
 }
 type APICreateUserPlanUri struct {
-	CourseIDRequired
+	required.CourseIDField
 }
 type APICreateUserPlanBody struct {
-	NameRequired
+	required.NameField
 }
 
 // APIDeleteUserPlanInput /v2/user/workout/{workout_id} [DELETE]
 type APIDeleteUserPlanInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	userRequired.UserIDField
 	Uri    APIDeleteUserPlanUri
 }
 type APIDeleteUserPlanUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIGetUserPlansInput /v2/user/course/{course_id}/plans [GET]
 type APIGetUserPlansInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	userRequired.UserIDField
 	Uri    APIGetUserPlansUri
 }
 type APIGetUserPlansUri struct {
-	CourseIDRequired
+	required.CourseIDField
 }
 
 // APIUpdateUserPlanInput /v2/user/plan/{plan_id} [PATCH]
 type APIUpdateUserPlanInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	userRequired.UserIDField
 	Uri    APIUpdateUserPlanUri
 	Body   APIUpdateUserPlanBody
 }
 type APIUpdateUserPlanUri struct {
-	IDRequired
+	required.IDField
 }
 type APIUpdateUserPlanBody struct {
-	NameRequired
+	required.NameField
 }
 
 // APICreateTrainerPlanInput /v2/trainer/course/{course_id}/plan [POST]
 type APICreateTrainerPlanInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	userRequired.UserIDField
 	Uri    APICreateTrainerPlanUri
 	Body   APICreateTrainerPlanBody
 }
 type APICreateTrainerPlanUri struct {
-	CourseIDRequired
+	required.CourseIDField
 }
 type APICreateTrainerPlanBody struct {
-	NameRequired
+	required.NameField
+}
+
+// APIGetTrainerPlansInput /v2/trainer/course/{course_id}/plans [POST]
+type APIGetTrainerPlansInput struct {
+	userRequired.UserIDField
+	Uri    APIGetTrainerPlansUri
+}
+type APIGetTrainerPlansUri struct {
+	required.CourseIDField
 }
