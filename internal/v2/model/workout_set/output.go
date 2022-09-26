@@ -117,6 +117,36 @@ type APIGetUserWorkoutSetsData []*struct {
 // APIUpdateUserWorkoutSetOutput /v2/user/workout_set/{workout_set_id} [PATCH]
 type APIUpdateUserWorkoutSetOutput struct {
 	base.Output
+	Data *APIUpdateUserWorkoutSetData `json:"data,omitempty"`
+}
+type APIUpdateUserWorkoutSetData struct {
+	optional.IDField
+	optional.TypeField
+	optional.AutoNextField
+	optional.StartAudioField
+	optional.ProgressAudioField
+	optional.RemarkField
+	optional.WeightField
+	optional.RepsField
+	optional.DistanceField
+	optional.DurationField
+	optional.InclineField
+	optional.CreateAtField
+	optional.UpdateAtField
+	Action *struct {
+		action.IDField
+		action.NameField
+		action.SourceField
+		action.TypeField
+		action.CategoryField
+		action.BodyField
+		action.EquipmentField
+		action.IntroField
+		action.CoverField
+		action.VideoField
+		action.CreateAtField
+		action.UpdateAtField
+	} `json:"action,omitempty"`
 }
 
 // APIDeleteUserWorkoutSetStartAudioOutput /v2/user/workout_set/{workout_set_id}/start_audio [DELETE]

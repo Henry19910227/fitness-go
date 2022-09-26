@@ -23,6 +23,7 @@ type GenerateInput struct {
 
 type FindInput struct {
 	optional.IDField
+	PreloadInput
 }
 
 type ListInput struct {
