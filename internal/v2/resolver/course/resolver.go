@@ -586,3 +586,32 @@ func (r *resolver) APICreateTrainerSingleWorkoutCourse(tx *gorm.DB, input *model
 	output.SetStatus(code.Success)
 	return output
 }
+
+func (r *resolver) APIGetTrainerCourse(input *model.APIGetTrainerCourseInput) (output model.APIGetTrainerCourseOutput) {
+	// 獲取課表資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "SaleItem.ProductLabel"},
+	}
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證
+	if input.UserID != util.OnNilJustReturnInt64(courseOutput.UserID, 0) {
+		output.Set(code.BadRequest, "非該課表擁有者，無法查看課表資訊")
+		return output
+	}
+	// parser output
+	data := model.APIGetTrainerCourseData{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
