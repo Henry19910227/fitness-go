@@ -62,7 +62,9 @@ type APIGetCMSWorkoutSetsData []*struct {
 // APICreateUserWorkoutSetsOutput /v2/user/workout/{workout_id}/workout_sets [POST]
 type APICreateUserWorkoutSetsOutput struct {
 	base.Output
+	Data *APICreateUserWorkoutSetsData `json:"data,omitempty"`
 }
+type APICreateUserWorkoutSetsData []int64
 
 // APICreateUserWorkoutSetByDuplicateOutput /v2/user/workout_set/{workout_set_id}/duplicate [POST]
 type APICreateUserWorkoutSetByDuplicateOutput struct {

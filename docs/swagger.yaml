@@ -5798,7 +5798,7 @@ definitions:
               example: 1,4
               type: string
             user_id:
-              description: 帳戶id
+              description: 用戶id
               example: 10001
               type: integer
           type: object
@@ -5926,7 +5926,7 @@ definitions:
         example: "2022-06-12 00:00:00"
         type: string
       user_id:
-        description: 帳戶id
+        description: 用戶id
         example: 10001
         type: integer
       youtube_url:
@@ -8521,6 +8521,10 @@ definitions:
         description: 狀態碼
         example: 9000
         type: integer
+      data:
+        items:
+          type: integer
+        type: array
       msg:
         description: 訊息
         example: message..

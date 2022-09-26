@@ -52,7 +52,7 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 	// 驗證動作權限
 	actionListInput := actionModel.ListInput{}
 	actionListInput.IDs = input.Body.ActionIDs
-	actionListInput.Type = util.PointerInt(1)
+	actionListInput.Source = util.PointerInt(1)
 	actionOutputs, _, err := r.actionService.Tx(tx).List(&actionListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -86,7 +86,7 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 		setTable.Remark = util.PointerString("")
 		setTables = append(setTables, &setTable)
 	}
-	_, err = r.workoutSetService.Tx(tx).Create(setTables)
+	workoutSetIDs, err := r.workoutSetService.Tx(tx).Create(setTables)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -110,6 +110,9 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 	}
 	tx.Commit()
 	// Parser Output
+	data := model.APICreateUserWorkoutSetsData{}
+	data = workoutSetIDs
+	output.Data = &data
 	output.Set(code.Success, "success")
 	return output
 }
