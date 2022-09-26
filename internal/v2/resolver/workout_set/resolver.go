@@ -372,7 +372,23 @@ func (r *resolver) APIUpdateUserWorkoutSet(tx *gorm.DB, input *model.APIUpdateUs
 	}
 	tx.Commit()
 	// parser output
+	findInput = model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Action"},
+	}
+	workoutSetOutput, err = r.workoutSetService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIUpdateUserWorkoutSetData{}
+	if err := util.Parser(workoutSetOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }
 

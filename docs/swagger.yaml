@@ -8799,12 +8799,120 @@ definitions:
         example: message..
         type: string
     type: object
+  workout_set.APIUpdateUserWorkoutSetData:
+    properties:
+      action:
+        properties:
+          body:
+            description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+            example: 4
+            type: integer
+          category:
+            description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+            example: 1
+            type: integer
+          cover:
+            description: 封面
+            example: 1234.jpg
+            type: string
+          create_at:
+            description: 創建時間
+            example: "2022-06-14 00:00:00"
+            type: string
+          equipment:
+            description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+            example: 4
+            type: integer
+          id:
+            description: 動作id
+            example: 1
+            type: integer
+          intro:
+            description: 動作介紹
+            example: 全靠雙腳的力量將身體後蹬，雙手依舊輕鬆握住拉桿，上半身利用下背力量稍微挺直，直到雙腳完全伸直為止
+            type: string
+          name:
+            description: 動作名稱
+            example: 划船機
+            type: string
+          source:
+            description: 動作來源(1:系統動作/2:教練動作/3:學員動作)
+            example: 2
+            type: integer
+          type:
+            description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+            example: 1
+            type: integer
+          update_at:
+            description: 更新時間
+            example: "2022-06-14 00:00:00"
+            type: string
+          video:
+            description: 動作影片
+            example: 1234.mp4
+            type: string
+        type: object
+      auto_next:
+        description: 自動下一組(Y:是/N:否)
+        example: "Y"
+        type: string
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      distance:
+        description: 距離(公里)
+        example: 2.5
+        type: number
+      duration:
+        description: 時長(秒)
+        example: 30
+        type: integer
+      id:
+        description: 訓練組 id
+        example: 2
+        type: integer
+      incline:
+        description: 坡度
+        example: 10.5
+        type: number
+      progress_audio:
+        description: 進行中語音
+        example: 1234.mp3
+        type: string
+      remark:
+        description: 備註
+        example: 注意呼吸不可憋氣
+        type: string
+      reps:
+        description: 次數
+        example: 2
+        type: integer
+      start_audio:
+        description: 前導語音
+        example: 1234.mp3
+        type: string
+      type:
+        description: 動作類別(1:動作/2:休息)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      weight:
+        description: 重量(公斤)
+        example: 50.5
+        type: number
+    type: object
   workout_set.APIUpdateUserWorkoutSetOutput:
     properties:
       code:
         description: 狀態碼
         example: 9000
         type: integer
+      data:
+        $ref: '#/definitions/workout_set.APIUpdateUserWorkoutSetData'
       msg:
         description: 訊息
         example: message..
