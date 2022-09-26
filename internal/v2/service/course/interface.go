@@ -17,4 +17,5 @@ type Service interface {
 	ChargeList(input *model.ChargeListInput) (outputs []*model.Output, page *paging.Output, err error)
 	Updates(items []*model.Table) (err error)
 	Update(item *model.Table) (err error)
+	UpdateSaleID(id int64, saleItemID *int64) (err error)
 }

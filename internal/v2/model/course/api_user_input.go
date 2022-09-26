@@ -34,7 +34,7 @@ type APIDeleteUserCourseUri struct {
 	required.IDField
 }
 
-// APIUpdateUserCourseInput /v2/user/course/{course_id} [UPDATE]
+// APIUpdateUserCourseInput /v2/user/course/{course_id} [PATCH]
 type APIUpdateUserCourseInput struct {
 	required.UserIDField
 	Uri  APIUpdateUserCourseUri

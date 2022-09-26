@@ -154,3 +154,8 @@ func (s *service) Update(item *model.Table) (err error) {
 	err = s.repository.Update(&table)
 	return err
 }
+
+func (s *service) UpdateSaleID(id int64, saleItemID *int64) (err error) {
+	err = s.repository.UpdateSaleID(id, saleItemID)
+	return err
+}

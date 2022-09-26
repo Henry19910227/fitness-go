@@ -27,4 +27,5 @@ type Resolver interface {
 	APICreateTrainerCourse(input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput)
 	APICreateTrainerSingleWorkoutCourse(tx *gorm.DB, input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput)
 	APIGetTrainerCourse(input *model.APIGetTrainerCourseInput) (output model.APIGetTrainerCourseOutput)
+	APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTrainerCourseInput) (output model.APIUpdateTrainerCourseOutput)
 }

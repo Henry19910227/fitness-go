@@ -7,6 +7,7 @@ import (
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -76,4 +77,61 @@ type APIGetFavoriteCoursesInput struct {
 }
 type APIGetFavoriteCoursesForm struct {
 	PagingInput
+}
+
+// APIGetTrainerCoursesInput /v2/trainer/courses [GET]
+type APIGetTrainerCoursesInput struct {
+	required.UserIDField
+	Query APIGetTrainerCoursesQuery
+}
+type APIGetTrainerCoursesQuery struct {
+	optional.CourseStatusField
+	PagingInput
+}
+
+// APICreateTrainerCourseInput /v2/trainer/course [POST]
+type APICreateTrainerCourseInput struct {
+	required.UserIDField
+	Body APICreateTrainerCourseBody
+}
+type APICreateTrainerCourseBody struct {
+	required.NameField
+	required.CategoryField
+	required.LevelField
+	required.ScheduleTypeField
+}
+
+// APIGetTrainerCourseInput /v2/trainer/course/{course_id} [GET]
+type APIGetTrainerCourseInput struct {
+	required.UserIDField
+	Uri APIGetTrainerCourseUri
+}
+type APIGetTrainerCourseUri struct {
+	required.IDField
+}
+
+// APIUpdateTrainerCourseInput /v2/trainer/course/{course_id} [PATCH]
+type APIUpdateTrainerCourseInput struct {
+	required.UserIDField
+	Cover *file.Input
+	Uri   APIUpdateTrainerCourseUri
+	Form  APIUpdateTrainerCourseForm
+}
+type APIUpdateTrainerCourseUri struct {
+	required.IDField
+}
+type APIUpdateTrainerCourseForm struct {
+	optional.SaleTypeField
+	optional.SaleIDField
+	optional.CategoryField
+	optional.NameField
+	optional.IntroField
+	optional.FoodField
+	optional.LevelField
+	optional.SuitField
+	optional.EquipmentField
+	optional.PlaceField
+	optional.TrainTargetField
+	optional.BodyTargetField
+	optional.NoticeField
 }

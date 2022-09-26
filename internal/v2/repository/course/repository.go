@@ -228,3 +228,8 @@ func (r *repository) Update(item *model.Table) (err error) {
 	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
 	return err
 }
+
+func (r *repository) UpdateSaleID(id int64, saleItemID *int64) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", id).Updates(map[string]interface{}{"sale_id": saleItemID}).Error
+	return err
+}

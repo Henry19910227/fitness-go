@@ -6,6 +6,7 @@ import (
 	courseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/course"
@@ -377,5 +378,52 @@ func (c *controller) GetTrainerCourse(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetTrainerCourse(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateTrainerCourse 更新教練課表
+// @Summary 更新教練課表
+// @Description 查看封面照 : {Base URL}/v2/resource/course/cover/{Filename}
+// @Tags 教練課表_v2
+// @Security fitness_token
+// @Accept mpfd
+// @Param course_id path int64 true "課表id"
+// @Param sale_type formData int false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)"
+// @Param sale_id formData int64 false "銷售 id"
+// @Param category formData int false "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)"
+// @Param name formData string false "課表名稱"
+// @Param cover formData file false "課表封面照"
+// @Param intro formData string false "課表介紹"
+// @Param food formData string false "飲食建議"
+// @Param level formData int false "強度(1:初級/2:中級/3:中高級/4:高級)"
+// @Param suit formData string false "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)"
+// @Param equipment formData string false "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"
+// @Param place formData string false "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)"
+// @Param train_target formData string false "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)"
+// @Param body_target formData string false "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)"
+// @Param notice formData string false "注意事項"
+// @Produce json
+// @Success 200 {object} course.APIUpdateCMSCourseCoverOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/course/{course_id} [PATCH]
+func (c *controller) UpdateTrainerCourse(ctx *gin.Context) {
+	var input model.APIUpdateTrainerCourseInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBind(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	//獲取封面圖
+	file, fileHeader, _ := ctx.Request.FormFile("cover")
+	if file != nil {
+		input.Cover = &fileModel.Input{}
+		input.Cover.Named = fileHeader.Filename
+		input.Cover.Data = file
+	}
+	output := c.resolver.APIUpdateTrainerCourse(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }

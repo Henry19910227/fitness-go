@@ -10,10 +10,12 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	saleItemModel "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user_subscribe_info"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
 	"github.com/gin-gonic/gin"
@@ -25,15 +27,16 @@ type resolver struct {
 	planService          plan.Service
 	workoutService       workout.Service
 	subscribeInfoService user_subscribe_info.Service
+	saleItemService      sale_item.Service
 	uploadTool           uploader.Tool
 }
 
 func New(courseService courseService.Service, planService plan.Service,
 	workoutService workout.Service, subscribeInfoService user_subscribe_info.Service,
-	uploadTool uploader.Tool) Resolver {
+	saleItemService sale_item.Service, uploadTool uploader.Tool) Resolver {
 	return &resolver{courseService: courseService, planService: planService,
 		workoutService: workoutService, subscribeInfoService: subscribeInfoService,
-		uploadTool: uploadTool}
+		saleItemService: saleItemService, uploadTool: uploadTool}
 }
 
 func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput) {
@@ -613,5 +616,107 @@ func (r *resolver) APIGetTrainerCourse(input *model.APIGetTrainerCourseInput) (o
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTrainerCourseInput) (output model.APIUpdateTrainerCourseOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := model.FindInput{}
+	findCourseInput.ID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法修改資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(input.Form.SaleType, 0) == model.SaleTypePersonal {
+		output.Set(code.BadRequest, "教練課表無法修改為個人課表")
+		return output
+	}
+	// 驗證輸入參數
+	if util.OnNilJustReturnInt(input.Form.SaleType, 0) == model.SaleTypeCharge {
+		if input.Form.SaleID == nil {
+			output.Set(code.BadRequest, "當銷售類型為付費課表時，SaleID必須帶值")
+			return output
+		}
+		findSaleItemInput := saleItemModel.FindInput{}
+		findSaleItemInput.ID = input.Form.SaleID
+		saleItemOutput, err := r.saleItemService.Find(&findSaleItemInput)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		if util.OnNilJustReturnInt(saleItemOutput.Type, 0) != model.SaleTypeCharge {
+			output.Set(code.BadRequest, "銷售類型不符")
+			return output
+		}
+	}
+	// 修改課表
+	table := model.Table{}
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := r.courseService.Tx(tx).Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	//當課表類型不為付費課表時，sale_id 保持 nil
+	findCourseInput = model.FindInput{}
+	findCourseInput.ID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err = r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != model.SaleTypeCharge {
+		if err := r.courseService.Tx(tx).UpdateSaleID(input.Uri.ID, nil); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
+	// 上傳 cover
+	if input.Cover != nil {
+		// 儲存新 cover
+		newCoverNamed, err := r.uploadTool.Save(input.Cover.Data, input.Cover.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改課表
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.Cover = util.PointerString(newCoverNamed)
+		if err := r.courseService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊 cover
+		_ = r.uploadTool.Delete(util.OnNilJustReturnString(courseOutput.Cover, ""))
+	}
+	tx.Commit()
+	// parser output
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "SaleItem.ProductLabel"},
+	}
+	courseOutput, err = r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIUpdateTrainerCourseData{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Data = &data
+	output.Set(code.Success, "success")
 	return output
 }

@@ -16,4 +16,5 @@ type Repository interface {
 	ChargeList(input *model.ChargeListInput) (outputs []*model.Output, amount int64, err error)
 	Updates(items []*model.Table) (err error)
 	Update(item *model.Table) (err error)
+	UpdateSaleID(id int64, saleItemID *int64) (err error)
 }

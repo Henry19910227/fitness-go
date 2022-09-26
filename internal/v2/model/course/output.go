@@ -180,7 +180,7 @@ type APIDeleteUserCourseOutput struct {
 	base.Output
 }
 
-// APIUpdateUserCourseOutput /v2/user/course/{course_id} [UPDATE]
+// APIUpdateUserCourseOutput /v2/user/course/{course_id} [PATCH]
 type APIUpdateUserCourseOutput struct {
 	base.Output
 }
@@ -286,6 +286,44 @@ type APIGetTrainerCourseData struct {
 		trainerOptional.NicknameField
 		trainerOptional.SkillField
 	} `json:"trainer,omitempty"`
+	SaleItem *struct {
+		saleItemOptional.IDField
+		saleItemOptional.NameField
+		ProductLabel *struct {
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+}
+
+// APIUpdateTrainerCourseOutput /v2/trainer/course/{course_id} [PATCH]
+type APIUpdateTrainerCourseOutput struct {
+	base.Output
+	Data *APIUpdateTrainerCourseData `json:"data,omitempty"`
+}
+type APIUpdateTrainerCourseData struct {
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.SaleIDField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.IntroField
+	courseOptional.FoodField
+	courseOptional.LevelField
+	courseOptional.SuitField
+	courseOptional.EquipmentField
+	courseOptional.PlaceField
+	courseOptional.TrainTargetField
+	courseOptional.BodyTargetField
+	courseOptional.NoticeField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	optional.CreateAtField
+	optional.UpdateAtField
 	SaleItem *struct {
 		saleItemOptional.IDField
 		saleItemOptional.NameField
