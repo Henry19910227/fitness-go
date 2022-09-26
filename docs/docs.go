@@ -21013,7 +21013,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "帳戶id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -21180,7 +21180,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "帳戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -24619,6 +24619,12 @@ var doc = `{
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "msg": {
                     "description": "訊息",
