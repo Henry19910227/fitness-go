@@ -26,3 +26,12 @@ type APICreateTrainerCourseBody struct {
 	required.LevelField
 	required.ScheduleTypeField
 }
+
+// APIGetTrainerCourseInput /v2/trainer/course/{course_id} [GET]
+type APIGetTrainerCourseInput struct {
+	required.UserIDField
+	Uri APIGetTrainerCourseUri
+}
+type APIGetTrainerCourseUri struct {
+	required.IDField
+}

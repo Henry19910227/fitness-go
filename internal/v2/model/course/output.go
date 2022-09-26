@@ -5,6 +5,7 @@ import (
 	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
 	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
 	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -250,4 +251,48 @@ type APICreateTrainerCourseOutput struct {
 }
 type APICreateTrainerCourseData struct {
 	courseOptional.IDField
+}
+
+// APIGetTrainerCourseOutput /v2/trainer/course/{course_id} [GET]
+type APIGetTrainerCourseOutput struct {
+	base.Output
+	Data *APIGetTrainerCourseData `json:"data,omitempty"`
+}
+type APIGetTrainerCourseData struct {
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.SaleIDField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.IntroField
+	courseOptional.FoodField
+	courseOptional.LevelField
+	courseOptional.SuitField
+	courseOptional.EquipmentField
+	courseOptional.PlaceField
+	courseOptional.TrainTargetField
+	courseOptional.BodyTargetField
+	courseOptional.NoticeField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	optional.CreateAtField
+	optional.UpdateAtField
+	Trainer *struct {
+		trainerOptional.UserIDField
+		trainerOptional.AvatarField
+		trainerOptional.NicknameField
+		trainerOptional.SkillField
+	} `json:"trainer,omitempty"`
+	SaleItem *struct {
+		saleItemOptional.IDField
+		saleItemOptional.NameField
+		ProductLabel *struct {
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
 }
