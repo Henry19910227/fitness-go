@@ -427,3 +427,25 @@ func (c *controller) UpdateTrainerCourse(ctx *gin.Context) {
 	output := c.resolver.APIUpdateTrainerCourse(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// DeleteTrainerCourse 刪除教練課表
+// @Summary 刪除教練課表
+// @Description 刪除教練課表
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} course.APIDeleteTrainerCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/course/{course_id} [DELETE]
+func (c *controller) DeleteTrainerCourse(ctx *gin.Context) {
+	var input model.APIDeleteTrainerCourseInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteTrainerCourse(&input)
+	ctx.JSON(http.StatusOK, output)
+}

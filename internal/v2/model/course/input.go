@@ -135,3 +135,12 @@ type APIUpdateTrainerCourseForm struct {
 	optional.BodyTargetField
 	optional.NoticeField
 }
+
+// APIDeleteTrainerCourseInput /v2/trainer/course/{course_id} [DELETE]
+type APIDeleteTrainerCourseInput struct {
+	required.UserIDField
+	Uri APIDeleteTrainerCourseUri
+}
+type APIDeleteTrainerCourseUri struct {
+	required.IDField
+}

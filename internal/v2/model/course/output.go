@@ -334,3 +334,8 @@ type APIUpdateTrainerCourseData struct {
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 }
+
+// APIDeleteTrainerCourseOutput /v2/trainer/course/{course_id} [DELETE]
+type APIDeleteTrainerCourseOutput struct {
+	base.Output
+}

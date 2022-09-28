@@ -720,3 +720,28 @@ func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTra
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIDeleteTrainerCourse(input *model.APIDeleteTrainerCourseInput) (output model.APIDeleteTrainerCourseOutput) {
+	// 查詢課表資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非課表擁有者，無法刪除資源")
+		return output
+	}
+	// 刪除課表
+	deleteInput := model.DeleteInput{}
+	deleteInput.ID = input.Uri.ID
+	if err := r.courseService.Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}
