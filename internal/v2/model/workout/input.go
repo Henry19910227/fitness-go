@@ -95,3 +95,12 @@ type APIDeleteUserWorkoutEndAudioInput struct {
 type APIDeleteUserWorkoutEndAudioUri struct {
 	required.IDField
 }
+
+// APIGetTrainerWorkoutsInput /v2/trainer/plan/{plan_is}/workouts [GET]
+type APIGetTrainerWorkoutsInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIGetTrainerPlansUri
+}
+type APIGetTrainerPlansUri struct {
+	required.PlanIDField
+}

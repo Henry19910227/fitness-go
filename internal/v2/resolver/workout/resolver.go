@@ -17,12 +17,12 @@ import (
 )
 
 type resolver struct {
-	workoutService workout.Service
+	workoutService    workout.Service
 	workoutSetService workout_set.Service
-	planService    plan.Service
-	courseService  course.Service
-	startAudioTool uploader.Tool
-	endAudioTool   uploader.Tool
+	planService       plan.Service
+	courseService     course.Service
+	startAudioTool    uploader.Tool
+	endAudioTool      uploader.Tool
 }
 
 func New(workoutService workout.Service, workoutSetService workout_set.Service, planService plan.Service, courseService course.Service, startAudioTool uploader.Tool, endAudioTool uploader.Tool) Resolver {
@@ -129,7 +129,7 @@ func (r *resolver) APICreateUserWorkoutFromTemplate(tx *gorm.DB, input *model.AP
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	if util.OnNilJustReturnInt64(courseOutput.ID, 0) != util.OnNilJustReturnInt64(templateOutput.ID, 0)  {
+	if util.OnNilJustReturnInt64(courseOutput.ID, 0) != util.OnNilJustReturnInt64(templateOutput.ID, 0) {
 		output.Set(code.BadRequest, "非此課表所屬模板id，無法創建資源")
 		return output
 	}
@@ -503,5 +503,24 @@ func (r *resolver) APIDeleteUserWorkoutEndAudio(input *model.APIDeleteUserWorkou
 	_ = r.endAudioTool.Delete(util.OnNilJustReturnString(workoutOutput.EndAudio, ""))
 	// parser output
 	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIGetTrainerWorkouts(input *model.APIGetTrainerWorkoutsInput) (output model.APIGetTrainerWorkoutsOutput) {
+	listInput := model.ListInput{}
+	listInput.PlanID = util.PointerInt64(input.Uri.PlanID)
+	workoutOutputs, _, err := r.workoutService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetTrainerWorkoutsData{}
+	if err := util.Parser(workoutOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }

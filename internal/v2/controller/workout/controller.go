@@ -184,3 +184,25 @@ func (c *controller) DeleteUserWorkoutEndAudio(ctx *gin.Context) {
 	output := c.resolver.APIDeleteUserWorkoutEndAudio(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetTrainerWorkouts 獲取教練訓練列表
+// @Summary 獲取教練訓練列表
+// @Description 獲取教練訓練列表
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param plan_id path int64 true "計畫id"
+// @Success 200 {object} workout.APIGetTrainerWorkoutsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/plan/{plan_id}/workouts [GET]
+func (c *controller) GetTrainerWorkouts(ctx *gin.Context) {
+	input := model.APIGetTrainerWorkoutsInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetTrainerWorkouts(&input)
+	ctx.JSON(http.StatusOK, output)
+}

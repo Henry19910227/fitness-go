@@ -11605,6 +11605,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/plan/{plan_id}/workouts": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練訓練列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "獲取教練訓練列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/workout.APIGetTrainerWorkoutsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/profile": {
             "get": {
                 "security": [
@@ -24399,6 +24442,69 @@ var doc = `{
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout.APIGetTrainerWorkoutsOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "end_audio": {
+                                "description": "結束語音",
+                                "type": "string",
+                                "example": "123.mp3"
+                            },
+                            "equipment": {
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
+                            },
+                            "id": {
+                                "description": "訓練 id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "description": "訓練名稱",
+                                "type": "string",
+                                "example": "腿部訓練"
+                            },
+                            "start_audio": {
+                                "description": "前導語音",
+                                "type": "string",
+                                "example": "123.mp3"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "workout_set_count": {
+                                "description": "動作組數",
+                                "type": "integer",
+                                "example": 10
+                            }
+                        }
+                    }
                 },
                 "msg": {
                     "description": "訊息",
