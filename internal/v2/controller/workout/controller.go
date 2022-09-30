@@ -206,3 +206,37 @@ func (c *controller) GetTrainerWorkouts(ctx *gin.Context) {
 	output := c.resolver.APIGetTrainerWorkouts(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// CreateTrainerWorkout 創建教練訓練
+// @Summary 創建教練訓練
+// @Description 創建教練訓練
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param plan_id path int64 true "計畫id"
+// @Param json_body body workout.APICreateTrainerWorkoutBody true "輸入參數"
+// @Success 200 {object} workout.APICreateTrainerWorkoutOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/plan/{plan_id}/workout [POST]
+func (c *controller) CreateTrainerWorkout(ctx *gin.Context) {
+	var input model.APICreateTrainerWorkoutInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	// 正常創建訓練
+	if input.Body.WorkoutTemplateID == nil {
+		output := c.resolver.APICreateTrainerWorkout(ctx.MustGet("tx").(*gorm.DB), &input)
+		ctx.JSON(http.StatusOK, output)
+		return
+	}
+	// 使用模板創建訓練
+	output := c.resolver.APICreateTrainerWorkoutFromTemplate(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}

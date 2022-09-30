@@ -104,3 +104,17 @@ type APIGetTrainerWorkoutsInput struct {
 type APIGetTrainerPlansUri struct {
 	required.PlanIDField
 }
+
+// APICreateTrainerWorkoutInput /v2/trainer/plan/{plan_id}/workout [POST]
+type APICreateTrainerWorkoutInput struct {
+	courseRequired.UserIDField
+	Uri  APICreateTrainerWorkoutUri
+	Body APICreateTrainerWorkoutBody
+}
+type APICreateTrainerWorkoutUri struct {
+	required.PlanIDField
+}
+type APICreateTrainerWorkoutBody struct {
+	required.NameField
+	WorkoutTemplateID *int64 `json:"workout_template_id" binding:"omitempty" example:"1"` // 訓練模板ID
+}

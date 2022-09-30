@@ -524,3 +524,203 @@ func (r *resolver) APIGetTrainerWorkouts(input *model.APIGetTrainerWorkoutsInput
 	output.Data = &data
 	return output
 }
+
+func (r *resolver) APICreateTrainerWorkout(tx *gorm.DB, input *model.APICreateTrainerWorkoutInput) (output model.APICreateTrainerWorkoutOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.PlanID = util.PointerInt64(input.Uri.PlanID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證課表權限
+	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout && util.OnNilJustReturnInt(courseOutput.WorkoutCount, 0) >= 1 {
+		output.Set(code.BadRequest, "已達訓練數量上限，無法創建資源")
+		return output
+	}
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非課表擁有者，無法創建資源")
+		return output
+	}
+	// 創建訓練
+	workoutTable := model.Table{}
+	workoutTable.PlanID = util.PointerInt64(input.Uri.PlanID)
+	workoutTable.Name = util.PointerString(input.Body.Name)
+	workoutTable.Equipment = util.PointerString("")
+	workoutTable.StartAudio = util.PointerString("")
+	workoutTable.EndAudio = util.PointerString("")
+	workoutTable.WorkoutSetCount = util.PointerInt(0)
+	workoutID, err := r.workoutService.Tx(tx).Create(&workoutTable)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此計畫訓練數量
+	workoutListInput := model.ListInput{}
+	workoutListInput.PlanID = util.PointerInt64(input.Uri.PlanID)
+	workoutOutputs, _, err := r.workoutService.Tx(tx).List(&workoutListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新此計畫訓練數量
+	planTable := planModel.Table{}
+	planTable.ID = util.PointerInt64(input.Uri.PlanID)
+	planTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
+	if err := r.planService.Tx(tx).Update(&planTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此課表訓練數量
+	workoutListInput = model.ListInput{}
+	workoutListInput.CourseID = courseOutput.ID
+	workoutOutputs, _, err = r.workoutService.Tx(tx).List(&workoutListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新此課表訓練數量
+	courseTable := courseModel.Table{}
+	courseTable.ID = courseOutput.ID
+	courseTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
+	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// Parser Output
+	data := model.APICreateTrainerWorkoutData{}
+	data.ID = util.PointerInt64(workoutID)
+	output.Data = &data
+	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APICreateTrainerWorkoutFromTemplate(tx *gorm.DB, input *model.APICreateTrainerWorkoutInput) (output model.APICreateTrainerWorkoutOutput) {
+	defer tx.Rollback()
+	/** 驗證權限流程 */
+	// 1.驗證課表權限
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.PlanID = util.PointerInt64(input.Uri.PlanID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) == courseModel.SingleWorkout && util.OnNilJustReturnInt(courseOutput.WorkoutCount, 0) >= 1 {
+		output.Set(code.BadRequest, "已達訓練數量上限，無法創建資源")
+		return output
+	}
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非課表擁有者，無法創建資源")
+		return output
+	}
+	// 2.驗證模板 workout_id 合法性
+	findCourseInput = courseModel.FindInput{}
+	findCourseInput.WorkoutID = input.Body.WorkoutTemplateID
+	templateOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if util.OnNilJustReturnInt64(courseOutput.ID, 0) != util.OnNilJustReturnInt64(templateOutput.ID, 0) {
+		output.Set(code.BadRequest, "非此課表所屬模板id，無法創建資源")
+		return output
+	}
+	/** 查詢模板資訊 */
+	// 查詢模板 workout 資訊
+	findWorkoutInput := model.FindInput{}
+	findWorkoutInput.ID = input.Body.WorkoutTemplateID
+	workoutOutput, err := r.workoutService.Tx(tx).Find(&findWorkoutInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢模板 workout_set 資訊
+	workoutSetListInput := workoutSetModel.ListInput{}
+	workoutSetListInput.WorkoutID = input.Body.WorkoutTemplateID
+	workoutSetOutputs, _, err := r.workoutSetService.Tx(tx).List(&workoutSetListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	/** 以模板創建 workout */
+	// 1. 創建 workout 到指定 plan_id
+	workoutTable := model.Table{}
+	workoutTable.PlanID = util.PointerInt64(input.Uri.PlanID)
+	workoutTable.Name = util.PointerString(input.Body.Name)
+	workoutTable.Equipment = workoutOutput.Equipment
+	workoutTable.StartAudio = workoutOutput.StartAudio
+	workoutTable.EndAudio = workoutOutput.EndAudio
+	workoutTable.WorkoutSetCount = workoutOutput.WorkoutSetCount
+	newWorkoutID, err := r.workoutService.Tx(tx).Create(&workoutTable)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 2. 創建 workout_sets
+	workoutSetTables := make([]*workoutSetModel.Table, 0)
+	if err := util.Parser(workoutSetOutputs, &workoutSetTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	for _, workoutSetTable := range workoutSetTables {
+		workoutSetTable.ID = nil
+		workoutSetTable.WorkoutID = util.PointerInt64(newWorkoutID)
+	}
+	_, err = r.workoutSetService.Tx(tx).Create(workoutSetTables)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	/** 更新訓練與訓練組數 */
+	// 1. 查詢此課表訓練數量
+	workoutListInput := model.ListInput{}
+	workoutListInput.CourseID = courseOutput.ID
+	workoutOutputs, _, err := r.workoutService.Tx(tx).List(&workoutListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 2. 更新此課表訓練數量
+	courseTable := courseModel.Table{}
+	courseTable.ID = courseOutput.ID
+	courseTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
+	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 3. 查詢此計畫訓練數量
+	workoutListInput = model.ListInput{}
+	workoutListInput.PlanID = util.PointerInt64(input.Uri.PlanID)
+	workoutOutputs, _, err = r.workoutService.Tx(tx).List(&workoutListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 4. 更新此計畫訓練數量
+	planTable := planModel.Table{}
+	planTable.ID = util.PointerInt64(input.Uri.PlanID)
+	planTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
+	if err := r.planService.Tx(tx).Update(&planTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 5. 更新此訓練的訓練組數量
+	workoutTable = model.Table{}
+	workoutTable.ID = util.PointerInt64(newWorkoutID)
+	workoutTable.WorkoutSetCount = util.PointerInt(len(workoutSetOutputs))
+	if err := r.workoutService.Tx(tx).Update(&workoutTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// Parser Output
+	data := model.APICreateTrainerWorkoutData{}
+	data.ID = util.PointerInt64(newWorkoutID)
+	output.Data = &data
+	output.SetStatus(code.Success)
+	return output
+}

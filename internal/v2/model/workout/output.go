@@ -90,3 +90,12 @@ type APIGetTrainerWorkoutsData []*struct {
 	optional.CreateAtField
 	optional.UpdateAtField
 }
+
+// APICreateTrainerWorkoutOutput /v2/trainer/plan/{plan_id}/workout [POST]
+type APICreateTrainerWorkoutOutput struct {
+	base.Output
+	Data *APICreateTrainerWorkoutData `json:"data,omitempty"`
+}
+type APICreateTrainerWorkoutData struct {
+	optional.IDField
+}

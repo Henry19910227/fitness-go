@@ -16,6 +16,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.StaticFS("/resource/workout/start_audio", http.Dir("./volumes/storage/workout/start_audio"))
 	v2.StaticFS("/resource/workout/end_audio", http.Dir("./volumes/storage/workout/end_audio"))
+
 	v2.POST("/user/plan/:plan_id/workout", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateUserWorkout)
 	v2.DELETE("/user/workout/:workout_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserWorkout)
 	v2.GET("/user/plan/:plan_id/workouts", midd.Verify([]global.Role{global.UserRole}), controller.GetUserWorkouts)
@@ -23,5 +24,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.DELETE("/user/workout/:workout_id/start_audio", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserWorkoutStartAudio)
 	v2.DELETE("/user/workout/:workout_id/end_audio", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserWorkoutEndAudio)
 
+	v2.POST("/trainer/plan/:plan_id/workout", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateTrainerWorkout)
 	v2.GET("/trainer/plan/:plan_id/workouts", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerWorkouts)
 }

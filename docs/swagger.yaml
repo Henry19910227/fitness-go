@@ -5809,7 +5809,7 @@ definitions:
               example: 1,4
               type: string
             user_id:
-              description: 帳戶id
+              description: 用戶id
               example: 10001
               type: integer
           type: object
@@ -5937,7 +5937,7 @@ definitions:
         example: "2022-06-12 00:00:00"
         type: string
       user_id:
-        description: 帳戶id
+        description: 用戶id
         example: 10001
         type: integer
       youtube_url:
@@ -8169,6 +8169,37 @@ definitions:
         type: integer
     required:
     - seq
+    type: object
+  workout.APICreateTrainerWorkoutBody:
+    properties:
+      name:
+        description: 訓練名稱
+        example: 腿部訓練
+        type: string
+      workout_template_id:
+        description: 訓練模板ID
+        example: 1
+        type: integer
+    type: object
+  workout.APICreateTrainerWorkoutData:
+    properties:
+      id:
+        description: 訓練 id
+        example: 1
+        type: integer
+    type: object
+  workout.APICreateTrainerWorkoutOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/workout.APICreateTrainerWorkoutData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
     type: object
   workout.APICreateUserWorkoutBody:
     properties:
@@ -16197,6 +16228,40 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取教練課表列表
+      tags:
+      - 教練課表_v2
+  /v2/trainer/plan/{plan_id}/workout:
+    post:
+      consumes:
+      - application/json
+      description: 創建教練訓練
+      parameters:
+      - description: 計畫id
+        in: path
+        name: plan_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/workout.APICreateTrainerWorkoutBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/workout.APICreateTrainerWorkoutOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 創建教練訓練
       tags:
       - 教練課表_v2
   /v2/trainer/plan/{plan_id}/workouts:
