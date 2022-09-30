@@ -11735,6 +11735,47 @@ var doc = `{
             }
         },
         "/v2/trainer/workout/{workout_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除教練訓練",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "刪除教練訓練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout.APIDeleteTrainerWorkoutOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "security": [
                     {
@@ -21356,7 +21397,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "帳戶id",
+                                "description": "用戶 id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -21523,7 +21564,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "帳戶id",
+                    "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -24559,6 +24600,21 @@ var doc = `{
                 },
                 "data": {
                     "$ref": "#/definitions/workout.APICreateUserWorkoutData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout.APIDeleteTrainerWorkoutOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",

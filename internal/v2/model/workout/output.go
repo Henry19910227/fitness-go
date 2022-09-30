@@ -115,3 +115,8 @@ type APIUpdateTrainerWorkoutData struct {
 	optional.CreateAtField
 	optional.UpdateAtField
 }
+
+// APIDeleteTrainerWorkoutOutput /v2/trainer/workout/{workout_id} [DELETE]
+type APIDeleteTrainerWorkoutOutput struct {
+	base.Output
+}
