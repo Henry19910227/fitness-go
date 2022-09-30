@@ -99,3 +99,19 @@ type APICreateTrainerWorkoutOutput struct {
 type APICreateTrainerWorkoutData struct {
 	optional.IDField
 }
+
+// APIUpdateTrainerWorkoutOutput /v2/trainer/workout/{workout_id} [PATCH]
+type APIUpdateTrainerWorkoutOutput struct {
+	base.Output
+	Data *APIUpdateTrainerWorkoutData `json:"data,omitempty"`
+}
+type APIUpdateTrainerWorkoutData struct {
+	optional.IDField
+	optional.NameField
+	optional.EquipmentField
+	optional.StartAudioField
+	optional.EndAudioField
+	optional.WorkoutSetCountField
+	optional.CreateAtField
+	optional.UpdateAtField
+}

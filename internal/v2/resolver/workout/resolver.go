@@ -724,3 +724,94 @@ func (r *resolver) APICreateTrainerWorkoutFromTemplate(tx *gorm.DB, input *model
 	output.SetStatus(code.Success)
 	return output
 }
+
+func (r *resolver) APIUpdateTrainerWorkout(tx *gorm.DB, input *model.APIUpdateTrainerWorkoutInput) (output model.APIUpdateTrainerWorkoutOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此訓練擁有者，無法修改資源")
+		return output
+	}
+	// 查詢訓練資訊
+	findWorkoutInput := model.FindInput{}
+	findWorkoutInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutOutput, err := r.workoutService.Tx(tx).Find(&findWorkoutInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 修改訓練
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := r.workoutService.Tx(tx).Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 上傳 start audio
+	if input.Form.StartAudio != nil {
+		// 儲存新 start audio
+		startAudioNamed, err := r.startAudioTool.Save(input.Form.StartAudio.Data, input.Form.StartAudio.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.StartAudio = util.PointerString(startAudioNamed)
+		if err := r.workoutService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊 start audio
+		_ = r.startAudioTool.Delete(util.OnNilJustReturnString(workoutOutput.StartAudio, ""))
+	}
+	// 上傳 end audio
+	if input.Form.EndAudio != nil {
+		// 儲存新 end audio
+		endAudioNamed, err := r.endAudioTool.Save(input.Form.EndAudio.Data, input.Form.EndAudio.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練
+		table := model.Table{}
+		table.ID = util.PointerInt64(input.Uri.ID)
+		table.EndAudio = util.PointerString(endAudioNamed)
+		if err := r.workoutService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 刪除舊 end audio
+		_ = r.endAudioTool.Delete(util.OnNilJustReturnString(workoutOutput.EndAudio, ""))
+	}
+	tx.Commit()
+	// parser output
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutOutput, err = r.workoutService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIUpdateTrainerWorkoutData{}
+	if err := util.Parser(workoutOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Data = &data
+	output.Set(code.Success, "success")
+	return output
+}

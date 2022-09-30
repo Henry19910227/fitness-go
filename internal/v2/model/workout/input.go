@@ -118,3 +118,19 @@ type APICreateTrainerWorkoutBody struct {
 	required.NameField
 	WorkoutTemplateID *int64 `json:"workout_template_id" binding:"omitempty" example:"1"` // 訓練模板ID
 }
+
+// APIUpdateTrainerWorkoutInput /v2/trainer/workout/{workout_id} [PATCH]
+type APIUpdateTrainerWorkoutInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Uri    APIUpdateTrainerWorkoutUri
+	Form   APIUpdateTrainerWorkoutForm
+}
+type APIUpdateTrainerWorkoutUri struct {
+	required.IDField
+}
+type APIUpdateTrainerWorkoutForm struct {
+	optional.EquipmentField
+	optional.NameField
+	StartAudio *file.Input
+	EndAudio   *file.Input
+}

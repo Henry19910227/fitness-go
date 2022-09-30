@@ -17,4 +17,5 @@ type Resolver interface {
 	APICreateTrainerWorkout(tx *gorm.DB, input *model.APICreateTrainerWorkoutInput) (output model.APICreateTrainerWorkoutOutput)
 	APICreateTrainerWorkoutFromTemplate(tx *gorm.DB, input *model.APICreateTrainerWorkoutInput) (output model.APICreateTrainerWorkoutOutput)
 	APIGetTrainerWorkouts(input *model.APIGetTrainerWorkoutsInput) (output model.APIGetTrainerWorkoutsOutput)
+	APIUpdateTrainerWorkout(tx *gorm.DB, input *model.APIUpdateTrainerWorkoutInput) (output model.APIUpdateTrainerWorkoutOutput)
 }

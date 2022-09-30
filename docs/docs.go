@@ -11734,6 +11734,73 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/workout/{workout_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔 : {Base URL}/v2/resource/workout/end_audio/{Filename}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "更新教練訓練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "訓練名稱",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                        "name": "equipment",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "訓練前導音檔",
+                        "name": "start_audio",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "訓練結束音檔",
+                        "name": "end_audio",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout.APIUpdateTrainerWorkoutOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/action": {
             "post": {
                 "security": [
@@ -21289,7 +21356,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶id",
+                                "description": "帳戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -21456,7 +21523,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "帳戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -24668,6 +24735,69 @@ var doc = `{
                             }
                         }
                     }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout.APIUpdateTrainerWorkoutData": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "end_audio": {
+                    "description": "結束語音",
+                    "type": "string",
+                    "example": "123.mp3"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
+                },
+                "id": {
+                    "description": "訓練 id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "訓練名稱",
+                    "type": "string",
+                    "example": "腿部訓練"
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string",
+                    "example": "123.mp3"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "workout_set_count": {
+                    "description": "動作組數",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "workout.APIUpdateTrainerWorkoutOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/workout.APIUpdateTrainerWorkoutData"
                 },
                 "msg": {
                     "description": "訊息",

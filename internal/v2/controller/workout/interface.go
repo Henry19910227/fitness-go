@@ -12,4 +12,5 @@ type Controller interface {
 
 	CreateTrainerWorkout(ctx *gin.Context)
 	GetTrainerWorkouts(ctx *gin.Context)
+	UpdateTrainerWorkout(ctx *gin.Context)
 }

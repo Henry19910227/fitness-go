@@ -240,3 +240,47 @@ func (c *controller) CreateTrainerWorkout(ctx *gin.Context) {
 	output := c.resolver.APICreateTrainerWorkoutFromTemplate(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// UpdateTrainerWorkout 更新教練訓練
+// @Summary 更新教練訓練
+// @Description 前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔 : {Base URL}/v2/resource/workout/end_audio/{Filename}
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_id path int64 true "訓練id"
+// @Param name formData string false "訓練名稱"
+// @Param equipment formData string false "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"
+// @Param start_audio formData file false "訓練前導音檔"
+// @Param end_audio formData file false "訓練結束音檔"
+// @Success 200 {object} workout.APIUpdateTrainerWorkoutOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/workout/{workout_id} [PATCH]
+func (c *controller) UpdateTrainerWorkout(ctx *gin.Context) {
+	input := model.APIUpdateTrainerWorkoutInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBind(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	//獲取訓練前導音檔
+	file, fileHeader, _ := ctx.Request.FormFile("start_audio")
+	if file != nil {
+		input.Form.StartAudio = &fileModel.Input{}
+		input.Form.StartAudio.Named = fileHeader.Filename
+		input.Form.StartAudio.Data = file
+	}
+	//獲取訓練結束音檔
+	file, fileHeader, _ = ctx.Request.FormFile("end_audio")
+	if file != nil {
+		input.Form.EndAudio = &fileModel.Input{}
+		input.Form.EndAudio.Named = fileHeader.Filename
+		input.Form.EndAudio.Data = file
+	}
+	output := c.resolver.APIUpdateTrainerWorkout(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
