@@ -328,3 +328,25 @@ func (c *controller) DeleteTrainerWorkoutStartAudio(ctx *gin.Context) {
 	output := c.resolver.APIDeleteTrainerWorkoutStartAudio(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// DeleteTrainerWorkoutEndAudio 刪除教練訓練結束語音
+// @Summary 刪除教練訓練結束語音
+// @Description 刪除教練訓練結束語音
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_id path int64 true "訓練id"
+// @Success 200 {object} workout.APIDeleteTrainerWorkoutEndAudioOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/workout/{workout_id}/end_audio [DELETE]
+func (c *controller) DeleteTrainerWorkoutEndAudio(ctx *gin.Context) {
+	var input model.APIDeleteTrainerWorkoutEndAudioInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteTrainerWorkoutEndAudio(&input)
+	ctx.JSON(http.StatusOK, output)
+}

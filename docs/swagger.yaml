@@ -5809,7 +5809,7 @@ definitions:
               example: 1,4
               type: string
             user_id:
-              description: 用戶 id
+              description: 用戶id
               example: 10001
               type: integer
           type: object
@@ -5937,7 +5937,7 @@ definitions:
         example: "2022-06-12 00:00:00"
         type: string
       user_id:
-        description: 用戶 id
+        description: 用戶id
         example: 10001
         type: integer
       youtube_url:
@@ -8232,7 +8232,29 @@ definitions:
         example: message..
         type: string
     type: object
+  workout.APIDeleteTrainerWorkoutEndAudioOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   workout.APIDeleteTrainerWorkoutOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  workout.APIDeleteTrainerWorkoutStartAudioOutput:
     properties:
       code:
         description: 狀態碼
@@ -16441,6 +16463,62 @@ paths:
       security:
       - fitness_token: []
       summary: 更新教練訓練
+      tags:
+      - 教練課表_v2
+  /v2/trainer/workout/{workout_id}/end_audio:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除教練訓練結束語音
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/workout.APIDeleteTrainerWorkoutEndAudioOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除教練訓練結束語音
+      tags:
+      - 教練課表_v2
+  /v2/trainer/workout/{workout_id}/start_audio:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除教練訓練前導語音
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/workout.APIDeleteTrainerWorkoutStartAudioOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除教練訓練前導語音
       tags:
       - 教練課表_v2
   /v2/user/action:

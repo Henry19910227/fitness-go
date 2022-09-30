@@ -15,4 +15,5 @@ type Controller interface {
 	GetTrainerWorkouts(ctx *gin.Context)
 	UpdateTrainerWorkout(ctx *gin.Context)
 	DeleteTrainerWorkoutStartAudio(ctx *gin.Context)
+	DeleteTrainerWorkoutEndAudio(ctx *gin.Context)
 }
