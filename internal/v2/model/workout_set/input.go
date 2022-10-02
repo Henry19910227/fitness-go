@@ -142,3 +142,16 @@ type APIGetTrainerWorkoutSetsInput struct {
 type APIGetTrainerWorkoutSetsUri struct {
 	required.WorkoutIDField
 }
+
+// APICreateTrainerWorkoutSetsInput /v2/trainer/workout/{workout_id}/workout_sets [POST]
+type APICreateTrainerWorkoutSetsInput struct {
+	userRequired.UserIDField
+	Uri  APICreateTrainerWorkoutSetsUri
+	Body APICreateTrainerWorkoutSetsBody
+}
+type APICreateTrainerWorkoutSetsUri struct {
+	required.WorkoutIDField
+}
+type APICreateTrainerWorkoutSetsBody struct {
+	ActionIDs []int64 `json:"action_ids" binding:"required,workout_set_action_ids" example:"1,10,15"` // 動作id
+}

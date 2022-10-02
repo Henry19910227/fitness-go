@@ -272,6 +272,33 @@ func (c *controller) DeleteUserWorkoutSetProgressAudio(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// CreateTrainerWorkoutSets 創建教練訓練組
+// @Summary 創建教練訓練組
+// @Description 創建教練訓練組
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_id path int64 true "訓練id"
+// @Param json_body body workout_set.APICreateTrainerWorkoutSetsBody true "輸入參數"
+// @Success 200 {object} workout_set.APICreateTrainerWorkoutSetsOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/workout/{workout_id}/workout_sets [POST]
+func (c *controller) CreateTrainerWorkoutSets(ctx *gin.Context) {
+	var input model.APICreateTrainerWorkoutSetsInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateTrainerWorkoutSets(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetTrainerWorkoutSets 獲取教練訓練組列表
 // @Summary 獲取教練訓練組列表
 // @Description 獲取教練訓練組列表

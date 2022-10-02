@@ -518,3 +518,86 @@ func (r *resolver) APIGetTrainerWorkoutSets(input *model.APIGetTrainerWorkoutSet
 	output.Data = &data
 	return output
 }
+
+func (r *resolver) APICreateTrainerWorkoutSets(tx *gorm.DB, input *model.APICreateTrainerWorkoutSetsInput) (output model.APICreateTrainerWorkoutSetsOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
+		return output
+	}
+	// 驗證動作權限
+	actionListInput := actionModel.ListInput{}
+	actionListInput.IDs = input.Body.ActionIDs
+	actionListInput.Source = util.PointerInt(1)
+	actionOutputs, _, err := r.actionService.Tx(tx).List(&actionListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(actionOutputs) != len(input.Body.ActionIDs) {
+		output.Set(code.BadRequest, "含有不合法動作")
+		return output
+	}
+	for _, actionOutput := range actionOutputs {
+		if util.OnNilJustReturnInt(actionOutput.Source, 0) == actionModel.SourceUser {
+			output.Set(code.PermissionDenied, "不可添加用戶動作")
+			return output
+		}
+	}
+	// 添加訓練組
+	setTables := make([]*model.Table, 0)
+	for _, actionID := range input.Body.ActionIDs {
+		setTable := model.Table{}
+		setTable.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+		setTable.ActionID = util.PointerInt64(actionID)
+		setTable.Type = util.PointerInt(1)
+		setTable.AutoNext = util.PointerString("N")
+		setTable.Weight = util.PointerFloat64(10)
+		setTable.Reps = util.PointerInt(10)
+		setTable.Distance = util.PointerFloat64(1)
+		setTable.Duration = util.PointerInt(60)
+		setTable.Incline = util.PointerFloat64(1)
+		setTable.StartAudio = util.PointerString("")
+		setTable.ProgressAudio = util.PointerString("")
+		setTable.Remark = util.PointerString("")
+		setTables = append(setTables, &setTable)
+	}
+	workoutSetIDs, err := r.workoutSetService.Tx(tx).Create(setTables)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此訓練的訓練組數量
+	setListInput := model.ListInput{}
+	setListInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+	setListInput.Type = util.PointerInt(1)
+	setOutputs, _, err := r.workoutSetService.Tx(tx).List(&setListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新此訓練的訓練組數量
+	workoutTable := workoutModel.Table{}
+	workoutTable.ID = util.PointerInt64(input.Uri.WorkoutID)
+	workoutTable.WorkoutSetCount = util.PointerInt(len(setOutputs))
+	if err := r.workoutService.Tx(tx).Update(&workoutTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// Parser Output
+	data := model.APICreateTrainerWorkoutSetsData{}
+	data = workoutSetIDs
+	output.Data = &data
+	output.Set(code.Success, "success")
+	return output
+}

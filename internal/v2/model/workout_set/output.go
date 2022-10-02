@@ -195,3 +195,10 @@ type APIGetTrainerWorkoutSetsData []*struct {
 		action.UpdateAtField
 	} `json:"action,omitempty"`
 }
+
+// APICreateTrainerWorkoutSetsOutput /v2/trainer/workout/{workout_id}/workout_sets [POST]
+type APICreateTrainerWorkoutSetsOutput struct {
+	base.Output
+	Data *APICreateTrainerWorkoutSetsData `json:"data,omitempty"`
+}
+type APICreateTrainerWorkoutSetsData []int64
