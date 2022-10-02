@@ -202,3 +202,8 @@ type APICreateTrainerWorkoutSetsOutput struct {
 	Data *APICreateTrainerWorkoutSetsData `json:"data,omitempty"`
 }
 type APICreateTrainerWorkoutSetsData []int64
+
+// APICreateTrainerRestSetOutput /v2/user/workout/{workout_id}/rest_set [POST]
+type APICreateTrainerRestSetOutput struct {
+	base.Output
+}

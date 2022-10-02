@@ -299,6 +299,28 @@ func (c *controller) CreateTrainerWorkoutSets(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// CreateTrainerRestSet 創建教練休息組
+// @Summary 創建教練休息組
+// @Description 創建教練休息組
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_id path int64 true "訓練id"
+// @Success 200 {object} workout_set.APICreateTrainerRestSetOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/workout/{workout_id}/rest_set [POST]
+func (c *controller) CreateTrainerRestSet(ctx *gin.Context) {
+	var input model.APICreateTrainerRestSetInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateTrainerRestSet(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetTrainerWorkoutSets 獲取教練訓練組列表
 // @Summary 獲取教練訓練組列表
 // @Description 獲取教練訓練組列表

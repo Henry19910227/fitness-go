@@ -8637,6 +8637,17 @@ definitions:
         example: message..
         type: string
     type: object
+  workout_set.APICreateTrainerRestSetOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   workout_set.APICreateTrainerWorkoutSetsBody:
     properties:
       action_ids:
@@ -16613,6 +16624,33 @@ paths:
       security:
       - fitness_token: []
       summary: 刪除教練訓練結束語音
+      tags:
+      - 教練課表_v2
+  /v2/trainer/workout/{workout_id}/rest_set:
+    post:
+      consumes:
+      - application/json
+      description: 創建教練休息組
+      parameters:
+      - description: 訓練id
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          schema:
+            $ref: '#/definitions/workout_set.APICreateTrainerRestSetOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 創建教練休息組
       tags:
       - 教練課表_v2
   /v2/trainer/workout/{workout_id}/start_audio:
