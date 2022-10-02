@@ -495,3 +495,26 @@ func (r *resolver) APIGetCMSWorkoutSets(input *model.APIGetCMSWorkoutSetsInput) 
 	output.Paging = page
 	return output
 }
+
+func (r *resolver) APIGetTrainerWorkoutSets(input *model.APIGetTrainerWorkoutSetsInput) (output model.APIGetTrainerWorkoutSetsOutput) {
+	// 查詢
+	listInput := model.ListInput{}
+	listInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Action"},
+	}
+	setOutputs, _, err := r.workoutSetService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetTrainerWorkoutSetsData{}
+	if err := util.Parser(setOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}

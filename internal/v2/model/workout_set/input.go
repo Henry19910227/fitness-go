@@ -1,7 +1,7 @@
 package workout_set
 
 import (
-	courseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
+	userRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -44,7 +44,7 @@ type APIGetCMSWorkoutSetsInput struct {
 
 // APICreateUserWorkoutSetsInput /v2/user/workout/{workout_id}/workout_sets [POST]
 type APICreateUserWorkoutSetsInput struct {
-	courseRequired.UserIDField
+	userRequired.UserIDField
 	Uri  APICreateUserWorkoutSetsUri
 	Body APICreateUserWorkoutSetsBody
 }
@@ -57,7 +57,7 @@ type APICreateUserWorkoutSetsBody struct {
 
 // APICreateUserWorkoutSetByDuplicateInput /v2/user/workout_set/{workout_set_id}/duplicate [POST]
 type APICreateUserWorkoutSetByDuplicateInput struct {
-	courseRequired.UserIDField
+	userRequired.UserIDField
 	Uri  APICreateUserWorkoutSetByDuplicateUri
 	Body APICreateUserWorkoutSetByDuplicateBody
 }
@@ -70,7 +70,7 @@ type APICreateUserWorkoutSetByDuplicateBody struct {
 
 // APICreateUserRestSetInput /v2/user/workout/{workout_id}/rest_set [POST]
 type APICreateUserRestSetInput struct {
-	courseRequired.UserIDField
+	userRequired.UserIDField
 	Uri APICreateUserRestSetUri
 }
 type APICreateUserRestSetUri struct {
@@ -79,7 +79,7 @@ type APICreateUserRestSetUri struct {
 
 // APIDeleteUserWorkoutSetInput /v2/user/workout_set/{workout_set_id} [POST]
 type APIDeleteUserWorkoutSetInput struct {
-	courseRequired.UserIDField
+	userRequired.UserIDField
 	Uri APIDeleteUserWorkoutSetUri
 }
 type APIDeleteUserWorkoutSetUri struct {
@@ -88,7 +88,7 @@ type APIDeleteUserWorkoutSetUri struct {
 
 // APIGetUserWorkoutSetsInput /v2/user/workout/{workout_id}/workout_sets [GET]
 type APIGetUserWorkoutSetsInput struct {
-	courseRequired.UserIDField
+	userRequired.UserIDField
 	Uri APIGetUserWorkoutSetsUri
 }
 type APIGetUserWorkoutSetsUri struct {
@@ -97,7 +97,7 @@ type APIGetUserWorkoutSetsUri struct {
 
 // APIUpdateUserWorkoutSetInput /v2/user/workout_set/{workout_set_id} [PATCH]
 type APIUpdateUserWorkoutSetInput struct {
-	courseRequired.UserIDField
+	userRequired.UserIDField
 	Uri  APIUpdateUserWorkoutSetUri
 	Form APIUpdateUserWorkoutSetForm
 }
@@ -118,7 +118,7 @@ type APIUpdateUserWorkoutSetForm struct {
 
 // APIDeleteUserWorkoutSetStartAudioInput /v2/user/workout_set/{workout_set_id}/start_audio [DELETE]
 type APIDeleteUserWorkoutSetStartAudioInput struct {
-	courseRequired.UserIDField
+	userRequired.UserIDField
 	Uri APIDeleteUserWorkoutSetStartAudioUri
 }
 type APIDeleteUserWorkoutSetStartAudioUri struct {
@@ -127,9 +127,18 @@ type APIDeleteUserWorkoutSetStartAudioUri struct {
 
 // APIDeleteUserWorkoutSetProgressAudioInput /v2/user/workout_set/{workout_set_id}/progress_audio [DELETE]
 type APIDeleteUserWorkoutSetProgressAudioInput struct {
-	courseRequired.UserIDField
+	userRequired.UserIDField
 	Uri APIDeleteUserWorkoutSetProgressAudioUri
 }
 type APIDeleteUserWorkoutSetProgressAudioUri struct {
 	required.IDField
+}
+
+// APIGetTrainerWorkoutSetsInput /v2/trainer/workout/{workout_id}/workout_sets [GET]
+type APIGetTrainerWorkoutSetsInput struct {
+	userRequired.UserIDField
+	Uri APIGetUserWorkoutSetsUri
+}
+type APIGetTrainerWorkoutSetsUri struct {
+	required.WorkoutIDField
 }

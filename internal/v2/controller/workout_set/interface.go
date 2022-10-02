@@ -3,6 +3,8 @@ package workout_set
 import "github.com/gin-gonic/gin"
 
 type Controller interface {
+	GetCMSWorkoutSets(ctx *gin.Context)
+
 	CreateUserWorkoutSets(ctx *gin.Context)
 	CreateUserWorkoutSetByDuplicate(ctx *gin.Context)
 	CreateUserRestSet(ctx *gin.Context)
@@ -11,5 +13,6 @@ type Controller interface {
 	DeleteUserWorkoutSetStartAudio(ctx *gin.Context)
 	DeleteUserWorkoutSetProgressAudio(ctx *gin.Context)
 	GetUserWorkoutSets(ctx *gin.Context)
-	GetCMSWorkoutSets(ctx *gin.Context)
+
+	GetTrainerWorkoutSets(ctx *gin.Context)
 }

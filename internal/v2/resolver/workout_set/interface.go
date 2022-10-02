@@ -6,6 +6,8 @@ import (
 )
 
 type Resolver interface {
+	APIGetCMSWorkoutSets(input *model.APIGetCMSWorkoutSetsInput) interface{}
+
 	APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateUserWorkoutSetsInput) (output model.APICreateUserWorkoutSetsOutput)
 	APICreateUserWorkoutSetByDuplicate(tx *gorm.DB, input *model.APICreateUserWorkoutSetByDuplicateInput) (output model.APICreateUserWorkoutSetByDuplicateOutput)
 	APICreateUserRestSet(input *model.APICreateUserRestSetInput) (output model.APICreateUserRestSetOutput)
@@ -14,5 +16,6 @@ type Resolver interface {
 	APIDeleteUserWorkoutSetStartAudio(input *model.APIDeleteUserWorkoutSetStartAudioInput) (output model.APIDeleteUserWorkoutSetStartAudioOutput)
 	APIDeleteUserWorkoutSetProgressAudio(input *model.APIDeleteUserWorkoutSetProgressAudioInput) (output model.APIDeleteUserWorkoutSetProgressAudioOutput)
 	APIGetUserWorkoutSets(input *model.APIGetUserWorkoutSetsInput) (output model.APIGetUserWorkoutSetsOutput)
-	APIGetCMSWorkoutSets(input *model.APIGetCMSWorkoutSetsInput) interface{}
+
+	APIGetTrainerWorkoutSets(input *model.APIGetTrainerWorkoutSetsInput) (output model.APIGetTrainerWorkoutSetsOutput)
 }
