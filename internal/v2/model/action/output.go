@@ -14,10 +14,10 @@ import (
 type Output struct {
 	Table
 	MaxDistanceRecord *max_distance_record.Output `json:"max_distance_record" gorm:"foreignKey:action_id;references:id"` // 最長距離紀錄
-	MaxRepsRecord *max_reps_record.Output `json:"max_reps_record" gorm:"foreignKey:action_id;references:id"` // 最多次數紀錄
-	MaxRMRecord *max_rm_record.Output `json:"max_rm_record" gorm:"foreignKey:action_id;references:id"` // 最大RM紀錄
-	MaxSpeedRecord *max_speed_record.Output `json:"max_speed_record" gorm:"foreignKey:action_id;references:id"` // 最高速度紀錄
-	MaxWeightRecord *max_weight_record.Output `json:"max_weight_record" gorm:"foreignKey:action_id;references:id"` // 最大重量紀錄
+	MaxRepsRecord     *max_reps_record.Output     `json:"max_reps_record" gorm:"foreignKey:action_id;references:id"`     // 最多次數紀錄
+	MaxRMRecord       *max_rm_record.Output       `json:"max_rm_record" gorm:"foreignKey:action_id;references:id"`       // 最大RM紀錄
+	MaxSpeedRecord    *max_speed_record.Output    `json:"max_speed_record" gorm:"foreignKey:action_id;references:id"`    // 最高速度紀錄
+	MaxWeightRecord   *max_weight_record.Output   `json:"max_weight_record" gorm:"foreignKey:action_id;references:id"`   // 最大重量紀錄
 	MinDurationRecord *min_duration_record.Output `json:"min_duration_record" gorm:"foreignKey:action_id;references:id"` // 最短時長紀錄
 }
 
@@ -153,4 +153,26 @@ type APIDeleteUserActionOutput struct {
 // APIDeleteUserActionVideoOutput /v2/user/action/{action_id}/video [DELETE]
 type APIDeleteUserActionVideoOutput struct {
 	base.Output
+}
+
+// APIGetTrainerActionsOutput /v2/trainer/actions [GET] 獲取個人動作庫 API
+type APIGetTrainerActionsOutput struct {
+	base.Output
+	Data   *APIGetTrainerActionsData `json:"data,omitempty"`
+	Paging *paging.Output            `json:"paging,omitempty"`
+}
+type APIGetTrainerActionsData []*struct {
+	IDField
+	NameField
+	SourceField
+	TypeField
+	CategoryField
+	BodyField
+	EquipmentField
+	IntroField
+	CoverField
+	VideoField
+	StatusField
+	CreateAtField
+	UpdateAtField
 }

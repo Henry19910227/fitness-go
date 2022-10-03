@@ -304,3 +304,31 @@ func (c *controller) UpdateCMSAction(ctx *gin.Context) {
 	output := c.resolver.APIUpdateCMSAction(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetTrainerActions 獲取教練動作列表
+// @Summary 獲取教練動作列表
+// @Description 獲取教練動作列表
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param name query string false "動作名稱"
+// @Param source query string false "動作來源(1:平台動作/2:教練動作)"
+// @Param category query string false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"
+// @Param body query string false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"
+// @Param equipment query string false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} action.APIGetTrainerActionsOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/actions [GET]
+func (c *controller) GetTrainerActions(ctx *gin.Context) {
+	var input model.APIGetTrainerActionsInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetTrainerActions(&input)
+	ctx.JSON(http.StatusOK, output)
+}

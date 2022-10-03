@@ -15,4 +15,6 @@ type Resolver interface {
 	APIGetCMSActions(input *model.APIGetCMSActionsInput) (output model.APIGetCMSActionsOutput)
 	APICreateCMSAction(input *model.APICreateCMSActionInput) (output model.APICreateCMSActionOutput)
 	APIUpdateCMSAction(input *model.APIUpdateCMSActionInput) (output base.Output)
+
+	APIGetTrainerActions(input *model.APIGetTrainerActionsInput) (output model.APIGetTrainerActionsOutput)
 }
