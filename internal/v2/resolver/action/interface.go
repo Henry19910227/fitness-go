@@ -16,5 +16,6 @@ type Resolver interface {
 	APICreateCMSAction(input *model.APICreateCMSActionInput) (output model.APICreateCMSActionOutput)
 	APIUpdateCMSAction(input *model.APIUpdateCMSActionInput) (output base.Output)
 
+	APICreateTrainerAction(tx *gorm.DB, input *model.APICreateTrainerActionInput) (output model.APICreateTrainerActionOutput)
 	APIGetTrainerActions(input *model.APIGetTrainerActionsInput) (output model.APIGetTrainerActionsOutput)
 }

@@ -159,3 +159,19 @@ type APIGetTrainerActionsQuery struct {
 	Equipment *string `json:"equipment,omitempty" form:"equipment" binding:"omitempty,action_equipment" example:"1,3,5"`  //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
 	PagingInput
 }
+
+// APICreateTrainerActionInput /v2/trainer/action [POST] 新增教練動作 API
+type APICreateTrainerActionInput struct {
+	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
+	Cover  *file.Input
+	Video  *file.Input
+	Form   APICreateUserActionForm
+}
+type APICreateTrainerActionForm struct {
+	NameRequired
+	TypeRequired
+	CategoryRequired
+	BodyRequired
+	EquipmentRequired
+	IntroRequired
+}

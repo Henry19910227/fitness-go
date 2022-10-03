@@ -23,6 +23,124 @@ func New(actionService actionService.Service, coverUploadTool uploader.Tool, vid
 	return &resolver{actionService: actionService, coverUploadTool: coverUploadTool, videoUploadTool: videoUploadTool}
 }
 
+func (r *resolver) APIGetCMSActions(input *model.APIGetCMSActionsInput) (output model.APIGetCMSActionsOutput) {
+	actionInput := model.ListInput{}
+	actionInput.Source = util.PointerInt(1)
+	actionInput.Size = input.Size
+	actionInput.Page = input.Page
+	actionInput.OrderField = "create_at"
+	actionInput.OrderType = order_by.ASC
+	datas, page, err := r.actionService.List(&actionInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetCMSActionsData{}
+	if err := util.Parser(datas, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
+	return output
+}
+
+func (r *resolver) APICreateCMSAction(input *model.APICreateCMSActionInput) (output model.APICreateCMSActionOutput) {
+	table := model.Table{}
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	table.Cover = util.PointerString("")
+	table.Video = util.PointerString("")
+	table.Source = util.PointerInt(1)
+	// 儲存動作封面圖
+	if input.CoverFile != nil {
+		coverNamed, err := r.coverUploadTool.Save(input.CoverFile.Data, input.CoverFile.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		table.Cover = util.PointerString(coverNamed)
+	}
+	// 儲存動作影片
+	if input.VideoFile != nil {
+		videoNamed, err := r.videoUploadTool.Save(input.VideoFile.Data, input.VideoFile.Named)
+		if err != nil {
+			if table.Cover != nil {
+				_ = r.coverUploadTool.Delete(*table.Cover)
+			}
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		table.Video = util.PointerString(videoNamed)
+	}
+	result, err := r.actionService.Create(&table)
+	if err != nil {
+		if table.Cover != nil {
+			_ = r.coverUploadTool.Delete(*table.Cover)
+		}
+		if table.Video != nil {
+			_ = r.videoUploadTool.Delete(*table.Video)
+		}
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APICreateCMSActionData{}
+	if err := util.Parser(result, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIUpdateCMSAction(input *model.APIUpdateCMSActionInput) (output base.Output) {
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	if err := util.Parser(input.Form, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 儲存動作封面圖
+	if input.CoverFile != nil {
+		coverNamed, err := r.coverUploadTool.Save(input.CoverFile.Data, input.CoverFile.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		table.Cover = util.PointerString(coverNamed)
+	}
+	// 儲存動作影片
+	if input.VideoFile != nil {
+		videoNamed, err := r.videoUploadTool.Save(input.VideoFile.Data, input.VideoFile.Named)
+		if err != nil {
+			if table.Cover != nil {
+				_ = r.coverUploadTool.Delete(*table.Cover)
+			}
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		table.Video = util.PointerString(videoNamed)
+	}
+	// 更新資料
+	if err := r.actionService.Update(&table); err != nil {
+		if table.Cover != nil {
+			_ = r.coverUploadTool.Delete(*table.Cover)
+		}
+		if table.Video != nil {
+			_ = r.videoUploadTool.Delete(*table.Video)
+		}
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}
+
 func (r *resolver) APICreateUserAction(tx *gorm.DB, input *model.APICreateUserActionInput) (output model.APICreateUserActionOutput) {
 	defer tx.Rollback()
 	table := model.Table{}
@@ -301,121 +419,58 @@ func (r *resolver) APIDeleteUserActionVideo(input *model.APIDeleteUserActionVide
 	return output
 }
 
-func (r *resolver) APIGetCMSActions(input *model.APIGetCMSActionsInput) (output model.APIGetCMSActionsOutput) {
-	actionInput := model.ListInput{}
-	actionInput.Source = util.PointerInt(1)
-	actionInput.Size = input.Size
-	actionInput.Page = input.Page
-	actionInput.OrderField = "create_at"
-	actionInput.OrderType = order_by.ASC
-	datas, page, err := r.actionService.List(&actionInput)
-	if err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	// parser output
-	data := model.APIGetCMSActionsData{}
-	if err := util.Parser(datas, &data); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	output.Set(code.Success, "success")
-	output.Paging = page
-	output.Data = data
-	return output
-}
-
-func (r *resolver) APICreateCMSAction(input *model.APICreateCMSActionInput) (output model.APICreateCMSActionOutput) {
+func (r *resolver) APICreateTrainerAction(tx *gorm.DB, input *model.APICreateTrainerActionInput) (output model.APICreateTrainerActionOutput) {
+	defer tx.Rollback()
 	table := model.Table{}
-	if err := util.Parser(input.Form, &table); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
+	table.UserID = util.PointerInt64(input.UserID)
+	table.Source = util.PointerInt(model.SourceTrainer)
 	table.Cover = util.PointerString("")
 	table.Video = util.PointerString("")
-	table.Source = util.PointerInt(1)
-	// 儲存動作封面圖
-	if input.CoverFile != nil {
-		coverNamed, err := r.coverUploadTool.Save(input.CoverFile.Data, input.CoverFile.Named)
-		if err != nil {
-			output.Set(code.BadRequest, err.Error())
-			return output
-		}
-		table.Cover = util.PointerString(coverNamed)
-	}
-	// 儲存動作影片
-	if input.VideoFile != nil {
-		videoNamed, err := r.videoUploadTool.Save(input.VideoFile.Data, input.VideoFile.Named)
-		if err != nil {
-			if table.Cover != nil {
-				_ = r.coverUploadTool.Delete(*table.Cover)
-			}
-			output.Set(code.BadRequest, err.Error())
-			return output
-		}
-		table.Video = util.PointerString(videoNamed)
-	}
-	result, err := r.actionService.Create(&table)
-	if err != nil {
-		if table.Cover != nil {
-			_ = r.coverUploadTool.Delete(*table.Cover)
-		}
-		if table.Video != nil {
-			_ = r.videoUploadTool.Delete(*table.Video)
-		}
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	data := model.APICreateCMSActionData{}
-	if err := util.Parser(result, &data); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	output.Set(code.Success, "success")
-	output.Data = &data
-	return output
-}
-
-func (r *resolver) APIUpdateCMSAction(input *model.APIUpdateCMSActionInput) (output base.Output) {
-	table := model.Table{}
-	table.ID = util.PointerInt64(input.Uri.ID)
 	if err := util.Parser(input.Form, &table); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	// 儲存動作封面圖
-	if input.CoverFile != nil {
-		coverNamed, err := r.coverUploadTool.Save(input.CoverFile.Data, input.CoverFile.Named)
-		if err != nil {
-			output.Set(code.BadRequest, err.Error())
-			return output
-		}
-		table.Cover = util.PointerString(coverNamed)
-	}
-	// 儲存動作影片
-	if input.VideoFile != nil {
-		videoNamed, err := r.videoUploadTool.Save(input.VideoFile.Data, input.VideoFile.Named)
-		if err != nil {
-			if table.Cover != nil {
-				_ = r.coverUploadTool.Delete(*table.Cover)
-			}
-			output.Set(code.BadRequest, err.Error())
-			return output
-		}
-		table.Video = util.PointerString(videoNamed)
-	}
-	// 更新資料
-	if err := r.actionService.Update(&table); err != nil {
-		if table.Cover != nil {
-			_ = r.coverUploadTool.Delete(*table.Cover)
-		}
-		if table.Video != nil {
-			_ = r.videoUploadTool.Delete(*table.Video)
-		}
+	actionOutput, err := r.actionService.Tx(tx).Create(&table)
+	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	if input.Video != nil {
+		videoNamed, err := r.videoUploadTool.Save(input.Video.Data, input.Video.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練組
+		table := model.Table{}
+		table.ID = actionOutput.ID
+		table.Video = util.PointerString(videoNamed)
+		if err := r.actionService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
+	if input.Cover != nil {
+		coverNamed, err := r.coverUploadTool.Save(input.Cover.Data, input.Cover.Named)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 修改訓練組
+		table := model.Table{}
+		table.ID = actionOutput.ID
+		table.Cover = util.PointerString(coverNamed)
+		if err := r.actionService.Tx(tx).Update(&table); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
+	tx.Commit()
+	// parser output
+	data := model.APICreateTrainerActionData{}
+	data.ID = actionOutput.ID
 	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }
 

@@ -176,3 +176,12 @@ type APIGetTrainerActionsData []*struct {
 	CreateAtField
 	UpdateAtField
 }
+
+// APICreateTrainerActionOutput /v2/trainer/action [POST] 新增教練動作 API
+type APICreateTrainerActionOutput struct {
+	base.Output
+	Data *APICreateTrainerActionData `json:"data,omitempty"`
+}
+type APICreateTrainerActionData struct {
+	IDField
+}

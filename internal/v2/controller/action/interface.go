@@ -13,5 +13,6 @@ type Controller interface {
 	DeleteUserAction(ctx *gin.Context)
 	DeleteUserActionVideo(ctx *gin.Context)
 
+	CreateTrainerAction(ctx *gin.Context)
 	GetTrainerActions(ctx *gin.Context)
 }
