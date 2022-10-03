@@ -185,3 +185,8 @@ type APICreateTrainerActionOutput struct {
 type APICreateTrainerActionData struct {
 	IDField
 }
+
+// APIUpdateTrainerActionOutput /v2/trainer/action/{action_id} [PATCH] 修改教練動作 API
+type APIUpdateTrainerActionOutput struct {
+	base.Output
+}

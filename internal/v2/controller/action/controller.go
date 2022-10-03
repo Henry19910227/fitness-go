@@ -352,6 +352,53 @@ func (c *controller) CreateTrainerAction(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// UpdateTrainerAction 更新教練動作
+// @Summary 更新教練動作
+// @Description 更新教練動作
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作 id"`
+// @Param name formData string false "動作名稱(1~20字元)"`
+// @Param category formData int false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"`
+// @Param body formData int false "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)"`
+// @Param equipment formData int false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"`
+// @Param intro formData string false "動作介紹(1~400字元)"`
+// @Param cover formData file false "課表封面照"
+// @Param video formData file false "影片檔"
+// @Success 200 {object} action.APIUpdateTrainerActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/action/{action_id} [PATCH]
+func (c *controller) UpdateTrainerAction(ctx *gin.Context) {
+	input := model.APIUpdateTrainerActionInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBind(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	//獲取封面圖
+	file, fileHeader, _ := ctx.Request.FormFile("cover")
+	if file != nil {
+		input.Cover = &fileModel.Input{}
+		input.Cover.Named = fileHeader.Filename
+		input.Cover.Data = file
+	}
+	//獲取訓練影片
+	file, fileHeader, _ = ctx.Request.FormFile("video")
+	if file != nil {
+		input.Video = &fileModel.Input{}
+		input.Video.Named = fileHeader.Filename
+		input.Video.Data = file
+	}
+	output := c.resolver.APIUpdateTrainerAction(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetTrainerActions 獲取教練動作列表
 // @Summary 獲取教練動作列表
 // @Description 獲取教練動作列表

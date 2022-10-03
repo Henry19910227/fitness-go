@@ -11193,6 +11193,91 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/action/{action_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新教練動作",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "更新教練動作",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作 id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "動作名稱(1~20字元)",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                        "name": "category",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                        "name": "body",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                        "name": "equipment",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "動作介紹(1~400字元)",
+                        "name": "intro",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "課表封面照",
+                        "name": "cover",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "影片檔",
+                        "name": "video",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/action.APIUpdateTrainerActionOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/actions": {
             "get": {
                 "security": [
@@ -14585,6 +14670,21 @@ var doc = `{
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "action.APIUpdateTrainerActionOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },
@@ -21961,7 +22061,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶 id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -22128,7 +22228,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶 id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },

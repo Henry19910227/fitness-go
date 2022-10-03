@@ -28,5 +28,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.DELETE("/user/action/:action_id/video", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserActionVideo)
 
 	v2.POST("/trainer/action", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateTrainerAction)
+	v2.PATCH("/trainer/action/:action_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateTrainerAction)
 	v2.GET("/trainer/actions", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerActions)
 }

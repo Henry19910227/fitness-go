@@ -175,3 +175,22 @@ type APICreateTrainerActionForm struct {
 	EquipmentRequired
 	IntroRequired
 }
+
+// APIUpdateTrainerActionInput /v2/trainer/action/{action_id} [PATCH] 修改教練動作 API
+type APIUpdateTrainerActionInput struct {
+	UserIDRequired
+	Cover *file.Input
+	Video *file.Input
+	Form  APIUpdateTrainerActionForm
+	Uri   APIUpdateTrainerActionUri
+}
+type APIUpdateTrainerActionForm struct {
+	NameOptional
+	CategoryOptional
+	BodyOptional
+	EquipmentOptional
+	IntroOptional
+}
+type APIUpdateTrainerActionUri struct {
+	IDRequired
+}
