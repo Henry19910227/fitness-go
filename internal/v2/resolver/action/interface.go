@@ -20,4 +20,5 @@ type Resolver interface {
 	APIUpdateTrainerAction(tx *gorm.DB, input *model.APIUpdateTrainerActionInput) (output model.APIUpdateTrainerActionOutput)
 	APIGetTrainerActions(input *model.APIGetTrainerActionsInput) (output model.APIGetTrainerActionsOutput)
 	APIDeleteTrainerAction(input *model.APIDeleteTrainerActionInput) (output model.APIDeleteTrainerActionOutput)
+	APIDeleteTrainerActionVideo(input *model.APIDeleteTrainerActionVideoInput) (output model.APIDeleteTrainerActionVideoOutput)
 }

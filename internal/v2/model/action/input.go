@@ -203,3 +203,12 @@ type APIDeleteTrainerActionInput struct {
 type APIDeleteTrainerActionUri struct {
 	IDRequired
 }
+
+// APIDeleteTrainerActionVideoInput /v2/trainer/action/{action_id}/video
+type APIDeleteTrainerActionVideoInput struct {
+	UserIDRequired
+	Uri APIDeleteTrainerActionVideoUri
+}
+type APIDeleteTrainerActionVideoUri struct {
+	IDRequired
+}

@@ -663,3 +663,37 @@ func (r *resolver) APIDeleteTrainerAction(input *model.APIDeleteTrainerActionInp
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIDeleteTrainerActionVideo(input *model.APIDeleteTrainerActionVideoInput) (output model.APIDeleteTrainerActionVideoOutput) {
+	// 查詢動作資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	actionOutput, err := r.actionService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt(actionOutput.Source, 0) != model.SourceTrainer {
+		output.Set(code.BadRequest, "非教練類型動作，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt64(actionOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此動作擁有者，無法刪除資源")
+		return output
+	}
+	// 修改訓練組
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	table.Video = util.PointerString("")
+	if err := r.actionService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除影片
+	_ = r.videoUploadTool.Delete(util.OnNilJustReturnString(actionOutput.Video, ""))
+
+	output.Set(code.Success, "success")
+	return output
+}
+

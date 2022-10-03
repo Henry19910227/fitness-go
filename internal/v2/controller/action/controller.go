@@ -427,7 +427,7 @@ func (c *controller) GetTrainerActions(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// DeleteTrainerActionVideo 刪除教練動作
+// DeleteTrainerAction 刪除教練動作
 // @Summary 刪除教練動作
 // @Description 刪除教練動作
 // @Tags 教練課表_v2
@@ -438,7 +438,7 @@ func (c *controller) GetTrainerActions(ctx *gin.Context) {
 // @Success 200 {object} action.APIDeleteTrainerActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/trainer/action/{action_id} [DELETE]
-func (c *controller) DeleteTrainerActionVideo(ctx *gin.Context) {
+func (c *controller) DeleteTrainerAction(ctx *gin.Context) {
 	var input model.APIDeleteTrainerActionInput
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
@@ -446,5 +446,27 @@ func (c *controller) DeleteTrainerActionVideo(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIDeleteTrainerAction(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// DeleteTrainerActionVideo 刪除教練動作影片
+// @Summary 刪除教練動作影片
+// @Description 刪除教練動作影片
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作id"
+// @Success 200 {object} action.APIDeleteTrainerActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/action/{action_id}/video [DELETE]
+func (c *controller) DeleteTrainerActionVideo(ctx *gin.Context) {
+	var input model.APIDeleteTrainerActionVideoInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteTrainerActionVideo(&input)
 	ctx.JSON(http.StatusOK, output)
 }

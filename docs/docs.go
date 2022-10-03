@@ -11319,6 +11319,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/action/{action_id}/video": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除教練動作影片",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "刪除教練動作影片",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/action.APIDeleteTrainerActionOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/actions": {
             "get": {
                 "security": [
@@ -22117,7 +22160,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "帳戶id",
+                                "description": "用戶 id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -22284,7 +22327,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "帳戶id",
+                    "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
                 },
