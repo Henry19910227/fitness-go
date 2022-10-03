@@ -14,4 +14,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := workout_set_order.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.PUT("/user/workout/:workout_id/workout_set_orders", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserWorkoutSetOrders)
+	v2.PUT("/trainer/workout/:workout_id/workout_set_orders", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateTrainerWorkoutSetOrders)
 }

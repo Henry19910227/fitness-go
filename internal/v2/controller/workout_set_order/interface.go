@@ -4,4 +4,5 @@ import "github.com/gin-gonic/gin"
 
 type Controller interface {
 	UpdateUserWorkoutSetOrders(ctx *gin.Context)
+	UpdateTrainerWorkoutSetOrders(ctx *gin.Context)
 }

@@ -11971,6 +11971,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/workout/{workout_id}/workout_set_orders": {
+            "put": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新教練訓練組排序",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "更新教練訓練組排序",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/workout_set_order.APIUpdateTrainerWorkoutSetOrderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set_order.APIUpdateTrainerWorkoutSetOrdersOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/workout/{workout_id}/workout_sets": {
             "get": {
                 "security": [
@@ -21619,7 +21671,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶id",
+                                "description": "帳戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -21786,7 +21838,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "帳戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -26161,6 +26213,48 @@ var doc = `{
                 },
                 "data": {
                     "$ref": "#/definitions/workout_set.APIUpdateUserWorkoutSetData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set_order.APIUpdateTrainerWorkoutSetOrderBody": {
+            "type": "object",
+            "required": [
+                "workout_set_orders"
+            ],
+            "properties": {
+                "workout_set_orders": {
+                    "description": "訓練組排序",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "seq": {
+                                "description": "排序號",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "workout_set_id": {
+                                "description": "訓練組id",
+                                "type": "integer",
+                                "example": 1
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "workout_set_order.APIUpdateTrainerWorkoutSetOrdersOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",

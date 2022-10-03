@@ -7,4 +7,5 @@ import (
 
 type Resolver interface {
 	APIUpdateUserWorkoutSetOrders(tx *gorm.DB, input *model.APIUpdateUserWorkoutSetOrdersInput) (output model.APIUpdateUserWorkoutSetOrdersOutput)
+	APIUpdateTrainerWorkoutSetOrders(tx *gorm.DB, input *model.APIUpdateTrainerWorkoutSetOrdersInput) (output model.APIUpdateTrainerWorkoutSetOrdersOutput)
 }

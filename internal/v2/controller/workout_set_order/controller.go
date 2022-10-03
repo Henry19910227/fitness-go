@@ -44,3 +44,30 @@ func (c *controller) UpdateUserWorkoutSetOrders(ctx *gin.Context) {
 	output := c.resolver.APIUpdateUserWorkoutSetOrders(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// UpdateTrainerWorkoutSetOrders 更新教練訓練組排序
+// @Summary 更新教練訓練組排序
+// @Description 更新教練訓練組排序
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_id path int64 true "訓練id"
+// @Param json_body body workout_set_order.APIUpdateTrainerWorkoutSetOrderBody true "輸入參數"
+// @Success 200 {object} workout_set_order.APIUpdateTrainerWorkoutSetOrdersOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/workout/{workout_id}/workout_set_orders [PUT]
+func (c *controller) UpdateTrainerWorkoutSetOrders(ctx *gin.Context) {
+	var input model.APIUpdateTrainerWorkoutSetOrdersInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateTrainerWorkoutSetOrders(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}

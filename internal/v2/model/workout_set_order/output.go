@@ -16,3 +16,8 @@ func (Output) TableName() string {
 type APIUpdateUserWorkoutSetOrdersOutput struct {
 	base.Output
 }
+
+// APIUpdateTrainerWorkoutSetOrdersOutput /v2/trainer/workout/{workout_id}/workout_set_orders [PUT] 修改訓練組的順序
+type APIUpdateTrainerWorkoutSetOrdersOutput struct {
+	base.Output
+}
