@@ -16,4 +16,5 @@ type Controller interface {
 	CreateTrainerAction(ctx *gin.Context)
 	UpdateTrainerAction(ctx *gin.Context)
 	GetTrainerActions(ctx *gin.Context)
+	DeleteTrainerActionVideo(ctx *gin.Context)
 }

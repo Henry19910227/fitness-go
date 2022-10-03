@@ -629,3 +629,37 @@ func (r *resolver) APIUpdateTrainerAction(tx *gorm.DB, input *model.APIUpdateTra
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIDeleteTrainerAction(input *model.APIDeleteTrainerActionInput) (output model.APIDeleteTrainerActionOutput) {
+	// 查詢動作資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	actionOutput, err := r.actionService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt(actionOutput.Source, 0) != model.SourceTrainer {
+		output.Set(code.BadRequest, "非教練類型動作，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt64(actionOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此動作擁有者，無法刪除資源")
+		return output
+	}
+	// 刪除動作
+	deleteInput := model.DeleteInput{}
+	deleteInput.ID = input.Uri.ID
+	if err := r.actionService.Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除相關封面
+	_ = r.coverUploadTool.Delete(util.OnNilJustReturnString(actionOutput.Cover, ""))
+	// 刪除相關影片
+	_ = r.videoUploadTool.Delete(util.OnNilJustReturnString(actionOutput.Video, ""))
+
+	output.Set(code.Success, "success")
+	return output
+}

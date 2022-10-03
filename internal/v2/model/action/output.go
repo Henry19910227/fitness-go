@@ -190,3 +190,8 @@ type APICreateTrainerActionData struct {
 type APIUpdateTrainerActionOutput struct {
 	base.Output
 }
+
+// APIDeleteTrainerActionOutput /v2/trainer/action/{action_id} [DELETE]
+type APIDeleteTrainerActionOutput struct {
+	base.Output
+}

@@ -194,3 +194,12 @@ type APIUpdateTrainerActionForm struct {
 type APIUpdateTrainerActionUri struct {
 	IDRequired
 }
+
+// APIDeleteTrainerActionInput /v2/trainer/action/{action_id} [DELETE]
+type APIDeleteTrainerActionInput struct {
+	UserIDRequired
+	Uri APIDeleteTrainerActionUri
+}
+type APIDeleteTrainerActionUri struct {
+	IDRequired
+}
