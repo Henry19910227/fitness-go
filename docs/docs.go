@@ -12594,6 +12594,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/workout_set/{workout_set_id}/duplicate": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "複製教練訓練組",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "複製教練訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APICreateTrainerWorkoutSetByDuplicateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APICreateTrainerWorkoutSetByDuplicateOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/workout_set/{workout_set_id}/progress_audio": {
             "delete": {
                 "security": [
@@ -22384,7 +22436,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶 id",
+                                "description": "帳戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -22551,7 +22603,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶 id",
+                    "description": "帳戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -26135,6 +26187,34 @@ var doc = `{
             }
         },
         "workout_set.APICreateTrainerRestSetOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set.APICreateTrainerWorkoutSetByDuplicateBody": {
+            "type": "object",
+            "required": [
+                "duplicate_count"
+            ],
+            "properties": {
+                "duplicate_count": {
+                    "description": "複製個數",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "workout_set.APICreateTrainerWorkoutSetByDuplicateOutput": {
             "type": "object",
             "properties": {
                 "code": {

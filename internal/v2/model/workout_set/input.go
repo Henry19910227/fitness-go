@@ -212,3 +212,16 @@ type APIDeleteTrainerWorkoutSetProgressAudioInput struct {
 type APIDeleteTrainerWorkoutSetProgressAudioUri struct {
 	required.IDField
 }
+
+// APICreateTrainerWorkoutSetByDuplicateInput /v2/trainer/workout_set/{workout_set_id}/duplicate [POST]
+type APICreateTrainerWorkoutSetByDuplicateInput struct {
+	userRequired.UserIDField
+	Uri  APICreateTrainerWorkoutSetByDuplicateUri
+	Body APICreateTrainerWorkoutSetByDuplicateBody
+}
+type APICreateTrainerWorkoutSetByDuplicateUri struct {
+	required.IDField
+}
+type APICreateTrainerWorkoutSetByDuplicateBody struct {
+	DuplicateCount int `json:"duplicate_count" binding:"required,min=1,max=5" example:"1"` //複製個數
+}

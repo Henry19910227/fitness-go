@@ -257,3 +257,8 @@ type APIDeleteTrainerWorkoutSetStartAudioOutput struct {
 type APIDeleteTrainerWorkoutSetProgressAudioOutput struct {
 	base.Output
 }
+
+// APICreateTrainerWorkoutSetByDuplicateOutput /v2/trainer/workout_set/{workout_set_id}/duplicate [POST]
+type APICreateTrainerWorkoutSetByDuplicateOutput struct {
+	base.Output
+}

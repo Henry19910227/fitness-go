@@ -864,3 +864,69 @@ func (r *resolver) APIDeleteTrainerWorkoutSetProgressAudio(input *model.APIDelet
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APICreateTrainerWorkoutSetByDuplicate(tx *gorm.DB, input *model.APICreateTrainerWorkoutSetByDuplicateInput) (output model.APICreateTrainerWorkoutSetByDuplicateOutput) {
+	defer tx.Rollback()
+	/** 驗證權限流程 */
+	// 1.查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutSetID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 2.驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
+		return output
+	}
+	/** 複製訓練組流程 */
+	// 1.查詢訓練組
+	findWorkoutSetInput := model.FindInput{}
+	findWorkoutSetInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutSetOutput, err := r.workoutSetService.Tx(tx).Find(&findWorkoutSetInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 2.複製訓練組
+	workoutSetTables := make([]*model.Table, 0)
+	for i := 0; i < input.Body.DuplicateCount; i++ {
+		workoutSetTable := model.Table{}
+		if err := util.Parser(workoutSetOutput, &workoutSetTable); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		workoutSetTable.ID = nil
+		workoutSetTables = append(workoutSetTables, &workoutSetTable)
+	}
+	// 3.新增訓練組
+	_, err = r.workoutSetService.Tx(tx).Create(workoutSetTables)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	/** 更新上層訓練的訓練組數量流程 */
+	// 1.查詢當前訓練組數量
+	setListInput := model.ListInput{}
+	setListInput.WorkoutID = workoutSetOutput.WorkoutID
+	setListInput.Type = util.PointerInt(1)
+	setOutputs, _, err := r.workoutSetService.Tx(tx).List(&setListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 2.更新當前訓練組數量
+	workoutTable := workoutModel.Table{}
+	workoutTable.ID = workoutSetOutput.WorkoutID
+	workoutTable.WorkoutSetCount = util.PointerInt(len(setOutputs))
+	if err := r.workoutService.Tx(tx).Update(&workoutTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// Parser Output
+	output.Set(code.Success, "success")
+	return output
+}

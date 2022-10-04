@@ -5921,7 +5921,7 @@ definitions:
               example: 1,4
               type: string
             user_id:
-              description: 用戶 id
+              description: 帳戶id
               example: 10001
               type: integer
           type: object
@@ -6049,7 +6049,7 @@ definitions:
         example: "2022-06-12 00:00:00"
         type: string
       user_id:
-        description: 用戶 id
+        description: 帳戶id
         example: 10001
         type: integer
       youtube_url:
@@ -8754,6 +8754,26 @@ definitions:
         type: string
     type: object
   workout_set.APICreateTrainerRestSetOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  workout_set.APICreateTrainerWorkoutSetByDuplicateBody:
+    properties:
+      duplicate_count:
+        description: 複製個數
+        example: 1
+        type: integer
+    required:
+    - duplicate_count
+    type: object
+  workout_set.APICreateTrainerWorkoutSetByDuplicateOutput:
     properties:
       code:
         description: 狀態碼
@@ -17412,6 +17432,40 @@ paths:
       security:
       - fitness_token: []
       summary: 更新教練訓練組
+      tags:
+      - 教練課表_v2
+  /v2/trainer/workout_set/{workout_set_id}/duplicate:
+    post:
+      consumes:
+      - application/json
+      description: 複製教練訓練組
+      parameters:
+      - description: 訓練組id
+        in: path
+        name: workout_set_id
+        required: true
+        type: integer
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/workout_set.APICreateTrainerWorkoutSetByDuplicateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/workout_set.APICreateTrainerWorkoutSetByDuplicateOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 複製教練訓練組
       tags:
       - 教練課表_v2
   /v2/trainer/workout_set/{workout_set_id}/progress_audio:

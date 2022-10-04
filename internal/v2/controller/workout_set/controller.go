@@ -456,3 +456,30 @@ func (c *controller) DeleteTrainerWorkoutSetProgressAudio(ctx *gin.Context) {
 	output := c.resolver.APIDeleteTrainerWorkoutSetProgressAudio(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// CreateTrainerWorkoutSetByDuplicate 複製教練訓練組
+// @Summary 複製教練訓練組
+// @Description 複製教練訓練組
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_set_id path int64 true "訓練組id"
+// @Param json_body body workout_set.APICreateTrainerWorkoutSetByDuplicateBody true "輸入參數"
+// @Success 200 {object} workout_set.APICreateTrainerWorkoutSetByDuplicateOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/workout_set/{workout_set_id}/duplicate [POST]
+func (c *controller) CreateTrainerWorkoutSetByDuplicate(ctx *gin.Context) {
+	var input model.APICreateTrainerWorkoutSetByDuplicateInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateTrainerWorkoutSetByDuplicate(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
