@@ -194,3 +194,12 @@ type APIUpdateTrainerWorkoutSetForm struct {
 	StartAudio    *file.Input
 	ProgressAudio *file.Input
 }
+
+// APIDeleteTrainerWorkoutSetStartAudioInput /v2/trainer/workout_set/{workout_set_id}/start_audio [DELETE]
+type APIDeleteTrainerWorkoutSetStartAudioInput struct {
+	userRequired.UserIDField
+	Uri APIDeleteTrainerWorkoutSetStartAudioUri
+}
+type APIDeleteTrainerWorkoutSetStartAudioUri struct {
+	required.IDField
+}

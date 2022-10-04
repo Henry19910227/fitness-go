@@ -247,3 +247,8 @@ type APIUpdateTrainerWorkoutSetData struct {
 		action.UpdateAtField
 	} `json:"action,omitempty"`
 }
+
+// APIDeleteTrainerWorkoutSetStartAudioOutput /v2/trainer/workout_set/{workout_set_id}/start_audio [DELETE]
+type APIDeleteTrainerWorkoutSetStartAudioOutput struct {
+	base.Output
+}
