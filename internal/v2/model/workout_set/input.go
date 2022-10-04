@@ -173,3 +173,24 @@ type APIDeleteTrainerWorkoutSetInput struct {
 type APIDeleteTrainerWorkoutSetUri struct {
 	required.IDField
 }
+
+// APIUpdateTrainerWorkoutSetInput /v2/trainer/workout_set/{workout_set_id} [PATCH]
+type APIUpdateTrainerWorkoutSetInput struct {
+	userRequired.UserIDField
+	Uri  APIUpdateTrainerWorkoutSetUri
+	Form APIUpdateTrainerWorkoutSetForm
+}
+type APIUpdateTrainerWorkoutSetUri struct {
+	required.IDField
+}
+type APIUpdateTrainerWorkoutSetForm struct {
+	optional.AutoNextField
+	optional.RemarkField
+	optional.WeightField
+	optional.RepsField
+	optional.DistanceField
+	optional.DurationField
+	optional.InclineField
+	StartAudio    *file.Input
+	ProgressAudio *file.Input
+}

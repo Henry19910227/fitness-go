@@ -18,4 +18,5 @@ type Controller interface {
 	CreateTrainerRestSet(ctx *gin.Context)
 	GetTrainerWorkoutSets(ctx *gin.Context)
 	DeleteTrainerWorkoutSet(ctx *gin.Context)
+	UpdateTrainerWorkoutSet(ctx *gin.Context)
 }

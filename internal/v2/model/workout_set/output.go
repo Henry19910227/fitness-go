@@ -212,3 +212,38 @@ type APICreateTrainerRestSetOutput struct {
 type APIDeleteTrainerWorkoutSetOutput struct {
 	base.Output
 }
+
+// APIUpdateTrainerWorkoutSetOutput /v2/trainer/workout_set/{workout_set_id} [PATCH]
+type APIUpdateTrainerWorkoutSetOutput struct {
+	base.Output
+	Data *APIUpdateTrainerWorkoutSetData `json:"data,omitempty"`
+}
+type APIUpdateTrainerWorkoutSetData struct {
+	optional.IDField
+	optional.TypeField
+	optional.AutoNextField
+	optional.StartAudioField
+	optional.ProgressAudioField
+	optional.RemarkField
+	optional.WeightField
+	optional.RepsField
+	optional.DistanceField
+	optional.DurationField
+	optional.InclineField
+	optional.CreateAtField
+	optional.UpdateAtField
+	Action *struct {
+		action.IDField
+		action.NameField
+		action.SourceField
+		action.TypeField
+		action.CategoryField
+		action.BodyField
+		action.EquipmentField
+		action.IntroField
+		action.CoverField
+		action.VideoField
+		action.CreateAtField
+		action.UpdateAtField
+	} `json:"action,omitempty"`
+}

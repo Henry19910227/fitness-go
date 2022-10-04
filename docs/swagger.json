@@ -12479,6 +12479,101 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3 進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "更新教練訓練組",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "自動下一組(Y:是/N:否)",
+                        "name": "auto_next",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "備註(1~40)",
+                        "name": "remark",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "description": "重量(公斤 0.01~999.99)",
+                        "name": "weight",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "次數(1~999)",
+                        "name": "reps",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "description": "距離(公里 0.01~999.99)",
+                        "name": "distance",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "時長(秒 1~38439)",
+                        "name": "duration",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "description": "坡度(0.01~999.99)",
+                        "name": "incline",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "訓練前導音檔",
+                        "name": "start_audio",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "訓練中音檔",
+                        "name": "progress_audio",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APIUpdateTrainerWorkoutSetOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
             }
         },
         "/v2/user/action": {
@@ -22185,7 +22280,7 @@
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶id",
+                                "description": "帳戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -22352,7 +22447,7 @@
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "帳戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -26589,6 +26684,159 @@
                             }
                         }
                     }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set.APIUpdateTrainerWorkoutSetData": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "object",
+                    "properties": {
+                        "body": {
+                            "description": "身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)",
+                            "type": "integer",
+                            "example": 4
+                        },
+                        "category": {
+                            "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "cover": {
+                            "description": "封面",
+                            "type": "string",
+                            "example": "1234.jpg"
+                        },
+                        "create_at": {
+                            "description": "創建時間",
+                            "type": "string",
+                            "example": "2022-06-14 00:00:00"
+                        },
+                        "equipment": {
+                            "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                            "type": "integer",
+                            "example": 4
+                        },
+                        "id": {
+                            "description": "動作id",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "intro": {
+                            "description": "動作介紹",
+                            "type": "string",
+                            "example": "全靠雙腳的力量將身體後蹬，雙手依舊輕鬆握住拉桿，上半身利用下背力量稍微挺直，直到雙腳完全伸直為止"
+                        },
+                        "name": {
+                            "description": "動作名稱",
+                            "type": "string",
+                            "example": "划船機"
+                        },
+                        "source": {
+                            "description": "動作來源(1:系統動作/2:教練動作/3:學員動作)",
+                            "type": "integer",
+                            "example": 2
+                        },
+                        "type": {
+                            "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "update_at": {
+                            "description": "更新時間",
+                            "type": "string",
+                            "example": "2022-06-14 00:00:00"
+                        },
+                        "video": {
+                            "description": "動作影片",
+                            "type": "string",
+                            "example": "1234.mp4"
+                        }
+                    }
+                },
+                "auto_next": {
+                    "description": "自動下一組(Y:是/N:否)",
+                    "type": "string",
+                    "example": "Y"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "distance": {
+                    "description": "距離(公里)",
+                    "type": "number",
+                    "example": 2.5
+                },
+                "duration": {
+                    "description": "時長(秒)",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "訓練組 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "incline": {
+                    "description": "坡度",
+                    "type": "number",
+                    "example": 10.5
+                },
+                "progress_audio": {
+                    "description": "進行中語音",
+                    "type": "string",
+                    "example": "1234.mp3"
+                },
+                "remark": {
+                    "description": "備註",
+                    "type": "string",
+                    "example": "注意呼吸不可憋氣"
+                },
+                "reps": {
+                    "description": "次數",
+                    "type": "integer",
+                    "example": 2
+                },
+                "start_audio": {
+                    "description": "前導語音",
+                    "type": "string",
+                    "example": "1234.mp3"
+                },
+                "type": {
+                    "description": "動作類別(1:動作/2:休息)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "weight": {
+                    "description": "重量(公斤)",
+                    "type": "number",
+                    "example": 50.5
+                }
+            }
+        },
+        "workout_set.APIUpdateTrainerWorkoutSetOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/workout_set.APIUpdateTrainerWorkoutSetData"
                 },
                 "msg": {
                     "description": "訊息",
