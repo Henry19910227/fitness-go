@@ -203,3 +203,12 @@ type APIDeleteTrainerWorkoutSetStartAudioInput struct {
 type APIDeleteTrainerWorkoutSetStartAudioUri struct {
 	required.IDField
 }
+
+// APIDeleteTrainerWorkoutSetProgressAudioInput /v2/trainer/workout_set/{workout_set_id}/progress_audio [DELETE]
+type APIDeleteTrainerWorkoutSetProgressAudioInput struct {
+	userRequired.UserIDField
+	Uri APIDeleteTrainerWorkoutSetProgressAudioUri
+}
+type APIDeleteTrainerWorkoutSetProgressAudioUri struct {
+	required.IDField
+}

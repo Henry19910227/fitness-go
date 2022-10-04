@@ -23,4 +23,5 @@ type Resolver interface {
 	APIDeleteTrainerWorkoutSet(tx *gorm.DB, input *model.APIDeleteTrainerWorkoutSetInput) (output model.APIDeleteTrainerWorkoutSetOutput)
 	APIUpdateTrainerWorkoutSet(tx *gorm.DB, input *model.APIUpdateTrainerWorkoutSetInput) (output model.APIUpdateTrainerWorkoutSetOutput)
 	APIDeleteTrainerWorkoutSetStartAudio(input *model.APIDeleteTrainerWorkoutSetStartAudioInput) (output model.APIDeleteTrainerWorkoutSetStartAudioOutput)
+	APIDeleteTrainerWorkoutSetProgressAudio(input *model.APIDeleteTrainerWorkoutSetProgressAudioInput) (output model.APIDeleteTrainerWorkoutSetProgressAudioOutput)
 }

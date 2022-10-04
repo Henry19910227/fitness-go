@@ -12594,6 +12594,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/workout_set/{workout_set_id}/progress_audio": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除教練訓練組進行中語音",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "刪除教練訓練組進行中語音",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練組id",
+                        "name": "workout_set_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APIDeleteTrainerWorkoutSetProgressAudioOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/workout_set/{workout_set_id}/start_audio": {
             "delete": {
                 "security": [
@@ -26232,6 +26275,21 @@ var doc = `{
             }
         },
         "workout_set.APIDeleteTrainerWorkoutSetOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "workout_set.APIDeleteTrainerWorkoutSetProgressAudioOutput": {
             "type": "object",
             "properties": {
                 "code": {

@@ -827,3 +827,40 @@ func (r *resolver) APIDeleteTrainerWorkoutSetStartAudio(input *model.APIDeleteTr
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIDeleteTrainerWorkoutSetProgressAudio(input *model.APIDeleteTrainerWorkoutSetProgressAudioInput) (output model.APIDeleteTrainerWorkoutSetProgressAudioOutput) {
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutSetID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
+		return output
+	}
+	// 查詢訓練資訊
+	findWorkoutSetInput := model.FindInput{}
+	findWorkoutSetInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutSetOutput, err := r.workoutSetService.Find(&findWorkoutSetInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 修改訓練組
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	table.ProgressAudio = util.PointerString("")
+	if err := r.workoutSetService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除音檔
+	_ = r.ProgressAudioTool.Delete(util.OnNilJustReturnString(workoutSetOutput.ProgressAudio, ""))
+	// parser output
+	output.Set(code.Success, "success")
+	return output
+}
