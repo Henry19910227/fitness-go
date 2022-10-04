@@ -21,7 +21,6 @@ func New(resolver workoutSet.Resolver) Controller {
 	return &controller{resolver: resolver}
 }
 
-
 // GetCMSWorkoutSets 獲取訓練組列表
 // @Summary 獲取訓練組列表
 // @Description 獲取訓練組列表
@@ -340,5 +339,27 @@ func (c *controller) GetTrainerWorkoutSets(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetTrainerWorkoutSets(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// DeleteTrainerWorkoutSet 刪除教練訓練組
+// @Summary 刪除教練訓練組
+// @Description 刪除教練訓練組
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_set_id path int64 true "訓練組id"
+// @Success 200 {object} workout_set.APIDeleteTrainerWorkoutSetOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/workout_set/{workout_set_id} [DELETE]
+func (c *controller) DeleteTrainerWorkoutSet(ctx *gin.Context) {
+	var input model.APIDeleteTrainerWorkoutSetInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteTrainerWorkoutSet(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }

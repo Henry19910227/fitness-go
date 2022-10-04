@@ -207,3 +207,8 @@ type APICreateTrainerWorkoutSetsData []int64
 type APICreateTrainerRestSetOutput struct {
 	base.Output
 }
+
+// APIDeleteTrainerWorkoutSetOutput /v2/trainer/workout_set_is/{workout_set_id} [DELETE]
+type APIDeleteTrainerWorkoutSetOutput struct {
+	base.Output
+}

@@ -638,3 +638,61 @@ func (r *resolver) APICreateTrainerRestSet(input *model.APICreateTrainerRestSetI
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIDeleteTrainerWorkoutSet(tx *gorm.DB, input *model.APIDeleteTrainerWorkoutSetInput) (output model.APIDeleteTrainerWorkoutSetOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.WorkoutSetID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢訓練
+	findSetInput := model.FindInput{}
+	findSetInput.ID = util.PointerInt64(input.Uri.ID)
+	workoutSetOutput, err := r.workoutSetService.Tx(tx).Find(&findSetInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
+		return output
+	}
+	// 刪除訓練組
+	deleteSetInput := model.DeleteInput{}
+	deleteSetInput.ID = input.Uri.ID
+	if err := r.workoutSetService.Tx(tx).Delete(&deleteSetInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此訓練的訓練組數量
+	setListInput := model.ListInput{}
+	setListInput.WorkoutID = workoutSetOutput.WorkoutID
+	setListInput.Type = util.PointerInt(1)
+	setOutputs, _, err := r.workoutSetService.Tx(tx).List(&setListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新此訓練的訓練組數量
+	workoutTable := workoutModel.Table{}
+	workoutTable.ID = workoutSetOutput.WorkoutID
+	workoutTable.WorkoutSetCount = util.PointerInt(len(setOutputs))
+	if err := r.workoutService.Tx(tx).Update(&workoutTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除 start audio 檔案
+	_ = r.startAudioTool.Delete(util.OnNilJustReturnString(workoutSetOutput.StartAudio, ""))
+	// 刪除 progress audio 檔案
+	_ = r.ProgressAudioTool.Delete(util.OnNilJustReturnString(workoutSetOutput.ProgressAudio, ""))
+
+	tx.Commit()
+	// Parser Output
+	output.Set(code.Success, "success")
+	return output
+}
