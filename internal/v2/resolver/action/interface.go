@@ -12,6 +12,8 @@ type Resolver interface {
 	APIGetUserActions(input *model.APIGetUserActionsInput) (output model.APIGetUserActionsOutput)
 	APIDeleteUserAction(input *model.APIDeleteUserActionInput) (output model.APIDeleteUserActionOutput)
 	APIDeleteUserActionVideo(input *model.APIDeleteUserActionVideoInput) (output model.APIDeleteUserActionVideoOutput)
+	APIGetUserActionSystemImages() (output model.APIGetUserActionSystemImagesOutput)
+
 	APIGetCMSActions(input *model.APIGetCMSActionsInput) (output model.APIGetCMSActionsOutput)
 	APICreateCMSAction(input *model.APICreateCMSActionInput) (output model.APICreateCMSActionOutput)
 	APIUpdateCMSAction(input *model.APIUpdateCMSActionInput) (output base.Output)

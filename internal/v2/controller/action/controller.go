@@ -305,6 +305,21 @@ func (c *controller) DeleteUserActionVideo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// APIGetUserActionSystemImages 獲取個人動作系統圖列表
+// @Summary 獲取個人動作系統圖列表
+// @Description 系統圖URL： {Base URL}/v2/resource/action/system_image/{Filename}
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} action.APIGetUserActionSystemImagesOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/action/system_images [GET]
+func (c *controller) APIGetUserActionSystemImages(ctx *gin.Context) {
+	output := c.resolver.APIGetUserActionSystemImages()
+	ctx.JSON(http.StatusOK, output)
+}
+
 // CreateTrainerAction 新增教練動作
 // @Summary 新增教練動作
 // @Description 查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}

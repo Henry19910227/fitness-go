@@ -9,6 +9,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	actionService "github.com/Henry19910227/fitness-go/internal/v2/service/action"
 	"gorm.io/gorm"
+	"io/ioutil"
 	"strconv"
 	"strings"
 )
@@ -419,6 +420,17 @@ func (r *resolver) APIDeleteUserActionVideo(input *model.APIDeleteUserActionVide
 	return output
 }
 
+func (r *resolver) APIGetUserActionSystemImages() (output model.APIGetUserActionSystemImagesOutput) {
+	files, _ := ioutil.ReadDir(util.RootPath() + "/volumes/storage/action/system_image/")
+	images := make([]string, 0)
+	for _, file := range files {
+		images = append(images, file.Name())
+	}
+	output.Data = &images
+	output.Set(code.Success, "success")
+	return output
+}
+
 func (r *resolver) APICreateTrainerAction(tx *gorm.DB, input *model.APICreateTrainerActionInput) (output model.APICreateTrainerActionOutput) {
 	defer tx.Rollback()
 	table := model.Table{}
@@ -696,4 +708,3 @@ func (r *resolver) APIDeleteTrainerActionVideo(input *model.APIDeleteTrainerActi
 	output.Set(code.Success, "success")
 	return output
 }
-

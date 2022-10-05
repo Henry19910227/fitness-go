@@ -1,6 +1,8 @@
 package action
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type Controller interface {
 	CreateCMSAction(ctx *gin.Context)
@@ -12,6 +14,7 @@ type Controller interface {
 	GetUserActions(ctx *gin.Context)
 	DeleteUserAction(ctx *gin.Context)
 	DeleteUserActionVideo(ctx *gin.Context)
+	APIGetUserActionSystemImages(ctx *gin.Context)
 
 	CreateTrainerAction(ctx *gin.Context)
 	UpdateTrainerAction(ctx *gin.Context)

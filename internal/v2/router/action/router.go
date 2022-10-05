@@ -16,6 +16,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.StaticFS("/resource/action/cover", http.Dir("./volumes/storage/action/cover"))
 	v2.StaticFS("/resource/action/video", http.Dir("./volumes/storage/action/video"))
+	v2.StaticFS("/resource/action/system_image", http.Dir("./volumes/storage/action/system_image"))
 
 	v2.GET("/cms/actions", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSActions)
 	v2.POST("/cms/action", midd.Verify([]global.Role{global.AdminRole}), controller.CreateCMSAction)
@@ -26,6 +27,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/user/actions", midd.Verify([]global.Role{global.UserRole}), controller.GetUserActions)
 	v2.DELETE("/user/action/:action_id", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserAction)
 	v2.DELETE("/user/action/:action_id/video", midd.Verify([]global.Role{global.UserRole}), controller.DeleteUserActionVideo)
+	v2.GET("/user/action/system_images", midd.Verify([]global.Role{global.UserRole}), controller.APIGetUserActionSystemImages)
 
 	v2.POST("/trainer/action", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateTrainerAction)
 	v2.PATCH("/trainer/action/:action_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateTrainerAction)

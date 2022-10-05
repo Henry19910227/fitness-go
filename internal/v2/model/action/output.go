@@ -155,6 +155,12 @@ type APIDeleteUserActionVideoOutput struct {
 	base.Output
 }
 
+// APIGetUserActionSystemImagesOutput /v2/user/action/system_images [GET]
+type APIGetUserActionSystemImagesOutput struct {
+	base.Output
+	Data *[]string `json:"data,omitempty"`
+}
+
 // APIGetTrainerActionsOutput /v2/trainer/actions [GET] 獲取個人動作庫 API
 type APIGetTrainerActionsOutput struct {
 	base.Output
