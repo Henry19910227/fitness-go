@@ -12830,7 +12830,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取個人動作系統圖列表",
+                "description": "系統圖URL： {Base URL}/v2/resource/action/system_image/{Filename}",
                 "consumes": [
                     "application/json"
                 ],
