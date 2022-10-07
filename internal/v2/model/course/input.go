@@ -144,3 +144,12 @@ type APIDeleteTrainerCourseInput struct {
 type APIDeleteTrainerCourseUri struct {
 	required.IDField
 }
+
+// APISubmitTrainerCourseInput /v2/trainer/course/{course_id}/submit [POST]
+type APISubmitTrainerCourseInput struct {
+	required.UserIDField
+	Uri APISubmitTrainerCourseUri
+}
+type APISubmitTrainerCourseUri struct {
+	required.IDField
+}

@@ -11871,6 +11871,49 @@
                 }
             }
         },
+        "/v2/trainer/course/{course_id}/submit": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "送審教練課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "送審教練課表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/course.APISubmitTrainerCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/courses": {
             "get": {
                 "security": [
@@ -16604,6 +16647,21 @@
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "course.APISubmitTrainerCourseOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },
@@ -22473,7 +22531,7 @@
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶 id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -22640,7 +22698,7 @@
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶 id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },

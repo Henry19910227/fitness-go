@@ -339,3 +339,8 @@ type APIUpdateTrainerCourseData struct {
 type APIDeleteTrainerCourseOutput struct {
 	base.Output
 }
+
+// APISubmitTrainerCourseOutput /v2/trainer/course/{course_id}/submit [POST]
+type APISubmitTrainerCourseOutput struct {
+	base.Output
+}

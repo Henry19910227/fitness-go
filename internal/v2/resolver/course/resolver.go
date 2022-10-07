@@ -745,3 +745,44 @@ func (r *resolver) APIDeleteTrainerCourse(input *model.APIDeleteTrainerCourseInp
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APISubmitTrainerCourse(input *model.APISubmitTrainerCourseInput) (output model.APISubmitTrainerCourseOutput) {
+	// 查詢課表資訊
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非課表擁有者，無法刪除資源")
+		return output
+	}
+	// 檢查課表狀態
+	saleType := util.OnNilJustReturnInt(courseOutput.SaleType, 0)
+	if saleType == model.SaleTypeNone {
+		output.Set(code.BadRequest, "未設定 sale_type")
+		return output
+	}
+	if saleType == model.SaleTypeCharge && courseOutput.SaleID == nil {
+		output.Set(code.BadRequest, "未設定 sale_item_id")
+		return output
+	}
+	courseStatus := util.OnNilJustReturnInt(courseOutput.CourseStatus, 0)
+	if courseStatus != model.Preparing && courseStatus != model.Reject {
+		output.Set(code.BadRequest, "此課表無法重新送審")
+		return output
+	}
+	// 更新課表
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.ID)
+	table.CourseStatus = util.PointerInt(model.Reviewing)
+	if err := r.courseService.Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}
