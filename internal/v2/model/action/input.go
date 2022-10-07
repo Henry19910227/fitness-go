@@ -1,6 +1,9 @@
 package action
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/action/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/action/required"
+	userRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -12,7 +15,7 @@ type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
 
 type FindInput struct {
-	IDOptional
+	optional.IDField
 }
 
 type ListInput struct {
@@ -21,21 +24,21 @@ type ListInput struct {
 	CategoryList  []int   `json:"category_list"`  //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
 	BodyList      []int   `json:"body_list"`      //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
 	EquipmentList []int   `json:"equipment_list"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-	UserIDOptional
-	NameOptional
-	TypeOptional
-	SourceOptional
+	optional.UserIDField
+	optional.NameField
+	optional.TypeField
+	optional.SourceField
 	PagingInput
 	OrderByInput
 }
 
 type DeleteInput struct {
-	IDRequired
+	required.IDField
 }
 
 type UserActionListInput struct {
-	UserIDOptional
-	NameOptional
+	optional.UserIDField
+	optional.NameField
 	Source    []int `json:"source"`    //動作來源(1:平台動作/2:教練動作)
 	Category  []int `json:"category"`  //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
 	Body      []int `json:"body"`      //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
@@ -55,12 +58,12 @@ type APICreateCMSActionInput struct {
 	VideoFile *file.Input
 }
 type APICreateCMSActionForm struct {
-	NameRequired
-	TypeRequired
-	CategoryRequired
-	BodyRequired
-	EquipmentRequired
-	IntroRequired
+	required.NameField
+	required.TypeField
+	required.CategoryField
+	required.BodyField
+	required.EquipmentField
+	required.IntroField
 }
 
 // APIUpdateCMSActionInput /v2/cms/action/{action_id} [PATCH] 更新動作 API
@@ -71,12 +74,12 @@ type APIUpdateCMSActionInput struct {
 	VideoFile *file.Input
 }
 type APIUpdateCMSActionForm struct {
-	NameOptional
-	IntroOptional
-	StatusOptional
+	optional.NameField
+	optional.IntroField
+	optional.StatusField
 }
 type APIUpdateCMSActionUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APICreateUserActionInput /v2/user/action [POST] 新增個人動作 API
@@ -87,12 +90,12 @@ type APICreateUserActionInput struct {
 	Form   APICreateUserActionForm
 }
 type APICreateUserActionForm struct {
-	NameRequired
-	TypeRequired
-	CategoryRequired
-	BodyRequired
-	EquipmentRequired
-	IntroRequired
+	required.NameField
+	required.TypeField
+	required.CategoryField
+	required.BodyField
+	required.EquipmentField
+	required.IntroField
 }
 
 // APIUpdateUserActionInput /v2/user/action/{action_id} [PATCH] 修改個人動作 API
@@ -104,14 +107,14 @@ type APIUpdateUserActionInput struct {
 	Uri    APIUpdateUserActionUri
 }
 type APIUpdateUserActionForm struct {
-	NameOptional
-	CategoryOptional
-	BodyOptional
-	EquipmentOptional
-	IntroOptional
+	optional.NameField
+	optional.CategoryField
+	optional.BodyField
+	optional.EquipmentField
+	optional.IntroField
 }
 type APIUpdateUserActionUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIGetUserActionsInput /v2/user/actions [GET] 獲取個人動作庫 API
@@ -130,25 +133,25 @@ type APIGetUserActionsQuery struct {
 
 // APIDeleteUserActionInput /v2/user/action/{action_id} [DELETE]
 type APIDeleteUserActionInput struct {
-	UserIDRequired
+	userRequired.UserIDField
 	Uri APIDeleteUserActionUri
 }
 type APIDeleteUserActionUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIDeleteUserActionVideoInput /v2/user/action/{action_id}/video
 type APIDeleteUserActionVideoInput struct {
-	UserIDRequired
+	userRequired.UserIDField
 	Uri APIDeleteUserActionVideoUri
 }
 type APIDeleteUserActionVideoUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIGetTrainerActionsInput /v2/trainer/actions [GET] 獲取教練動作庫 API
 type APIGetTrainerActionsInput struct {
-	UserIDRequired
+	userRequired.UserIDField
 	Query APIGetUserActionsQuery
 }
 type APIGetTrainerActionsQuery struct {
@@ -168,47 +171,47 @@ type APICreateTrainerActionInput struct {
 	Form   APICreateUserActionForm
 }
 type APICreateTrainerActionForm struct {
-	NameRequired
-	TypeRequired
-	CategoryRequired
-	BodyRequired
-	EquipmentRequired
-	IntroRequired
+	required.NameField
+	required.TypeField
+	required.CategoryField
+	required.BodyField
+	required.EquipmentField
+	required.IntroField
 }
 
 // APIUpdateTrainerActionInput /v2/trainer/action/{action_id} [PATCH] 修改教練動作 API
 type APIUpdateTrainerActionInput struct {
-	UserIDRequired
+	userRequired.UserIDField
 	Cover *file.Input
 	Video *file.Input
 	Form  APIUpdateTrainerActionForm
 	Uri   APIUpdateTrainerActionUri
 }
 type APIUpdateTrainerActionForm struct {
-	NameOptional
-	CategoryOptional
-	BodyOptional
-	EquipmentOptional
-	IntroOptional
+	optional.NameField
+	optional.CategoryField
+	optional.BodyField
+	optional.EquipmentField
+	optional.IntroField
 }
 type APIUpdateTrainerActionUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIDeleteTrainerActionInput /v2/trainer/action/{action_id} [DELETE]
 type APIDeleteTrainerActionInput struct {
-	UserIDRequired
+	userRequired.UserIDField
 	Uri APIDeleteTrainerActionUri
 }
 type APIDeleteTrainerActionUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIDeleteTrainerActionVideoInput /v2/trainer/action/{action_id}/video
 type APIDeleteTrainerActionVideoInput struct {
-	UserIDRequired
+	userRequired.UserIDField
 	Uri APIDeleteTrainerActionVideoUri
 }
 type APIDeleteTrainerActionVideoUri struct {
-	IDRequired
+	required.IDField
 }

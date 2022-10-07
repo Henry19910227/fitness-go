@@ -1,6 +1,7 @@
 package action
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/action/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/max_distance_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/max_reps_record"
@@ -74,19 +75,19 @@ type APIGetCMSActionsOutput struct {
 	Paging *paging.Output       `json:"paging,omitempty"`
 }
 type APIGetCMSActionsData []*struct {
-	IDField
-	NameField
-	SourceField
-	TypeField
-	CategoryField
-	BodyField
-	EquipmentField
-	IntroField
-	CoverField
-	VideoField
-	StatusField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.NameField
+	optional.SourceField
+	optional.TypeField
+	optional.CategoryField
+	optional.BodyField
+	optional.EquipmentField
+	optional.IntroField
+	optional.CoverField
+	optional.VideoField
+	optional.StatusField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APICreateCMSActionOutput /cms/action [POST] 創建動作 API
@@ -95,18 +96,18 @@ type APICreateCMSActionOutput struct {
 	Data *APICreateCMSActionData `json:"data,omitempty"`
 }
 type APICreateCMSActionData struct {
-	IDField
-	NameField
-	TypeField
-	CategoryField
-	BodyField
-	EquipmentField
-	IntroField
-	CoverField
-	VideoField
-	StatusField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.NameField
+	optional.TypeField
+	optional.CategoryField
+	optional.BodyField
+	optional.EquipmentField
+	optional.IntroField
+	optional.CoverField
+	optional.VideoField
+	optional.StatusField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APICreateUserActionOutput /v2/user/action [POST] 新增個人動作 API
@@ -115,7 +116,7 @@ type APICreateUserActionOutput struct {
 	Data *APICreateUserActionData `json:"data,omitempty"`
 }
 type APICreateUserActionData struct {
-	IDField
+	optional.IDField
 }
 
 // APIUpdateUserActionOutput /v2/user/action/{action_id} [PATCH] 修改個人動作 API
@@ -130,19 +131,19 @@ type APIGetUserActionsOutput struct {
 	Paging *paging.Output         `json:"paging,omitempty"`
 }
 type APIGetUserActionsData []*struct {
-	IDField
-	NameField
-	SourceField
-	TypeField
-	CategoryField
-	BodyField
-	EquipmentField
-	IntroField
-	CoverField
-	VideoField
-	StatusField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.NameField
+	optional.SourceField
+	optional.TypeField
+	optional.CategoryField
+	optional.BodyField
+	optional.EquipmentField
+	optional.IntroField
+	optional.CoverField
+	optional.VideoField
+	optional.StatusField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APIDeleteUserActionOutput /v2/user/action/{action_id} [DELETE]
@@ -168,19 +169,19 @@ type APIGetTrainerActionsOutput struct {
 	Paging *paging.Output            `json:"paging,omitempty"`
 }
 type APIGetTrainerActionsData []*struct {
-	IDField
-	NameField
-	SourceField
-	TypeField
-	CategoryField
-	BodyField
-	EquipmentField
-	IntroField
-	CoverField
-	VideoField
-	StatusField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.NameField
+	optional.SourceField
+	optional.TypeField
+	optional.CategoryField
+	optional.BodyField
+	optional.EquipmentField
+	optional.IntroField
+	optional.CoverField
+	optional.VideoField
+	optional.StatusField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APICreateTrainerActionOutput /v2/trainer/action [POST] 新增教練動作 API
@@ -189,7 +190,7 @@ type APICreateTrainerActionOutput struct {
 	Data *APICreateTrainerActionData `json:"data,omitempty"`
 }
 type APICreateTrainerActionData struct {
-	IDField
+	optional.IDField
 }
 
 // APIUpdateTrainerActionOutput /v2/trainer/action/{action_id} [PATCH] 修改教練動作 API

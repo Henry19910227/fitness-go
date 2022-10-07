@@ -449,6 +449,7 @@ func (r *resolver) APIUpdateUserCourse(input *model.APIUpdateUserCourseInput) (o
 }
 
 func (r *resolver) APIGetUserCourse(input *model.APIGetUserCourseInput) (output model.APIGetUserCourseOutput) {
+	// 查詢資料
 	findInput := model.FindInput{}
 	findInput.ID = util.PointerInt64(input.Uri.ID)
 	findInput.Preloads = []*preloadModel.Preload{
@@ -463,6 +464,51 @@ func (r *resolver) APIGetUserCourse(input *model.APIGetUserCourseInput) (output 
 	}
 	// parser output
 	data := model.APIGetUserCourseData{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetUserCourseStructure(input *model.APIGetUserCourseStructureInput) (output model.APIGetUserCourseStructureOutput) {
+	// 檢查課表是否是單一訓練課表
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if courseOutput.SaleType != util.PointerInt(model.SingleWorkout) {
+		output.Set(code.BadRequest, "只允許查看單一訓練課表")
+		return output
+	}
+	// 查詢課表
+	findInput = model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "UserCourseStatistic"},
+		{Field: "SaleItem"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "Plans"},
+		{Field: "Plans.Workouts"},
+		{Field: "Plans.Workouts.WorkoutSets"},
+		{Field: "Plans.Workouts.WorkoutSets.Action"},
+		{Field: "Plans.Workouts.WorkoutSets", Conditions: []interface{}{func(db *gorm.DB) *gorm.DB {
+			db = db.Joins("LEFT JOIN workout_set_orders ON workout_sets.id = workout_set_orders.workout_set_id")
+			return db.Order("workout_set_orders.seq IS NULL ASC, workout_set_orders.seq ASC, workout_sets.create_at ASC")
+		}}},
+	}
+	courseOutput, err = r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetUserCourseStructureData{}
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

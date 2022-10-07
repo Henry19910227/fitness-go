@@ -1,6 +1,7 @@
 package workout_set
 
 import (
+	actionOptional "github.com/Henry19910227/fitness-go/internal/v2/field/action/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -44,18 +45,18 @@ type APIGetCMSWorkoutSetsData []*struct {
 	optional.CreateAtField
 	optional.UpdateAtField
 	Action *struct {
-		action.IDField
-		action.NameField
-		action.SourceField
-		action.TypeField
-		action.CategoryField
-		action.BodyField
-		action.EquipmentField
-		action.IntroField
-		action.CoverField
-		action.VideoField
-		action.CreateAtField
-		action.UpdateAtField
+		actionOptional.IDField
+		actionOptional.NameField
+		actionOptional.SourceField
+		actionOptional.TypeField
+		actionOptional.CategoryField
+		actionOptional.BodyField
+		actionOptional.EquipmentField
+		actionOptional.IntroField
+		actionOptional.CoverField
+		actionOptional.VideoField
+		actionOptional.CreateAtField
+		actionOptional.UpdateAtField
 	} `json:"action,omitempty"`
 }
 
@@ -101,18 +102,18 @@ type APIGetUserWorkoutSetsData []*struct {
 	optional.CreateAtField
 	optional.UpdateAtField
 	Action *struct {
-		action.IDField
-		action.NameField
-		action.SourceField
-		action.TypeField
-		action.CategoryField
-		action.BodyField
-		action.EquipmentField
-		action.IntroField
-		action.CoverField
-		action.VideoField
-		action.CreateAtField
-		action.UpdateAtField
+		actionOptional.IDField
+		actionOptional.NameField
+		actionOptional.SourceField
+		actionOptional.TypeField
+		actionOptional.CategoryField
+		actionOptional.BodyField
+		actionOptional.EquipmentField
+		actionOptional.IntroField
+		actionOptional.CoverField
+		actionOptional.VideoField
+		actionOptional.CreateAtField
+		actionOptional.UpdateAtField
 	} `json:"action,omitempty"`
 }
 
@@ -136,18 +137,18 @@ type APIUpdateUserWorkoutSetData struct {
 	optional.CreateAtField
 	optional.UpdateAtField
 	Action *struct {
-		action.IDField
-		action.NameField
-		action.SourceField
-		action.TypeField
-		action.CategoryField
-		action.BodyField
-		action.EquipmentField
-		action.IntroField
-		action.CoverField
-		action.VideoField
-		action.CreateAtField
-		action.UpdateAtField
+		actionOptional.IDField
+		actionOptional.NameField
+		actionOptional.SourceField
+		actionOptional.TypeField
+		actionOptional.CategoryField
+		actionOptional.BodyField
+		actionOptional.EquipmentField
+		actionOptional.IntroField
+		actionOptional.CoverField
+		actionOptional.VideoField
+		actionOptional.CreateAtField
+		actionOptional.UpdateAtField
 	} `json:"action,omitempty"`
 }
 
@@ -181,18 +182,18 @@ type APIGetTrainerWorkoutSetsData []*struct {
 	optional.CreateAtField
 	optional.UpdateAtField
 	Action *struct {
-		action.IDField
-		action.NameField
-		action.SourceField
-		action.TypeField
-		action.CategoryField
-		action.BodyField
-		action.EquipmentField
-		action.IntroField
-		action.CoverField
-		action.VideoField
-		action.CreateAtField
-		action.UpdateAtField
+		actionOptional.IDField
+		actionOptional.NameField
+		actionOptional.SourceField
+		actionOptional.TypeField
+		actionOptional.CategoryField
+		actionOptional.BodyField
+		actionOptional.EquipmentField
+		actionOptional.IntroField
+		actionOptional.CoverField
+		actionOptional.VideoField
+		actionOptional.CreateAtField
+		actionOptional.UpdateAtField
 	} `json:"action,omitempty"`
 }
 
@@ -233,18 +234,18 @@ type APIUpdateTrainerWorkoutSetData struct {
 	optional.CreateAtField
 	optional.UpdateAtField
 	Action *struct {
-		action.IDField
-		action.NameField
-		action.SourceField
-		action.TypeField
-		action.CategoryField
-		action.BodyField
-		action.EquipmentField
-		action.IntroField
-		action.CoverField
-		action.VideoField
-		action.CreateAtField
-		action.UpdateAtField
+		actionOptional.IDField
+		actionOptional.NameField
+		actionOptional.SourceField
+		actionOptional.TypeField
+		actionOptional.CategoryField
+		actionOptional.BodyField
+		actionOptional.EquipmentField
+		actionOptional.IntroField
+		actionOptional.CoverField
+		actionOptional.VideoField
+		actionOptional.CreateAtField
+		actionOptional.UpdateAtField
 	} `json:"action,omitempty"`
 }
 

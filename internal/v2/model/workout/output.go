@@ -4,10 +4,12 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 )
 
 type Output struct {
 	Table
+	WorkoutSets *[]workout_set.Output `json:"workout_sets,omitempty" gorm:"foreignKey:workout_id;references:id"` // 訓練組列表
 	WorkoutLogs *[]workout_log.Output `json:"workout_logs,omitempty" gorm:"foreignKey:workout_id;references:id"` // 訓練log列表
 }
 

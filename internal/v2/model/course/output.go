@@ -1,14 +1,19 @@
 package course
 
 import (
+	actionOptional "github.com/Henry19910227/fitness-go/internal/v2/field/action/optional"
 	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
 	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
 	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
 	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
+	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
+	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/review_statistic"
 	saleItem "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
@@ -22,6 +27,7 @@ type Output struct {
 	ReviewStatistic            *review_statistic.Output              `json:"review_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`              // 評分統計
 	UserCourseStatistic        *user_course_statistic.Output         `json:"user_course_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`         // 用戶課表統計
 	CourseTrainingAvgStatistic *course_training_avg_statistic.Output `json:"course_training_avg_statistic,omitempty" gorm:"foreignKey:course_id;references:id"` // 課表完成度統計
+	Plans 					   []*plan.Output 						 `json:"plans,omitempty" gorm:"foreignKey:course_id;references:id"` // 計畫
 }
 
 func (Output) TableName() string {
@@ -343,4 +349,92 @@ type APIDeleteTrainerCourseOutput struct {
 // APISubmitTrainerCourseOutput /v2/trainer/course/{course_id}/submit [POST]
 type APISubmitTrainerCourseOutput struct {
 	base.Output
+}
+
+// APIGetUserCourseStructureOutput /v2/user/course/{course_id}/structure [GET]
+type APIGetUserCourseStructureOutput struct {
+	base.Output
+	Data *APIGetUserCourseStructureData `json:"data,omitempty"`
+}
+type APIGetUserCourseStructureData struct {
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.SaleIDField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.IntroField
+	courseOptional.FoodField
+	courseOptional.LevelField
+	courseOptional.SuitField
+	courseOptional.EquipmentField
+	courseOptional.PlaceField
+	courseOptional.TrainTargetField
+	courseOptional.BodyTargetField
+	courseOptional.NoticeField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
+	Plans []*struct {
+		planOptional.IDField
+		planOptional.NameField
+		planOptional.WorkoutCountField
+		planOptional.CreateAtField
+		planOptional.UpdateAtField
+		Workouts []*struct {
+			workoutOptional.IDField
+			workoutOptional.NameField
+			workoutOptional.EquipmentField
+			workoutOptional.StartAudioField
+			workoutOptional.EndAudioField
+			workoutOptional.WorkoutSetCountField
+			workoutOptional.CreateAtField
+			workoutOptional.UpdateAtField
+			WorkoutSets []*struct {
+				workoutSetOptional.IDField
+				workoutSetOptional.TypeField
+				workoutSetOptional.AutoNextField
+				workoutSetOptional.StartAudioField
+				workoutSetOptional.ProgressAudioField
+				workoutSetOptional.RemarkField
+				workoutSetOptional.WeightField
+				workoutSetOptional.RepsField
+				workoutSetOptional.DistanceField
+				workoutSetOptional.DurationField
+				workoutSetOptional.InclineField
+				workoutSetOptional.CreateAtField
+				workoutSetOptional.UpdateAtField
+				Action *struct {
+					actionOptional.IDField
+					actionOptional.NameField
+					actionOptional.SourceField
+					actionOptional.TypeField
+					actionOptional.CategoryField
+					actionOptional.BodyField
+					actionOptional.EquipmentField
+					actionOptional.IntroField
+					actionOptional.CoverField
+					actionOptional.VideoField
+					actionOptional.CreateAtField
+					actionOptional.UpdateAtField
+				} `json:"action,omitempty"`
+			} `json:"workout_sets,omitempty"`
+		} `json:"workouts,omitempty"`
+	} `json:"plans,omitempty"`
+	SaleItem *struct {
+		saleItemOptional.IDField
+		saleItemOptional.NameField
+		ProductLabel *struct {
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+	UserCourseStatistic *struct {
+		user_course_statistic.FinishWorkoutCountField
+		user_course_statistic.DurationField
+	} `json:"user_course_statistic,omitempty"`
 }

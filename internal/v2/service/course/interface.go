@@ -11,6 +11,7 @@ type Service interface {
 	Create(item *model.Table) (id int64, err error)
 	Delete(input *model.DeleteInput) (err error)
 	Find(input *model.FindInput) (output *model.Output, err error)
+	FindStructure(input *model.FindInput) (output *model.Output, err error)
 	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
 	FavoriteList(input *model.FavoriteListInput) (outputs []*model.Output, page *paging.Output, err error)
 	ProgressList(input *model.ProgressListInput) (outputs []*model.Output, page *paging.Output, err error)

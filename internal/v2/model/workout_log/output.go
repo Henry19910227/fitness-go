@@ -1,8 +1,8 @@
 package workout_log
 
 import (
+	actionOptional "github.com/Henry19910227/fitness-go/internal/v2/field/action/optional"
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_set_log"
 )
@@ -40,10 +40,10 @@ type APICreateUserWorkoutLogItem struct {
 		workoutSetOptional.DurationField
 		workoutSetOptional.InclineField
 		Action *struct {
-			action.IDField
-			action.NameField
-			action.SourceField
-			action.TypeField
+			actionOptional.IDField
+			actionOptional.NameField
+			actionOptional.SourceField
+			actionOptional.TypeField
 		} `json:"action,omitempty"`
 	} `json:"workout_set,omitempty"`
 }

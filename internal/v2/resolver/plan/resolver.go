@@ -33,7 +33,7 @@ func (r *resolver) APIGetCMSPlans(input *model.APIGetCMSPlansInput) interface{} 
 		return base.BadRequest(util.PointerString(err.Error()))
 	}
 	listInput.Preloads = []*preloadModel.Preload{
-		{Field: "Workout", OrderBy: order_by.NewInput("create_at", "DESC")},
+		{Field: "Workouts", OrderBy: order_by.NewInput("create_at", "DESC")},
 	}
 	// 調用 repo
 	result, page, err := r.planService.List(&listInput)

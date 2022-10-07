@@ -11,7 +11,7 @@ import (
 
 type Output struct {
 	Table
-	Workout           []*workout.Output           `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"`            // 訓練
+	Workouts           []*workout.Output           `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"`            // 訓練
 	UserPlanStatistic *user_plan_statistic.Output `json:"user_plan_statistic,omitempty" gorm:"foreignKey:plan_id;references:id"` // 計畫統計
 }
 

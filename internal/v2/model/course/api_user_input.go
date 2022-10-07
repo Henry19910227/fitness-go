@@ -55,3 +55,12 @@ type APIGetUserCourseInput struct {
 type APIGetUserCourseUri struct {
 	required.IDField
 }
+
+// APIGetUserCourseStructureInput /v2/user/course/{course_id}/structure [GET]
+type APIGetUserCourseStructureInput struct {
+	required.UserIDField
+	Uri APIGetUserCourseStructureUri
+}
+type APIGetUserCourseStructureUri struct {
+	required.IDField
+}

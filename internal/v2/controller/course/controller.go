@@ -308,6 +308,28 @@ func (c *controller) GetUserCourse(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// GetUserCourseStructure 獲取用戶個人課表結構
+// @Summary 獲取用戶個人課表結構
+// @Description 獲取用戶個人課表結構
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} course.APIGetUserCourseStructureOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/course/{course_id}/structure [GET]
+func (c *controller) GetUserCourseStructure(ctx *gin.Context) {
+	input := model.APIGetUserCourseStructureInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetUserCourseStructure(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetTrainerCourses 獲取教練課表列表
 // @Summary 獲取教練課表列表
 // @Description 獲取教練課表列表

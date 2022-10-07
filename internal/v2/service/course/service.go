@@ -41,6 +41,14 @@ func (s *service) Find(input *model.FindInput) (output *model.Output, err error)
 	return output, err
 }
 
+func (s *service) FindStructure(input *model.FindInput) (output *model.Output, err error) {
+	output, err = s.repository.FindStructure(input)
+	if err != nil {
+		return output, err
+	}
+	return output, err
+}
+
 func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
 	output, amount, err := s.repository.List(input)
 	if err != nil {
