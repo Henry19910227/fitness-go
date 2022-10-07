@@ -426,7 +426,11 @@ func (r *resolver) APIUpdateUserCourse(input *model.APIUpdateUserCourseInput) (o
 	}
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.BadRequest, "非課表擁有者，無法修改資源")
+		output.Set(code.BadRequest, "非課表擁有者，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != model.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法刪除資源")
 		return output
 	}
 	// 修改課表

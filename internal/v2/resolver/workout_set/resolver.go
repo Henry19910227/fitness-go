@@ -49,6 +49,10 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
 		return output
 	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法創建資源")
+		return output
+	}
 	// 驗證動作權限
 	actionListInput := actionModel.ListInput{}
 	actionListInput.IDs = input.Body.ActionIDs
@@ -133,6 +137,10 @@ func (r *resolver) APICreateUserWorkoutSetByDuplicate(tx *gorm.DB, input *model.
 		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
 		return output
 	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法創建資源")
+		return output
+	}
 	/** 複製訓練組流程 */
 	// 1.查詢訓練組
 	findWorkoutSetInput := model.FindInput{}
@@ -197,6 +205,10 @@ func (r *resolver) APICreateUserRestSet(input *model.APICreateUserRestSetInput) 
 		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
 		return output
 	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法創建資源")
+		return output
+	}
 	// 添加休息組
 	table := model.Table{}
 	table.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
@@ -241,6 +253,10 @@ func (r *resolver) APIDeleteUserWorkoutSet(tx *gorm.DB, input *model.APIDeleteUs
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
 		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法刪除資源")
 		return output
 	}
 	// 刪除訓練組
@@ -314,6 +330,10 @@ func (r *resolver) APIUpdateUserWorkoutSet(tx *gorm.DB, input *model.APIUpdateUs
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
 		output.Set(code.BadRequest, "非此訓練組擁有者，無法修改資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法修改資源")
 		return output
 	}
 	// 查詢訓練組資訊
@@ -409,6 +429,10 @@ func (r *resolver) APIDeleteUserWorkoutSetStartAudio(input *model.APIDeleteUserW
 		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
 		return output
 	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法刪除資源")
+		return output
+	}
 	// 查詢訓練資訊
 	findWorkoutSetInput := model.FindInput{}
 	findWorkoutSetInput.ID = util.PointerInt64(input.Uri.ID)
@@ -444,6 +468,10 @@ func (r *resolver) APIDeleteUserWorkoutSetProgressAudio(input *model.APIDeleteUs
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
 		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法刪除資源")
 		return output
 	}
 	// 查詢訓練資訊

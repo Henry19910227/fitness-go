@@ -72,6 +72,10 @@ func (r *resolver) APICreateUserPlan(tx *gorm.DB, input *model.APICreateUserPlan
 		output.Set(code.BadRequest, "非此課表擁有者，無法創建資源")
 		return output
 	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法新增資源")
+		return output
+	}
 	// 創建計畫
 	planTable := model.Table{}
 	planTable.CourseID = util.PointerInt64(input.Uri.CourseID)
@@ -141,7 +145,11 @@ func (r *resolver) APIDeleteUserPlan(tx *gorm.DB, input *model.APIDeleteUserPlan
 	}
 	// 驗證計畫刪除權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
+		output.Set(code.BadRequest, "非課表擁有者，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法刪除資源")
 		return output
 	}
 	// 刪除計畫
@@ -214,7 +222,11 @@ func (r *resolver) APIUpdateUserPlan(input *model.APIUpdateUserPlanInput) (outpu
 	}
 	// 驗證計畫刪除權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.BadRequest, "非此課表擁有者，無法刪除資源")
+		output.Set(code.BadRequest, "非課表擁有者，無法修改資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "非個人課表類型，無法修改資源")
 		return output
 	}
 	// 修改計畫
