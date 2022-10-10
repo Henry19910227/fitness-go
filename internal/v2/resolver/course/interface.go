@@ -9,6 +9,7 @@ import (
 
 type Resolver interface {
 	APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput)
+
 	APIGetCMSCourses(ctx *gin.Context, input *model.APIGetCMSCoursesInput) interface{}
 	APIGetCMSCourse(ctx *gin.Context, input *model.APIGetCMSCourseInput) interface{}
 	APIUpdateCMSCoursesStatus(input *model.APIUpdateCMSCoursesStatusInput) (output base.Output)

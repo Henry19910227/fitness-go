@@ -12,11 +12,13 @@ import (
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/review_statistic"
 	saleItem "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_course_asset"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_course_statistic"
 )
 
@@ -26,12 +28,28 @@ type Output struct {
 	SaleItem                   *saleItem.Output                      `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`                       // 銷售項目
 	ReviewStatistic            *review_statistic.Output              `json:"review_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`              // 評分統計
 	UserCourseStatistic        *user_course_statistic.Output         `json:"user_course_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`         // 用戶課表統計
+	UserCourseAsset 		   *user_course_asset.Output			 `json:"user_course_asset,omitempty" gorm:"foreignKey:course_id;references:id"` 			// 課表購買紀錄
 	CourseTrainingAvgStatistic *course_training_avg_statistic.Output `json:"course_training_avg_statistic,omitempty" gorm:"foreignKey:course_id;references:id"` // 課表完成度統計
+	FavoriteCourse 			   *favorite_course.Output				 `json:"favorite_course,omitempty" gorm:"foreignKey:course_id;references:id"` // 課表完成度統計
 	Plans 					   []*plan.Output 						 `json:"plans,omitempty" gorm:"foreignKey:course_id;references:id"` // 計畫
 }
 
 func (Output) TableName() string {
 	return "courses"
+}
+
+func (o *Output) UserCourseAssetOnSafe() user_course_asset.Output {
+	if o.UserCourseAsset != nil {
+		return *o.UserCourseAsset
+	}
+	return user_course_asset.Output{}
+}
+
+func (o *Output) FavoriteCourseOnSafe() favorite_course.Output {
+	if o.FavoriteCourse != nil {
+		return *o.FavoriteCourse
+	}
+	return favorite_course.Output{}
 }
 
 // APIGetFavoriteCoursesOutput /v2/favorite/courses [GET] 獲取收藏課表列表
@@ -378,6 +396,8 @@ type APIGetUserCourseStructureData struct {
 	courseOptional.WorkoutCountField
 	courseOptional.CreateAtField
 	courseOptional.UpdateAtField
+	AllowAccess  *int `json:"allow_access" example:"0"` // 是否允許訪問此課表(0:否/1:是)
+	Favorite     *int `json:"favorite" example:"1"` //是否收藏(0:否/1:是)
 	Plans []*struct {
 		planOptional.IDField
 		planOptional.NameField

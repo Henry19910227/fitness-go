@@ -509,7 +509,7 @@ func (r *resolver) APIGetUserCourseStructure(input *model.APIGetUserCourseStruct
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	if courseOutput.SaleType != util.PointerInt(model.SingleWorkout) {
+	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) != model.SingleWorkout {
 		output.Set(code.BadRequest, "只允許查看單一訓練課表")
 		return output
 	}
@@ -518,6 +518,8 @@ func (r *resolver) APIGetUserCourseStructure(input *model.APIGetUserCourseStruct
 	findInput.ID = util.PointerInt64(input.Uri.ID)
 	findInput.Preloads = []*preloadModel.Preload{
 		{Field: "UserCourseStatistic"},
+		{Field: "UserCourseAsset", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "FavoriteCourse", Conditions: []interface{}{"user_id = ?", input.UserID}},
 		{Field: "SaleItem"},
 		{Field: "SaleItem.ProductLabel"},
 		{Field: "Plans"},
@@ -539,6 +541,19 @@ func (r *resolver) APIGetUserCourseStructure(input *model.APIGetUserCourseStruct
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
+	}
+	data.AllowAccess = util.PointerInt(0)
+	data.Favorite = util.PointerInt(0)
+	// 獲取是否可訪問狀態
+	isAllow, err := r.getAllowAccessStatus(input.UserID, courseOutput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data.AllowAccess = util.PointerInt(isAllow)
+	// 獲取訂閱狀態
+	if courseOutput.FavoriteCourse != nil {
+		data.Favorite = util.PointerInt(1)
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data
@@ -862,4 +877,41 @@ func (r *resolver) APISubmitTrainerCourse(input *model.APISubmitTrainerCourseInp
 	}
 	output.Set(code.Success, "success")
 	return output
+}
+
+func (r *resolver) getAllowAccessStatus(userID int64, courseOutput *model.Output) (isAllow int, err error) {
+	isAllow = 0
+	// 1.該課表為免費課表
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) == model.SaleTypeFree {
+		isAllow = 1
+	}
+	// 2.該課表為訂閱課表
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) == model.SaleTypeSubscribe {
+		infoList := subscribeInfoModel.ListInput{}
+		infoList.UserID = util.PointerInt64(userID)
+		infoList.Page = 1
+		infoList.Size = 1
+		infoList.OrderType = order_by.DESC
+		infoList.OrderField = "update_at"
+		infoOutputs, _, err := r.subscribeInfoService.List(&infoList)
+		if err != nil {
+			return isAllow, err
+		}
+		if len(infoOutputs) > 0 {
+			if util.OnNilJustReturnInt(infoOutputs[0].Status, 0) == 1 {
+				isAllow = 1
+			}
+		}
+	}
+	// 3.該課表為付費課表
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) == model.SaleTypeCharge {
+		if util.OnNilJustReturnInt(courseOutput.UserCourseAssetOnSafe().Available, 0) == 1 {
+			isAllow = 1
+		}
+	}
+	// 4.該課表為個人課表
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) == model.SaleTypePersonal {
+		isAllow = 1
+	}
+	return isAllow, err
 }

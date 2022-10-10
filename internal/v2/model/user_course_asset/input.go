@@ -7,14 +7,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 )
 
-type Output struct {
-	Table
-}
-
-func (Output) TableName() string {
-	return "user_course_assets"
-}
-
 type PagingInput = paging.Input
 type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
