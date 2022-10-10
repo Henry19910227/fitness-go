@@ -1,6 +1,7 @@
 package course
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
@@ -9,6 +10,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
+	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	saleItemModel "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
@@ -80,7 +82,9 @@ func (r *resolver) APIGetCMSCourses(ctx *gin.Context, input *model.APIGetCMSCour
 		logger.Shared().Error(ctx, err.Error())
 		return base.BadRequest(util.PointerString(err.Error()))
 	}
-	param.IgnoredCourseStatus = []int{1}
+	param.Wheres = []*whereModel.Where{
+		{Query: "courses.course_status NOT IN (?)", Args: []interface{}{[]int{model.Preparing}}},
+	}
 	param.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "SaleItem"},
@@ -326,20 +330,27 @@ func (r *resolver) APIGetUserPersonalCourses(input *model.APIGetUserCoursesInput
 
 func (r *resolver) APIGetUserProgressCourses(input *model.APIGetUserCoursesInput) (output model.APIGetUserCoursesOutput) {
 	// 查詢進行中課表
-	listInput := model.ProgressListInput{}
-	listInput.UserID = input.UserID
-	listInput.OrderField = "update_at"
-	listInput.OrderType = order_by.DESC
+	listInput := model.ListInput{}
+	listInput.Joins = []*joinModel.Join{
+		{Query: "LEFT JOIN user_course_statistics ON courses.id = user_course_statistics.course_id"},
+	}
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "user_course_statistics.user_id = ?", Args: []interface{}{input.UserID}},
+		{Query: "courses.sale_type IN (?)", Args: []interface{}{[]int{model.SaleTypeFree, model.SaleTypeSubscribe, model.SaleTypeCharge}}},
+	}
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "ReviewStatistic"},
 		{Field: "SaleItem.ProductLabel"},
 	}
+	listInput.Orders = []*orderByModel.Order{
+		{Value: fmt.Sprintf("user_course_statistics.%s %s", "update_at", order_by.DESC)},
+	}
 	if err := util.Parser(input.Query, &listInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	courseOutputs, page, err := r.courseService.ProgressList(&listInput)
+	courseOutputs, page, err := r.courseService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

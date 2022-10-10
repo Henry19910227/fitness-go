@@ -6,6 +6,7 @@ import (
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 )
 
@@ -25,7 +26,9 @@ func (r *resolver) APIGetCMSCourseTrainingAvgStatistic(input *model.APIGetCMSCou
 		return output
 	}
 	if input.Query.SaleType == nil {
-		listInput.SaleTypes = []int{courseModel.SaleTypeFree, courseModel.SaleTypeSubscribe, courseModel.SaleTypeCharge}
+		listInput.Wheres = []*whereModel.Where{
+			{Query: "courses.sale_type IN (?)", Args: []interface{}{[]int{courseModel.SaleTypeFree, courseModel.SaleTypeSubscribe, courseModel.SaleTypeCharge}}},
+		}
 	}
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "SaleItem.ProductLabel"},

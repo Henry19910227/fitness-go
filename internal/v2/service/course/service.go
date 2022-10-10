@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/course"
 	"gorm.io/gorm"
 	"time"
@@ -67,19 +68,6 @@ func (s *service) FavoriteList(input *model.FavoriteListInput) (outputs []*model
 	return output, page, err
 }
 
-func (s *service) ProgressList(input *model.ProgressListInput) (outputs []*model.Output, page *paging.Output, err error) {
-	output, amount, err := s.repository.ProgressList(input)
-	if err != nil {
-		return output, page, err
-	}
-	page = &paging.Output{}
-	page.TotalCount = int(amount)
-	page.TotalPage = util.Pagination(int(amount), input.Size)
-	page.Page = input.Page
-	page.Size = input.Size
-	return output, page, err
-}
-
 func (s *service) Updates(items []*model.Table) (err error) {
 	// 查找須更新的資料
 	itemMap := make(map[int64]*model.Table)
@@ -89,7 +77,9 @@ func (s *service) Updates(items []*model.Table) (err error) {
 		itemMap[*item.ID] = item
 	}
 	listInput := model.ListInput{}
-	listInput.IDs = courseIDs
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "courses.id IN (?)", Args: []interface{}{courseIDs}},
+	}
 	outputs, _, err := s.repository.List(&listInput)
 	if err != nil {
 		return err

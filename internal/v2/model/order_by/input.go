@@ -6,8 +6,7 @@ const (
 )
 
 type Order struct {
-	Query string
-	Args []interface{}
+	Value interface{}
 }
 
 type Input struct {

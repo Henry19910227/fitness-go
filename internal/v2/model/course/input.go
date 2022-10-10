@@ -4,7 +4,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
-	assetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user_course_asset/optional"
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -49,11 +48,6 @@ type ListInput struct {
 	optional.ScheduleTypeField
 	JoinInput
 	WhereInput
-	assetOptional.AvailableField
-	Payer				*int64 // 付款者
-	SaleTypes           []int // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
-	IgnoredCourseStatus []int // 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
-	IDs                 []int64 // 課表ID
 	PagingInput
 	PreloadInput
 	OrderByInput

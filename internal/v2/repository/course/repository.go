@@ -100,18 +100,6 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.ScheduleType != nil {
 		db = db.Where("courses.schedule_type = ?", *input.ScheduleType)
 	}
-	// SaleTypes
-	if len(input.SaleTypes) > 0 {
-		db = db.Where("courses.sale_type IN (?)", input.SaleTypes)
-	}
-	// IDs
-	if len(input.IDs) > 0 {
-		db = db.Where("courses.id IN (?)", input.IDs)
-	}
-	// IgnoredCourseStatus
-	if len(input.IgnoredCourseStatus) > 0 {
-		db = db.Where("courses.course_status NOT IN (?)", input.IgnoredCourseStatus)
-	}
 	// Custom Where
 	if len(input.Wheres) > 0 {
 		for _, where := range input.Wheres {
@@ -139,7 +127,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Custom Order
 	if input.Orders != nil {
 		for _, orderBy := range input.Orders {
-			db = db.Order(fmt.Sprintf(orderBy.Query, orderBy.Args...))
+			db = db.Order(orderBy.Value)
 		}
 	}
 	//查詢數據
@@ -174,35 +162,6 @@ func (r *repository) FavoriteList(input *model.FavoriteListInput) (outputs []*mo
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
 		db = db.Order(fmt.Sprintf("favorite_courses.%s %s", input.OrderField, input.OrderType))
-	}
-	//查詢數據
-	err = db.Find(&outputs).Error
-	return outputs, amount, err
-}
-
-func (r *repository) ProgressList(input *model.ProgressListInput) (outputs []*model.Output, amount int64, err error) {
-	db := r.db.Model(&model.Output{})
-	// JOIN
-	db = db.Joins("LEFT JOIN user_course_statistics AS statistic ON courses.id = statistic.course_id AND statistic.user_id = ?", input.UserID)
-	// user_id 篩選條件
-	db = db.Where("statistic.user_id = ?", input.UserID)
-	//Preload
-	if len(input.Preloads) > 0 {
-		for _, preload := range input.Preloads {
-			db = db.Preload(preload.Field)
-		}
-	}
-	// Count
-	db = db.Count(&amount)
-	// Select
-	db = db.Select("courses.*")
-	// Paging
-	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
-	}
-	// Order
-	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("statistic.%s %s", input.OrderField, input.OrderType))
 	}
 	//查詢數據
 	err = db.Find(&outputs).Error
