@@ -45,20 +45,26 @@ func New(courseService courseService.Service, planService plan.Service,
 
 func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput) {
 	// parser input
-	param := model.FavoriteListInput{}
-	param.UserID = util.PointerInt64(input.UserID)
-	param.OrderField = "create_at"
-	param.OrderType = order_by.DESC
+	param := model.ListInput{}
+	param.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN favorite_courses ON courses.id = favorite_courses.course_id"},
+	}
+	param.Wheres = []*whereModel.Where{
+		{Query: "favorite_courses.user_id = ?", Args: []interface{}{input.UserID}},
+	}
 	param.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "ReviewStatistic"},
+	}
+	param.Orders = []*orderByModel.Order{
+		{Value: fmt.Sprintf("favorite_courses.%s %s", "create_at", order_by.DESC)},
 	}
 	if err := util.Parser(input.Form, &param); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	// 執行查詢
-	results, page, err := r.courseService.FavoriteList(&param)
+	results, page, err := r.courseService.List(&param)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

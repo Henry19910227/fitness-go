@@ -54,20 +54,6 @@ type ListInput struct {
 	CustomOrderByInput
 }
 
-type FavoriteListInput struct {
-	optional.UserIDField
-	PagingInput
-	PreloadInput
-	OrderByInput
-}
-
-type ProgressListInput struct {
-	required.UserIDField
-	PagingInput
-	PreloadInput
-	OrderByInput
-}
-
 // APIGetFavoriteCoursesInput /v2/favorite/courses [GET]
 type APIGetFavoriteCoursesInput struct {
 	required.UserIDField
