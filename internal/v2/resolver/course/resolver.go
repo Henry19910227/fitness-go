@@ -7,11 +7,13 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	saleItemModel "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
@@ -356,10 +358,18 @@ func (r *resolver) APIGetUserProgressCourses(input *model.APIGetUserCoursesInput
 
 func (r *resolver) APIGetUserChargeCourses(input *model.APIGetUserCoursesInput) (output model.APIGetUserCoursesOutput) {
 	// 查詢付費課表
-	listInput := model.ChargeListInput{}
-	listInput.UserID = input.UserID
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.SaleType = util.PointerInt(model.SaleTypeCharge)
 	listInput.OrderField = "create_at"
 	listInput.OrderType = order_by.DESC
+	listInput.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN user_course_assets ON courses.id = user_course_assets.course_id"},
+	}
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "user_course_assets.user_id = ?", Args: []interface{}{input.UserID}},
+		{Query: "user_course_assets.available = ?", Args: []interface{}{1}},
+	}
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "ReviewStatistic"},
@@ -369,7 +379,7 @@ func (r *resolver) APIGetUserChargeCourses(input *model.APIGetUserCoursesInput) 
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	courseOutputs, page, err := r.courseService.ChargeList(&listInput)
+	courseOutputs, page, err := r.courseService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

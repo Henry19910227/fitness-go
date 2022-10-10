@@ -70,40 +70,55 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
+	// Join
+	if len(input.Joins) > 0 {
+		for _, join := range input.Joins {
+			db = db.Joins(join.Query, join.Args...)
+		}
+	}
 	// id 篩選條件
 	if input.ID != nil {
-		db = db.Where("id = ?", *input.ID)
+		db = db.Where("courses.id = ?", *input.ID)
 	}
 	// user_id 篩選條件
 	if input.UserID != nil {
-		db = db.Where("user_id = ?", *input.UserID)
+		db = db.Where("courses.user_id = ?", *input.UserID)
 	}
 	// name 篩選條件
 	if input.Name != nil {
-		db = db.Where("name LIKE ?", "%"+*input.Name+"%")
+		db = db.Where("courses.name LIKE ?", "%"+*input.Name+"%")
 	}
 	// course_status 篩選條件
 	if input.CourseStatus != nil {
-		db = db.Where("course_status = ?", *input.CourseStatus)
+		db = db.Where("courses.course_status = ?", *input.CourseStatus)
 	}
 	// trainer_status 篩選條件
 	if input.SaleType != nil {
-		db = db.Where("sale_type = ?", *input.SaleType)
+		db = db.Where("courses.sale_type = ?", *input.SaleType)
 	}
 	// schedule_type 篩選條件
 	if input.ScheduleType != nil {
-		db = db.Where("schedule_type = ?", *input.ScheduleType)
+		db = db.Where("courses.schedule_type = ?", *input.ScheduleType)
 	}
+	// SaleTypes
 	if len(input.SaleTypes) > 0 {
-		db = db.Where("sale_type IN (?)", input.SaleTypes)
+		db = db.Where("courses.sale_type IN (?)", input.SaleTypes)
 	}
+	// IDs
 	if len(input.IDs) > 0 {
-		db = db.Where("id IN (?)", input.IDs)
+		db = db.Where("courses.id IN (?)", input.IDs)
 	}
+	// IgnoredCourseStatus
 	if len(input.IgnoredCourseStatus) > 0 {
-		db = db.Where("course_status NOT IN (?)", input.IgnoredCourseStatus)
+		db = db.Where("courses.course_status NOT IN (?)", input.IgnoredCourseStatus)
 	}
-	//Preload
+	// Custom Where
+	if len(input.Wheres) > 0 {
+		for _, where := range input.Wheres {
+			db = db.Where(where.Query, where.Args...)
+		}
+	}
+	// Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
 			db = db.Preload(preload.Field, preload.Conditions...)
@@ -111,13 +126,21 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	}
 	// Count
 	db = db.Count(&amount)
+	// Select
+	db = db.Select("courses.*")
 	// Paging
 	if input.Page > 0 && input.Size > 0 {
 		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("%s %s", input.OrderField, input.OrderType))
+		db = db.Order(fmt.Sprintf("courses.%s %s", input.OrderField, input.OrderType))
+	}
+	// Custom Order
+	if input.Orders != nil {
+		for _, orderBy := range input.Orders {
+			db = db.Order(fmt.Sprintf(orderBy.Query, orderBy.Args...))
+		}
 	}
 	//查詢數據
 	err = db.Find(&outputs).Error
@@ -180,39 +203,6 @@ func (r *repository) ProgressList(input *model.ProgressListInput) (outputs []*mo
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
 		db = db.Order(fmt.Sprintf("statistic.%s %s", input.OrderField, input.OrderType))
-	}
-	//查詢數據
-	err = db.Find(&outputs).Error
-	return outputs, amount, err
-}
-
-func (r *repository) ChargeList(input *model.ChargeListInput) (outputs []*model.Output, amount int64, err error) {
-	db := r.db.Model(&model.Output{})
-	// JOIN
-	db = db.Joins("INNER JOIN user_course_assets AS asset ON courses.id = asset.course_id AND asset.user_id = ?", input.UserID)
-	// user_id 篩選條件
-	db = db.Where("asset.user_id = ?", input.UserID)
-	// available 篩選條件
-	db = db.Where("asset.available = ?", 1)
-	// sale_type 篩選條件
-	db = db.Where("courses.sale_type = ?", model.SaleTypeCharge)
-	//Preload
-	if len(input.Preloads) > 0 {
-		for _, preload := range input.Preloads {
-			db = db.Preload(preload.Field)
-		}
-	}
-	// Count
-	db = db.Count(&amount)
-	// Select
-	db = db.Select("courses.*")
-	// Paging
-	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
-	}
-	// Order
-	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("asset.%s %s", input.OrderField, input.OrderType))
 	}
 	//查詢數據
 	err = db.Find(&outputs).Error
