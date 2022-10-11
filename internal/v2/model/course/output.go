@@ -28,10 +28,10 @@ type Output struct {
 	SaleItem                   *saleItem.Output                      `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`                       // 銷售項目
 	ReviewStatistic            *review_statistic.Output              `json:"review_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`              // 評分統計
 	UserCourseStatistic        *user_course_statistic.Output         `json:"user_course_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`         // 用戶課表統計
-	UserCourseAsset 		   *user_course_asset.Output			 `json:"user_course_asset,omitempty" gorm:"foreignKey:course_id;references:id"` 			// 課表購買紀錄
+	UserCourseAsset            *user_course_asset.Output             `json:"user_course_asset,omitempty" gorm:"foreignKey:course_id;references:id"`             // 課表購買紀錄
 	CourseTrainingAvgStatistic *course_training_avg_statistic.Output `json:"course_training_avg_statistic,omitempty" gorm:"foreignKey:course_id;references:id"` // 課表完成度統計
-	FavoriteCourse 			   *favorite_course.Output				 `json:"favorite_course,omitempty" gorm:"foreignKey:course_id;references:id"` // 課表完成度統計
-	Plans 					   []*plan.Output 						 `json:"plans,omitempty" gorm:"foreignKey:course_id;references:id"` // 計畫
+	FavoriteCourse             *favorite_course.Output               `json:"favorite_course,omitempty" gorm:"foreignKey:course_id;references:id"`               // 課表完成度統計
+	Plans                      []*plan.Output                        `json:"plans,omitempty" gorm:"foreignKey:course_id;references:id"`                         // 計畫
 }
 
 func (Output) TableName() string {
@@ -226,12 +226,104 @@ type APIGetUserCourseData struct {
 	courseOptional.WorkoutCountField
 	courseOptional.CreateAtField
 	courseOptional.UpdateAtField
-	Trainer *struct {
+	AllowAccess *int `json:"allow_access" example:"0"` // 是否允許訪問此課表(0:否/1:是)
+	Favorite    *int `json:"favorite" example:"1"`     //是否收藏(0:否/1:是)
+	Trainer     *struct {
 		trainerOptional.UserIDField
 		trainerOptional.AvatarField
 		trainerOptional.NicknameField
 		trainerOptional.SkillField
 	} `json:"trainer,omitempty"`
+	SaleItem *struct {
+		saleItemOptional.IDField
+		saleItemOptional.NameField
+		ProductLabel *struct {
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+	UserCourseStatistic *struct {
+		user_course_statistic.FinishWorkoutCountField
+		user_course_statistic.DurationField
+	} `json:"user_course_statistic,omitempty"`
+}
+
+// APIGetUserCourseStructureOutput /v2/user/course/{course_id}/structure [GET]
+type APIGetUserCourseStructureOutput struct {
+	base.Output
+	Data *APIGetUserCourseStructureData `json:"data,omitempty"`
+}
+type APIGetUserCourseStructureData struct {
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.SaleIDField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.IntroField
+	courseOptional.FoodField
+	courseOptional.LevelField
+	courseOptional.SuitField
+	courseOptional.EquipmentField
+	courseOptional.PlaceField
+	courseOptional.TrainTargetField
+	courseOptional.BodyTargetField
+	courseOptional.NoticeField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
+	AllowAccess *int `json:"allow_access" example:"0"` // 是否允許訪問此課表(0:否/1:是)
+	Favorite    *int `json:"favorite" example:"1"`     //是否收藏(0:否/1:是)
+	Plans       []*struct {
+		planOptional.IDField
+		planOptional.NameField
+		planOptional.WorkoutCountField
+		planOptional.CreateAtField
+		planOptional.UpdateAtField
+		Workouts []*struct {
+			workoutOptional.IDField
+			workoutOptional.NameField
+			workoutOptional.EquipmentField
+			workoutOptional.StartAudioField
+			workoutOptional.EndAudioField
+			workoutOptional.WorkoutSetCountField
+			workoutOptional.CreateAtField
+			workoutOptional.UpdateAtField
+			WorkoutSets []*struct {
+				workoutSetOptional.IDField
+				workoutSetOptional.TypeField
+				workoutSetOptional.AutoNextField
+				workoutSetOptional.StartAudioField
+				workoutSetOptional.ProgressAudioField
+				workoutSetOptional.RemarkField
+				workoutSetOptional.WeightField
+				workoutSetOptional.RepsField
+				workoutSetOptional.DistanceField
+				workoutSetOptional.DurationField
+				workoutSetOptional.InclineField
+				workoutSetOptional.CreateAtField
+				workoutSetOptional.UpdateAtField
+				Action *struct {
+					actionOptional.IDField
+					actionOptional.NameField
+					actionOptional.SourceField
+					actionOptional.TypeField
+					actionOptional.CategoryField
+					actionOptional.BodyField
+					actionOptional.EquipmentField
+					actionOptional.IntroField
+					actionOptional.CoverField
+					actionOptional.VideoField
+					actionOptional.CreateAtField
+					actionOptional.UpdateAtField
+				} `json:"action,omitempty"`
+			} `json:"workout_sets,omitempty"`
+		} `json:"workouts,omitempty"`
+	} `json:"plans,omitempty"`
 	SaleItem *struct {
 		saleItemOptional.IDField
 		saleItemOptional.NameField
@@ -367,94 +459,4 @@ type APIDeleteTrainerCourseOutput struct {
 // APISubmitTrainerCourseOutput /v2/trainer/course/{course_id}/submit [POST]
 type APISubmitTrainerCourseOutput struct {
 	base.Output
-}
-
-// APIGetUserCourseStructureOutput /v2/user/course/{course_id}/structure [GET]
-type APIGetUserCourseStructureOutput struct {
-	base.Output
-	Data *APIGetUserCourseStructureData `json:"data,omitempty"`
-}
-type APIGetUserCourseStructureData struct {
-	courseOptional.IDField
-	courseOptional.SaleTypeField
-	courseOptional.SaleIDField
-	courseOptional.CourseStatusField
-	courseOptional.CategoryField
-	courseOptional.ScheduleTypeField
-	courseOptional.NameField
-	courseOptional.CoverField
-	courseOptional.IntroField
-	courseOptional.FoodField
-	courseOptional.LevelField
-	courseOptional.SuitField
-	courseOptional.EquipmentField
-	courseOptional.PlaceField
-	courseOptional.TrainTargetField
-	courseOptional.BodyTargetField
-	courseOptional.NoticeField
-	courseOptional.PlanCountField
-	courseOptional.WorkoutCountField
-	courseOptional.CreateAtField
-	courseOptional.UpdateAtField
-	AllowAccess  *int `json:"allow_access" example:"0"` // 是否允許訪問此課表(0:否/1:是)
-	Favorite     *int `json:"favorite" example:"1"` //是否收藏(0:否/1:是)
-	Plans []*struct {
-		planOptional.IDField
-		planOptional.NameField
-		planOptional.WorkoutCountField
-		planOptional.CreateAtField
-		planOptional.UpdateAtField
-		Workouts []*struct {
-			workoutOptional.IDField
-			workoutOptional.NameField
-			workoutOptional.EquipmentField
-			workoutOptional.StartAudioField
-			workoutOptional.EndAudioField
-			workoutOptional.WorkoutSetCountField
-			workoutOptional.CreateAtField
-			workoutOptional.UpdateAtField
-			WorkoutSets []*struct {
-				workoutSetOptional.IDField
-				workoutSetOptional.TypeField
-				workoutSetOptional.AutoNextField
-				workoutSetOptional.StartAudioField
-				workoutSetOptional.ProgressAudioField
-				workoutSetOptional.RemarkField
-				workoutSetOptional.WeightField
-				workoutSetOptional.RepsField
-				workoutSetOptional.DistanceField
-				workoutSetOptional.DurationField
-				workoutSetOptional.InclineField
-				workoutSetOptional.CreateAtField
-				workoutSetOptional.UpdateAtField
-				Action *struct {
-					actionOptional.IDField
-					actionOptional.NameField
-					actionOptional.SourceField
-					actionOptional.TypeField
-					actionOptional.CategoryField
-					actionOptional.BodyField
-					actionOptional.EquipmentField
-					actionOptional.IntroField
-					actionOptional.CoverField
-					actionOptional.VideoField
-					actionOptional.CreateAtField
-					actionOptional.UpdateAtField
-				} `json:"action,omitempty"`
-			} `json:"workout_sets,omitempty"`
-		} `json:"workouts,omitempty"`
-	} `json:"plans,omitempty"`
-	SaleItem *struct {
-		saleItemOptional.IDField
-		saleItemOptional.NameField
-		ProductLabel *struct {
-			productLabelOptional.IDField
-			productLabelOptional.ProductIDField
-			productLabelOptional.TwdField
-		} `json:"product_label,omitempty"`
-	} `json:"sale_item,omitempty"`
-	UserCourseStatistic *struct {
-		user_course_statistic.FinishWorkoutCountField
-		user_course_statistic.DurationField
-	} `json:"user_course_statistic,omitempty"`
 }

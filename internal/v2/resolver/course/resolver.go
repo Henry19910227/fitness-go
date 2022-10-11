@@ -483,6 +483,8 @@ func (r *resolver) APIGetUserCourse(input *model.APIGetUserCourseInput) (output 
 		{Field: "Trainer"},
 		{Field: "SaleItem.ProductLabel"},
 		{Field: "UserCourseStatistic", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "UserCourseAsset", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "FavoriteCourse", Conditions: []interface{}{"user_id = ?", input.UserID}},
 	}
 	courseOutput, err := r.courseService.Find(&findInput)
 	if err != nil {
@@ -494,6 +496,19 @@ func (r *resolver) APIGetUserCourse(input *model.APIGetUserCourseInput) (output 
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
+	}
+	data.AllowAccess = util.PointerInt(0)
+	data.Favorite = util.PointerInt(0)
+	// 獲取是否可訪問狀態
+	isAllow, err := r.getAllowAccessStatus(input.UserID, courseOutput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data.AllowAccess = util.PointerInt(isAllow)
+	// 獲取訂閱狀態
+	if courseOutput.FavoriteCourse != nil {
+		data.Favorite = util.PointerInt(1)
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data
