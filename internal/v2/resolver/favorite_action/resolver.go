@@ -26,3 +26,15 @@ func (r *resolver) APICreateFavoriteAction(input *model.APICreateFavoriteActionI
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIDeleteFavoriteAction(input *model.APIDeleteFavoriteActionInput) (output model.APIDeleteFavoriteActionOutput) {
+	deleteInput := model.DeleteInput{}
+	deleteInput.UserID = input.UserID
+	deleteInput.ActionID = input.Uri.ActionID
+	if err := r.favoriteActionService.Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}

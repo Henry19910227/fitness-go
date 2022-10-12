@@ -20,3 +20,11 @@ func (r *repository) Create(item *model.Table) (err error) {
 	}
 	return err
 }
+
+func (r *repository) Delete(input *model.DeleteInput) (err error) {
+	err = r.db.
+		Where("user_id = ?", input.UserID).
+		Where("action_id = ?", input.ActionID).
+		Delete(&model.Table{}).Error
+	return err
+}

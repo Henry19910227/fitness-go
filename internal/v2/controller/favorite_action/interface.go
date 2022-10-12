@@ -4,4 +4,5 @@ import "github.com/gin-gonic/gin"
 
 type Controller interface {
 	CreateFavoriteAction(ctx *gin.Context)
+	DeleteFavoriteAction(ctx *gin.Context)
 }

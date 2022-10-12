@@ -9884,6 +9884,47 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除動作收藏",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "收藏_v2"
+                ],
+                "summary": "刪除動作收藏",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "動作id",
+                        "name": "action_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/favorite_action.APIDeleteFavoriteActionOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
             }
         },
         "/v2/favorite/courses": {
@@ -14803,7 +14844,7 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
@@ -15002,7 +15043,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15093,7 +15134,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15205,7 +15246,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15845,7 +15886,6 @@ var doc = `{
             "required": [
                 "category",
                 "level",
-                "name",
                 "schedule_type"
             ],
             "properties": {
@@ -15860,9 +15900,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "腿部訓練"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -15902,14 +15942,13 @@ var doc = `{
         "course.APICreateUserCourseBody": {
             "type": "object",
             "required": [
-                "name",
                 "schedule_type"
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "腿部訓練"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -21219,6 +21258,21 @@ var doc = `{
                 }
             }
         },
+        "favorite_action.APIDeleteFavoriteActionOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "feedback.APIGetCMSFeedbacksOutput": {
             "type": "object",
             "properties": {
@@ -22529,14 +22583,11 @@ var doc = `{
         },
         "plan.APICreateTrainerPlanBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "腿部訓練"
                 }
             }
         },
@@ -22570,14 +22621,11 @@ var doc = `{
         },
         "plan.APICreateUserPlanBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "腿部訓練"
                 }
             }
         },
@@ -22851,14 +22899,11 @@ var doc = `{
         },
         "plan.APIUpdateUserPlanBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "腿部訓練"
                 }
             }
         },
@@ -26194,14 +26239,11 @@ var doc = `{
         },
         "workout.APICreateTrainerWorkoutBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "腿部訓練"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -26240,14 +26282,11 @@ var doc = `{
         },
         "workout.APICreateUserWorkoutBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "腿部訓練"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27210,7 +27249,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -27366,7 +27405,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -27519,7 +27558,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -27662,7 +27701,7 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
@@ -27815,7 +27854,7 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
