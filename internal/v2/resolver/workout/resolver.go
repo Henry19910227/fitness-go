@@ -985,3 +985,22 @@ func (r *resolver) APIDeleteTrainerWorkoutEndAudio(input *model.APIDeleteTrainer
 	output.Set(code.Success, "success")
 	return output
 }
+
+func (r *resolver) APIGetProductWorkouts(input *model.APIGetProductWorkoutsInput) (output model.APIGetProductWorkoutsOutput) {
+	listInput := model.ListInput{}
+	listInput.PlanID = util.PointerInt64(input.Uri.PlanID)
+	workoutOutputs, _, err := r.workoutService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetProductWorkoutsData{}
+	if err := util.Parser(workoutOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}

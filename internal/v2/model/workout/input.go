@@ -161,3 +161,12 @@ type APIDeleteTrainerWorkoutEndAudioInput struct {
 type APIDeleteTrainerWorkoutEndAudioUri struct {
 	required.IDField
 }
+
+// APIGetProductWorkoutsInput /v2/product/plan/{plan_id}/workouts [GET]
+type APIGetProductWorkoutsInput struct {
+	userRequired.UserIDField
+	Uri APIGetProductPlansUri
+}
+type APIGetProductPlansUri struct {
+	required.PlanIDField
+}

@@ -132,3 +132,19 @@ type APIDeleteTrainerWorkoutStartAudioOutput struct {
 type APIDeleteTrainerWorkoutEndAudioOutput struct {
 	base.Output
 }
+
+// APIGetProductWorkoutsOutput /v2/product/plan/{plan_is}/workouts [GET]
+type APIGetProductWorkoutsOutput struct {
+	base.Output
+	Data *APIGetProductWorkoutsData `json:"data,omitempty"`
+}
+type APIGetProductWorkoutsData []*struct {
+	optional.IDField
+	optional.NameField
+	optional.EquipmentField
+	optional.StartAudioField
+	optional.EndAudioField
+	optional.WorkoutSetCountField
+	optional.CreateAtField
+	optional.UpdateAtField
+}
