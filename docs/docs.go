@@ -10541,6 +10541,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/product/course/{course_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店課表詳細",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店課表_v2"
+                ],
+                "summary": "獲取商店課表詳細",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetUserCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/apple": {
             "post": {
                 "description": "使用Apple註冊",
@@ -14829,14 +14872,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "動作介紹(1~400字元)",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "划船機"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15023,14 +15066,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "動作介紹(1~400字元)",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "划船機"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15114,14 +15157,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "動作介紹(1~400字元)",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "划船機"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15226,14 +15269,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "動作介紹(1~400字元)",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "划船機"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15886,6 +15929,7 @@ var doc = `{
             "required": [
                 "category",
                 "level",
+                "name",
                 "schedule_type"
             ],
             "properties": {
@@ -15900,9 +15944,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "訓練名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "腿部訓練"
+                    "example": "銅級課表 "
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -15942,13 +15986,14 @@ var doc = `{
         "course.APICreateUserCourseBody": {
             "type": "object",
             "required": [
+                "name",
                 "schedule_type"
             ],
             "properties": {
                 "name": {
-                    "description": "訓練名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "腿部訓練"
+                    "example": "銅級課表 "
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -17269,9 +17314,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "划船機"
                 }
             }
         },
@@ -22583,11 +22628,14 @@ var doc = `{
         },
         "plan.APICreateTrainerPlanBody": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
-                    "description": "訓練名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "腿部訓練"
+                    "example": "銅級課表 "
                 }
             }
         },
@@ -22621,11 +22669,14 @@ var doc = `{
         },
         "plan.APICreateUserPlanBody": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
-                    "description": "訓練名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "腿部訓練"
+                    "example": "銅級課表 "
                 }
             }
         },
@@ -22899,11 +22950,14 @@ var doc = `{
         },
         "plan.APIUpdateUserPlanBody": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
-                    "description": "訓練名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "腿部訓練"
+                    "example": "銅級課表 "
                 }
             }
         },
@@ -23191,9 +23245,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "動作介紹(1~400字元)",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -23201,9 +23255,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "划船機"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -26239,11 +26293,14 @@ var doc = `{
         },
         "workout.APICreateTrainerWorkoutBody": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
-                    "description": "訓練名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "腿部訓練"
+                    "example": "銅級課表 "
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -26282,11 +26339,14 @@ var doc = `{
         },
         "workout.APICreateUserWorkoutBody": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
-                    "description": "訓練名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "腿部訓練"
+                    "example": "銅級課表 "
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -26447,9 +26507,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "划船機"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -26515,9 +26575,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "划船機"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -26568,9 +26628,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "划船機"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -26631,9 +26691,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "划船機"
                 },
                 "start_audio": {
                     "description": "前導語音",

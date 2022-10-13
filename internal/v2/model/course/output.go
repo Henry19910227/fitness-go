@@ -460,3 +460,58 @@ type APIDeleteTrainerCourseOutput struct {
 type APISubmitTrainerCourseOutput struct {
 	base.Output
 }
+
+// APIGetProductCourseOutput /v2/product/course/{course_id} [GET]
+type APIGetProductCourseOutput struct {
+	base.Output
+	Data *APIGetProductCourseData `json:"data,omitempty"`
+}
+type APIGetProductCourseData struct {
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.SaleIDField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.IntroField
+	courseOptional.FoodField
+	courseOptional.LevelField
+	courseOptional.SuitField
+	courseOptional.EquipmentField
+	courseOptional.PlaceField
+	courseOptional.TrainTargetField
+	courseOptional.BodyTargetField
+	courseOptional.NoticeField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
+	AllowAccess *int `json:"allow_access" example:"0"` // 是否允許訪問此課表(0:否/1:是)
+	Favorite    *int `json:"favorite" example:"1"`     //是否收藏(0:否/1:是)
+	Trainer     *struct {
+		trainerOptional.UserIDField
+		trainerOptional.AvatarField
+		trainerOptional.NicknameField
+		trainerOptional.SkillField
+	} `json:"trainer,omitempty"`
+	SaleItem *struct {
+		saleItemOptional.IDField
+		saleItemOptional.NameField
+		ProductLabel *struct {
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+	ReviewStatistic struct {
+		review_statistic.ScoreTotalRequired
+		review_statistic.AmountRequired
+		review_statistic.FiveTotalField
+		review_statistic.FourTotalField
+		review_statistic.ThreeTotalField
+		review_statistic.TwoTotalField
+		review_statistic.OneTotalField
+	} `json:"review_statistic"`
+}

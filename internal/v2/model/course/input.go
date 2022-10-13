@@ -137,3 +137,12 @@ type APISubmitTrainerCourseInput struct {
 type APISubmitTrainerCourseUri struct {
 	required.IDField
 }
+
+// APIGetProductCourseInput /v2/product/course/{course_id} [GET]
+type APIGetProductCourseInput struct {
+	required.UserIDField
+	Uri APIGetProductCourseUri
+}
+type APIGetProductCourseUri struct {
+	required.IDField
+}

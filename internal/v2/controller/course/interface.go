@@ -24,4 +24,6 @@ type Controller interface {
 	UpdateTrainerCourse(ctx *gin.Context)
 	DeleteTrainerCourse(ctx *gin.Context)
 	SubmitTrainerCourse(ctx *gin.Context)
+
+	GetProductCourse(ctx *gin.Context)
 }

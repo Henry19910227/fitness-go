@@ -493,3 +493,25 @@ func (c *controller) SubmitTrainerCourse(ctx *gin.Context) {
 	output := c.resolver.APISubmitTrainerCourse(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetProductCourse 獲取商店課表詳細
+// @Summary 獲取商店課表詳細
+// @Description 獲取商店課表詳細
+// @Tags 商店課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} course.APIGetUserCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/product/course/{course_id} [GET]
+func (c *controller) GetProductCourse(ctx *gin.Context) {
+	var input model.APIGetProductCourseInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetProductCourse(&input)
+	ctx.JSON(http.StatusOK, output)
+}

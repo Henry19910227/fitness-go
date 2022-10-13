@@ -32,4 +32,6 @@ type Resolver interface {
 	APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTrainerCourseInput) (output model.APIUpdateTrainerCourseOutput)
 	APIDeleteTrainerCourse(input *model.APIDeleteTrainerCourseInput) (output model.APIDeleteTrainerCourseOutput)
 	APISubmitTrainerCourse(input *model.APISubmitTrainerCourseInput) (output model.APISubmitTrainerCourseOutput)
+
+	APIGetProductCourse(input *model.APIGetProductCourseInput) (output model.APIGetProductCourseOutput)
 }

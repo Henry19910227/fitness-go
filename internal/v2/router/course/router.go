@@ -15,7 +15,9 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := course.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
+
 	v2.GET("/favorite/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetFavoriteCourses)
+
 	v2.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)
 	v2.GET("/cms/course/:course_id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
 	v2.PATCH("/cms/courses/course_status", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesStatus)
@@ -34,4 +36,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/trainer/course/:course_id", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerCourse)
 	v2.PATCH("/trainer/course/:course_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateTrainerCourse)
 	v2.POST("/trainer/course/:course_id/submit", midd.Verify([]global.Role{global.UserRole}), controller.SubmitTrainerCourse)
+
+	v2.GET("/product/course/:course_id", midd.Verify([]global.Role{global.UserRole}), controller.GetProductCourse)
 }

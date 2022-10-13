@@ -894,6 +894,46 @@ func (r *resolver) APISubmitTrainerCourse(input *model.APISubmitTrainerCourseInp
 	return output
 }
 
+func (r *resolver) APIGetProductCourse(input *model.APIGetProductCourseInput) (output model.APIGetProductCourseOutput) {
+	// 查詢資料
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "ReviewStatistic"},
+		{Field: "UserCourseAsset", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "FavoriteCourse", Conditions: []interface{}{"user_id = ?", input.UserID}},
+	}
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetProductCourseData{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data.AllowAccess = util.PointerInt(0)
+	data.Favorite = util.PointerInt(0)
+	// 獲取是否可訪問狀態
+	isAllow, err := r.getAllowAccessStatus(input.UserID, courseOutput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data.AllowAccess = util.PointerInt(isAllow)
+	// 獲取收藏狀態
+	if courseOutput.FavoriteCourse != nil {
+		data.Favorite = util.PointerInt(1)
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
 func (r *resolver) getAllowAccessStatus(userID int64, courseOutput *model.Output) (isAllow int, err error) {
 	isAllow = 0
 	// 1.該課表為免費課表

@@ -26,12 +26,12 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       name:
-        description: 教練本名
-        example: 亨利
+        description: 動作名稱
+        example: 划船機
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
@@ -170,12 +170,12 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 動作介紹(1~400字元)
+              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
               type: string
             name:
-              description: 教練本名
-              example: 亨利
+              description: 動作名稱
+              example: 划船機
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -240,12 +240,12 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 動作介紹(1~400字元)
+              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
               type: string
             name:
-              description: 教練本名
-              example: 亨利
+              description: 動作名稱
+              example: 划船機
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -325,12 +325,12 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 動作介紹(1~400字元)
+              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
               type: string
             name:
-              description: 教練本名
-              example: 亨利
+              description: 動作名稱
+              example: 划船機
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -825,8 +825,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -835,6 +835,7 @@ definitions:
     required:
     - category
     - level
+    - name
     - schedule_type
     type: object
   course.APICreateTrainerCourseData:
@@ -860,14 +861,15 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
         example: 2
         type: integer
     required:
+    - name
     - schedule_type
     type: object
   course.APICreateUserCourseData:
@@ -1869,8 +1871,8 @@ definitions:
   course.APIUpdateUserCourseBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 動作名稱
+        example: 划船機
         type: string
     type: object
   course.APIUpdateUserCourseOutput:
@@ -5894,9 +5896,11 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
+    required:
+    - name
     type: object
   plan.APICreateTrainerPlanData:
     properties:
@@ -5921,9 +5925,11 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
+    required:
+    - name
     type: object
   plan.APICreateUserPlanData:
     properties:
@@ -6128,9 +6134,11 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
+    required:
+    - name
     type: object
   plan.APIUpdateUserPlanOutput:
     properties:
@@ -6344,16 +6352,16 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       motto:
         description: 座右銘
         example: 勞其筋骨
         type: string
       name:
-        description: 教練本名
-        example: 亨利
+        description: 動作名稱
+        example: 划船機
         type: string
       nickname:
         description: 教練暱稱
@@ -8648,13 +8656,15 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       workout_template_id:
         description: 訓練模板ID
         example: 1
         type: integer
+    required:
+    - name
     type: object
   workout.APICreateTrainerWorkoutData:
     properties:
@@ -8679,13 +8689,15 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       workout_template_id:
         description: 訓練模板ID
         example: 1
         type: integer
+    required:
+    - name
     type: object
   workout.APICreateUserWorkoutData:
     properties:
@@ -8799,8 +8811,8 @@ definitions:
               example: 1
               type: integer
             name:
-              description: 教練本名
-              example: 亨利
+              description: 動作名稱
+              example: 划船機
               type: string
             start_audio:
               description: 前導語音
@@ -8851,8 +8863,8 @@ definitions:
               example: 1
               type: integer
             name:
-              description: 教練本名
-              example: 亨利
+              description: 動作名稱
+              example: 划船機
               type: string
             start_audio:
               description: 前導語音
@@ -8892,8 +8904,8 @@ definitions:
         example: 1
         type: integer
       name:
-        description: 教練本名
-        example: 亨利
+        description: 動作名稱
+        example: 划船機
         type: string
       start_audio:
         description: 前導語音
@@ -8940,8 +8952,8 @@ definitions:
         example: 1
         type: integer
       name:
-        description: 教練本名
-        example: 亨利
+        description: 動作名稱
+        example: 划船機
         type: string
       start_audio:
         description: 前導語音
@@ -16459,6 +16471,34 @@ paths:
       summary: 修改密碼
       tags:
       - 用戶個人_v2
+  /v2/product/course/{course_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取商店課表詳細
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/course.APIGetUserCourseOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取商店課表詳細
+      tags:
+      - 商店課表_v2
   /v2/register/apple:
     post:
       consumes:
