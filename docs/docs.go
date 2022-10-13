@@ -10584,6 +10584,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/product/course/{course_id}/plans": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店課表計畫列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店課表_v2"
+                ],
+                "summary": "獲取商店課表計畫列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APIGetProductPlansOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/register/apple": {
             "post": {
                 "description": "使用Apple註冊",
@@ -14867,7 +14910,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -14925,7 +14968,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 }
@@ -14953,7 +14996,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 }
@@ -15061,7 +15104,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15152,7 +15195,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15264,7 +15307,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15944,9 +15987,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -15991,9 +16034,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -17689,7 +17732,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "訓練 log id",
+                                                "description": "動作id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -22633,9 +22676,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 }
             }
         },
@@ -22674,9 +22717,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 }
             }
         },
@@ -22822,6 +22865,54 @@ var doc = `{
                 }
             }
         },
+        "plan.APIGetProductPlansOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "計畫id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "description": "計畫名稱",
+                                "type": "string",
+                                "example": "第一週增肌計畫"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "workout_count": {
+                                "description": "訓練數量",
+                                "type": "integer",
+                                "example": 10
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "plan.APIGetTrainerPlansOutput": {
             "type": "object",
             "properties": {
@@ -22955,9 +23046,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 }
             }
         },
@@ -26298,9 +26389,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -26313,7 +26404,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 }
@@ -26344,9 +26435,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -26359,7 +26450,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 }
@@ -26502,7 +26593,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -26570,7 +26661,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -26623,7 +26714,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -26686,7 +26777,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -27279,7 +27370,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -27435,7 +27526,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -27588,7 +27679,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -27731,7 +27822,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -27884,7 +27975,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },

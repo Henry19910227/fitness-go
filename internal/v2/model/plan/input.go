@@ -37,7 +37,7 @@ type ListInput struct {
 }
 
 type APIGetCMSPlansInput struct {
-	Uri APIGetCMSPlansUri
+	Uri   APIGetCMSPlansUri
 	Query APIGetCMSPlansQuery
 }
 type APIGetCMSPlansUri struct {
@@ -51,8 +51,8 @@ type APIGetCMSPlansQuery struct {
 // APICreateUserPlanInput /v2/user/course/{course_id}/plan [POST]
 type APICreateUserPlanInput struct {
 	courseRequired.UserIDField
-	Uri    APICreateUserPlanUri
-	Body   APICreateUserPlanBody
+	Uri  APICreateUserPlanUri
+	Body APICreateUserPlanBody
 }
 type APICreateUserPlanUri struct {
 	required.CourseIDField
@@ -64,7 +64,7 @@ type APICreateUserPlanBody struct {
 // APIDeleteUserPlanInput /v2/user/workout/{workout_id} [DELETE]
 type APIDeleteUserPlanInput struct {
 	userRequired.UserIDField
-	Uri    APIDeleteUserPlanUri
+	Uri APIDeleteUserPlanUri
 }
 type APIDeleteUserPlanUri struct {
 	required.IDField
@@ -73,7 +73,7 @@ type APIDeleteUserPlanUri struct {
 // APIGetUserPlansInput /v2/user/course/{course_id}/plans [GET]
 type APIGetUserPlansInput struct {
 	userRequired.UserIDField
-	Uri    APIGetUserPlansUri
+	Uri APIGetUserPlansUri
 }
 type APIGetUserPlansUri struct {
 	required.CourseIDField
@@ -82,8 +82,8 @@ type APIGetUserPlansUri struct {
 // APIUpdateUserPlanInput /v2/user/plan/{plan_id} [PATCH]
 type APIUpdateUserPlanInput struct {
 	userRequired.UserIDField
-	Uri    APIUpdateUserPlanUri
-	Body   APIUpdateUserPlanBody
+	Uri  APIUpdateUserPlanUri
+	Body APIUpdateUserPlanBody
 }
 type APIUpdateUserPlanUri struct {
 	required.IDField
@@ -95,8 +95,8 @@ type APIUpdateUserPlanBody struct {
 // APICreateTrainerPlanInput /v2/trainer/course/{course_id}/plan [POST]
 type APICreateTrainerPlanInput struct {
 	userRequired.UserIDField
-	Uri    APICreateTrainerPlanUri
-	Body   APICreateTrainerPlanBody
+	Uri  APICreateTrainerPlanUri
+	Body APICreateTrainerPlanBody
 }
 type APICreateTrainerPlanUri struct {
 	required.CourseIDField
@@ -108,8 +108,17 @@ type APICreateTrainerPlanBody struct {
 // APIGetTrainerPlansInput /v2/trainer/course/{course_id}/plans [POST]
 type APIGetTrainerPlansInput struct {
 	userRequired.UserIDField
-	Uri    APIGetTrainerPlansUri
+	Uri APIGetTrainerPlansUri
 }
 type APIGetTrainerPlansUri struct {
+	required.CourseIDField
+}
+
+// APIGetProductPlansInput /v2/product/course/{course_id}/plans [GET]
+type APIGetProductPlansInput struct {
+	userRequired.UserIDField
+	Uri APIGetProductPlansUri
+}
+type APIGetProductPlansUri struct {
 	required.CourseIDField
 }

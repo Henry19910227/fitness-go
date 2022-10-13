@@ -294,3 +294,22 @@ func (r *resolver) APICreateTrainerPlan(tx *gorm.DB, input *model.APICreateTrain
 	output.SetStatus(code.Success)
 	return output
 }
+
+func (r *resolver) APIGetProductPlans(input *model.APIGetProductPlansInput) (output model.APIGetProductPlansOutput) {
+	listInput := model.ListInput{}
+	listInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+	planOutputs, _, err := r.planService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetProductPlansData{}
+	if err := util.Parser(planOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}

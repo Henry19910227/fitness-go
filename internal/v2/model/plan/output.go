@@ -11,7 +11,7 @@ import (
 
 type Output struct {
 	Table
-	Workouts           []*workout.Output           `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"`            // 訓練
+	Workouts          []*workout.Output           `json:"workouts,omitempty" gorm:"foreignKey:plan_id;references:id"`            // 訓練
 	UserPlanStatistic *user_plan_statistic.Output `json:"user_plan_statistic,omitempty" gorm:"foreignKey:plan_id;references:id"` // 計畫統計
 }
 
@@ -103,4 +103,17 @@ type APIGetTrainerPlansData []*struct {
 		user_plan_statistic.DurationField
 		user_plan_statistic.FinishWorkoutCountField
 	} `json:"user_plan_statistic,omitempty"`
+}
+
+// APIGetProductPlansOutput /v2/product/course/{course_id}/plans [GET]
+type APIGetProductPlansOutput struct {
+	base.Output
+	Data *APIGetProductPlansData `json:"data,omitempty"`
+}
+type APIGetProductPlansData []*struct {
+	planOptional.IDField
+	planOptional.NameField
+	planOptional.WorkoutCountField
+	planOptional.CreateAtField
+	planOptional.UpdateAtField
 }

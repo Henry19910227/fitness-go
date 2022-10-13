@@ -6,6 +6,7 @@ import (
 
 type Controller interface {
 	GetCMSPlans(ctx *gin.Context)
+
 	CreateUserPlan(ctx *gin.Context)
 	DeleteUserPlan(ctx *gin.Context)
 	GetUserPlans(ctx *gin.Context)
@@ -13,4 +14,6 @@ type Controller interface {
 
 	CreateTrainerPlan(ctx *gin.Context)
 	GetTrainerPlans(ctx *gin.Context)
+
+	GetProductPlans(ctx *gin.Context)
 }

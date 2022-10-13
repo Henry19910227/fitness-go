@@ -22,7 +22,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
       intro:
@@ -66,7 +66,7 @@ definitions:
   action.APICreateTrainerActionData:
     properties:
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
     type: object
@@ -86,7 +86,7 @@ definitions:
   action.APICreateUserActionData:
     properties:
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
     type: object
@@ -166,7 +166,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 訓練 log id
+              description: 動作id
               example: 1
               type: integer
             intro:
@@ -236,7 +236,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 訓練 log id
+              description: 動作id
               example: 1
               type: integer
             intro:
@@ -321,7 +321,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 訓練 log id
+              description: 動作id
               example: 1
               type: integer
             intro:
@@ -825,8 +825,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 銷售名稱
-        example: '銅級課表 '
+        description: 課表名稱
+        example: 增肌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -861,8 +861,8 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 銷售名稱
-        example: '銅級課表 '
+        description: 課表名稱
+        example: 增肌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -2159,7 +2159,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 訓練 log id
+                      description: 動作id
                       example: 1
                       type: integer
                     product_id:
@@ -5896,8 +5896,8 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 銷售名稱
-        example: '銅級課表 '
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -5925,8 +5925,8 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 銷售名稱
-        example: '銅級課表 '
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -6037,6 +6037,42 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  plan.APIGetProductPlansOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: 計畫id
+              example: 1
+              type: integer
+            name:
+              description: 計畫名稱
+              example: 第一週增肌計畫
+              type: string
+            update_at:
+              description: 更新時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            workout_count:
+              description: 訓練數量
+              example: 10
+              type: integer
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   plan.APIGetTrainerPlansOutput:
     properties:
       code:
@@ -6134,8 +6170,8 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 銷售名稱
-        example: '銅級課表 '
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -8656,8 +8692,8 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 銷售名稱
-        example: '銅級課表 '
+        description: 課表名稱
+        example: 增肌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -8669,7 +8705,7 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
     type: object
@@ -8689,8 +8725,8 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 銷售名稱
-        example: '銅級課表 '
+        description: 課表名稱
+        example: 增肌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -8702,7 +8738,7 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
     type: object
@@ -8807,7 +8843,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 訓練 log id
+              description: 動作id
               example: 1
               type: integer
             name:
@@ -8859,7 +8895,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 訓練 log id
+              description: 動作id
               example: 1
               type: integer
             name:
@@ -8900,7 +8936,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
       name:
@@ -8948,7 +8984,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
       name:
@@ -9391,7 +9427,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 log id
+              description: 動作id
               example: 1
               type: integer
             incline:
@@ -9512,7 +9548,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 log id
+              description: 動作id
               example: 1
               type: integer
             incline:
@@ -9631,7 +9667,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 log id
+              description: 動作id
               example: 1
               type: integer
             incline:
@@ -9743,7 +9779,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
       incline:
@@ -9862,7 +9898,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 訓練 log id
+        description: 動作id
         example: 1
         type: integer
       incline:
@@ -16497,6 +16533,33 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取商店課表詳細
+      tags:
+      - 商店課表_v2
+  /v2/product/course/{course_id}/plans:
+    get:
+      consumes:
+      - application/json
+      description: 獲取商店課表計畫列表
+      parameters:
+      - description: 課表id
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/plan.APIGetProductPlansOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取商店課表計畫列表
       tags:
       - 商店課表_v2
   /v2/register/apple:
