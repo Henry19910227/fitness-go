@@ -934,6 +934,67 @@ func (r *resolver) APIGetProductCourse(input *model.APIGetProductCourseInput) (o
 	return output
 }
 
+func (r *resolver) APIGetProductCourseStructure(input *model.APIGetProductCourseStructureInput) (output model.APIGetProductCourseStructureOutput) {
+	// 檢查課表是否是單一訓練課表
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.ScheduleType, 0) != model.SingleWorkout {
+		output.Set(code.BadRequest, "只允許查看單一訓練課表")
+		return output
+	}
+	// 查詢課表
+	findInput = model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "UserCourseAsset", Conditions: []interface{}{"user_id = ?", input.UserID}}, //判斷是否可訪問權限
+		{Field: "FavoriteCourse", Conditions: []interface{}{"user_id = ?", input.UserID}},  //判斷收藏
+		{Field: "SaleItem"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "ReviewStatistic"},
+		{Field: "Trainer"},
+		{Field: "Plans"},
+		{Field: "Plans.Workouts"},
+		{Field: "Plans.Workouts.WorkoutSets"},
+		{Field: "Plans.Workouts.WorkoutSets.Action"},
+		{Field: "Plans.Workouts.WorkoutSets", Conditions: []interface{}{func(db *gorm.DB) *gorm.DB {
+			db = db.Joins("LEFT JOIN workout_set_orders ON workout_sets.id = workout_set_orders.workout_set_id")
+			return db.Order("workout_set_orders.seq IS NULL ASC, workout_set_orders.seq ASC, workout_sets.create_at ASC")
+		}}},
+	}
+	courseOutput, err = r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetProductCourseStructureData{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data.AllowAccess = util.PointerInt(0)
+	data.Favorite = util.PointerInt(0)
+	// 獲取是否可訪問狀態
+	isAllow, err := r.getAllowAccessStatus(input.UserID, courseOutput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data.AllowAccess = util.PointerInt(isAllow)
+	// 獲取訂閱狀態
+	if courseOutput.FavoriteCourse != nil {
+		data.Favorite = util.PointerInt(1)
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
 func (r *resolver) getAllowAccessStatus(userID int64, courseOutput *model.Output) (isAllow int, err error) {
 	isAllow = 0
 	// 1.該課表為免費課表

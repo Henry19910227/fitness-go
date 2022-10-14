@@ -515,3 +515,25 @@ func (c *controller) GetProductCourse(ctx *gin.Context) {
 	output := c.resolver.APIGetProductCourse(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetProductCourseStructure 獲取商店課表結構
+// @Summary 獲取商店課表結構
+// @Description 獲取商店課表結構
+// @Tags 商店課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} course.APIGetProductCourseStructureOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/product/course/{course_id}/structure [GET]
+func (c *controller) GetProductCourseStructure(ctx *gin.Context) {
+	input := model.APIGetProductCourseStructureInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetProductCourseStructure(&input)
+	ctx.JSON(http.StatusOK, output)
+}
