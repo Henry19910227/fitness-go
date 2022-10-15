@@ -265,7 +265,21 @@ func (r *resolver) APIUpdateUserAction(tx *gorm.DB, input *model.APIUpdateUserAc
 	}
 	tx.Commit()
 	// parser output
+	// 查詢動作資訊
+	findInput = model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	actionOutput, err = r.actionService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIUpdateUserActionData{}
+	if err := util.Parser(actionOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }
 

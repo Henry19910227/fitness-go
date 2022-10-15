@@ -122,6 +122,21 @@ type APICreateUserActionData struct {
 // APIUpdateUserActionOutput /v2/user/action/{action_id} [PATCH] 修改個人動作 API
 type APIUpdateUserActionOutput struct {
 	base.Output
+	Data *APIUpdateUserActionData `json:"data,omitempty"`
+}
+type APIUpdateUserActionData struct {
+	optional.IDField
+	optional.NameField
+	optional.TypeField
+	optional.CategoryField
+	optional.BodyField
+	optional.EquipmentField
+	optional.IntroField
+	optional.CoverField
+	optional.VideoField
+	optional.StatusField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APIGetUserActionsOutput /v2/user/actions [GET] 獲取個人動作庫 API
