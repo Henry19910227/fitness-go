@@ -263,3 +263,38 @@ type APIDeleteTrainerWorkoutSetProgressAudioOutput struct {
 type APICreateTrainerWorkoutSetByDuplicateOutput struct {
 	base.Output
 }
+
+// APIGetProductWorkoutSetsOutput /v2/product/workout/{workout_id}/workout_sets [GET]
+type APIGetProductWorkoutSetsOutput struct {
+	base.Output
+	Data *APIGetProductWorkoutSetsData `json:"data,omitempty"`
+}
+type APIGetProductWorkoutSetsData []*struct {
+	optional.IDField
+	optional.TypeField
+	optional.AutoNextField
+	optional.StartAudioField
+	optional.ProgressAudioField
+	optional.RemarkField
+	optional.WeightField
+	optional.RepsField
+	optional.DistanceField
+	optional.DurationField
+	optional.InclineField
+	optional.CreateAtField
+	optional.UpdateAtField
+	Action *struct {
+		actionOptional.IDField
+		actionOptional.NameField
+		actionOptional.SourceField
+		actionOptional.TypeField
+		actionOptional.CategoryField
+		actionOptional.BodyField
+		actionOptional.EquipmentField
+		actionOptional.IntroField
+		actionOptional.CoverField
+		actionOptional.VideoField
+		actionOptional.CreateAtField
+		actionOptional.UpdateAtField
+	} `json:"action,omitempty"`
+}

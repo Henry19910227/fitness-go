@@ -483,3 +483,26 @@ func (c *controller) CreateTrainerWorkoutSetByDuplicate(ctx *gin.Context) {
 	output := c.resolver.APICreateTrainerWorkoutSetByDuplicate(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetProductWorkoutSets 獲取商店課表訓練組列表
+// @Summary 獲取商店課表訓練組列表
+// @Description 獲取商店課表訓練組列表
+// @Tags 商店課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_id path int64 true "訓練id"
+// @Success 200 {object} workout_set.APIGetProductWorkoutSetsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/product/workout/{workout_id}/workout_sets [GET]
+func (c *controller) GetProductWorkoutSets(ctx *gin.Context) {
+	var input model.APIGetProductWorkoutSetsInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetProductWorkoutSets(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
