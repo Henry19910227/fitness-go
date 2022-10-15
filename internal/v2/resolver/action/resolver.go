@@ -7,6 +7,8 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
+	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	actionService "github.com/Henry19910227/fitness-go/internal/v2/service/action"
 	"gorm.io/gorm"
 	"io/ioutil"
@@ -285,7 +287,7 @@ func (r *resolver) APIUpdateUserAction(tx *gorm.DB, input *model.APIUpdateUserAc
 
 func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (output model.APIGetUserActionsOutput) {
 	// parser input
-	var sourceList []int
+	sourceList := make([]interface{}, 0)
 	if input.Query.Source != nil {
 		if strings.Contains(*input.Query.Source, "2") {
 			output.Set(code.BadRequest, "搜索內容不可包含教練動作")
@@ -300,10 +302,10 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 			sourceList = append(sourceList, opt)
 		}
 	} else {
-		sourceList = []int{1, 3}
+		sourceList = []interface{}{1, 3}
 	}
 
-	var categoryList []int
+	categoryList := make([]interface{}, 0)
 	if input.Query.Category != nil {
 		for _, item := range strings.Split(*input.Query.Category, ",") {
 			opt, err := strconv.Atoi(item)
@@ -315,7 +317,7 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 		}
 	}
 
-	var bodyList []int
+	bodyList := make([]interface{}, 0)
 	if input.Query.Body != nil {
 		for _, item := range strings.Split(*input.Query.Body, ",") {
 			opt, err := strconv.Atoi(item)
@@ -327,7 +329,7 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 		}
 	}
 
-	var equipmentList []int
+	equipmentList := make([]interface{}, 0)
 	if input.Query.Equipment != nil {
 		for _, item := range strings.Split(*input.Query.Equipment, ",") {
 			opt, err := strconv.Atoi(item)
@@ -338,26 +340,53 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 			equipmentList = append(equipmentList, opt)
 		}
 	}
+	wheres := make([]*whereModel.Where, 0)
+	if len(sourceList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "actions.source IN (?)", Args: sourceList})
+	}
+	if len(categoryList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "actions.category IN (?)", Args: categoryList})
+	}
+	if len(bodyList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "actions.equipment IN (?)", Args: equipmentList})
+	}
+	if len(equipmentList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "actions.body IN (?)", Args: bodyList})
+	}
 	// 查詢動作
 	listInput := model.ListInput{}
 	listInput.UserID = util.PointerInt64(input.UserID)
 	listInput.Name = input.Query.Name
-	listInput.SourceList = sourceList
-	listInput.CategoryList = categoryList
-	listInput.EquipmentList = equipmentList
-	listInput.BodyList = bodyList
 	listInput.Size = input.Query.Size
 	listInput.Page = input.Query.Page
 	listInput.OrderField = "create_at"
 	listInput.OrderType = order_by.DESC
+	listInput.Wheres = wheres
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "FavoriteAction", Conditions: []interface{}{"user_id = ?", input.UserID}},
+	}
 	actionOutputs, page, err := r.actionService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	// output 轉換成 data item
+	dataItems := make([]*model.APIGetUserActionsItem, 0)
+	for _, actionOutput := range actionOutputs {
+		dataItem := model.APIGetUserActionsItem{}
+		if err := util.Parser(actionOutput, &dataItem); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		dataItem.Favorite = util.PointerInt(0)
+		if actionOutput.FavoriteAction != nil {
+			dataItem.Favorite = util.PointerInt(1)
+		}
+		dataItems = append(dataItems, &dataItem)
+	}
 	// parser output
 	data := model.APIGetUserActionsData{}
-	if err := util.Parser(actionOutputs, &data); err != nil {
+	if err := util.Parser(dataItems, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}

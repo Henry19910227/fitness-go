@@ -46,7 +46,7 @@ type APIGetUserWorkoutsDataItem struct {
 	optional.StartAudioField
 	optional.EndAudioField
 	optional.WorkoutSetCountField
-	Finish *int `json:"finish" example:"1"` // 是否完成(0:未完成/2:已完成)
+	Finish *int `json:"finish" example:"1"` // 是否完成(0:未完成/1:已完成)
 	optional.CreateAtField
 	optional.UpdateAtField
 }

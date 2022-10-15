@@ -15,35 +15,35 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 個人介紹
+        example: Henry教練
         type: string
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -66,7 +66,7 @@ definitions:
   action.APICreateTrainerActionData:
     properties:
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
     type: object
@@ -86,7 +86,7 @@ definitions:
   action.APICreateUserActionData:
     properties:
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
     type: object
@@ -159,23 +159,23 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             intro:
-              description: 動作介紹(1~400字元)
-              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
-              description: 動作名稱
-              example: 划船機
+              description: 教練本名
+              example: 亨利
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -186,12 +186,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -229,23 +229,23 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             intro:
-              description: 動作介紹(1~400字元)
-              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
-              description: 動作名稱
-              example: 划船機
+              description: 教練本名
+              example: 亨利
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -256,12 +256,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -314,23 +314,27 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
+            favorite:
+              description: 是否收藏(0:否/1:是)
               example: 1
               type: integer
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             intro:
-              description: 動作介紹(1~400字元)
-              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
-              description: 動作名稱
-              example: 划船機
+              description: 教練本名
+              example: 亨利
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -341,12 +345,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -388,35 +392,35 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 個人介紹
+        example: Henry教練
         type: string
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -878,8 +882,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -914,8 +918,8 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -2272,8 +2276,8 @@ definitions:
   course.APIUpdateUserCourseBody:
     properties:
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
     type: object
   course.APIUpdateUserCourseOutput:
@@ -2560,7 +2564,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 動作id
+                      description: id
                       example: 1
                       type: integer
                     product_id:
@@ -6293,8 +6297,8 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
     required:
     - name
@@ -6322,8 +6326,8 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
     required:
     - name
@@ -6567,8 +6571,8 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
     required:
     - name
@@ -6766,7 +6770,7 @@ definitions:
         type: array
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       email:
         description: 信箱
@@ -6785,16 +6789,16 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
         example: 勞其筋骨
         type: string
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       nickname:
         description: 教練暱稱
@@ -6850,7 +6854,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -7114,7 +7118,7 @@ definitions:
             type: string
           create_at:
             description: 創建時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
           nickname:
             description: 教練暱稱
@@ -7130,7 +7134,7 @@ definitions:
             type: integer
           update_at:
             description: 更新時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
         type: object
       update_at:
@@ -7242,7 +7246,7 @@ definitions:
             type: string
           create_at:
             description: 創建時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
           nickname:
             description: 教練暱稱
@@ -7258,7 +7262,7 @@ definitions:
             type: integer
           update_at:
             description: 更新時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
         type: object
       update_at:
@@ -7365,7 +7369,7 @@ definitions:
             type: string
           create_at:
             description: 創建時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
           nickname:
             description: 教練暱稱
@@ -7381,7 +7385,7 @@ definitions:
             type: integer
           update_at:
             description: 更新時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
         type: object
       update_at:
@@ -7488,7 +7492,7 @@ definitions:
             type: string
           create_at:
             description: 創建時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
           nickname:
             description: 教練暱稱
@@ -7504,7 +7508,7 @@ definitions:
             type: integer
           update_at:
             description: 更新時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
         type: object
       update_at:
@@ -7611,7 +7615,7 @@ definitions:
             type: string
           create_at:
             description: 創建時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
           nickname:
             description: 教練暱稱
@@ -7627,7 +7631,7 @@ definitions:
             type: integer
           update_at:
             description: 更新時間
-            example: "2022-06-14 00:00:00"
+            example: "2022-06-12 00:00:00"
             type: string
         type: object
       update_at:
@@ -9089,8 +9093,8 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -9102,7 +9106,7 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
     type: object
@@ -9122,8 +9126,8 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -9135,7 +9139,7 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
     type: object
@@ -9229,23 +9233,23 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             name:
-              description: 動作名稱
-              example: 划船機
+              description: 教練本名
+              example: 亨利
               type: string
             start_audio:
               description: 前導語音
@@ -9253,7 +9257,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -9277,23 +9281,23 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             name:
-              description: 動作名稱
-              example: 划船機
+              description: 教練本名
+              example: 亨利
               type: string
             start_audio:
               description: 前導語音
@@ -9301,7 +9305,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -9325,27 +9329,27 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             finish:
               description: 是否完成(0:未完成/2:已完成)
               example: 1
               type: integer
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             name:
-              description: 動作名稱
-              example: 划船機
+              description: 教練本名
+              example: 亨利
               type: string
             start_audio:
               description: 前導語音
@@ -9353,7 +9357,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -9370,23 +9374,23 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       end_audio:
         description: 結束語音
         example: 123.mp3
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       start_audio:
         description: 前導語音
@@ -9394,7 +9398,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -9418,23 +9422,23 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       end_audio:
         description: 結束語音
         example: 123.mp3
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       start_audio:
         description: 前導語音
@@ -9442,7 +9446,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -9861,7 +9865,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -9872,7 +9876,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             incline:
@@ -9896,12 +9900,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -9982,7 +9986,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -9993,7 +9997,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             incline:
@@ -10017,12 +10021,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -10101,7 +10105,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -10112,7 +10116,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             incline:
@@ -10136,12 +10140,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -10220,7 +10224,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -10231,7 +10235,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 動作id
+              description: id
               example: 1
               type: integer
             incline:
@@ -10255,12 +10259,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -10332,7 +10336,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       distance:
         description: 距離(公里)
@@ -10343,7 +10347,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
       incline:
@@ -10367,12 +10371,12 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -10451,7 +10455,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       distance:
         description: 距離(公里)
@@ -10462,7 +10466,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 動作id
+        description: id
         example: 1
         type: integer
       incline:
@@ -10486,12 +10490,12 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       weight:
         description: 重量(公斤)

@@ -31,7 +31,7 @@ type Output struct {
 	UserCourseStatistic        *user_course_statistic.Output         `json:"user_course_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`         // 用戶課表統計
 	UserCourseAsset            *user_course_asset.Output             `json:"user_course_asset,omitempty" gorm:"foreignKey:course_id;references:id"`             // 課表購買紀錄
 	CourseTrainingAvgStatistic *course_training_avg_statistic.Output `json:"course_training_avg_statistic,omitempty" gorm:"foreignKey:course_id;references:id"` // 課表完成度統計
-	FavoriteCourse             *favorite_course.Output               `json:"favorite_course,omitempty" gorm:"foreignKey:course_id;references:id"`               // 課表完成度統計
+	FavoriteCourse             *favorite_course.Output               `json:"favorite_course,omitempty" gorm:"foreignKey:course_id;references:id"`               // 課表收藏
 	Plans                      []*plan.Output                        `json:"plans,omitempty" gorm:"foreignKey:course_id;references:id"`                         // 計畫
 }
 

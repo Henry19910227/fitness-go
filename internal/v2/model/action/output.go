@@ -3,6 +3,7 @@ package action
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/action/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/max_distance_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/max_reps_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/max_rm_record"
@@ -20,6 +21,7 @@ type Output struct {
 	MaxSpeedRecord    *max_speed_record.Output    `json:"max_speed_record" gorm:"foreignKey:action_id;references:id"`    // 最高速度紀錄
 	MaxWeightRecord   *max_weight_record.Output   `json:"max_weight_record" gorm:"foreignKey:action_id;references:id"`   // 最大重量紀錄
 	MinDurationRecord *min_duration_record.Output `json:"min_duration_record" gorm:"foreignKey:action_id;references:id"` // 最短時長紀錄
+	FavoriteAction 	  *favorite_action.Output 	  `json:"favorite_action" gorm:"foreignKey:action_id;references:id"` // 動作收藏
 }
 
 func (Output) TableName() string {
@@ -66,6 +68,13 @@ func (o Output) MinDurationRecordOnSafe() min_duration_record.Output {
 		return *o.MinDurationRecord
 	}
 	return min_duration_record.Output{}
+}
+
+func (o Output) FavoriteActionOnSafe() favorite_action.Output {
+	if o.FavoriteAction != nil {
+		return *o.FavoriteAction
+	}
+	return favorite_action.Output{}
 }
 
 // APIGetCMSActionsOutput /cms/actions [GET] 獲取動作列表 API
@@ -146,6 +155,9 @@ type APIGetUserActionsOutput struct {
 	Paging *paging.Output         `json:"paging,omitempty"`
 }
 type APIGetUserActionsData []*struct {
+	APIGetUserActionsItem
+}
+type APIGetUserActionsItem struct {
 	optional.IDField
 	optional.NameField
 	optional.SourceField
@@ -157,6 +169,7 @@ type APIGetUserActionsData []*struct {
 	optional.CoverField
 	optional.VideoField
 	optional.StatusField
+	Favorite *int `json:"favorite,omitempty" example:"1"` //是否收藏(0:否/1:是)
 	optional.CreateAtField
 	optional.UpdateAtField
 }
