@@ -201,13 +201,15 @@ func (r *resolver) APICreateUserCourse(input *model.APICreateUserCourseInput) (o
 		return output
 	}
 	// 3. 驗證多計畫課表創建是否達上線
-	if len(subscribeListOutput) == 0 && len(courseOutputs) >= 1 {
-		output.Set(code.PermissionDenied, "多計畫課表創建已達上限(未訂閱)")
-		return output
-	}
-	if util.OnNilJustReturnInt(subscribeListOutput[0].Status, 0) == 0 && len(courseOutputs) >= 1 {
-		output.Set(code.PermissionDenied, "多計畫課表創建已達上限(未訂閱)")
-		return output
+	if len(courseOutputs) >= 1 {
+		if len(subscribeListOutput) == 0 {
+			output.Set(code.PermissionDenied, "多計畫課表創建已達上限(未訂閱)")
+			return output
+		}
+		if util.OnNilJustReturnInt(subscribeListOutput[0].Status, 0) == 0 {
+			output.Set(code.PermissionDenied, "多計畫課表創建已達上限(未訂閱)")
+			return output
+		}
 	}
 	// 創建課表
 	table := model.Table{}
