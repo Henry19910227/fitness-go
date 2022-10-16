@@ -75,7 +75,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Custom Where
 	if len(input.Wheres) > 0 {
 		for _, where := range input.Wheres {
-			db = db.Where(where.Query, where.Args)
+			db = db.Where(where.Query, where.Args...)
 		}
 	}
 	// Preload
