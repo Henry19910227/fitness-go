@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/action"
@@ -55,8 +56,10 @@ func (r *resolver) APICreateUserWorkoutSets(tx *gorm.DB, input *model.APICreateU
 	}
 	// 驗證動作權限
 	actionListInput := actionModel.ListInput{}
-	actionListInput.IDs = input.Body.ActionIDs
-	actionListInput.Source = util.PointerInt(1)
+	actionListInput.Wheres = []*whereModel.Where{
+		{Query: "actions.id IN (?)", Args: []interface{}{input.Body.ActionIDs}},
+		{Query: "actions.Source IN (?)", Args: []interface{}{[]int{actionModel.SourceSystem, actionModel.SourceUser}}},
+	}
 	actionOutputs, _, err := r.actionService.Tx(tx).List(&actionListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
