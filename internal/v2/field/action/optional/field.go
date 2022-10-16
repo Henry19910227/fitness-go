@@ -13,13 +13,13 @@ type NameField struct {
 	Name *string `json:"name,omitempty" form:"name" gorm:"column:name" binding:"omitempty,min=1,max=20" example:"划船機"` //動作名稱
 }
 type TypeField struct {
-	Type *int `json:"type,omitempty" gorm:"column:type" binding:"omitempty,oneof=1 2 3 4 5" example:"1"` //紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+	Type *int `json:"type,omitempty" form:"type" gorm:"column:type" binding:"omitempty,oneof=1 2 3 4 5" example:"1"` //紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
 }
 type SourceField struct {
-	Source *int `json:"source,omitempty" gorm:"column:source" binding:"omitempty,oneof=1 2 3" example:"1"` //動作來源(1:系統動作/2:教練動作/2:學員動作)
+	Source *int `json:"source,omitempty" form:"source" gorm:"column:source" binding:"omitempty,oneof=1 2 3" example:"1"` //動作來源(1:系統動作/2:教練動作/2:學員動作)
 }
 type CategoryField struct {
-	Category *int `json:"category,omitempty" form:"category" gorm:"column:category" binding:"omitempty,oneof=1 2 3 4 5" example:"1"` //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+	Category *int `json:"category,omitempty" form:"category" form:"category" gorm:"column:category" binding:"omitempty,oneof=1 2 3 4 5" example:"1"` //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
 }
 type BodyField struct {
 	Body *int `json:"body,omitempty" form:"body" gorm:"column:body" binding:"omitempty,oneof=1 2 3 4 5 6 7 8" example:"8"` //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)

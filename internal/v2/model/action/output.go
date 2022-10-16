@@ -126,6 +126,17 @@ type APICreateUserActionOutput struct {
 }
 type APICreateUserActionData struct {
 	optional.IDField
+	optional.NameField
+	optional.TypeField
+	optional.CategoryField
+	optional.BodyField
+	optional.EquipmentField
+	optional.IntroField
+	optional.CoverField
+	optional.VideoField
+	optional.StatusField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APIUpdateUserActionOutput /v2/user/action/{action_id} [PATCH] 修改個人動作 API
