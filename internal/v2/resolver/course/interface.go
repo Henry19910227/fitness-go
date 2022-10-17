@@ -34,5 +34,6 @@ type Resolver interface {
 	APISubmitTrainerCourse(input *model.APISubmitTrainerCourseInput) (output model.APISubmitTrainerCourseOutput)
 
 	APIGetProductCourse(input *model.APIGetProductCourseInput) (output model.APIGetProductCourseOutput)
+	APIGetProductCourses(input *model.APIGetProductCoursesInput) (output model.APIGetProductCoursesOutput)
 	APIGetProductCourseStructure(input *model.APIGetProductCourseStructureInput) (output model.APIGetProductCourseStructureOutput)
 }

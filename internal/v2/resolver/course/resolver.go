@@ -24,6 +24,8 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"strconv"
+	"strings"
 )
 
 type resolver struct {
@@ -932,6 +934,123 @@ func (r *resolver) APIGetProductCourse(input *model.APIGetProductCourseInput) (o
 		data.Favorite = util.PointerInt(1)
 	}
 	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetProductCourses(input *model.APIGetProductCoursesInput) (output model.APIGetProductCoursesOutput) {
+	levelList := make([]interface{}, 0)
+	if input.Query.Level != nil {
+		for _, item := range strings.Split(*input.Query.Level, ",") {
+			opt, err := strconv.Atoi(item)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			levelList = append(levelList, opt)
+		}
+	}
+	categoryList := make([]interface{}, 0)
+	if input.Query.Category != nil {
+		for _, item := range strings.Split(*input.Query.Category, ",") {
+			opt, err := strconv.Atoi(item)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			categoryList = append(categoryList, opt)
+		}
+	}
+	saleTypeList := make([]interface{}, 0)
+	if input.Query.SaleType != nil {
+		for _, item := range strings.Split(*input.Query.SaleType, ",") {
+			opt, err := strconv.Atoi(item)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			saleTypeList = append(saleTypeList, opt)
+		}
+	}
+	trainerSexList := make([]interface{}, 0)
+	if input.Query.TrainerSex != nil {
+		for _, item := range strings.Split(*input.Query.TrainerSex, ",") {
+			trainerSexList = append(trainerSexList, item)
+		}
+	}
+	joins := make([]*joinModel.Join, 0)
+	wheres := make([]*whereModel.Where, 0)
+	orders := make([]*orderByModel.Order, 0)
+	if input.Query.Name != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.name LIKE ?", Args: []interface{}{"%" + *input.Query.Name + "%"}})
+	}
+	if input.Query.Score != nil {
+		joins = append(joins, &joinModel.Join{Query: "LEFT JOIN review_statistics AS review ON courses.id = review.course_id"})
+		wheres = append(wheres, &whereModel.Where{Query: "FLOOR(review.score_total / review.amount) >= ?", Args: []interface{}{*input.Query.Score}})
+	}
+	if len(levelList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.level IN (?)", Args: []interface{}{levelList}})
+	}
+	if len(categoryList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.category IN (?)", Args: []interface{}{categoryList}})
+	}
+	if input.Query.Suit != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.suit LIKE ?", Args: []interface{}{"%" + *input.Query.Suit + "%"}})
+	}
+	if input.Query.Equipment != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.equipment LIKE ?", Args: []interface{}{"%" + *input.Query.Equipment + "%"}})
+	}
+	if input.Query.Place != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.place LIKE ?", Args: []interface{}{"%" + *input.Query.Place + "%"}})
+	}
+	if input.Query.TrainTarget != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.train_target LIKE ?", Args: []interface{}{"%" + *input.Query.TrainTarget + "%"}})
+	}
+	if input.Query.BodyTarget != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.body_target LIKE ?", Args: []interface{}{"%" + *input.Query.BodyTarget + "%"}})
+	}
+	if input.Query.SaleType != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "courses.sale_type IN (?)", Args: []interface{}{saleTypeList}})
+	}
+	if input.Query.TrainerSex != nil {
+		joins = append(joins, &joinModel.Join{Query: "INNER JOIN users ON courses.user_id = users.id"})
+		wheres = append(wheres, &whereModel.Where{Query: "users.sex IN (?)", Args: []interface{}{trainerSexList}})
+	}
+	if input.Query.TrainerSkill != nil {
+		joins = append(joins, &joinModel.Join{Query: "INNER JOIN trainers ON courses.user_id = trainers.user_id"})
+		wheres = append(wheres, &whereModel.Where{Query: "trainers.skill LIKE ?", Args: []interface{}{"%" + *input.Query.TrainerSkill + "%"}})
+	}
+	if input.Query.OrderField == "create_at" {
+		orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("courses.%s %s", "create_at", order_by.DESC)})
+	}
+	if input.Query.OrderField == "popular" {
+		joins = append(joins, &joinModel.Join{Query: "LEFT JOIN course_usage_statistics ON courses.id = course_usage_statistics.course_id"})
+		orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("course_usage_statistics.%s %s", "total_finish_workout_count", order_by.DESC)})
+	}
+	listInput := model.ListInput{}
+	listInput.CourseStatus = util.PointerInt(model.Sale)
+	listInput.Wheres = wheres
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "ReviewStatistic"},
+	}
+	listInput.Joins = joins
+	listInput.Size = input.Query.Size
+	listInput.Page = input.Query.Page
+	listInput.Orders = orders
+	courseOutputs, page, err := r.courseService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIGetProductCoursesData{}
+	if err := util.Parser(courseOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
 	output.Data = &data
 	return output
 }

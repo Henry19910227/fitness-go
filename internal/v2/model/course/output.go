@@ -617,3 +617,43 @@ type APIGetProductCourseStructureData struct {
 		trainerOptional.SkillField
 	} `json:"trainer,omitempty"`
 }
+
+// APIGetProductCoursesOutput /v2/product/courses [GET]
+type APIGetProductCoursesOutput struct {
+	base.Output
+	Data   *APIGetProductCoursesData `json:"data,omitempty"`
+	Paging *paging.Output            `json:"paging,omitempty"`
+}
+type APIGetProductCoursesData []*struct {
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.LevelField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
+	Trainer *struct {
+		trainerOptional.UserIDField
+		trainerOptional.AvatarField
+		trainerOptional.NicknameField
+		trainerOptional.SkillField
+	} `json:"trainer,omitempty"`
+	SaleItem *struct {
+		saleItemOptional.IDField
+		saleItemOptional.NameField
+		ProductLabel *struct {
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+	ReviewStatistic struct {
+		reviewRequired.ScoreTotalField
+		reviewRequired.AmountField
+	} `json:"review_statistic"`
+}

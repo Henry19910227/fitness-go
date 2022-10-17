@@ -516,6 +516,42 @@ func (c *controller) GetProductCourse(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// GetProductCourses 獲取商店課表列表
+// @Summary 獲取商店課表列表
+// @Description 獲取商店課表列表
+// @Tags 商店課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param name query string false "課表名稱(1~40字元)"
+// @Param score query int false "評價(1~5分)-單選"
+// @Param level query string false "強度(1:初級/2:中級/3:中高級/4:高級)-複選"
+// @Param category query string false "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)-複選"
+// @Param suit query string false "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)-複選"
+// @Param equipment query string false "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)-複選"
+// @Param place query string false "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選"
+// @Param train_target query string false "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選"
+// @Param body_target query string false "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選"
+// @Param sale_type query string false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選"
+// @Param trainer_sex query string false "教練性別(m:男性/f:女性)-複選"
+// @Param trainer_skill query string false "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)"
+// @Param order_field query string true "排序欄位 (create_at:創建時間/popular:熱門)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} course.APIGetProductCoursesOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/product/courses [GET]
+func (c *controller) GetProductCourses(ctx *gin.Context) {
+	var input model.APIGetProductCoursesInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetProductCourses(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetProductCourseStructure 獲取商店課表結構
 // @Summary 獲取商店課表結構
 // @Description 獲取商店課表結構

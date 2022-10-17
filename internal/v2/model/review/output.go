@@ -2,6 +2,7 @@ package review
 
 import (
 	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	reviewOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -27,10 +28,10 @@ type APIGetCMSReviewsOutput struct {
 	Paging *paging.Output       `json:"paging,omitempty"`
 }
 type APIGetCMSReviewsData []*struct {
-	IDField
-	ScoreField
-	BodyField
-	CreateAtField
+	reviewOptional.IDField
+	reviewOptional.ScoreField
+	reviewOptional.BodyField
+	reviewOptional.CreateAtField
 	User *struct {
 		user.IDField
 		user.NicknameField

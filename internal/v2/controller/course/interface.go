@@ -26,5 +26,6 @@ type Controller interface {
 	SubmitTrainerCourse(ctx *gin.Context)
 
 	GetProductCourse(ctx *gin.Context)
+	GetProductCourses(ctx *gin.Context)
 	GetProductCourseStructure(ctx *gin.Context)
 }
