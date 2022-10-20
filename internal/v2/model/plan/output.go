@@ -105,6 +105,11 @@ type APIGetTrainerPlansData []*struct {
 	} `json:"user_plan_statistic,omitempty"`
 }
 
+// APIDeleteTrainerPlanOutput /v2/trainer/plan/{plan_id} [DELETE]
+type APIDeleteTrainerPlanOutput struct {
+	base.Output
+}
+
 // APIGetProductPlansOutput /v2/product/course/{course_id}/plans [GET]
 type APIGetProductPlansOutput struct {
 	base.Output

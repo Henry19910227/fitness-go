@@ -4280,7 +4280,7 @@ var doc = `{
                 "tags": [
                     "Plan_v1"
                 ],
-                "summary": "刪除計畫",
+                "summary": "刪除計畫 (API已經過時，更新為 /v2/trainer/plan/{plan_id} [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -12416,6 +12416,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/plan/{plan_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "刪除教練課表計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "刪除教練課表計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APIDeleteTrainerPlanOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/plan/{plan_id}/workout": {
             "post": {
                 "security": [
@@ -15178,9 +15221,9 @@ var doc = `{
                     "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "增肌課表"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15188,14 +15231,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -15289,9 +15332,9 @@ var doc = `{
                     "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "增肌課表"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15299,14 +15342,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -15427,9 +15470,9 @@ var doc = `{
                                 "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "計畫名稱",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "第一週增肌計畫"
+                                "example": "增肌課表"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15442,14 +15485,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15518,9 +15561,9 @@ var doc = `{
                                 "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "計畫名稱",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "第一週增肌計畫"
+                                "example": "增肌課表"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15533,14 +15576,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15635,9 +15678,9 @@ var doc = `{
                                 "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "計畫名稱",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "第一週增肌計畫"
+                                "example": "增肌課表"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15650,14 +15693,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15731,9 +15774,9 @@ var doc = `{
                     "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "增肌課表"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15741,14 +15784,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -16373,9 +16416,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "亨利"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -16420,9 +16463,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "亨利"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -18353,9 +18396,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "增肌課表"
                 }
             }
         },
@@ -23674,9 +23717,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "亨利"
                 }
             }
         },
@@ -23715,9 +23758,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "亨利"
                 }
             }
         },
@@ -23741,6 +23784,21 @@ var doc = `{
                 },
                 "data": {
                     "$ref": "#/definitions/plan.APICreateUserPlanData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "plan.APIDeleteTrainerPlanOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",
@@ -24044,9 +24102,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "亨利"
                 }
             }
         },
@@ -24344,9 +24402,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "增肌課表"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -24419,7 +24477,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶 id",
@@ -24793,7 +24851,7 @@ var doc = `{
                         "update_at": {
                             "description": "更新時間",
                             "type": "string",
-                            "example": "2022-06-14 00:00:00"
+                            "example": "2022-06-12 00:00:00"
                         }
                     }
                 },
@@ -24960,7 +25018,7 @@ var doc = `{
                         "update_at": {
                             "description": "更新時間",
                             "type": "string",
-                            "example": "2022-06-14 00:00:00"
+                            "example": "2022-06-12 00:00:00"
                         }
                     }
                 },
@@ -25121,7 +25179,7 @@ var doc = `{
                         "update_at": {
                             "description": "更新時間",
                             "type": "string",
-                            "example": "2022-06-14 00:00:00"
+                            "example": "2022-06-12 00:00:00"
                         }
                     }
                 },
@@ -25282,7 +25340,7 @@ var doc = `{
                         "update_at": {
                             "description": "更新時間",
                             "type": "string",
-                            "example": "2022-06-14 00:00:00"
+                            "example": "2022-06-12 00:00:00"
                         }
                     }
                 },
@@ -25443,7 +25501,7 @@ var doc = `{
                         "update_at": {
                             "description": "更新時間",
                             "type": "string",
-                            "example": "2022-06-14 00:00:00"
+                            "example": "2022-06-12 00:00:00"
                         }
                     }
                 },
@@ -27387,9 +27445,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "亨利"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27433,9 +27491,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "亨利"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27596,9 +27654,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "計畫名稱",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "第一週增肌計畫"
+                                "example": "增肌課表"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -27608,7 +27666,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -27659,9 +27717,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "計畫名稱",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "第一週增肌計畫"
+                                "example": "增肌課表"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -27671,7 +27729,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -27727,9 +27785,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "計畫名稱",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "第一週增肌計畫"
+                                "example": "增肌課表"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -27739,7 +27797,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -27780,9 +27838,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "增肌課表"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -27792,7 +27850,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -27843,9 +27901,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "增肌課表"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -27855,7 +27913,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -28461,14 +28519,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -28617,14 +28675,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -28770,14 +28828,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -28923,14 +28981,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -29066,14 +29124,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",
@@ -29219,14 +29277,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",

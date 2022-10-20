@@ -89,7 +89,7 @@ func (p *Plan) UpdatePlan(c *gin.Context) {
 }
 
 // DeletePlan 刪除計畫
-// @Summary 刪除計畫
+// @Summary 刪除計畫 (API已經過時，更新為 /v2/trainer/plan/{plan_id} [DELETE])
 // @Description 刪除計畫
 // @Tags Plan_v1
 // @Accept json

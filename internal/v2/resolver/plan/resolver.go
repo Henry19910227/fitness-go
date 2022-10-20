@@ -295,6 +295,67 @@ func (r *resolver) APICreateTrainerPlan(tx *gorm.DB, input *model.APICreateTrain
 	return output
 }
 
+func (r *resolver) APIDeleteTrainerPlan(tx *gorm.DB, input *model.APIDeleteTrainerPlanInput) (output model.APIDeleteTrainerPlanOutput) {
+	defer tx.Rollback()
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.PlanID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證計畫刪除權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非課表擁有者，無法刪除資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) == courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "無法刪除個人課表類型資源")
+		return output
+	}
+	courseStatus := util.OnNilJustReturnInt(courseOutput.CourseStatus, 0)
+	if courseStatus == courseModel.Reviewing || courseStatus == courseModel.Sale || courseStatus == courseModel.Remove {
+		output.Set(code.BadRequest, "無法刪除該狀態課表資源")
+		return output
+	}
+	// 刪除計畫
+	deletePlanInput := model.DeleteInput{}
+	deletePlanInput.ID = input.Uri.ID
+	if err := r.planService.Tx(tx).Delete(&deletePlanInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此課表計畫數量
+	planListInput := model.ListInput{}
+	planListInput.CourseID = courseOutput.ID
+	planOutputs, _, err := r.planService.Tx(tx).List(&planListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢此課表訓練數量
+	workoutListInput := workoutModel.ListInput{}
+	workoutListInput.CourseID = courseOutput.ID
+	workoutOutputs, _, err := r.workoutService.Tx(tx).List(&workoutListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新此課表計畫與訓練數量
+	courseTable := courseModel.Table{}
+	courseTable.ID = courseOutput.ID
+	courseTable.PlanCount = util.PointerInt(len(planOutputs))
+	courseTable.WorkoutCount = util.PointerInt(len(workoutOutputs))
+	if err := r.courseService.Tx(tx).Update(&courseTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	output.SetStatus(code.Success)
+	return output
+}
+
 func (r *resolver) APIGetProductPlans(input *model.APIGetProductPlansInput) (output model.APIGetProductPlansOutput) {
 	listInput := model.ListInput{}
 	listInput.CourseID = util.PointerInt64(input.Uri.CourseID)

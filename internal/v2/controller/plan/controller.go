@@ -194,6 +194,28 @@ func (c *controller) GetTrainerPlans(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// DeleteTrainerPlan 刪除教練課表計畫
+// @Summary 刪除教練課表計畫
+// @Description 刪除教練課表計畫
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param plan_id path int64 true "計畫id"
+// @Success 200 {object} plan.APIDeleteTrainerPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/plan/{plan_id} [DELETE]
+func (c *controller) DeleteTrainerPlan(ctx *gin.Context) {
+	var input model.APIDeleteTrainerPlanInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteTrainerPlan(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetProductPlans 獲取商店課表計畫列表
 // @Summary 獲取商店課表計畫列表
 // @Description 獲取商店課表計畫列表
