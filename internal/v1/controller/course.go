@@ -126,7 +126,7 @@ func NewCourse(baseGroup *gin.RouterGroup,
 }
 
 // CreateCourse 創建課表
-// @Summary 創建課表
+// @Summary 創建課表 (API已經過時，更新為 /v2/trainer/course [POST])
 // @Description 創建課表
 // @Tags Course_v1
 // @Accept json
@@ -161,7 +161,7 @@ func (cc *Course) CreateCourse(c *gin.Context) {
 }
 
 // UpdateCourse 更新課表
-// @Summary 更新課表
+// @Summary 更新課表 (API已經過時，更新為 /v2/trainer/course/{course_id} [PATCH])
 // @Description 更新課表
 // @Tags Course_v1
 // @Accept json
@@ -204,7 +204,7 @@ func (cc *Course) UpdateCourse(c *gin.Context) {
 }
 
 // UpdateCourseSaleType 更新課表銷售類型
-// @Summary 更新課表銷售類型
+// @Summary 更新課表銷售類型 (API已經過時，更新為 /v2/trainer/course/{course_id} [PATCH])
 // @Description 更新課表銷售類型
 // @Tags Course_v1
 // @Accept json
@@ -235,7 +235,7 @@ func (cc *Course) UpdateCourseSaleType(c *gin.Context) {
 }
 
 // GetCourses 獲取我創建的課表
-// @Summary 獲取我的課表列表
+// @Summary 獲取我的課表列表 (API已經過時，更新為 /v2/trainer/courses [GET])
 // @Description 獲取我的課表列表
 // @Tags Course_v1
 // @Accept json
@@ -269,7 +269,7 @@ func (cc *Course) GetCourses(c *gin.Context) {
 }
 
 // GetCourse 獲取課表詳細
-// @Summary 獲取課表詳細
+// @Summary 獲取課表詳細 (API已經過時，更新為 /v2/trainer/course/{course_id} [GET])
 // @Description 獲取課表詳細
 // @Tags Course_v1
 // @Accept json
@@ -319,7 +319,7 @@ func (cc *Course) GetCourseOverview(c *gin.Context) {
 }
 
 // UploadCourseCover 上傳課表封面照
-// @Summary 上傳課表封面照
+// @Summary 上傳課表封面照 (API已經過時，更新為 /v2/trainer/course/{course_id} [PATCH])
 // @Description 查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/course/cover/{圖片名}
 // @Tags Course_v1
 // @Security fitness_token
@@ -353,7 +353,7 @@ func (cc *Course) UploadCourseCover(c *gin.Context) {
 }
 
 // DeleteCourse 刪除課表
-// @Summary 刪除課表
+// @Summary 刪除課表 (API已經過時，更新為 /v2/trainer/course/{course_id} [DELETE])
 // @Description 刪除課表
 // @Tags Course_v1
 // @Accept json
@@ -378,7 +378,7 @@ func (cc *Course) DeleteCourse(c *gin.Context) {
 }
 
 // CreatePlan 創建計畫
-// @Summary 創建計畫
+// @Summary 創建計畫 (API已經過時，更新為 /v2/trainer/course/{course_id}/plan [POST])
 // @Description 創建計畫
 // @Tags Course_v1
 // @Accept json
@@ -409,7 +409,7 @@ func (cc *Course) CreatePlan(c *gin.Context) {
 }
 
 // GetPlans 取得課表內的計畫列表
-// @Summary  取得課表內的計畫列表
+// @Summary  取得課表內的計畫列表 (API已經過時，更新為 /v2/trainer/course/{course_id}/plans [GET])
 // @Description  取得課表內的計畫列表
 // @Tags Course_v1
 // @Accept json
@@ -547,7 +547,7 @@ func (cc *Course) SearchActions(c *gin.Context) {
 }
 
 // CourseSubmit 送審課表
-// @Summary 送審課表
+// @Summary 送審課表 (API已經過時，更新為 /v2/trainer/course/{course_id}/submit [POST])
 // @Description 送審課表
 // @Tags Course_v1
 // @Accept json

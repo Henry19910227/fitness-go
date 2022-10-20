@@ -431,7 +431,7 @@ var doc = `{
                 "tags": [
                     "Payment_v1"
                 ],
-                "summary": "取得 Apple Store api access token",
+                "summary": "取得 Apple Store api access token(測試用)",
                 "responses": {
                     "200": {
                         "description": "獲取成功!",
@@ -1317,7 +1317,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "創建課表",
+                "summary": "創建課表 (API已經過時，更新為 /v2/trainer/course [POST])",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -1374,7 +1374,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "獲取課表詳細",
+                "summary": "獲取課表詳細 (API已經過時，更新為 /v2/trainer/course/{course_id} [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1427,7 +1427,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "刪除課表",
+                "summary": "刪除課表 (API已經過時，更新為 /v2/trainer/course/{course_id} [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1480,7 +1480,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "更新課表",
+                "summary": "更新課表 (API已經過時，更新為 /v2/trainer/course/{course_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1742,7 +1742,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "上傳課表封面照",
+                "summary": "上傳課表封面照 (API已經過時，更新為 /v2/trainer/course/{course_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1859,7 +1859,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "創建計畫",
+                "summary": "創建計畫 (API已經過時，更新為 /v2/trainer/course/{course_id}/plan [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1923,7 +1923,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "取得課表內的計畫列表",
+                "summary": "取得課表內的計畫列表 (API已經過時，更新為 /v2/trainer/course/{course_id}/plans [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1981,7 +1981,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "更新課表銷售類型",
+                "summary": "更新課表銷售類型 (API已經過時，更新為 /v2/trainer/course/{course_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2045,7 +2045,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "送審課表",
+                "summary": "送審課表 (API已經過時，更新為 /v2/trainer/course/{course_id}/submit [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2088,7 +2088,7 @@ var doc = `{
                 "tags": [
                     "Exercise_v1"
                 ],
-                "summary": "獲取課表詳細",
+                "summary": "獲取課表詳細 (API已經過時，更新為 /v2/user/course/{course_id} [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2143,7 +2143,7 @@ var doc = `{
                 "tags": [
                     "Exercise_v1"
                 ],
-                "summary": "獲取課表計畫列表",
+                "summary": "獲取課表計畫列表 (API已經過時，更新為 /v2/user/course/{course_id}/plans [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2201,7 +2201,7 @@ var doc = `{
                 "tags": [
                     "Exercise_v1"
                 ],
-                "summary": "獲取課表結構",
+                "summary": "獲取課表結構 (API已經過時，更新為 /v2/user/course/{course_id}/structure [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2256,7 +2256,7 @@ var doc = `{
                 "tags": [
                     "Exercise_v1"
                 ],
-                "summary": "獲取課表",
+                "summary": "獲取課表 (API已經過時，更新為 /v2/user/courses [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2328,7 +2328,7 @@ var doc = `{
                 "tags": [
                     "Payment_v1"
                 ],
-                "summary": "創建課表訂單 (/v2/course_order [POST] 替代)",
+                "summary": "創建課表訂單 (API已經過時，更新為 /v2/course_order [POST])",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -2385,7 +2385,7 @@ var doc = `{
                 "tags": [
                     "Explore_v1"
                 ],
-                "summary": "獲取課表產品詳細",
+                "summary": "獲取課表產品詳細 (API已過時，更新為 /v2/product/course/{course_id} [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2440,7 +2440,7 @@ var doc = `{
                 "tags": [
                     "Explore_v1"
                 ],
-                "summary": "獲取課表產品計畫列表",
+                "summary": "獲取課表產品計畫列表 (API已經過時，更新為 /v2/product/course/{course_id}/plans [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2650,7 +2650,7 @@ var doc = `{
                 "tags": [
                     "Explore_v1"
                 ],
-                "summary": "獲取課表結構(只限單一訓練課表)",
+                "summary": "獲取課表結構(只限單一訓練課表) (API已過時，更新為 /v2/product/course/{course_id}/structure [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2705,7 +2705,7 @@ var doc = `{
                 "tags": [
                     "Explore_v1"
                 ],
-                "summary": "搜尋課表產品列表",
+                "summary": "搜尋課表產品列表 (API已過時，更新為 /v2/product/courses [GET])",
                 "parameters": [
                     {
                         "type": "string",
@@ -3014,7 +3014,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "獲取我的課表列表",
+                "summary": "獲取我的課表列表 (API已經過時，更新為 /v2/trainer/courses [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -3181,7 +3181,7 @@ var doc = `{
                 "tags": [
                     "Favorite_v1"
                 ],
-                "summary": "收藏動作",
+                "summary": "收藏動作  (API已經過時，更新為 /v2/favorite/action/{action_id} [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -3222,7 +3222,7 @@ var doc = `{
                 "tags": [
                     "Favorite_v1"
                 ],
-                "summary": "刪除收藏動作",
+                "summary": "刪除收藏動作 (API已經過時，更新為 /v2/favorite/action/{action_id} [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4333,7 +4333,7 @@ var doc = `{
                 "tags": [
                     "Plan_v1"
                 ],
-                "summary": "修改計畫",
+                "summary": "修改計畫 (API已經過時，更新為 /v2/trainer/plan/{plan_id}/workout [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4397,7 +4397,7 @@ var doc = `{
                 "tags": [
                     "Plan_v1"
                 ],
-                "summary": "創建訓練",
+                "summary": "創建訓練 (API已經過時，更新為 /v2/trainer/plan/{plan_id}/workout [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4461,7 +4461,7 @@ var doc = `{
                 "tags": [
                     "Plan_v1"
                 ],
-                "summary": "取得計畫內的訓練列表",
+                "summary": "取得計畫內的訓練列表 (API已經過時，更新為 /v2/trainer/plan/{plan_id}/workouts [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4519,7 +4519,7 @@ var doc = `{
                 "tags": [
                     "Exercise_v1"
                 ],
-                "summary": "獲取訓練列表",
+                "summary": "獲取訓練列表 (API已經過時，更新為 /v2/user/plan/{plan_id}/workouts [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4577,7 +4577,7 @@ var doc = `{
                 "tags": [
                     "Explore_v1"
                 ],
-                "summary": "獲取訓練列表",
+                "summary": "獲取訓練列表 (API已經過時，更新為 /v2/product/plan/{plan_id}/workouts [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -5149,7 +5149,7 @@ var doc = `{
                 "tags": [
                     "Payment_v1"
                 ],
-                "summary": "創建訂閱訂單 (/v2/subscribe_order [POST] 替代)",
+                "summary": "創建訂閱訂單 (API已經過時，更新為 /v2/subscribe_order [POST])",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -5255,7 +5255,7 @@ var doc = `{
                 "tags": [
                     "Trainer_v1"
                 ],
-                "summary": "取得我的教練資訊 (/v2/trainer/profile [GET] 替代)",
+                "summary": "取得我的教練資訊 (API已經過時，更新為 /v2/trainer/profile [GET])",
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -5877,7 +5877,7 @@ var doc = `{
                 "tags": [
                     "User_v1"
                 ],
-                "summary": "上傳我的大頭照 (/v2/user/avatar [PATCH] 替代)",
+                "summary": "上傳我的大頭照 (API已經過時，更新為 /v2/user/avatar [PATCH])",
                 "parameters": [
                     {
                         "type": "file",
@@ -5932,7 +5932,7 @@ var doc = `{
                 "tags": [
                     "User_v1"
                 ],
-                "summary": "獲取個人資訊 (/v2/user/profile [GET] 替代)",
+                "summary": "獲取個人資訊 (API已經過時，更新為 /v2/user/profile [GET])",
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -5976,7 +5976,7 @@ var doc = `{
                 "tags": [
                     "User_v1"
                 ],
-                "summary": "更新個人資訊 (/v2/user/profile [PATCH] 替代)",
+                "summary": "更新個人資訊 (API已經過時，更新為 /v2/user/profile [PATCH])",
                 "parameters": [
                     {
                         "description": "更新欄位",
@@ -6033,7 +6033,7 @@ var doc = `{
                 "tags": [
                     "Payment_v1"
                 ],
-                "summary": "驗證apple收據 (/v2/verify_apple_receipt [POST] 替代)",
+                "summary": "驗證apple收據 (API已經過時，更新為 /v2/verify_apple_receipt [POST])",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -6078,7 +6078,7 @@ var doc = `{
                 "tags": [
                     "Payment_v1"
                 ],
-                "summary": "驗證google收據",
+                "summary": "驗證google收據 (API已經過時，更新為 /v2/verify_google_receipt [POST])",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -6123,7 +6123,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "刪除訓練",
+                "summary": "刪除訓練 (API已經過時，更新為 /v2/trainer/workout/{workout_id} [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6176,7 +6176,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "修改訓練",
+                "summary": "修改訓練 (API已經過時，更新為 /v2/trainer/workout/{workout_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6240,7 +6240,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "上傳訓練結束語音",
+                "summary": "上傳訓練結束語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6300,7 +6300,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "刪除訓練結束語音",
+                "summary": "刪除訓練結束語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/end_audio [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6395,7 +6395,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "新增休息組",
+                "summary": "新增休息組 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/rest_set [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6450,7 +6450,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "上傳訓練前導語音",
+                "summary": "上傳訓練前導語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6510,7 +6510,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "刪除訓練前導語音",
+                "summary": "刪除訓練前導語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/start_audio [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6553,7 +6553,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "新增訓練組",
+                "summary": "新增訓練組 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_sets [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6620,7 +6620,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "取得訓練內的訓練組列表",
+                "summary": "取得訓練內的訓練組列表 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_sets [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6678,7 +6678,7 @@ var doc = `{
                 "tags": [
                     "Exercise_v1"
                 ],
-                "summary": "創建訓練記錄",
+                "summary": "創建訓練記錄 (API已經過時，更新為 /v2/user/workout/{workout_id}/workout_log [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6745,7 +6745,7 @@ var doc = `{
                 "tags": [
                     "Exercise_v1"
                 ],
-                "summary": "獲取訓練組列表",
+                "summary": "獲取訓練組列表 (API已經過時，更新為 /v2/user/workout/{workout_id}/workout_sets [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6964,7 +6964,7 @@ var doc = `{
                 "tags": [
                     "Explore_v1"
                 ],
-                "summary": "獲取訓練組列表(探索區課表)",
+                "summary": "獲取訓練組列表(探索區課表) (API已經過時，更新為 /v2/product/workout/{workout_id}/workout_sets [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -7022,7 +7022,7 @@ var doc = `{
                 "tags": [
                     "WorkoutSet_v1"
                 ],
-                "summary": "刪除訓練組",
+                "summary": "刪除訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id} [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -7075,7 +7075,7 @@ var doc = `{
                 "tags": [
                     "WorkoutSet_v1"
                 ],
-                "summary": "修改訓練組",
+                "summary": "修改訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -7139,7 +7139,7 @@ var doc = `{
                 "tags": [
                     "WorkoutSet_v1"
                 ],
-                "summary": "複製訓練組",
+                "summary": "複製訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/duplicate [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -7206,7 +7206,7 @@ var doc = `{
                 "tags": [
                     "WorkoutSet_v1"
                 ],
-                "summary": "上傳訓練組進行中語音",
+                "summary": "上傳訓練組進行中語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -7266,7 +7266,7 @@ var doc = `{
                 "tags": [
                     "WorkoutSet_v1"
                 ],
-                "summary": "刪除訓練組進行中語音",
+                "summary": "刪除訓練組進行中語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/progress_audio [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -7309,7 +7309,7 @@ var doc = `{
                 "tags": [
                     "WorkoutSet_v1"
                 ],
-                "summary": "上傳訓練組前導語音",
+                "summary": "上傳訓練組前導語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -7369,7 +7369,7 @@ var doc = `{
                 "tags": [
                     "WorkoutSet_v1"
                 ],
-                "summary": "刪除訓練組前導語音",
+                "summary": "刪除訓練組前導語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/start_audio [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -15163,9 +15163,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "動作id",
@@ -15173,14 +15173,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "第一週增肌計畫"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15188,7 +15188,7 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
@@ -15274,9 +15274,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "動作id",
@@ -15284,14 +15284,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "第一週增肌計畫"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15299,7 +15299,7 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
@@ -15412,9 +15412,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
                                 "description": "動作id",
@@ -15422,14 +15422,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "動作名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "划船機"
+                                "example": "第一週增肌計畫"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15442,7 +15442,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15503,9 +15503,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
                                 "description": "動作id",
@@ -15513,14 +15513,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "動作名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "划船機"
+                                "example": "第一週增肌計畫"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15533,7 +15533,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15615,9 +15615,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "favorite": {
                                 "description": "是否收藏(0:否/1:是)",
@@ -15630,14 +15630,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "動作名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "划船機"
+                                "example": "第一週增肌計畫"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15650,7 +15650,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15716,9 +15716,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "動作id",
@@ -15726,14 +15726,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "第一週增肌計畫"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15741,7 +15741,7 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
@@ -16373,9 +16373,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -16420,9 +16420,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -18353,9 +18353,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "第一週增肌計畫"
                 }
             }
         },
@@ -23640,7 +23640,9 @@ var doc = `{
             "type": "object",
             "required": [
                 "page",
-                "size"
+                "size",
+                "total_count",
+                "total_page"
             ],
             "properties": {
                 "page": {
@@ -23672,9 +23674,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 }
             }
         },
@@ -23713,9 +23715,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 }
             }
         },
@@ -24042,9 +24044,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 }
             }
         },
@@ -24253,7 +24255,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶id",
+                                "description": "用戶 id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -24332,9 +24334,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -24342,9 +24344,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "第一週增肌計畫"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -24420,7 +24422,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -27385,9 +27387,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27431,9 +27433,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27584,9 +27586,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
                                 "description": "訓練 id",
@@ -27594,9 +27596,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "動作名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "划船機"
+                                "example": "第一週增肌計畫"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -27647,9 +27649,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
                                 "description": "訓練 id",
@@ -27657,9 +27659,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "動作名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "划船機"
+                                "example": "第一週增肌計畫"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -27710,9 +27712,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "finish": {
                                 "description": "是否完成(0:未完成/1:已完成)",
@@ -27725,9 +27727,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "動作名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "划船機"
+                                "example": "第一週增肌計畫"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -27768,9 +27770,9 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "訓練 id",
@@ -27778,9 +27780,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "第一週增肌計畫"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -27831,9 +27833,9 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "訓練 id",
@@ -27841,9 +27843,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "第一週增肌計畫"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -28459,7 +28461,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -28615,7 +28617,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -28768,7 +28770,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -28921,7 +28923,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -29064,7 +29066,7 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
@@ -29217,7 +29219,7 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },

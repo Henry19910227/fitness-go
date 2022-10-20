@@ -28,7 +28,7 @@ func NewWorkoutProduct(baseGroup *gin.RouterGroup, workoutService service.Workou
 }
 
 // GetWorkoutSets 獲取訓練組列表(探索區課表)
-// @Summary 獲取訓練組列表(探索區課表)
+// @Summary 獲取訓練組列表(探索區課表) (API已經過時，更新為 /v2/product/workout/{workout_id}/workout_sets [GET])
 // @Description 獲取訓練組列表(探索區課表)
 // @Tags Explore_v1
 // @Accept json

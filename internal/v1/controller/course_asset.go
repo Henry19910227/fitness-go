@@ -11,9 +11,9 @@ import (
 type CourseAsset struct {
 	Base
 	courseService service.Course
-	planService service.Plan
-	userMidd    midd.User
-	courseMidd  midd.Course
+	planService   service.Plan
+	userMidd      midd.User
+	courseMidd    midd.Course
 }
 
 func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, planService service.Plan, userMidd midd.User, courseMidd midd.Course) {
@@ -38,7 +38,7 @@ func NewCourseAsset(baseGroup *gin.RouterGroup, courseService service.Course, pl
 }
 
 // GetCourseAsset 獲取課表詳細
-// @Summary 獲取課表詳細
+// @Summary 獲取課表詳細 (API已經過時，更新為 /v2/user/course/{course_id} [GET])
 // @Description 獲取課表詳細
 // @Tags Exercise_v1
 // @Accept json
@@ -68,7 +68,7 @@ func (a *CourseAsset) GetCourseAsset(c *gin.Context) {
 }
 
 // GetCourseAssetStructure 獲取課表結構(只限單一訓練課表)
-// @Summary 獲取課表結構
+// @Summary 獲取課表結構 (API已經過時，更新為 /v2/user/course/{course_id}/structure [GET])
 // @Description 單一訓練的課表使用
 // @Tags Exercise_v1
 // @Accept json
@@ -98,7 +98,7 @@ func (a *CourseAsset) GetCourseAssetStructure(c *gin.Context) {
 }
 
 // GetCourseAssets 獲取課表列表
-// @Summary 獲取課表
+// @Summary 獲取課表 (API已經過時，更新為 /v2/user/courses [GET])
 // @Description 獲取課表
 // @Tags Exercise_v1
 // @Accept json
@@ -139,7 +139,7 @@ func (a *CourseAsset) GetCourseAssets(c *gin.Context) {
 }
 
 // GetPlanAssets 獲取課表計畫列表
-// @Summary 獲取課表計畫列表
+// @Summary 獲取課表計畫列表 (API已經過時，更新為 /v2/user/course/{course_id}/plans [GET])
 // @Description 獲取課表計畫列表
 // @Tags Exercise_v1
 // @Accept json

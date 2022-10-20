@@ -58,7 +58,7 @@ func NewPlan(baseGroup *gin.RouterGroup,
 }
 
 // UpdatePlan 修改計畫
-// @Summary 修改計畫
+// @Summary 修改計畫 (API已經過時，更新為 /v2/trainer/plan/{plan_id}/workout [POST])
 // @Description 修改計畫
 // @Tags Plan_v1
 // @Accept json
@@ -114,7 +114,7 @@ func (p *Plan) DeletePlan(c *gin.Context) {
 }
 
 // CreateWorkout 創建訓練
-// @Summary 創建訓練
+// @Summary 創建訓練 (API已經過時，更新為 /v2/trainer/plan/{plan_id}/workout [POST])
 // @Description 創建訓練
 // @Tags Plan_v1
 // @Accept json
@@ -165,7 +165,7 @@ func (p *Plan) CreateWorkout(c *gin.Context) {
 }
 
 // GetWorkouts 取得計畫內的訓練列表
-// @Summary  取得計畫內的訓練列表
+// @Summary 取得計畫內的訓練列表 (API已經過時，更新為 /v2/trainer/plan/{plan_id}/workouts [GET])
 // @Description  取得計畫內的訓練列表
 // @Tags Plan_v1
 // @Accept json

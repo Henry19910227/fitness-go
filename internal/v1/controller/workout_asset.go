@@ -34,7 +34,7 @@ func NewWorkoutAsset(baseGroup *gin.RouterGroup, workoutService service.Workout,
 }
 
 // GetWorkoutSets 獲取訓練組列表
-// @Summary 獲取訓練組列表
+// @Summary 獲取訓練組列表 (API已經過時，更新為 /v2/user/workout/{workout_id}/workout_sets [GET])
 // @Description 獲取訓練組列表
 // @Tags Exercise_v1
 // @Accept json
@@ -64,7 +64,7 @@ func (p *WorkoutAsset) GetWorkoutSets(c *gin.Context) {
 }
 
 // CreateWorkoutLog 創建訓練記錄
-// @Summary 創建訓練記錄
+// @Summary 創建訓練記錄 (API已經過時，更新為 /v2/user/workout/{workout_id}/workout_log [POST])
 // @Description 創建訓練記錄
 // @Tags Exercise_v1
 // @Accept json

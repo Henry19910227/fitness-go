@@ -53,7 +53,7 @@ type APIDeleteUserWorkoutUri struct {
 	required.IDField
 }
 
-// APIGetUserWorkoutsInput /v2/user/plan/{plan_is}/workouts [GET]
+// APIGetUserWorkoutsInput /v2/user/plan/{plan_id}/workouts [GET]
 type APIGetUserWorkoutsInput struct {
 	userRequired.UserIDField
 	Uri APIGetUserPlansUri
@@ -96,7 +96,7 @@ type APIDeleteUserWorkoutEndAudioUri struct {
 	required.IDField
 }
 
-// APIGetTrainerWorkoutsInput /v2/trainer/plan/{plan_is}/workouts [GET]
+// APIGetTrainerWorkoutsInput /v2/trainer/plan/{plan_id}/workouts [GET]
 type APIGetTrainerWorkoutsInput struct {
 	userRequired.UserIDField
 	Uri APIGetTrainerPlansUri

@@ -204,12 +204,12 @@ type APICreateTrainerWorkoutSetsOutput struct {
 }
 type APICreateTrainerWorkoutSetsData []int64
 
-// APICreateTrainerRestSetOutput /v2/user/workout/{workout_id}/rest_set [POST]
+// APICreateTrainerRestSetOutput /v2/trainer/workout/{workout_id}/rest_set [POST]
 type APICreateTrainerRestSetOutput struct {
 	base.Output
 }
 
-// APIDeleteTrainerWorkoutSetOutput /v2/trainer/workout_set_is/{workout_set_id} [DELETE]
+// APIDeleteTrainerWorkoutSetOutput /v2/trainer/workout_set/{workout_set_id} [DELETE]
 type APIDeleteTrainerWorkoutSetOutput struct {
 	base.Output
 }

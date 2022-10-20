@@ -105,7 +105,7 @@ type APICreateTrainerPlanBody struct {
 	required.NameField
 }
 
-// APIGetTrainerPlansInput /v2/trainer/course/{course_id}/plans [POST]
+// APIGetTrainerPlansInput /v2/trainer/course/{course_id}/plans [GET]
 type APIGetTrainerPlansInput struct {
 	userRequired.UserIDField
 	Uri APIGetTrainerPlansUri

@@ -71,7 +71,7 @@ func NewPayment(baseGroup *gin.RouterGroup,
 }
 
 // CreateCourseOrder 創建課表訂單
-// @Summary 創建課表訂單 (/v2/course_order [POST] 替代)
+// @Summary 創建課表訂單 (API已經過時，更新為 /v2/course_order [POST])
 // @Description 創建課表訂單
 // @Tags Payment_v1
 // @Accept json
@@ -101,7 +101,7 @@ func (p *Payment) CreateCourseOrder(c *gin.Context) {
 }
 
 // CreateSubscribeOrder 創建訂閱訂單
-// @Summary 創建訂閱訂單 (/v2/subscribe_order [POST] 替代)
+// @Summary 創建訂閱訂單 (API已經過時，更新為 /v2/subscribe_order [POST])
 // @Description 創建訂閱訂單
 // @Tags Payment_v1
 // @Accept json
@@ -131,7 +131,7 @@ func (p *Payment) CreateSubscribeOrder(c *gin.Context) {
 }
 
 // VerifyAppleReceipt 驗證apple收據
-// @Summary 驗證apple收據 (/v2/verify_apple_receipt [POST] 替代)
+// @Summary 驗證apple收據 (API已經過時，更新為 /v2/verify_apple_receipt [POST])
 // @Description 驗證apple收據
 // @Tags Payment_v1
 // @Accept json
@@ -160,7 +160,7 @@ func (p *Payment) VerifyAppleReceipt(c *gin.Context) {
 }
 
 // VerifyGoogleReceipt 驗證google收據
-// @Summary 驗證google收據
+// @Summary 驗證google收據 (API已經過時，更新為 /v2/verify_google_receipt [POST])
 // @Description 驗證google收據
 // @Tags Payment_v1
 // @Accept json
@@ -294,7 +294,7 @@ func (p *Payment) GetHistory(c *gin.Context) {
 }
 
 // GetAppStoreServerAPIAccessToken 取得 App Store Server api access token
-// @Summary 取得 Apple Store api access token
+// @Summary 取得 Apple Store api access token(測試用)
 // @Description 取得 Apple Store api access token
 // @Tags Payment_v1
 // @Accept json

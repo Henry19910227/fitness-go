@@ -165,7 +165,7 @@ type APICreateTrainerRestSetUri struct {
 	required.WorkoutIDField
 }
 
-// APIDeleteTrainerWorkoutSetInput /v2/trainer/workout_set/{workout_set_id} [POST]
+// APIDeleteTrainerWorkoutSetInput /v2/trainer/workout_set/{workout_set_id} [DELETE]
 type APIDeleteTrainerWorkoutSetInput struct {
 	userRequired.UserIDField
 	Uri APIDeleteTrainerWorkoutSetUri

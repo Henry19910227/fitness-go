@@ -24,7 +24,7 @@ func NewUser(baseGroup *gin.RouterGroup, userService service.User, userMiddlewar
 }
 
 // UpdateUserInfo 更新個人資訊
-// @Summary 更新個人資訊 (/v2/user/profile [PATCH] 替代)
+// @Summary 更新個人資訊 (API已經過時，更新為 /v2/user/profile [PATCH])
 // @Description 更新個人資訊
 // @Tags User_v1
 // @Accept json
@@ -63,7 +63,7 @@ func (u *user) UpdateUserInfo(c *gin.Context) {
 }
 
 // GetUserInfo 獲取個人資訊
-// @Summary 獲取個人資訊 (/v2/user/profile [GET] 替代)
+// @Summary 獲取個人資訊 (API已經過時，更新為 /v2/user/profile [GET])
 // @Description 獲取個人資訊
 // @Tags User_v1
 // @Accept json
@@ -87,7 +87,7 @@ func (u *user) GetUserInfo(c *gin.Context) {
 }
 
 // UploadMyUserAvatar 上傳我的大頭照
-// @Summary 上傳我的大頭照 (/v2/user/avatar [PATCH] 替代)
+// @Summary 上傳我的大頭照 (API已經過時，更新為 /v2/user/avatar [PATCH])
 // @Description 查看我的大頭照 : https://www.fitopia-hub.tk/api/v1/resource/user/avatar/{圖片名}
 // @Tags User_v1
 // @Security fitness_token

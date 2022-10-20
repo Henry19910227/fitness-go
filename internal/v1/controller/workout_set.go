@@ -78,7 +78,7 @@ func NewWorkoutSet(baseGroup *gin.RouterGroup,
 }
 
 // UpdateWorkoutSet 修改訓練組
-// @Summary 修改訓練組
+// @Summary 修改訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id} [PATCH])
 // @Description 修改訓練組
 // @Tags WorkoutSet_v1
 // @Accept json
@@ -117,7 +117,7 @@ func (w *workoutset) UpdateWorkoutSet(c *gin.Context) {
 }
 
 // DeleteWorkoutSet 刪除訓練組
-// @Summary 刪除訓練組
+// @Summary 刪除訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id} [DELETE])
 // @Description 刪除訓練組
 // @Tags WorkoutSet_v1
 // @Accept json
@@ -142,7 +142,7 @@ func (w *workoutset) DeleteWorkoutSet(c *gin.Context) {
 }
 
 // UploadWorkoutSetStartAudio 上傳訓練組前導語音
-// @Summary 上傳訓練組前導語音
+// @Summary 上傳訓練組前導語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id} [PATCH])
 // @Description 下載訓練組前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/start_audio/{語音檔案名}
 // @Tags WorkoutSet_v1
 // @Security fitness_token
@@ -173,7 +173,7 @@ func (w *workoutset) UploadWorkoutSetStartAudio(c *gin.Context) {
 }
 
 // DeleteWorkoutSetStartAudio 刪除訓練組前導語音
-// @Summary 刪除訓練組前導語音
+// @Summary 刪除訓練組前導語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/start_audio [DELETE])
 // @Description 刪除訓練組前導語音
 // @Tags WorkoutSet_v1
 // @Accept json
@@ -197,7 +197,7 @@ func (w *workoutset) DeleteWorkoutSetStartAudio(c *gin.Context) {
 }
 
 // UploadWorkoutSetProgressAudio 上傳訓練組進行中語音
-// @Summary 上傳訓練組進行中語音
+// @Summary 上傳訓練組進行中語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id} [PATCH])
 // @Description 下載訓練組進行中語音 : https://www.fitopia-hub.tk/api/v1/resource/workout_set/progress_audio/{語音檔案名}
 // @Tags WorkoutSet_v1
 // @Security fitness_token
@@ -228,7 +228,7 @@ func (w *workoutset) UploadWorkoutSetProgressAudio(c *gin.Context) {
 }
 
 // DeleteWorkoutSetProgressAudio 刪除訓練組進行中語音
-// @Summary 刪除訓練組進行中語音
+// @Summary 刪除訓練組進行中語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/progress_audio [DELETE])
 // @Description 刪除訓練組進行中語音
 // @Tags WorkoutSet_v1
 // @Accept json
@@ -252,7 +252,7 @@ func (w *workoutset) DeleteWorkoutSetProgressAudio(c *gin.Context) {
 }
 
 // DuplicateWorkoutSet 複製訓練組
-// @Summary 複製訓練組
+// @Summary 複製訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/duplicate [POST])
 // @Description 複製訓練組
 // @Tags WorkoutSet_v1
 // @Accept json

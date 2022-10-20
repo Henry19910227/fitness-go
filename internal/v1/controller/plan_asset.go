@@ -26,7 +26,7 @@ func NewPlanAsset(baseGroup *gin.RouterGroup, planService service.Plan, workoutS
 }
 
 // GetWorkouts 獲取訓練列表
-// @Summary 獲取訓練列表
+// @Summary 獲取訓練列表 (API已經過時，更新為 /v2/user/plan/{plan_id}/workouts [GET])
 // @Description 獲取訓練列表
 // @Tags Exercise_v1
 // @Accept json

@@ -96,7 +96,7 @@ func NewWorkout(baseGroup *gin.RouterGroup,
 }
 
 // UpdateWorkout 修改訓練
-// @Summary 修改訓練
+// @Summary 修改訓練 (API已經過時，更新為 /v2/trainer/workout/{workout_id} [PATCH])
 // @Description 修改訓練
 // @Tags Workout_v1
 // @Accept json
@@ -131,7 +131,7 @@ func (w *workout) UpdateWorkout(c *gin.Context) {
 }
 
 // DeleteWorkout 刪除訓練
-// @Summary 刪除訓練
+// @Summary 刪除訓練 (API已經過時，更新為 /v2/trainer/workout/{workout_id} [DELETE])
 // @Description 刪除訓練
 // @Tags Workout_v1
 // @Accept json
@@ -156,7 +156,7 @@ func (w *workout) DeleteWorkout(c *gin.Context) {
 }
 
 // UploadWorkoutStartAudio 上傳訓練前導語音
-// @Summary 上傳訓練前導語音
+// @Summary 上傳訓練前導語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id} [PATCH])
 // @Description 下載前導語音 : https://www.fitopia-hub.tk/api/v1/resource/workout/start_audio/{語音檔案名}
 // @Tags Workout_v1
 // @Security fitness_token
@@ -187,7 +187,7 @@ func (w *workout) UploadWorkoutStartAudio(c *gin.Context) {
 }
 
 // UploadWorkoutEndAudio 上傳訓練結束語音
-// @Summary 上傳訓練結束語音
+// @Summary 上傳訓練結束語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id} [PATCH])
 // @Description 上傳訓練結束語音 : https://www.fitopia-hub.tk/api/v1/resource/workout/end_audio/{語音檔案名}
 // @Tags Workout_v1
 // @Security fitness_token
@@ -218,7 +218,7 @@ func (w *workout) UploadWorkoutEndAudio(c *gin.Context) {
 }
 
 // DeleteWorkoutStartAudio 刪除訓練前導語音
-// @Summary 刪除訓練前導語音
+// @Summary 刪除訓練前導語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/start_audio [DELETE])
 // @Description 刪除訓練前導語音
 // @Tags Workout_v1
 // @Accept json
@@ -242,7 +242,7 @@ func (w *workout) DeleteWorkoutStartAudio(c *gin.Context) {
 }
 
 // DeleteWorkoutEndAudio 刪除訓練結束語音
-// @Summary 刪除訓練結束語音
+// @Summary 刪除訓練結束語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/end_audio [DELETE])
 // @Description 刪除訓練結束語音
 // @Tags Workout_v1
 // @Accept json
@@ -266,7 +266,7 @@ func (w *workout) DeleteWorkoutEndAudio(c *gin.Context) {
 }
 
 // CreateWorkoutSets 新增訓練組
-// @Summary 新增訓練組
+// @Summary 新增訓練組 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_sets [POST])
 // @Description 新增訓練組
 // @Tags Workout_v1
 // @Accept json
@@ -297,7 +297,7 @@ func (w *workout) CreateWorkoutSets(c *gin.Context) {
 }
 
 // CreateRestSet 新增休息組
-// @Summary 新增休息組
+// @Summary 新增休息組 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/rest_set [POST])
 // @Description 新增休息組
 // @Tags Workout_v1
 // @Accept json
@@ -322,7 +322,7 @@ func (w *workout) CreateRestSet(c *gin.Context) {
 }
 
 // GetWorkoutSets 取得訓練內的訓練組列表
-// @Summary  取得訓練內的訓練組列表
+// @Summary  取得訓練內的訓練組列表 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_sets [GET])
 // @Description  取得訓練內的訓練組列表
 // @Tags Workout_v1
 // @Accept json

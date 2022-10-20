@@ -31,7 +31,7 @@ type APIDeleteUserWorkoutOutput struct {
 	base.Output
 }
 
-// APIGetUserWorkoutsOutput /v2/user/plan/{plan_is}/workouts [GET]
+// APIGetUserWorkoutsOutput /v2/user/plan/{plan_id}/workouts [GET]
 type APIGetUserWorkoutsOutput struct {
 	base.Output
 	Data APIGetUserWorkoutsData `json:"data"`
@@ -77,7 +77,7 @@ type APIDeleteUserWorkoutEndAudioOutput struct {
 	base.Output
 }
 
-// APIGetTrainerWorkoutsOutput /v2/trainer/plan/{plan_is}/workouts [GET]
+// APIGetTrainerWorkoutsOutput /v2/trainer/plan/{plan_id}/workouts [GET]
 type APIGetTrainerWorkoutsOutput struct {
 	base.Output
 	Data *APIGetTrainerWorkoutsData `json:"data,omitempty"`
@@ -133,7 +133,7 @@ type APIDeleteTrainerWorkoutEndAudioOutput struct {
 	base.Output
 }
 
-// APIGetProductWorkoutsOutput /v2/product/plan/{plan_is}/workouts [GET]
+// APIGetProductWorkoutsOutput /v2/product/plan/{plan_id}/workouts [GET]
 type APIGetProductWorkoutsOutput struct {
 	base.Output
 	Data *APIGetProductWorkoutsData `json:"data,omitempty"`

@@ -97,7 +97,7 @@ func (f *Favorite) CreateFavoriteTrainer(c *gin.Context) {
 }
 
 // CreateFavoriteAction 收藏動作
-// @Summary 收藏動作
+// @Summary 收藏動作  (API已經過時，更新為 /v2/favorite/action/{action_id} [POST])
 // @Description 收藏動作
 // @Tags Favorite_v1
 // @Accept json
@@ -184,7 +184,7 @@ func (f *Favorite) DeleteFavoriteTrainer(c *gin.Context) {
 }
 
 // DeleteFavoriteAction 刪除收藏動作
-// @Summary 刪除收藏動作
+// @Summary 刪除收藏動作 (API已經過時，更新為 /v2/favorite/action/{action_id} [DELETE])
 // @Description 刪除收藏動作
 // @Tags Favorite_v1
 // @Accept json

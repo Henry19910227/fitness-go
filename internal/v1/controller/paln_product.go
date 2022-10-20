@@ -26,7 +26,7 @@ func NewPlanProduct(baseGroup *gin.RouterGroup, planService service.Plan, workou
 }
 
 // GetWorkouts 獲取訓練列表
-// @Summary 獲取訓練列表
+// @Summary 獲取訓練列表 (API已經過時，更新為 /v2/product/plan/{plan_id}/workouts [GET])
 // @Description 獲取訓練列表
 // @Tags Explore_v1
 // @Accept json
