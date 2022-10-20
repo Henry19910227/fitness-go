@@ -3,6 +3,7 @@ package course
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
+	orderByRequired "github.com/Henry19910227/fitness-go/internal/v2/field/order_by/required"
 	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
 	reviewOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review/optional"
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
@@ -266,5 +267,5 @@ type APIGetProductCoursesQuery struct {
 	TrainerSex   *string `json:"trainer_sex,omitempty" form:"trainer_sex" binding:"omitempty,course_trainer_sex" example:"m"`        // 教練性別(m:男性/f:女性)-複選
 	TrainerSkill *string ` json:"trainer_skill,omitempty" form:"trainer_skill" binding:"omitempty,course_trainer_skill" example:"5"` // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
 	PagingInput
-	orderBy.OrderFieldField
+	orderByRequired.OrderFieldField
 }
