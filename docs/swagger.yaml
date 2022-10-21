@@ -30,16 +30,16 @@ definitions:
         example: 增肌專用課表
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -114,16 +114,16 @@ definitions:
         example: 增肌專用課表
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -218,8 +218,8 @@ definitions:
               example: 增肌專用課表
               type: string
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -230,8 +230,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -288,8 +288,8 @@ definitions:
               example: 增肌專用課表
               type: string
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -300,8 +300,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -377,8 +377,8 @@ definitions:
               example: 增肌專用課表
               type: string
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -389,8 +389,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -451,16 +451,16 @@ definitions:
         example: 增肌專用課表
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -926,8 +926,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 教練本名
-        example: 亨利
+        description: 課表名稱
+        example: 增肌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -962,8 +962,8 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 課表名稱
+        example: 增肌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -2442,8 +2442,8 @@ definitions:
   course.APIUpdateUserCourseBody:
     properties:
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
     type: object
   course.APIUpdateUserCourseOutput:
@@ -6469,8 +6469,8 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -6498,8 +6498,8 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -6754,8 +6754,8 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -6912,7 +6912,7 @@ definitions:
               example: 1,4
               type: string
             user_id:
-              description: 用戶 id
+              description: 帳戶id
               example: 10001
               type: integer
           type: object
@@ -6924,7 +6924,7 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
-  trainer.APIGetTrainerProfileData:
+  trainer.APIGetTrainerData:
     properties:
       address:
         description: 住址
@@ -6975,13 +6975,17 @@ definitions:
         description: 課表介紹
         example: 增肌專用課表
         type: string
+      is_deleted:
+        description: 是否刪除
+        example: 0
+        type: integer
       motto:
         description: 座右銘
         example: 勞其筋骨
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       nickname:
         description: 教練暱稱
@@ -7040,7 +7044,144 @@ definitions:
         example: "2022-06-12 00:00:00"
         type: string
       user_id:
-        description: 用戶 id
+        description: 帳戶id
+        example: 10001
+        type: integer
+      youtube_url:
+        description: youtube連結
+        example: www.youtube.com
+        type: string
+    type: object
+  trainer.APIGetTrainerOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/trainer.APIGetTrainerData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  trainer.APIGetTrainerProfileData:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: abc.png
+        type: string
+      certificates:
+        items:
+          properties:
+            id:
+              description: id
+              example: 1
+              type: integer
+            image:
+              description: 圖片
+              example: 1234.jpg
+              type: string
+            name:
+              description: 證照名稱
+              example: A級教練證照
+              type: string
+          type: object
+        type: array
+      create_at:
+        description: 創建時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 年資
+        example: 5
+        type: integer
+      facebook_url:
+        description: 臉書連結
+        example: www.facebook.com
+        type: string
+      instagram_url:
+        description: ig連結
+        example: www.ig.com
+        type: string
+      intro:
+        description: 課表介紹
+        example: 增肌專用課表
+        type: string
+      motto:
+        description: 座右銘
+        example: 勞其筋骨
+        type: string
+      name:
+        description: 產品名稱
+        example: 金卡會員(月)
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      phone:
+        description: 電話
+        example: "0955123321"
+        type: string
+      skill:
+        description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        example: 1,4
+        type: string
+      trainer_album_photos:
+        items:
+          properties:
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: 相片id
+              example: 1
+              type: integer
+            photo:
+              description: 照片
+              example: 123.jpg
+              type: string
+          type: object
+        type: array
+      trainer_level:
+        description: 教練評鑑等級
+        example: 1
+        type: integer
+      trainer_statistic:
+        properties:
+          course_count:
+            description: 課表總數
+            example: 15
+            type: integer
+          review_score:
+            description: 課表總評分
+            example: 4.5
+            type: number
+          student_count:
+            description: 學生總數
+            example: 10
+            type: integer
+        type: object
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      user_id:
+        description: 帳戶id
         example: 10001
         type: integer
       youtube_url:
@@ -7964,7 +8105,7 @@ definitions:
         example: test@gmail.com
         type: string
       nickname:
-        description: 暱稱(1~20字元)
+        description: 暱稱
         example: henry
         type: string
       otp_code:
@@ -7999,7 +8140,7 @@ definitions:
         example: test@gmail.com
         type: string
       nickname:
-        description: 暱稱(1~20字元)
+        description: 暱稱
         example: henry
         type: string
       otp_code:
@@ -8038,7 +8179,7 @@ definitions:
         example: test@gmail.com
         type: string
       nickname:
-        description: 暱稱(1~20字元)
+        description: 暱稱
         example: henry
         type: string
       otp_code:
@@ -8073,7 +8214,7 @@ definitions:
         example: test@gmail.com
         type: string
       nickname:
-        description: 暱稱(1~20字元)
+        description: 暱稱
         example: henry
         type: string
       otp_code:
@@ -8108,7 +8249,7 @@ definitions:
         example: test@gmail.com
         type: string
       nickname:
-        description: 暱稱(1~20字元)
+        description: 暱稱
         example: henry
         type: string
       otp_code:
@@ -8175,7 +8316,7 @@ definitions:
   user.APIRegisterNicknameValidateBody:
     properties:
       nickname:
-        description: 暱稱(1~20字元)
+        description: 暱稱
         example: henry
         type: string
     required:
@@ -8294,15 +8435,15 @@ definitions:
         type: string
       experience:
         description: 經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)
-        example: 2
+        example: 1
         type: integer
       height:
         description: 身高
-        example: 176.5
+        example: 165.5
         type: number
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       sex:
         description: 性別 (m:男/f:女)
@@ -8310,11 +8451,11 @@ definitions:
         type: string
       target:
         description: 目標 (0:未指定/1:減重/2:維持健康/3:增肌)
-        example: 3
+        example: 1
         type: integer
       weight:
         description: 體重
-        example: 70.5
+        example: 50.5
         type: number
     type: object
   user.APIUpdateUserProfileOutput:
@@ -9276,8 +9417,8 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 課表名稱
+        example: 增肌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -9309,8 +9450,8 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 課表名稱
+        example: 增肌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -9431,8 +9572,8 @@ definitions:
               example: 1
               type: integer
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             start_audio:
               description: 前導語音
@@ -9479,8 +9620,8 @@ definitions:
               example: 1
               type: integer
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             start_audio:
               description: 前導語音
@@ -9531,8 +9672,8 @@ definitions:
               example: 1
               type: integer
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             start_audio:
               description: 前導語音
@@ -9572,8 +9713,8 @@ definitions:
         example: 1
         type: integer
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       start_audio:
         description: 前導語音
@@ -9620,8 +9761,8 @@ definitions:
         example: 1
         type: integer
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       start_audio:
         description: 前導語音
@@ -10083,8 +10224,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -10204,8 +10345,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -10323,8 +10464,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -10442,8 +10583,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -10554,8 +10695,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -10673,8 +10814,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -17292,7 +17433,7 @@ paths:
       - fitness_token: []
       summary: 獲取商店課表詳細
       tags:
-      - 商店課表_v2
+      - 商店_v2
   /v2/product/course/{course_id}/plans:
     get:
       consumes:
@@ -17319,7 +17460,7 @@ paths:
       - fitness_token: []
       summary: 獲取商店課表計畫列表
       tags:
-      - 商店課表_v2
+      - 商店_v2
   /v2/product/course/{course_id}/structure:
     get:
       consumes:
@@ -17346,7 +17487,7 @@ paths:
       - fitness_token: []
       summary: 獲取商店課表結構
       tags:
-      - 商店課表_v2
+      - 商店_v2
   /v2/product/courses:
     get:
       consumes:
@@ -17431,7 +17572,7 @@ paths:
       - fitness_token: []
       summary: 獲取商店課表列表
       tags:
-      - 商店課表_v2
+      - 商店_v2
   /v2/product/plan/{plan_id}/workouts:
     get:
       consumes:
@@ -17458,7 +17599,7 @@ paths:
       - fitness_token: []
       summary: 獲取商店課表訓練列表
       tags:
-      - 商店課表_v2
+      - 商店_v2
   /v2/product/workout/{workout_id}/workout_sets:
     get:
       consumes:
@@ -17485,7 +17626,7 @@ paths:
       - fitness_token: []
       summary: 獲取商店課表訓練組列表
       tags:
-      - 商店課表_v2
+      - 商店_v2
   /v2/register/apple:
     post:
       consumes:
@@ -17904,6 +18045,33 @@ paths:
       summary: 創建訂閱訂單
       tags:
       - 支付_v2
+  /v2/trainer/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取教練資訊
+      parameters:
+      - description: 教練ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/trainer.APIGetTrainerOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取教練資訊
+      tags:
+      - 商店_v2
   /v2/trainer/action:
     post:
       consumes:

@@ -1,6 +1,7 @@
 package feedback
 
 import (
+	userOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/feedback_image"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -43,7 +44,7 @@ type APIGetCMSFeedbacksData []*struct {
 		feedback_image.CreateAtField
 	} `json:"images,omitempty"`
 	User *struct {
-		user.IDField
-		user.NicknameField
+		userOptional.IDField
+		userOptional.NicknameField
 	} `json:"user,omitempty"`
 }

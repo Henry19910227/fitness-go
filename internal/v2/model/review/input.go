@@ -4,10 +4,10 @@ import (
 	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	reviewOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review/optional"
 	reviewRequired "github.com/Henry19910227/fitness-go/internal/v2/field/review/required"
+	userOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/user"
 )
 
 type PagingInput = paging.Input
@@ -25,7 +25,7 @@ type DeleteInput struct {
 
 type ListInput struct {
 	courseOptional.NameField
-	user.NicknameOptional
+	userOptional.NicknameField
 	reviewOptional.ScoreField
 	PreloadInput
 	OrderByInput
@@ -38,7 +38,7 @@ type APIGetCMSReviewsInput struct {
 }
 type APIGetCMSReviewsQuery struct {
 	courseOptional.NameField
-	user.NicknameOptional
+	userOptional.NicknameField
 	reviewOptional.ScoreField
 	OrderByInput
 	PagingInput

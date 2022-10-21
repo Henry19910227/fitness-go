@@ -219,7 +219,7 @@ func (c *controller) DeleteTrainerPlan(ctx *gin.Context) {
 // GetProductPlans 獲取商店課表計畫列表
 // @Summary 獲取商店課表計畫列表
 // @Description 獲取商店課表計畫列表
-// @Tags 商店課表_v2
+// @Tags 商店_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token

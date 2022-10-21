@@ -497,7 +497,7 @@ func (c *controller) SubmitTrainerCourse(ctx *gin.Context) {
 // GetProductCourse 獲取商店課表詳細
 // @Summary 獲取商店課表詳細
 // @Description 獲取商店課表詳細
-// @Tags 商店課表_v2
+// @Tags 商店_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -519,7 +519,7 @@ func (c *controller) GetProductCourse(ctx *gin.Context) {
 // GetProductCourses 獲取商店課表列表
 // @Summary 獲取商店課表列表
 // @Description 獲取商店課表列表
-// @Tags 商店課表_v2
+// @Tags 商店_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -555,7 +555,7 @@ func (c *controller) GetProductCourses(ctx *gin.Context) {
 // GetProductCourseStructure 獲取商店課表結構
 // @Summary 獲取商店課表結構
 // @Description 獲取商店課表結構
-// @Tags 商店課表_v2
+// @Tags 商店_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token

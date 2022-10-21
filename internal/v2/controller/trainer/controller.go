@@ -35,6 +35,24 @@ func (c *controller) GetTrainerProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// GetTrainer 獲取教練資訊
+// @Summary 獲取教練資訊
+// @Description 獲取教練資訊
+// @Tags 商店_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練ID"
+// @Success 200 {object} trainer.APIGetTrainerOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/{user_id} [GET]
+func (c *controller) GetTrainer(ctx *gin.Context) {
+	var input model.APIGetTrainerInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	output := c.resolver.APIGetTrainer(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetFavoriteTrainers 獲取教練收藏列表
 // @Summary 獲取教練收藏列表
 // @Description 獲取教練收藏列表

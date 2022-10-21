@@ -1,7 +1,8 @@
 package user
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
+	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
+	optional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
@@ -39,23 +40,23 @@ type APIGetUserProfileOutput struct {
 	Data *APIGetUserProfileData `json:"data,omitempty"`
 }
 type APIGetUserProfileData struct {
-	IDField
-	AccountTypeField
-	AccountField
-	DeviceTokenField
-	UserStatusField
-	UserTypeField
-	EmailField
-	NicknameField
-	AvatarField
-	SexField
-	BirthdayField
-	HeightField
-	WeightField
-	ExperienceField
-	TargetField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.AccountTypeField
+	optional.AccountField
+	optional.DeviceTokenField
+	optional.UserStatusField
+	optional.UserTypeField
+	optional.EmailField
+	optional.NicknameField
+	optional.AvatarField
+	optional.SexField
+	optional.BirthdayField
+	optional.HeightField
+	optional.WeightField
+	optional.ExperienceField
+	optional.TargetField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APIGetAppleRefreshTokenOutput /v2/apple_refresh_token [POST]
@@ -100,25 +101,25 @@ type APILoginForEmailOutput struct {
 
 }
 type APILoginForEmailData struct {
-	IDField
-	NicknameField
-	AvatarField
-	UserStatusField
-	SexField
-	BirthdayField
-	HeightField
-	WeightField
-	ExperienceField
-	TargetField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.NicknameField
+	optional.AvatarField
+	optional.UserStatusField
+	optional.SexField
+	optional.BirthdayField
+	optional.HeightField
+	optional.WeightField
+	optional.ExperienceField
+	optional.TargetField
+	optional.CreateAtField
+	optional.UpdateAtField
 	Trainer *struct {
-		optional.NicknameField
-		optional.AvatarField
-		optional.TrainerStatusField
-		optional.TrainerLevelField
-		optional.CreateAtField
-		optional.UpdateAtField
+		trainerOptional.NicknameField
+		trainerOptional.AvatarField
+		trainerOptional.TrainerStatusField
+		trainerOptional.TrainerLevelField
+		trainerOptional.CreateAtField
+		trainerOptional.UpdateAtField
 	} `json:"trainer,omitempty"`
 	UserSubscribeInfo *struct {
 		user_subscribe_info.StatusField

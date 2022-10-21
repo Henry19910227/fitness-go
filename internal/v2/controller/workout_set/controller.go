@@ -487,7 +487,7 @@ func (c *controller) CreateTrainerWorkoutSetByDuplicate(ctx *gin.Context) {
 // GetProductWorkoutSets 獲取商店課表訓練組列表
 // @Summary 獲取商店課表訓練組列表
 // @Description 獲取商店課表訓練組列表
-// @Tags 商店課表_v2
+// @Tags 商店_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
@@ -505,4 +505,3 @@ func (c *controller) GetProductWorkoutSets(ctx *gin.Context) {
 	output := c.resolver.APIGetProductWorkoutSets(&input)
 	ctx.JSON(http.StatusOK, output)
 }
-

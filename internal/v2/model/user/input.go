@@ -1,6 +1,8 @@
 package user
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -16,57 +18,57 @@ type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
 
 type ListInput struct {
-	AccountOptional
-	PasswordOptional
-	NicknameOptional
-	EmailOptional
-	IsDeletedOptional
+	optional.AccountField
+	optional.PasswordField
+	optional.NicknameField
+	optional.EmailField
+	optional.IsDeletedField
 	PagingInput
 	PreloadInput
 	OrderByInput
 }
 
 type FindInput struct {
-	IDOptional
-	IsDeletedOptional
+	optional.IDField
+	optional.IsDeletedField
 	PreloadInput
 }
 
 // APIUpdatePasswordInput /v2/password [PATCH]
 type APIUpdatePasswordInput struct {
-	IDRequired
+	required.IDField
 	Body APIUpdatePasswordBody
 }
 type APIUpdatePasswordBody struct {
 	OldPassword string `json:"old_password" binding:"required,min=6,max=18" example:"12345678"` // 舊密碼 (6~18字元)
-	PasswordRequired
+	required.PasswordField
 }
 
 // APIUpdateUserProfileInput /v2/user/profile [PATCH]
 type APIUpdateUserProfileInput struct {
-	IDRequired
+	required.IDField
 	Body APIUpdateUserProfileBody
 }
 type APIUpdateUserProfileBody struct {
-	NicknameOptional
-	SexOptional
-	HeightOptional
-	WeightOptional
-	BirthdayOptional
-	ExperienceOptional
-	TargetOptional
+	optional.NicknameField
+	optional.SexField
+	optional.HeightField
+	optional.WeightField
+	optional.BirthdayField
+	optional.ExperienceField
+	optional.TargetField
 }
 
 // APIUpdateUserAvatarInput /v2/user/avatar [PATCH]
 type APIUpdateUserAvatarInput struct {
-	IDRequired
+	required.IDField
 	CoverNamed string
 	File       multipart.File
 }
 
 // APIGetUserProfileInput /v2/user/profile [GET]
 type APIGetUserProfileInput struct {
-	IDRequired
+	required.IDField
 }
 
 // APILoginForEmailInput /v2/login/email [POST]
@@ -74,8 +76,8 @@ type APILoginForEmailInput struct {
 	Body APILoginForEmailBody
 }
 type APILoginForEmailBody struct {
-	EmailRequired
-	PasswordRequired
+	required.EmailField
+	required.PasswordField
 }
 
 // APIGetAppleRefreshTokenInput /v2/apple_refresh_token [POST]
@@ -120,7 +122,7 @@ type APILoginForLineBody struct {
 
 // APILogoutInput /v2/logout [POST]
 type APILogoutInput struct {
-	IDRequired
+	required.IDField
 }
 
 // APIRegisterForEmailInput /v2/register/email [POST]
@@ -128,9 +130,9 @@ type APIRegisterForEmailInput struct {
 	Body APIRegisterForEmailBody
 }
 type APIRegisterForEmailBody struct {
-	EmailRequired
-	PasswordRequired
-	NicknameRequired
+	required.EmailField
+	required.PasswordField
+	required.NicknameField
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
@@ -140,8 +142,8 @@ type APIRegisterForFacebookInput struct {
 }
 type APIRegisterForFacebookBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
-	NicknameRequired
-	EmailRequired
+	required.NicknameField
+	required.EmailField
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
@@ -151,8 +153,8 @@ type APIRegisterForGoogleInput struct {
 }
 type APIRegisterForGoogleBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
-	NicknameRequired
-	EmailRequired
+	required.NicknameField
+	required.EmailField
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
@@ -162,8 +164,8 @@ type APIRegisterForAppleInput struct {
 }
 type APIRegisterForAppleBody struct {
 	RefreshToken string `json:"refresh_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // refresh token
-	NicknameRequired
-	EmailRequired
+	required.NicknameField
+	required.EmailField
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
@@ -173,8 +175,8 @@ type APIRegisterForLineInput struct {
 }
 type APIRegisterForLineBody struct {
 	AccessToken string `json:"access_token" binding:"required" example:"EAAucgU8qZCzMBAOZCy59TLD1aM2NAO1ITBpZC64imFp95CRuPv4ZAWepAMV"` // sdk 回傳的 token string
-	NicknameRequired
-	EmailRequired
+	required.NicknameField
+	required.EmailField
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"` // 信箱驗證碼
 }
 
@@ -183,7 +185,7 @@ type APICreateOTPInput struct {
 	Body APICreateOTPBody
 }
 type APICreateOTPBody struct {
-	EmailRequired
+	required.EmailField
 }
 
 // APIRegisterNicknameValidateInput /v2/register/nickname/validate [POST]
@@ -191,7 +193,7 @@ type APIRegisterNicknameValidateInput struct {
 	Body APIRegisterNicknameValidateBody
 }
 type APIRegisterNicknameValidateBody struct {
-	NicknameRequired
+	required.NicknameField
 }
 
 // APIRegisterEmailValidateInput /v2/register/email/validate [POST]
@@ -199,7 +201,7 @@ type APIRegisterEmailValidateInput struct {
 	Body APIRegisterEmailValidateBody
 }
 type APIRegisterEmailValidateBody struct {
-	EmailRequired
+	required.EmailField
 }
 
 // APIRegisterEmailAccountValidateInput /v2/register/email_account/validate [POST]
@@ -207,7 +209,7 @@ type APIRegisterEmailAccountValidateInput struct {
 	Body APIRegisterEmailAccountValidateBody
 }
 type APIRegisterEmailAccountValidateBody struct {
-	EmailRequired
+	required.EmailField
 }
 
 // APIRegisterFacebookAccountValidateInput /v2/register/facebook_account/validate [POST]
@@ -266,5 +268,5 @@ type APIUpdateResetPasswordInput struct {
 type APIUpdateResetPasswordBody struct {
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"`      // 信箱驗證碼
 	Email   string `json:"email" binding:"required,email" example:"henry@gmail.com"` // 信箱
-	PasswordRequired
+	required.PasswordField
 }

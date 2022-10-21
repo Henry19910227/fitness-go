@@ -37,6 +37,11 @@ type APIGetTrainerProfileInput struct {
 	required.UserIDField
 }
 
+// APIGetTrainerInput /v2/trainer/{user_id} [GET]
+type APIGetTrainerInput struct {
+	required.UserIDField
+}
+
 // APIUpdateCMSTrainerAvatarInput /v2/cms/trainer/avatar [PATCH]
 type APIUpdateCMSTrainerAvatarInput struct {
 	required.UserIDField

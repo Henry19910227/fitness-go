@@ -46,6 +46,31 @@ func (r *resolver) APIGetTrainerProfile(input *model.APIGetTrainerProfileInput) 
 	return output
 }
 
+func (r *resolver) APIGetTrainer(input *model.APIGetTrainerInput) (output model.APIGetTrainerOutput) {
+	findInput := model.FindInput{}
+	findInput.UserID = util.PointerInt64(input.UserID)
+	findInput.Preloads = []*preload.Preload{
+		{Field: "User"},
+		{Field: "TrainerStatistic"},
+		{Field: "Certificates"},
+		{Field: "TrainerAlbums"},
+	}
+	trainerOutput, err := r.trainerService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIGetTrainerData{}
+	data.IsDeleted = trainerOutput.UserOnSafe().IsDeleted
+	if err := util.Parser(trainerOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
 func (r *resolver) APIGetFavoriteTrainers(input *model.APIGetFavoriteTrainersInput) (output model.APIGetFavoriteTrainersOutput) {
 	// parser input
 	param := model.FavoriteListInput{}

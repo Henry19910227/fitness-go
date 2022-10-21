@@ -15,6 +15,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := middleware.NewTokenMiddleware(redis.Shared())
 	v2.StaticFS("/resource/trainer/avatar", http.Dir("./volumes/storage/trainer/avatar"))
 	v2.GET("/trainer/profile", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerProfile)
+	v2.GET("/trainer/:user_id", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainer)
 	v2.GET("/favorite/trainers", midd.Verify([]global.Role{global.UserRole}), controller.GetFavoriteTrainers)
 	v2.PATCH("/cms/trainer/:user_id/avatar", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSTrainerAvatar)
 }
