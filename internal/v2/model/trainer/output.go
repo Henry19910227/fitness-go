@@ -93,6 +93,21 @@ type APIGetTrainerData struct {
 	} `json:"trainer_statistic,omitempty"`
 }
 
+// APIGetTrainersOutput /v2/trainers [GET]
+type APIGetTrainersOutput struct {
+	base.Output
+	Data *APIGetTrainersData `json:"data,omitempty"`
+	Paging *paging.Output `json:"paging,omitempty"`
+}
+type APIGetTrainersData []*struct {
+	optional.UserIDField
+	optional.NicknameField
+	optional.SkillField
+	optional.AvatarField
+	optional.CreateAtField
+	optional.UpdateAtField
+}
+
 // APIGetFavoriteTrainersOutput /v2/favorite/trainers [GET] 獲取
 type APIGetFavoriteTrainersOutput struct {
 	base.Output

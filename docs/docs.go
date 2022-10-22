@@ -10765,8 +10765,7 @@ var doc = `{
                         "type": "string",
                         "description": "排序欄位 (create_at:創建時間/popular:熱門)",
                         "name": "order_field",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
@@ -13289,6 +13288,62 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainers": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取教練列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "排序類型(latest:最新/popular:熱門)-單選",
+                        "name": "order_field",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/trainer.APIGetTrainersOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/user/action": {
             "post": {
                 "security": [
@@ -15259,14 +15314,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "動作介紹(1~400字元)",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15274,9 +15329,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -15370,14 +15425,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "動作介紹(1~400字元)",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15385,9 +15440,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -15508,14 +15563,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "課表介紹",
+                                "description": "動作介紹(1~400字元)",
                                 "type": "string",
-                                "example": "增肌專用課表"
+                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "訓練名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "腿部訓練"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15528,9 +15583,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -15599,14 +15654,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "課表介紹",
+                                "description": "動作介紹(1~400字元)",
                                 "type": "string",
-                                "example": "增肌專用課表"
+                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "訓練名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "腿部訓練"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15619,9 +15674,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -15716,14 +15771,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "課表介紹",
+                                "description": "動作介紹(1~400字元)",
                                 "type": "string",
-                                "example": "增肌專用課表"
+                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "訓練名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "腿部訓練"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15736,9 +15791,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -15812,14 +15867,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "動作介紹(1~400字元)",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15827,9 +15882,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -16459,9 +16514,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -16506,9 +16561,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -18439,9 +18494,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 }
             }
         },
@@ -23760,9 +23815,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -23801,9 +23856,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -24145,9 +24200,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -24356,7 +24411,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "帳戶id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -24435,9 +24490,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "動作介紹(1~400字元)",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -24450,9 +24505,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -24528,7 +24583,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "帳戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -24619,9 +24674,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "動作介紹(1~400字元)",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -24629,9 +24684,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -24707,7 +24762,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "帳戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -24733,6 +24788,62 @@ var doc = `{
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
+                }
+            }
+        },
+        "trainer.APIGetTrainersOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "avatar": {
+                                "description": "教練大頭照",
+                                "type": "string",
+                                "example": "abc.png"
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-12 00:00:00"
+                            },
+                            "nickname": {
+                                "description": "教練暱稱",
+                                "type": "string",
+                                "example": "Henry"
+                            },
+                            "skill": {
+                                "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                                "type": "string",
+                                "example": "1,4"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-12 00:00:00"
+                            },
+                            "user_id": {
+                                "description": "用戶id",
+                                "type": "integer",
+                                "example": 10001
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },
@@ -27672,9 +27783,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27718,9 +27829,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27881,9 +27992,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "訓練名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "腿部訓練"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -27944,9 +28055,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "訓練名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "腿部訓練"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -28012,9 +28123,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "訓練名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "腿部訓練"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -28065,9 +28176,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -28128,9 +28239,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -28746,9 +28857,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -28902,9 +29013,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -29055,9 +29166,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -29208,9 +29319,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -29351,9 +29462,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -29504,9 +29615,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",

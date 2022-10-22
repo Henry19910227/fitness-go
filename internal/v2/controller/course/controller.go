@@ -535,7 +535,7 @@ func (c *controller) GetProductCourse(ctx *gin.Context) {
 // @Param sale_type query string false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選"
 // @Param trainer_sex query string false "教練性別(m:男性/f:女性)-複選"
 // @Param trainer_skill query string false "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)"
-// @Param order_field query string true "排序欄位 (create_at:創建時間/popular:熱門)"
+// @Param order_field query string false "排序欄位 (create_at:創建時間/popular:熱門)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
 // @Success 200 {object} course.APIGetProductCoursesOutput "成功!"

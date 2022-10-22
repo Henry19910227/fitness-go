@@ -3,7 +3,6 @@ package course
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
-	orderByRequired "github.com/Henry19910227/fitness-go/internal/v2/field/order_by/required"
 	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
 	reviewOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review/optional"
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
@@ -254,7 +253,6 @@ type APIGetProductCoursesInput struct {
 }
 type APIGetProductCoursesQuery struct {
 	optional.NameField
-	//OrderType *string `json:"order_type,omitempty" form:"order_type" binding:"omitempty,oneof=latest popular" example:"latest"` // 排序類型(latest:最新/popular:熱門)-單選
 	reviewOptional.ScoreField
 	Level        *string `json:"level,omitempty" form:"level" binding:"omitempty,course_level" example:"3"`                          // 強度(1:初級/2:中級/3:中高級/4:高級)-複選
 	Category     *string `json:"category,omitempty" form:"category" binding:"omitempty,course_category" example:"3"`                 // 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)-複選
@@ -265,7 +263,7 @@ type APIGetProductCoursesQuery struct {
 	BodyTarget   *string `json:"body_target,omitempty" form:"body_target" binding:"omitempty,course_body_target" example:"2"`        // 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選
 	SaleType     *string `json:"sale_type,omitempty" form:"sale_type" binding:"omitempty,course_sale_type" example:"1"`              // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選
 	TrainerSex   *string `json:"trainer_sex,omitempty" form:"trainer_sex" binding:"omitempty,course_trainer_sex" example:"m"`        // 教練性別(m:男性/f:女性)-複選
-	TrainerSkill *string ` json:"trainer_skill,omitempty" form:"trainer_skill" binding:"omitempty,course_trainer_skill" example:"5"` // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+	TrainerSkill *string `json:"trainer_skill,omitempty" form:"trainer_skill" binding:"omitempty,course_trainer_skill" example:"5"`  // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+	OrderField 	 *string `json:"order_field" form:"order_field" binding:"omitempty,oneof=latest popular" example:"latest"` 			 // 排序類型(latest:最新/popular:熱門)-單選
 	PagingInput
-	orderByRequired.OrderFieldField
 }

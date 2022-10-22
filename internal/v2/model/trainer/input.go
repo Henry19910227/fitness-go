@@ -3,15 +3,20 @@ package trainer
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/required"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"mime/multipart"
 )
 
 type PagingInput = paging.Input
 type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
+type CustomOrderByInput = orderBy.CustomInput
 
 type FindInput struct {
 	optional.UserIDField
@@ -20,9 +25,12 @@ type FindInput struct {
 
 type ListInput struct {
 	optional.UserIDField
-	PreloadInput
+	JoinInput
+	WhereInput
 	PagingInput
+	PreloadInput
 	OrderByInput
+	CustomOrderByInput
 }
 
 type FavoriteListInput struct {
@@ -39,7 +47,20 @@ type APIGetTrainerProfileInput struct {
 
 // APIGetTrainerInput /v2/trainer/{user_id} [GET]
 type APIGetTrainerInput struct {
+	Uri APIGetTrainerUri
+}
+type APIGetTrainerUri struct {
 	required.UserIDField
+}
+
+// APIGetTrainersInput /v2/trainers [GET]
+type APIGetTrainersInput struct {
+	required.UserIDField
+	Query APIGetTrainersQuery
+}
+type APIGetTrainersQuery struct {
+	OrderField *string `json:"order_field" form:"order_field" binding:"omitempty,oneof=latest popular" example:"latest"` // 排序類型(latest:最新/popular:熱門)-單選
+	PagingInput
 }
 
 // APIUpdateCMSTrainerAvatarInput /v2/cms/trainer/avatar [PATCH]

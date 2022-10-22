@@ -48,8 +48,34 @@ func (c *controller) GetTrainerProfile(ctx *gin.Context) {
 // @Router /v2/trainer/{user_id} [GET]
 func (c *controller) GetTrainer(ctx *gin.Context) {
 	var input model.APIGetTrainerInput
-	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
 	output := c.resolver.APIGetTrainer(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetTrainers 獲取教練列表
+// @Summary 獲取教練列表
+// @Description 獲取教練列表
+// @Tags 商店_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param order_field query string false "排序類型(latest:最新/popular:熱門)-單選"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} trainer.APIGetTrainersOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainers [GET]
+func (c *controller) GetTrainers(ctx *gin.Context) {
+	var input model.APIGetTrainersInput
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetTrainers(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

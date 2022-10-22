@@ -1,12 +1,16 @@
 package trainer
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
+	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	trainerService "github.com/Henry19910227/fitness-go/internal/v2/service/trainer"
 )
 
@@ -48,7 +52,7 @@ func (r *resolver) APIGetTrainerProfile(input *model.APIGetTrainerProfileInput) 
 
 func (r *resolver) APIGetTrainer(input *model.APIGetTrainerInput) (output model.APIGetTrainerOutput) {
 	findInput := model.FindInput{}
-	findInput.UserID = util.PointerInt64(input.UserID)
+	findInput.UserID = util.PointerInt64(input.Uri.UserID)
 	findInput.Preloads = []*preload.Preload{
 		{Field: "User"},
 		{Field: "TrainerStatistic"},
@@ -67,6 +71,43 @@ func (r *resolver) APIGetTrainer(input *model.APIGetTrainerInput) (output model.
 		return output
 	}
 	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetTrainers(input *model.APIGetTrainersInput) (output model.APIGetTrainersOutput) {
+	joins := make([]*joinModel.Join, 0)
+	wheres := make([]*whereModel.Where, 0)
+	orders := make([]*orderByModel.Order, 0)
+	if input.Query.OrderField != nil {
+		if *input.Query.OrderField == "latest" {
+			orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("trainers.%s %s", "create_at", order_by.DESC)})
+		}
+		if *input.Query.OrderField == "popular" {
+			joins = append(joins, &joinModel.Join{Query: "LEFT JOIN trainer_statistics ON trainers.user_id = trainer_statistics.user_id"})
+			orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("trainer_statistics.%s %s", "student_count", order_by.DESC)})
+		}
+	} else {
+		orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("trainers.%s %s", "create_at", order_by.DESC)})
+	}
+	listInput := model.ListInput{}
+	listInput.Wheres = wheres
+	listInput.Joins = joins
+	listInput.Orders = orders
+	listInput.Size = input.Query.Size
+	listInput.Page = input.Query.Page
+	trainerOutputs, page, err := r.trainerService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIGetTrainersData{}
+	if err := util.Parser(trainerOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
 	output.Data = &data
 	return output
 }

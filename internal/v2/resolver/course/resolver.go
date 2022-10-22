@@ -1020,12 +1020,16 @@ func (r *resolver) APIGetProductCourses(input *model.APIGetProductCoursesInput) 
 		joins = append(joins, &joinModel.Join{Query: "INNER JOIN trainers ON courses.user_id = trainers.user_id"})
 		wheres = append(wheres, &whereModel.Where{Query: "trainers.skill LIKE ?", Args: []interface{}{"%" + *input.Query.TrainerSkill + "%"}})
 	}
-	if input.Query.OrderField == "create_at" {
+	if input.Query.OrderField != nil {
+		if *input.Query.OrderField == "latest" {
+			orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("courses.%s %s", "create_at", order_by.DESC)})
+		}
+		if *input.Query.OrderField == "popular" {
+			joins = append(joins, &joinModel.Join{Query: "LEFT JOIN course_usage_statistics ON courses.id = course_usage_statistics.course_id"})
+			orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("course_usage_statistics.%s %s", "total_finish_workout_count", order_by.DESC)})
+		}
+	} else {
 		orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("courses.%s %s", "create_at", order_by.DESC)})
-	}
-	if input.Query.OrderField == "popular" {
-		joins = append(joins, &joinModel.Join{Query: "LEFT JOIN course_usage_statistics ON courses.id = course_usage_statistics.course_id"})
-		orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("course_usage_statistics.%s %s", "total_finish_workout_count", order_by.DESC)})
 	}
 	listInput := model.ListInput{}
 	listInput.CourseStatus = util.PointerInt(model.Sale)
