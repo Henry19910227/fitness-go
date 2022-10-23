@@ -14,12 +14,14 @@ import (
 	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	saleItemModel "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
+	trainerModel "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/sale_item"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user_subscribe_info"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
 	"github.com/gin-gonic/gin"
@@ -34,15 +36,16 @@ type resolver struct {
 	workoutService       workout.Service
 	subscribeInfoService user_subscribe_info.Service
 	saleItemService      sale_item.Service
+	trainerService		 trainer.Service
 	uploadTool           uploader.Tool
 }
 
 func New(courseService courseService.Service, planService plan.Service,
 	workoutService workout.Service, subscribeInfoService user_subscribe_info.Service,
-	saleItemService sale_item.Service, uploadTool uploader.Tool) Resolver {
+	saleItemService sale_item.Service, trainerService trainer.Service, uploadTool uploader.Tool) Resolver {
 	return &resolver{courseService: courseService, planService: planService,
 		workoutService: workoutService, subscribeInfoService: subscribeInfoService,
-		saleItemService: saleItemService, uploadTool: uploadTool}
+		saleItemService: saleItemService, trainerService: trainerService, uploadTool: uploadTool}
 }
 
 func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput) {
@@ -1114,6 +1117,104 @@ func (r *resolver) APIGetStoreCourseStructure(input *model.APIGetStoreCourseStru
 	// 獲取訂閱狀態
 	if courseOutput.FavoriteCourse != nil {
 		data.Favorite = util.PointerInt(1)
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetStoreHomePage(input *model.APIGetStoreHomePageInput) (output model.APIGetStoreHomePageOutput) {
+	// 查詢最新課表列表
+	latestCourseListInput := model.ListInput{}
+	latestCourseListInput.CourseStatus = util.PointerInt(model.Sale)
+	latestCourseListInput.OrderField = "create_at"
+	latestCourseListInput.OrderType = order_by.DESC
+	latestCourseListInput.Page = 1
+	latestCourseListInput.Size = 5
+	latestCourseListInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "ReviewStatistic"},
+	}
+	latestCourseOutputs, _, err := r.courseService.List(&latestCourseListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢熱門課表列表
+	popularCourseListInput := model.ListInput{}
+	popularCourseListInput.CourseStatus = util.PointerInt(model.Sale)
+	popularCourseListInput.Page = 1
+	popularCourseListInput.Size = 5
+	popularCourseListInput.Joins = []*joinModel.Join{
+		{Query: "LEFT JOIN course_usage_statistics ON courses.id = course_usage_statistics.course_id"},
+	}
+	popularCourseListInput.Orders = []*orderByModel.Order{
+		{Value: fmt.Sprintf("course_usage_statistics.%s %s", "total_finish_workout_count", order_by.DESC)},
+	}
+	popularCourseListInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "ReviewStatistic"},
+	}
+	popularCourseOutputs, _, err := r.courseService.List(&popularCourseListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢最新教練
+	latestTrainerListInput := trainerModel.ListInput{}
+	latestTrainerListInput.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN users ON users.id = trainers.user_id"},
+	}
+	latestTrainerListInput.Wheres = []*whereModel.Where{
+		{Query: "users.is_deleted = ?", Args: []interface{}{0}},
+	}
+	latestTrainerListInput.OrderField = "create_at"
+	latestTrainerListInput.OrderType = order_by.DESC
+	latestTrainerListInput.Page = 1
+	latestTrainerListInput.Size = 5
+	latestTrainerOutputs, _, err := r.trainerService.List(&latestTrainerListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢熱門教練
+	popularTrainerListInput := trainerModel.ListInput{}
+	popularTrainerListInput.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN users ON users.id = trainers.user_id"},
+		{Query: "LEFT JOIN trainer_statistics ON trainers.user_id = trainer_statistics.user_id"},
+	}
+	popularTrainerListInput.Wheres = []*whereModel.Where{
+		{Query: "users.is_deleted = ?", Args: []interface{}{0}},
+	}
+	popularTrainerListInput.Orders = []*orderByModel.Order{
+		{Value: fmt.Sprintf("trainer_statistics.%s %s", "student_count", order_by.DESC)},
+	}
+	popularTrainerListInput.Page = 1
+	popularTrainerListInput.Size = 5
+	popularTrainerOutputs, _, err := r.trainerService.List(&popularTrainerListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := model.APIGetStoreHomePageData{}
+	if err := util.Parser(latestCourseOutputs, &data.LatestCourses); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := util.Parser(popularCourseOutputs, &data.PopularCourses); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := util.Parser(latestTrainerOutputs, &data.LatestTrainers); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := util.Parser(popularTrainerOutputs, &data.PopularTrainers); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data

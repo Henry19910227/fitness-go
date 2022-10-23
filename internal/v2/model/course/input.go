@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
 	reviewOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review/optional"
+	userRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -266,4 +267,9 @@ type APIGetStoreCoursesQuery struct {
 	TrainerSkill *string `json:"trainer_skill,omitempty" form:"trainer_skill" binding:"omitempty,course_trainer_skill" example:"5"`  // 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
 	OrderField 	 *string `json:"order_field" form:"order_field" binding:"omitempty,oneof=latest popular" example:"latest"` 			 // 排序類型(latest:最新/popular:熱門)-單選
 	PagingInput
+}
+
+// APIGetStoreHomePageInput /v2/store/home_page [GET]
+type APIGetStoreHomePageInput struct {
+	userRequired.UserIDField
 }

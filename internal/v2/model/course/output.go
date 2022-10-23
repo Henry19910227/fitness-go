@@ -657,3 +657,54 @@ type APIGetStoreCoursesData []*struct {
 		reviewRequired.AmountField
 	} `json:"review_statistic"`
 }
+
+// APIGetStoreHomePageOutput /v2/store/home_page [GET]
+type APIGetStoreHomePageOutput struct {
+	base.Output
+	Data *APIGetStoreHomePageData `json:"data,omitempty"`
+}
+type APIGetStoreHomePageData struct {
+	LatestCourses APIGetStoreHomePageCourseItems `json:"latest_courses"`
+	PopularCourses APIGetStoreHomePageCourseItems `json:"popular_courses"`
+	LatestTrainers APIGetStoreHomePageTrainerItems `json:"latest_trainers"`
+	PopularTrainers APIGetStoreHomePageTrainerItems `json:"popular_trainers"`
+}
+type APIGetStoreHomePageCourseItems []*struct {
+	courseOptional.IDField
+	courseOptional.SaleTypeField
+	courseOptional.CourseStatusField
+	courseOptional.CategoryField
+	courseOptional.ScheduleTypeField
+	courseOptional.NameField
+	courseOptional.CoverField
+	courseOptional.LevelField
+	courseOptional.PlanCountField
+	courseOptional.WorkoutCountField
+	courseOptional.CreateAtField
+	courseOptional.UpdateAtField
+	SaleItem *struct {
+		saleItemOptional.IDField
+		saleItemOptional.NameField
+		ProductLabel *struct {
+			productLabelOptional.IDField
+			productLabelOptional.ProductIDField
+			productLabelOptional.TwdField
+		} `json:"product_label,omitempty"`
+	} `json:"sale_item,omitempty"`
+	ReviewStatistic struct {
+		reviewRequired.ScoreTotalField
+		reviewRequired.AmountField
+	} `json:"review_statistic"`
+	Trainer *struct {
+		trainerOptional.UserIDField
+		trainerOptional.AvatarField
+		trainerOptional.NicknameField
+		trainerOptional.SkillField
+	} `json:"trainer,omitempty"`
+}
+type APIGetStoreHomePageTrainerItems []*struct {
+	trainerOptional.UserIDField
+	trainerOptional.AvatarField
+	trainerOptional.NicknameField
+	trainerOptional.SkillField
+}

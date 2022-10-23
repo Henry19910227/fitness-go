@@ -40,4 +40,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/store/course/:course_id", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreCourse)
 	v2.GET("/store/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreCourses)
 	v2.GET("/store/course/:course_id/structure", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreCourseStructure)
+	v2.GET("/store/home_page", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreHomePage)
+
 }

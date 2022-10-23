@@ -26,24 +26,24 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -110,24 +110,24 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -214,12 +214,12 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
-              description: 訓練名稱
-              example: 腿部訓練
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -230,12 +230,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -284,12 +284,12 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
-              description: 訓練名稱
-              example: 腿部訓練
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -300,12 +300,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -373,12 +373,12 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
-              description: 訓練名稱
-              example: 腿部訓練
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -389,12 +389,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -447,24 +447,24 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -926,8 +926,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 課表名稱
+        example: 增肌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -936,6 +936,7 @@ definitions:
     required:
     - category
     - level
+    - name
     - schedule_type
     type: object
   course.APICreateTrainerCourseData:
@@ -961,14 +962,15 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 課表名稱
+        example: 增肌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
         example: 2
         type: integer
     required:
+    - name
     - schedule_type
     type: object
   course.APICreateUserCourseData:
@@ -1774,6 +1776,282 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  course.APIGetStoreHomePageData:
+    properties:
+      latest_courses:
+        items:
+          properties:
+            category:
+              description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+              example: 1
+              type: integer
+            course_status:
+              description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+              example: 3
+              type: integer
+            cover:
+              description: 課表封面
+              example: abc.png
+              type: string
+            create_at:
+              description: 創建時間
+              example: "2022-06-12 00:00:00"
+              type: string
+            id:
+              description: 課表 id
+              example: 2
+              type: integer
+            level:
+              description: 強度(1:初級/2:中級/3:中高級/4:高級)
+              example: 4
+              type: integer
+            name:
+              description: 課表名稱
+              example: 增肌課表
+              type: string
+            plan_count:
+              description: 計畫總數
+              example: 10
+              type: integer
+            review_statistic:
+              properties:
+                amount:
+                  description: 評分筆數
+                  example: 10
+                  type: integer
+                score_total:
+                  description: 評分累積
+                  example: 100
+                  type: integer
+              type: object
+            sale_item:
+              properties:
+                id:
+                  description: 銷售id
+                  example: 1
+                  type: integer
+                name:
+                  description: 銷售名稱
+                  example: '銅級課表 '
+                  type: string
+                product_label:
+                  properties:
+                    id:
+                      description: 產品標籤id
+                      example: 1
+                      type: integer
+                    product_id:
+                      description: 產品id
+                      example: com.fitness.gold_member_month
+                      type: string
+                    twd:
+                      description: 台幣價格
+                      example: 500
+                      type: integer
+                  type: object
+              type: object
+            sale_type:
+              description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
+              example: 3
+              type: integer
+            schedule_type:
+              description: 排課類別(1:單一訓練/2:多項計畫)
+              example: 2
+              type: integer
+            trainer:
+              properties:
+                avatar:
+                  description: 教練大頭照
+                  example: abc.png
+                  type: string
+                nickname:
+                  description: 教練暱稱
+                  example: Henry
+                  type: string
+                skill:
+                  description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+                  example: 1,4
+                  type: string
+                user_id:
+                  description: 用戶id
+                  example: 10001
+                  type: integer
+              type: object
+            update_at:
+              description: 更新時間
+              example: "2022-06-12 00:00:00"
+              type: string
+            workout_count:
+              description: 訓練總數
+              example: 50
+              type: integer
+          type: object
+        type: array
+      latest_trainers:
+        items:
+          properties:
+            avatar:
+              description: 教練大頭照
+              example: abc.png
+              type: string
+            nickname:
+              description: 教練暱稱
+              example: Henry
+              type: string
+            skill:
+              description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+              example: 1,4
+              type: string
+            user_id:
+              description: 用戶id
+              example: 10001
+              type: integer
+          type: object
+        type: array
+      popular_courses:
+        items:
+          properties:
+            category:
+              description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+              example: 1
+              type: integer
+            course_status:
+              description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+              example: 3
+              type: integer
+            cover:
+              description: 課表封面
+              example: abc.png
+              type: string
+            create_at:
+              description: 創建時間
+              example: "2022-06-12 00:00:00"
+              type: string
+            id:
+              description: 課表 id
+              example: 2
+              type: integer
+            level:
+              description: 強度(1:初級/2:中級/3:中高級/4:高級)
+              example: 4
+              type: integer
+            name:
+              description: 課表名稱
+              example: 增肌課表
+              type: string
+            plan_count:
+              description: 計畫總數
+              example: 10
+              type: integer
+            review_statistic:
+              properties:
+                amount:
+                  description: 評分筆數
+                  example: 10
+                  type: integer
+                score_total:
+                  description: 評分累積
+                  example: 100
+                  type: integer
+              type: object
+            sale_item:
+              properties:
+                id:
+                  description: 銷售id
+                  example: 1
+                  type: integer
+                name:
+                  description: 銷售名稱
+                  example: '銅級課表 '
+                  type: string
+                product_label:
+                  properties:
+                    id:
+                      description: 產品標籤id
+                      example: 1
+                      type: integer
+                    product_id:
+                      description: 產品id
+                      example: com.fitness.gold_member_month
+                      type: string
+                    twd:
+                      description: 台幣價格
+                      example: 500
+                      type: integer
+                  type: object
+              type: object
+            sale_type:
+              description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
+              example: 3
+              type: integer
+            schedule_type:
+              description: 排課類別(1:單一訓練/2:多項計畫)
+              example: 2
+              type: integer
+            trainer:
+              properties:
+                avatar:
+                  description: 教練大頭照
+                  example: abc.png
+                  type: string
+                nickname:
+                  description: 教練暱稱
+                  example: Henry
+                  type: string
+                skill:
+                  description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+                  example: 1,4
+                  type: string
+                user_id:
+                  description: 用戶id
+                  example: 10001
+                  type: integer
+              type: object
+            update_at:
+              description: 更新時間
+              example: "2022-06-12 00:00:00"
+              type: string
+            workout_count:
+              description: 訓練總數
+              example: 50
+              type: integer
+          type: object
+        type: array
+      popular_trainers:
+        items:
+          properties:
+            avatar:
+              description: 教練大頭照
+              example: abc.png
+              type: string
+            nickname:
+              description: 教練暱稱
+              example: Henry
+              type: string
+            skill:
+              description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+              example: 1,4
+              type: string
+            user_id:
+              description: 用戶id
+              example: 10001
+              type: integer
+          type: object
+        type: array
+    type: object
+  course.APIGetStoreHomePageOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/course.APIGetStoreHomePageData'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   course.APIGetTrainerCoursesOutput:
     properties:
       code:
@@ -2440,8 +2718,8 @@ definitions:
   course.APIUpdateUserCourseBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
     type: object
   course.APIUpdateUserCourseOutput:
@@ -6463,9 +6741,11 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 課表名稱
+        example: 增肌課表
         type: string
+    required:
+    - name
     type: object
   plan.APICreateTrainerPlanData:
     properties:
@@ -6490,9 +6770,11 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 課表名稱
+        example: 增肌課表
         type: string
+    required:
+    - name
     type: object
   plan.APICreateUserPlanData:
     properties:
@@ -6744,9 +7026,11 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 課表名稱
+        example: 增肌課表
         type: string
+    required:
+    - name
     type: object
   plan.APIUpdateUserPlanOutput:
     properties:
@@ -6900,7 +7184,7 @@ definitions:
               example: 1,4
               type: string
             user_id:
-              description: 用戶id
+              description: 用戶 id
               example: 10001
               type: integer
           type: object
@@ -6960,8 +7244,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       is_deleted:
         description: 是否刪除
@@ -6972,8 +7256,8 @@ definitions:
         example: 勞其筋骨
         type: string
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       nickname:
         description: 教練暱稱
@@ -7029,10 +7313,10 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
-        description: 用戶id
+        description: 用戶 id
         example: 10001
         type: integer
       youtube_url:
@@ -7080,10 +7364,10 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             user_id:
-              description: 用戶id
+              description: 用戶 id
               example: 10001
               type: integer
           type: object
@@ -7143,16 +7427,16 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
         example: 勞其筋骨
         type: string
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       nickname:
         description: 教練暱稱
@@ -7208,10 +7492,10 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
-        description: 用戶id
+        description: 用戶 id
         example: 10001
         type: integer
       youtube_url:
@@ -9447,13 +9731,15 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 課表名稱
+        example: 增肌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
         example: 1
         type: integer
+    required:
+    - name
     type: object
   workout.APICreateTrainerWorkoutData:
     properties:
@@ -9478,13 +9764,15 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 課表名稱
+        example: 增肌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
         example: 1
         type: integer
+    required:
+    - name
     type: object
   workout.APICreateUserWorkoutData:
     properties:
@@ -9598,8 +9886,8 @@ definitions:
               example: 1
               type: integer
             name:
-              description: 訓練名稱
-              example: 腿部訓練
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             start_audio:
               description: 前導語音
@@ -9607,7 +9895,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -9646,8 +9934,8 @@ definitions:
               example: 1
               type: integer
             name:
-              description: 訓練名稱
-              example: 腿部訓練
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             start_audio:
               description: 前導語音
@@ -9655,7 +9943,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -9698,8 +9986,8 @@ definitions:
               example: 1
               type: integer
             name:
-              description: 訓練名稱
-              example: 腿部訓練
+              description: 產品名稱
+              example: 金卡會員(月)
               type: string
             start_audio:
               description: 前導語音
@@ -9707,7 +9995,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -9739,8 +10027,8 @@ definitions:
         example: 1
         type: integer
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       start_audio:
         description: 前導語音
@@ -9748,7 +10036,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -9787,8 +10075,8 @@ definitions:
         example: 1
         type: integer
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 產品名稱
+        example: 金卡會員(月)
         type: string
       start_audio:
         description: 前導語音
@@ -9796,7 +10084,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -10250,12 +10538,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -10371,12 +10659,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -10490,12 +10778,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -10609,12 +10897,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -10721,12 +11009,12 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -10840,12 +11128,12 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -17963,6 +18251,27 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取商店課表列表
+      tags:
+      - 商店_v2
+  /v2/store/home_page:
+    get:
+      consumes:
+      - application/json
+      description: 獲取商店首頁資料
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/course.APIGetStoreHomePageOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取商店首頁資料
       tags:
       - 商店_v2
   /v2/store/plan/{plan_id}/workouts:

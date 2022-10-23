@@ -573,3 +573,20 @@ func (c *controller) GetStoreCourseStructure(ctx *gin.Context) {
 	output := c.resolver.APIGetStoreCourseStructure(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetStoreHomePage 獲取商店首頁資料
+// @Summary 獲取商店首頁資料
+// @Description 獲取商店首頁資料
+// @Tags 商店_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} course.APIGetStoreHomePageOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/store/home_page [GET]
+func (c *controller) GetStoreHomePage(ctx *gin.Context) {
+	input := model.APIGetStoreHomePageInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	output := c.resolver.APIGetStoreHomePage(&input)
+	ctx.JSON(http.StatusOK, output)
+}

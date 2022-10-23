@@ -79,6 +79,9 @@ func (r *resolver) APIGetStoreTrainers(input *model.APIGetStoreTrainersInput) (o
 	joins := make([]*joinModel.Join, 0)
 	wheres := make([]*whereModel.Where, 0)
 	orders := make([]*orderByModel.Order, 0)
+
+	joins = append(joins, &joinModel.Join{Query: "INNER JOIN users ON users.id = trainers.user_id"})
+	wheres = append(wheres, &whereModel.Where{Query: "users.is_deleted = ?", Args: []interface{}{0}})
 	if input.Query.OrderField != nil {
 		if *input.Query.OrderField == "latest" {
 			orders = append(orders, &orderByModel.Order{Value: fmt.Sprintf("trainers.%s %s", "create_at", order_by.DESC)})
