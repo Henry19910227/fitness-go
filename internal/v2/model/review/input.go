@@ -5,14 +5,22 @@ import (
 	reviewOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review/optional"
 	reviewRequired "github.com/Henry19910227/fitness-go/internal/v2/field/review/required"
 	userOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
+	userRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/group"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 )
 
 type PagingInput = paging.Input
 type PreloadInput = preload.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
+type GroupInput = group.Input
 type OrderByInput = orderBy.Input
+type CustomOrderByInput = orderBy.CustomInput
 
 type FindInput struct {
 	reviewOptional.IDField
@@ -26,10 +34,15 @@ type DeleteInput struct {
 type ListInput struct {
 	courseOptional.NameField
 	userOptional.NicknameField
+	reviewOptional.CourseIDField
 	reviewOptional.ScoreField
+	JoinInput
+	GroupInput
+	WhereInput
+	PagingInput
 	PreloadInput
 	OrderByInput
-	PagingInput
+	CustomOrderByInput
 }
 
 // APIGetCMSReviewsInput /v2/cms/reviews [GET]
@@ -63,4 +76,18 @@ type APIDeleteCMSReviewInput struct {
 }
 type APIDeleteCMSReviewUri struct {
 	reviewRequired.IDField
+}
+
+// APIGetStoreCourseReviewsInput /v2/store/course/{course_id}/reviews [GET]
+type APIGetStoreCourseReviewsInput struct {
+	userRequired.UserIDField
+	Uri   APIGetStoreCourseReviewsUri
+	Query APIGetStoreCourseReviewsQuery
+}
+type APIGetStoreCourseReviewsUri struct {
+	reviewRequired.CourseIDField
+}
+type APIGetStoreCourseReviewsQuery struct {
+	FilterType *int `json:"filter_type" form:"filter_type" binding:"omitempty,oneof=1 2" example:"1"` //篩選類型(1:全部/2:有照片)
+	PagingInput
 }

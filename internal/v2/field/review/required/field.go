@@ -4,7 +4,7 @@ type IDField struct {
 	ID int64 `json:"id" form:"review_id" binding:"required" example:"1"` //評論id
 }
 type CourseIDField struct {
-	CourseID int64 `json:"course_id" binding:"required" example:"10"` //課表id
+	CourseID int64 `json:"course_id" uri:"course_id" binding:"required" example:"10"` //課表id
 }
 type UserIDField struct {
 	UserID int64 `json:"user_id" binding:"required" example:"10001"` //用戶id

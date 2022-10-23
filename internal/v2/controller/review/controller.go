@@ -90,3 +90,31 @@ func (c *controller) DeleteCMSReview(ctx *gin.Context) {
 	output := c.resolver.APIDeleteCMSReview(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// GetStoreCourseReviews 獲取商店課表評論列表
+// @Summary 獲取商店課表評論列表
+// @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
+// @Tags 商店_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Param filter_type query int false "篩選類型(1:全部/2:有照片)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} review.APIGetStoreCourseReviewsOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/store/course/{course_id}/reviews [GET]
+func (c *controller) GetStoreCourseReviews(ctx *gin.Context) {
+	input := model.APIGetStoreCourseReviewsInput{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetStoreCourseReviews(&input)
+	ctx.JSON(http.StatusOK, output)
+}

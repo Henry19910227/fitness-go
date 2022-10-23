@@ -57,3 +57,29 @@ type APIUpdateCMSReviewOutput struct {
 type APIDeleteCMSReviewOutput struct {
 	base.Output
 }
+
+// APIGetStoreCourseReviewsOutput /v2/store/course/{course_id}/reviews [GET]
+type APIGetStoreCourseReviewsOutput struct {
+	base.Output
+	Data   *APIGetStoreCourseReviewsData `json:"data,omitempty"`
+	Paging *paging.Output                `json:"paging,omitempty"`
+}
+type APIGetStoreCourseReviewsData []*struct {
+	reviewOptional.IDField
+	reviewOptional.ScoreField
+	reviewOptional.BodyField
+	reviewOptional.CreateAtField
+	User *struct {
+		userOptional.IDField
+		userOptional.NicknameField
+	} `json:"user,omitempty"`
+	Course *struct {
+		courseOptional.IDField
+		courseOptional.NameField
+	} `json:"course,omitempty"`
+	Images []*struct {
+		review_image.IDField
+		review_image.ImageField
+		review_image.CreateAtField
+	} `json:"images,omitempty"`
+}

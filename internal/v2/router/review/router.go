@@ -15,4 +15,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/cms/reviews", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSReviews)
 	v2.PATCH("/cms/review/:review_id", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSReview)
 	v2.DELETE("/cms/review/:review_id", midd.Verify([]global.Role{global.AdminRole}), controller.DeleteCMSReview)
+	v2.GET("/store/course/:course_id/reviews", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreCourseReviews)
 }

@@ -1,9 +1,13 @@
 package review
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	groupModel "github.com/Henry19910227/fitness-go/internal/v2/model/group"
+	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
+	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/review"
 	reviewService "github.com/Henry19910227/fitness-go/internal/v2/service/review"
@@ -99,5 +103,42 @@ func (r *resolver) APIDeleteCMSReview(input *model.APIDeleteCMSReviewInput) (out
 		_ = r.uploadTool.Delete(util.OnNilJustReturnString(imageOutput.Image, ""))
 	}
 	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIGetStoreCourseReviews(input *model.APIGetStoreCourseReviewsInput) (output model.APIGetStoreCourseReviewsOutput) {
+	joins := make([]*joinModel.Join, 0)
+	groups := make([]*groupModel.Group, 0)
+	if util.OnNilJustReturnInt(input.Query.FilterType, 0) == 2 {
+		joins = append(joins, &joinModel.Join{Query: "INNER JOIN review_images ON review_images.review_id = reviews.id"})
+		groups = append(groups, &groupModel.Group{Name: "reviews.id"})
+	}
+	listInput := model.ListInput{}
+	listInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+	listInput.Joins = joins
+	listInput.Groups = groups
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "User"},
+		{Field: "Images"},
+	}
+	listInput.Orders = []*orderByModel.Order{
+		{Value: fmt.Sprintf("reviews.user_id <> %v %s", input.UserID, orderByModel.ASC)},
+	}
+	listInput.Page = input.Query.Page
+	listInput.Size = input.Query.Size
+	reviewOutputs, page, err := r.reviewService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parser Output
+	data := model.APIGetStoreCourseReviewsData{}
+	if err := util.Parser(reviewOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = &data
 	return output
 }
