@@ -123,11 +123,11 @@ type APIDeleteTrainerPlanUri struct {
 	required.IDField
 }
 
-// APIGetProductPlansInput /v2/product/course/{course_id}/plans [GET]
-type APIGetProductPlansInput struct {
+// APIGetStorePlansInput /v2/store/course/{course_id}/plans [GET]
+type APIGetStorePlansInput struct {
 	userRequired.UserIDField
-	Uri APIGetProductPlansUri
+	Uri APIGetStorePlansUri
 }
-type APIGetProductPlansUri struct {
+type APIGetStorePlansUri struct {
 	required.CourseIDField
 }

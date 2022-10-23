@@ -45,20 +45,20 @@ type APIGetTrainerProfileInput struct {
 	required.UserIDField
 }
 
-// APIGetTrainerInput /v2/trainer/{user_id} [GET]
-type APIGetTrainerInput struct {
-	Uri APIGetTrainerUri
+// APIGetStoreTrainerInput /v2/store/trainer/{user_id} [GET]
+type APIGetStoreTrainerInput struct {
+	Uri APIGetStoreTrainerUri
 }
-type APIGetTrainerUri struct {
+type APIGetStoreTrainerUri struct {
 	required.UserIDField
 }
 
-// APIGetTrainersInput /v2/trainers [GET]
-type APIGetTrainersInput struct {
+// APIGetStoreTrainersInput /v2/store/trainers [GET]
+type APIGetStoreTrainersInput struct {
 	required.UserIDField
-	Query APIGetTrainersQuery
+	Query APIGetStoreTrainersQuery
 }
-type APIGetTrainersQuery struct {
+type APIGetStoreTrainersQuery struct {
 	OrderField *string `json:"order_field" form:"order_field" binding:"omitempty,oneof=latest popular" example:"latest"` // 排序類型(latest:最新/popular:熱門)-單選
 	PagingInput
 }

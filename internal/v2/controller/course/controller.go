@@ -494,7 +494,7 @@ func (c *controller) SubmitTrainerCourse(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetProductCourse 獲取商店課表詳細
+// GetStoreCourse 獲取商店課表詳細
 // @Summary 獲取商店課表詳細
 // @Description 獲取商店課表詳細
 // @Tags 商店_v2
@@ -504,19 +504,19 @@ func (c *controller) SubmitTrainerCourse(ctx *gin.Context) {
 // @Param course_id path int64 true "課表id"
 // @Success 200 {object} course.APIGetUserCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/product/course/{course_id} [GET]
-func (c *controller) GetProductCourse(ctx *gin.Context) {
-	var input model.APIGetProductCourseInput
+// @Router /v2/store/course/{course_id} [GET]
+func (c *controller) GetStoreCourse(ctx *gin.Context) {
+	var input model.APIGetStoreCourseInput
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetProductCourse(&input)
+	output := c.resolver.APIGetStoreCourse(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetProductCourses 獲取商店課表列表
+// GetStoreCourses 獲取商店課表列表
 // @Summary 獲取商店課表列表
 // @Description 獲取商店課表列表
 // @Tags 商店_v2
@@ -535,24 +535,24 @@ func (c *controller) GetProductCourse(ctx *gin.Context) {
 // @Param sale_type query string false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選"
 // @Param trainer_sex query string false "教練性別(m:男性/f:女性)-複選"
 // @Param trainer_skill query string false "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)"
-// @Param order_field query string false "排序欄位 (create_at:創建時間/popular:熱門)"
+// @Param order_field query string false "排序欄位 (latest:最新/popular:熱門)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} course.APIGetProductCoursesOutput "成功!"
+// @Success 200 {object} course.APIGetStoreCoursesOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/product/courses [GET]
-func (c *controller) GetProductCourses(ctx *gin.Context) {
-	var input model.APIGetProductCoursesInput
+// @Router /v2/store/courses [GET]
+func (c *controller) GetStoreCourses(ctx *gin.Context) {
+	var input model.APIGetStoreCoursesInput
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetProductCourses(&input)
+	output := c.resolver.APIGetStoreCourses(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetProductCourseStructure 獲取商店課表結構
+// GetStoreCourseStructure 獲取商店課表結構
 // @Summary 獲取商店課表結構
 // @Description 獲取商店課表結構
 // @Tags 商店_v2
@@ -560,16 +560,16 @@ func (c *controller) GetProductCourses(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
-// @Success 200 {object} course.APIGetProductCourseStructureOutput "成功!"
+// @Success 200 {object} course.APIGetStoreCourseStructureOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/product/course/{course_id}/structure [GET]
-func (c *controller) GetProductCourseStructure(ctx *gin.Context) {
-	input := model.APIGetProductCourseStructureInput{}
+// @Router /v2/store/course/{course_id}/structure [GET]
+func (c *controller) GetStoreCourseStructure(ctx *gin.Context) {
+	input := model.APIGetStoreCourseStructureInput{}
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetProductCourseStructure(&input)
+	output := c.resolver.APIGetStoreCourseStructure(&input)
 	ctx.JSON(http.StatusOK, output)
 }

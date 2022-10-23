@@ -216,7 +216,7 @@ func (c *controller) DeleteTrainerPlan(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetProductPlans 獲取商店課表計畫列表
+// GetStorePlans 獲取商店課表計畫列表
 // @Summary 獲取商店課表計畫列表
 // @Description 獲取商店課表計畫列表
 // @Tags 商店_v2
@@ -224,16 +224,16 @@ func (c *controller) DeleteTrainerPlan(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
-// @Success 200 {object} plan.APIGetProductPlansOutput "成功!"
+// @Success 200 {object} plan.APIGetStorePlansOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/product/course/{course_id}/plans [GET]
-func (c *controller) GetProductPlans(ctx *gin.Context) {
-	input := model.APIGetProductPlansInput{}
+// @Router /v2/store/course/{course_id}/plans [GET]
+func (c *controller) GetStorePlans(ctx *gin.Context) {
+	input := model.APIGetStorePlansInput{}
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetProductPlans(&input)
+	output := c.resolver.APIGetStorePlans(&input)
 	ctx.JSON(http.StatusOK, output)
 }

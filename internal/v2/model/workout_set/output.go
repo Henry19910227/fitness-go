@@ -264,12 +264,12 @@ type APICreateTrainerWorkoutSetByDuplicateOutput struct {
 	base.Output
 }
 
-// APIGetProductWorkoutSetsOutput /v2/product/workout/{workout_id}/workout_sets [GET]
-type APIGetProductWorkoutSetsOutput struct {
+// APIGetStoreWorkoutSetsOutput /v2/store/workout/{workout_id}/workout_sets [GET]
+type APIGetStoreWorkoutSetsOutput struct {
 	base.Output
-	Data *APIGetProductWorkoutSetsData `json:"data,omitempty"`
+	Data *APIGetStoreWorkoutSetsData `json:"data,omitempty"`
 }
-type APIGetProductWorkoutSetsData []*struct {
+type APIGetStoreWorkoutSetsData []*struct {
 	optional.IDField
 	optional.TypeField
 	optional.AutoNextField

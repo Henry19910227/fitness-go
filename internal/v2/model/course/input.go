@@ -228,30 +228,30 @@ type APISubmitTrainerCourseUri struct {
 	required.IDField
 }
 
-// APIGetProductCourseInput /v2/product/course/{course_id} [GET]
-type APIGetProductCourseInput struct {
+// APIGetStoreCourseInput /v2/store/course/{course_id} [GET]
+type APIGetStoreCourseInput struct {
 	required.UserIDField
-	Uri APIGetProductCourseUri
+	Uri APIGetStoreCourseUri
 }
-type APIGetProductCourseUri struct {
+type APIGetStoreCourseUri struct {
 	required.IDField
 }
 
-// APIGetProductCourseStructureInput /v2/product/course/{course_id}/structure [GET]
-type APIGetProductCourseStructureInput struct {
+// APIGetStoreCourseStructureInput /v2/store/course/{course_id}/structure [GET]
+type APIGetStoreCourseStructureInput struct {
 	required.UserIDField
-	Uri APIGetProductCourseStructureUri
+	Uri APIGetStoreCourseStructureUri
 }
-type APIGetProductCourseStructureUri struct {
+type APIGetStoreCourseStructureUri struct {
 	required.IDField
 }
 
-// APIGetProductCoursesInput /v2/product/courses [GET]
-type APIGetProductCoursesInput struct {
+// APIGetStoreCoursesInput /v2/store/courses [GET]
+type APIGetStoreCoursesInput struct {
 	required.UserIDField
-	Query APIGetProductCoursesQuery
+	Query APIGetStoreCoursesQuery
 }
-type APIGetProductCoursesQuery struct {
+type APIGetStoreCoursesQuery struct {
 	optional.NameField
 	reviewOptional.ScoreField
 	Level        *string `json:"level,omitempty" form:"level" binding:"omitempty,course_level" example:"3"`                          // 強度(1:初級/2:中級/3:中高級/4:高級)-複選

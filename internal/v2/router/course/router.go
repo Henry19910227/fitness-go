@@ -37,7 +37,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.PATCH("/trainer/course/:course_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateTrainerCourse)
 	v2.POST("/trainer/course/:course_id/submit", midd.Verify([]global.Role{global.UserRole}), controller.SubmitTrainerCourse)
 
-	v2.GET("/product/course/:course_id", midd.Verify([]global.Role{global.UserRole}), controller.GetProductCourse)
-	v2.GET("/product/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetProductCourses)
-	v2.GET("/product/course/:course_id/structure", midd.Verify([]global.Role{global.UserRole}), controller.GetProductCourseStructure)
+	v2.GET("/store/course/:course_id", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreCourse)
+	v2.GET("/store/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreCourses)
+	v2.GET("/store/course/:course_id/structure", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreCourseStructure)
 }

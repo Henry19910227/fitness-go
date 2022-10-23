@@ -68,12 +68,12 @@ type APIGetTrainerProfileData struct {
 	} `json:"trainer_statistic,omitempty"`
 }
 
-// APIGetTrainerOutput /v2/trainer/{user_id} [GET]
-type APIGetTrainerOutput struct {
+// APIGetStoreTrainerOutput /v2/store/trainer/{user_id} [GET]
+type APIGetStoreTrainerOutput struct {
 	base.Output
-	Data *APIGetTrainerData `json:"data,omitempty"`
+	Data *APIGetStoreTrainerData `json:"data,omitempty"`
 }
-type APIGetTrainerData struct {
+type APIGetStoreTrainerData struct {
 	Table
 	userOptional.IsDeletedField
 	Certificates []*struct {
@@ -93,13 +93,13 @@ type APIGetTrainerData struct {
 	} `json:"trainer_statistic,omitempty"`
 }
 
-// APIGetTrainersOutput /v2/trainers [GET]
-type APIGetTrainersOutput struct {
+// APIGetStoreTrainersOutput /v2/store/trainers [GET]
+type APIGetStoreTrainersOutput struct {
 	base.Output
-	Data *APIGetTrainersData `json:"data,omitempty"`
-	Paging *paging.Output `json:"paging,omitempty"`
+	Data *APIGetStoreTrainersData `json:"data,omitempty"`
+	Paging *paging.Output         `json:"paging,omitempty"`
 }
-type APIGetTrainersData []*struct {
+type APIGetStoreTrainersData []*struct {
 	optional.UserIDField
 	optional.NicknameField
 	optional.SkillField

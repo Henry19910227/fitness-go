@@ -351,7 +351,7 @@ func (c *controller) DeleteTrainerWorkoutEndAudio(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetProductWorkouts 獲取商店課表訓練列表
+// GetStoreWorkouts 獲取商店課表訓練列表
 // @Summary 獲取商店課表訓練列表
 // @Description 獲取商店課表訓練列表
 // @Tags 商店_v2
@@ -359,16 +359,16 @@ func (c *controller) DeleteTrainerWorkoutEndAudio(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
-// @Success 200 {object} workout.APIGetProductWorkoutsOutput "成功!"
+// @Success 200 {object} workout.APIGetStoreWorkoutsOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/product/plan/{plan_id}/workouts [GET]
-func (c *controller) GetProductWorkouts(ctx *gin.Context) {
-	input := model.APIGetProductWorkoutsInput{}
+// @Router /v2/store/plan/{plan_id}/workouts [GET]
+func (c *controller) GetStoreWorkouts(ctx *gin.Context) {
+	input := model.APIGetStoreWorkoutsInput{}
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetProductWorkouts(&input)
+	output := c.resolver.APIGetStoreWorkouts(&input)
 	ctx.JSON(http.StatusOK, output)
 }

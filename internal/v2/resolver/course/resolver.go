@@ -898,7 +898,7 @@ func (r *resolver) APISubmitTrainerCourse(input *model.APISubmitTrainerCourseInp
 	return output
 }
 
-func (r *resolver) APIGetProductCourse(input *model.APIGetProductCourseInput) (output model.APIGetProductCourseOutput) {
+func (r *resolver) APIGetStoreCourse(input *model.APIGetStoreCourseInput) (output model.APIGetStoreCourseOutput) {
 	// 查詢資料
 	findInput := model.FindInput{}
 	findInput.ID = util.PointerInt64(input.Uri.ID)
@@ -915,7 +915,7 @@ func (r *resolver) APIGetProductCourse(input *model.APIGetProductCourseInput) (o
 		return output
 	}
 	// parser output
-	data := model.APIGetProductCourseData{}
+	data := model.APIGetStoreCourseData{}
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -938,7 +938,7 @@ func (r *resolver) APIGetProductCourse(input *model.APIGetProductCourseInput) (o
 	return output
 }
 
-func (r *resolver) APIGetProductCourses(input *model.APIGetProductCoursesInput) (output model.APIGetProductCoursesOutput) {
+func (r *resolver) APIGetStoreCourses(input *model.APIGetStoreCoursesInput) (output model.APIGetStoreCoursesOutput) {
 	levelList := make([]interface{}, 0)
 	if input.Query.Level != nil {
 		for _, item := range strings.Split(*input.Query.Level, ",") {
@@ -1048,7 +1048,7 @@ func (r *resolver) APIGetProductCourses(input *model.APIGetProductCoursesInput) 
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	data := model.APIGetProductCoursesData{}
+	data := model.APIGetStoreCoursesData{}
 	if err := util.Parser(courseOutputs, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -1059,7 +1059,7 @@ func (r *resolver) APIGetProductCourses(input *model.APIGetProductCoursesInput) 
 	return output
 }
 
-func (r *resolver) APIGetProductCourseStructure(input *model.APIGetProductCourseStructureInput) (output model.APIGetProductCourseStructureOutput) {
+func (r *resolver) APIGetStoreCourseStructure(input *model.APIGetStoreCourseStructureInput) (output model.APIGetStoreCourseStructureOutput) {
 	// 檢查課表是否是單一訓練課表
 	findInput := model.FindInput{}
 	findInput.ID = util.PointerInt64(input.Uri.ID)
@@ -1097,7 +1097,7 @@ func (r *resolver) APIGetProductCourseStructure(input *model.APIGetProductCourse
 		return output
 	}
 	// parser output
-	data := model.APIGetProductCourseStructureData{}
+	data := model.APIGetStoreCourseStructureData{}
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

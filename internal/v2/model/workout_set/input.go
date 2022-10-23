@@ -226,11 +226,11 @@ type APICreateTrainerWorkoutSetByDuplicateBody struct {
 	DuplicateCount int `json:"duplicate_count" binding:"required,min=1,max=5" example:"1"` //複製個數
 }
 
-// APIGetProductWorkoutSetsInput /v2/product/workout/{workout_id}/workout_sets [GET]
-type APIGetProductWorkoutSetsInput struct {
+// APIGetStoreWorkoutSetsInput /v2/store/workout/{workout_id}/workout_sets [GET]
+type APIGetStoreWorkoutSetsInput struct {
 	userRequired.UserIDField
-	Uri APIGetProductWorkoutSetsUri
+	Uri APIGetStoreWorkoutSetsUri
 }
-type APIGetProductWorkoutSetsUri struct {
+type APIGetStoreWorkoutSetsUri struct {
 	required.WorkoutIDField
 }

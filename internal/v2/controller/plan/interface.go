@@ -16,5 +16,5 @@ type Controller interface {
 	GetTrainerPlans(ctx *gin.Context)
 	DeleteTrainerPlan(ctx *gin.Context)
 
-	GetProductPlans(ctx *gin.Context)
+	GetStorePlans(ctx *gin.Context)
 }

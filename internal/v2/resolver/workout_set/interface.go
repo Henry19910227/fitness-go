@@ -26,5 +26,5 @@ type Resolver interface {
 	APIDeleteTrainerWorkoutSetStartAudio(input *model.APIDeleteTrainerWorkoutSetStartAudioInput) (output model.APIDeleteTrainerWorkoutSetStartAudioOutput)
 	APIDeleteTrainerWorkoutSetProgressAudio(input *model.APIDeleteTrainerWorkoutSetProgressAudioInput) (output model.APIDeleteTrainerWorkoutSetProgressAudioOutput)
 
-	APIGetProductWorkoutSets(input *model.APIGetProductWorkoutSetsInput) (output model.APIGetProductWorkoutSetsOutput)
+	APIGetStoreWorkoutSets(input *model.APIGetStoreWorkoutSetsInput) (output model.APIGetStoreWorkoutSetsOutput)
 }

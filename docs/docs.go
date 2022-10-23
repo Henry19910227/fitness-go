@@ -10541,349 +10541,6 @@ var doc = `{
                 }
             }
         },
-        "/v2/product/course/{course_id}": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取商店課表詳細",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商店_v2"
-                ],
-                "summary": "獲取商店課表詳細",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表id",
-                        "name": "course_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
-                        "schema": {
-                            "$ref": "#/definitions/course.APIGetUserCourseOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/product/course/{course_id}/plans": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取商店課表計畫列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商店_v2"
-                ],
-                "summary": "獲取商店課表計畫列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表id",
-                        "name": "course_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/plan.APIGetProductPlansOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/product/course/{course_id}/structure": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取商店課表結構",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商店_v2"
-                ],
-                "summary": "獲取商店課表結構",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表id",
-                        "name": "course_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/course.APIGetProductCourseStructureOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/product/courses": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取商店課表列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商店_v2"
-                ],
-                "summary": "獲取商店課表列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "課表名稱(1~40字元)",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "評價(1~5分)-單選",
-                        "name": "score",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "強度(1:初級/2:中級/3:中高級/4:高級)-複選",
-                        "name": "level",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)-複選",
-                        "name": "category",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)-複選",
-                        "name": "suit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)-複選",
-                        "name": "equipment",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選",
-                        "name": "place",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選",
-                        "name": "train_target",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選",
-                        "name": "body_target",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選",
-                        "name": "sale_type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "教練性別(m:男性/f:女性)-複選",
-                        "name": "trainer_sex",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
-                        "name": "trainer_skill",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "排序欄位 (create_at:創建時間/popular:熱門)",
-                        "name": "order_field",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "頁數(從第一頁開始)",
-                        "name": "page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "筆數",
-                        "name": "size",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/course.APIGetProductCoursesOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/product/plan/{plan_id}/workouts": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取商店課表訓練列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商店_v2"
-                ],
-                "summary": "獲取商店課表訓練列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "計畫id",
-                        "name": "plan_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/workout.APIGetProductWorkoutsOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/product/workout/{workout_id}/workout_sets": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取商店課表訓練組列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商店_v2"
-                ],
-                "summary": "獲取商店課表訓練組列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "訓練id",
-                        "name": "workout_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/workout_set.APIGetProductWorkoutSetsOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
         "/v2/register/apple": {
             "post": {
                 "description": "使用Apple註冊",
@@ -11473,6 +11130,448 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/user.APIUpdateResetPasswordOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/store/course/{course_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店課表詳細",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店課表詳細",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetUserCourseOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/store/course/{course_id}/plans": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店課表計畫列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店課表計畫列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/plan.APIGetStorePlansOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/store/course/{course_id}/structure": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店課表結構",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店課表結構",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetStoreCourseStructureOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/store/courses": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店課表列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店課表列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "課表名稱(1~40字元)",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "評價(1~5分)-單選",
+                        "name": "score",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "強度(1:初級/2:中級/3:中高級/4:高級)-複選",
+                        "name": "level",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)-複選",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)-複選",
+                        "name": "suit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)-複選",
+                        "name": "equipment",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)-複選",
+                        "name": "place",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)-複選",
+                        "name": "train_target",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)-複選",
+                        "name": "body_target",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)-複選",
+                        "name": "sale_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練性別(m:男性/f:女性)-複選",
+                        "name": "trainer_sex",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "name": "trainer_skill",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (latest:最新/popular:熱門)",
+                        "name": "order_field",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/course.APIGetStoreCoursesOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/store/plan/{plan_id}/workouts": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店課表訓練列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店課表訓練列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/workout.APIGetStoreWorkoutsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/store/trainer/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店教練詳細資訊",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店教練詳細資訊",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/trainer.APIGetStoreTrainerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/store/trainers": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店教練列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店教練列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "排序類型(latest:最新/popular:熱門)-單選",
+                        "name": "order_field",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/trainer.APIGetStoreTrainersOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/store/workout/{workout_id}/workout_sets": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取商店課表訓練組列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店課表訓練組列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "訓練id",
+                        "name": "workout_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/workout_set.APIGetStoreWorkoutSetsOutput"
                         }
                     },
                     "400": {
@@ -13234,105 +13333,6 @@ var doc = `{
                         "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
                         "schema": {
                             "$ref": "#/definitions/workout_set.APIDeleteTrainerWorkoutSetStartAudioOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/trainer/{user_id}": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取教練資訊",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商店_v2"
-                ],
-                "summary": "獲取教練資訊",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "教練ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/trainer.APIGetTrainerOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "失敗!",
-                        "schema": {
-                            "$ref": "#/definitions/base.Output"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/trainers": {
-            "get": {
-                "security": [
-                    {
-                        "fitness_token": []
-                    }
-                ],
-                "description": "獲取教練列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商店_v2"
-                ],
-                "summary": "獲取教練列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "排序類型(latest:最新/popular:熱門)-單選",
-                        "name": "order_field",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "頁數(從第一頁開始)",
-                        "name": "page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "筆數",
-                        "name": "size",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功!",
-                        "schema": {
-                            "$ref": "#/definitions/trainer.APIGetTrainersOutput"
                         }
                     },
                     "400": {
@@ -15314,9 +15314,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "Henry教練"
                 },
                 "name": {
                     "description": "訓練名稱",
@@ -15329,14 +15329,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -15425,9 +15425,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "Henry教練"
                 },
                 "name": {
                     "description": "訓練名稱",
@@ -15440,14 +15440,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -15563,9 +15563,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "個人介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "Henry教練"
                             },
                             "name": {
                                 "description": "訓練名稱",
@@ -15583,14 +15583,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15654,9 +15654,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "個人介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "Henry教練"
                             },
                             "name": {
                                 "description": "訓練名稱",
@@ -15674,14 +15674,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15771,9 +15771,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "個人介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "Henry教練"
                             },
                             "name": {
                                 "description": "訓練名稱",
@@ -15791,14 +15791,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15867,9 +15867,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "Henry教練"
                 },
                 "name": {
                     "description": "訓練名稱",
@@ -15882,14 +15882,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -16499,7 +16499,6 @@ var doc = `{
             "required": [
                 "category",
                 "level",
-                "name",
                 "schedule_type"
             ],
             "properties": {
@@ -16514,9 +16513,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -16556,14 +16555,13 @@ var doc = `{
         "course.APICreateUserCourseBody": {
             "type": "object",
             "required": [
-                "name",
                 "schedule_type"
             ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -17005,7 +17003,7 @@ var doc = `{
                 }
             }
         },
-        "course.APIGetProductCourseStructureData": {
+        "course.APIGetStoreCourseStructureData": {
             "type": "object",
             "properties": {
                 "allow_access": {
@@ -17444,7 +17442,7 @@ var doc = `{
                 }
             }
         },
-        "course.APIGetProductCourseStructureOutput": {
+        "course.APIGetStoreCourseStructureOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -17453,7 +17451,7 @@ var doc = `{
                     "example": 9000
                 },
                 "data": {
-                    "$ref": "#/definitions/course.APIGetProductCourseStructureData"
+                    "$ref": "#/definitions/course.APIGetStoreCourseStructureData"
                 },
                 "msg": {
                     "description": "訊息",
@@ -17462,7 +17460,7 @@ var doc = `{
                 }
             }
         },
-        "course.APIGetProductCoursesOutput": {
+        "course.APIGetStoreCoursesOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -23810,14 +23808,11 @@ var doc = `{
         },
         "plan.APICreateTrainerPlanBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 }
             }
         },
@@ -23851,14 +23846,11 @@ var doc = `{
         },
         "plan.APICreateUserPlanBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 }
             }
         },
@@ -24019,7 +24011,7 @@ var doc = `{
                 }
             }
         },
-        "plan.APIGetProductPlansOutput": {
+        "plan.APIGetStorePlansOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -24195,14 +24187,11 @@ var doc = `{
         },
         "plan.APIUpdateUserPlanBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 }
             }
         },
@@ -24428,7 +24417,7 @@ var doc = `{
                 }
             }
         },
-        "trainer.APIGetTrainerData": {
+        "trainer.APIGetStoreTrainerData": {
             "type": "object",
             "properties": {
                 "address": {
@@ -24490,9 +24479,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "Henry教練"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -24580,7 +24569,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -24594,7 +24583,7 @@ var doc = `{
                 }
             }
         },
-        "trainer.APIGetTrainerOutput": {
+        "trainer.APIGetStoreTrainerOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -24603,12 +24592,68 @@ var doc = `{
                     "example": 9000
                 },
                 "data": {
-                    "$ref": "#/definitions/trainer.APIGetTrainerData"
+                    "$ref": "#/definitions/trainer.APIGetStoreTrainerData"
                 },
                 "msg": {
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
+                }
+            }
+        },
+        "trainer.APIGetStoreTrainersOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "avatar": {
+                                "description": "教練大頭照",
+                                "type": "string",
+                                "example": "abc.png"
+                            },
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-12 00:00:00"
+                            },
+                            "nickname": {
+                                "description": "教練暱稱",
+                                "type": "string",
+                                "example": "Henry"
+                            },
+                            "skill": {
+                                "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                                "type": "string",
+                                "example": "1,4"
+                            },
+                            "update_at": {
+                                "description": "更新時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "user_id": {
+                                "description": "用戶id",
+                                "type": "integer",
+                                "example": 10001
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },
@@ -24674,9 +24719,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "Henry教練"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -24759,7 +24804,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -24788,62 +24833,6 @@ var doc = `{
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
-                }
-            }
-        },
-        "trainer.APIGetTrainersOutput": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "狀態碼",
-                    "type": "integer",
-                    "example": 9000
-                },
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "avatar": {
-                                "description": "教練大頭照",
-                                "type": "string",
-                                "example": "abc.png"
-                            },
-                            "create_at": {
-                                "description": "創建時間",
-                                "type": "string",
-                                "example": "2022-06-12 00:00:00"
-                            },
-                            "nickname": {
-                                "description": "教練暱稱",
-                                "type": "string",
-                                "example": "Henry"
-                            },
-                            "skill": {
-                                "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
-                                "type": "string",
-                                "example": "1,4"
-                            },
-                            "update_at": {
-                                "description": "更新時間",
-                                "type": "string",
-                                "example": "2022-06-12 00:00:00"
-                            },
-                            "user_id": {
-                                "description": "用戶id",
-                                "type": "integer",
-                                "example": 10001
-                            }
-                        }
-                    }
-                },
-                "msg": {
-                    "description": "訊息",
-                    "type": "string",
-                    "example": "message.."
-                },
-                "paging": {
-                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },
@@ -27778,14 +27767,11 @@ var doc = `{
         },
         "workout.APICreateTrainerWorkoutBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27824,14 +27810,11 @@ var doc = `{
         },
         "workout.APICreateUserWorkoutBody": {
             "type": "object",
-            "required": [
-                "name"
-            ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "訓練名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "腿部訓練"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -27958,7 +27941,7 @@ var doc = `{
                 }
             }
         },
-        "workout.APIGetProductWorkoutsOutput": {
+        "workout.APIGetStoreWorkoutsOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -28004,7 +27987,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -28067,7 +28050,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -28135,7 +28118,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -28188,7 +28171,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -28251,7 +28234,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -28857,14 +28840,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -28884,7 +28867,7 @@ var doc = `{
                 }
             }
         },
-        "workout_set.APIGetProductWorkoutSetsOutput": {
+        "workout_set.APIGetStoreWorkoutSetsOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -29013,14 +28996,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -29166,14 +29149,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -29319,14 +29302,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -29462,14 +29445,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",
@@ -29615,14 +29598,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",

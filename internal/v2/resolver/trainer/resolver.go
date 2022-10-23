@@ -50,7 +50,7 @@ func (r *resolver) APIGetTrainerProfile(input *model.APIGetTrainerProfileInput) 
 	return output
 }
 
-func (r *resolver) APIGetTrainer(input *model.APIGetTrainerInput) (output model.APIGetTrainerOutput) {
+func (r *resolver) APIGetStoreTrainer(input *model.APIGetStoreTrainerInput) (output model.APIGetStoreTrainerOutput) {
 	findInput := model.FindInput{}
 	findInput.UserID = util.PointerInt64(input.Uri.UserID)
 	findInput.Preloads = []*preload.Preload{
@@ -64,7 +64,7 @@ func (r *resolver) APIGetTrainer(input *model.APIGetTrainerInput) (output model.
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	data := model.APIGetTrainerData{}
+	data := model.APIGetStoreTrainerData{}
 	data.IsDeleted = trainerOutput.UserOnSafe().IsDeleted
 	if err := util.Parser(trainerOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -75,7 +75,7 @@ func (r *resolver) APIGetTrainer(input *model.APIGetTrainerInput) (output model.
 	return output
 }
 
-func (r *resolver) APIGetTrainers(input *model.APIGetTrainersInput) (output model.APIGetTrainersOutput) {
+func (r *resolver) APIGetStoreTrainers(input *model.APIGetStoreTrainersInput) (output model.APIGetStoreTrainersOutput) {
 	joins := make([]*joinModel.Join, 0)
 	wheres := make([]*whereModel.Where, 0)
 	orders := make([]*orderByModel.Order, 0)
@@ -101,7 +101,7 @@ func (r *resolver) APIGetTrainers(input *model.APIGetTrainersInput) (output mode
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	data := model.APIGetTrainersData{}
+	data := model.APIGetStoreTrainersData{}
 	if err := util.Parser(trainerOutputs, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

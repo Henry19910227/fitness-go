@@ -356,7 +356,7 @@ func (r *resolver) APIDeleteTrainerPlan(tx *gorm.DB, input *model.APIDeleteTrain
 	return output
 }
 
-func (r *resolver) APIGetProductPlans(input *model.APIGetProductPlansInput) (output model.APIGetProductPlansOutput) {
+func (r *resolver) APIGetStorePlans(input *model.APIGetStorePlansInput) (output model.APIGetStorePlansOutput) {
 	listInput := model.ListInput{}
 	listInput.CourseID = util.PointerInt64(input.Uri.CourseID)
 	planOutputs, _, err := r.planService.List(&listInput)
@@ -365,7 +365,7 @@ func (r *resolver) APIGetProductPlans(input *model.APIGetProductPlansInput) (out
 		return output
 	}
 	// parser output
-	data := model.APIGetProductPlansData{}
+	data := model.APIGetStorePlansData{}
 	if err := util.Parser(planOutputs, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

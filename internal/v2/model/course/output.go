@@ -462,12 +462,12 @@ type APISubmitTrainerCourseOutput struct {
 	base.Output
 }
 
-// APIGetProductCourseOutput /v2/product/course/{course_id} [GET]
-type APIGetProductCourseOutput struct {
+// APIGetStoreCourseOutput /v2/store/course/{course_id} [GET]
+type APIGetStoreCourseOutput struct {
 	base.Output
-	Data *APIGetProductCourseData `json:"data,omitempty"`
+	Data *APIGetStoreCourseData `json:"data,omitempty"`
 }
-type APIGetProductCourseData struct {
+type APIGetStoreCourseData struct {
 	courseOptional.IDField
 	courseOptional.SaleTypeField
 	courseOptional.SaleIDField
@@ -517,12 +517,12 @@ type APIGetProductCourseData struct {
 	} `json:"review_statistic"`
 }
 
-// APIGetProductCourseStructureOutput /v2/product/course/{course_id}/structure [GET]
-type APIGetProductCourseStructureOutput struct {
+// APIGetStoreCourseStructureOutput /v2/store/course/{course_id}/structure [GET]
+type APIGetStoreCourseStructureOutput struct {
 	base.Output
-	Data *APIGetProductCourseStructureData `json:"data,omitempty"`
+	Data *APIGetStoreCourseStructureData `json:"data,omitempty"`
 }
-type APIGetProductCourseStructureData struct {
+type APIGetStoreCourseStructureData struct {
 	courseOptional.IDField
 	courseOptional.SaleTypeField
 	courseOptional.SaleIDField
@@ -618,13 +618,13 @@ type APIGetProductCourseStructureData struct {
 	} `json:"trainer,omitempty"`
 }
 
-// APIGetProductCoursesOutput /v2/product/courses [GET]
-type APIGetProductCoursesOutput struct {
+// APIGetStoreCoursesOutput /v2/store/courses [GET]
+type APIGetStoreCoursesOutput struct {
 	base.Output
-	Data   *APIGetProductCoursesData `json:"data,omitempty"`
+	Data   *APIGetStoreCoursesData `json:"data,omitempty"`
 	Paging *paging.Output            `json:"paging,omitempty"`
 }
-type APIGetProductCoursesData []*struct {
+type APIGetStoreCoursesData []*struct {
 	courseOptional.IDField
 	courseOptional.SaleTypeField
 	courseOptional.CourseStatusField

@@ -37,5 +37,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.DELETE("/trainer/workout_set/:workout_set_id/start_audio", midd.Verify([]global.Role{global.UserRole}), controller.DeleteTrainerWorkoutSetStartAudio)
 	v2.DELETE("/trainer/workout_set/:workout_set_id/progress_audio", midd.Verify([]global.Role{global.UserRole}), controller.DeleteTrainerWorkoutSetProgressAudio)
 
-	v2.GET("/product/workout/:workout_id/workout_sets", midd.Verify([]global.Role{global.UserRole}), controller.GetProductWorkoutSets)
+	v2.GET("/store/workout/:workout_id/workout_sets", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreWorkoutSets)
 }

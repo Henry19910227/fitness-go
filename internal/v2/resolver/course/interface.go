@@ -33,7 +33,7 @@ type Resolver interface {
 	APIDeleteTrainerCourse(input *model.APIDeleteTrainerCourseInput) (output model.APIDeleteTrainerCourseOutput)
 	APISubmitTrainerCourse(input *model.APISubmitTrainerCourseInput) (output model.APISubmitTrainerCourseOutput)
 
-	APIGetProductCourse(input *model.APIGetProductCourseInput) (output model.APIGetProductCourseOutput)
-	APIGetProductCourses(input *model.APIGetProductCoursesInput) (output model.APIGetProductCoursesOutput)
-	APIGetProductCourseStructure(input *model.APIGetProductCourseStructureInput) (output model.APIGetProductCourseStructureOutput)
+	APIGetStoreCourse(input *model.APIGetStoreCourseInput) (output model.APIGetStoreCourseOutput)
+	APIGetStoreCourses(input *model.APIGetStoreCoursesInput) (output model.APIGetStoreCoursesOutput)
+	APIGetStoreCourseStructure(input *model.APIGetStoreCourseStructureInput) (output model.APIGetStoreCourseStructureOutput)
 }

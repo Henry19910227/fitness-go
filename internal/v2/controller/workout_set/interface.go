@@ -23,5 +23,5 @@ type Controller interface {
 	DeleteTrainerWorkoutSetProgressAudio(ctx *gin.Context)
 	CreateTrainerRestSet(ctx *gin.Context)
 
-	GetProductWorkoutSets(ctx *gin.Context)
+	GetStoreWorkoutSets(ctx *gin.Context)
 }

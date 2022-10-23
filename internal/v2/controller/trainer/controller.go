@@ -35,30 +35,30 @@ func (c *controller) GetTrainerProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetTrainer 獲取教練資訊
-// @Summary 獲取教練資訊
-// @Description 獲取教練資訊
+// GetStoreTrainer 獲取商店教練詳細資訊
+// @Summary 獲取商店教練詳細資訊
+// @Description 獲取商店教練詳細資訊
 // @Tags 商店_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
 // @Param user_id path int64 true "教練ID"
-// @Success 200 {object} trainer.APIGetTrainerOutput "成功!"
+// @Success 200 {object} trainer.APIGetStoreTrainerOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/trainer/{user_id} [GET]
-func (c *controller) GetTrainer(ctx *gin.Context) {
-	var input model.APIGetTrainerInput
+// @Router /v2/store/trainer/{user_id} [GET]
+func (c *controller) GetStoreTrainer(ctx *gin.Context) {
+	var input model.APIGetStoreTrainerInput
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetTrainer(&input)
+	output := c.resolver.APIGetStoreTrainer(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetTrainers 獲取教練列表
-// @Summary 獲取教練列表
-// @Description 獲取教練列表
+// GetStoreTrainers 獲取商店教練列表
+// @Summary 獲取商店教練列表
+// @Description 獲取商店教練列表
 // @Tags 商店_v2
 // @Accept json
 // @Produce json
@@ -66,16 +66,16 @@ func (c *controller) GetTrainer(ctx *gin.Context) {
 // @Param order_field query string false "排序類型(latest:最新/popular:熱門)-單選"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} trainer.APIGetTrainersOutput "成功!"
+// @Success 200 {object} trainer.APIGetStoreTrainersOutput "成功!"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/trainers [GET]
-func (c *controller) GetTrainers(ctx *gin.Context) {
-	var input model.APIGetTrainersInput
+// @Router /v2/store/trainers [GET]
+func (c *controller) GetStoreTrainers(ctx *gin.Context) {
+	var input model.APIGetStoreTrainersInput
 	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetTrainers(&input)
+	output := c.resolver.APIGetStoreTrainers(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

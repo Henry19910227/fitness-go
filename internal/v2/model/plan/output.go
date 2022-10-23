@@ -110,12 +110,12 @@ type APIDeleteTrainerPlanOutput struct {
 	base.Output
 }
 
-// APIGetProductPlansOutput /v2/product/course/{course_id}/plans [GET]
-type APIGetProductPlansOutput struct {
+// APIGetStorePlansOutput /v2/store/course/{course_id}/plans [GET]
+type APIGetStorePlansOutput struct {
 	base.Output
-	Data *APIGetProductPlansData `json:"data,omitempty"`
+	Data *APIGetStorePlansData `json:"data,omitempty"`
 }
-type APIGetProductPlansData []*struct {
+type APIGetStorePlansData []*struct {
 	planOptional.IDField
 	planOptional.NameField
 	planOptional.WorkoutCountField

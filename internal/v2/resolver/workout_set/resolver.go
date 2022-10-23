@@ -962,7 +962,7 @@ func (r *resolver) APICreateTrainerWorkoutSetByDuplicate(tx *gorm.DB, input *mod
 	return output
 }
 
-func (r *resolver) APIGetProductWorkoutSets(input *model.APIGetProductWorkoutSetsInput) (output model.APIGetProductWorkoutSetsOutput) {
+func (r *resolver) APIGetStoreWorkoutSets(input *model.APIGetStoreWorkoutSetsInput) (output model.APIGetStoreWorkoutSetsOutput) {
 	// 查詢
 	listInput := model.ListInput{}
 	listInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
@@ -975,7 +975,7 @@ func (r *resolver) APIGetProductWorkoutSets(input *model.APIGetProductWorkoutSet
 		return output
 	}
 	// parser output
-	data := model.APIGetProductWorkoutSetsData{}
+	data := model.APIGetStoreWorkoutSetsData{}
 	if err := util.Parser(setOutputs, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

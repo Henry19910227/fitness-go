@@ -986,7 +986,7 @@ func (r *resolver) APIDeleteTrainerWorkoutEndAudio(input *model.APIDeleteTrainer
 	return output
 }
 
-func (r *resolver) APIGetProductWorkouts(input *model.APIGetProductWorkoutsInput) (output model.APIGetProductWorkoutsOutput) {
+func (r *resolver) APIGetStoreWorkouts(input *model.APIGetStoreWorkoutsInput) (output model.APIGetStoreWorkoutsOutput) {
 	listInput := model.ListInput{}
 	listInput.PlanID = util.PointerInt64(input.Uri.PlanID)
 	workoutOutputs, _, err := r.workoutService.List(&listInput)
@@ -995,7 +995,7 @@ func (r *resolver) APIGetProductWorkouts(input *model.APIGetProductWorkoutsInput
 		return output
 	}
 	// parser output
-	data := model.APIGetProductWorkoutsData{}
+	data := model.APIGetStoreWorkoutsData{}
 	if err := util.Parser(workoutOutputs, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
