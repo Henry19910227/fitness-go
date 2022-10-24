@@ -5,21 +5,38 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	groupModel "github.com/Henry19910227/fitness-go/internal/v2/model/group"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/review"
+	reviewImageModel "github.com/Henry19910227/fitness-go/internal/v2/model/review_image"
+	reviewStatisticModel "github.com/Henry19910227/fitness-go/internal/v2/model/review_statistic"
+	trainerStatisticModel "github.com/Henry19910227/fitness-go/internal/v2/model/trainer_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	reviewService "github.com/Henry19910227/fitness-go/internal/v2/service/review"
+	reviewImageService "github.com/Henry19910227/fitness-go/internal/v2/service/review_image"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/review_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer_statistic"
+	"gorm.io/gorm"
 )
 
 type resolver struct {
-	reviewService reviewService.Service
-	uploadTool    uploader.Tool
+	reviewService      reviewService.Service
+	reviewImageService reviewImageService.Service
+	reviewStatisticService review_statistic.Service
+	trainerStatisticService trainer_statistic.Service
+	courseService course.Service
+	uploadTool         uploader.Tool
 }
 
-func New(orderService reviewService.Service, uploadTool uploader.Tool) Resolver {
-	return &resolver{reviewService: orderService, uploadTool: uploadTool}
+func New(reviewService reviewService.Service, reviewImageService reviewImageService.Service,
+	reviewStatisticService review_statistic.Service, trainerStatisticService trainer_statistic.Service,
+	courseService course.Service, uploadTool uploader.Tool) Resolver {
+	return &resolver{reviewService: reviewService, reviewImageService: reviewImageService,
+		reviewStatisticService: reviewStatisticService, trainerStatisticService: trainerStatisticService,
+		courseService: courseService, uploadTool: uploadTool}
 }
 
 func (r *resolver) APIGetCMSReviews(input *model.APIGetCMSReviewsInput) (output model.APIGetCMSReviewsOutput) {
@@ -140,5 +157,61 @@ func (r *resolver) APIGetStoreCourseReviews(input *model.APIGetStoreCourseReview
 	output.Set(code.Success, "success")
 	output.Paging = page
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APICreateStoreCourseReview(tx *gorm.DB, input *model.APICreateStoreCourseReviewInput) (output model.APICreateStoreCourseReviewOutput) {
+	defer tx.Rollback()
+	// 查詢課表資訊
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.ID = util.PointerInt64(input.Uri.CourseID)
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 新增 review
+	table := model.Table{}
+	table.UserID = util.PointerInt64(input.UserID)
+	table.CourseID = util.PointerInt64(input.Uri.CourseID)
+	table.Score = util.PointerInt(input.Form.Score)
+	table.Body = input.Form.Body
+	reviewID, err := r.reviewService.Tx(tx).Create(&table)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 新增 review image
+	reviewImageTables := make([]*reviewImageModel.Table, 0)
+	for _, file := range input.Files {
+		imageNamed, _ := r.uploadTool.Save(file.Data, file.Named)
+		if len(imageNamed) > 0 {
+			reviewImageTable := reviewImageModel.Table{}
+			reviewImageTable.ReviewID = util.PointerInt64(reviewID)
+			reviewImageTable.Image = util.PointerString(imageNamed)
+			reviewImageTables = append(reviewImageTables, &reviewImageTable)
+		}
+	}
+	if err := r.reviewImageService.Tx(tx).Create(reviewImageTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新評論統計
+	reviewStatisticInput := reviewStatisticModel.StatisticInput{}
+	reviewStatisticInput.CourseID = util.OnNilJustReturnInt64(courseOutput.ID, 0)
+	if err := r.reviewStatisticService.Tx(tx).Statistic(&reviewStatisticInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新教練統計
+	trainerStatisticInput := trainerStatisticModel.StatisticReviewScoreInput{}
+	trainerStatisticInput.UserID = util.OnNilJustReturnInt64(courseOutput.UserID, 0)
+	if err := r.trainerStatisticService.Tx(tx).StatisticReviewScore(&trainerStatisticInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// Parser output
+	output.Set(code.Success, "success")
 	return output
 }

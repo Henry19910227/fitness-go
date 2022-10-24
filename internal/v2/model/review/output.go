@@ -3,6 +3,7 @@ package review
 import (
 	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	reviewOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review/optional"
+	reviewImageOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review_image/optional"
 	userOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course"
@@ -42,9 +43,9 @@ type APIGetCMSReviewsData []*struct {
 		courseOptional.NameField
 	} `json:"course,omitempty"`
 	Images []*struct {
-		review_image.IDField
-		review_image.ImageField
-		review_image.CreateAtField
+		reviewImageOptional.IDField
+		reviewImageOptional.ImageField
+		reviewImageOptional.CreateAtField
 	} `json:"images,omitempty"`
 }
 
@@ -78,8 +79,13 @@ type APIGetStoreCourseReviewsData []*struct {
 		courseOptional.NameField
 	} `json:"course,omitempty"`
 	Images []*struct {
-		review_image.IDField
-		review_image.ImageField
-		review_image.CreateAtField
+		reviewImageOptional.IDField
+		reviewImageOptional.ImageField
+		reviewImageOptional.CreateAtField
 	} `json:"images,omitempty"`
+}
+
+// APICreateStoreCourseReviewOutput /v2/store/course/{course_id}/review [POST]
+type APICreateStoreCourseReviewOutput struct {
+	base.Output
 }

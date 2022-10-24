@@ -11227,6 +11227,68 @@ var doc = `{
                 }
             }
         },
+        "/v2/store/course/{course_id}/review": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看評論圖 https://www.fitopia-hub.tk/api/v2/resource/course/review/{圖片名}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "創建商店課表評論",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "評分",
+                        "name": "score",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "評論內文",
+                        "name": "body",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "評論照片(多張)",
+                        "name": "review_image[]",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/review.APICreateStoreCourseReviewOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/store/course/{course_id}/reviews": {
             "get": {
                 "security": [
@@ -11234,7 +11296,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}",
+                "description": "查看評論圖 https://www.fitopia-hub.tk/api/v2/resource/course/review/{圖片名}",
                 "consumes": [
                     "application/json"
                 ],
@@ -15401,12 +15463,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "計畫id",
                     "type": "integer",
                     "example": 1
                 },
@@ -15416,9 +15478,9 @@ var doc = `{
                     "example": "Henry教練"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "第一週增肌計畫"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15433,7 +15495,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -15464,7 +15526,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "動作id",
+                    "description": "計畫id",
                     "type": "integer",
                     "example": 1
                 }
@@ -15512,12 +15574,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "計畫id",
                     "type": "integer",
                     "example": 1
                 },
@@ -15527,9 +15589,9 @@ var doc = `{
                     "example": "Henry教練"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "第一週增肌計畫"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15544,7 +15606,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -15650,12 +15712,12 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "計畫id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15665,9 +15727,9 @@ var doc = `{
                                 "example": "Henry教練"
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "第一週增肌計畫"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15687,7 +15749,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15741,12 +15803,12 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "計畫id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15756,9 +15818,9 @@ var doc = `{
                                 "example": "Henry教練"
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "第一週增肌計畫"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15778,7 +15840,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15853,9 +15915,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "favorite": {
                                 "description": "是否收藏(0:否/1:是)",
@@ -15863,7 +15925,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "計畫id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -15873,9 +15935,9 @@ var doc = `{
                                 "example": "Henry教練"
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "第一週增肌計畫"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15895,7 +15957,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -15954,12 +16016,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "計畫id",
                     "type": "integer",
                     "example": 1
                 },
@@ -15969,9 +16031,9 @@ var doc = `{
                     "example": "Henry教練"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "第一週增肌計畫"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15986,7 +16048,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -16611,9 +16673,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "划船機"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -16658,9 +16720,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "划船機"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -18956,9 +19018,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "第一週增肌計畫"
                 }
             }
         },
@@ -19331,7 +19393,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "產品標籤id",
+                                                "description": "計畫id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -24277,9 +24339,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "划船機"
                 }
             }
         },
@@ -24318,9 +24380,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "划船機"
                 }
             }
         },
@@ -24662,9 +24724,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "划船機"
                 }
             }
         },
@@ -24781,6 +24843,21 @@ var doc = `{
                     "description": "用戶ID",
                     "type": "integer",
                     "example": 10001
+                }
+            }
+        },
+        "review.APICreateStoreCourseReviewOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },
@@ -25028,7 +25105,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -25066,9 +25143,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "第一週增肌計畫"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -25115,6 +25192,11 @@ var doc = `{
                 },
                 "trainer_statistic": {
                     "type": "object",
+                    "required": [
+                        "course_count",
+                        "review_score",
+                        "student_count"
+                    ],
                     "properties": {
                         "course_count": {
                             "description": "課表總數",
@@ -25194,7 +25276,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "nickname": {
                                 "description": "教練暱稱",
@@ -25268,7 +25350,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -25301,9 +25383,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "第一週增肌計畫"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -25350,6 +25432,11 @@ var doc = `{
                 },
                 "trainer_statistic": {
                     "type": "object",
+                    "required": [
+                        "course_count",
+                        "review_score",
+                        "student_count"
+                    ],
                     "properties": {
                         "course_count": {
                             "description": "課表總數",
@@ -28344,9 +28431,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "划船機"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -28359,7 +28446,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "計畫id",
                     "type": "integer",
                     "example": 1
                 }
@@ -28390,9 +28477,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "划船機"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -28405,7 +28492,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "計畫id",
                     "type": "integer",
                     "example": 1
                 }
@@ -28543,19 +28630,19 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "計畫id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "第一週增肌計畫"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -28565,7 +28652,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -28606,19 +28693,19 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "計畫id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "第一週增肌計畫"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -28628,7 +28715,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -28669,9 +28756,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "finish": {
                                 "description": "是否完成(0:未完成/1:已完成)",
@@ -28679,14 +28766,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "計畫id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "name": {
-                                "description": "產品名稱",
+                                "description": "計畫名稱",
                                 "type": "string",
-                                "example": "金卡會員(月)"
+                                "example": "第一週增肌計畫"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -28696,7 +28783,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -28727,19 +28814,19 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "計畫id",
                     "type": "integer",
                     "example": 1
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "第一週增肌計畫"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -28749,7 +28836,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -28790,19 +28877,19 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "計畫id",
                     "type": "integer",
                     "example": 1
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "第一週增肌計畫"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -28812,7 +28899,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -29388,9 +29475,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "計畫id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -29425,7 +29512,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -29544,9 +29631,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "計畫id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -29581,7 +29668,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -29697,9 +29784,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "計畫id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -29734,7 +29821,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -29850,9 +29937,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "計畫id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -29887,7 +29974,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -29993,9 +30080,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練組 id",
+                    "description": "計畫id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",
@@ -30030,7 +30117,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",
@@ -30146,9 +30233,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練組 id",
+                    "description": "計畫id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",
@@ -30183,7 +30270,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",

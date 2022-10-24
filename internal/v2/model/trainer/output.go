@@ -2,6 +2,7 @@ package trainer
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
+	trainerStatisticRequired "github.com/Henry19910227/fitness-go/internal/v2/field/trainer_statistic/required"
 	userOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/certificate"
@@ -62,9 +63,9 @@ type APIGetTrainerProfileData struct {
 		trainer_albums.CreateAtField
 	} `json:"trainer_album_photos,omitempty"`
 	TrainerStatistic *struct {
-		trainer_statistic.CourseCount
-		trainer_statistic.ReviewScore
-		trainer_statistic.StudentCount
+		trainerStatisticRequired.CourseCountField
+		trainerStatisticRequired.ReviewScoreField
+		trainerStatisticRequired.StudentCountField
 	} `json:"trainer_statistic,omitempty"`
 }
 
@@ -87,9 +88,9 @@ type APIGetStoreTrainerData struct {
 		trainer_albums.CreateAtField
 	} `json:"trainer_album_photos,omitempty"`
 	TrainerStatistic *struct {
-		trainer_statistic.CourseCount
-		trainer_statistic.ReviewScore
-		trainer_statistic.StudentCount
+		trainerStatisticRequired.CourseCountField
+		trainerStatisticRequired.ReviewScoreField
+		trainerStatisticRequired.StudentCountField
 	} `json:"trainer_statistic,omitempty"`
 }
 

@@ -5,6 +5,8 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/review"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/review"
+	"gorm.io/gorm"
+	"time"
 )
 
 type service struct {
@@ -13,6 +15,10 @@ type service struct {
 
 func New(repository review.Repository) Service {
 	return &service{repository: repository}
+}
+
+func (s *service) Tx(tx *gorm.DB) Service {
+	return NewService(tx)
 }
 
 func (s *service) Update(item *model.Table) (err error) {
@@ -59,4 +65,10 @@ func (s *service) Delete(input *model.DeleteInput) (err error) {
 func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {
 	output, err = s.repository.Find(input)
 	return output, err
+}
+
+func (s *service) Create(item *model.Table) (id int64, err error) {
+	item.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+	id, err = s.repository.Create(item)
+	return id, err
 }

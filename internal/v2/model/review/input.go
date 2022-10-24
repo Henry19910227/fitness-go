@@ -6,6 +6,7 @@ import (
 	reviewRequired "github.com/Henry19910227/fitness-go/internal/v2/field/review/required"
 	userOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	userRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/group"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -90,4 +91,19 @@ type APIGetStoreCourseReviewsUri struct {
 type APIGetStoreCourseReviewsQuery struct {
 	FilterType *int `json:"filter_type" form:"filter_type" binding:"omitempty,oneof=1 2" example:"1"` //篩選類型(1:全部/2:有照片)
 	PagingInput
+}
+
+// APICreateStoreCourseReviewInput /v2/store/course/{course_id}/review [POST]
+type APICreateStoreCourseReviewInput struct {
+	userRequired.UserIDField
+	Files []*file.Input
+	Uri   APICreateStoreCourseReviewUri
+	Form  APICreateStoreCourseReviewForm
+}
+type APICreateStoreCourseReviewUri struct {
+	reviewRequired.CourseIDField
+}
+type APICreateStoreCourseReviewForm struct {
+	reviewRequired.ScoreField
+	reviewOptional.BodyField
 }

@@ -13,7 +13,7 @@ type ScoreField struct {
 	Score *int `json:"score,omitempty" form:"score" binding:"omitempty,oneof=1 2 3 4 5" example:"5"` //評分(1~5分)
 }
 type BodyField struct {
-	Body *string `json:"body,omitempty" binding:"omitempty" example:"很棒的課表"` //內容
+	Body *string `json:"body,omitempty" form:"body" binding:"omitempty,max=400" example:"很棒的課表"` //內容
 }
 type CreateAtField struct {
 	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at" example:"2022-06-14 00:00:00"` //創建時間

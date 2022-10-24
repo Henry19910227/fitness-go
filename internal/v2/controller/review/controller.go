@@ -3,9 +3,11 @@ package review
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/review"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/review"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -93,7 +95,7 @@ func (c *controller) DeleteCMSReview(ctx *gin.Context) {
 
 // GetStoreCourseReviews 獲取商店課表評論列表
 // @Summary 獲取商店課表評論列表
-// @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
+// @Description 查看評論圖 https://www.fitopia-hub.tk/api/v2/resource/course/review/{圖片名}
 // @Tags 商店_v2
 // @Accept json
 // @Produce json
@@ -107,6 +109,7 @@ func (c *controller) DeleteCMSReview(ctx *gin.Context) {
 // @Router /v2/store/course/{course_id}/reviews [GET]
 func (c *controller) GetStoreCourseReviews(ctx *gin.Context) {
 	input := model.APIGetStoreCourseReviewsInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
@@ -116,5 +119,48 @@ func (c *controller) GetStoreCourseReviews(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetStoreCourseReviews(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// CreateStoreCourseReview 創建商店課表評論
+// @Summary 創建商店課表評論
+// @Description 查看評論圖 https://www.fitopia-hub.tk/api/v2/resource/course/review/{圖片名}
+// @Tags 商店_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Param score formData int true "評分"
+// @Param body formData string false "評論內文"
+// @Param review_image[] formData file false "評論照片(多張)"
+// @Success 200 {object} review.APICreateStoreCourseReviewOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/store/course/{course_id}/review [POST]
+func (c *controller) CreateStoreCourseReview(ctx *gin.Context) {
+	input := model.APICreateStoreCourseReviewInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBind(&input.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	fileDatas := ctx.Request.MultipartForm.File["review_image[]"]
+	if len(fileDatas) > 5 {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString("超過圖片上傳上限")))
+		return
+	}
+	files := make([]*file.Input, 0)
+	for _, fileData := range fileDatas {
+		data, _ := fileData.Open()
+		f := file.Input{}
+		f.Named = fileData.Filename
+		f.Data = data
+		files = append(files, &f)
+	}
+	input.Files = files
+	output := c.resolver.APICreateStoreCourseReview(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
