@@ -8,4 +8,5 @@ type Controller interface {
 	DeleteCMSReview(ctx *gin.Context)
 	GetStoreCourseReviews(ctx *gin.Context)
 	CreateStoreCourseReview(ctx *gin.Context)
+	DeleteStoreCourseReview(ctx *gin.Context)
 }

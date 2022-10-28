@@ -170,6 +170,19 @@ func (r *resolver) APICreateStoreCourseReview(tx *gorm.DB, input *model.APICreat
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	// 驗證是否有評分過此課表
+	reviewListInput := model.ListInput{}
+	reviewListInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+	reviewListInput.UserID = util.PointerInt64(input.UserID)
+	reviewOutputs, _, err := r.reviewService.Tx(tx).List(&reviewListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(reviewOutputs) > 0 {
+		output.Set(code.BadRequest, "已評分過此課表")
+		return output
+	}
 	// 新增 review
 	table := model.Table{}
 	table.UserID = util.PointerInt64(input.UserID)
@@ -211,6 +224,62 @@ func (r *resolver) APICreateStoreCourseReview(tx *gorm.DB, input *model.APICreat
 		return output
 	}
 	tx.Commit()
+	// Parser output
+	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIDeleteStoreCourseReview(tx *gorm.DB, input *model.APIDeleteStoreCourseReviewInput) (output model.APIDeleteStoreCourseReviewOutput) {
+	defer tx.Rollback()
+	// 查詢評論資訊
+	findReviewInput := model.FindInput{}
+	findReviewInput.ID = util.PointerInt64(input.Uri.ID)
+	findReviewInput.Preloads = []*preloadModel.Preload{
+		{Field: "Images"},
+	}
+	reviewOutput, err := r.reviewService.Tx(tx).Find(&findReviewInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if util.OnNilJustReturnInt64(reviewOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非評論發布者，無法刪除該評論")
+		return output
+	}
+	// 查詢課表資訊
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.ID = reviewOutput.CourseID
+	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除評論
+	deleteReviewInput := model.DeleteInput{}
+	deleteReviewInput.ID = util.PointerInt64(input.Uri.ID)
+	if err := r.reviewService.Tx(tx).Delete(&deleteReviewInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新評論統計
+	reviewStatisticInput := reviewStatisticModel.StatisticInput{}
+	reviewStatisticInput.CourseID = util.OnNilJustReturnInt64(courseOutput.ID, 0)
+	if err := r.reviewStatisticService.Tx(tx).Statistic(&reviewStatisticInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新教練統計
+	trainerStatisticInput := trainerStatisticModel.StatisticReviewScoreInput{}
+	trainerStatisticInput.UserID = util.OnNilJustReturnInt64(courseOutput.UserID, 0)
+	if err := r.trainerStatisticService.Tx(tx).StatisticReviewScore(&trainerStatisticInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// 刪除圖片檔
+	for _, image := range reviewOutput.Images{
+		_ = r.uploadTool.Delete(util.OnNilJustReturnString(image.Image, ""))
+	}
 	// Parser output
 	output.Set(code.Success, "success")
 	return output

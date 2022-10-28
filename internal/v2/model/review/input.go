@@ -37,6 +37,7 @@ type ListInput struct {
 	userOptional.NicknameField
 	reviewOptional.CourseIDField
 	reviewOptional.ScoreField
+	reviewOptional.UserIDField
 	JoinInput
 	GroupInput
 	WhereInput
@@ -106,4 +107,13 @@ type APICreateStoreCourseReviewUri struct {
 type APICreateStoreCourseReviewForm struct {
 	reviewRequired.ScoreField
 	reviewOptional.BodyField
+}
+
+// APIDeleteStoreCourseReviewInput /v2/store/course/{course_id}/review [DELETE]
+type APIDeleteStoreCourseReviewInput struct {
+	userRequired.UserIDField
+	Uri APIDeleteStoreCourseReviewUri
+}
+type APIDeleteStoreCourseReviewUri struct {
+	reviewRequired.IDField
 }

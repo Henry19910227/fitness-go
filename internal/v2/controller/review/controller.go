@@ -164,3 +164,25 @@ func (c *controller) CreateStoreCourseReview(ctx *gin.Context) {
 	output := c.resolver.APICreateStoreCourseReview(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+// DeleteStoreCourseReview 刪除商店課表評論
+// @Summary 刪除商店課表評論
+// @Description 刪除商店課表評論
+// @Tags 商店_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param review_id path int64 true "評論id"
+// @Success 200 {object} review.APIDeleteStoreCourseReviewOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/store/course/review/{review_id} [DELETE]
+func (c *controller) DeleteStoreCourseReview(ctx *gin.Context) {
+	input := model.APIDeleteStoreCourseReviewInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteStoreCourseReview(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}

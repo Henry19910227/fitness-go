@@ -89,3 +89,8 @@ type APIGetStoreCourseReviewsData []*struct {
 type APICreateStoreCourseReviewOutput struct {
 	base.Output
 }
+
+// APIDeleteStoreCourseReviewOutput /v2/store/course/{course_id}/review [DELETE]
+type APIDeleteStoreCourseReviewOutput struct {
+	base.Output
+}

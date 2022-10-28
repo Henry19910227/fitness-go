@@ -1,10 +1,10 @@
 package optional
 
 type IDField struct {
-	ID *int64 `json:"id,omitempty" binding:"omitempty" example:"1"` //評論id
+	ID *int64 `json:"id,omitempty" uri:"review_id" form:"review_id" binding:"omitempty" example:"1"` //評論id
 }
 type CourseIDField struct {
-	CourseID *int64 `json:"course_id,omitempty"  uri:"course_id" binding:"omitempty" example:"10"` //課表id
+	CourseID *int64 `json:"course_id,omitempty" uri:"course_id" binding:"omitempty" example:"10"` //課表id
 }
 type UserIDField struct {
 	UserID *int64 `json:"user_id,omitempty" binding:"omitempty" example:"10001"` //用戶id

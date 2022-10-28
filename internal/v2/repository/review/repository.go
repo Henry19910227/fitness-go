@@ -52,6 +52,10 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.CourseID != nil {
 		db = db.Where("reviews.course_id = ?", *input.CourseID)
 	}
+	//加入 reviews.user_id 篩選條件
+	if input.UserID != nil {
+		db = db.Where("reviews.user_id = ?", *input.UserID)
+	}
 	//加入 courses.name 篩選條件
 	if input.Name != nil {
 		db = db.Joins("INNER JOIN courses ON reviews.course_id = courses.id")

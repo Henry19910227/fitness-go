@@ -15,31 +15,31 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 課表名稱
+        example: 增肌課表
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -66,8 +66,8 @@ definitions:
   action.APICreateTrainerActionData:
     properties:
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
     type: object
   action.APICreateTrainerActionOutput:
@@ -99,31 +99,31 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 課表名稱
+        example: 增肌課表
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -203,23 +203,23 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
               example: 2,3,6
               type: string
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
-              description: 計畫名稱
-              example: 第一週增肌計畫
+              description: 課表名稱
+              example: 增肌課表
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -230,8 +230,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -273,23 +273,23 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
               example: 2,3,6
               type: string
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
-              description: 計畫名稱
-              example: 第一週增肌計畫
+              description: 課表名稱
+              example: 增肌課表
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -300,8 +300,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -358,7 +358,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
@@ -369,16 +369,16 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
-              description: 計畫名稱
-              example: 第一週增肌計畫
+              description: 課表名稱
+              example: 增肌課表
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -389,8 +389,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -436,31 +436,31 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 課表名稱
+        example: 增肌課表
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -926,8 +926,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -962,8 +962,8 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -2718,8 +2718,8 @@ definitions:
   course.APIUpdateUserCourseBody:
     properties:
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 課表名稱
+        example: 增肌課表
         type: string
     type: object
   course.APIUpdateUserCourseOutput:
@@ -3006,8 +3006,8 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 計畫id
-                      example: 1
+                      description: 課表 id
+                      example: 2
                       type: integer
                     product_id:
                       description: 產品id
@@ -6741,8 +6741,8 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
     required:
     - name
@@ -6770,8 +6770,8 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
     required:
     - name
@@ -7026,8 +7026,8 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
     required:
     - name
@@ -7130,6 +7130,17 @@ definitions:
         type: string
     type: object
   review.APIDeleteCMSReviewOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  review.APIDeleteStoreCourseReviewOutput:
     properties:
       code:
         description: 狀態碼
@@ -7309,7 +7320,7 @@ definitions:
         type: array
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       email:
         description: 信箱
@@ -7328,8 +7339,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       is_deleted:
         description: 是否刪除
@@ -7340,8 +7351,8 @@ definitions:
         example: 勞其筋骨
         type: string
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 課表名稱
+        example: 增肌課表
         type: string
       nickname:
         description: 教練暱稱
@@ -7440,7 +7451,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             nickname:
               description: 教練暱稱
@@ -7496,7 +7507,7 @@ definitions:
         type: array
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       email:
         description: 信箱
@@ -7515,16 +7526,16 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
         example: 勞其筋骨
         type: string
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 課表名稱
+        example: 增肌課表
         type: string
       nickname:
         description: 教練暱稱
@@ -9823,8 +9834,8 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -9836,8 +9847,8 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
     type: object
   workout.APICreateTrainerWorkoutOutput:
@@ -9856,8 +9867,8 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 動作名稱
-        example: 划船機
+        description: 教練本名
+        example: 亨利
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -9869,8 +9880,8 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
     type: object
   workout.APICreateUserWorkoutOutput:
@@ -9963,7 +9974,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -9974,12 +9985,12 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             name:
-              description: 計畫名稱
-              example: 第一週增肌計畫
+              description: 課表名稱
+              example: 增肌課表
               type: string
             start_audio:
               description: 前導語音
@@ -10011,7 +10022,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -10022,12 +10033,12 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             name:
-              description: 計畫名稱
-              example: 第一週增肌計畫
+              description: 課表名稱
+              example: 增肌課表
               type: string
             start_audio:
               description: 前導語音
@@ -10059,7 +10070,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -10074,12 +10085,12 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             name:
-              description: 計畫名稱
-              example: 第一週增肌計畫
+              description: 課表名稱
+              example: 增肌課表
               type: string
             start_audio:
               description: 前導語音
@@ -10104,7 +10115,7 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       end_audio:
         description: 結束語音
@@ -10115,12 +10126,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 課表名稱
+        example: 增肌課表
         type: string
       start_audio:
         description: 前導語音
@@ -10152,7 +10163,7 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       end_audio:
         description: 結束語音
@@ -10163,12 +10174,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
       name:
-        description: 計畫名稱
-        example: 第一週增肌計畫
+        description: 課表名稱
+        example: 增肌課表
         type: string
       start_audio:
         description: 前導語音
@@ -10595,7 +10606,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -10606,8 +10617,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -10630,8 +10641,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -10716,7 +10727,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -10727,8 +10738,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -10751,8 +10762,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -10835,7 +10846,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -10846,8 +10857,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -10870,8 +10881,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -10954,7 +10965,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -10965,8 +10976,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 計畫id
-              example: 1
+              description: 課表 id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -10989,8 +11000,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -11066,7 +11077,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       distance:
         description: 距離(公里)
@@ -11077,8 +11088,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
       incline:
         description: 坡度
@@ -11101,8 +11112,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -11185,7 +11196,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       distance:
         description: 距離(公里)
@@ -11196,8 +11207,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 計畫id
-        example: 1
+        description: 課表 id
+        example: 2
         type: integer
       incline:
         description: 坡度
@@ -11220,8 +11231,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -18340,6 +18351,33 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取商店課表結構
+      tags:
+      - 商店_v2
+  /v2/store/course/review/{review_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除商店課表評論
+      parameters:
+      - description: 評論id
+        in: path
+        name: review_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/review.APIDeleteStoreCourseReviewOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 刪除商店課表評論
       tags:
       - 商店_v2
   /v2/store/courses:

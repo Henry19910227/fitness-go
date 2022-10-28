@@ -1,7 +1,7 @@
 package required
 
 type IDField struct {
-	ID int64 `json:"id" form:"review_id" binding:"required" example:"1"` //評論id
+	ID int64 `json:"id" uri:"review_id" form:"review_id" binding:"required" example:"1"` //評論id
 }
 type CourseIDField struct {
 	CourseID int64 `json:"course_id" uri:"course_id" binding:"required" example:"10"` //課表id
