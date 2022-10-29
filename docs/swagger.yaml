@@ -22,16 +22,16 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
       intro:
         description: 課表介紹
         example: 增肌專用課表
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
@@ -66,8 +66,8 @@ definitions:
   action.APICreateTrainerActionData:
     properties:
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
     type: object
   action.APICreateTrainerActionOutput:
@@ -106,16 +106,16 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
       intro:
         description: 課表介紹
         example: 增肌專用課表
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
@@ -210,16 +210,16 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             intro:
               description: 課表介紹
               example: 增肌專用課表
               type: string
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -280,16 +280,16 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             intro:
               description: 課表介紹
               example: 增肌專用課表
               type: string
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -369,16 +369,16 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             intro:
               description: 課表介紹
               example: 增肌專用課表
               type: string
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
@@ -443,16 +443,16 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
       intro:
         description: 課表介紹
         example: 增肌專用課表
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       status:
         description: 動作狀態(0:下架/1:上架)
@@ -926,8 +926,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 教練本名
-        example: 亨利
+        description: 計畫名稱
+        example: 第一週增肌計畫
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -962,8 +962,8 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 計畫名稱
+        example: 第一週增肌計畫
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -2718,8 +2718,8 @@ definitions:
   course.APIUpdateUserCourseBody:
     properties:
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
     type: object
   course.APIUpdateUserCourseOutput:
@@ -3006,8 +3006,8 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 課表 id
-                      example: 2
+                      description: 銷售id
+                      example: 1
                       type: integer
                     product_id:
                       description: 產品id
@@ -6741,8 +6741,8 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 計畫名稱
+        example: 第一週增肌計畫
         type: string
     required:
     - name
@@ -6770,8 +6770,8 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 計畫名稱
+        example: 第一週增肌計畫
         type: string
     required:
     - name
@@ -7026,8 +7026,8 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 計畫名稱
+        example: 第一週增肌計畫
         type: string
     required:
     - name
@@ -7146,6 +7146,77 @@ definitions:
         description: 狀態碼
         example: 9000
         type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  review.APIGetStoreCourseReviewData:
+    properties:
+      body:
+        description: 內容
+        example: 很棒的課表
+        type: string
+      course:
+        properties:
+          id:
+            description: 課表 id
+            example: 2
+            type: integer
+          name:
+            description: 課表名稱
+            example: 增肌課表
+            type: string
+        type: object
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      id:
+        description: 評論id
+        example: 1
+        type: integer
+      images:
+        items:
+          properties:
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: 圖片id
+              example: 1
+              type: integer
+            image:
+              description: 圖片
+              example: 1234.jpg
+              type: string
+          type: object
+        type: array
+      score:
+        description: 評分(1~5分)
+        example: 5
+        type: integer
+      user:
+        properties:
+          id:
+            description: 帳戶id
+            example: 10001
+            type: integer
+          nickname:
+            description: 暱稱
+            example: henry
+            type: string
+        type: object
+    type: object
+  review.APIGetStoreCourseReviewOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/review.APIGetStoreCourseReviewData'
       msg:
         description: 訊息
         example: message..
@@ -7351,8 +7422,8 @@ definitions:
         example: 勞其筋骨
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       nickname:
         description: 教練暱稱
@@ -7534,8 +7605,8 @@ definitions:
         example: 勞其筋骨
         type: string
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       nickname:
         description: 教練暱稱
@@ -9834,8 +9905,8 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 計畫名稱
+        example: 第一週增肌計畫
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -9847,8 +9918,8 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
     type: object
   workout.APICreateTrainerWorkoutOutput:
@@ -9867,8 +9938,8 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 計畫名稱
+        example: 第一週增肌計畫
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -9880,8 +9951,8 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
     type: object
   workout.APICreateUserWorkoutOutput:
@@ -9985,12 +10056,12 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             start_audio:
               description: 前導語音
@@ -10033,12 +10104,12 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             start_audio:
               description: 前導語音
@@ -10085,12 +10156,12 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             name:
-              description: 課表名稱
-              example: 增肌課表
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             start_audio:
               description: 前導語音
@@ -10126,12 +10197,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       start_audio:
         description: 前導語音
@@ -10174,12 +10245,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
       name:
-        description: 課表名稱
-        example: 增肌課表
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       start_audio:
         description: 前導語音
@@ -10617,8 +10688,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -10738,8 +10809,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -10857,8 +10928,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -10976,8 +11047,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 銷售id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -11088,8 +11159,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
       incline:
         description: 坡度
@@ -11207,8 +11278,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 課表 id
-        example: 2
+        description: 銷售id
+        example: 1
         type: integer
       incline:
         description: 坡度
@@ -12843,7 +12914,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 創建評論
+      summary: 創建評論 (API已經過時，更新為 /v2/store/course/{course_id}/review [POST])
       tags:
       - Review_v1
   /v1/course_product/{course_id}/reviews:
@@ -12891,7 +12962,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取評論列表
+      summary: 獲取評論列表 (API已經過時，更新為 /v2/store/course/{course_id}/reviews [GET])
       tags:
       - Review_v1
   /v1/course_product_structure/{course_id}:
@@ -14318,7 +14389,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 刪除評論
+      summary: 刪除評論 (API已經過時，更新為 /v2/store/course/review/{review_id} [DELETE])
       tags:
       - Review_v1
     get:
@@ -14349,7 +14420,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取評論
+      summary: 獲取評論 (API已經過時，更新為 /v2/store/course/review/{review_id} [GET])
       tags:
       - Review_v1
   /v1/sale_items:
@@ -18378,6 +18449,32 @@ paths:
       security:
       - fitness_token: []
       summary: 刪除商店課表評論
+      tags:
+      - 商店_v2
+    get:
+      consumes:
+      - application/json
+      description: 查看評論圖 https://www.fitopia-hub.tk/api/v2/resource/course/review/{圖片名}
+      parameters:
+      - description: 評論id
+        in: path
+        name: review_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/review.APIGetStoreCourseReviewOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取商店課表評論
       tags:
       - 商店_v2
   /v2/store/courses:

@@ -2498,7 +2498,7 @@ var doc = `{
                 "tags": [
                     "Review_v1"
                 ],
-                "summary": "創建評論",
+                "summary": "創建評論 (API已經過時，更新為 /v2/store/course/{course_id}/review [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2572,7 +2572,7 @@ var doc = `{
                 "tags": [
                     "Review_v1"
                 ],
-                "summary": "獲取評論列表",
+                "summary": "獲取評論列表 (API已經過時，更新為 /v2/store/course/{course_id}/reviews [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4958,7 +4958,7 @@ var doc = `{
                 "tags": [
                     "Review_v1"
                 ],
-                "summary": "獲取評論",
+                "summary": "獲取評論 (API已經過時，更新為 /v2/store/course/review/{review_id} [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -5011,7 +5011,7 @@ var doc = `{
                 "tags": [
                     "Review_v1"
                 ],
-                "summary": "刪除評論",
+                "summary": "刪除評論 (API已經過時，更新為 /v2/store/course/review/{review_id} [DELETE])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -11142,6 +11142,47 @@ var doc = `{
             }
         },
         "/v2/store/course/review/{review_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看評論圖 https://www.fitopia-hub.tk/api/v2/resource/course/review/{圖片名}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商店_v2"
+                ],
+                "summary": "獲取商店課表評論",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "評論id",
+                        "name": "review_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/review.APIGetStoreCourseReviewOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -15511,9 +15552,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "intro": {
                     "description": "課表介紹",
@@ -15521,9 +15562,9 @@ var doc = `{
                     "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15569,9 +15610,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 }
             }
         },
@@ -15622,9 +15663,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "intro": {
                     "description": "課表介紹",
@@ -15632,9 +15673,9 @@ var doc = `{
                     "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -15760,9 +15801,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "intro": {
                                 "description": "課表介紹",
@@ -15770,9 +15811,9 @@ var doc = `{
                                 "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "課表名稱",
+                                "description": "銷售名稱",
                                 "type": "string",
-                                "example": "增肌課表"
+                                "example": "銅級課表 "
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15851,9 +15892,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "intro": {
                                 "description": "課表介紹",
@@ -15861,9 +15902,9 @@ var doc = `{
                                 "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "課表名稱",
+                                "description": "銷售名稱",
                                 "type": "string",
-                                "example": "增肌課表"
+                                "example": "銅級課表 "
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -15968,9 +16009,9 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "intro": {
                                 "description": "課表介紹",
@@ -15978,9 +16019,9 @@ var doc = `{
                                 "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "課表名稱",
+                                "description": "銷售名稱",
                                 "type": "string",
-                                "example": "增肌課表"
+                                "example": "銅級課表 "
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -16064,9 +16105,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "intro": {
                     "description": "課表介紹",
@@ -16074,9 +16115,9 @@ var doc = `{
                     "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -16716,9 +16757,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "第一週增肌計畫"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -16763,9 +16804,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "第一週增肌計畫"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -19061,9 +19102,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 }
             }
         },
@@ -19436,9 +19477,9 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "課表 id",
+                                                "description": "銷售id",
                                                 "type": "integer",
-                                                "example": 2
+                                                "example": 1
                                             },
                                             "product_id": {
                                                 "description": "產品id",
@@ -24382,9 +24423,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "第一週增肌計畫"
                 }
             }
         },
@@ -24423,9 +24464,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "第一週增肌計畫"
                 }
             }
         },
@@ -24767,9 +24808,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "第一週增肌計畫"
                 }
             }
         },
@@ -24926,6 +24967,102 @@ var doc = `{
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "review.APIGetStoreCourseReviewData": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "內容",
+                    "type": "string",
+                    "example": "很棒的課表"
+                },
+                "course": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "description": "課表 id",
+                            "type": "integer",
+                            "example": 2
+                        },
+                        "name": {
+                            "description": "課表名稱",
+                            "type": "string",
+                            "example": "增肌課表"
+                        }
+                    }
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "評論id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "圖片id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "image": {
+                                "description": "圖片",
+                                "type": "string",
+                                "example": "1234.jpg"
+                            }
+                        }
+                    }
+                },
+                "score": {
+                    "description": "評分(1~5分)",
+                    "type": "integer",
+                    "example": 5
+                },
+                "user": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "description": "帳戶id",
+                            "type": "integer",
+                            "example": 10001
+                        },
+                        "nickname": {
+                            "description": "暱稱",
+                            "type": "string",
+                            "example": "henry"
+                        }
+                    }
+                }
+            }
+        },
+        "review.APIGetStoreCourseReviewOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/review.APIGetStoreCourseReviewData"
                 },
                 "msg": {
                     "description": "訊息",
@@ -25201,9 +25338,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -25441,9 +25578,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -28489,9 +28626,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "第一週增肌計畫"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -28504,9 +28641,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 }
             }
         },
@@ -28535,9 +28672,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "計畫名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "第一週增肌計畫"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -28550,9 +28687,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 }
             }
         },
@@ -28693,14 +28830,14 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
-                                "description": "課表名稱",
+                                "description": "銷售名稱",
                                 "type": "string",
-                                "example": "增肌課表"
+                                "example": "銅級課表 "
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -28756,14 +28893,14 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
-                                "description": "課表名稱",
+                                "description": "銷售名稱",
                                 "type": "string",
-                                "example": "增肌課表"
+                                "example": "銅級課表 "
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -28824,14 +28961,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
-                                "description": "課表名稱",
+                                "description": "銷售名稱",
                                 "type": "string",
-                                "example": "增肌課表"
+                                "example": "銅級課表 "
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -28877,14 +29014,14 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -28940,14 +29077,14 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -29533,9 +29670,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -29689,9 +29826,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -29842,9 +29979,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -29995,9 +30132,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "銷售id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -30138,9 +30275,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",
@@ -30291,9 +30428,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "銷售id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",

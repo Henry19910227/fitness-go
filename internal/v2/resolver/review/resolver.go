@@ -160,6 +160,29 @@ func (r *resolver) APIGetStoreCourseReviews(input *model.APIGetStoreCourseReview
 	return output
 }
 
+func (r *resolver) APIGetStoreCourseReview(input *model.APIGetStoreCourseReviewInput) (output model.APIGetStoreCourseReviewOutput) {
+	findInput := model.FindInput{}
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "User"},
+		{Field: "Images"},
+	}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	reviewOutput, err := r.reviewService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parser Output
+	data := model.APIGetStoreCourseReviewData{}
+	if err := util.Parser(reviewOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
 func (r *resolver) APICreateStoreCourseReview(tx *gorm.DB, input *model.APICreateStoreCourseReviewInput) (output model.APICreateStoreCourseReviewOutput) {
 	defer tx.Rollback()
 	// 查詢課表資訊

@@ -85,12 +85,37 @@ type APIGetStoreCourseReviewsData []*struct {
 	} `json:"images,omitempty"`
 }
 
+// APIGetStoreCourseReviewOutput /v2/store/course/review/{review_id} [GET]
+type APIGetStoreCourseReviewOutput struct {
+	base.Output
+	Data *APIGetStoreCourseReviewData `json:"data,omitempty"`
+}
+type APIGetStoreCourseReviewData struct {
+	reviewOptional.IDField
+	reviewOptional.ScoreField
+	reviewOptional.BodyField
+	reviewOptional.CreateAtField
+	User *struct {
+		userOptional.IDField
+		userOptional.NicknameField
+	} `json:"user,omitempty"`
+	Course *struct {
+		courseOptional.IDField
+		courseOptional.NameField
+	} `json:"course,omitempty"`
+	Images []*struct {
+		reviewImageOptional.IDField
+		reviewImageOptional.ImageField
+		reviewImageOptional.CreateAtField
+	} `json:"images,omitempty"`
+}
+
 // APICreateStoreCourseReviewOutput /v2/store/course/{course_id}/review [POST]
 type APICreateStoreCourseReviewOutput struct {
 	base.Output
 }
 
-// APIDeleteStoreCourseReviewOutput /v2/store/course/{course_id}/review [DELETE]
+// APIDeleteStoreCourseReviewOutput /v2/store/course/review/{review_id} [DELETE]
 type APIDeleteStoreCourseReviewOutput struct {
 	base.Output
 }

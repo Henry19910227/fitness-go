@@ -122,6 +122,28 @@ func (c *controller) GetStoreCourseReviews(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// GetStoreCourseReview 獲取商店課表評論
+// @Summary 獲取商店課表評論
+// @Description 查看評論圖 https://www.fitopia-hub.tk/api/v2/resource/course/review/{圖片名}
+// @Tags 商店_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param review_id path int64 true "評論id"
+// @Success 200 {object} review.APIGetStoreCourseReviewOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/store/course/review/{review_id} [GET]
+func (c *controller) GetStoreCourseReview(ctx *gin.Context) {
+	input := model.APIGetStoreCourseReviewInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetStoreCourseReview(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // CreateStoreCourseReview 創建商店課表評論
 // @Summary 創建商店課表評論
 // @Description 查看評論圖 https://www.fitopia-hub.tk/api/v2/resource/course/review/{圖片名}

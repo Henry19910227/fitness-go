@@ -51,7 +51,7 @@ func NewReview(baseGroup *gin.RouterGroup,
 }
 
 // CreateReview 創建評論
-// @Summary 創建評論
+// @Summary 創建評論 (API已經過時，更新為 /v2/store/course/{course_id}/review [POST])
 // @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review_v1
 // @Accept json
@@ -106,7 +106,7 @@ func (r *Review) CreateReview(c *gin.Context) {
 }
 
 // GetReviews 獲取評論列表
-// @Summary 獲取評論列表
+// @Summary 獲取評論列表 (API已經過時，更新為 /v2/store/course/{course_id}/reviews [GET])
 // @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review_v1
 // @Accept json
@@ -152,7 +152,7 @@ func (r *Review) GetReviews(c *gin.Context) {
 }
 
 // GetReview 獲取評論
-// @Summary 獲取評論
+// @Summary 獲取評論 (API已經過時，更新為 /v2/store/course/review/{review_id} [GET])
 // @Description 查看評論圖 https://www.fitopia-hub.tk/api/v1/resource/course/review/{圖片名}
 // @Tags Review_v1
 // @Accept json
@@ -177,7 +177,7 @@ func (r *Review) GetReview(c *gin.Context) {
 }
 
 // DeleteReview 刪除評論
-// @Summary 刪除評論
+// @Summary 刪除評論 (API已經過時，更新為 /v2/store/course/review/{review_id} [DELETE])
 // @Description 刪除評論
 // @Tags Review_v1
 // @Accept json

@@ -10,6 +10,7 @@ type Resolver interface {
 	APIUpdateCMSReview(input *model.APIUpdateCMSReviewInput) (output model.APIUpdateCMSReviewOutput)
 	APIDeleteCMSReview(input *model.APIDeleteCMSReviewInput) (output model.APIDeleteCMSReviewOutput)
 	APIGetStoreCourseReviews(input *model.APIGetStoreCourseReviewsInput) (output model.APIGetStoreCourseReviewsOutput)
+	APIGetStoreCourseReview(input *model.APIGetStoreCourseReviewInput) (output model.APIGetStoreCourseReviewOutput)
 	APICreateStoreCourseReview(tx *gorm.DB, input *model.APICreateStoreCourseReviewInput) (output model.APICreateStoreCourseReviewOutput)
 	APIDeleteStoreCourseReview(tx *gorm.DB, input *model.APIDeleteStoreCourseReviewInput) (output model.APIDeleteStoreCourseReviewOutput)
 }

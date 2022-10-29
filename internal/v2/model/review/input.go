@@ -94,6 +94,15 @@ type APIGetStoreCourseReviewsQuery struct {
 	PagingInput
 }
 
+// APIGetStoreCourseReviewInput /v2/store/course/review/{review_id} [GET]
+type APIGetStoreCourseReviewInput struct {
+	userRequired.UserIDField
+	Uri APIGetStoreCourseReviewUri
+}
+type APIGetStoreCourseReviewUri struct {
+	reviewRequired.IDField
+}
+
 // APICreateStoreCourseReviewInput /v2/store/course/{course_id}/review [POST]
 type APICreateStoreCourseReviewInput struct {
 	userRequired.UserIDField
@@ -109,7 +118,7 @@ type APICreateStoreCourseReviewForm struct {
 	reviewOptional.BodyField
 }
 
-// APIDeleteStoreCourseReviewInput /v2/store/course/{course_id}/review [DELETE]
+// APIDeleteStoreCourseReviewInput /v2/store/course/review/{review_id} [DELETE]
 type APIDeleteStoreCourseReviewInput struct {
 	userRequired.UserIDField
 	Uri APIDeleteStoreCourseReviewUri
