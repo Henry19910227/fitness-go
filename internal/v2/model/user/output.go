@@ -240,3 +240,8 @@ type APIResetOTPValidateOutput struct {
 type APIUpdateResetPasswordOutput struct {
 	base.Output
 }
+
+// APIDeleteUserOutput /v2/user [DELETE]
+type APIDeleteUserOutput struct {
+	base.Output
+}

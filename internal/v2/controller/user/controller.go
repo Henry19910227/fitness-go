@@ -6,6 +6,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/user"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -557,5 +558,22 @@ func (c *controller) UpdateResetPassword(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIUpdateResetPassword(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// DeleteUser 刪除個人用戶帳號
+// @Summary 刪除個人用戶帳號
+// @Description 刪除個人用戶帳號
+// @Tags 用戶個人_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} user.APIDeleteUserOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user [DELETE]
+func (c *controller) DeleteUser(ctx *gin.Context) {
+	input := model.APIDeleteUserInput{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	output := c.resolver.APIDeleteUser(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }

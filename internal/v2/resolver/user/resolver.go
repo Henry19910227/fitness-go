@@ -11,18 +11,24 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iap"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/jwt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/line_login"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/mail"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/otp"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	receiptModel "github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user_subscribe_info"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 	"time"
 )
@@ -31,6 +37,7 @@ type resolver struct {
 	userService          user.Service
 	receiptService       receipt.Service
 	subscribeInfoService user_subscribe_info.Service
+	courseService 		 course.Service
 	otpTool              otp.Tool
 	cryptoTool           crypto.Tool
 	redisTool            redis.Tool
@@ -42,22 +49,23 @@ type resolver struct {
 	uploadTool           uploader.Tool
 	iapTool              iap.Tool
 	iabTool              iab.Tool
+	mailTool 			 mail.Tool
 }
 
 func New(userService user.Service, receiptService receipt.Service,
-	subscribeInfoService user_subscribe_info.Service, otpTool otp.Tool,
-	cryptoTool crypto.Tool, redisTool redis.Tool,
+	subscribeInfoService user_subscribe_info.Service, courseService course.Service,
+	otpTool otp.Tool, cryptoTool crypto.Tool, redisTool redis.Tool,
 	jwtTool jwt.Tool, fbLoginTool fb_login.Tool,
 	googleLoginTool google_login.Tool, appleLoginTool apple_login.Tool,
 	lineLoginTool line_login.Tool, uploadTool uploader.Tool,
-	iapTool iap.Tool, iabTool iab.Tool) Resolver {
+	iapTool iap.Tool, iabTool iab.Tool, mailTool mail.Tool) Resolver {
 	return &resolver{userService: userService, receiptService: receiptService,
-		subscribeInfoService: subscribeInfoService, otpTool: otpTool,
+		subscribeInfoService: subscribeInfoService, courseService: courseService, otpTool: otpTool,
 		cryptoTool: cryptoTool, redisTool: redisTool,
 		jwtTool: jwtTool, fbLoginTool: fbLoginTool,
 		googleLoginTool: googleLoginTool, appleLoginTool: appleLoginTool,
 		lineLoginTool: lineLoginTool, uploadTool: uploadTool,
-		iapTool: iapTool, iabTool: iabTool}
+		iapTool: iapTool, iabTool: iabTool, mailTool: mailTool}
 }
 
 func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput) {
@@ -980,6 +988,7 @@ func (r *resolver) APIUpdateResetPassword(input *model.APIUpdateResetPasswordInp
 	//驗證權限
 	listInput := model.ListInput{}
 	listInput.Email = util.PointerString(input.Body.Email)
+	listInput.IsDeleted = util.PointerInt(0)
 	listInput.Page = 1
 	listInput.Size = 1
 	listInput.OrderField = "create_at"
@@ -1014,11 +1023,73 @@ func (r *resolver) APIUpdateResetPassword(input *model.APIUpdateResetPasswordInp
 	return output
 }
 
+func (r *resolver) APIDeleteUser(ctx *gin.Context, tx *gorm.DB, input *model.APIDeleteUserInput) (output model.APIDeleteUserOutput) {
+	defer tx.Rollback()
+	// 查詢該用戶
+	listInput := model.ListInput{}
+	listInput.ID = util.PointerInt64(input.UserID)
+	listInput.IsDeleted = util.PointerInt(0)
+	listInput.Page = 1
+	listInput.Size = 1
+	listInput.OrderField = "create_at"
+	listInput.OrderType = orderBy.DESC
+	userOutputs, _, err := r.userService.Tx(tx).List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(userOutputs) == 0 {
+		output.Set(code.BadRequest, "查無此用戶")
+		return output
+	}
+	// 將該用戶更新為刪除狀態
+	table := model.Table{}
+	table.ID = util.PointerInt64(input.UserID)
+	table.IsDeleted = util.PointerInt(1)
+	if err := r.userService.Tx(tx).Update(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢該用戶上架的付費課表
+	courseListInput := courseModel.ListInput{}
+	courseListInput.UserID = util.PointerInt64(input.UserID)
+	courseListInput.SaleType = util.PointerInt(courseModel.SaleTypeCharge)
+	courseListInput.CourseStatus = util.PointerInt(courseModel.Sale)
+	courseOutputs, _, err := r.courseService.Tx(tx).List(&courseListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 將付費課表改為下架狀態
+	courseTables := make([]*courseModel.Table, 0)
+	for _, courseOutput := range courseOutputs {
+		courseTable := courseModel.Table{}
+		courseTable.ID = courseOutput.ID
+		courseTable.CourseStatus = util.PointerInt(courseModel.Remove)
+		courseTables = append(courseTables, &courseTable)
+	}
+	if err := r.courseService.Tx(tx).Updates(courseTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// 寄信
+	if err := r.mailTool.Send(util.OnNilJustReturnString(userOutputs[0].Email, ""), "健身帳戶刪除通知信", "您已刪除健身帳戶"); err != nil {
+		logger.Shared().Error(ctx, err.Error())
+	}
+	// 將token失效
+	if err := r.redisTool.Del(jwt.UserTokenPrefix + "." + strconv.Itoa(int(input.UserID))); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "刪除成功!")
+	return output
+}
+
 func (r *resolver) nicknameValidate(nickname string) (bool, error) {
 	//檢查帳號是否重複
 	listInput := model.ListInput{}
 	listInput.Nickname = util.PointerString(nickname)
-	listInput.IsDeleted = util.PointerInt(0)
 	outputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		return false, err
@@ -1030,7 +1101,6 @@ func (r *resolver) emailValidate(email string) (bool, error) {
 	//檢查帳號是否重複
 	listInput := model.ListInput{}
 	listInput.Email = util.PointerString(email)
-	listInput.IsDeleted = util.PointerInt(0)
 	outputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		return false, err
@@ -1042,7 +1112,6 @@ func (r *resolver) accountValidate(account string) (bool, error) {
 	//檢查帳號是否重複
 	listInput := model.ListInput{}
 	listInput.Account = util.PointerString(account)
-	listInput.IsDeleted = util.PointerInt(0)
 	outputs, _, err := r.userService.List(&listInput)
 	if err != nil {
 		return false, err

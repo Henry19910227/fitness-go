@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
 	"github.com/Henry19910227/fitness-go/internal/v2/controller/user"
+	"github.com/Henry19910227/fitness-go/internal/v2/middleware"
 	tokenMiddleware "github.com/Henry19910227/fitness-go/internal/v2/middleware/token"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -41,4 +42,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.POST("/reset_password/otp", controller.CreateResetOTP)
 	v2.POST("/reset_password/otp_validate", controller.ResetOTPValidate)
 	v2.PATCH("/reset_password/password", controller.UpdateResetPassword)
+	v2.DELETE("/user", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeleteUser)
+
 }

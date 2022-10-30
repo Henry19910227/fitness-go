@@ -3,9 +3,11 @@ package user
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"mime/multipart"
 )
 
@@ -15,17 +17,24 @@ type GenerateInput struct {
 
 type PagingInput = paging.Input
 type PreloadInput = preload.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
 type OrderByInput = orderBy.Input
+type CustomOrderByInput = orderBy.CustomInput
 
 type ListInput struct {
+	optional.IDField
 	optional.AccountField
 	optional.PasswordField
 	optional.NicknameField
 	optional.EmailField
 	optional.IsDeletedField
+	JoinInput
+	WhereInput
 	PagingInput
 	PreloadInput
 	OrderByInput
+	CustomOrderByInput
 }
 
 type FindInput struct {
@@ -269,4 +278,9 @@ type APIUpdateResetPasswordBody struct {
 	OTPCode string `json:"otp_code" binding:"required,max=16" example:"531476"`      // 信箱驗證碼
 	Email   string `json:"email" binding:"required,email" example:"henry@gmail.com"` // 信箱
 	required.PasswordField
+}
+
+// APIDeleteUserInput /v2/user [DELETE]
+type APIDeleteUserInput struct {
+	required.UserIDField
 }

@@ -32,4 +32,5 @@ type Controller interface {
 	CreateResetOTP(ctx *gin.Context)
 	ResetOTPValidate(ctx *gin.Context)
 	UpdateResetPassword(ctx *gin.Context)
+	DeleteUser(ctx *gin.Context)
 }

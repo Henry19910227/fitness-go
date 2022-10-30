@@ -1,6 +1,10 @@
 package user
 
-import model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
+import (
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
 
 type Resolver interface {
 	APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput)
@@ -30,4 +34,5 @@ type Resolver interface {
 	APICreateResetOTP(input *model.APICreateResetOTPInput) (output model.APICreateResetOTPOutput)
 	APIResetOTPValidate(input *model.APIResetOTPValidateInput) (output model.APIResetOTPValidateOutput)
 	APIUpdateResetPassword(input *model.APIUpdateResetPasswordInput) (output model.APIUpdateResetPasswordOutput)
+	APIDeleteUser(ctx *gin.Context, tx *gorm.DB, input *model.APIDeleteUserInput) (output model.APIDeleteUserOutput)
 }

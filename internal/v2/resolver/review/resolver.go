@@ -14,6 +14,7 @@ import (
 	reviewImageModel "github.com/Henry19910227/fitness-go/internal/v2/model/review_image"
 	reviewStatisticModel "github.com/Henry19910227/fitness-go/internal/v2/model/review_statistic"
 	trainerStatisticModel "github.com/Henry19910227/fitness-go/internal/v2/model/trainer_statistic"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	reviewService "github.com/Henry19910227/fitness-go/internal/v2/service/review"
 	reviewImageService "github.com/Henry19910227/fitness-go/internal/v2/service/review_image"
@@ -126,13 +127,19 @@ func (r *resolver) APIDeleteCMSReview(input *model.APIDeleteCMSReviewInput) (out
 func (r *resolver) APIGetStoreCourseReviews(input *model.APIGetStoreCourseReviewsInput) (output model.APIGetStoreCourseReviewsOutput) {
 	joins := make([]*joinModel.Join, 0)
 	groups := make([]*groupModel.Group, 0)
+	wheres := make([]*whereModel.Where, 0)
+
+	joins = append(joins, &joinModel.Join{Query: "INNER JOIN users ON users.id = reviews.user_id"})
+	wheres = append(wheres, &whereModel.Where{Query: "users.is_deleted = ?", Args: []interface{}{0}})
 	if util.OnNilJustReturnInt(input.Query.FilterType, 0) == 2 {
 		joins = append(joins, &joinModel.Join{Query: "INNER JOIN review_images ON review_images.review_id = reviews.id"})
 		groups = append(groups, &groupModel.Group{Name: "reviews.id"})
 	}
+
 	listInput := model.ListInput{}
 	listInput.CourseID = util.PointerInt64(input.Uri.CourseID)
 	listInput.Joins = joins
+	listInput.Wheres = wheres
 	listInput.Groups = groups
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "User"},
