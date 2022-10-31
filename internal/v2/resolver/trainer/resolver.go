@@ -117,16 +117,24 @@ func (r *resolver) APIGetStoreTrainers(input *model.APIGetStoreTrainersInput) (o
 
 func (r *resolver) APIGetFavoriteTrainers(input *model.APIGetFavoriteTrainersInput) (output model.APIGetFavoriteTrainersOutput) {
 	// parser input
-	param := model.FavoriteListInput{}
-	param.UserID = util.PointerInt64(input.UserID)
-	param.OrderField = "create_at"
-	param.OrderType = order_by.DESC
-	if err := util.Parser(input.Form, &param); err != nil {
+	listInput := model.ListInput{}
+	listInput.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN favorite_trainers ON trainers.user_id = favorite_trainers.trainer_id"},
+		{Query: "INNER JOIN users ON trainers.user_id = users.id"},
+	}
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "favorite_trainers.user_id = ?", Args: []interface{}{input.UserID}},
+		{Query: "users.is_deleted = ?", Args: []interface{}{0}},
+	}
+	listInput.Orders = []*orderByModel.Order{
+		{Value: fmt.Sprintf("favorite_trainers.%s %s", "create_at", order_by.DESC)},
+	}
+	if err := util.Parser(input.Form, &listInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	// 執行查詢
-	results, page, err := r.trainerService.FavoriteList(&param)
+	results, page, err := r.trainerService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
