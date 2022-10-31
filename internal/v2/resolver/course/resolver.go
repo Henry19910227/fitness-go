@@ -56,6 +56,7 @@ func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput
 	}
 	param.Wheres = []*whereModel.Where{
 		{Query: "favorite_courses.user_id = ?", Args: []interface{}{input.UserID}},
+		{Query: "courses.course_status = ?", Args: []interface{}{model.Sale}},
 	}
 	param.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
