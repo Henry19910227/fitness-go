@@ -1,6 +1,7 @@
 package bank_account
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/bank_account/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 )
 
@@ -18,13 +19,13 @@ type APIGetTrainerBankAccountOutput struct {
 	Data *APIGetTrainerBankAccountData `json:"data,omitempty"`
 }
 type APIGetTrainerBankAccountData struct {
-	AccountNameField
-	AccountImageField
-	BackCodeField
-	BranchField
-	AccountField
-	CreateAtField
-	UpdateAtField
+	optional.AccountNameField
+	optional.AccountImageField
+	optional.BankCodeField
+	optional.BranchField
+	optional.AccountField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APIUpdateTrainerBankAccountOutput /v2/trainer/bank_account [GET]

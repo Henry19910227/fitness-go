@@ -10,6 +10,22 @@ func NewTrainerAvatarTool() Tool {
 	return New(setting.NewTrainerAvatar())
 }
 
+func NewTrainerAlbumTool() Tool {
+	return New(setting.NewTrainerAlbum())
+}
+
+func NewCartFrontImageTool() Tool {
+	return New(setting.NewCardFrontImage())
+}
+
+func NewCartBackImageTool() Tool {
+	return New(setting.NewCardBackImage())
+}
+
+func NewCertificateImageTool() Tool {
+	return New(setting.NewCertificateImage())
+}
+
 func NewUserAvatarTool() Tool {
 	return New(setting.NewUserAvatar())
 }

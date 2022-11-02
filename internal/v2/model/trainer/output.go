@@ -1,21 +1,23 @@
 package trainer
 
 import (
+	certOptional "github.com/Henry19910227/fitness-go/internal/v2/field/certificate/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
+	trainerAlbumOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer_album/optional"
 	trainerStatisticRequired "github.com/Henry19910227/fitness-go/internal/v2/field/trainer_statistic/required"
 	userOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/certificate"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer_albums"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer_album"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer_statistic"
 )
 
 type Output struct {
 	Table
-	User             *UserOutput               `json:"user,omitempty" gorm:"foreignKey:id;references:user_id"`
-	TrainerAlbums    *[]trainer_albums.Output  `json:"trainer_album_photos,omitempty" gorm:"foreignKey:user_id;references:user_id"`
-	Certificates     *[]certificate.Output     `json:"certificates,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	User             *UserOutput             `json:"user,omitempty" gorm:"foreignKey:id;references:user_id"`
+	TrainerAlbums    *[]trainer_album.Output `json:"trainer_album_photos,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	Certificates     *[]certificate.Output   `json:"certificates,omitempty" gorm:"foreignKey:user_id;references:user_id"`
 	TrainerStatistic *trainer_statistic.Output `json:"trainer_statistic,omitempty" gorm:"foreignKey:user_id;references:user_id"`
 }
 
@@ -53,14 +55,38 @@ type APIGetTrainerProfileOutput struct {
 type APIGetTrainerProfileData struct {
 	Table
 	Certificates []*struct {
-		certificate.IDField
-		certificate.ImageField
-		certificate.NameField
+		certOptional.IDField
+		certOptional.ImageField
+		certOptional.NameField
 	} `json:"certificates,omitempty"`
 	TrainerAlbumPhotos []*struct {
-		trainer_albums.IDField
-		trainer_albums.PhotoField
-		trainer_albums.CreateAtField
+		trainerAlbumOptional.IDField
+		trainerAlbumOptional.PhotoField
+		trainerAlbumOptional.CreateAtField
+	} `json:"trainer_album_photos,omitempty"`
+	TrainerStatistic *struct {
+		trainerStatisticRequired.CourseCountField
+		trainerStatisticRequired.ReviewScoreField
+		trainerStatisticRequired.StudentCountField
+	} `json:"trainer_statistic,omitempty"`
+}
+
+// APICreateTrainerOutput /v2/trainer [POST]
+type APICreateTrainerOutput struct {
+	base.Output
+	Data *APICreateTrainerData `json:"data,omitempty"`
+}
+type APICreateTrainerData struct {
+	Table
+	Certificates []*struct {
+		certOptional.IDField
+		certOptional.ImageField
+		certOptional.NameField
+	} `json:"certificates,omitempty"`
+	TrainerAlbumPhotos []*struct {
+		trainerAlbumOptional.IDField
+		trainerAlbumOptional.PhotoField
+		trainerAlbumOptional.CreateAtField
 	} `json:"trainer_album_photos,omitempty"`
 	TrainerStatistic *struct {
 		trainerStatisticRequired.CourseCountField
@@ -78,14 +104,14 @@ type APIGetStoreTrainerData struct {
 	Table
 	userOptional.IsDeletedField
 	Certificates []*struct {
-		certificate.IDField
-		certificate.ImageField
-		certificate.NameField
+		certOptional.IDField
+		certOptional.ImageField
+		certOptional.NameField
 	} `json:"certificates,omitempty"`
 	TrainerAlbumPhotos []*struct {
-		trainer_albums.IDField
-		trainer_albums.PhotoField
-		trainer_albums.CreateAtField
+		trainerAlbumOptional.IDField
+		trainerAlbumOptional.PhotoField
+		trainerAlbumOptional.CreateAtField
 	} `json:"trainer_album_photos,omitempty"`
 	TrainerStatistic *struct {
 		trainerStatisticRequired.CourseCountField

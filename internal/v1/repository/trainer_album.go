@@ -29,7 +29,7 @@ func (t *trainerAlbum) CreateAlbumPhoto(uid int64, imageNamed string) error {
 
 func (t *trainerAlbum) FindAlbumPhotoByUID(uid int64) ([]*model.TrainerAlbumPhotoEntity, error) {
 	photos := make([]*model.TrainerAlbumPhotoEntity, 0)
-	if err := t.gorm.DB().Table("trainer_albums").
+	if err := t.gorm.DB().Table("trainer_album").
 		Select("id", "photo", "create_at").
 		Where("user_id = ?", uid).
 		Find(&photos).Error; err != nil {

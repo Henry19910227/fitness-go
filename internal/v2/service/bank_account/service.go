@@ -5,6 +5,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/bank_account"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/bank_account"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -14,6 +15,17 @@ type service struct {
 
 func New(repository bank_account.Repository) Service {
 	return &service{repository: repository}
+}
+
+func (s *service) Tx(tx *gorm.DB) Service {
+	return NewService(tx)
+}
+
+func (s *service) Create(item *model.Table) (err error) {
+	item.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+	item.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+	err = s.repository.Create(item)
+	return err
 }
 
 func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {

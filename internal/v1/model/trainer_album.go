@@ -8,7 +8,7 @@ type TrainerAlbumPhoto struct {
 }
 
 func (TrainerAlbumPhoto) TableName() string {
-	return "trainer_albums"
+	return "trainer_album"
 }
 
 type TrainerAlbumPhotoEntity struct {
