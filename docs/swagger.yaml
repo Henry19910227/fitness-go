@@ -18,16 +18,16 @@ definitions:
         example: "2022-06-12 00:00:00"
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -66,7 +66,7 @@ definitions:
   action.APICreateTrainerActionData:
     properties:
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
     type: object
@@ -102,16 +102,16 @@ definitions:
         example: "2022-06-12 00:00:00"
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -206,16 +206,16 @@ definitions:
               example: "2022-06-12 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -276,16 +276,16 @@ definitions:
               example: "2022-06-12 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -361,20 +361,20 @@ definitions:
               example: "2022-06-12 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             favorite:
               description: 是否收藏(0:否/1:是)
               example: 1
               type: integer
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -439,16 +439,16 @@ definitions:
         example: "2022-06-12 00:00:00"
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -3006,7 +3006,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 圖片id
+                      description: 產品標籤id
                       example: 1
                       type: integer
                     product_id:
@@ -4481,7 +4481,8 @@ definitions:
       orderId:
         type: string
       paymentState:
-        description: 0. Payment pending 1. Payment received 2. Free trial 3. Pending deferred upgrade/downgrade
+        description: 0. Payment pending 1. Payment received 2. Free trial 3. Pending
+          deferred upgrade/downgrade
         type: integer
       priceAmountMicros:
         type: string
@@ -4925,7 +4926,8 @@ definitions:
         description: App Store 退還交易或從家庭共享中撤銷交易的 UNIX 時間（以毫秒為單位）
         type: integer
       revocationReason:
-        description: App Store 退還交易或從家庭共享中撤銷交易的原因(0:Apple Support 因其他原因代表客戶退還交易；例如，意外購買/1:由於您的應用程序中存在實際或感知的問題，Apple 支持代表客戶退還了交易)
+        description: App Store 退還交易或從家庭共享中撤銷交易的原因(0:Apple Support 因其他原因代表客戶退還交易；例如，意外購買/1:由於您的應用程序中存在實際或感知的問題，Apple
+          支持代表客戶退還了交易)
         type: string
       signedDate:
         description: App Store 對 JSON Web 簽名 (JWS) 數據進行簽名的 UNIX 時間（以毫秒為單位)
@@ -4937,7 +4939,8 @@ definitions:
         description: 交易的唯一標識符
         type: string
       type:
-        description: 應用內購買的產品類型(Auto-Renewable Subscription/Non-Consumable/Consumable/Non-Renewing Subscription)
+        description: 應用內購買的產品類型(Auto-Renewable Subscription/Non-Consumable/Consumable/Non-Renewing
+          Subscription)
         type: string
       webOrderLineItemId:
         description: 跨設備訂閱購買事件的唯一標識符，包括訂閱續訂
@@ -6268,7 +6271,8 @@ definitions:
   order.APIAppStoreNotificationBody:
     properties:
       signedPayload:
-        description: The payload in JSON Web Signature (JWS) format, signed by the App Store
+        description: The payload in JSON Web Signature (JWS) format, signed by the
+          App Store
         example: MIJOlgYJKoZIhvcN...
         type: string
     type: object
@@ -7380,8 +7384,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -7559,8 +7563,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       is_deleted:
         description: 是否刪除
@@ -7750,8 +7754,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -7852,6 +7856,151 @@ definitions:
       data:
         example: 123.jpg
         type: string
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  trainer.APIUpdateTrainerData:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: abc.png
+        type: string
+      certificates:
+        items:
+          properties:
+            id:
+              description: id
+              example: 1
+              type: integer
+            image:
+              description: 圖片
+              example: 1234.jpg
+              type: string
+            name:
+              description: 證照名稱
+              example: A級教練證照
+              type: string
+          required:
+          - id
+          - image
+          - name
+          type: object
+        type: array
+      create_at:
+        description: 創建時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: henry@gmail.com
+        type: string
+      experience:
+        description: 年資
+        example: 5
+        type: integer
+      facebook_url:
+        description: 臉書連結
+        example: www.facebook.com
+        type: string
+      instagram_url:
+        description: ig連結
+        example: www.ig.com
+        type: string
+      intro:
+        description: 課表介紹
+        example: 增肌專用課表
+        type: string
+      motto:
+        description: 座右銘
+        example: 勞其筋骨
+        type: string
+      name:
+        description: 教練本名
+        example: 亨利
+        type: string
+      nickname:
+        description: 教練暱稱
+        example: Henry
+        type: string
+      phone:
+        description: 電話
+        example: "0955123321"
+        type: string
+      skill:
+        description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        example: 1,4
+        type: string
+      trainer_album_photos:
+        items:
+          properties:
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: 相片id
+              example: 1
+              type: integer
+            photo:
+              description: 照片
+              example: 123.jpg
+              type: string
+          type: object
+        type: array
+      trainer_level:
+        description: 教練評鑑等級
+        example: 1
+        type: integer
+      trainer_statistic:
+        properties:
+          course_count:
+            description: 課表總數
+            example: 15
+            type: integer
+          review_score:
+            description: 課表總評分
+            example: 4.5
+            type: number
+          student_count:
+            description: 學生總數
+            example: 10
+            type: integer
+        required:
+        - course_count
+        - review_score
+        - student_count
+        type: object
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 10001
+        type: integer
+      youtube_url:
+        description: youtube連結
+        example: www.youtube.com
+        type: string
+    type: object
+  trainer.APIUpdateTrainerOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/trainer.APIUpdateTrainerData'
       msg:
         description: 訊息
         example: message..
@@ -10080,7 +10229,7 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
     type: object
@@ -10111,7 +10260,7 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
     type: object
@@ -10212,11 +10361,11 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             name:
@@ -10260,11 +10409,11 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             name:
@@ -10308,15 +10457,15 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             finish:
               description: 是否完成(0:未完成/1:已完成)
               example: 1
               type: integer
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             name:
@@ -10353,11 +10502,11 @@ definitions:
         example: 123.mp3
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
       name:
@@ -10401,11 +10550,11 @@ definitions:
         example: 123.mp3
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
       name:
@@ -10848,7 +10997,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             incline:
@@ -10969,7 +11118,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             incline:
@@ -11088,7 +11237,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             incline:
@@ -11207,7 +11356,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 產品標籤id
               example: 1
               type: integer
             incline:
@@ -11319,7 +11468,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
       incline:
@@ -11438,7 +11587,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 圖片id
+        description: 產品標籤id
         example: 1
         type: integer
       incline:
@@ -11587,7 +11736,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名}
+        查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -13154,7 +13304,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取課表結構(只限單一訓練課表) (API已過時，更新為 /v2/product/course/{course_id}/structure [GET])
+      summary: 獲取課表結構(只限單一訓練課表) (API已過時，更新為 /v2/product/course/{course_id}/structure
+        [GET])
       tags:
       - Explore_v1
   /v1/course_products:
@@ -14496,7 +14647,8 @@ paths:
           description: 該資料已存在
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 驗證信箱是否可使用 (/v2/register/email/validate [POST] 和 /v2/register/email_account/validate [POST] 替代)
+      summary: 驗證信箱是否可使用 (/v2/register/email/validate [POST] 和 /v2/register/email_account/validate
+        [POST] 替代)
       tags:
       - Register_v1
   /v1/register/nickname/validate:
@@ -14727,7 +14879,12 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -14827,13 +14984,18 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 編輯教練
+      summary: 編輯教練 (API已經過時，更新為 /v2/trainer [PATCH])
       tags:
       - Trainer_v1
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -14965,7 +15127,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 創建教練
+      summary: 創建教練 (API已經過時，更新為 /v2/trainer [POST])
       tags:
       - Trainer_v1
   /v1/trainer/{user_id}:
@@ -14997,7 +15159,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 取得指定教練資訊
+      summary: 取得指定教練資訊 (API已經過時，更新為 /v2/store/trainer/{user_id} [GET])
       tags:
       - Trainer_v1
   /v1/trainer/{user_id}/course_products:
@@ -15088,7 +15250,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 取得教練列表
+      summary: 取得教練列表 (API已經過時，更新為 /v2/store/trainers [GET])
       tags:
       - Trainer_v1
   /v1/user/avatar:
@@ -15399,7 +15561,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 修改訓練組的順序
+      summary: 修改訓練組的順序 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_set_orders
+        [API])
       tags:
       - Workout_v1
   /v1/workout/{workout_id}/rest_set:
@@ -15458,7 +15621,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 刪除訓練前導語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/start_audio [DELETE])
+      summary: 刪除訓練前導語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/start_audio
+        [DELETE])
       tags:
       - Workout_v1
     post:
@@ -15568,7 +15732,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 取得訓練內的訓練組列表 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_sets [GET])
+      summary: 取得訓練內的訓練組列表 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_sets
+        [GET])
       tags:
       - Workout_v1
   /v1/workout_asset/{workout_id}/workout_log:
@@ -15773,7 +15938,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取訓練組列表(探索區課表) (API已經過時，更新為 /v2/product/workout/{workout_id}/workout_sets [GET])
+      summary: 獲取訓練組列表(探索區課表) (API已經過時，更新為 /v2/product/workout/{workout_id}/workout_sets
+        [GET])
       tags:
       - Explore_v1
   /v1/workout_set/{workout_set_id}:
@@ -15882,7 +16048,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 複製訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/duplicate [POST])
+      summary: 複製訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/duplicate
+        [POST])
       tags:
       - WorkoutSet_v1
   /v1/workout_set/{workout_set_id}/progress_audio:
@@ -15909,7 +16076,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 刪除訓練組進行中語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/progress_audio [DELETE])
+      summary: 刪除訓練組進行中語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/progress_audio
+        [DELETE])
       tags:
       - WorkoutSet_v1
     post:
@@ -15972,7 +16140,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 刪除訓練組前導語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/start_audio [DELETE])
+      summary: 刪除訓練組前導語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/start_audio
+        [DELETE])
       tags:
       - WorkoutSet_v1
     post:
@@ -16364,7 +16533,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}'
+      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 :
+        {Base URL}/v2/resource/action/video/{Filename}'
       parameters:
       - description: 動作id
         in: path
@@ -17601,7 +17771,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/favorite_action.APIDeleteFavoriteActionOutput'
         "400":
@@ -17627,7 +17798,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/favorite_action.APICreateFavoriteActionOutput'
         "400":
@@ -18437,7 +18609,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIGetUserCourseOutput'
         "400":
@@ -18888,10 +19061,119 @@ paths:
       tags:
       - 支付_v2
   /v2/trainer:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/account_image/{圖片名}'
+      parameters:
+      - description: 教練暱稱
+        in: formData
+        name: nickname
+        type: string
+      - description: 專長-需按照順序排列(範例:1,3,5)(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        in: formData
+        name: skill
+        type: string
+      - description: 教練介紹 (1~400字元)
+        in: formData
+        name: intro
+        type: string
+      - description: 年資 (0~40年)
+        in: formData
+        name: experience
+        type: string
+      - description: 座右銘 (1~100字元)
+        in: formData
+        name: motto
+        type: string
+      - description: 臉書連結
+        in: formData
+        name: facebook_url
+        type: string
+      - description: instagram連結
+        in: formData
+        name: instagram_url
+        type: string
+      - description: youtube連結
+        in: formData
+        name: youtube_url
+        type: string
+      - description: 教練形象照
+        in: formData
+        name: avatar
+        type: file
+      - description: 刪除的相簿照片id
+        in: formData
+        items:
+          type: integer
+        name: delete_trainer_album_photos_id
+        type: array
+      - description: 新增的教練相簿照片(可一次新增多張)
+        in: formData
+        name: create_trainer_album_photos
+        type: file
+      - description: 刪除的證照照片id
+        in: formData
+        items:
+          type: integer
+        name: delete_certificate_id
+        type: array
+      - description: 更新的證照照片id(可一次更新多個id)
+        in: formData
+        items:
+          type: integer
+        name: update_certificate_id
+        type: array
+      - description: 更新的證照照片(需與待更新的證照照片id數量相同)
+        in: formData
+        name: update_certificate_images
+        type: file
+      - description: 更新的證照名稱(需與待更新的證照照片id數量相同)
+        in: formData
+        items:
+          type: string
+        name: update_certificate_names
+        type: array
+      - description: 新增的證照照片(可一次新增多張)
+        in: formData
+        name: create_certificate_images
+        type: file
+      - description: 新增的證照名稱(需與待新增的證照照片數量相同)
+        in: formData
+        items:
+          type: string
+        name: create_certificate_names
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/trainer.APIUpdateTrainerOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 編輯教練
+      tags:
+      - 教練個人_v2
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -18903,7 +19185,7 @@ paths:
         name: nickname
         required: true
         type: string
-      - description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+      - description: 專長-需按照順序排列(範例:1,3,5)(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
         in: formData
         name: skill
         required: true
@@ -19023,7 +19305,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}'
+      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 :
+        {Base URL}/v2/resource/action/video/{Filename}'
       parameters:
       - description: 動作名稱(1~20字元)
         in: formData
@@ -19068,7 +19351,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APICreateTrainerActionOutput'
         "400":
@@ -19095,7 +19379,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIDeleteTrainerActionOutput'
         "400":
@@ -19149,7 +19434,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIUpdateTrainerActionOutput'
         "400":
@@ -19176,7 +19462,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIDeleteTrainerActionOutput'
         "400":
@@ -19228,7 +19515,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIGetTrainerActionsOutput'
         "400":
@@ -19318,7 +19606,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied(需訂閱權限)
           schema:
             $ref: '#/definitions/course.APICreateTrainerCourseOutput'
         "400":
@@ -19345,7 +19634,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIDeleteTrainerCourseOutput'
         "400":
@@ -19371,7 +19661,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIGetUserCourseOutput'
         "400":
@@ -19486,7 +19777,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APICreateTrainerPlanOutput'
         "400":
@@ -19540,7 +19832,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APISubmitTrainerCourseOutput'
         "400":
@@ -19603,7 +19896,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APIDeleteTrainerPlanOutput'
         "400":
@@ -19636,7 +19930,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APICreateTrainerWorkoutOutput'
         "400":
@@ -19711,7 +20006,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteTrainerWorkoutOutput'
         "400":
@@ -19726,7 +20022,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔 : {Base URL}/v2/resource/workout/end_audio/{Filename}'
+      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔
+        : {Base URL}/v2/resource/workout/end_audio/{Filename}'
       parameters:
       - description: 訓練id
         in: path
@@ -19753,7 +20050,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIUpdateTrainerWorkoutOutput'
         "400":
@@ -19780,7 +20078,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteTrainerWorkoutEndAudioOutput'
         "400":
@@ -19807,7 +20106,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateTrainerRestSetOutput'
         "400":
@@ -19834,7 +20134,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteTrainerWorkoutStartAudioOutput'
         "400":
@@ -19926,7 +20227,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateTrainerWorkoutSetsOutput'
         "400":
@@ -19953,7 +20255,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteTrainerWorkoutSetOutput'
         "400":
@@ -19968,7 +20271,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3 進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
+      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3
+        進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
       parameters:
       - description: 訓練組id
         in: path
@@ -20015,7 +20319,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIUpdateTrainerWorkoutSetOutput'
         "400":
@@ -20048,7 +20353,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateTrainerWorkoutSetByDuplicateOutput'
         "400":
@@ -20075,7 +20381,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteTrainerWorkoutSetProgressAudioOutput'
         "400":
@@ -20102,7 +20409,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteTrainerWorkoutSetStartAudioOutput'
         "400":
@@ -20139,7 +20447,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}'
+      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 :
+        {Base URL}/v2/resource/action/video/{Filename}'
       parameters:
       - description: 動作名稱(1~20字元)
         in: formData
@@ -20184,7 +20493,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APICreateUserActionOutput'
         "400":
@@ -20211,7 +20521,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIDeleteUserActionOutput'
         "400":
@@ -20265,7 +20576,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIUpdateUserActionOutput'
         "400":
@@ -20292,7 +20604,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIDeleteUserActionVideoOutput'
         "400":
@@ -20313,7 +20626,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIGetUserActionSystemImagesOutput'
         "400":
@@ -20365,7 +20679,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIGetUserActionsOutput'
         "400":
@@ -20420,7 +20735,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied(需訂閱權限)
           schema:
             $ref: '#/definitions/course.APICreateUserCourseOutput'
         "400":
@@ -20447,7 +20763,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIDeleteUserCourseOutput'
         "400":
@@ -20473,7 +20790,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIGetUserCourseOutput'
         "400":
@@ -20505,7 +20823,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIUpdateUserCourseOutput'
         "400":
@@ -20538,7 +20857,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APICreateUserPlanOutput'
         "400":
@@ -20655,7 +20975,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APIDeleteUserPlanOutput'
         "400":
@@ -20687,7 +21008,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APIUpdateUserPlanOutput'
         "400":
@@ -20720,7 +21042,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APICreateUserWorkoutOutput'
         "400":
@@ -20843,7 +21166,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteUserWorkoutOutput'
         "400":
@@ -20858,7 +21182,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔 : {Base URL}/v2/resource/workout/end_audio/{Filename}'
+      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔
+        : {Base URL}/v2/resource/workout/end_audio/{Filename}'
       parameters:
       - description: 訓練id
         in: path
@@ -20885,7 +21210,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIUpdateUserWorkoutOutput'
         "400":
@@ -20912,7 +21238,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteUserWorkoutEndAudioOutput'
         "400":
@@ -20939,7 +21266,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateUserRestSetOutput'
         "400":
@@ -20966,7 +21294,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteUserWorkoutStartAudioOutput'
         "400":
@@ -20999,7 +21328,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_log.APICreateUserWorkoutLogOutput'
         "400":
@@ -21091,7 +21421,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateUserWorkoutSetsOutput'
         "400":
@@ -21118,7 +21449,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteUserWorkoutSetOutput'
         "400":
@@ -21133,7 +21465,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3 進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
+      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3
+        進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
       parameters:
       - description: 訓練組id
         in: path
@@ -21180,7 +21513,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIUpdateUserWorkoutSetOutput'
         "400":
@@ -21213,7 +21547,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateUserWorkoutSetByDuplicateOutput'
         "400":
@@ -21240,7 +21575,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteUserWorkoutSetProgressAudioOutput'
         "400":
@@ -21267,7 +21603,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteUserWorkoutSetStartAudioOutput'
         "400":

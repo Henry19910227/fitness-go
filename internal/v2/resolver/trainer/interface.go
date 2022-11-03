@@ -7,6 +7,7 @@ import (
 
 type Resolver interface {
 	APICreateTrainer(tx *gorm.DB, input *model.APICreateTrainerInput) (output model.APICreateTrainerOutput)
+	APIUpdateTrainer(tx *gorm.DB, input *model.APIUpdateTrainerInput) (output model.APIUpdateTrainerOutput)
 	APIGetTrainerProfile(input *model.APIGetTrainerProfileInput) (output model.APIGetTrainerProfileOutput)
 	APIGetStoreTrainer(input *model.APIGetStoreTrainerInput) (output model.APIGetStoreTrainerOutput)
 	APIGetStoreTrainers(input *model.APIGetStoreTrainersInput) (output model.APIGetStoreTrainersOutput)

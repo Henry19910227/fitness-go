@@ -9,4 +9,6 @@ type Repository interface {
 	WithTrx(tx *gorm.DB) Repository
 	Create(item *model.Table) (id int64, err error)
 	Creates(items []*model.Table) (err error)
+	Deletes(inputs []*model.DeleteInput) (err error)
+	List(input *model.ListInput) (outputs []*model.Output, amount int64, err error)
 }

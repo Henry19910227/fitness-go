@@ -8,5 +8,5 @@ type TrainerAlbum struct {
 }
 
 func (TrainerAlbum) TableName() string {
-	return "trainer_album"
+	return "trainer_albums"
 }

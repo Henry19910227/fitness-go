@@ -24,17 +24,17 @@ import (
 )
 
 type resolver struct {
-	trainerService trainer.Service
+	trainerService      trainer.Service
 	trainerAlbumService trainer_album.Service
-	cardService card.Service
-	certService certificate.Service
-	bankAccountService bank_account.Service
-	avatarUploadTool uploader.Tool
-	albumUploadTool uploader.Tool
+	cardService         card.Service
+	certService         certificate.Service
+	bankAccountService  bank_account.Service
+	avatarUploadTool    uploader.Tool
+	albumUploadTool     uploader.Tool
 	cardFrontUploadTool uploader.Tool
-	cardBackUploadTool uploader.Tool
-	certUploadTool    uploader.Tool
-	accountUploadTool uploader.Tool
+	cardBackUploadTool  uploader.Tool
+	certUploadTool      uploader.Tool
+	accountUploadTool   uploader.Tool
 }
 
 func New(trainerService trainer.Service, trainerAlbumService trainer_album.Service,
@@ -46,7 +46,7 @@ func New(trainerService trainer.Service, trainerAlbumService trainer_album.Servi
 	return &resolver{trainerService: trainerService, trainerAlbumService: trainerAlbumService,
 		cardService: cardService, certService: certService,
 		bankAccountService: bankAccountService,
-		avatarUploadTool: avatarUploadTool, albumUploadTool: albumUploadTool,
+		avatarUploadTool:   avatarUploadTool, albumUploadTool: albumUploadTool,
 		cardFrontUploadTool: cardFrontUploadTool, cardBackUploadTool: cardBackUploadTool,
 		certUploadTool: certUploadTool, accountUploadTool: accountUploadTool}
 }
@@ -182,6 +182,206 @@ func (r *resolver) APICreateTrainer(tx *gorm.DB, input *model.APICreateTrainerIn
 		return output
 	}
 	data := model.APICreateTrainerData{}
+	if err := util.Parser(trainerOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIUpdateTrainer(tx *gorm.DB, input *model.APIUpdateTrainerInput) (output model.APIUpdateTrainerOutput) {
+	// 查詢教練資訊
+	findInput := model.FindInput{}
+	findInput.Preloads = []*preload.Preload{{Field: "Certificates"}, {Field: "TrainerAlbums"}}
+	trainerOutput, err := r.trainerService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證教練相簿刪除限制
+	albumListInput := albumModel.ListInput{}
+	albumListInput.Wheres = []*whereModel.Where{
+		{Query: "trainer_albums.id IN (?)", Args: []interface{}{input.Form.DeleteAlbumPhotosIDs}},
+	}
+	deleteAlbumOutputs, _, err := r.trainerAlbumService.List(&albumListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	for _, albumOutput := range deleteAlbumOutputs {
+		if util.OnNilJustReturnInt64(albumOutput.UserID, 0) != input.UserID {
+			output.Set(code.BadRequest, "非此教練相簿照片擁有者，無法刪除資源")
+			return output
+		}
+	}
+	if len(deleteAlbumOutputs) != len(input.Form.DeleteAlbumPhotosIDs) {
+		output.Set(code.BadRequest, "查無某些教練相簿照片，無法刪除資源")
+		return output
+	}
+	// 驗證教練相簿新增限制
+	if len(trainerOutput.TrainerAlbums)-len(input.Form.DeleteAlbumPhotosIDs)+len(input.CreateAlbumPhotos) > 5 {
+		output.Set(code.BadRequest, "教練相簿數量超過上限，無法新增資源")
+		return output
+	}
+	// 驗證證照刪除限制
+	certListInput := certModel.ListInput{}
+	certListInput.Wheres = []*whereModel.Where{
+		{Query: "certificates.id IN (?)", Args: []interface{}{input.Form.DeleteCertificateIDs}},
+	}
+	deleteCertOutputs, _, err := r.certService.List(&certListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	for _, certOutput := range deleteCertOutputs {
+		if util.OnNilJustReturnInt64(certOutput.UserID, 0) != input.UserID {
+			output.Set(code.BadRequest, "非此證照照片擁有者，無法刪除資源")
+			return output
+		}
+	}
+	if len(deleteCertOutputs) != len(input.Form.DeleteCertificateIDs) {
+		output.Set(code.BadRequest, "查無某些證照照片，無法刪除資源")
+		return output
+	}
+	// 驗證證照更新限制
+	certListInput = certModel.ListInput{}
+	certListInput.Wheres = []*whereModel.Where{
+		{Query: "certificates.id IN (?)", Args: []interface{}{input.Form.UpdateCertificateIDs}},
+	}
+	updateCertOutputs, _, err := r.certService.List(&certListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	for _, certOutput := range updateCertOutputs {
+		if util.OnNilJustReturnInt64(certOutput.UserID, 0) != input.UserID {
+			output.Set(code.BadRequest, "非此證照照片擁有者，無法更新資源")
+			return output
+		}
+	}
+	if len(updateCertOutputs) != len(input.Form.UpdateCertificateIDs) {
+		output.Set(code.BadRequest, "查無某些證照照片，無法更新資源")
+		return output
+	}
+	if len(input.Form.UpdateCertificateIDs) != len(input.UpdateCertificateImages) || len(input.Form.UpdateCertificateIDs) != len(input.Form.UpdateCertificateNames) {
+		output.Set(code.BadRequest, "更新證照的照片或名稱與證照ID數量不相等，無法更新資源")
+		return output
+	}
+	// 驗證證照新增限制
+	if len(input.Form.CreateCertificateNames) != len(input.CreateCertificateImages) {
+		output.Set(code.BadRequest, "新增證照的照片與名稱數量不相等，無法更新資源")
+		return output
+	}
+	defer tx.Rollback()
+	// 刪除教練相簿照片
+	albumDeleteInputs := make([]*albumModel.DeleteInput, 0)
+	for _, id := range input.Form.DeleteAlbumPhotosIDs {
+		deleteInput := albumModel.DeleteInput{}
+		deleteInput.ID = util.PointerInt64(id)
+		albumDeleteInputs = append(albumDeleteInputs, &deleteInput)
+	}
+	if err := r.trainerAlbumService.Tx(tx).Deletes(albumDeleteInputs); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 刪除證照照片
+	certDeleteInputs := make([]*certModel.DeleteInput, 0)
+	for _, id := range input.Form.DeleteCertificateIDs {
+		deleteInput := certModel.DeleteInput{}
+		deleteInput.ID = util.PointerInt64(id)
+		certDeleteInputs = append(certDeleteInputs, &deleteInput)
+	}
+	if err := r.certService.Tx(tx).Deletes(certDeleteInputs); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新教練資訊
+	trainerTable := model.Table{}
+	trainerTable.Nickname = input.Form.Nickname
+	trainerTable.Skill = input.Form.Skill
+	trainerTable.Intro = input.Form.Intro
+	trainerTable.Experience = input.Form.Experience
+	trainerTable.Motto = input.Form.Motto
+	trainerTable.FacebookURL = input.Form.FacebookURL
+	trainerTable.InstagramURL = input.Form.InstagramURL
+	trainerTable.YoutubeURL = input.Form.YoutubeURL
+	if input.Avatar != nil {
+		avatar, _ := r.avatarUploadTool.Save(input.Avatar.Data, input.Avatar.Named)
+		trainerTable.Avatar = util.PointerString(avatar)
+	}
+	if err := r.trainerService.Tx(tx).Update(&trainerTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 更新證照照片
+	certTables := make([]*certModel.Table, 0)
+	for idx, id := range input.Form.UpdateCertificateIDs {
+		file := input.UpdateCertificateImages[idx]
+		name := input.Form.UpdateCertificateNames[idx]
+		imageNamed, _ := r.certUploadTool.Save(file.Data, file.Named)
+		certTable := certModel.Table{}
+		certTable.ID = util.PointerInt64(id)
+		certTable.Name = util.PointerString(name)
+		certTable.Image = util.PointerString(imageNamed)
+		certTables = append(certTables, &certTable)
+	}
+	if err := r.certService.Tx(tx).Updates(certTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 新增證照照片
+	certTables = make([]*certModel.Table, 0)
+	for idx, name := range input.Form.CreateCertificateNames {
+		file := input.CreateCertificateImages[idx]
+		imageNamed, _ := r.certUploadTool.Save(file.Data, file.Named)
+		certTable := certModel.Table{}
+		certTable.UserID = util.PointerInt64(input.UserID)
+		certTable.Name = util.PointerString(name)
+		certTable.Image = util.PointerString(imageNamed)
+		certTables = append(certTables, &certTable)
+	}
+	if err := r.certService.Tx(tx).Creates(certTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 新增教練相簿照片
+	albumTables := make([]*albumModel.Table, 0)
+	for _, file := range input.CreateAlbumPhotos {
+		imageNamed, _ := r.albumUploadTool.Save(file.Data, file.Named)
+		albumTable := albumModel.Table{}
+		albumTable.UserID = util.PointerInt64(input.UserID)
+		albumTable.Photo = util.PointerString(imageNamed)
+		albumTables = append(albumTables, &albumTable)
+	}
+	if err := r.trainerAlbumService.Tx(tx).Creates(albumTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// 刪除已經刪除的教練相簿檔案
+	for _, albumOutput := range deleteAlbumOutputs {
+		_ = r.albumUploadTool.Delete(util.OnNilJustReturnString(albumOutput.Photo, ""))
+	}
+	// 刪除已經刪除的證照檔案
+	for _, certOutput := range deleteCertOutputs {
+		_ = r.certUploadTool.Delete(util.OnNilJustReturnString(certOutput.Image, ""))
+	}
+	// 刪除已經更新的證照檔案
+	for _, certOutput := range updateCertOutputs {
+		_ = r.certUploadTool.Delete(util.OnNilJustReturnString(certOutput.Image, ""))
+	}
+	// Parser output
+	findTrainerInput := model.FindInput{}
+	findTrainerInput.UserID = util.PointerInt64(input.UserID)
+	findTrainerInput.Preloads = []*preload.Preload{{Field: "TrainerStatistic"}, {Field: "Certificates"}, {Field: "TrainerAlbums"}}
+	trainerOutput, err = r.trainerService.Find(&findTrainerInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := model.APIUpdateTrainerData{}
 	if err := util.Parser(trainerOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

@@ -15,9 +15,9 @@ import (
 
 type Output struct {
 	Table
-	User             *UserOutput             `json:"user,omitempty" gorm:"foreignKey:id;references:user_id"`
-	TrainerAlbums    *[]trainer_album.Output `json:"trainer_album_photos,omitempty" gorm:"foreignKey:user_id;references:user_id"`
-	Certificates     *[]certificate.Output   `json:"certificates,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	User             *UserOutput               `json:"user,omitempty" gorm:"foreignKey:id;references:user_id"`
+	TrainerAlbums    []*trainer_album.Output   `json:"trainer_album_photos,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	Certificates     []*certificate.Output     `json:"certificates,omitempty" gorm:"foreignKey:user_id;references:user_id"`
 	TrainerStatistic *trainer_statistic.Output `json:"trainer_statistic,omitempty" gorm:"foreignKey:user_id;references:user_id"`
 }
 
@@ -95,6 +95,30 @@ type APICreateTrainerData struct {
 	} `json:"trainer_statistic,omitempty"`
 }
 
+// APIUpdateTrainerOutput /v2/trainer [PATCH]
+type APIUpdateTrainerOutput struct {
+	base.Output
+	Data *APIUpdateTrainerData `json:"data,omitempty"`
+}
+type APIUpdateTrainerData struct {
+	Table
+	Certificates []*struct {
+		certOptional.IDField
+		certOptional.ImageField
+		certOptional.NameField
+	} `json:"certificates,omitempty"`
+	TrainerAlbumPhotos []*struct {
+		trainerAlbumOptional.IDField
+		trainerAlbumOptional.PhotoField
+		trainerAlbumOptional.CreateAtField
+	} `json:"trainer_album_photos,omitempty"`
+	TrainerStatistic *struct {
+		trainerStatisticRequired.CourseCountField
+		trainerStatisticRequired.ReviewScoreField
+		trainerStatisticRequired.StudentCountField
+	} `json:"trainer_statistic,omitempty"`
+}
+
 // APIGetStoreTrainerOutput /v2/store/trainer/{user_id} [GET]
 type APIGetStoreTrainerOutput struct {
 	base.Output
@@ -123,8 +147,8 @@ type APIGetStoreTrainerData struct {
 // APIGetStoreTrainersOutput /v2/store/trainers [GET]
 type APIGetStoreTrainersOutput struct {
 	base.Output
-	Data *APIGetStoreTrainersData `json:"data,omitempty"`
-	Paging *paging.Output         `json:"paging,omitempty"`
+	Data   *APIGetStoreTrainersData `json:"data,omitempty"`
+	Paging *paging.Output           `json:"paging,omitempty"`
 }
 type APIGetStoreTrainersData []*struct {
 	optional.UserIDField

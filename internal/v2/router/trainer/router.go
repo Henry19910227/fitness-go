@@ -21,6 +21,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.StaticFS("/resource/trainer/certificate", http.Dir("./volumes/storage/trainer/certificate"))
 
 	v2.POST("/trainer", middleware.Transaction(orm.Shared().DB()) , midd.Verify([]global.Role{global.UserRole}), controller.CreateTrainer)
+	v2.PATCH("/trainer", middleware.Transaction(orm.Shared().DB()) , midd.Verify([]global.Role{global.UserRole}), controller.UpdateTrainer)
 	v2.GET("/trainer/profile", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerProfile)
 	v2.GET("/store/trainer/:user_id", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreTrainer)
 	v2.GET("/store/trainers", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreTrainers)

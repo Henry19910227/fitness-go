@@ -56,6 +56,9 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 }
 
 func (s *service) Updates(items []*model.Table) (err error) {
+	if len(items) == 0 {
+		return err
+	}
 	// 查找須更新的資料
 	itemMap := make(map[int64]*model.Table)
 	courseIDs := make([]int64, 0)

@@ -5299,7 +5299,7 @@ var doc = `{
                 "tags": [
                     "Trainer_v1"
                 ],
-                "summary": "創建教練",
+                "summary": "創建教練 (API已經過時，更新為 /v2/trainer [POST])",
                 "parameters": [
                     {
                         "type": "string",
@@ -5505,7 +5505,7 @@ var doc = `{
                 "tags": [
                     "Trainer_v1"
                 ],
-                "summary": "編輯教練",
+                "summary": "編輯教練 (API已經過時，更新為 /v2/trainer [PATCH])",
                 "parameters": [
                     {
                         "type": "string",
@@ -5673,7 +5673,7 @@ var doc = `{
                 "tags": [
                     "Trainer_v1"
                 ],
-                "summary": "取得指定教練資訊",
+                "summary": "取得指定教練資訊 (API已經過時，更新為 /v2/store/trainer/{user_id} [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -5806,7 +5806,7 @@ var doc = `{
                 "tags": [
                     "Trainer_v1"
                 ],
-                "summary": "取得教練列表",
+                "summary": "取得教練列表 (API已經過時，更新為 /v2/store/trainers [GET])",
                 "parameters": [
                     {
                         "type": "string",
@@ -6343,7 +6343,7 @@ var doc = `{
                 "tags": [
                     "Workout_v1"
                 ],
-                "summary": "修改訓練組的順序",
+                "summary": "修改訓練組的順序 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_set_orders [API])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -11906,7 +11906,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "description": "專長-需按照順序排列(範例:1,3,5)(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
                         "name": "skill",
                         "in": "formData",
                         "required": true
@@ -12053,6 +12053,157 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/trainer.APICreateTrainerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "查看教練大頭照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/account_image/{圖片名}",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練個人_v2"
+                ],
+                "summary": "編輯教練",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "教練暱稱",
+                        "name": "nickname",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "專長-需按照順序排列(範例:1,3,5)(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                        "name": "skill",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "教練介紹 (1~400字元)",
+                        "name": "intro",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "年資 (0~40年)",
+                        "name": "experience",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "座右銘 (1~100字元)",
+                        "name": "motto",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "臉書連結",
+                        "name": "facebook_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "instagram連結",
+                        "name": "instagram_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "youtube連結",
+                        "name": "youtube_url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "教練形象照",
+                        "name": "avatar",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "刪除的相簿照片id",
+                        "name": "delete_trainer_album_photos_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "新增的教練相簿照片(可一次新增多張)",
+                        "name": "create_trainer_album_photos",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "刪除的證照照片id",
+                        "name": "delete_certificate_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "更新的證照照片id(可一次更新多個id)",
+                        "name": "update_certificate_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "更新的證照照片(需與待更新的證照照片id數量相同)",
+                        "name": "update_certificate_images",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "更新的證照名稱(需與待更新的證照照片id數量相同)",
+                        "name": "update_certificate_names",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "新增的證照照片(可一次新增多張)",
+                        "name": "create_certificate_images",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "新增的證照名稱(需與待新增的證照照片數量相同)",
+                        "name": "create_certificate_names",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/trainer.APIUpdateTrainerOutput"
                         }
                     },
                     "400": {
@@ -15774,19 +15925,19 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -15837,7 +15988,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 }
@@ -15885,19 +16036,19 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16023,19 +16174,19 @@ var doc = `{
                                 "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16114,19 +16265,19 @@ var doc = `{
                                 "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16226,9 +16377,9 @@ var doc = `{
                                 "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "favorite": {
                                 "description": "是否收藏(0:否/1:是)",
@@ -16236,14 +16387,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16327,19 +16478,19 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -19704,7 +19855,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "圖片id",
+                                                "description": "產品標籤id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -25509,9 +25660,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -25744,9 +25895,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -25994,9 +26145,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -26127,6 +26278,195 @@ var doc = `{
                 "data": {
                     "type": "string",
                     "example": "123.jpg"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "trainer.APIUpdateTrainerData": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "certificates": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "image",
+                            "name"
+                        ],
+                        "properties": {
+                            "id": {
+                                "description": "id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "image": {
+                                "description": "圖片",
+                                "type": "string",
+                                "example": "1234.jpg"
+                            },
+                            "name": {
+                                "description": "證照名稱",
+                                "type": "string",
+                                "example": "A級教練證照"
+                            }
+                        }
+                    }
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "年資",
+                    "type": "integer",
+                    "example": 5
+                },
+                "facebook_url": {
+                    "description": "臉書連結",
+                    "type": "string",
+                    "example": "www.facebook.com"
+                },
+                "instagram_url": {
+                    "description": "ig連結",
+                    "type": "string",
+                    "example": "www.ig.com"
+                },
+                "intro": {
+                    "description": "課表介紹",
+                    "type": "string",
+                    "example": "增肌專用課表"
+                },
+                "motto": {
+                    "description": "座右銘",
+                    "type": "string",
+                    "example": "勞其筋骨"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "亨利"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0955123321"
+                },
+                "skill": {
+                    "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                    "type": "string",
+                    "example": "1,4"
+                },
+                "trainer_album_photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "相片id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "photo": {
+                                "description": "照片",
+                                "type": "string",
+                                "example": "123.jpg"
+                            }
+                        }
+                    }
+                },
+                "trainer_level": {
+                    "description": "教練評鑑等級",
+                    "type": "integer",
+                    "example": 1
+                },
+                "trainer_statistic": {
+                    "type": "object",
+                    "required": [
+                        "course_count",
+                        "review_score",
+                        "student_count"
+                    ],
+                    "properties": {
+                        "course_count": {
+                            "description": "課表總數",
+                            "type": "integer",
+                            "example": 15
+                        },
+                        "review_score": {
+                            "description": "課表總評分",
+                            "type": "number",
+                            "example": 4.5
+                        },
+                        "student_count": {
+                            "description": "學生總數",
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "youtube_url": {
+                    "description": "youtube連結",
+                    "type": "string",
+                    "example": "www.youtube.com"
+                }
+            }
+        },
+        "trainer.APIUpdateTrainerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/trainer.APIUpdateTrainerData"
                 },
                 "msg": {
                     "description": "訊息",
@@ -29079,7 +29419,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 }
@@ -29122,7 +29462,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 }
@@ -29260,12 +29600,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -29323,12 +29663,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -29386,9 +29726,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "finish": {
                                 "description": "是否完成(0:未完成/1:已完成)",
@@ -29396,7 +29736,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -29444,12 +29784,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 },
@@ -29507,12 +29847,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 },
@@ -30105,7 +30445,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30261,7 +30601,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30414,7 +30754,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30567,7 +30907,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "產品標籤id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30710,7 +31050,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 },
@@ -30863,7 +31203,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "產品標籤id",
                     "type": "integer",
                     "example": 1
                 },

@@ -61,7 +61,7 @@ func NewTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, cour
 }
 
 // CreateTrainer 創建教練
-// @Summary 創建教練
+// @Summary 創建教練 (API已經過時，更新為 /v2/trainer [POST])
 // @Description 查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}
 // @Tags Trainer_v1
 // @Accept mpfd
@@ -204,7 +204,7 @@ func (t *Trainer) CreateTrainer(c *gin.Context) {
 }
 
 // UpdateTrainer 編輯教練
-// @Summary 編輯教練
+// @Summary 編輯教練 (API已經過時，更新為 /v2/trainer [PATCH])
 // @Description 查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}
 // @Tags Trainer_v1
 // @Accept mpfd
@@ -334,7 +334,7 @@ func (t *Trainer) GetTrainer(c *gin.Context) {
 }
 
 // GetTrainers 取得教練列表
-// @Summary 取得教練列表
+// @Summary 取得教練列表 (API已經過時，更新為 /v2/store/trainers [GET])
 // @Description 取得教練列表
 // @Tags Trainer_v1
 // @Accept json
@@ -408,7 +408,7 @@ func (t *Trainer) GetTrainerCourseProducts(c *gin.Context) {
 }
 
 // GetTrainerByUID 取得指定教練資訊
-// @Summary 取得指定教練資訊
+// @Summary 取得指定教練資訊 (API已經過時，更新為 /v2/store/trainer/{user_id} [GET])
 // @Description 取得指定教練資訊
 // @Tags Trainer_v1
 // @Accept json

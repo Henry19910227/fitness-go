@@ -352,7 +352,7 @@ func (w *workout) GetWorkoutSets(c *gin.Context) {
 }
 
 // UpdateWorkoutSetOrders 修改訓練組的順序
-// @Summary 修改訓練組的順序
+// @Summary 修改訓練組的順序 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_set_orders [API])
 // @Description 修改訓練組的順序
 // @Tags Workout_v1
 // @Accept json
