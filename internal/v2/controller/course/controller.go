@@ -574,6 +574,35 @@ func (c *controller) GetStoreCourseStructure(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// GetStoreTrainerCourses 獲取商店教練課表
+// @Summary 獲取商店教練課表
+// @Description 獲取商店教練課表
+// @Tags 商店_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練id"
+// @Param sale_type query int false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)"
+// @Param page query int true "頁數(從第一頁開始)"
+// @Param size query int true "筆數"
+// @Success 200 {object} course.APIGetStoreTrainerCoursesOutput "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/store/trainer/{user_id}/courses [GET]
+func (c *controller) GetStoreTrainerCourses(ctx *gin.Context) {
+	var input model.APIGetStoreTrainerCoursesInput
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetStoreTrainerCourses(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // GetStoreHomePage 獲取商店首頁資料
 // @Summary 獲取商店首頁資料
 // @Description 獲取商店首頁資料

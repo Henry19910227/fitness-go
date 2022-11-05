@@ -36,5 +36,6 @@ type Resolver interface {
 	APIGetStoreCourse(input *model.APIGetStoreCourseInput) (output model.APIGetStoreCourseOutput)
 	APIGetStoreCourses(input *model.APIGetStoreCoursesInput) (output model.APIGetStoreCoursesOutput)
 	APIGetStoreCourseStructure(input *model.APIGetStoreCourseStructureInput) (output model.APIGetStoreCourseStructureOutput)
+	APIGetStoreTrainerCourses(input *model.APIGetStoreTrainerCoursesInput) (output model.APIGetStoreTrainerCoursesOutput)
 	APIGetStoreHomePage(input *model.APIGetStoreHomePageInput) (output model.APIGetStoreHomePageOutput)
 }

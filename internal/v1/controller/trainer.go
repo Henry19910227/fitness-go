@@ -363,7 +363,7 @@ func (t *Trainer) GetTrainers(c *gin.Context) {
 }
 
 // GetTrainerCourseProducts 取得教練的課表產品清單
-// @Summary 取得教練的課表產品清單
+// @Summary 取得教練的課表產品清單 (API已過時，更新為 /v2/store/trainer/{user_id}/courses [GET])
 // @Description 取得教練的課表產品清單
 // @Tags Trainer_v1
 // @Accept json

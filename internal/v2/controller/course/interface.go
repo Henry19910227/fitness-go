@@ -28,5 +28,6 @@ type Controller interface {
 	GetStoreCourse(ctx *gin.Context)
 	GetStoreCourses(ctx *gin.Context)
 	GetStoreCourseStructure(ctx *gin.Context)
+	GetStoreTrainerCourses(ctx *gin.Context)
 	GetStoreHomePage(ctx *gin.Context)
 }

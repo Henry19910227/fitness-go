@@ -1124,6 +1124,36 @@ func (r *resolver) APIGetStoreCourseStructure(input *model.APIGetStoreCourseStru
 	return output
 }
 
+func (r *resolver) APIGetStoreTrainerCourses(input *model.APIGetStoreTrainerCoursesInput) (output model.APIGetStoreTrainerCoursesOutput) {
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.Uri.UserID)
+	listInput.CourseStatus = util.PointerInt(model.Sale)
+	listInput.SaleType = input.Query.SaleType
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "courses.sale_type <> ?", Args: []interface{}{model.SaleTypePersonal}}, // not equal
+	}
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "ReviewStatistic"},
+	}
+	courseOutputs, page, err := r.courseService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parse output
+	data := model.APIGetStoreTrainerCoursesData{}
+	if err := util.Parser(courseOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = &data
+	return output
+}
+
 func (r *resolver) APIGetStoreHomePage(input *model.APIGetStoreHomePageInput) (output model.APIGetStoreHomePageOutput) {
 	// 查詢最新課表列表
 	latestCourseListInput := model.ListInput{}

@@ -27,7 +27,7 @@ func NewStore(baseGroup *gin.RouterGroup, storeService service.Store, courseServ
 }
 
 // GetHomePage 獲取商店首頁資料
-// @Summary 獲取商店首頁資料
+// @Summary 獲取商店首頁資料 (API已過時，更新為 /v2/store/home_page [GET])
 // @Description 獲取商店首頁資料
 // @Tags Store_v1
 // @Accept json
