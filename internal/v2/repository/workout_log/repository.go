@@ -18,6 +18,23 @@ func (r *repository) WithTrx(tx *gorm.DB) Repository {
 	return New(tx)
 }
 
+func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
+	db := r.db.Model(&model.Output{})
+	//加入 id 篩選條件
+	if input.ID != nil {
+		db = db.Where("id = ?", *input.ID)
+	}
+	// Preload
+	if len(input.Preloads) > 0 {
+		for _, preload := range input.Preloads {
+			db = db.Preload(preload.Field, preload.Conditions...)
+		}
+	}
+	//查詢數據
+	err = db.First(&output).Error
+	return output, err
+}
+
 func (r *repository) Create(item *model.Table) (id int64, err error) {
 	err = r.db.Model(&model.Table{}).Create(&item).Error
 	if err != nil {

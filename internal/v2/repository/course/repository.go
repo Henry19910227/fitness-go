@@ -33,6 +33,12 @@ func (r *repository) Delete(input *model.DeleteInput) (err error) {
 
 func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
 	db := r.db.Model(&model.Output{})
+	// Join
+	if len(input.Joins) > 0 {
+		for _, join := range input.Joins {
+			db = db.Joins(join.Query, join.Args...)
+		}
+	}
 	//加入 id 篩選條件
 	if input.ID != nil {
 		db = db.Where("courses.id = ?", *input.ID)
@@ -54,6 +60,12 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 		db = db.Joins("INNER JOIN workouts ON plans.id = workouts.plan_id")
 		db = db.Joins("INNER JOIN workout_sets ON workouts.id = workout_sets.workout_id")
 		db = db.Where("workout_sets.id = ?", *input.WorkoutSetID)
+	}
+	// Custom Where
+	if len(input.Wheres) > 0 {
+		for _, where := range input.Wheres {
+			db = db.Where(where.Query, where.Args...)
+		}
 	}
 	//Preload
 	if len(input.Preloads) > 0 {

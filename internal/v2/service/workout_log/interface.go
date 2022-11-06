@@ -8,6 +8,7 @@ import (
 
 type Service interface {
 	Tx(tx *gorm.DB) Service
+	Find(input *model.FindInput) (output *model.Output, err error)
 	Create(item *model.Table) (id int64, err error)
 	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
 }

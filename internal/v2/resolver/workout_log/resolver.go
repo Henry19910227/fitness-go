@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	maxDistanceModel "github.com/Henry19910227/fitness-go/internal/v2/model/max_distance_record"
 	maxRepsModel "github.com/Henry19910227/fitness-go/internal/v2/model/max_reps_record"
 	maxRMModel "github.com/Henry19910227/fitness-go/internal/v2/model/max_rm_record"
@@ -14,6 +15,7 @@ import (
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log/api_get_user_workout_log"
 	workoutSetModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 	workoutSetLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
@@ -36,11 +38,11 @@ type resolver struct {
 	workoutSetService    workout_set.Service
 	courseService        course.Service
 	maxDistanceService   max_distance_record.Service
-	maxRepsService   	 max_reps_record.Service
-	maxRMService   	 	 max_rm_record.Service
-	maxSpeedService  	 max_speed_record.Service
-	maxWeightService 	 max_weight_record.Service
-	minDurationService 	 min_duration_record.Service
+	maxRepsService       max_reps_record.Service
+	maxRMService         max_rm_record.Service
+	maxSpeedService      max_speed_record.Service
+	maxWeightService     max_weight_record.Service
+	minDurationService   min_duration_record.Service
 }
 
 func New(workoutLogService workout_log.Service, workoutSetLogService workout_set_log.Service,
@@ -297,5 +299,48 @@ func (r *resolver) APIGetUserWorkoutLogs(input *model.APIGetUserWorkoutLogsInput
 	output.Set(code.Success, "success")
 	output.Data = &data
 	output.Paging = page
+	return output
+}
+
+func (r *resolver) APIGetUserWorkoutLog(input *api_get_user_workout_log.Input) (output api_get_user_workout_log.Output) {
+	// 查詢訓練記錄
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.WorkoutLogID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Workout"},
+		{Field: "WorkoutSetLogs.WorkoutSet.Action"},
+	}
+	workoutLogOutput, err := r.workoutLogService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN plans ON courses.id = plans.course_id"},
+		{Query: "INNER JOIN workouts ON plans.id = workouts.plan_id"},
+	}
+	findCourseInput.Wheres = []*whereModel.Where{
+		{Query: "workouts.id = ?", Args: []interface{}{util.OnNilJustReturnInt64(workoutLogOutput.WorkoutID, 0)}},
+	}
+	courseOutput, err := r.courseService.Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parser Output
+	data := api_get_user_workout_log.Data{}
+	data.Course = &api_get_user_workout_log.Course{}
+	if err := util.Parser(workoutLogOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := util.Parser(courseOutput, data.Course); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }

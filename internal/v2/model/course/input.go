@@ -36,6 +36,8 @@ type FindInput struct {
 	workoutOptional.WorkoutIDField
 	workoutSetOptional.WorkoutSetIDField
 	PreloadInput
+	JoinInput
+	WhereInput
 }
 
 type DeleteInput struct {

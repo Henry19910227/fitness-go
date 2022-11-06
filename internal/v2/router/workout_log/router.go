@@ -15,4 +15,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.POST("/user/workout/:workout_id/workout_log", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateUserWorkoutLog)
 	v2.GET("/user/workout_logs", midd.Verify([]global.Role{global.UserRole}), controller.GetUserWorkoutLogs)
+	v2.GET("/user/workout_log/:workout_log_id", midd.Verify([]global.Role{global.UserRole}), controller.GetUserWorkoutLog)
 }

@@ -3,12 +3,12 @@ package workout_log
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_log/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_log/required"
+	workoutSetLogRequired "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set_log/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_set_log"
 )
 
 type PagingInput = paging.Input
@@ -17,6 +17,11 @@ type WhereInput = where.Input
 type JoinInput = join.Input
 type OrderByInput = orderBy.Input
 type CustomOrderByInput = orderBy.CustomInput
+
+type FindInput struct {
+	optional.IDField
+	PreloadInput
+}
 
 type ListInput struct {
 	optional.UserIDField
@@ -42,12 +47,12 @@ type APICreateUserWorkoutLogBody struct {
 	optional.IntensityField
 	optional.PlaceField
 	WorkoutSetLogs []*struct {
-		workout_set_log.WorkoutSetIDRequired
-		workout_set_log.WeightRequired
-		workout_set_log.DistanceRequired
-		workout_set_log.InclineRequired
-		workout_set_log.RepsRequired
-		workout_set_log.DurationRequired
+		workoutSetLogRequired.WorkoutSetIDField
+		workoutSetLogRequired.WeightField
+		workoutSetLogRequired.DistanceField
+		workoutSetLogRequired.InclineField
+		workoutSetLogRequired.RepsField
+		workoutSetLogRequired.DurationField
 	} `json:"workout_set_logs"`
 }
 

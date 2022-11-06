@@ -5,6 +5,7 @@ import (
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_log/optional"
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
+	workoutSetLogOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set_log/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_set_log"
@@ -12,7 +13,8 @@ import (
 
 type Output struct {
 	Table
-	Workout *WorkoutOutput `json:"workout,omitempty" gorm:"foreignKey:workout_id;references:id"`
+	Workout        *WorkoutOutput            `json:"workout,omitempty" gorm:"foreignKey:workout_id;references:id"`
+	WorkoutSetLogs []*workout_set_log.Output `json:"workout_set_logs,omitempty" gorm:"foreignKey:workout_log_id;references:id"`
 }
 
 func (Output) TableName() string {
@@ -43,12 +45,12 @@ type APICreateUserWorkoutLogData []*struct {
 	APICreateUserWorkoutLogItem
 }
 type APICreateUserWorkoutLogItem struct {
-	workout_set_log.WorkoutSetIDField
-	workout_set_log.WeightField
-	workout_set_log.DistanceField
-	workout_set_log.InclineField
-	workout_set_log.RepsField
-	workout_set_log.DurationField
+	workoutSetLogOptional.WorkoutSetIDField
+	workoutSetLogOptional.WeightField
+	workoutSetLogOptional.DistanceField
+	workoutSetLogOptional.InclineField
+	workoutSetLogOptional.RepsField
+	workoutSetLogOptional.DurationField
 	NewRecord  *int `json:"new_record" example:"1"` //是否是新紀錄(0:否/1:是)
 	WorkoutSet *struct {
 		workoutSetOptional.IDField
@@ -70,8 +72,8 @@ type APICreateUserWorkoutLogItem struct {
 // APIGetUserWorkoutLogsOutput /v2/user/workout_logs [GET]
 type APIGetUserWorkoutLogsOutput struct {
 	base.Output
-	Data *APIGetUserWorkoutLogsData `json:"data,omitempty"`
-	Paging *paging.Output       `json:"paging,omitempty"`
+	Data   *APIGetUserWorkoutLogsData `json:"data,omitempty"`
+	Paging *paging.Output             `json:"paging,omitempty"`
 }
 type APIGetUserWorkoutLogsData []*struct {
 	optional.IDField
@@ -79,7 +81,7 @@ type APIGetUserWorkoutLogsData []*struct {
 	optional.IntensityField
 	optional.PlaceField
 	optional.CreateAtField
-	Workout *struct{
+	Workout *struct {
 		workoutOptional.IDField
 		workoutOptional.NameField
 		workoutOptional.EquipmentField

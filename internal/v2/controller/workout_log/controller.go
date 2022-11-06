@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log/api_get_user_workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/workout_log"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -67,5 +68,27 @@ func (c *controller) GetUserWorkoutLogs(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetUserWorkoutLogs(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetUserWorkoutLog 獲取訓練紀錄
+// @Summary 獲取訓練紀錄
+// @Description 獲取訓練紀錄
+// @Tags 歷史_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_log_id path int64 true "訓練記錄id"
+// @Success 200 {object} api_get_user_workout_log.Output "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/workout_log/{workout_log_id} [GET]
+func (c *controller) GetUserWorkoutLog(ctx *gin.Context) {
+	var input api_get_user_workout_log.Input
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetUserWorkoutLog(&input)
 	ctx.JSON(http.StatusOK, output)
 }
