@@ -22,8 +22,8 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
       intro:
         description: 個人介紹
@@ -38,8 +38,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 銷售類型(1:免費課表/3:付費課表)
-        example: 3
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
         type: integer
       update_at:
         description: 更新時間
@@ -66,8 +66,8 @@ definitions:
   action.APICreateTrainerActionData:
     properties:
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
     type: object
   action.APICreateTrainerActionOutput:
@@ -106,8 +106,8 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
       intro:
         description: 個人介紹
@@ -122,8 +122,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 銷售類型(1:免費課表/3:付費課表)
-        example: 3
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
         type: integer
       update_at:
         description: 更新時間
@@ -210,8 +210,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             intro:
               description: 個人介紹
@@ -230,8 +230,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 銷售類型(1:免費課表/3:付費課表)
-              example: 3
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              example: 1
               type: integer
             update_at:
               description: 更新時間
@@ -280,8 +280,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             intro:
               description: 個人介紹
@@ -300,8 +300,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 銷售類型(1:免費課表/3:付費課表)
-              example: 3
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              example: 1
               type: integer
             update_at:
               description: 更新時間
@@ -369,8 +369,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             intro:
               description: 個人介紹
@@ -389,8 +389,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 銷售類型(1:免費課表/3:付費課表)
-              example: 3
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              example: 1
               type: integer
             update_at:
               description: 更新時間
@@ -443,8 +443,8 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
       intro:
         description: 個人介紹
@@ -459,8 +459,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 銷售類型(1:免費課表/3:付費課表)
-        example: 3
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
         type: integer
       update_at:
         description: 更新時間
@@ -3128,8 +3128,8 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 銷售id
-                      example: 1
+                      description: 帳戶id
+                      example: 10001
                       type: integer
                     product_id:
                       description: 產品id
@@ -10347,8 +10347,8 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
     type: object
   workout.APICreateTrainerWorkoutOutput:
@@ -10378,8 +10378,8 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
     type: object
   workout.APICreateUserWorkoutOutput:
@@ -10483,8 +10483,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             name:
               description: 訓練名稱
@@ -10508,6 +10508,8 @@ definitions:
         description: 訊息
         example: message..
         type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
     type: object
   workout.APIGetTrainerWorkoutsOutput:
     properties:
@@ -10531,8 +10533,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             name:
               description: 訓練名稱
@@ -10583,8 +10585,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             name:
               description: 訓練名稱
@@ -10624,8 +10626,8 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
       name:
         description: 訓練名稱
@@ -10672,8 +10674,8 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
       name:
         description: 訓練名稱
@@ -10851,6 +10853,79 @@ definitions:
         description: 訊息
         example: message..
         type: string
+    type: object
+  workout_log.APIGetUserWorkoutLogsOutput:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            create_at:
+              description: 創建時間
+              example: "2022-06-12 00:00:00"
+              type: string
+            duration:
+              description: 時長(秒)
+              example: 30
+              type: integer
+            id:
+              description: 帳戶id
+              example: 10001
+              type: integer
+            intensity:
+              description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
+              example: 1
+              type: integer
+            place:
+              description: 地點(0:未指定/1:住家/2:健身房/3:戶外/4:空地/5:其他)
+              example: 1
+              type: integer
+            workout:
+              properties:
+                create_at:
+                  description: 創建時間
+                  example: "2022-06-14 00:00:00"
+                  type: string
+                end_audio:
+                  description: 結束語音
+                  example: 123.mp3
+                  type: string
+                equipment:
+                  description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+                  example: 2,3,6
+                  type: string
+                id:
+                  description: 訓練 id
+                  example: 1
+                  type: integer
+                name:
+                  description: 訓練名稱
+                  example: 腿部訓練
+                  type: string
+                start_audio:
+                  description: 前導語音
+                  example: 123.mp3
+                  type: string
+                update_at:
+                  description: 更新時間
+                  example: "2022-06-14 00:00:00"
+                  type: string
+                workout_set_count:
+                  description: 動作組數
+                  example: 10
+                  type: integer
+              type: object
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
     type: object
   workout_set.APICreateTrainerRestSetOutput:
     properties:
@@ -11115,8 +11190,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             incline:
               description: 坡度
@@ -11139,8 +11214,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 銷售類型(1:免費課表/3:付費課表)
-              example: 3
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              example: 1
               type: integer
             update_at:
               description: 更新時間
@@ -11236,8 +11311,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             incline:
               description: 坡度
@@ -11260,8 +11335,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 銷售類型(1:免費課表/3:付費課表)
-              example: 3
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              example: 1
               type: integer
             update_at:
               description: 更新時間
@@ -11355,8 +11430,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             incline:
               description: 坡度
@@ -11379,8 +11454,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 銷售類型(1:免費課表/3:付費課表)
-              example: 3
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              example: 1
               type: integer
             update_at:
               description: 更新時間
@@ -11474,8 +11549,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 銷售id
-              example: 1
+              description: 帳戶id
+              example: 10001
               type: integer
             incline:
               description: 坡度
@@ -11498,8 +11573,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 銷售類型(1:免費課表/3:付費課表)
-              example: 3
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              example: 1
               type: integer
             update_at:
               description: 更新時間
@@ -11586,8 +11661,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
       incline:
         description: 坡度
@@ -11610,8 +11685,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 銷售類型(1:免費課表/3:付費課表)
-        example: 3
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
         type: integer
       update_at:
         description: 更新時間
@@ -11705,8 +11780,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 銷售id
-        example: 1
+        description: 帳戶id
+        example: 10001
         type: integer
       incline:
         description: 坡度
@@ -11729,8 +11804,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 銷售類型(1:免費課表/3:付費課表)
-        example: 3
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        example: 1
         type: integer
       update_at:
         description: 更新時間
@@ -21510,6 +21585,48 @@ paths:
       summary: 創建個人訓練組
       tags:
       - 用戶個人課表_v2
+  /v2/user/workout_logs:
+    get:
+      consumes:
+      - application/json
+      description: 以日期區間獲取訓練記錄，用於獲取歷史首頁資料
+      parameters:
+      - description: 區間開始日期 YYYY-MM-DD
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: 區間結束日期 YYYY-MM-DD
+        in: query
+        name: end_date
+        required: true
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          schema:
+            $ref: '#/definitions/workout_log.APIGetUserWorkoutLogsOutput'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 以日期區間獲取訓練記錄
+      tags:
+      - 歷史_v2
   /v2/user/workout_set/{workout_set_id}:
     delete:
       consumes:

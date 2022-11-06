@@ -7,4 +7,5 @@ import (
 
 type Resolver interface {
 	APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUserWorkoutLogInput) (output model.APICreateUserWorkoutLogOutput)
+	APIGetUserWorkoutLogs(input *model.APIGetUserWorkoutLogsInput) (output model.APIGetUserWorkoutLogsOutput)
 }

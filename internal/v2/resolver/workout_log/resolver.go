@@ -12,6 +12,7 @@ import (
 	maxWeightModel "github.com/Henry19910227/fitness-go/internal/v2/model/max_weight_record"
 	minDurationModel "github.com/Henry19910227/fitness-go/internal/v2/model/min_duration_record"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
 	workoutSetModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 	workoutSetLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set_log"
@@ -268,5 +269,33 @@ func (r *resolver) APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUs
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetUserWorkoutLogs(input *model.APIGetUserWorkoutLogsInput) (output model.APIGetUserWorkoutLogsOutput) {
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "Workout"},
+	}
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "workout_logs.create_at BETWEEN ? AND ?", Args: []interface{}{input.Query.StartDate + " 00:00:00", input.Query.EndDate + " 23:59:59"}},
+	}
+	listInput.Page = input.Query.Page
+	listInput.Size = input.Query.Size
+	workoutLogOutputs, page, err := r.workoutLogService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parser Output
+	data := model.APIGetUserWorkoutLogsData{}
+	if err := util.Parser(workoutLogOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	output.Paging = page
 	return output
 }

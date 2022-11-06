@@ -3,6 +3,7 @@ package workout
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 )
@@ -137,6 +138,7 @@ type APIDeleteTrainerWorkoutEndAudioOutput struct {
 type APIGetStoreWorkoutsOutput struct {
 	base.Output
 	Data *APIGetStoreWorkoutsData `json:"data,omitempty"`
+	Paging *paging.Output         `json:"paging,omitempty"`
 }
 type APIGetStoreWorkoutsData []*struct {
 	optional.IDField
