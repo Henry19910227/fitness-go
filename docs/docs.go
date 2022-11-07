@@ -3265,7 +3265,7 @@ var doc = `{
                 "tags": [
                     "Favorite_v1"
                 ],
-                "summary": "新增收藏課表",
+                "summary": "新增收藏課表 (API已過時，更新為 /v2/favorite/course/{course_id} [POST])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -9916,6 +9916,49 @@ var doc = `{
                         "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
                         "schema": {
                             "$ref": "#/definitions/favorite_action.APIDeleteFavoriteActionOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/favorite/course/{course_id}": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "收藏課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "收藏_v2"
+                ],
+                "summary": "收藏課表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/api_create_favorite_course.Output"
                         }
                     },
                     "400": {
@@ -16740,6 +16783,21 @@ var doc = `{
                 },
                 "data": {
                     "$ref": "#/definitions/action.APIUpdateUserActionData"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "api_create_favorite_course.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",
@@ -31163,7 +31221,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31319,7 +31377,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31472,7 +31530,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31625,7 +31683,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31768,7 +31826,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 1
+                    "example": 2.5
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -31921,7 +31979,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 1
+                    "example": 2.5
                 },
                 "duration": {
                     "description": "時長(秒)",

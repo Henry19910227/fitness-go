@@ -39,7 +39,7 @@ func NewFavorite(baseGroup *gin.RouterGroup, favoriteService service.Favorite, c
 }
 
 // CreateFavoriteCourse 新增收藏課表
-// @Summary 新增收藏課表
+// @Summary 新增收藏課表 (API已過時，更新為 /v2/favorite/course/{course_id} [POST])
 // @Description 新增收藏課表
 // @Tags Favorite_v1
 // @Accept json
