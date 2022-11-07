@@ -89,3 +89,8 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	err = db.Find(&outputs).Error
 	return outputs, amount, err
 }
+
+func (r *repository) Delete(input *model.DeleteInput) (err error) {
+	err = r.db.Where("id = ?", input.ID).Delete(&model.Table{}).Error
+	return err
+}

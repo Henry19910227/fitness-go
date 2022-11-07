@@ -44,3 +44,8 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 	page.Size = input.Size
 	return output, page, err
 }
+
+func (s *service) Delete(input *model.DeleteInput) (err error) {
+	err = s.repository.Delete(input)
+	return err
+}

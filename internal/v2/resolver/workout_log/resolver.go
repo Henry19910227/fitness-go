@@ -15,6 +15,7 @@ import (
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log/api_delete_user_workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log/api_get_user_workout_log"
 	workoutSetModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 	workoutSetLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set_log"
@@ -315,6 +316,11 @@ func (r *resolver) APIGetUserWorkoutLog(input *api_get_user_workout_log.Input) (
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	// 驗證查詢權限
+	if util.OnNilJustReturnInt64(workoutLogOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此紀錄擁有者，無法查詢該紀錄")
+		return output
+	}
 	// 查詢課表
 	findCourseInput := courseModel.FindInput{}
 	findCourseInput.Joins = []*joinModel.Join{
@@ -342,5 +348,30 @@ func (r *resolver) APIGetUserWorkoutLog(input *api_get_user_workout_log.Input) (
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIDeleteUserWorkoutLog(input *api_delete_user_workout_log.Input) (output api_delete_user_workout_log.Output) {
+	// 查詢訓練記錄
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.WorkoutLogID)
+	workoutLogOutput, err := r.workoutLogService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證刪除權限
+	if util.OnNilJustReturnInt64(workoutLogOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此紀錄擁有者，無法刪除該紀錄")
+		return output
+	}
+	deleteInput := model.DeleteInput{}
+	deleteInput.ID = input.Uri.WorkoutLogID
+	if err := r.workoutLogService.Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parser Output
+	output.Set(code.Success, "success")
 	return output
 }

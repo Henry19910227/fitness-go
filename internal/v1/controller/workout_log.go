@@ -31,7 +31,7 @@ func NewWorkoutLog(baseGroup *gin.RouterGroup, workoutLogService service.Workout
 }
 
 // GetWorkoutLog 獲取訓練紀錄詳細
-// @Summary 獲取訓練紀錄詳細
+// @Summary 獲取訓練紀錄詳細 (API已過時，更新為 /v2/user/workout_log/{workout_log_id} [GET])
 // @Description 獲取訓練紀錄詳細
 // @Tags History_v1
 // @Accept json
@@ -56,7 +56,7 @@ func (p *WorkoutLog) GetWorkoutLog(c *gin.Context) {
 }
 
 // GetWorkoutLogSummaries 以日期區間獲取訓練記錄
-// @Summary 以日期區間獲取訓練記錄
+// @Summary 以日期區間獲取訓練記錄 (API已過時，更新為 /v2/user/workout_logs [GET])
 // @Description 以日期區間獲取訓練記錄，用於獲取歷史首頁資料
 // @Tags History_v1
 // @Accept json
@@ -87,7 +87,7 @@ func (p *WorkoutLog) GetWorkoutLogSummaries(c *gin.Context) {
 }
 
 // DeleteWorkoutLog 刪除訓練紀錄
-// @Summary 刪除訓練紀錄
+// @Summary 刪除訓練紀錄 (API已過時，更新為 /v2/user/workout_log/{workout_log_id} [DELETE])
 // @Description 用於歷史頁面刪除訓練紀錄
 // @Tags History_v1
 // @Accept json

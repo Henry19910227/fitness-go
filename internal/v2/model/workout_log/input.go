@@ -33,6 +33,10 @@ type ListInput struct {
 	CustomOrderByInput
 }
 
+type DeleteInput struct {
+	required.IDField
+}
+
 // APICreateUserWorkoutLogInput /v2/user/workout/{workout_id}/workout_log [POST]
 type APICreateUserWorkoutLogInput struct {
 	required.UserIDField

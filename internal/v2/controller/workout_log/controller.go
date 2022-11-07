@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log/api_delete_user_workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log/api_get_user_workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/workout_log"
 	"github.com/gin-gonic/gin"
@@ -46,9 +47,9 @@ func (c *controller) CreateUserWorkoutLog(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetUserWorkoutLogs 以日期區間獲取訓練記錄
-// @Summary 以日期區間獲取訓練記錄
-// @Description 以日期區間獲取訓練記錄，用於獲取歷史首頁資料
+// GetUserWorkoutLogs 以日期區間獲取用戶訓練記錄
+// @Summary 以日期區間獲取用戶訓練記錄
+// @Description 以日期區間獲取用戶訓練記錄，用於獲取歷史首頁資料
 // @Tags 歷史_v2
 // @Accept json
 // @Produce json
@@ -71,9 +72,9 @@ func (c *controller) GetUserWorkoutLogs(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetUserWorkoutLog 獲取訓練紀錄
-// @Summary 獲取訓練紀錄
-// @Description 獲取訓練紀錄
+// GetUserWorkoutLog 獲取用戶訓練紀錄
+// @Summary 獲取用戶訓練紀錄
+// @Description 獲取用戶訓練紀錄
 // @Tags 歷史_v2
 // @Accept json
 // @Produce json
@@ -90,5 +91,27 @@ func (c *controller) GetUserWorkoutLog(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetUserWorkoutLog(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// DeleteUserWorkoutLog 刪除用戶訓練紀錄
+// @Summary 刪除用戶訓練紀錄
+// @Description 刪除用戶訓練紀錄
+// @Tags 歷史_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param workout_log_id path int64 true "訓練記錄id"
+// @Success 200 {object} api_delete_user_workout_log.Output "Success"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/workout_log/{workout_log_id} [DELETE]
+func (c *controller) DeleteUserWorkoutLog(ctx *gin.Context) {
+	var input api_delete_user_workout_log.Input
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteUserWorkoutLog(&input)
 	ctx.JSON(http.StatusOK, output)
 }
