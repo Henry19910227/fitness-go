@@ -13,4 +13,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := favorite_course.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.POST("/favorite/course/:course_id", midd.Verify([]global.Role{global.UserRole}), controller.CreateFavoriteCourse)
+	v2.DELETE("/favorite/course/:course_id", midd.Verify([]global.Role{global.UserRole}), controller.DeleteFavoriteCourse)
 }

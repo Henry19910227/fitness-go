@@ -126,7 +126,7 @@ func (f *Favorite) CreateFavoriteAction(c *gin.Context) {
 }
 
 // DeleteFavoriteCourse 刪除收藏課表
-// @Summary 刪除收藏課表
+// @Summary 刪除收藏課表 (API已經過時，更新為 /v2/favorite/course/{course_id} [DELETE])
 // @Description 刪除收藏課表
 // @Tags Favorite_v1
 // @Accept json

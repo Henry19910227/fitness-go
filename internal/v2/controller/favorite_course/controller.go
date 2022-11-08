@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_course/api_create_favorite_course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_course/api_delete_favorite_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/favorite_course"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -36,5 +37,27 @@ func (c *controller) CreateFavoriteCourse(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APICreateFavoriteCourse(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// DeleteFavoriteCourse 刪除課表收藏
+// @Summary 刪除課表收藏
+// @Description 刪除課表收藏
+// @Tags 收藏_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} api_delete_favorite_course.Output "Success"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/favorite/course/{course_id} [DELETE]
+func (c *controller) DeleteFavoriteCourse(ctx *gin.Context) {
+	input := api_delete_favorite_course.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteFavoriteCourse(&input)
 	ctx.JSON(http.StatusOK, output)
 }
