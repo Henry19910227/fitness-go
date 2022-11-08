@@ -16304,9 +16304,9 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "動作id",
@@ -16314,9 +16314,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16329,14 +16329,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -16415,9 +16415,9 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "動作id",
@@ -16425,9 +16425,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16440,14 +16440,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -16553,9 +16553,9 @@ var doc = `{
                                 "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
                                 "description": "動作id",
@@ -16563,9 +16563,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16583,14 +16583,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -16644,9 +16644,9 @@ var doc = `{
                                 "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
                                 "description": "動作id",
@@ -16654,9 +16654,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16674,14 +16674,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -16756,9 +16756,9 @@ var doc = `{
                                 "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "favorite": {
                                 "description": "是否收藏(0:否/1:是)",
@@ -16771,9 +16771,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16791,14 +16791,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -16857,9 +16857,9 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "動作id",
@@ -16867,9 +16867,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16882,14 +16882,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -17267,7 +17267,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 }
             }
         },
@@ -26515,9 +26515,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -26605,10 +26605,10 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -26666,7 +26666,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "用戶id",
+                                "description": "用戶 id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -26750,9 +26750,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -26845,10 +26845,10 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -26913,10 +26913,10 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "user_id": {
-                                "description": "用戶id",
+                                "description": "用戶 id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -27000,9 +27000,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27090,10 +27090,10 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -27208,9 +27208,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27298,10 +27298,10 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "用戶id",
+                    "description": "用戶 id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -30455,9 +30455,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
                                 "description": "訓練 id",
@@ -30477,7 +30477,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -30521,9 +30521,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
                                 "description": "訓練 id",
@@ -30543,7 +30543,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -30584,9 +30584,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "finish": {
                                 "description": "是否完成(0:未完成/1:已完成)",
@@ -30611,7 +30611,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -30642,9 +30642,9 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "訓練 id",
@@ -30664,7 +30664,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -30705,9 +30705,9 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
                     "description": "訓練 id",
@@ -30727,7 +30727,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -31391,7 +31391,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31419,9 +31419,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -31429,14 +31429,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -31547,7 +31547,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31575,9 +31575,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -31585,14 +31585,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -31700,7 +31700,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31728,9 +31728,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -31738,14 +31738,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -31853,7 +31853,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31881,9 +31881,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -31891,14 +31891,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -31996,7 +31996,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 2.5
+                    "example": 1
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -32024,9 +32024,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -32034,14 +32034,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",
@@ -32149,7 +32149,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 2.5
+                    "example": 1
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -32177,9 +32177,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -32187,14 +32187,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",
