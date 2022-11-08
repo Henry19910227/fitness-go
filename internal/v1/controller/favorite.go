@@ -68,7 +68,7 @@ func (f *Favorite) CreateFavoriteCourse(c *gin.Context) {
 }
 
 // CreateFavoriteTrainer 收藏教練
-// @Summary 收藏教練
+// @Summary 收藏教練 (API已經過時，更新為 /v2/favorite/trainer/{user_id} [POST])
 // @Description 收藏教練
 // @Tags Favorite_v1
 // @Accept json
@@ -155,7 +155,7 @@ func (f *Favorite) DeleteFavoriteCourse(c *gin.Context) {
 }
 
 // DeleteFavoriteTrainer 刪除收藏教練
-// @Summary 刪除收藏教練
+// @Summary 刪除收藏教練 (API已經過時，更新為 /v2/favorite/trainer/{user_id} [DELETE])
 // @Description 刪除收藏教練
 // @Tags Favorite_v1
 // @Accept json

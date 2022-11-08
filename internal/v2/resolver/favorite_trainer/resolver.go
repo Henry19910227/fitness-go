@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/favorite_trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_trainer/api_create_favorite_trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_trainer/api_delete_favorite_trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/favorite_trainer"
 )
 
@@ -35,6 +36,32 @@ func (r *resolver) APICreateFavoriteTrainer(input *api_create_favorite_trainer.I
 	table.UserID = util.PointerInt64(input.UserID)
 	table.TrainerID = util.PointerInt64(input.Uri.TrainerID)
 	if err := r.favoriteTrainerService.Create(&table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIDeleteFavoriteTrainer(input *api_delete_favorite_trainer.Input) (output api_delete_favorite_trainer.Output) {
+	// 查詢教練收藏
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.TrainerID = util.PointerInt64(input.Uri.TrainerID)
+	favoriteOutputs, _, err := r.favoriteTrainerService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(favoriteOutputs) == 0 {
+		output.Set(code.BadRequest, "無收藏此教練")
+		return output
+	}
+	// 刪除教練收藏
+	deleteInput := model.DeleteInput{}
+	deleteInput.UserID = input.UserID
+	deleteInput.TrainerID = input.Uri.TrainerID
+	if err := r.favoriteTrainerService.Delete(&deleteInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}

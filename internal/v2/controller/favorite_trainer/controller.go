@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_trainer/api_create_favorite_trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_trainer/api_delete_favorite_trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/favorite_trainer"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -36,5 +37,27 @@ func (c *controller) CreateFavoriteTrainer(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APICreateFavoriteTrainer(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// DeleteFavoriteTrainer 刪除教練收藏
+// @Summary 刪除教練收藏
+// @Description 刪除教練收藏
+// @Tags 收藏_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練id"
+// @Success 200 {object} api_delete_favorite_trainer.Output "Success"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/favorite/trainer/{user_id} [DELETE]
+func (c *controller) DeleteFavoriteTrainer(ctx *gin.Context) {
+	input := api_delete_favorite_trainer.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteFavoriteTrainer(&input)
 	ctx.JSON(http.StatusOK, output)
 }
