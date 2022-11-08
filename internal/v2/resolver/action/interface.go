@@ -2,6 +2,7 @@ package action
 
 import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"gorm.io/gorm"
 )
@@ -18,7 +19,7 @@ type Resolver interface {
 	APICreateCMSAction(input *model.APICreateCMSActionInput) (output model.APICreateCMSActionOutput)
 	APIUpdateCMSAction(input *model.APIUpdateCMSActionInput) (output base.Output)
 
-	APICreateTrainerAction(tx *gorm.DB, input *model.APICreateTrainerActionInput) (output model.APICreateTrainerActionOutput)
+	APICreateTrainerAction(tx *gorm.DB, input *api_create_trainer_action.Input) (output api_create_trainer_action.Output)
 	APIUpdateTrainerAction(tx *gorm.DB, input *model.APIUpdateTrainerActionInput) (output model.APIUpdateTrainerActionOutput)
 	APIGetTrainerActions(input *model.APIGetTrainerActionsInput) (output model.APIGetTrainerActionsOutput)
 	APIDeleteTrainerAction(input *model.APIDeleteTrainerActionInput) (output model.APIDeleteTrainerActionOutput)
