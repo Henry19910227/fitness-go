@@ -3,6 +3,7 @@ package action
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -327,6 +328,7 @@ func (c *controller) APIGetUserActionSystemImages(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
+// @Param course_id path int64 true "課表ID"
 // @Param name formData string true "動作名稱(1~20字元)"`
 // @Param type formData int true "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)"`
 // @Param category formData int true "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"`
@@ -335,12 +337,16 @@ func (c *controller) APIGetUserActionSystemImages(ctx *gin.Context) {
 // @Param intro formData string true "動作介紹(1~400字元)"`
 // @Param cover formData file true "課表封面照"
 // @Param video formData file false "影片檔"
-// @Success 200 {object} action.APICreateTrainerActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Success 200 {object} api_create_trainer_action.Output "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/trainer/action [POST]
+// @Router /v2/trainer/course/{course_id}/action [POST]
 func (c *controller) CreateTrainerAction(ctx *gin.Context) {
-	input := model.APICreateTrainerActionInput{}
+	input := api_create_trainer_action.Input{}
 	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
 	if err := ctx.ShouldBind(&input.Form); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return

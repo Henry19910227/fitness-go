@@ -5,11 +5,14 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	actionService "github.com/Henry19910227/fitness-go/internal/v2/service/action"
+	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"gorm.io/gorm"
 	"io/ioutil"
 	"strconv"
@@ -18,12 +21,13 @@ import (
 
 type resolver struct {
 	actionService   actionService.Service
+	courseService   courseService.Service
 	coverUploadTool uploader.Tool
 	videoUploadTool uploader.Tool
 }
 
-func New(actionService actionService.Service, coverUploadTool uploader.Tool, videoUploadTool uploader.Tool) Resolver {
-	return &resolver{actionService: actionService, coverUploadTool: coverUploadTool, videoUploadTool: videoUploadTool}
+func New(actionService actionService.Service, courseService courseService.Service, coverUploadTool uploader.Tool, videoUploadTool uploader.Tool) Resolver {
+	return &resolver{actionService: actionService, courseService: courseService, coverUploadTool: coverUploadTool, videoUploadTool: videoUploadTool}
 }
 
 func (r *resolver) APIGetCMSActions(input *model.APIGetCMSActionsInput) (output model.APIGetCMSActionsOutput) {
@@ -474,10 +478,23 @@ func (r *resolver) APIGetUserActionSystemImages() (output model.APIGetUserAction
 	return output
 }
 
-func (r *resolver) APICreateTrainerAction(tx *gorm.DB, input *model.APICreateTrainerActionInput) (output model.APICreateTrainerActionOutput) {
+func (r *resolver) APICreateTrainerAction(tx *gorm.DB, input *api_create_trainer_action.Input) (output api_create_trainer_action.Output) {
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.ID = util.PointerInt64(input.Uri.CourseID)
+	courseOutput, err := r.courseService.Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	courseStatus := util.OnNilJustReturnInt(courseOutput.CourseStatus, 0)
+	if courseStatus != courseModel.Preparing && courseStatus != courseModel.Reject {
+		output.Set(code.BadRequest, "該課表不是準備或退審狀態，無法新增動作至該課表")
+		return output
+	}
 	defer tx.Rollback()
 	table := model.Table{}
 	table.UserID = util.PointerInt64(input.UserID)
+	table.CourseID = util.PointerInt64(input.Uri.CourseID)
 	table.Source = util.PointerInt(model.SourceTrainer)
 	table.Cover = util.PointerString("")
 	table.Video = util.PointerString("")
@@ -522,7 +539,7 @@ func (r *resolver) APICreateTrainerAction(tx *gorm.DB, input *model.APICreateTra
 	}
 	tx.Commit()
 	// parser output
-	data := model.APICreateTrainerActionData{}
+	data := api_create_trainer_action.Data{}
 	data.ID = actionOutput.ID
 	output.Set(code.Success, "success")
 	output.Data = &data

@@ -434,7 +434,7 @@ func (cc *Course) GetPlans(c *gin.Context) {
 }
 
 // CreateAction 創建動作
-// @Summary 創建動作
+// @Summary 創建動作 (API已過時，更新為 /v2/trainer/course/{course_id}/action [POST])
 // @Description 創建動作
 // @Tags Course_v1
 // @Accept json

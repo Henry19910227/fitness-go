@@ -60,7 +60,7 @@ func NewAction(baseGroup *gin.RouterGroup,
 }
 
 // UpdateAction 修改動作
-// @Summary 修改動作
+// @Summary 修改動作 (API已過時，更新為 /v2/trainer/action/{action_id} [PATCH])
 // @Description 查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}
 // @Tags Action_v1
 // @Accept json
@@ -123,7 +123,7 @@ func (a *Action) UpdateAction(c *gin.Context) {
 }
 
 // DeleteAction 刪除動作
-// @Summary 刪除動作
+// @Summary 刪除動作 (API已過時，更新為 /v2/trainer/action/{action_id} [DELETE])
 // @Description 刪除動作
 // @Tags Action_v1
 // @Accept json
@@ -148,7 +148,7 @@ func (a *Action) DeleteAction(c *gin.Context) {
 }
 
 // DeleteActionVideo 刪除動作影片
-// @Summary 刪除動作影片
+// @Summary 刪除動作影片 (API已過時，更新為 /v2/trainer/action/{action_id}/video [DELETE])
 // @Description 刪除動作影片
 // @Tags Action_v1
 // @Accept json
@@ -172,7 +172,7 @@ func (a *Action) DeleteActionVideo(c *gin.Context) {
 }
 
 // SearchActions 搜尋動作庫的動作列表
-// @Summary 搜尋動作庫的動作列表
+// @Summary 搜尋動作庫的動作列表 (API已過時，更新為 /v2/trainer/actions [GET])
 // @Description 搜尋動作庫的動作列表
 // @Tags Action_v1
 // @Accept json

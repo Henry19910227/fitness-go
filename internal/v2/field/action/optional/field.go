@@ -7,7 +7,7 @@ type UserIDField struct {
 	UserID *int64 `json:"user_id,omitempty" gorm:"column:user_id" binding:"omitempty" example:"10001"` //用戶id
 }
 type CourseIDField struct {
-	CourseID *int64 `json:"course_id,omitempty" gorm:"column:course_id" binding:"omitempty" example:"10"` //課表id
+	CourseID *int64 `json:"course_id,omitempty" uri:"course_id" gorm:"column:course_id" binding:"omitempty" example:"10"` //課表id
 }
 type NameField struct {
 	Name *string `json:"name,omitempty" form:"name" gorm:"column:name" binding:"omitempty,min=1,max=20" example:"划船機"` //動作名稱

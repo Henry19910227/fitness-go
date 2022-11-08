@@ -21,7 +21,7 @@ type Output struct {
 	MaxSpeedRecord    *max_speed_record.Output    `json:"max_speed_record" gorm:"foreignKey:action_id;references:id"`    // 最高速度紀錄
 	MaxWeightRecord   *max_weight_record.Output   `json:"max_weight_record" gorm:"foreignKey:action_id;references:id"`   // 最大重量紀錄
 	MinDurationRecord *min_duration_record.Output `json:"min_duration_record" gorm:"foreignKey:action_id;references:id"` // 最短時長紀錄
-	FavoriteAction 	  *favorite_action.Output 	  `json:"favorite_action" gorm:"foreignKey:action_id;references:id"` // 動作收藏
+	FavoriteAction    *favorite_action.Output     `json:"favorite_action" gorm:"foreignKey:action_id;references:id"`     // 動作收藏
 }
 
 func (Output) TableName() string {
@@ -221,15 +221,6 @@ type APIGetTrainerActionsData []*struct {
 	optional.StatusField
 	optional.CreateAtField
 	optional.UpdateAtField
-}
-
-// APICreateTrainerActionOutput /v2/trainer/action [POST] 新增教練動作 API
-type APICreateTrainerActionOutput struct {
-	base.Output
-	Data *APICreateTrainerActionData `json:"data,omitempty"`
-}
-type APICreateTrainerActionData struct {
-	optional.IDField
 }
 
 // APIUpdateTrainerActionOutput /v2/trainer/action/{action_id} [PATCH] 修改教練動作 API

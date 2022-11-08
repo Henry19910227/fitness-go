@@ -172,22 +172,6 @@ type APIGetTrainerActionsQuery struct {
 	PagingInput
 }
 
-// APICreateTrainerActionInput /v2/trainer/action [POST] 新增教練動作 API
-type APICreateTrainerActionInput struct {
-	UserID int64 `json:"user_id" binding:"required" example:"10001"` // 用戶 id
-	Cover  *file.Input
-	Video  *file.Input
-	Form   APICreateUserActionForm
-}
-type APICreateTrainerActionForm struct {
-	required.NameField
-	required.TypeField
-	required.CategoryField
-	required.BodyField
-	required.EquipmentField
-	required.IntroField
-}
-
 // APIUpdateTrainerActionInput /v2/trainer/action/{action_id} [PATCH] 修改教練動作 API
 type APIUpdateTrainerActionInput struct {
 	userRequired.UserIDField
@@ -216,7 +200,7 @@ type APIDeleteTrainerActionUri struct {
 	required.IDField
 }
 
-// APIDeleteTrainerActionVideoInput /v2/trainer/action/{action_id}/video
+// APIDeleteTrainerActionVideoInput /v2/trainer/action/{action_id}/video [DELETE]
 type APIDeleteTrainerActionVideoInput struct {
 	userRequired.UserIDField
 	Uri APIDeleteTrainerActionVideoUri
