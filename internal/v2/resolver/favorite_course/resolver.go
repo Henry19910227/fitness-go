@@ -28,7 +28,7 @@ func (r *resolver) APICreateFavoriteCourse(input *api_create_favorite_course.Inp
 		return output
 	}
 	if len(favoriteOutputs) > 0 {
-		output.Set(code.BadRequest, "已加入過該課表收藏")
+		output.Set(code.BadRequest, "已收藏過該課表")
 		return output
 	}
 	// 新增課表收藏
@@ -54,7 +54,7 @@ func (r *resolver) APIDeleteFavoriteCourse(input *api_delete_favorite_course.Inp
 		return output
 	}
 	if len(favoriteOutputs) == 0 {
-		output.Set(code.BadRequest, "查無此課表收藏")
+		output.Set(code.BadRequest, "無收藏此課表")
 		return output
 	}
 	// 刪除課表收藏

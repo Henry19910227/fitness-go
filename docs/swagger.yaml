@@ -15,7 +15,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
@@ -26,8 +26,8 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -38,12 +38,12 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -99,7 +99,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
@@ -110,8 +110,8 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -122,12 +122,12 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -203,7 +203,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
@@ -214,8 +214,8 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 動作介紹(1~400字元)
-              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -230,12 +230,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -273,7 +273,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
@@ -284,8 +284,8 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 動作介紹(1~400字元)
-              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -300,12 +300,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -358,7 +358,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
@@ -373,8 +373,8 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 動作介紹(1~400字元)
-              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -389,12 +389,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -436,7 +436,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
@@ -447,8 +447,8 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -459,12 +459,12 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -485,6 +485,17 @@ definitions:
         type: string
     type: object
   api_create_favorite_course.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  api_create_favorite_trainer.Output:
     properties:
       code:
         description: 狀態碼
@@ -724,11 +735,11 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
     type: object
   bank_account.APIGetTrainerBankAccountOutput:
@@ -7722,8 +7733,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -7791,7 +7802,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -7901,8 +7912,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       is_deleted:
         description: 是否刪除
@@ -7974,7 +7985,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -8025,7 +8036,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -8092,8 +8103,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -8161,7 +8172,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -8251,8 +8262,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 動作介紹(1~400字元)
-        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -8320,7 +8331,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -10692,7 +10703,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -10716,7 +10727,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -10742,7 +10753,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -10766,7 +10777,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -10790,7 +10801,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -10818,7 +10829,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -10835,7 +10846,7 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       end_audio:
         description: 結束語音
@@ -10859,7 +10870,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -10883,7 +10894,7 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       end_audio:
         description: 結束語音
@@ -10907,7 +10918,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -11399,7 +11410,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -11426,20 +11437,20 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -11520,7 +11531,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -11547,20 +11558,20 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -11639,7 +11650,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -11666,20 +11677,20 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -11758,7 +11769,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -11785,20 +11796,20 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -11870,7 +11881,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       distance:
         description: 距離(公里)
@@ -11897,20 +11908,20 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數id
-        example: 1
+        description: 次數
+        example: 2
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -11989,7 +12000,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       distance:
         description: 距離(公里)
@@ -12016,20 +12027,20 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數id
-        example: 1
+        description: 次數
+        example: 2
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -18307,6 +18318,33 @@ paths:
       security:
       - fitness_token: []
       summary: 獲取課表收藏列表
+      tags:
+      - 收藏_v2
+  /v2/favorite/trainer/{user_id}:
+    post:
+      consumes:
+      - application/json
+      description: 收藏教練
+      parameters:
+      - description: 教練id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/api_create_favorite_trainer.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 收藏教練
       tags:
       - 收藏_v2
   /v2/favorite/trainers:
