@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_trainer_course_actions"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -420,13 +421,14 @@ func (c *controller) UpdateTrainerAction(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// GetTrainerActions 獲取教練動作列表
+// GetTrainerCourseActions 獲取教練動作列表
 // @Summary 獲取教練動作列表
 // @Description 獲取教練動作列表
 // @Tags 教練課表_v2
 // @Accept json
 // @Produce json
 // @Security fitness_token
+// @Param course_id path int64 true "課表ID"
 // @Param name query string false "動作名稱"
 // @Param source query string false "動作來源(1:平台動作/2:教練動作)"
 // @Param category query string false "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)"
@@ -434,17 +436,21 @@ func (c *controller) UpdateTrainerAction(ctx *gin.Context) {
 // @Param equipment query string false "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} action.APIGetTrainerActionsOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Success 200 {object} api_get_trainer_course_actions.Output "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
-// @Router /v2/trainer/actions [GET]
-func (c *controller) GetTrainerActions(ctx *gin.Context) {
-	var input model.APIGetTrainerActionsInput
+// @Router /v2/trainer/course/{course_id}/actions [GET]
+func (c *controller) GetTrainerCourseActions(ctx *gin.Context) {
+	var input api_get_trainer_course_actions.Input
 	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
 	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIGetTrainerActions(&input)
+	output := c.resolver.APIGetTrainerCourseActions(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

@@ -6,6 +6,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_trainer_course_actions"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -291,7 +292,7 @@ func (r *resolver) APIUpdateUserAction(tx *gorm.DB, input *model.APIUpdateUserAc
 
 func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (output model.APIGetUserActionsOutput) {
 	// parser input
-	sourceList := make([]interface{}, 0)
+	sourceList := make([]int, 0)
 	if input.Query.Source != nil {
 		if strings.Contains(*input.Query.Source, "2") {
 			output.Set(code.BadRequest, "搜索內容不可包含教練動作")
@@ -306,10 +307,11 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 			sourceList = append(sourceList, opt)
 		}
 	} else {
-		sourceList = []interface{}{1, 3}
+		sourceList = append(sourceList, model.SourceSystem)
+		sourceList = append(sourceList, model.SourceUser)
 	}
 
-	categoryList := make([]interface{}, 0)
+	categoryList := make([]int, 0)
 	if input.Query.Category != nil {
 		for _, item := range strings.Split(*input.Query.Category, ",") {
 			opt, err := strconv.Atoi(item)
@@ -321,7 +323,7 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 		}
 	}
 
-	bodyList := make([]interface{}, 0)
+	bodyList := make([]int, 0)
 	if input.Query.Body != nil {
 		for _, item := range strings.Split(*input.Query.Body, ",") {
 			opt, err := strconv.Atoi(item)
@@ -333,7 +335,7 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 		}
 	}
 
-	equipmentList := make([]interface{}, 0)
+	equipmentList := make([]int, 0)
 	if input.Query.Equipment != nil {
 		for _, item := range strings.Split(*input.Query.Equipment, ",") {
 			opt, err := strconv.Atoi(item)
@@ -546,9 +548,9 @@ func (r *resolver) APICreateTrainerAction(tx *gorm.DB, input *api_create_trainer
 	return output
 }
 
-func (r *resolver) APIGetTrainerActions(input *model.APIGetTrainerActionsInput) (output model.APIGetTrainerActionsOutput) {
+func (r *resolver) APIGetTrainerCourseActions(input *api_get_trainer_course_actions.Input) (output api_get_trainer_course_actions.Output) {
 	// parser input
-	var sourceList []int
+	sourceList := make([]int, 0)
 	if input.Query.Source != nil {
 		if strings.Contains(*input.Query.Source, "3") {
 			output.Set(code.BadRequest, "搜索內容不可包含用戶動作")
@@ -563,10 +565,11 @@ func (r *resolver) APIGetTrainerActions(input *model.APIGetTrainerActionsInput) 
 			sourceList = append(sourceList, opt)
 		}
 	} else {
-		sourceList = []int{1, 3}
+		sourceList = append(sourceList, model.SourceSystem)
+		sourceList = append(sourceList, model.SourceTrainer)
 	}
 
-	var categoryList []int
+	categoryList := make([]int, 0)
 	if input.Query.Category != nil {
 		for _, item := range strings.Split(*input.Query.Category, ",") {
 			opt, err := strconv.Atoi(item)
@@ -578,7 +581,7 @@ func (r *resolver) APIGetTrainerActions(input *model.APIGetTrainerActionsInput) 
 		}
 	}
 
-	var bodyList []int
+	bodyList := make([]int, 0)
 	if input.Query.Body != nil {
 		for _, item := range strings.Split(*input.Query.Body, ",") {
 			opt, err := strconv.Atoi(item)
@@ -590,7 +593,7 @@ func (r *resolver) APIGetTrainerActions(input *model.APIGetTrainerActionsInput) 
 		}
 	}
 
-	var equipmentList []int
+	equipmentList := make([]int, 0)
 	if input.Query.Equipment != nil {
 		for _, item := range strings.Split(*input.Query.Equipment, ",") {
 			opt, err := strconv.Atoi(item)
@@ -601,14 +604,24 @@ func (r *resolver) APIGetTrainerActions(input *model.APIGetTrainerActionsInput) 
 			equipmentList = append(equipmentList, opt)
 		}
 	}
+	wheres := make([]*whereModel.Where, 0)
+	wheres = append(wheres, &whereModel.Where{Query: "actions.course_id = ? OR actions.course_id IS NULL", Args: []interface{}{input.Uri.CourseID}})
+	if len(sourceList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "actions.source IN (?)", Args: []interface{}{sourceList}})
+	}
+	if len(categoryList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "actions.category IN (?)", Args: []interface{}{categoryList}})
+	}
+	if len(bodyList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "actions.body IN (?)", Args: []interface{}{bodyList}})
+	}
+	if len(equipmentList) > 0 {
+		wheres = append(wheres, &whereModel.Where{Query: "actions.equipment IN (?)", Args: []interface{}{equipmentList}})
+	}
 	// 查詢動作
 	listInput := model.ListInput{}
-	listInput.UserID = util.PointerInt64(input.UserID)
 	listInput.Name = input.Query.Name
-	listInput.SourceList = sourceList
-	listInput.CategoryList = categoryList
-	listInput.EquipmentList = equipmentList
-	listInput.BodyList = bodyList
+	listInput.Wheres = wheres
 	listInput.Size = input.Query.Size
 	listInput.Page = input.Query.Page
 	listInput.OrderField = "create_at"
@@ -619,7 +632,7 @@ func (r *resolver) APIGetTrainerActions(input *model.APIGetTrainerActionsInput) 
 		return output
 	}
 	// parser output
-	data := model.APIGetTrainerActionsData{}
+	data := api_get_trainer_course_actions.Data{}
 	if err := util.Parser(actionOutputs, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

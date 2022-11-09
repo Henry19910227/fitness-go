@@ -500,7 +500,7 @@ func (cc *Course) CreateAction(c *gin.Context) {
 }
 
 // SearchActions 搜尋動作列表
-// @Summary 搜尋動作列表
+// @Summary 搜尋動作列表 (API已過時，更新為 /v2/trainer/course/{course_id}/actions [GET])
 // @Description 搜尋動作列表
 // @Tags Course_v1
 // @Accept json
