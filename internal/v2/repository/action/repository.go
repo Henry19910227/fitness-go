@@ -64,6 +64,10 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.UserID != nil {
 		db = db.Where("actions.user_id = ? OR actions.user_id IS NULL", *input.UserID)
 	}
+	// course_id 篩選條件
+	if input.CourseID != nil {
+		db = db.Where("actions.course_id = ?", *input.CourseID)
+	}
 	// Type 篩選條件
 	if input.Type != nil {
 		db = db.Where("actions.type = ?", *input.Type)

@@ -18,9 +18,9 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
         description: 動作id
         example: 1
@@ -82,9 +82,9 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
         description: 動作id
         example: 1
@@ -186,79 +186,9 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
-            id:
-              description: 動作id
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
               example: 1
               type: integer
-            intro:
-              description: 個人介紹
-              example: Henry教練
-              type: string
-            name:
-              description: 動作名稱
-              example: 划船機
-              type: string
-            source:
-              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
-              example: 1
-              type: integer
-            status:
-              description: 動作狀態(0:下架/1:上架)
-              example: 1
-              type: integer
-            type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
-              type: integer
-            update_at:
-              description: 更新時間
-              example: "2022-06-14 00:00:00"
-              type: string
-            video:
-              description: 動作影片
-              example: 1234.mp4
-              type: string
-          type: object
-        type: array
-      msg:
-        description: 訊息
-        example: message..
-        type: string
-      paging:
-        $ref: '#/definitions/paging.Output'
-    type: object
-  action.APIGetTrainerActionsOutput:
-    properties:
-      code:
-        description: 狀態碼
-        example: 9000
-        type: integer
-      data:
-        items:
-          properties:
-            body:
-              description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-              example: 8
-              type: integer
-            category:
-              description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
-              example: 1
-              type: integer
-            cover:
-              description: 封面
-              example: 1234.jpg
-              type: string
-            create_at:
-              description: 創建時間
-              example: "2022-06-14 00:00:00"
-              type: string
-            equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
             id:
               description: 動作id
               example: 1
@@ -341,9 +271,9 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             favorite:
               description: 是否收藏(0:否/1:是)
               example: 1
@@ -419,9 +349,9 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
         description: 動作id
         example: 1
@@ -538,6 +468,76 @@ definitions:
         description: 訊息
         example: message..
         type: string
+    type: object
+  api_get_trainer_course_actions.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            body:
+              description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+              example: 8
+              type: integer
+            category:
+              description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+              example: 1
+              type: integer
+            cover:
+              description: 封面
+              example: 1234.jpg
+              type: string
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            equipment:
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
+            id:
+              description: 動作id
+              example: 1
+              type: integer
+            intro:
+              description: 個人介紹
+              example: Henry教練
+              type: string
+            name:
+              description: 動作名稱
+              example: 划船機
+              type: string
+            source:
+              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
+              example: 1
+              type: integer
+            status:
+              description: 動作狀態(0:下架/1:上架)
+              example: 1
+              type: integer
+            type:
+              description: 動作類別(1:動作/2:休息)
+              example: 1
+              type: integer
+            update_at:
+              description: 更新時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            video:
+              description: 動作影片
+              example: 1234.mp4
+              type: string
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
     type: object
   api_get_user_workout_log.Course:
     properties:
@@ -10721,9 +10721,9 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             id:
               description: 訓練 id
               example: 1
@@ -10771,9 +10771,9 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             id:
               description: 訓練 id
               example: 1
@@ -10819,9 +10819,9 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             finish:
               description: 是否完成(0:未完成/1:已完成)
               example: 1
@@ -10864,9 +10864,9 @@ definitions:
         example: 123.mp3
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
         description: 訓練 id
         example: 1
@@ -10912,9 +10912,9 @@ definitions:
         example: 123.mp3
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
         description: 訓練 id
         example: 1
@@ -12373,7 +12373,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 搜尋動作庫的動作列表 (API已過時，更新為 /v2/trainer/actions [GET])
+      summary: 搜尋動作庫的動作列表 (API已過時，更新為 /v2/user/actions [GET])
       tags:
       - Action_v1
   /v1/app_store/access_token:
@@ -13167,7 +13167,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 搜尋動作列表
+      summary: 搜尋動作列表 (API已過時，更新為 /v2/trainer/course/{course_id}/actions [GET])
       tags:
       - Course_v1
   /v1/course/{course_id}/cover:
@@ -19994,59 +19994,6 @@ paths:
       summary: 刪除教練動作影片
       tags:
       - 教練課表_v2
-  /v2/trainer/actions:
-    get:
-      consumes:
-      - application/json
-      description: 獲取教練動作列表
-      parameters:
-      - description: 動作名稱
-        in: query
-        name: name
-        type: string
-      - description: 動作來源(1:平台動作/2:教練動作)
-        in: query
-        name: source
-        type: string
-      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
-        in: query
-        name: category
-        type: string
-      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
-        in: query
-        name: body
-        type: string
-      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        in: query
-        name: equipment
-        type: string
-      - description: 頁數(從第一頁開始)
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: 筆數
-        in: query
-        name: size
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
-            denied
-          schema:
-            $ref: '#/definitions/action.APIGetTrainerActionsOutput'
-        "400":
-          description: 失敗!
-          schema:
-            $ref: '#/definitions/base.Output'
-      security:
-      - fitness_token: []
-      summary: 獲取教練動作列表
-      tags:
-      - 教練課表_v2
   /v2/trainer/bank_account:
     get:
       consumes:
@@ -20341,6 +20288,64 @@ paths:
       security:
       - fitness_token: []
       summary: 新增教練動作
+      tags:
+      - 教練課表_v2
+  /v2/trainer/course/{course_id}/actions:
+    get:
+      consumes:
+      - application/json
+      description: 獲取教練動作列表
+      parameters:
+      - description: 課表ID
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: 動作名稱
+        in: query
+        name: name
+        type: string
+      - description: 動作來源(1:平台動作/2:教練動作)
+        in: query
+        name: source
+        type: string
+      - description: 分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
+        in: query
+        name: category
+        type: string
+      - description: 身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
+        in: query
+        name: body
+        type: string
+      - description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        in: query
+        name: equipment
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
+          schema:
+            $ref: '#/definitions/api_get_trainer_course_actions.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取教練動作列表
       tags:
       - 教練課表_v2
   /v2/trainer/course/{course_id}/plan:

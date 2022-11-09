@@ -29,6 +29,7 @@ type ListInput struct {
 	CategoryList  []int   `json:"category_list"`  //分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)
 	BodyList      []int   `json:"body_list"`      //身體部位(1:全身/2:核心/3:手臂/4:背部/5:臀部/6:腿部/7:肩膀/8:胸部)
 	EquipmentList []int   `json:"equipment_list"` //器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+	optional.CourseIDField
 	optional.UserIDField
 	optional.NameField
 	optional.TypeField

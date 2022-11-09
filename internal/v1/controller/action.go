@@ -172,7 +172,7 @@ func (a *Action) DeleteActionVideo(c *gin.Context) {
 }
 
 // SearchActions 搜尋動作庫的動作列表
-// @Summary 搜尋動作庫的動作列表 (API已過時，更新為 /v2/trainer/actions [GET])
+// @Summary 搜尋動作庫的動作列表 (API已過時，更新為 /v2/user/actions [GET])
 // @Description 搜尋動作庫的動作列表
 // @Tags Action_v1
 // @Accept json
