@@ -7,6 +7,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_trainer_course_actions"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_user_action_best_pr"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -398,6 +399,33 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 	}
 	output.Set(code.Success, "success")
 	output.Paging = page
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetUserActionBestPR(input *api_get_user_action_best_pr.Input) (output api_get_user_action_best_pr.Output) {
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ActionID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "MaxDistanceRecord", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "MaxRepsRecord", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "MaxRMRecord", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "MaxSpeedRecord", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "MaxWeightRecord", Conditions: []interface{}{"user_id = ?", input.UserID}},
+		{Field: "MinDurationRecord", Conditions: []interface{}{"user_id = ?", input.UserID}},
+	}
+	actionOutput, err := r.actionService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := api_get_user_action_best_pr.Data{}
+	if err := util.Parser(actionOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
 	output.Data = &data
 	return output
 }

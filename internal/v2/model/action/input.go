@@ -21,6 +21,7 @@ type CustomOrderByInput = orderBy.CustomInput
 
 type FindInput struct {
 	optional.IDField
+	PreloadInput
 }
 
 type ListInput struct {

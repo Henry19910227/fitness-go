@@ -5,6 +5,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_trainer_course_actions"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_user_action_best_pr"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -260,6 +261,28 @@ func (c *controller) GetUserActions(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetUserActions(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetUserActionBestPR 獲取動作個人最佳紀錄
+// @Summary 獲取動作個人最佳紀錄
+// @Description 獲取動作個人最佳紀錄
+// @Tags 用戶個人課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param action_id path int64 true "動作id"
+// @Success 200 {object} api_get_user_action_best_pr.Output "Success!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/user/action/{action_id}/best_personal_record [GET]
+func (c *controller) GetUserActionBestPR(ctx *gin.Context) {
+	var input api_get_user_action_best_pr.Input
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetUserActionBestPR(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

@@ -23,6 +23,12 @@ func (r *repository) Find(input *model.FindInput) (output *model.Output, err err
 	if input.ID != nil {
 		db = db.Where("id = ?", *input.ID)
 	}
+	// Preload
+	if len(input.Preloads) > 0 {
+		for _, preload := range input.Preloads {
+			db = db.Preload(preload.Field, preload.Conditions...)
+		}
+	}
 	//查詢數據
 	err = db.First(&output).Error
 	return output, err
