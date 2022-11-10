@@ -12,6 +12,7 @@ type Controller interface {
 	CreateUserAction(ctx *gin.Context)
 	UpdateUserAction(ctx *gin.Context)
 	GetUserActions(ctx *gin.Context)
+	GetUserActionBestPR(ctx *gin.Context)
 	DeleteUserAction(ctx *gin.Context)
 	DeleteUserActionVideo(ctx *gin.Context)
 	APIGetUserActionSystemImages(ctx *gin.Context)
