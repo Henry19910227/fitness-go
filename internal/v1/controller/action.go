@@ -212,7 +212,7 @@ func (a *Action) SearchActions(c *gin.Context) {
 }
 
 // GetActionBestPR 獲取動作個人最佳紀錄
-// @Summary 獲取動作個人最佳紀錄
+// @Summary 獲取動作個人最佳紀錄 (API已過時，更新為 /v2/user/action/{action_id}/best_personal_record [GET])
 // @Description 獲取動作個人最佳紀錄
 // @Tags Action_v1
 // @Accept json
@@ -242,7 +242,7 @@ func (a *Action) GetActionBestPR(c *gin.Context) {
 }
 
 // GetWorkoutSetLogs 以日期獲取動作訓練組紀錄
-// @Summary 以日期獲取動作訓練組紀錄
+// @Summary 以日期獲取動作訓練組紀錄 (API已過時，更新為 /v2/user/action/{action_id}/workout_set_logs [GET])
 // @Description 以日期獲取動作訓練組紀錄
 // @Tags Action_v1
 // @Accept json

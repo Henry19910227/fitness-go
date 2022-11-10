@@ -45,6 +45,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/workout"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/workout_log"
 	workoutSet "github.com/Henry19910227/fitness-go/internal/v2/router/workout_set"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/workout_set_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/workout_set_order"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
@@ -244,6 +245,7 @@ func main() {
 	favorite_action.SetRoute(v2)
 	favorite_course.SetRoute(v2)
 	favorite_trainer.SetRoute(v2)
+	workout_set_log.SetRoute(v2)
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }
 
