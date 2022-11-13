@@ -29,7 +29,7 @@ func (WorkoutOutput) TableName() string {
 	return "workouts"
 }
 
-func (o *Output) WorkoutOnSafe() WorkoutOutput {
+func (o Output) WorkoutOnSafe() WorkoutOutput {
 	if o.Workout != nil {
 		return *o.Workout
 	}

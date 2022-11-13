@@ -14,3 +14,17 @@ type Output struct {
 func (Output) TableName() string {
 	return "order_courses"
 }
+
+func (o Output) CourseOnSafe() course.Output {
+	if o.Course != nil {
+		return *o.Course
+	}
+	return course.Output{}
+}
+
+func (o Output) SaleItemOnSafe() sale_item.Output {
+	if o.SaleItem != nil {
+		return *o.SaleItem
+	}
+	return sale_item.Output{}
+}

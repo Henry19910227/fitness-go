@@ -39,14 +39,14 @@ func (Output) TableName() string {
 	return "courses"
 }
 
-func (o *Output) UserCourseAssetOnSafe() user_course_asset.Output {
+func (o Output) UserCourseAssetOnSafe() user_course_asset.Output {
 	if o.UserCourseAsset != nil {
 		return *o.UserCourseAsset
 	}
 	return user_course_asset.Output{}
 }
 
-func (o *Output) FavoriteCourseOnSafe() favorite_course.Output {
+func (o Output) FavoriteCourseOnSafe() favorite_course.Output {
 	if o.FavoriteCourse != nil {
 		return *o.FavoriteCourse
 	}
@@ -622,7 +622,7 @@ type APIGetStoreCourseStructureData struct {
 type APIGetStoreCoursesOutput struct {
 	base.Output
 	Data   *APIGetStoreCoursesData `json:"data,omitempty"`
-	Paging *paging.Output            `json:"paging,omitempty"`
+	Paging *paging.Output          `json:"paging,omitempty"`
 }
 type APIGetStoreCoursesData []*struct {
 	courseOptional.IDField
@@ -662,7 +662,7 @@ type APIGetStoreCoursesData []*struct {
 type APIGetStoreTrainerCoursesOutput struct {
 	base.Output
 	Data   *APIGetStoreTrainerCoursesData `json:"data,omitempty"`
-	Paging *paging.Output            `json:"paging,omitempty"`
+	Paging *paging.Output                 `json:"paging,omitempty"`
 }
 type APIGetStoreTrainerCoursesData []*struct {
 	courseOptional.IDField
@@ -704,9 +704,9 @@ type APIGetStoreHomePageOutput struct {
 	Data *APIGetStoreHomePageData `json:"data,omitempty"`
 }
 type APIGetStoreHomePageData struct {
-	LatestCourses APIGetStoreHomePageCourseItems `json:"latest_courses"`
-	PopularCourses APIGetStoreHomePageCourseItems `json:"popular_courses"`
-	LatestTrainers APIGetStoreHomePageTrainerItems `json:"latest_trainers"`
+	LatestCourses   APIGetStoreHomePageCourseItems  `json:"latest_courses"`
+	PopularCourses  APIGetStoreHomePageCourseItems  `json:"popular_courses"`
+	LatestTrainers  APIGetStoreHomePageTrainerItems `json:"latest_trainers"`
 	PopularTrainers APIGetStoreHomePageTrainerItems `json:"popular_trainers"`
 }
 type APIGetStoreHomePageCourseItems []*struct {

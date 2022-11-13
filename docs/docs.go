@@ -4729,7 +4729,7 @@ var doc = `{
                 "tags": [
                     "Payment_v1"
                 ],
-                "summary": "兌換免費課表",
+                "summary": "兌換免費課表 (API已過時，更新為 /v2/order/{order_id}/redeem [POST])",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -10624,6 +10624,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/order/{order_id}/redeem": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "訂單兌換免費課表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付_v2"
+                ],
+                "summary": "訂單兌換免費課表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "訂單ID",
+                        "name": "order_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/api_order_redeem.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/otp": {
             "post": {
                 "description": "發送OTP",
@@ -16437,14 +16480,14 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "Henry教練"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16520,14 +16563,14 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "Henry教練"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16658,14 +16701,14 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "課表介紹",
+                                "description": "個人介紹",
                                 "type": "string",
-                                "example": "增肌專用課表"
+                                "example": "Henry教練"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16775,14 +16818,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "課表介紹",
+                                "description": "個人介紹",
                                 "type": "string",
-                                "example": "增肌專用課表"
+                                "example": "Henry教練"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16871,14 +16914,14 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "Henry教練"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16959,7 +17002,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "動作id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -17067,14 +17110,14 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "課表介紹",
+                                "description": "個人介紹",
                                 "type": "string",
-                                "example": "增肌專用課表"
+                                "example": "Henry教練"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -17123,7 +17166,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "動作id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17371,7 +17414,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -17379,7 +17422,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17569,6 +17612,21 @@ var doc = `{
                             "example": 50.5
                         }
                     }
+                }
+            }
+        },
+        "api_order_redeem.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },
@@ -21051,7 +21109,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "產品標籤id",
+                                                "description": "log id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -25397,9 +25455,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "訂單id",
-                    "type": "string",
-                    "example": "202105201300687423"
+                    "description": "log id",
+                    "type": "integer",
+                    "example": 1
                 },
                 "order_course": {
                     "type": "object",
@@ -25528,9 +25586,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "訂單id",
-                    "type": "string",
-                    "example": "202105201300687423"
+                    "description": "log id",
+                    "type": "integer",
+                    "example": 1
                 },
                 "order_status": {
                     "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
@@ -25646,9 +25704,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "訂單id",
-                                "type": "string",
-                                "example": "202105201300687423"
+                                "description": "log id",
+                                "type": "integer",
+                                "example": 1
                             },
                             "order_course": {
                                 "type": "object",
@@ -26833,7 +26891,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -26856,9 +26914,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "Henry教練"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -26946,10 +27004,10 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -27007,7 +27065,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "關聯的用戶id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -27068,7 +27126,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -27091,9 +27149,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "Henry教練"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -27186,10 +27244,10 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -27239,7 +27297,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "nickname": {
                                 "description": "教練暱稱",
@@ -27254,10 +27312,10 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "user_id": {
-                                "description": "關聯的用戶id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -27318,7 +27376,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -27341,9 +27399,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "Henry教練"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27431,10 +27489,10 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -27526,7 +27584,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -27549,9 +27607,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "課表介紹",
+                    "description": "個人介紹",
                     "type": "string",
-                    "example": "增肌專用課表"
+                    "example": "Henry教練"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27639,10 +27697,10 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -30615,7 +30673,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -30658,7 +30716,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -30801,7 +30859,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30867,7 +30925,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30935,7 +30993,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30988,7 +31046,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -31051,7 +31109,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -31303,7 +31361,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -31311,7 +31369,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31740,9 +31798,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "log id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -31896,9 +31954,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "log id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -32049,9 +32107,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "log id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -32202,9 +32260,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "log id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -32345,9 +32403,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練組 id",
+                    "description": "log id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",
@@ -32498,9 +32556,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練組 id",
+                    "description": "log id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",

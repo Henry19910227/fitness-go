@@ -2,6 +2,7 @@ package order
 
 import (
 	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/order/optional"
 	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
 	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -19,6 +20,20 @@ type Output struct {
 
 func (Output) TableName() string {
 	return "orders"
+}
+
+func (o Output) OrderCourseOnSafe() order_course.Output {
+	if o.OrderCourse != nil {
+		return *o.OrderCourse
+	}
+	return order_course.Output{}
+}
+
+func (o Output) OrderSubscribePlanOnSafe() order_subscribe_plan.Output {
+	if o.OrderSubscribePlan != nil {
+		return *o.OrderSubscribePlan
+	}
+	return order_subscribe_plan.Output{}
 }
 
 // APICreateCourseOrderOutput /v2/course_order [POST]
@@ -75,13 +90,13 @@ type APIGetCMSOrdersOutput struct {
 	Paging *paging.Output      `json:"paging,omitempty"`
 }
 type APIGetCMSOrdersData []*struct {
-	IDField
-	UserIDField
-	QuantityField
-	OrderTypeField
-	OrderStatusField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.UserIDField
+	optional.QuantityField
+	optional.OrderTypeField
+	optional.OrderStatusField
+	optional.CreateAtField
+	optional.UpdateAtField
 	OrderCourse *struct {
 		Course *struct {
 			courseOptional.IDField

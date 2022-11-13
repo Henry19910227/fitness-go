@@ -189,7 +189,7 @@ func (p *Payment) VerifyGoogleReceipt(c *gin.Context) {
 }
 
 // RedeemCourse 兌換免費課表
-// @Summary 兌換免費課表
+// @Summary 兌換免費課表 (API已過時，更新為 /v2/order/{order_id}/redeem [POST])
 // @Description 兌換免費課表
 // @Tags Payment_v1
 // @Accept json

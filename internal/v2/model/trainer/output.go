@@ -33,14 +33,14 @@ func (UserOutput) TableName() string {
 	return "users"
 }
 
-func (o *Output) UserOnSafe() UserOutput {
+func (o Output) UserOnSafe() UserOutput {
 	if o.User != nil {
 		return *o.User
 	}
 	return UserOutput{}
 }
 
-func (o *Output) TrainerStatisticOnSafe() trainer_statistic.Output {
+func (o Output) TrainerStatisticOnSafe() trainer_statistic.Output {
 	if o.TrainerStatistic != nil {
 		return *o.TrainerStatistic
 	}

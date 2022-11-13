@@ -13,6 +13,7 @@ import (
 	iabModel "github.com/Henry19910227/fitness-go/internal/v2/model/iab"
 	iapModel "github.com/Henry19910227/fitness-go/internal/v2/model/iap"
 	orderModel "github.com/Henry19910227/fitness-go/internal/v2/model/order"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_order_redeem"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderCourseModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	orderSubscribePlanModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_subscribe_plan"
@@ -406,6 +407,88 @@ func (r *resolver) APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *
 	}
 	logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+"訂單類型錯誤")
 	output.Set(code.BadRequest, "訂單類型錯誤")
+	return output
+}
+
+func (r *resolver) APIOrderRedeem(tx *gorm.DB, input *api_order_redeem.Input) (output api_order_redeem.Output) {
+	// 查詢訂單
+	findInput := orderModel.FindInput{}
+	findInput.ID = util.PointerString(input.Uri.OrderID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "OrderCourse.Course"},
+		{Field: "OrderCourse.SaleItem.ProductLabel"},
+	}
+	orderOutput, err := r.orderService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證訂單
+	if util.OnNilJustReturnInt64(orderOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非該用戶訂單")
+		return output
+	}
+	if util.OnNilJustReturnInt(orderOutput.Type, 0) != orderModel.BuyCourse {
+		output.Set(code.BadRequest, "此訂單類型錯誤，無法兌換課表")
+		return output
+	}
+	if orderOutput.OrderCourse == nil {
+		output.Set(code.BadRequest, "此訂單的未註名商品")
+		return output
+	}
+	if util.OnNilJustReturnInt(orderOutput.OrderCourseOnSafe().CourseOnSafe().SaleType, 0) != courseModel.SaleTypeFree {
+		output.Set(code.BadRequest, "此訂單的商品非免費課表")
+		return output
+	}
+	if util.OnNilJustReturnInt(orderOutput.OrderStatus, 0) != orderModel.Pending {
+		output.Set(code.BadRequest, "此訂單已失效")
+		return output
+	}
+	defer tx.Rollback()
+	// 1.儲存收據
+	receiptTable := receiptModel.Table{}
+	receiptTable.OrderID = orderOutput.ID
+	receiptTable.PaymentType = util.PointerInt(0)
+	receiptTable.OriginalTransactionID = util.PointerString("")
+	receiptTable.TransactionID = util.PointerString("")
+	receiptTable.ReceiptToken = util.PointerString("")
+	receiptTable.ProductID = util.PointerString("")
+	receiptTable.Quantity = util.PointerInt(1)
+	_, err = r.receiptService.Tx(tx).CreateOrUpdate(&receiptTable)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 2.創建購買紀錄
+	logTable := purchaseLogModel.Table{}
+	logTable.UserID = orderOutput.UserID
+	logTable.OrderID = orderOutput.ID
+	logTable.Type = util.PointerInt(purchaseLogModel.Buy)
+	_, err = r.purchaseLogService.Tx(tx).Create(&logTable)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 3.創建購買資源
+	assetTable := courseAssetModel.Table{}
+	assetTable.UserID = orderOutput.UserID
+	assetTable.CourseID = orderOutput.OrderCourseOnSafe().CourseID
+	assetTable.Available = util.PointerInt(1)
+	_, err = r.courseAssetService.Tx(tx).Create(&assetTable)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 4.更新訂單狀態
+	orderTable := orderModel.Table{}
+	orderTable.ID = orderOutput.ID
+	orderTable.OrderStatus = util.PointerInt(orderModel.Success)
+	if err := r.orderService.Tx(tx).Update(&orderTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	output.Set(code.Success, "success")
 	return output
 }
 
