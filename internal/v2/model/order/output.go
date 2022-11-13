@@ -5,11 +5,11 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/order/optional"
 	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
 	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
+	subscribePlanOptional "github.com/Henry19910227/fitness-go/internal/v2/field/subscribe_plan/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/subscribe_plan"
 )
 
 type Output struct {
@@ -70,9 +70,9 @@ type APICreateSubscribeOrderData struct {
 	Table
 	OrderSubscribePlan *struct {
 		SubscribePlan *struct {
-			subscribe_plan.IDField
-			subscribe_plan.PeriodField
-			subscribe_plan.NameField
+			subscribePlanOptional.IDField
+			subscribePlanOptional.PeriodField
+			subscribePlanOptional.NameField
 			ProductLabel *struct {
 				productLabelOptional.IDField
 				productLabelOptional.NameField
@@ -115,9 +115,9 @@ type APIGetCMSOrdersData []*struct {
 	} `json:"order_course,omitempty"`
 	OrderSubscribePlan *struct {
 		SubscribePlan *struct {
-			subscribe_plan.IDField
-			subscribe_plan.PeriodField
-			subscribe_plan.NameField
+			subscribePlanOptional.IDField
+			subscribePlanOptional.PeriodField
+			subscribePlanOptional.NameField
 			ProductLabel *struct {
 				productLabelOptional.IDField
 				productLabelOptional.NameField

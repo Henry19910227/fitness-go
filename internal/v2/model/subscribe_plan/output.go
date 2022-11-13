@@ -1,6 +1,8 @@
 package subscribe_plan
 
-import "github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
+import (
+	"github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
+)
 
 type Output struct {
 	Table
@@ -9,4 +11,11 @@ type Output struct {
 
 func (Output) TableName() string {
 	return "subscribe_plans"
+}
+
+func (o Output) ProductLabelOnSafe() product_label.Output {
+	if o.ProductLabel != nil {
+		return *o.ProductLabel
+	}
+	return product_label.Output{}
 }

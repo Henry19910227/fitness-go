@@ -36,6 +36,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/review"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/review_image"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/sale_item"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_promote_monthly_statistic"
@@ -248,6 +249,7 @@ func main() {
 	favorite_trainer.SetRoute(v2)
 	workout_set_log.SetRoute(v2)
 	sale_item.SetRoute(v2)
+	subscribe_plan.SetRoute(v2)
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }
 
