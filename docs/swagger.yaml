@@ -22,12 +22,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -38,8 +38,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -86,12 +86,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -102,8 +102,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -190,12 +190,12 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -210,8 +210,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -279,12 +279,12 @@ definitions:
               example: 1
               type: integer
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -299,8 +299,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -353,12 +353,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
@@ -369,8 +369,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -419,7 +419,7 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
     type: object
@@ -469,6 +469,47 @@ definitions:
         example: message..
         type: string
     type: object
+  api_get_sale_items.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            id:
+              description: 訓練 log id
+              example: 1
+              type: integer
+            name:
+              description: 銷售名稱
+              example: '銅級課表 '
+              type: string
+            product_label:
+              properties:
+                id:
+                  description: 產品標籤id
+                  example: 1
+                  type: integer
+                product_id:
+                  description: 產品id
+                  example: com.fitness.gold_member_month
+                  type: string
+                twd:
+                  description: 台幣價格
+                  example: 500
+                  type: integer
+              type: object
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
+    type: object
   api_get_trainer_course_actions.Output:
     properties:
       code:
@@ -499,12 +540,12 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
@@ -519,8 +560,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -542,7 +583,7 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       max_distance_record:
@@ -665,7 +706,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             incline:
@@ -733,7 +774,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       intensity:
@@ -3535,7 +3576,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: log id
+                      description: 訓練 log id
                       example: 1
                       type: integer
                     product_id:
@@ -6832,7 +6873,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       order_course:
@@ -6929,7 +6970,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       order_status:
@@ -7017,7 +7058,7 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             order_course:
@@ -7913,8 +7954,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -8092,8 +8133,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       is_deleted:
         description: 是否刪除
@@ -8283,8 +8324,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -8442,8 +8483,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -10758,7 +10799,7 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
     type: object
@@ -10789,7 +10830,7 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
     type: object
@@ -10894,7 +10935,7 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             name:
@@ -10944,7 +10985,7 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             name:
@@ -10996,7 +11037,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             name:
@@ -11037,7 +11078,7 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       name:
@@ -11085,7 +11126,7 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       name:
@@ -11283,7 +11324,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             intensity:
@@ -11601,7 +11642,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             incline:
@@ -11625,8 +11666,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -11722,7 +11763,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             incline:
@@ -11746,8 +11787,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -11841,7 +11882,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             incline:
@@ -11865,8 +11906,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -11960,7 +12001,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: log id
+              description: 訓練 log id
               example: 1
               type: integer
             incline:
@@ -11984,8 +12025,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12072,7 +12113,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       incline:
@@ -12096,8 +12137,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -12191,7 +12232,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: log id
+        description: 訓練 log id
         example: 1
         type: integer
       incline:
@@ -12215,8 +12256,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -15366,7 +15407,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 取得銷售項目清單
+      summary: 取得銷售項目清單 (API已過時，更新為 /v2/sale_items [GET])
       tags:
       - Sale_v1
   /v1/store_home_page:
@@ -19333,6 +19374,38 @@ paths:
       summary: 重設密碼
       tags:
       - 忘記密碼_v2
+  /v2/sale_items:
+    get:
+      consumes:
+      - application/json
+      description: 取得銷售項目清單
+      parameters:
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/api_get_sale_items.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 取得銷售項目清單
+      tags:
+      - 支付_v2
   /v2/store/course/{course_id}:
     get:
       consumes:

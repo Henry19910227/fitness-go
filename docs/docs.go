@@ -5054,7 +5054,7 @@ var doc = `{
                 "tags": [
                     "Sale_v1"
                 ],
-                "summary": "取得銷售項目清單",
+                "summary": "取得銷售項目清單 (API已過時，更新為 /v2/sale_items [GET])",
                 "responses": {
                     "200": {
                         "description": "獲取成功!",
@@ -11352,6 +11352,56 @@ var doc = `{
                 }
             }
         },
+        "/v2/sale_items": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "取得銷售項目清單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付_v2"
+                ],
+                "summary": "取得銷售項目清單",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/api_get_sale_items.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/store/course/review/{review_id}": {
             "get": {
                 "security": [
@@ -16480,14 +16530,14 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16500,9 +16550,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -16563,14 +16613,14 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16583,9 +16633,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -16701,14 +16751,14 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16726,9 +16776,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -16818,14 +16868,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -16843,9 +16893,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -16914,14 +16964,14 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -16934,9 +16984,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -17002,7 +17052,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -17071,6 +17121,62 @@ var doc = `{
                 }
             }
         },
+        "api_get_sale_items.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "description": "訓練 log id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "description": "銷售名稱",
+                                "type": "string",
+                                "example": "銅級課表 "
+                            },
+                            "product_label": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "description": "產品標籤id",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "product_id": {
+                                        "description": "產品id",
+                                        "type": "string",
+                                        "example": "com.fitness.gold_member_month"
+                                    },
+                                    "twd": {
+                                        "description": "台幣價格",
+                                        "type": "integer",
+                                        "example": 500
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
         "api_get_trainer_course_actions.Output": {
             "type": "object",
             "properties": {
@@ -17110,14 +17216,14 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -17135,9 +17241,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -17166,7 +17272,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17333,7 +17439,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17422,7 +17528,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -21109,7 +21215,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "log id",
+                                                "description": "訓練 log id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -25455,7 +25561,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -25586,7 +25692,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -25704,7 +25810,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -26914,9 +27020,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27149,9 +27255,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -27399,9 +27505,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27607,9 +27713,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -30673,7 +30779,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -30716,7 +30822,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -30859,7 +30965,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30925,7 +31031,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30993,7 +31099,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31046,7 +31152,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -31109,7 +31215,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -31369,7 +31475,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31798,7 +31904,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31828,9 +31934,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -31954,7 +32060,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31984,9 +32090,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -32107,7 +32213,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -32137,9 +32243,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -32260,7 +32366,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -32290,9 +32396,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -32403,7 +32509,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -32433,9 +32539,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -32556,7 +32662,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "log id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -32586,9 +32692,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",

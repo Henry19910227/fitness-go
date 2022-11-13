@@ -26,7 +26,7 @@ func NewSale(baseGroup *gin.RouterGroup, saleService service.Sale, userMidd midd
 }
 
 // GetSaleItems 取得銷售項目清單
-// @Summary  取得銷售項目清單
+// @Summary  取得銷售項目清單 (API已過時，更新為 /v2/sale_items [GET])
 // @Description  取得銷售項目清單
 // @Tags Sale_v1
 // @Accept json
