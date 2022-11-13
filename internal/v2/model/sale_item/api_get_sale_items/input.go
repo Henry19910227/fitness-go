@@ -10,8 +10,4 @@ type PagingInput = paging.Input
 // Input /v2/sale_items [GET]
 type Input struct {
 	userRequired.UserIDField
-	Query Query
-}
-type Query struct {
-	PagingInput
 }

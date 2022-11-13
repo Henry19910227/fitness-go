@@ -4,14 +4,12 @@ import (
 	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 )
 
 // Output /v2/sale_items [GET]
 type Output struct {
 	base.Output
-	Data   *Data          `json:"data,omitempty"`
-	Paging *paging.Output `json:"paging,omitempty"`
+	Data *Data `json:"data,omitempty"`
 }
 type Data []*struct {
 	optional.IDField

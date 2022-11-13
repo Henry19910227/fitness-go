@@ -24,9 +24,7 @@ func (r *resolver) APIGetSaleItems(input *api_get_sale_items.Input) (output api_
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "ProductLabel"},
 	}
-	listInput.Page = input.Query.Page
-	listInput.Size = input.Query.Size
-	saleItemOutputs, page, err := r.saleItemService.List(&listInput)
+	saleItemOutputs, _, err := r.saleItemService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -38,7 +36,6 @@ func (r *resolver) APIGetSaleItems(input *api_get_sale_items.Input) (output api_
 		return output
 	}
 	output.Set(code.Success, "success")
-	output.Paging = page
 	output.Data = &data
 	return output
 }

@@ -45,7 +45,7 @@ func (s *Sale) GetSaleItems(c *gin.Context) {
 }
 
 // GetSubscribePlans 取得訂閱方案清單
-// @Summary  取得訂閱方案清單
+// @Summary  取得訂閱方案清單 (API已過時，更新為 /v1/subscribe_plans [GET])
 // @Description  取得訂閱方案清單
 // @Tags Sale_v1
 // @Accept json
