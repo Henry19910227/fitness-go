@@ -3,6 +3,7 @@ package course
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -26,6 +27,7 @@ type Resolver interface {
 	APIGetUserCourseStructure(input *model.APIGetUserCourseStructureInput) (output model.APIGetUserCourseStructureOutput)
 
 	APIGetTrainerCourses(input *model.APIGetTrainerCoursesInput) (output model.APIGetTrainerCoursesOutput)
+	APIGetTrainerCourseOverview(input *api_get_trainer_course_overview.Input) (output api_get_trainer_course_overview.Output)
 	APICreateTrainerCourse(input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput)
 	APICreateTrainerSingleWorkoutCourse(tx *gorm.DB, input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput)
 	APIGetTrainerCourse(input *model.APIGetTrainerCourseInput) (output model.APIGetTrainerCourseOutput)

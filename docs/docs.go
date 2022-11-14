@@ -1804,7 +1804,7 @@ var doc = `{
                 "tags": [
                     "Course_v1"
                 ],
-                "summary": "獲取課表總覽",
+                "summary": "獲取課表總覽 (API已過時，更新為 /v2/trainer/course/{course_id}/overview [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -13263,6 +13263,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/course/{course_id}/overview": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練課表預覽",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "獲取教練課表預覽",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success!",
+                        "schema": {
+                            "$ref": "#/definitions/api_get_trainer_course_overview.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/course/{course_id}/plan": {
             "post": {
                 "security": [
@@ -16553,14 +16596,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -16568,9 +16611,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -16636,14 +16679,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -16651,9 +16694,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -16774,14 +16817,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "增肌課表"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -16794,9 +16837,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -16891,14 +16934,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "增肌課表"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -16911,9 +16954,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -16987,14 +17030,14 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -17002,9 +17045,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -17158,9 +17201,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "增肌課表"
                             },
                             "product_label": {
                                 "type": "object",
@@ -17211,9 +17254,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "增肌課表"
                             },
                             "period": {
                                 "description": "週期(1:一個月/2:二個月/3:三個月/6:六個月/12:一年/99:永久)",
@@ -17299,14 +17342,14 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "個人介紹",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "Henry教練"
+                                "example": "增肌專用課表"
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "增肌課表"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -17319,9 +17362,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -17343,6 +17386,234 @@ var doc = `{
                 },
                 "paging": {
                     "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
+        "api_get_trainer_course_overview.Data": {
+            "type": "object",
+            "properties": {
+                "body_target": {
+                    "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)",
+                    "type": "string",
+                    "example": "4,5"
+                },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
+                },
+                "food": {
+                    "description": "飲食建議",
+                    "type": "string",
+                    "example": "多吃雞胸肉"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "intro": {
+                    "description": "課表介紹",
+                    "type": "string",
+                    "example": "增肌專用課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                },
+                "notice": {
+                    "description": "注意事項",
+                    "type": "string",
+                    "example": "注意關節避免鎖死"
+                },
+                "place": {
+                    "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
+                    "type": "string",
+                    "example": "1,2"
+                },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 10
+                },
+                "review_statistic": {
+                    "type": "object",
+                    "properties": {
+                        "amount": {
+                            "description": "評分筆數",
+                            "type": "integer",
+                            "example": 10
+                        },
+                        "five_total": {
+                            "description": "五分總筆數",
+                            "type": "integer",
+                            "example": 20
+                        },
+                        "four_total": {
+                            "description": "四分總筆數",
+                            "type": "integer",
+                            "example": 15
+                        },
+                        "one_total": {
+                            "description": "一分總筆數",
+                            "type": "integer",
+                            "example": 5
+                        },
+                        "score_total": {
+                            "description": "評分累積",
+                            "type": "integer",
+                            "example": 100
+                        },
+                        "three_total": {
+                            "description": "三分總筆數",
+                            "type": "integer",
+                            "example": 10
+                        },
+                        "two_total": {
+                            "description": "二分總筆數",
+                            "type": "integer",
+                            "example": 5
+                        }
+                    }
+                },
+                "sale_id": {
+                    "description": "銷售 id",
+                    "type": "integer",
+                    "example": 3
+                },
+                "sale_item": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "description": "銷售id",
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "name": {
+                            "description": "銷售名稱",
+                            "type": "string",
+                            "example": "銅級課表 "
+                        },
+                        "product_label": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "產品標籤id",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "product_id": {
+                                    "description": "產品id",
+                                    "type": "string",
+                                    "example": "com.fitness.gold_member_month"
+                                },
+                                "twd": {
+                                    "description": "台幣價格",
+                                    "type": "integer",
+                                    "example": 500
+                                }
+                            }
+                        }
+                    }
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "suit": {
+                    "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
+                    "type": "string",
+                    "example": "2,5,7"
+                },
+                "train_target": {
+                    "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
+                    "type": "string",
+                    "example": "2,3,4"
+                },
+                "trainer": {
+                    "type": "object",
+                    "properties": {
+                        "avatar": {
+                            "description": "教練大頭照",
+                            "type": "string",
+                            "example": "abc.png"
+                        },
+                        "nickname": {
+                            "description": "教練暱稱",
+                            "type": "string",
+                            "example": "Henry"
+                        },
+                        "skill": {
+                            "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                            "type": "string",
+                            "example": "1,4"
+                        },
+                        "user_id": {
+                            "description": "用戶id",
+                            "type": "integer",
+                            "example": 10001
+                        }
+                    }
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 50
+                }
+            }
+        },
+        "api_get_trainer_course_overview.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_get_trainer_course_overview.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
                 }
             }
         },
@@ -18412,9 +18683,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "金牌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -18459,9 +18730,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "金牌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -20918,9 +21189,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 }
             }
         },
@@ -26239,9 +26510,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "金牌課表"
                 }
             }
         },
@@ -26280,9 +26551,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "金牌課表"
                 }
             }
         },
@@ -26624,9 +26895,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "金牌課表"
                 }
             }
         },
@@ -27108,9 +27379,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27118,9 +27389,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -27343,9 +27614,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -27358,9 +27629,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -27593,9 +27864,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27603,9 +27874,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -27801,9 +28072,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "個人介紹",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "Henry教練"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -27811,9 +28082,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -30855,9 +31126,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "金牌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -30901,9 +31172,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "計畫名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "第一週增肌計畫"
+                    "example": "金牌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -31064,9 +31335,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "增肌課表"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -31130,9 +31401,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "增肌課表"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -31198,9 +31469,9 @@ var doc = `{
                                 "example": 1
                             },
                             "name": {
-                                "description": "教練本名",
+                                "description": "課表名稱",
                                 "type": "string",
-                                "example": "亨利"
+                                "example": "增肌課表"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -31251,9 +31522,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -31314,9 +31585,9 @@ var doc = `{
                     "example": 1
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "增肌課表"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -32028,9 +32299,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -32184,9 +32455,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -32337,9 +32608,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -32490,9 +32761,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -32633,9 +32904,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -32786,9 +33057,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
