@@ -6,6 +6,7 @@ import (
 	courseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -351,6 +352,28 @@ func (c *controller) GetTrainerCourses(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetTrainerCourses(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetTrainerCourseOverview 獲取教練課表預覽
+// @Summary 獲取教練課表預覽
+// @Description 獲取教練課表預覽
+// @Tags 教練課表_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表id"
+// @Success 200 {object} api_get_trainer_course_overview.Output "Success!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/trainer/course/{course_id}/overview [GET]
+func (c *controller) GetTrainerCourseOverview(ctx *gin.Context) {
+	var input api_get_trainer_course_overview.Input
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetTrainerCourseOverview(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

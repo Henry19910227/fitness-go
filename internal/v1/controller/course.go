@@ -294,7 +294,7 @@ func (cc *Course) GetCourse(c *gin.Context) {
 }
 
 // GetCourseOverview 獲取課表總覽
-// @Summary 獲取課表總覽
+// @Summary 獲取課表總覽 (API已過時，更新為 /v2/trainer/course/{course_id}/overview [GET])
 // @Description 獲取課表總覽
 // @Tags Course_v1
 // @Accept json

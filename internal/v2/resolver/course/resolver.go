@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -36,7 +37,7 @@ type resolver struct {
 	workoutService       workout.Service
 	subscribeInfoService user_subscribe_info.Service
 	saleItemService      sale_item.Service
-	trainerService		 trainer.Service
+	trainerService       trainer.Service
 	uploadTool           uploader.Tool
 }
 
@@ -640,6 +641,36 @@ func (r *resolver) APICreateTrainerCourse(input *model.APICreateTrainerCourseInp
 	data.ID = util.PointerInt64(courseID)
 	output.Data = &data
 	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIGetTrainerCourseOverview(input *api_get_trainer_course_overview.Input) (output api_get_trainer_course_overview.Output) {
+	// 查詢資料
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.CourseID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Trainer"},
+		{Field: "SaleItem.ProductLabel"},
+		{Field: "ReviewStatistic"},
+	}
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證查詢權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非該課表創建者，無法查看課表")
+		return output
+	}
+	// parser output
+	data := api_get_trainer_course_overview.Data{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }
 
