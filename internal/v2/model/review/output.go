@@ -37,6 +37,7 @@ type APIGetCMSReviewsData []*struct {
 	User *struct {
 		userOptional.IDField
 		userOptional.NicknameField
+		userOptional.AvatarField
 	} `json:"user,omitempty"`
 	Course *struct {
 		courseOptional.IDField
@@ -73,6 +74,7 @@ type APIGetStoreCourseReviewsData []*struct {
 	User *struct {
 		userOptional.IDField
 		userOptional.NicknameField
+		userOptional.AvatarField
 	} `json:"user,omitempty"`
 	Course *struct {
 		courseOptional.IDField
@@ -98,6 +100,7 @@ type APIGetStoreCourseReviewData struct {
 	User *struct {
 		userOptional.IDField
 		userOptional.NicknameField
+		userOptional.AvatarField
 	} `json:"user,omitempty"`
 	Course *struct {
 		courseOptional.IDField
