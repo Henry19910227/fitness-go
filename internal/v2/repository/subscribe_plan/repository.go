@@ -15,6 +15,10 @@ func New(db *gorm.DB) Repository {
 	return &repository{db: db}
 }
 
+func (r *repository) WithTrx(tx *gorm.DB) Repository {
+	return New(tx)
+}
+
 func (r *repository) Find(input *subscribe_plan.FindInput) (output *subscribe_plan.Output, err error) {
 	db := r.db.Model(&model.Output{})
 	//加入 subscribe_plans.id 篩選條件

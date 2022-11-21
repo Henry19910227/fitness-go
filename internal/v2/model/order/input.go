@@ -5,15 +5,24 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/order/required"
 	orderCourseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/order_course/optional"
 	orderCourseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/order_course/required"
+	receiptOptional "github.com/Henry19910227/fitness-go/internal/v2/field/receipt/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/group"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/select_field"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 )
 
 type PagingInput = paging.Input
 type PreloadInput = preload.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
 type OrderByInput = orderBy.Input
+type SelectInput = select_field.Input
+type GroupInput = group.Input
+type CustomOrderByInput = orderBy.CustomInput
 
 type FindInput struct {
 	optional.IDField
@@ -26,10 +35,15 @@ type ListInput struct {
 	optional.OrderTypeField
 	optional.OrderStatusField
 	orderCourseOptional.CourseIDField
-	receipt.OriginalTransactionIDOptional
-	OrderByInput
+	receiptOptional.OriginalTransactionIDField
+	SelectInput
+	JoinInput
+	WhereInput
 	PagingInput
 	PreloadInput
+	OrderByInput
+	GroupInput
+	CustomOrderByInput
 }
 
 // APICreateCourseOrderInput /v2/course_order [POST]

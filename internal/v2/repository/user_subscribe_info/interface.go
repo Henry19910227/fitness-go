@@ -11,4 +11,5 @@ type Repository interface {
 	List(input *model.ListInput) (outputs []*model.Output, amount int64, err error)
 	CreateOrUpdate(item *model.Table) (err error)
 	Update(item *model.Table) (err error)
+	Updates(items []*model.Table) (err error)
 }

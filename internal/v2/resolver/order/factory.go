@@ -9,6 +9,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/service/order_subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/purchase_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/receipt"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/subscribe_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user"
@@ -29,6 +30,7 @@ func NewResolver(db *gorm.DB) Resolver {
 	subscribePlanService := subscribe_plan.NewService(db)
 	userService := user.NewService(db)
 	subscribeLogService := subscribe_log.NewService(db)
+	saleItemService := sale_item.NewService(db)
 	iapTool := iap.NewTool()
 	iabTool := iab.NewTool()
 	return New(orderService, courseService,
@@ -36,5 +38,6 @@ func NewResolver(db *gorm.DB) Resolver {
 		subscribeInfoService, orderSubscribePlanService,
 		receiptService, purchaseLogService,
 		subscribePlanService, userService,
-		subscribeLogService, iapTool, iabTool)
+		subscribeLogService, saleItemService,
+		iapTool, iabTool)
 }

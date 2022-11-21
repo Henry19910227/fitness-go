@@ -1,10 +1,13 @@
 package order
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/order"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_create_subscribe_order"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_order_redeem"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/order"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -48,18 +51,40 @@ func (c *controller) CreateCourseOrder(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param json_body body order.APICreateSubscribeOrderBody true "輸入參數"
-// @Success 200 {object} order.APICreateSubscribeOrderOutput "成功!"
+// @Param json_body body api_create_subscribe_order.Body true "輸入參數"
+// @Success 200 {object} api_create_subscribe_order.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/subscribe_order [POST]
 func (c *controller) CreateSubscribeOrder(ctx *gin.Context) {
-	input := model.APICreateSubscribeOrderInput{}
+	input := api_create_subscribe_order.Input{}
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
 	output := c.resolver.APICreateSubscribeOrder(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UploadAppleSubscribeReceipt 上傳apple訂閱收據
+// @Summary 上傳apple訂閱收據
+// @Description 上傳apple訂閱收據
+// @Tags 支付_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body api_upload_apple_subscribe_receipt.Body true "輸入參數"
+// @Success 200 {object} api_upload_apple_subscribe_receipt.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/apple_subscribe_receipt [POST]
+func (c *controller) UploadAppleSubscribeReceipt(ctx *gin.Context) {
+	input := api_upload_apple_subscribe_receipt.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUploadAppleSubscribeReceipt(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 
@@ -225,4 +250,10 @@ func (c *controller) GetCMSOrders(ctx *gin.Context) {
 	}
 	output := c.resolver.APIGetCMSOrders(&input)
 	ctx.JSON(http.StatusOK, output)
+}
+
+func (c *controller) SyncAppleSubscribeStatusSchedule() {
+	txHandle := orm.Shared().DB().Begin()
+	defer txHandle.Rollback()
+	c.resolver.SyncAppleSubscribeStatusSchedule(txHandle)
 }
