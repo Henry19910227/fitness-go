@@ -12,4 +12,5 @@ type Service interface {
 	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
 	CreateOrUpdate(item *model.Table) (err error)
 	Update(item *model.Table) (err error)
+	Updates(items []*model.Table) (err error)
 }

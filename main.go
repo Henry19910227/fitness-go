@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/errcode"
 	"github.com/Henry19910227/fitness-go/internal/pkg/setting"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/scheduler"
 	"github.com/Henry19910227/fitness-go/internal/pkg/vp"
 	"github.com/Henry19910227/fitness-go/internal/v1/access"
 	"github.com/Henry19910227/fitness-go/internal/v1/controller"
@@ -250,6 +251,7 @@ func main() {
 	workout_set_log.SetRoute(v2)
 	sale_item.SetRoute(v2)
 	subscribe_plan.SetRoute(v2)
+	scheduler.Shared().Cron().Start()
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }
 

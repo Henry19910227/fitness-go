@@ -3,6 +3,7 @@ package user
 import (
 	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	optional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
+	UserSubscribeInfoOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user_subscribe_info/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
@@ -122,10 +123,10 @@ type APILoginForEmailData struct {
 		trainerOptional.UpdateAtField
 	} `json:"trainer,omitempty"`
 	UserSubscribeInfo *struct {
-		user_subscribe_info.StatusField
-		user_subscribe_info.StartDateField
-		user_subscribe_info.ExpiresDateField
-		user_subscribe_info.UpdateAtField
+		UserSubscribeInfoOptional.StatusField
+		UserSubscribeInfoOptional.StartDateField
+		UserSubscribeInfoOptional.ExpiresDateField
+		UserSubscribeInfoOptional.UpdateAtField
 	} `json:"user_subscribe_info,omitempty"`
 }
 

@@ -2,6 +2,7 @@ package receipt
 
 import (
 	productLabelOptional "github.com/Henry19910227/fitness-go/internal/v2/field/product_label/optional"
+	receiptOptional "github.com/Henry19910227/fitness-go/internal/v2/field/receipt/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/product_label"
@@ -23,12 +24,12 @@ type APIGetCMSOrderReceiptsOutput struct {
 	Paging *paging.Output             `json:"paging,omitempty"`
 }
 type APIGetCMSOrderReceiptsData []*struct {
-	IDField
-	PaymentTypeField
-	OriginalTransactionIDField
-	TransactionIDField
-	QuantityField
-	CreateAtField
+	receiptOptional.IDField
+	receiptOptional.PaymentTypeField
+	receiptOptional.OriginalTransactionIDField
+	receiptOptional.TransactionIDField
+	receiptOptional.QuantityField
+	receiptOptional.CreateAtField
 	ProductLabel *struct {
 		productLabelOptional.IDField
 		productLabelOptional.NameField

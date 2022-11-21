@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/subscribe_plan"
+	"gorm.io/gorm"
 )
 
 type service struct {
@@ -13,6 +14,10 @@ type service struct {
 
 func New(repository subscribe_plan.Repository) Service {
 	return &service{repository: repository}
+}
+
+func (s *service) Tx(tx *gorm.DB) Service {
+	return NewService(tx)
 }
 
 func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {
