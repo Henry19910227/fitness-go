@@ -8,6 +8,7 @@ type Controller interface {
 	CreateCourseOrder(ctx *gin.Context)
 	CreateSubscribeOrder(ctx *gin.Context)
 	UploadAppleSubscribeReceipt(ctx *gin.Context)
+	UploadAppleChargeReceipt(ctx *gin.Context)
 	VerifyAppleReceipt(ctx *gin.Context)
 	VerifyGoogleReceipt(ctx *gin.Context)
 	OrderRedeem(ctx *gin.Context)
