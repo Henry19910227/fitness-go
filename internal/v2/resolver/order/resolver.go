@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iab"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iap"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v1/dto"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
@@ -18,6 +19,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_order_redeem"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipts"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderCourseModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	orderSubscribePlanModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_subscribe_plan"
@@ -355,166 +357,20 @@ func (r *resolver) APIVerifyAppleReceipt(ctx *gin.Context, tx *gorm.DB, input *o
 }
 
 func (r *resolver) APIUploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, input *api_upload_apple_subscribe_receipt.Input) (output api_upload_apple_subscribe_receipt.Output) {
-	// 驗證收據 api
-	response, err := r.iapTool.VerifyAppleReceiptAPI(input.Body.ReceiptData)
-	if err != nil {
-		logger.Shared().Error(ctx, "APIUploadAppleSubscribeReceipt："+err.Error())
+	if err := r.uploadAppleSubscribeReceipt(ctx, tx, input.UserID, input.Body.ReceiptData); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	// 驗證收據結果
-	if response.Status != 0 {
-		logger.Shared().Error(ctx, "APIUploadAppleSubscribeReceipt："+"收據驗證錯誤 - "+strconv.Itoa(response.Status))
-		output.Set(code.BadRequest, "收據驗證錯誤 - "+strconv.Itoa(response.Status))
-		return output
+	output.Set(code.Success, "success!")
+	return output
+}
+
+func (r *resolver) APIUploadAppleSubscribeReceipts(ctx *gin.Context, input *api_upload_apple_subscribe_receipts.Input) (output api_upload_apple_subscribe_receipts.Output) {
+	for _, receiptData := range input.Body.ReceiptDatas {
+		txHandle := orm.Shared().DB().Begin()
+		_ = r.uploadAppleSubscribeReceipt(ctx, txHandle, input.UserID, receiptData)
 	}
-	// 驗證收據格式
-	if len(response.Receipt.InApp) == 0 {
-		output.Set(code.BadRequest, "無效的收據(無InApp參數)")
-		return output
-	}
-	if len(response.LatestReceiptInfo) == 0 || len(response.PendingRenewalInfo) == 0 {
-		output.Set(code.BadRequest, "無效的收據(無LatestReceiptInfo或PendingRenewalInfo參數)")
-		return output
-	}
-	if response.LatestReceiptInfo[0].ExpiresDate == nil {
-		output.Set(code.BadRequest, "無效的收據(無ExpiresDate參數)")
-		return output
-	}
-	if len(response.PendingRenewalInfo[0].ExpirationIntent) > 0 {
-		output.Set(code.BadRequest, "此訂閱收據已過期")
-		return output
-	}
-	inApp := response.Receipt.InApp[0]
-	item := response.LatestReceiptInfo[0]
-	defer tx.Rollback()
-	// 驗證該用戶訂閱狀態
-	findSubscribeInfoInput := subscribeInfoModel.FindInput{}
-	findSubscribeInfoInput.UserID = util.PointerInt64(input.UserID)
-	subscribeInfoOutput, err := r.subscribeInfoService.Tx(tx).Find(&findSubscribeInfoInput)
-	if err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	if util.OnNilJustReturnInt(subscribeInfoOutput.Status, 0) == 1 {
-		output.Set(code.BadRequest, "該用戶為訂閱狀態")
-		return output
-	}
-	// 驗證被 OriginalTransactionID 綁定的用戶是否還在訂閱狀態
-	subscribeInfoListInput := subscribeInfoModel.ListInput{}
-	subscribeInfoListInput.OriginalTransactionID = util.PointerString(inApp.OriginalTransactionID)
-	subscribeInfoOutputs, _, err := r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
-	if err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	for _, subscribeInfoOutput := range subscribeInfoOutputs {
-		if util.OnNilJustReturnInt(subscribeInfoOutput.Status, 0) == 1 {
-			output.Set(code.BadRequest, "該 original_transaction_id 為訂閱狀態")
-			return output
-		}
-	}
-	// 驗證是否為訂閱收據
-	subscribePlanListInput := subscribePlanModel.ListInput{}
-	subscribePlanListInput.Joins = []*joinModel.Join{
-		{Query: "INNER JOIN product_labels ON subscribe_plans.product_label_id = product_labels.id"},
-	}
-	subscribePlanListInput.Wheres = []*whereModel.Where{
-		{Query: "product_labels.product_id = ?", Args: []interface{}{inApp.ProductID}},
-	}
-	subscribePlanOutputs, _, err := r.subscribePlanService.Tx(tx).List(&subscribePlanListInput)
-	if err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	if len(subscribePlanOutputs) == 0 {
-		output.Set(code.BadRequest, "訂單類型錯誤")
-	}
-	// 驗證收據是否已被使用
-	receiptListInput := receiptModel.ListInput{}
-	receiptListInput.OriginalTransactionID = util.PointerString(inApp.OriginalTransactionID)
-	receiptListInput.TransactionID = util.PointerString(inApp.TransactionID)
-	receiptOutputs, _, err := r.receiptService.Tx(tx).List(&receiptListInput)
-	if err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	if len(receiptOutputs) > 0 {
-		output.Set(code.BadRequest, "此收據已有上傳記錄")
-		return output
-	}
-	// 0.清空原先綁定該 OriginalTransactionID 的用戶
-	subscribeInfoUpdateTables := make([]*subscribeInfoModel.Table, 0)
-	for _, subscribeInfoOutput := range subscribeInfoOutputs {
-		subscribeInfoUpdateTable := subscribeInfoModel.Table{}
-		subscribeInfoUpdateTable.UserID = subscribeInfoOutput.UserID
-		subscribeInfoUpdateTable.OriginalTransactionID = util.PointerString("")
-		subscribeInfoUpdateTables = append(subscribeInfoUpdateTables, &subscribeInfoUpdateTable)
-	}
-	if err := r.subscribeInfoService.Tx(tx).Updates(subscribeInfoUpdateTables); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	// 1.創建訂單
-	orderID := time.Now().Format("20060102150405") + strconv.Itoa(int(util.RandRange(100000, 999999)))
-	table := orderModel.Table{}
-	table.ID = util.PointerString(orderID)
-	table.UserID = util.PointerInt64(input.UserID)
-	table.Quantity = util.PointerInt(1)
-	table.Type = util.PointerInt(orderModel.Subscribe)
-	table.OrderStatus = util.PointerInt(orderModel.Success)
-	_, err = r.orderService.Tx(tx).Create(&table)
-	if err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	// 2.創建訂單與訂閱項目關聯
-	orderSubscribePlanTable := orderSubscribePlanModel.Table{}
-	orderSubscribePlanTable.OrderID = util.PointerString(orderID)
-	orderSubscribePlanTable.SubscribePlanID = subscribePlanOutputs[0].ID
-	orderSubscribePlanTable.Status = util.PointerInt(1)
-	if err := r.orderSubscribePlanService.Tx(tx).Create(&orderSubscribePlanTable); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	// 3.儲存收據
-	quantity, _ := strconv.Atoi(item.Quantity)
-	receiptTable := receiptModel.Table{}
-	receiptTable.OrderID = util.PointerString(orderID)
-	receiptTable.PaymentType = util.PointerInt(receiptModel.IAP)
-	receiptTable.ReceiptToken = util.PointerString("")
-	receiptTable.OriginalTransactionID = util.PointerString(item.OriginalTransactionID)
-	receiptTable.TransactionID = util.PointerString(item.TransactionID)
-	receiptTable.ProductID = util.PointerString(item.ProductID)
-	receiptTable.Quantity = util.PointerInt(quantity)
-	_, err = r.receiptService.Tx(tx).CreateOrUpdate(&receiptTable)
-	if err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	// 4.更新用戶訂閱狀態與OriginalTransactionID
-	subscribeInfoTable := subscribeInfoModel.Table{}
-	subscribeInfoTable.UserID = util.PointerInt64(input.UserID)
-	subscribeInfoTable.OrderID = util.PointerString(orderID)
-	subscribeInfoTable.OriginalTransactionID = util.PointerString(item.OriginalTransactionID)
-	subscribeInfoTable.Status = util.PointerInt(subscribeInfoModel.ValidSubscribe)
-	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAP)
-	subscribeInfoTable.StartDate = util.PointerString(item.PurchaseDate.Format("2006-01-02 15:04:05"))
-	subscribeInfoTable.ExpiresDate = util.PointerString(item.ExpiresDate.Format("2006-01-02 15:04:05"))
-	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	// 5.更新用戶類型
-	userTable := userModel.Table{}
-	userTable.ID = util.PointerInt64(input.UserID)
-	userTable.UserType = util.PointerInt(userModel.Subscribe)
-	if err := r.userService.Tx(tx).Update(&userTable); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	tx.Commit()
-	output.Set(code.BadRequest, "success!")
+	output.Set(code.Success, "success!")
 	return output
 }
 
@@ -789,16 +645,15 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 		return output
 	}
 	// 2.修改訂單訂閱項目(升級or降級, 訂閱狀態)
-	var subscribePlanStatus = util.PointerInt(1)
-	if subscribeLogType == subscribeLogModel.Expired || subscribeLogType == subscribeLogModel.Refund {
-		subscribePlanStatus = util.PointerInt(0)
-	}
 	orderSubscribePlanTable := orderSubscribePlanModel.Table{}
 	orderSubscribePlanTable.OrderID = subscribeInfoOutputs[0].OrderID
 	orderSubscribePlanTable.SubscribePlanID = subscribePlanOutput.ID
-	orderSubscribePlanTable.Status = subscribePlanStatus
+	orderSubscribePlanTable.Status = util.PointerInt(1)
+	if subscribeLogType == subscribeLogModel.Expired || subscribeLogType == subscribeLogModel.Refund {
+		orderSubscribePlanTable.Status = util.PointerInt(0)
+	}
 	if err := r.orderSubscribePlanService.Tx(tx).Update(&orderSubscribePlanTable); err != nil {
-		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
+		logger.Shared().Error(ctx, "APIAppStoreNotification："+err.Error())
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
@@ -1458,6 +1313,155 @@ func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, productID string, 
 	orderTable.ID = order.ID
 	orderTable.OrderStatus = util.PointerInt(orderModel.Success)
 	if err := r.orderService.Tx(tx).Update(&orderTable); err != nil {
+		return err
+	}
+	tx.Commit()
+	return nil
+}
+
+func (r *resolver) uploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, userID int64, receiptData string) error {
+	defer tx.Rollback()
+	// 驗證收據 api
+	response, err := r.iapTool.VerifyAppleReceiptAPI(receiptData)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIUploadAppleSubscribeReceipt："+err.Error())
+		return err
+	}
+	// 驗證收據結果
+	if response.Status != 0 {
+		logger.Shared().Error(ctx, "APIUploadAppleSubscribeReceipt："+"收據驗證錯誤 - "+strconv.Itoa(response.Status))
+		return errors.New("收據驗證錯誤 - " + strconv.Itoa(response.Status))
+	}
+	// 驗證收據格式
+	if len(response.Receipt.InApp) == 0 {
+		return errors.New("無效的收據(無InApp參數)")
+	}
+	if len(response.LatestReceiptInfo) == 0 || len(response.PendingRenewalInfo) == 0 {
+		return errors.New("無效的收據(無LatestReceiptInfo或PendingRenewalInfo參數)")
+	}
+	if response.LatestReceiptInfo[0].ExpiresDate == nil {
+		return errors.New("無效的收據(無ExpiresDate參數)")
+	}
+	if len(response.PendingRenewalInfo[0].ExpirationIntent) > 0 {
+		fmt.Println("此訂閱收據已過期")
+		return errors.New("此訂閱收據已過期")
+	}
+	// 獲取最新資訊收據
+	latestReceipt := response.LatestReceiptInfo[0]
+	// 驗證該用戶訂閱狀態
+	findSubscribeInfoInput := subscribeInfoModel.FindInput{}
+	findSubscribeInfoInput.UserID = util.PointerInt64(userID)
+	subscribeInfoOutput, err := r.subscribeInfoService.Tx(tx).Find(&findSubscribeInfoInput)
+	if err != nil {
+		return err
+	}
+	if util.OnNilJustReturnInt(subscribeInfoOutput.Status, 0) == 1 {
+		fmt.Println("該用戶為訂閱狀態")
+		return errors.New("該用戶為訂閱狀態")
+	}
+	// 驗證被 OriginalTransactionID 綁定的用戶是否還在訂閱狀態
+	subscribeInfoListInput := subscribeInfoModel.ListInput{}
+	subscribeInfoListInput.OriginalTransactionID = util.PointerString(latestReceipt.OriginalTransactionID)
+	subscribeInfoOutputs, _, err := r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
+	if err != nil {
+		return err
+	}
+	for _, subscribeInfoOutput := range subscribeInfoOutputs {
+		if util.OnNilJustReturnInt(subscribeInfoOutput.Status, 0) == 1 {
+			fmt.Println("該 original_transaction_id 為訂閱狀態")
+			return errors.New("該 original_transaction_id 為訂閱狀態")
+		}
+	}
+	// 驗證是否為訂閱收據
+	subscribePlanListInput := subscribePlanModel.ListInput{}
+	subscribePlanListInput.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN product_labels ON subscribe_plans.product_label_id = product_labels.id"},
+	}
+	subscribePlanListInput.Wheres = []*whereModel.Where{
+		{Query: "product_labels.product_id = ?", Args: []interface{}{latestReceipt.ProductID}},
+	}
+	subscribePlanOutputs, _, err := r.subscribePlanService.Tx(tx).List(&subscribePlanListInput)
+	if err != nil {
+		return err
+	}
+	if len(subscribePlanOutputs) == 0 {
+		fmt.Println("收據類型錯誤")
+		return errors.New("收據類型錯誤")
+	}
+	// 驗證收據是否已被使用
+	receiptListInput := receiptModel.ListInput{}
+	receiptListInput.OriginalTransactionID = util.PointerString(latestReceipt.OriginalTransactionID)
+	receiptListInput.TransactionID = util.PointerString(latestReceipt.TransactionID)
+	receiptOutputs, _, err := r.receiptService.Tx(tx).List(&receiptListInput)
+	if err != nil {
+		return err
+	}
+	if len(receiptOutputs) > 0 {
+		fmt.Println("此收據已有上傳記錄")
+		return errors.New("此收據已有上傳記錄")
+	}
+	// 0.清空原先綁定該 OriginalTransactionID 的用戶
+	subscribeInfoUpdateTables := make([]*subscribeInfoModel.Table, 0)
+	for _, subscribeInfoOutput := range subscribeInfoOutputs {
+		subscribeInfoUpdateTable := subscribeInfoModel.Table{}
+		subscribeInfoUpdateTable.UserID = subscribeInfoOutput.UserID
+		subscribeInfoUpdateTable.OriginalTransactionID = util.PointerString("")
+		subscribeInfoUpdateTables = append(subscribeInfoUpdateTables, &subscribeInfoUpdateTable)
+	}
+	if err := r.subscribeInfoService.Tx(tx).Updates(subscribeInfoUpdateTables); err != nil {
+		return err
+	}
+	// 1.創建訂單
+	orderID := time.Now().Format("20060102150405") + strconv.Itoa(int(util.RandRange(100000, 999999)))
+	table := orderModel.Table{}
+	table.ID = util.PointerString(orderID)
+	table.UserID = util.PointerInt64(userID)
+	table.Quantity = util.PointerInt(1)
+	table.Type = util.PointerInt(orderModel.Subscribe)
+	table.OrderStatus = util.PointerInt(orderModel.Success)
+	_, err = r.orderService.Tx(tx).Create(&table)
+	if err != nil {
+		return err
+	}
+	// 2.創建訂單與訂閱項目關聯
+	orderSubscribePlanTable := orderSubscribePlanModel.Table{}
+	orderSubscribePlanTable.OrderID = util.PointerString(orderID)
+	orderSubscribePlanTable.SubscribePlanID = subscribePlanOutputs[0].ID
+	orderSubscribePlanTable.Status = util.PointerInt(1)
+	if err := r.orderSubscribePlanService.Tx(tx).Create(&orderSubscribePlanTable); err != nil {
+		return err
+	}
+	// 3.儲存收據
+	quantity, _ := strconv.Atoi(latestReceipt.Quantity)
+	receiptTable := receiptModel.Table{}
+	receiptTable.OrderID = util.PointerString(orderID)
+	receiptTable.PaymentType = util.PointerInt(receiptModel.IAP)
+	receiptTable.ReceiptToken = util.PointerString("")
+	receiptTable.OriginalTransactionID = util.PointerString(latestReceipt.OriginalTransactionID)
+	receiptTable.TransactionID = util.PointerString(latestReceipt.TransactionID)
+	receiptTable.ProductID = util.PointerString(latestReceipt.ProductID)
+	receiptTable.Quantity = util.PointerInt(quantity)
+	_, err = r.receiptService.Tx(tx).CreateOrUpdate(&receiptTable)
+	if err != nil {
+		return err
+	}
+	// 4.更新用戶訂閱狀態與OriginalTransactionID
+	subscribeInfoTable := subscribeInfoModel.Table{}
+	subscribeInfoTable.UserID = util.PointerInt64(userID)
+	subscribeInfoTable.OrderID = util.PointerString(orderID)
+	subscribeInfoTable.OriginalTransactionID = util.PointerString(latestReceipt.OriginalTransactionID)
+	subscribeInfoTable.Status = util.PointerInt(subscribeInfoModel.ValidSubscribe)
+	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAP)
+	subscribeInfoTable.StartDate = util.PointerString(latestReceipt.PurchaseDate.Format("2006-01-02 15:04:05"))
+	subscribeInfoTable.ExpiresDate = util.PointerString(latestReceipt.ExpiresDate.Format("2006-01-02 15:04:05"))
+	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
+		return err
+	}
+	// 5.更新用戶類型
+	userTable := userModel.Table{}
+	userTable.ID = util.PointerInt64(userID)
+	userTable.UserType = util.PointerInt(userModel.Subscribe)
+	if err := r.userService.Tx(tx).Update(&userTable); err != nil {
 		return err
 	}
 	tx.Commit()

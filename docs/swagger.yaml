@@ -22,9 +22,9 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       intro:
         description: 個人介紹
         example: Henry教練
@@ -86,9 +86,9 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       intro:
         description: 個人介紹
         example: Henry教練
@@ -190,9 +190,9 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             intro:
               description: 個人介紹
               example: Henry教練
@@ -279,9 +279,9 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             intro:
               description: 個人介紹
               example: Henry教練
@@ -353,9 +353,9 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       intro:
         description: 個人介紹
         example: Henry教練
@@ -432,9 +432,9 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       order_status:
         description: 訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)
         example: 2
@@ -509,9 +509,9 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
     type: object
   api_create_trainer_action.Output:
     properties:
@@ -569,9 +569,9 @@ definitions:
         items:
           properties:
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             name:
               description: 教練本名
               example: 亨利
@@ -608,9 +608,9 @@ definitions:
         items:
           properties:
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             name:
               description: 教練本名
               example: 亨利
@@ -675,9 +675,9 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             intro:
               description: 個人介紹
               example: Henry教練
@@ -894,9 +894,9 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       max_distance_record:
         properties:
           distance:
@@ -1017,16 +1017,16 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             incline:
               description: 坡度
               example: 10.5
               type: number
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             weight:
               description: 體重(公斤)
@@ -1085,9 +1085,9 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       intensity:
         description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
         example: 1
@@ -1278,6 +1278,29 @@ definitions:
     - receipt_data
     type: object
   api_upload_apple_subscribe_receipt.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  api_upload_apple_subscribe_receipts.Body:
+    properties:
+      receipt_datas:
+        description: 收據token
+        example:
+        - MIJOlgYJKoZIhvcN...
+        items:
+          type: string
+        type: array
+    required:
+    - receipt_datas
+    type: object
+  api_upload_apple_subscribe_receipts.Output:
     properties:
       code:
         description: 狀態碼
@@ -1730,8 +1753,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 課表名稱
+        example: 增肌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -1766,8 +1789,8 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 課表名稱
+        example: 增肌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -3932,9 +3955,9 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 課表 id
-                      example: 2
-                      type: integer
+                      description: 訂單id
+                      example: "202105201300687423"
+                      type: string
                     product_id:
                       description: 產品id
                       example: com.fitness.gold_member_month
@@ -7229,9 +7252,9 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       order_course:
         properties:
           course:
@@ -7324,9 +7347,9 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             order_course:
               properties:
                 course:
@@ -7581,8 +7604,8 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -7610,8 +7633,8 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -7866,8 +7889,8 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 課表名稱
+        example: 增肌課表
         type: string
     required:
     - name
@@ -11062,8 +11085,8 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 課表名稱
+        example: 增肌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -11075,9 +11098,9 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
     type: object
   workout.APICreateTrainerWorkoutOutput:
     properties:
@@ -11095,8 +11118,8 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 課表名稱
+        example: 增肌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -11108,9 +11131,9 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
     type: object
   workout.APICreateUserWorkoutOutput:
     properties:
@@ -11213,9 +11236,9 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             name:
               description: 教練本名
               example: 亨利
@@ -11263,9 +11286,9 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             name:
               description: 教練本名
               example: 亨利
@@ -11315,9 +11338,9 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             name:
               description: 教練本名
               example: 亨利
@@ -11356,9 +11379,9 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       name:
         description: 教練本名
         example: 亨利
@@ -11404,9 +11427,9 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       name:
         description: 教練本名
         example: 亨利
@@ -11602,9 +11625,9 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             intensity:
               description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
               example: 1
@@ -11920,9 +11943,9 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             incline:
               description: 坡度
               example: 10.5
@@ -11936,8 +11959,8 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
@@ -12041,9 +12064,9 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             incline:
               description: 坡度
               example: 10.5
@@ -12057,8 +12080,8 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
@@ -12160,9 +12183,9 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             incline:
               description: 坡度
               example: 10.5
@@ -12176,8 +12199,8 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
@@ -12279,9 +12302,9 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
-              type: integer
+              description: 訂單id
+              example: "202105201300687423"
+              type: string
             incline:
               description: 坡度
               example: 10.5
@@ -12295,8 +12318,8 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
@@ -12391,9 +12414,9 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       incline:
         description: 坡度
         example: 10.5
@@ -12407,8 +12430,8 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數id
-        example: 1
+        description: 次數
+        example: 2
         type: integer
       start_audio:
         description: 前導語音
@@ -12510,9 +12533,9 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 課表 id
-        example: 2
-        type: integer
+        description: 訂單id
+        example: "202105201300687423"
+        type: string
       incline:
         description: 坡度
         example: 10.5
@@ -12526,8 +12549,8 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數id
-        example: 1
+        description: 次數
+        example: 2
         type: integer
       start_audio:
         description: 前導語音
@@ -17189,7 +17212,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 上傳apple訂閱收據
+      description: 上傳單張apple訂閱收據
       parameters:
       - description: 輸入參數
         in: body
@@ -17210,7 +17233,35 @@ paths:
             $ref: '#/definitions/base.Output'
       security:
       - fitness_token: []
-      summary: 上傳apple訂閱收據
+      summary: 上傳單張apple訂閱收據
+      tags:
+      - 支付_v2
+  /v2/apple_subscribe_receipts:
+    post:
+      consumes:
+      - application/json
+      description: 上傳多張apple訂閱收據
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/api_upload_apple_subscribe_receipts.Body'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/api_upload_apple_subscribe_receipts.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 上傳多張apple訂閱收據
       tags:
       - 支付_v2
   /v2/banners:
