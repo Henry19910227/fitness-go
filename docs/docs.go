@@ -7527,7 +7527,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "上傳apple訂閱收據",
+                "description": "上傳單張apple訂閱收據",
                 "consumes": [
                     "application/json"
                 ],
@@ -7537,7 +7537,7 @@ var doc = `{
                 "tags": [
                     "支付_v2"
                 ],
-                "summary": "上傳apple訂閱收據",
+                "summary": "上傳單張apple訂閱收據",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -7554,6 +7554,51 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/api_upload_apple_subscribe_receipt.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/apple_subscribe_receipts": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "上傳多張apple訂閱收據",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付_v2"
+                ],
+                "summary": "上傳多張apple訂閱收據",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_upload_apple_subscribe_receipts.Body"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/api_upload_apple_subscribe_receipts.Output"
                         }
                     },
                     "400": {
@@ -16681,9 +16726,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "intro": {
                     "description": "個人介紹",
@@ -16764,9 +16809,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "intro": {
                     "description": "個人介紹",
@@ -16902,9 +16947,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "intro": {
                                 "description": "個人介紹",
@@ -17019,9 +17064,9 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "intro": {
                                 "description": "個人介紹",
@@ -17115,9 +17160,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "intro": {
                     "description": "個人介紹",
@@ -17221,9 +17266,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "order_status": {
                     "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
@@ -17324,9 +17369,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 }
             }
         },
@@ -17407,9 +17452,9 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "name": {
                                 "description": "教練本名",
@@ -17460,9 +17505,9 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "name": {
                                 "description": "教練本名",
@@ -17548,9 +17593,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "intro": {
                                 "description": "個人介紹",
@@ -17832,9 +17877,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "max_distance_record": {
                     "type": "object",
@@ -17999,9 +18044,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "incline": {
                                 "description": "坡度",
@@ -18009,9 +18054,9 @@ var doc = `{
                                 "example": 10.5
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "weight": {
                                 "description": "體重(公斤)",
@@ -18088,9 +18133,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "intensity": {
                     "description": "訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)",
@@ -18344,6 +18389,39 @@ var doc = `{
             }
         },
         "api_upload_apple_subscribe_receipt.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "api_upload_apple_subscribe_receipts.Body": {
+            "type": "object",
+            "required": [
+                "receipt_datas"
+            ],
+            "properties": {
+                "receipt_datas": {
+                    "description": "收據token",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "MIJOlgYJKoZIhvcN..."
+                    ]
+                }
+            }
+        },
+        "api_upload_apple_subscribe_receipts.Output": {
             "type": "object",
             "properties": {
                 "code": {
@@ -18956,9 +19034,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "產品名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "增肌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -19003,9 +19081,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "增肌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -21837,9 +21915,9 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "課表 id",
-                                                "type": "integer",
-                                                "example": 2
+                                                "description": "訂單id",
+                                                "type": "string",
+                                                "example": "202105201300687423"
                                             },
                                             "product_id": {
                                                 "description": "產品id",
@@ -26183,9 +26261,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "order_course": {
                     "type": "object",
@@ -26311,9 +26389,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "order_course": {
                                 "type": "object",
@@ -26662,9 +26740,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "增肌課表"
                 }
             }
         },
@@ -26703,9 +26781,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "增肌課表"
                 }
             }
         },
@@ -27047,9 +27125,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "增肌課表"
                 }
             }
         },
@@ -31278,9 +31356,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "增肌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -31293,9 +31371,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 }
             }
         },
@@ -31324,9 +31402,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "產品名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "金卡會員(月)"
+                    "example": "增肌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -31339,9 +31417,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 }
             }
         },
@@ -31482,9 +31560,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "name": {
                                 "description": "教練本名",
@@ -31548,9 +31626,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "name": {
                                 "description": "教練本名",
@@ -31616,9 +31694,9 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "name": {
                                 "description": "教練本名",
@@ -31669,9 +31747,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "name": {
                     "description": "教練本名",
@@ -31732,9 +31810,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "name": {
                     "description": "教練本名",
@@ -31992,9 +32070,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "intensity": {
                                 "description": "訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)",
@@ -32421,9 +32499,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "incline": {
                                 "description": "坡度",
@@ -32441,9 +32519,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -32577,9 +32655,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "incline": {
                                 "description": "坡度",
@@ -32597,9 +32675,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -32730,9 +32808,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "incline": {
                                 "description": "坡度",
@@ -32750,9 +32828,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -32883,9 +32961,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
-                                "type": "integer",
-                                "example": 2
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "incline": {
                                 "description": "坡度",
@@ -32903,9 +32981,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -33026,9 +33104,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "incline": {
                     "description": "坡度",
@@ -33046,9 +33124,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數id",
+                    "description": "次數",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -33179,9 +33257,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "課表 id",
-                    "type": "integer",
-                    "example": 2
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "incline": {
                     "description": "坡度",
@@ -33199,9 +33277,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數id",
+                    "description": "次數",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 },
                 "start_audio": {
                     "description": "前導語音",

@@ -9,6 +9,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_order_redeem"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipts"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/order"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -67,9 +68,9 @@ func (c *controller) CreateSubscribeOrder(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
-// UploadAppleSubscribeReceipt 上傳apple訂閱收據
-// @Summary 上傳apple訂閱收據
-// @Description 上傳apple訂閱收據
+// UploadAppleSubscribeReceipt 上傳單張apple訂閱收據
+// @Summary 上傳單張apple訂閱收據
+// @Description 上傳單張apple訂閱收據
 // @Tags 支付_v2
 // @Accept json
 // @Produce json
@@ -86,6 +87,28 @@ func (c *controller) UploadAppleSubscribeReceipt(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIUploadAppleSubscribeReceipt(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UploadAppleSubscribeReceipts 上傳多張apple訂閱收據
+// @Summary 上傳多張apple訂閱收據
+// @Description 上傳多張apple訂閱收據
+// @Tags 支付_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body api_upload_apple_subscribe_receipts.Body true "輸入參數"
+// @Success 200 {object} api_upload_apple_subscribe_receipts.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/apple_subscribe_receipts [POST]
+func (c *controller) UploadAppleSubscribeReceipts(ctx *gin.Context) {
+	input := api_upload_apple_subscribe_receipts.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUploadAppleSubscribeReceipts(ctx, &input)
 	ctx.JSON(http.StatusOK, output)
 }
 
