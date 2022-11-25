@@ -1652,7 +1652,7 @@ func (r *resolver) uploadGoogleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, u
 	subscribeInfoTable.OrderID = util.PointerString(orderID)
 	subscribeInfoTable.OriginalTransactionID = util.PointerString(originalTransactionID)
 	subscribeInfoTable.Status = util.PointerInt(subscribeInfoModel.ValidSubscribe)
-	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAP)
+	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAB)
 	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis / 1000).Format("2006-01-02 15:04:05"))
 	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis / 1000).Format("2006-01-02 15:04:05"))
 	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
