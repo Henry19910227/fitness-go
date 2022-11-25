@@ -21,6 +21,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipts"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_charge_receipt"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_subscribe_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderCourseModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	orderSubscribePlanModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_subscribe_plan"
@@ -370,6 +371,15 @@ func (r *resolver) APIUploadAppleSubscribeReceipts(ctx *gin.Context, input *api_
 	for _, receiptData := range input.Body.ReceiptDatas {
 		txHandle := orm.Shared().DB().Begin()
 		_ = r.uploadAppleSubscribeReceipt(ctx, txHandle, input.UserID, receiptData)
+	}
+	output.Set(code.Success, "success!")
+	return output
+}
+
+func (r *resolver) APIUploadGoogleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, input *api_upload_google_subscribe_receipt.Input) (output api_upload_google_subscribe_receipt.Output) {
+	if err := r.uploadGoogleSubscribeReceipt(ctx, tx, input.UserID, input.Body.ProductID, input.Body.ReceiptData); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
 	}
 	output.Set(code.Success, "success!")
 	return output
@@ -1413,7 +1423,7 @@ func (r *resolver) uploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, us
 		fmt.Println("該用戶為訂閱狀態")
 		return errors.New("該用戶為訂閱狀態")
 	}
-	// 驗證被 OriginalTransactionID 綁定的用戶是否還在訂閱狀態
+	// 驗證是否有正在綁定此 OriginalTransactionID 的用戶
 	subscribeInfoListInput := subscribeInfoModel.ListInput{}
 	subscribeInfoListInput.OriginalTransactionID = util.PointerString(latestReceipt.OriginalTransactionID)
 	subscribeInfoOutputs, _, err := r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
@@ -1455,16 +1465,16 @@ func (r *resolver) uploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, us
 		return errors.New("此收據已有上傳記錄")
 	}
 	// 0.清空原先綁定該 OriginalTransactionID 的用戶
-	subscribeInfoUpdateTables := make([]*subscribeInfoModel.Table, 0)
-	for _, subscribeInfoOutput := range subscribeInfoOutputs {
-		subscribeInfoUpdateTable := subscribeInfoModel.Table{}
-		subscribeInfoUpdateTable.UserID = subscribeInfoOutput.UserID
-		subscribeInfoUpdateTable.OriginalTransactionID = util.PointerString("")
-		subscribeInfoUpdateTables = append(subscribeInfoUpdateTables, &subscribeInfoUpdateTable)
-	}
-	if err := r.subscribeInfoService.Tx(tx).Updates(subscribeInfoUpdateTables); err != nil {
-		return err
-	}
+	//subscribeInfoUpdateTables := make([]*subscribeInfoModel.Table, 0)
+	//for _, subscribeInfoOutput := range subscribeInfoOutputs {
+	//	subscribeInfoUpdateTable := subscribeInfoModel.Table{}
+	//	subscribeInfoUpdateTable.UserID = subscribeInfoOutput.UserID
+	//	subscribeInfoUpdateTable.OriginalTransactionID = util.PointerString("")
+	//	subscribeInfoUpdateTables = append(subscribeInfoUpdateTables, &subscribeInfoUpdateTable)
+	//}
+	//if err := r.subscribeInfoService.Tx(tx).Updates(subscribeInfoUpdateTables); err != nil {
+	//	return err
+	//}
 	// 1.創建訂單
 	orderID := time.Now().Format("20060102150405") + strconv.Itoa(int(util.RandRange(100000, 999999)))
 	table := orderModel.Table{}
@@ -1508,6 +1518,147 @@ func (r *resolver) uploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, us
 	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAP)
 	subscribeInfoTable.StartDate = util.PointerString(latestReceipt.PurchaseDate.Format("2006-01-02 15:04:05"))
 	subscribeInfoTable.ExpiresDate = util.PointerString(latestReceipt.ExpiresDate.Format("2006-01-02 15:04:05"))
+	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
+		return err
+	}
+	// 5.更新用戶類型
+	userTable := userModel.Table{}
+	userTable.ID = util.PointerInt64(userID)
+	userTable.UserType = util.PointerInt(userModel.Subscribe)
+	if err := r.userService.Tx(tx).Update(&userTable); err != nil {
+		return err
+	}
+	tx.Commit()
+	return nil
+}
+
+func (r *resolver) uploadGoogleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, userID int64, productID string, receiptData string) error {
+	defer tx.Rollback()
+	// 驗證 google 收據
+	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+	if err != nil {
+		return err
+	}
+	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
+	if err != nil {
+		return err
+	}
+	response, err := r.iabTool.APIGetSubscription(productID, receiptData, token)
+	if err != nil {
+		return err
+	}
+	startTimeMillis, err := strconv.ParseInt(response.StartTimeMillis, 10, 64)
+	if err != nil {
+		return err
+	}
+	expiryTimeMillis, err := strconv.ParseInt(response.ExpiryTimeMillis, 10, 64)
+	if err != nil {
+		return err
+	}
+	// 獲取交易id
+	// 回傳的訂單如遇到 GPA.3331-2251-2804-48618..4
+	// OriginalTransactionID = 只留下'..'前的訂單編號 GPA.3331-2251-2804-48618
+	// TransactionID = 完整的訂單編號 GPA.3331-2251-2804-48618
+	originalTransactionID := response.OrderId
+	transactionID := response.OrderId
+	transactionIDs := strings.Split(response.OrderId, "..")
+	if len(transactionIDs) > 1 {
+		originalTransactionID = transactionIDs[0]
+	}
+	// 驗證該用戶訂閱狀態
+	findSubscribeInfoInput := subscribeInfoModel.FindInput{}
+	findSubscribeInfoInput.UserID = util.PointerInt64(userID)
+	subscribeInfoOutput, err := r.subscribeInfoService.Tx(tx).Find(&findSubscribeInfoInput)
+	if err != nil {
+		return err
+	}
+	if util.OnNilJustReturnInt(subscribeInfoOutput.Status, 0) == 1 {
+		fmt.Println("該用戶為訂閱狀態")
+		return errors.New("該用戶為訂閱狀態")
+	}
+	// 驗證是否有正在綁定此 OriginalTransactionID 的用戶
+	subscribeInfoListInput := subscribeInfoModel.ListInput{}
+	subscribeInfoListInput.OriginalTransactionID = util.PointerString(originalTransactionID)
+	subscribeInfoOutputs, _, err := r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
+	if err != nil {
+		return err
+	}
+	for _, subscribeInfoOutput := range subscribeInfoOutputs {
+		if util.OnNilJustReturnInt(subscribeInfoOutput.Status, 0) == 1 {
+			fmt.Println("該 original_transaction_id 為訂閱狀態")
+			return errors.New("該 original_transaction_id 為訂閱狀態")
+		}
+	}
+	// 驗證是否為訂閱收據
+	subscribePlanListInput := subscribePlanModel.ListInput{}
+	subscribePlanListInput.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN product_labels ON subscribe_plans.product_label_id = product_labels.id"},
+	}
+	subscribePlanListInput.Wheres = []*whereModel.Where{
+		{Query: "product_labels.product_id = ?", Args: []interface{}{productID}},
+	}
+	subscribePlanOutputs, _, err := r.subscribePlanService.Tx(tx).List(&subscribePlanListInput)
+	if err != nil {
+		return err
+	}
+	if len(subscribePlanOutputs) == 0 {
+		fmt.Println("收據類型錯誤")
+		return errors.New("收據類型錯誤")
+	}
+	// 驗證收據是否已被使用
+	receiptListInput := receiptModel.ListInput{}
+	receiptListInput.OriginalTransactionID = util.PointerString(originalTransactionID)
+	receiptListInput.TransactionID = util.PointerString(transactionID)
+	receiptOutputs, _, err := r.receiptService.Tx(tx).List(&receiptListInput)
+	if err != nil {
+		return err
+	}
+	if len(receiptOutputs) > 0 {
+		fmt.Println("此收據已有上傳記錄")
+		return errors.New("此收據已有上傳記錄")
+	}
+	// 1.創建訂單
+	orderID := time.Now().Format("20060102150405") + strconv.Itoa(int(util.RandRange(100000, 999999)))
+	table := orderModel.Table{}
+	table.ID = util.PointerString(orderID)
+	table.UserID = util.PointerInt64(userID)
+	table.Quantity = util.PointerInt(1)
+	table.Type = util.PointerInt(orderModel.Subscribe)
+	table.OrderStatus = util.PointerInt(orderModel.Success)
+	_, err = r.orderService.Tx(tx).Create(&table)
+	if err != nil {
+		return err
+	}
+	// 2.創建訂單與訂閱項目關聯
+	orderSubscribePlanTable := orderSubscribePlanModel.Table{}
+	orderSubscribePlanTable.OrderID = util.PointerString(orderID)
+	orderSubscribePlanTable.SubscribePlanID = subscribePlanOutputs[0].ID
+	orderSubscribePlanTable.Status = util.PointerInt(1)
+	if err := r.orderSubscribePlanService.Tx(tx).Create(&orderSubscribePlanTable); err != nil {
+		return err
+	}
+	// 3.儲存收據
+	receiptTable := receiptModel.Table{}
+	receiptTable.OrderID = util.PointerString(orderID)
+	receiptTable.PaymentType = util.PointerInt(receiptModel.IAB)
+	receiptTable.ReceiptToken = util.PointerString("")
+	receiptTable.OriginalTransactionID = util.PointerString(originalTransactionID)
+	receiptTable.TransactionID = util.PointerString(transactionID)
+	receiptTable.ProductID = util.PointerString(productID)
+	receiptTable.Quantity = util.PointerInt(1)
+	_, err = r.receiptService.Tx(tx).CreateOrUpdate(&receiptTable)
+	if err != nil {
+		return err
+	}
+	// 4.更新用戶訂閱狀態與OriginalTransactionID
+	subscribeInfoTable := subscribeInfoModel.Table{}
+	subscribeInfoTable.UserID = util.PointerInt64(userID)
+	subscribeInfoTable.OrderID = util.PointerString(orderID)
+	subscribeInfoTable.OriginalTransactionID = util.PointerString(originalTransactionID)
+	subscribeInfoTable.Status = util.PointerInt(subscribeInfoModel.ValidSubscribe)
+	subscribeInfoTable.PaymentType = util.PointerInt(receiptModel.IAP)
+	subscribeInfoTable.StartDate = util.PointerString(util.UnixToTime(startTimeMillis / 1000).Format("2006-01-02 15:04:05"))
+	subscribeInfoTable.ExpiresDate = util.PointerString(util.UnixToTime(expiryTimeMillis / 1000).Format("2006-01-02 15:04:05"))
 	if err := r.subscribeInfoService.Tx(tx).CreateOrUpdate(&subscribeInfoTable); err != nil {
 		return err
 	}

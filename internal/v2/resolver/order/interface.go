@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipts"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_charge_receipt"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_subscribe_receipt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -20,6 +21,7 @@ type Resolver interface {
 	APIUploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, input *api_upload_apple_subscribe_receipt.Input) (output api_upload_apple_subscribe_receipt.Output)
 	APIUploadAppleSubscribeReceipts(ctx *gin.Context, input *api_upload_apple_subscribe_receipts.Input) (output api_upload_apple_subscribe_receipts.Output)
 	APIUploadAppleChargeReceipt(ctx *gin.Context, tx *gorm.DB, input *api_upload_apple_charge_receipt.Input) (output api_upload_apple_charge_receipt.Output)
+	APIUploadGoogleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, input *api_upload_google_subscribe_receipt.Input) (output api_upload_google_subscribe_receipt.Output)
 	APIUploadGoogleChargeReceipt(ctx *gin.Context, tx *gorm.DB, input *api_upload_google_charge_receipt.Input) (output api_upload_google_charge_receipt.Output)
 	APIVerifyGoogleReceipt(ctx *gin.Context, tx *gorm.DB, input *model.APIVerifyGoogleReceiptInput) (output model.APIVerifyGoogleReceiptOutput)
 	APIOrderRedeem(tx *gorm.DB, input *api_order_redeem.Input) (output api_order_redeem.Output)
