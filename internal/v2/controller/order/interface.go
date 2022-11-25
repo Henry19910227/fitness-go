@@ -10,6 +10,7 @@ type Controller interface {
 	UploadAppleSubscribeReceipt(ctx *gin.Context)
 	UploadAppleSubscribeReceipts(ctx *gin.Context)
 	UploadAppleChargeReceipt(ctx *gin.Context)
+	UploadGoogleSubscribeReceipt(ctx *gin.Context)
 	UploadGoogleChargeReceipt(ctx *gin.Context)
 	VerifyAppleReceipt(ctx *gin.Context)
 	VerifyGoogleReceipt(ctx *gin.Context)
