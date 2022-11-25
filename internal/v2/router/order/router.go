@@ -19,6 +19,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.POST("/apple_subscribe_receipt", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UploadAppleSubscribeReceipt)
 	v2.POST("/apple_subscribe_receipts", midd.Verify([]global.Role{global.UserRole}), controller.UploadAppleSubscribeReceipts)
 	v2.POST("/apple_charge_receipt", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UploadAppleChargeReceipt)
+	v2.POST("/google_charge_receipt", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UploadGoogleChargeReceipt)
 	v2.POST("/verify_apple_receipt", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.VerifyAppleReceipt)
 	v2.POST("/verify_apple_subscribe", midd.Verify([]global.Role{global.UserRole}), controller.VerifyAppleSubscribe)
 	v2.POST("/verify_google_receipt", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.VerifyGoogleReceipt)

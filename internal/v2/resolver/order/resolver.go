@@ -20,6 +20,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipts"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderCourseModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	orderSubscribePlanModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_subscribe_plan"
@@ -375,6 +376,7 @@ func (r *resolver) APIUploadAppleSubscribeReceipts(ctx *gin.Context, input *api_
 }
 
 func (r *resolver) APIUploadAppleChargeReceipt(ctx *gin.Context, tx *gorm.DB, input *api_upload_apple_charge_receipt.Input) (output api_upload_apple_charge_receipt.Output) {
+	// 查詢訂單資訊
 	findInput := orderModel.FindInput{}
 	findInput.ID = util.PointerString(input.Body.OrderID)
 	findInput.Preloads = []*preloadModel.Preload{
@@ -384,7 +386,6 @@ func (r *resolver) APIUploadAppleChargeReceipt(ctx *gin.Context, tx *gorm.DB, in
 	}
 	orderOutput, err := r.orderService.Find(&findInput)
 	if err != nil {
-		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
@@ -392,13 +393,18 @@ func (r *resolver) APIUploadAppleChargeReceipt(ctx *gin.Context, tx *gorm.DB, in
 		output.Set(code.BadRequest, "無效的訂單，此訂單非該用戶創建")
 		return output
 	}
+	if util.OnNilJustReturnInt(orderOutput.Type, 0) != orderModel.BuyCourse {
+		output.Set(code.BadRequest, "此訂單非購買訂單，訂單類型錯誤")
+		return output
+	}
+	// 驗證 apple 收據
 	response, err := r.iapTool.VerifyAppleReceiptAPI(input.Body.ReceiptData)
 	if err != nil {
 		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	//驗證收據結果
+	// 驗證收據結果
 	if response.Status != 0 {
 		//更新訂單狀態
 		orderTable := orderModel.Table{}
@@ -408,12 +414,59 @@ func (r *resolver) APIUploadAppleChargeReceipt(ctx *gin.Context, tx *gorm.DB, in
 		output.Set(code.BadRequest, "收據驗證錯誤 - "+strconv.Itoa(response.Status))
 		return output
 	}
-	if util.OnNilJustReturnInt(orderOutput.Type, 0) != orderModel.BuyCourse {
-		output.Set(code.BadRequest, "此訂單非訂閱訂單，訂單類型錯誤")
-		return output
-	}
+	// 處理 apple 收據
 	if err := r.handleBuyCourseTradeForApple(tx, orderOutput, response); err != nil {
 		logger.Shared().Error(ctx, "APIVerifyAppleReceipt："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIUploadGoogleChargeReceipt(ctx *gin.Context, tx *gorm.DB, input *api_upload_google_charge_receipt.Input) (output api_upload_google_charge_receipt.Output) {
+	// 查詢訂單資訊
+	findInput := orderModel.FindInput{}
+	findInput.ID = util.PointerString(input.Body.OrderID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "OrderCourse.Course"},
+		{Field: "OrderCourse.SaleItem.ProductLabel"},
+		{Field: "OrderSubscribePlan.SubscribePlan.ProductLabel"},
+	}
+	orderOutput, err := r.orderService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if util.OnNilJustReturnInt64(orderOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "無效的訂單，此訂單非該用戶創建")
+		return output
+	}
+	if util.OnNilJustReturnInt(orderOutput.Type, 0) != orderModel.BuyCourse {
+		output.Set(code.BadRequest, "此訂單非購買訂單，訂單類型錯誤")
+		return output
+	}
+	// 驗證 google 收據
+	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	response, err := r.iabTool.APIGetProducts(input.Body.ProductID, input.Body.ReceiptData, token)
+	if err != nil {
+		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
+		output.Set(code.BadRequest, err.Error())
+	}
+	// 處理 google 收據
+	if err := r.handleBuyCourseTradeForGoogle(tx, orderOutput, response); err != nil {
+		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
@@ -962,6 +1015,7 @@ func (r *resolver) SyncAppleSubscribeStatusSchedule(tx *gorm.DB) {
 		subscribeInfoTable := subscribeInfoModel.Table{}
 		subscribeInfoTable.UserID = subscribeInfoOutput.UserID
 		subscribeInfoTable.Status = util.PointerInt(subscribeInfoModel.NoneSubscribe)
+		subscribeInfoTable.PaymentType = util.PointerInt(0)
 		subscribeInfoTable.OriginalTransactionID = util.PointerString("")
 		// 準備 user table
 		userTable := userModel.Table{}
