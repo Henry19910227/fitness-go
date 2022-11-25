@@ -10,6 +10,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipts"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/order"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -131,6 +132,28 @@ func (c *controller) UploadAppleChargeReceipt(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIUploadAppleChargeReceipt(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UploadGoogleChargeReceipt 上傳google付費收據
+// @Summary 上傳google付費收據
+// @Description 上傳google付費收據
+// @Tags 支付_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body api_upload_google_charge_receipt.Body true "輸入參數"
+// @Success 200 {object} api_upload_google_charge_receipt.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/google_charge_receipt [POST]
+func (c *controller) UploadGoogleChargeReceipt(ctx *gin.Context) {
+	input := api_upload_google_charge_receipt.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUploadGoogleChargeReceipt(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 
