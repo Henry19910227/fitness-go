@@ -18,11 +18,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       intro:
@@ -30,16 +30,16 @@ definitions:
         example: Henry教練
         type: string
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -82,11 +82,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       intro:
@@ -94,16 +94,16 @@ definitions:
         example: Henry教練
         type: string
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -186,11 +186,11 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             intro:
@@ -198,20 +198,20 @@ definitions:
               example: Henry教練
               type: string
             name:
-              description: 產品名稱
-              example: 金卡會員(月)
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -271,15 +271,15 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             favorite:
               description: 是否收藏(0:否/1:是)
               example: 1
               type: integer
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             intro:
@@ -287,20 +287,20 @@ definitions:
               example: Henry教練
               type: string
             name:
-              description: 產品名稱
-              example: 金卡會員(月)
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -349,11 +349,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       intro:
@@ -361,16 +361,16 @@ definitions:
         example: Henry教練
         type: string
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
         example: 1
         type: integer
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -432,7 +432,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       order_status:
@@ -509,7 +509,7 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
     type: object
@@ -569,12 +569,12 @@ definitions:
         items:
           properties:
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             name:
-              description: 產品名稱
-              example: 金卡會員(月)
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             product_label:
               properties:
@@ -608,12 +608,12 @@ definitions:
         items:
           properties:
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             name:
-              description: 產品名稱
-              example: 金卡會員(月)
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             period:
               description: 週期(1:一個月/2:二個月/3:三個月/6:六個月/12:一年/99:永久)
@@ -671,11 +671,11 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             intro:
@@ -683,20 +683,20 @@ definitions:
               example: Henry教練
               type: string
             name:
-              description: 產品名稱
-              example: 金卡會員(月)
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             source:
               description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
               example: 1
               type: integer
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -894,7 +894,7 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       max_distance_record:
@@ -1017,7 +1017,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             incline:
@@ -1085,7 +1085,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       intensity:
@@ -1356,6 +1356,36 @@ definitions:
     - receipt_data
     type: object
   api_upload_google_subscribe_receipt.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  api_upload_google_subscribe_receipts.Body:
+    properties:
+      receipt_items:
+        items:
+          properties:
+            product_id:
+              description: 產品id
+              example: com.fitness.xxx
+              type: string
+            receipt_data:
+              description: 收據token
+              example: MIJOlgYJKoZIhvcN...
+              type: string
+          required:
+          - product_id
+          - receipt_data
+          type: object
+        type: array
+    type: object
+  api_upload_google_subscribe_receipts.Output:
     properties:
       code:
         description: 狀態碼
@@ -1808,8 +1838,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: 金牌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -1818,6 +1848,7 @@ definitions:
     required:
     - category
     - level
+    - name
     - schedule_type
     type: object
   course.APICreateTrainerCourseData:
@@ -1843,14 +1874,15 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: 金牌課表
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
         example: 2
         type: integer
     required:
+    - name
     - schedule_type
     type: object
   course.APICreateUserCourseData:
@@ -3720,8 +3752,8 @@ definitions:
   course.APIUpdateUserCourseBody:
     properties:
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
     type: object
   course.APIUpdateUserCourseOutput:
@@ -4008,7 +4040,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: id
+                      description: 銷售id
                       example: 1
                       type: integer
                     product_id:
@@ -7305,7 +7337,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       order_course:
@@ -7400,7 +7432,7 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             order_course:
@@ -7657,9 +7689,11 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: 金牌課表
         type: string
+    required:
+    - name
     type: object
   plan.APICreateTrainerPlanData:
     properties:
@@ -7684,9 +7718,11 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: 金牌課表
         type: string
+    required:
+    - name
     type: object
   plan.APICreateUserPlanData:
     properties:
@@ -7938,9 +7974,11 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: 金牌課表
         type: string
+    required:
+    - name
     type: object
   plan.APIUpdateUserPlanOutput:
     properties:
@@ -8306,8 +8344,8 @@ definitions:
         example: 勞其筋骨
         type: string
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       nickname:
         description: 教練暱稱
@@ -8489,8 +8527,8 @@ definitions:
         example: 勞其筋骨
         type: string
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       nickname:
         description: 教練暱稱
@@ -8676,8 +8714,8 @@ definitions:
         example: 勞其筋骨
         type: string
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       nickname:
         description: 教練暱稱
@@ -8835,8 +8873,8 @@ definitions:
         example: 勞其筋骨
         type: string
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       nickname:
         description: 教練暱稱
@@ -10387,7 +10425,7 @@ definitions:
         example: "2022-07-11 11:00:00"
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
         example: 1
         type: integer
       update_at:
@@ -11132,18 +11170,20 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: 金牌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
         example: 1
         type: integer
+    required:
+    - name
     type: object
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
     type: object
@@ -11163,18 +11203,20 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 訓練名稱
-        example: 腿部訓練
+        description: 銷售名稱
+        example: 金牌課表
         type: string
       workout_template_id:
         description: 訓練模板ID
         example: 1
         type: integer
+    required:
+    - name
     type: object
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
     type: object
@@ -11275,16 +11317,16 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             name:
-              description: 產品名稱
-              example: 金卡會員(月)
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             start_audio:
               description: 前導語音
@@ -11325,16 +11367,16 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             name:
-              description: 產品名稱
-              example: 金卡會員(月)
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             start_audio:
               description: 前導語音
@@ -11373,20 +11415,20 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 1
-              type: integer
+              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 2,3,6
+              type: string
             finish:
               description: 是否完成(0:未完成/1:已完成)
               example: 1
               type: integer
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             name:
-              description: 產品名稱
-              example: 金卡會員(月)
+              description: 銷售名稱
+              example: '銅級課表 '
               type: string
             start_audio:
               description: 前導語音
@@ -11418,16 +11460,16 @@ definitions:
         example: 123.mp3
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       start_audio:
         description: 前導語音
@@ -11466,16 +11508,16 @@ definitions:
         example: 123.mp3
         type: string
       equipment:
-        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 1
-        type: integer
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       name:
-        description: 產品名稱
-        example: 金卡會員(月)
+        description: 銷售名稱
+        example: '銅級課表 '
         type: string
       start_audio:
         description: 前導語音
@@ -11668,7 +11710,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             intensity:
@@ -11986,7 +12028,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             incline:
@@ -12010,8 +12052,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12107,7 +12149,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             incline:
@@ -12131,8 +12173,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12226,7 +12268,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             incline:
@@ -12250,8 +12292,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12345,7 +12387,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 銷售id
               example: 1
               type: integer
             incline:
@@ -12369,8 +12411,8 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12457,7 +12499,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       incline:
@@ -12481,8 +12523,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -12576,7 +12618,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: id
+        description: 銷售id
         example: 1
         type: integer
       incline:
@@ -12600,8 +12642,8 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -19215,6 +19257,34 @@ paths:
       summary: 上傳單張google訂閱收據
       tags:
       - 支付_v2
+  /v2/google_subscribe_receipts:
+    post:
+      consumes:
+      - application/json
+      description: 上傳多張google訂閱收據
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/api_upload_google_subscribe_receipts.Body'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/api_upload_google_subscribe_receipts.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 上傳多張google訂閱收據
+      tags:
+      - 支付_v2
   /v2/login/apple:
     post:
       consumes:
@@ -20383,7 +20453,7 @@ paths:
             $ref: '#/definitions/base.Output'
       security:
       - fitness_token: []
-      summary: 創建訂閱訂單
+      summary: 創建訂閱訂單 (已棄用)
       tags:
       - 支付_v2
   /v2/subscribe_plans:
@@ -23196,7 +23266,7 @@ paths:
             $ref: '#/definitions/base.Output'
       security:
       - fitness_token: []
-      summary: 驗證apple收據
+      summary: 驗證apple收據 (已棄用)
       tags:
       - 支付_v2
   /v2/verify_apple_subscribe:
@@ -23224,7 +23294,7 @@ paths:
             $ref: '#/definitions/base.Output'
       security:
       - fitness_token: []
-      summary: 驗證帳戶是否允許訂閱
+      summary: 驗證帳戶是否允許訂閱 (已棄用)
       tags:
       - 支付_v2
   /v2/verify_google_receipt:
@@ -23252,7 +23322,7 @@ paths:
             $ref: '#/definitions/base.Output'
       security:
       - fitness_token: []
-      summary: 驗證google收據
+      summary: 驗證google收據 (已棄用)
       tags:
       - 支付_v2
 securityDefinitions:

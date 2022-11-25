@@ -12,6 +12,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipts"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_subscribe_receipt"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_subscribe_receipts"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/order"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -49,7 +50,7 @@ func (c *controller) CreateCourseOrder(ctx *gin.Context) {
 }
 
 // CreateSubscribeOrder 創建訂閱訂單
-// @Summary 創建訂閱訂單
+// @Summary 創建訂閱訂單 (已棄用)
 // @Description 創建訂閱訂單
 // @Tags 支付_v2
 // @Accept json
@@ -158,6 +159,28 @@ func (c *controller) UploadGoogleSubscribeReceipt(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, output)
 }
 
+// UploadGoogleSubscribeReceipts 上傳多張google訂閱收據
+// @Summary 上傳多張google訂閱收據
+// @Description 上傳多張google訂閱收據
+// @Tags 支付_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body api_upload_google_subscribe_receipts.Body true "輸入參數"
+// @Success 200 {object} api_upload_google_subscribe_receipts.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/google_subscribe_receipts [POST]
+func (c *controller) UploadGoogleSubscribeReceipts(ctx *gin.Context) {
+	input := api_upload_google_subscribe_receipts.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUploadGoogleSubscribeReceipts(ctx, &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
 // UploadGoogleChargeReceipt 上傳google付費收據
 // @Summary 上傳google付費收據
 // @Description 上傳google付費收據
@@ -181,7 +204,7 @@ func (c *controller) UploadGoogleChargeReceipt(ctx *gin.Context) {
 }
 
 // VerifyAppleReceipt 驗證apple收據
-// @Summary 驗證apple收據
+// @Summary 驗證apple收據 (已棄用)
 // @Description 驗證apple收據
 // @Tags 支付_v2
 // @Accept json
@@ -203,7 +226,7 @@ func (c *controller) VerifyAppleReceipt(ctx *gin.Context) {
 }
 
 // VerifyGoogleReceipt 驗證google收據
-// @Summary 驗證google收據
+// @Summary 驗證google收據 (已棄用)
 // @Description 驗證google收據
 // @Tags 支付_v2
 // @Accept json
@@ -295,7 +318,7 @@ func (c *controller) GooglePlayNotification(ctx *gin.Context) {
 }
 
 // VerifyAppleSubscribe 驗證帳戶是否允許訂閱
-// @Summary 驗證帳戶是否允許訂閱
+// @Summary 驗證帳戶是否允許訂閱 (已棄用)
 // @Description 在創建訂閱訂單前，確認該帳戶是否可訂閱的API
 // @Tags 支付_v2
 // @Accept json

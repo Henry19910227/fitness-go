@@ -22,6 +22,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipts"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_subscribe_receipt"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_google_subscribe_receipts"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderCourseModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_course"
 	orderSubscribePlanModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_subscribe_plan"
@@ -380,6 +381,15 @@ func (r *resolver) APIUploadGoogleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB
 	if err := r.uploadGoogleSubscribeReceipt(ctx, tx, input.UserID, input.Body.ProductID, input.Body.ReceiptData); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
+	}
+	output.Set(code.Success, "success!")
+	return output
+}
+
+func (r *resolver) APIUploadGoogleSubscribeReceipts(ctx *gin.Context, input *api_upload_google_subscribe_receipts.Input) (output api_upload_google_subscribe_receipts.Output) {
+	for _, item := range input.Body.ReceiptItems {
+		txHandle := orm.Shared().DB().Begin()
+		_ = r.uploadGoogleSubscribeReceipt(ctx, txHandle, input.UserID, item.ProductID, item.ReceiptData)
 	}
 	output.Set(code.Success, "success!")
 	return output
@@ -1464,17 +1474,6 @@ func (r *resolver) uploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, us
 		fmt.Println("此收據已有上傳記錄")
 		return errors.New("此收據已有上傳記錄")
 	}
-	// 0.清空原先綁定該 OriginalTransactionID 的用戶
-	//subscribeInfoUpdateTables := make([]*subscribeInfoModel.Table, 0)
-	//for _, subscribeInfoOutput := range subscribeInfoOutputs {
-	//	subscribeInfoUpdateTable := subscribeInfoModel.Table{}
-	//	subscribeInfoUpdateTable.UserID = subscribeInfoOutput.UserID
-	//	subscribeInfoUpdateTable.OriginalTransactionID = util.PointerString("")
-	//	subscribeInfoUpdateTables = append(subscribeInfoUpdateTables, &subscribeInfoUpdateTable)
-	//}
-	//if err := r.subscribeInfoService.Tx(tx).Updates(subscribeInfoUpdateTables); err != nil {
-	//	return err
-	//}
 	// 1.創建訂單
 	orderID := time.Now().Format("20060102150405") + strconv.Itoa(int(util.RandRange(100000, 999999)))
 	table := orderModel.Table{}
