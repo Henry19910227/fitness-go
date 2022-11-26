@@ -23,6 +23,7 @@ import (
 	receiptModel "github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user"
@@ -1210,9 +1211,11 @@ func (r *resolver) updateUserSubscribeInfoForIAP(subscribeInfo *subscribeInfoMod
 func (r *resolver) updateUserSubscribeInfoForIAB(subscribeInfo *subscribeInfoModel.Output) error {
 	//查詢收據資料
 	receiptListInput := receiptModel.ListInput{}
+	receiptListInput.Wheres = []*whereModel.Where{
+		{Query: "LENGTH(receipts.receipt_token) > 0"},
+	}
 	receiptListInput.OrderID = subscribeInfo.OrderID
 	receiptListInput.PaymentType = util.PointerInt(receiptModel.IAB)
-	receiptListInput.HaveReceiptToken = util.PointerInt(1)
 	receiptListInput.Page = 1
 	receiptListInput.Size = 1
 	receiptListInput.OrderType = orderBy.DESC
