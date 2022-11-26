@@ -174,25 +174,6 @@ type APIGetTrainerActionsQuery struct {
 	PagingInput
 }
 
-// APIUpdateTrainerActionInput /v2/trainer/action/{action_id} [PATCH] 修改教練動作 API
-type APIUpdateTrainerActionInput struct {
-	userRequired.UserIDField
-	Cover *file.Input
-	Video *file.Input
-	Form  APIUpdateTrainerActionForm
-	Uri   APIUpdateTrainerActionUri
-}
-type APIUpdateTrainerActionForm struct {
-	optional.NameField
-	optional.CategoryField
-	optional.BodyField
-	optional.EquipmentField
-	optional.IntroField
-}
-type APIUpdateTrainerActionUri struct {
-	required.IDField
-}
-
 // APIDeleteTrainerActionInput /v2/trainer/action/{action_id} [DELETE]
 type APIDeleteTrainerActionInput struct {
 	userRequired.UserIDField
