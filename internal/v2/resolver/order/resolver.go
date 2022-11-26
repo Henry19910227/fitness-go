@@ -1496,7 +1496,7 @@ func (r *resolver) uploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, us
 	receiptTable := receiptModel.Table{}
 	receiptTable.OrderID = util.PointerString(orderID)
 	receiptTable.PaymentType = util.PointerInt(receiptModel.IAP)
-	receiptTable.ReceiptToken = util.PointerString("")
+	receiptTable.ReceiptToken = util.PointerString(receiptData)
 	receiptTable.OriginalTransactionID = util.PointerString(latestReceipt.OriginalTransactionID)
 	receiptTable.TransactionID = util.PointerString(latestReceipt.TransactionID)
 	receiptTable.ProductID = util.PointerString(latestReceipt.ProductID)
@@ -1637,7 +1637,7 @@ func (r *resolver) uploadGoogleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, u
 	receiptTable := receiptModel.Table{}
 	receiptTable.OrderID = util.PointerString(orderID)
 	receiptTable.PaymentType = util.PointerInt(receiptModel.IAB)
-	receiptTable.ReceiptToken = util.PointerString("")
+	receiptTable.ReceiptToken = util.PointerString(receiptData)
 	receiptTable.OriginalTransactionID = util.PointerString(originalTransactionID)
 	receiptTable.TransactionID = util.PointerString(transactionID)
 	receiptTable.ProductID = util.PointerString(productID)

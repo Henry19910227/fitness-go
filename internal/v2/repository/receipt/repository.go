@@ -22,10 +22,11 @@ func (r *repository) WithTrx(tx *gorm.DB) Repository {
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
-	//加入 user_id 篩選條件
-	if input.UserID != nil {
-		db = db.Joins("INNER JOIN orders ON orders.id = receipts.order_id")
-		db = db.Where("orders.user_id = ?", *input.UserID)
+	// Join
+	if len(input.Joins) > 0 {
+		for _, join := range input.Joins {
+			db = db.Joins(join.Query, join.Args...)
+		}
 	}
 	// OrderID 篩選條件
 	if input.OrderID != nil {
@@ -43,24 +44,16 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.PaymentType != nil {
 		db = db.Where("receipts.payment_type = ?", *input.PaymentType)
 	}
-	// HaveReceiptToken 篩選條件
-	if input.HaveReceiptToken != nil {
-		if *input.HaveReceiptToken > 0 {
-			db = db.Where("LENGTH(receipts.receipt_token) > 0")
-		} else {
-			db = db.Where("LENGTH(receipts.receipt_token) = 0")
+	// Custom Where
+	if len(input.Wheres) > 0 {
+		for _, where := range input.Wheres {
+			db = db.Where(where.Query, where.Args...)
 		}
 	}
-	//Preload
+	// Preload
 	if len(input.Preloads) > 0 {
 		for _, preload := range input.Preloads {
-			if preload.OrderBy != nil {
-				db = db.Preload(preload.Field, func(db *gorm.DB) *gorm.DB {
-					return db.Order(fmt.Sprintf("receipts.%s %s", preload.OrderBy.OrderField, preload.OrderBy.OrderType))
-				})
-				continue
-			}
-			db = db.Preload(preload.Field)
+			db = db.Preload(preload.Field, preload.Conditions...)
 		}
 	}
 	// Count
@@ -74,6 +67,12 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
 		db = db.Order(fmt.Sprintf("receipts.%s %s", input.OrderField, input.OrderType))
+	}
+	// Custom Order
+	if input.Orders != nil {
+		for _, orderBy := range input.Orders {
+			db = db.Order(orderBy.Value)
+		}
 	}
 	//查詢數據
 	err = db.Find(&outputs).Error
