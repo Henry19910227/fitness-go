@@ -6,6 +6,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_trainer_course_actions"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_user_action_best_pr"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_update_trainer_action"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -412,11 +413,11 @@ func (c *controller) CreateTrainerAction(ctx *gin.Context) {
 // @Param intro formData string false "動作介紹(1~400字元)"`
 // @Param cover formData file false "課表封面照"
 // @Param video formData file false "影片檔"
-// @Success 200 {object} action.APIUpdateTrainerActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Success 200 {object} api_update_trainer_action.Output "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/trainer/action/{action_id} [PATCH]
 func (c *controller) UpdateTrainerAction(ctx *gin.Context) {
-	input := model.APIUpdateTrainerActionInput{}
+	input := api_update_trainer_action.Input{}
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))

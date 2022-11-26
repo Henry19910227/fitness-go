@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_trainer_course_actions"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_user_action_best_pr"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_update_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -671,11 +672,12 @@ func (r *resolver) APIGetTrainerCourseActions(input *api_get_trainer_course_acti
 	return output
 }
 
-func (r *resolver) APIUpdateTrainerAction(tx *gorm.DB, input *model.APIUpdateTrainerActionInput) (output model.APIUpdateTrainerActionOutput) {
+func (r *resolver) APIUpdateTrainerAction(tx *gorm.DB, input *api_update_trainer_action.Input) (output api_update_trainer_action.Output) {
 	defer tx.Rollback()
 	// 查詢動作資訊
 	findInput := model.FindInput{}
 	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{{Field: "Course"}}
 	actionOutput, err := r.actionService.Tx(tx).Find(&findInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -686,7 +688,7 @@ func (r *resolver) APIUpdateTrainerAction(tx *gorm.DB, input *model.APIUpdateTra
 		output.Set(code.BadRequest, "非教練類型動作，無法修改資源")
 		return output
 	}
-	if util.OnNilJustReturnInt64(actionOutput.UserID, 0) != input.UserID {
+	if util.OnNilJustReturnInt64(actionOutput.Course.UserID, 0) != input.UserID {
 		output.Set(code.BadRequest, "非此動作擁有者，無法修改資源")
 		return output
 	}
@@ -738,8 +740,22 @@ func (r *resolver) APIUpdateTrainerAction(tx *gorm.DB, input *model.APIUpdateTra
 		_ = r.coverUploadTool.Delete(util.OnNilJustReturnString(actionOutput.Cover, ""))
 	}
 	tx.Commit()
+	// 查詢修改後的動作
+	findActionInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.ID)
+	actionOutput, err = r.actionService.Find(&findActionInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	// parser output
+	data := api_update_trainer_action.Data{}
+	if err := util.Parser(actionOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }
 
@@ -781,6 +797,7 @@ func (r *resolver) APIDeleteTrainerActionVideo(input *model.APIDeleteTrainerActi
 	// 查詢動作資訊
 	findInput := model.FindInput{}
 	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.Preloads = []*preloadModel.Preload{{Field: "Course"}}
 	actionOutput, err := r.actionService.Find(&findInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -791,7 +808,7 @@ func (r *resolver) APIDeleteTrainerActionVideo(input *model.APIDeleteTrainerActi
 		output.Set(code.BadRequest, "非教練類型動作，無法刪除資源")
 		return output
 	}
-	if util.OnNilJustReturnInt64(actionOutput.UserID, 0) != input.UserID {
+	if util.OnNilJustReturnInt64(actionOutput.Course.UserID, 0) != input.UserID {
 		output.Set(code.BadRequest, "非此動作擁有者，無法刪除資源")
 		return output
 	}

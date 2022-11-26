@@ -15,6 +15,7 @@ import (
 
 type Output struct {
 	Table
+	Course *CourseOutput `json:"course" gorm:"foreignKey:id;references:course_id"` // 課表
 	MaxDistanceRecord *max_distance_record.Output `json:"max_distance_record" gorm:"foreignKey:action_id;references:id"` // 最長距離紀錄
 	MaxRepsRecord     *max_reps_record.Output     `json:"max_reps_record" gorm:"foreignKey:action_id;references:id"`     // 最多次數紀錄
 	MaxRMRecord       *max_rm_record.Output       `json:"max_rm_record" gorm:"foreignKey:action_id;references:id"`       // 最大RM紀錄
@@ -26,6 +27,21 @@ type Output struct {
 
 func (Output) TableName() string {
 	return "actions"
+}
+
+type CourseOutput struct {
+	CourseTable
+}
+
+func (CourseOutput) TableName() string {
+	return "courses"
+}
+
+func (o Output) CourseOnSafe() CourseOutput {
+	if o.Course != nil {
+		return *o.Course
+	}
+	return CourseOutput{}
 }
 
 func (o Output) MaxDistanceRecordOnSafe() max_distance_record.Output {
@@ -221,11 +237,6 @@ type APIGetTrainerActionsData []*struct {
 	optional.StatusField
 	optional.CreateAtField
 	optional.UpdateAtField
-}
-
-// APIUpdateTrainerActionOutput /v2/trainer/action/{action_id} [PATCH] 修改教練動作 API
-type APIUpdateTrainerActionOutput struct {
-	base.Output
 }
 
 // APIDeleteTrainerActionOutput /v2/trainer/action/{action_id} [DELETE]
