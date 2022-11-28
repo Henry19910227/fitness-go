@@ -94,6 +94,7 @@ FCM:
     TokenURL: https://oauth2.googleapis.com/token
     URL: https://fcm.googleapis.com
     Scope: https://www.googleapis.com/auth/firebase.messaging
+    Expire: 30 # Minute
     Debug:
       ProjectID: fitness-local
       KeyName: fcm-local-821466c48b.json

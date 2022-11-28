@@ -19,6 +19,14 @@ func New(setting fcm.Setting) Tool {
 	return &tool{setting: setting}
 }
 
+func (t *tool) Key() string {
+	return "fitness.fcm.token"
+}
+
+func (t *tool) GetExpire() time.Duration {
+	return t.setting.GetExpire()
+}
+
 func (t *tool) GenerateGoogleOAuth2Token(duration time.Duration) (string, error) {
 	jsonData, err := ioutil.ReadFile(util.RootPath() + "/config/" + t.setting.GetKeyName())
 	if err != nil {
@@ -70,10 +78,6 @@ func (t *tool) APISendMessage(token string, message map[string]interface{}) erro
 	url := t.setting.GetURL() + "/v1/projects/" + t.setting.GetProjectID() + "/messages:send"
 	header := make(map[string]string)
 	header["Authorization"] = fmt.Sprintf("Bearer %s", token)
-	//body := map[string]interface{}{
-	//	"message": map[string]interface{}{"token": "dgVouNzFbUydv8HSF85bDC:APA91bH8AwOU5C2iiSiHwkUMmgUIRSc87Xx2BEngNvuanR1c0BdQDqVGXxCpggEKN7WRHaH_8_inyGkcrVADSNLBrAGxkPbhw_lmkfOoUt_sMNMQ4hmmFi8-b4OJTxhfYUO14fZiKdqV",
-	//		"notification": map[string]string{"body": "HI", "title": "Test"}},
-	//}
 	_, err := util.SendRequest("POST", url, header, message, nil)
 	return err
 }
