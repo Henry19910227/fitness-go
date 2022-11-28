@@ -59,6 +59,7 @@ type APIUpdateUserProfileInput struct {
 	Body APIUpdateUserProfileBody
 }
 type APIUpdateUserProfileBody struct {
+	optional.DeviceTokenField
 	optional.NicknameField
 	optional.SexField
 	optional.HeightField

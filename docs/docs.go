@@ -16861,7 +16861,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -16876,7 +16876,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "description": "訂閱狀態(0:無訂閱/1:訂閱中)",
                     "type": "integer",
                     "example": 1
                 },
@@ -16944,7 +16944,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -16959,7 +16959,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "description": "訂閱狀態(0:無訂閱/1:訂閱中)",
                     "type": "integer",
                     "example": 1
                 },
@@ -17082,7 +17082,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17102,7 +17102,7 @@ var doc = `{
                                 "example": 1
                             },
                             "status": {
-                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                                "description": "訂閱狀態(0:無訂閱/1:訂閱中)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17199,7 +17199,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17219,7 +17219,7 @@ var doc = `{
                                 "example": 1
                             },
                             "status": {
-                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                                "description": "訂閱狀態(0:無訂閱/1:訂閱中)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17280,7 +17280,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17295,7 +17295,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "description": "訂閱狀態(0:無訂閱/1:訂閱中)",
                     "type": "integer",
                     "example": 1
                 },
@@ -17386,7 +17386,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17489,7 +17489,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 }
@@ -17572,7 +17572,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17625,7 +17625,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17713,7 +17713,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17733,7 +17733,7 @@ var doc = `{
                                 "example": 1
                             },
                             "status": {
-                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                                "description": "訂閱狀態(0:無訂閱/1:訂閱中)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17997,7 +17997,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18164,7 +18164,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18253,7 +18253,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -19353,9 +19353,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -19400,9 +19400,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -22234,7 +22234,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "評論id",
+                                                "description": "id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -26580,7 +26580,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -26708,7 +26708,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -27059,9 +27059,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 }
             }
         },
@@ -27100,9 +27100,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 }
             }
         },
@@ -27444,9 +27444,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 }
             }
         },
@@ -30376,6 +30376,11 @@ var doc = `{
                     "type": "string",
                     "example": "1991-02-27"
                 },
+                "device_token": {
+                    "description": "推播token",
+                    "type": "string",
+                    "example": "d2we12ew3d12we1"
+                },
                 "experience": {
                     "description": "經驗 (0:未指定/1:初學/2:中級/3:中高/4:專業)",
                     "type": "integer",
@@ -30683,7 +30688,7 @@ var doc = `{
                     "example": "2022-07-11 11:00:00"
                 },
                 "status": {
-                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "description": "訂閱狀態(0:無訂閱/1:訂閱中)",
                     "type": "integer",
                     "example": 1
                 },
@@ -31675,9 +31680,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -31690,7 +31695,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 }
@@ -31721,9 +31726,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "銷售名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "銅級課表 "
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -31736,7 +31741,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 }
@@ -31879,7 +31884,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31945,7 +31950,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -32013,7 +32018,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -32066,7 +32071,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -32129,7 +32134,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -32389,7 +32394,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -32818,7 +32823,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -32974,7 +32979,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -33127,7 +33132,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -33280,7 +33285,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -33423,7 +33428,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -33576,7 +33581,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
