@@ -90,6 +90,16 @@ IAB:
       JsonFilePath: ./config/fitness-84141-15033019d22e.json
       KeyName: fitness-84141-15033019d22e.json
       PackageName: com.alan.fitness.dev
+FCM:
+    TokenURL: https://oauth2.googleapis.com/token
+    URL: https://fcm.googleapis.com
+    Scope: https://www.googleapis.com/auth/firebase.messaging
+    Debug:
+      ProjectID: fitness-local
+      KeyName: fcm-local-821466c48b.json
+    Release:
+      ProjectID: fitness-local
+      KeyName: fcm-local-821466c48b.json
 FBLogin:
     Host: https://graph.facebook.com/
     Debug:
