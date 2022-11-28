@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS course_status_update_logs;
