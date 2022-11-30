@@ -1,7 +1,7 @@
 package required
 
 type UserIDField struct {
-	UserID int64 `json:"user_id" uri:"user_id" gorm:"column:user_id" binding:"required,max=20" example:"10001"` // 用戶id
+	UserID int64 `json:"user_id" uri:"user_id" gorm:"column:user_id" binding:"required" example:"10001"` // 用戶id
 }
 type NameField struct {
 	Name string `json:"name" form:"name" gorm:"column:name" binding:"required,max=20" example:"亨利"` // 教練本名

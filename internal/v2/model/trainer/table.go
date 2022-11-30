@@ -32,7 +32,24 @@ func (Table) TableName() string {
 
 type UserTable struct {
 	userOptional.IDField
+	userOptional.AccountTypeField
+	userOptional.AccountField
+	userOptional.PasswordField
+	userOptional.DeviceTokenField
+	userOptional.UserStatusField
+	userOptional.UserTypeField
+	userOptional.EmailField
+	userOptional.NicknameField
+	userOptional.AvatarField
+	userOptional.SexField
+	userOptional.BirthdayField
+	userOptional.HeightField
+	userOptional.WeightField
+	userOptional.ExperienceField
+	userOptional.TargetField
 	userOptional.IsDeletedField
+	userOptional.CreateAtField
+	userOptional.UpdateAtField
 }
 
 func (UserTable) TableName() string {

@@ -6,6 +6,7 @@ import (
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_update_cms_trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/trainer"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -285,6 +286,32 @@ func (c *controller) GetFavoriteTrainers(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetFavoriteTrainers(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateCMSTrainer 更新教練
+// @Summary 更新教練
+// @Description 更新教練
+// @Tags CMS會員管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "教練id"
+// @Param json_body body api_update_cms_trainer.Body true "輸入參數"
+// @Success 200 {object} api_update_cms_trainer.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/trainer/{user_id} [PATCH]
+func (c *controller) UpdateCMSTrainer(ctx *gin.Context) {
+	var input api_update_cms_trainer.Input
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateCMSTrainer(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 

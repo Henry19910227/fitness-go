@@ -9,5 +9,6 @@ type Controller interface {
 	GetStoreTrainer(ctx *gin.Context)
 	GetStoreTrainers(ctx *gin.Context)
 	GetFavoriteTrainers(ctx *gin.Context)
+	UpdateCMSTrainer(ctx *gin.Context)
 	UpdateCMSTrainerAvatar(ctx *gin.Context)
 }

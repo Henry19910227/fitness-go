@@ -3,52 +3,68 @@ package trainer
 import (
 	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/fcm"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	accountModel "github.com/Henry19910227/fitness-go/internal/v2/model/bank_account"
 	cardModel "github.com/Henry19910227/fitness-go/internal/v2/model/card"
 	certModel "github.com/Henry19910227/fitness-go/internal/v2/model/certificate"
+	fcmModel "github.com/Henry19910227/fitness-go/internal/v2/model/fcm"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_update_cms_trainer"
 	albumModel "github.com/Henry19910227/fitness-go/internal/v2/model/trainer_album"
+	trainerStatusLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/trainer_status_update_log"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/bank_account"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/card"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/certificate"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer_album"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer_status_update_log"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"time"
 )
 
 type resolver struct {
-	trainerService      trainer.Service
-	trainerAlbumService trainer_album.Service
-	cardService         card.Service
-	certService         certificate.Service
-	bankAccountService  bank_account.Service
-	avatarUploadTool    uploader.Tool
-	albumUploadTool     uploader.Tool
-	cardFrontUploadTool uploader.Tool
-	cardBackUploadTool  uploader.Tool
-	certUploadTool      uploader.Tool
-	accountUploadTool   uploader.Tool
+	trainerService          trainer.Service
+	trainerAlbumService     trainer_album.Service
+	trainerStatusLogService trainer_status_update_log.Service
+	cardService             card.Service
+	certService             certificate.Service
+	bankAccountService      bank_account.Service
+	avatarUploadTool        uploader.Tool
+	albumUploadTool         uploader.Tool
+	cardFrontUploadTool     uploader.Tool
+	cardBackUploadTool      uploader.Tool
+	certUploadTool          uploader.Tool
+	accountUploadTool       uploader.Tool
+	redisTool               redis.Tool
+	fcmTool                 fcm.Tool
 }
 
 func New(trainerService trainer.Service, trainerAlbumService trainer_album.Service,
+	trainerStatusLogService trainer_status_update_log.Service,
 	cardService card.Service, certService certificate.Service,
 	bankAccountService bank_account.Service,
 	avatarUploadTool uploader.Tool, albumUploadTool uploader.Tool,
 	cardFrontUploadTool uploader.Tool, cardBackUploadTool uploader.Tool,
-	certUploadTool uploader.Tool, accountUploadTool uploader.Tool) Resolver {
+	certUploadTool uploader.Tool, accountUploadTool uploader.Tool,
+	redisTool redis.Tool, fcmTool fcm.Tool) Resolver {
 	return &resolver{trainerService: trainerService, trainerAlbumService: trainerAlbumService,
-		cardService: cardService, certService: certService,
+		trainerStatusLogService: trainerStatusLogService,
+		cardService:             cardService, certService: certService,
 		bankAccountService: bankAccountService,
 		avatarUploadTool:   avatarUploadTool, albumUploadTool: albumUploadTool,
 		cardFrontUploadTool: cardFrontUploadTool, cardBackUploadTool: cardBackUploadTool,
-		certUploadTool: certUploadTool, accountUploadTool: accountUploadTool}
+		certUploadTool: certUploadTool, accountUploadTool: accountUploadTool,
+		redisTool: redisTool, fcmTool: fcmTool}
 }
 
 func (r *resolver) APICreateTrainer(tx *gorm.DB, input *model.APICreateTrainerInput) (output model.APICreateTrainerOutput) {
@@ -516,6 +532,97 @@ func (r *resolver) APIGetFavoriteTrainers(input *model.APIGetFavoriteTrainersInp
 	output.Set(code.Success, "success")
 	output.Paging = page
 	output.Data = data
+	return output
+}
+
+func (r *resolver) APIUpdateCMSTrainer(ctx *gin.Context, tx *gorm.DB, input *api_update_cms_trainer.Input) (output api_update_cms_trainer.Output) {
+	defer tx.Rollback()
+	// 查詢教練資訊
+	findTrainerInput := model.FindInput{}
+	findTrainerInput.UserID = util.PointerInt64(input.Uri.UserID)
+	findTrainerInput.Preloads = []*preload.Preload{
+		{Field: "User"},
+	}
+	trainerOutput, err := r.trainerService.Tx(tx).Find(&findTrainerInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 修改教練資訊
+	trainerTable := model.Table{}
+	trainerTable.UserID = util.PointerInt64(input.Uri.UserID)
+	trainerTable.TrainerStatus = input.Body.TrainerStatus
+	trainerTable.TrainerLevel = input.Body.TrainerLevel
+	if err := r.trainerService.Tx(tx).Update(&trainerTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 添加log紀錄
+	if input.Body.TrainerStatus != nil {
+		logTable := trainerStatusLogModel.Table{}
+		logTable.UserID = util.PointerInt64(input.Uri.UserID)
+		logTable.TrainerStatus = input.Body.TrainerStatus
+		logTable.Comment = util.PointerString("")
+		if _, err := r.trainerStatusLogService.Tx(tx).Create(&logTable); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
+	tx.Commit()
+	// 發送推播
+	oldStatus := util.OnNilJustReturnInt(trainerOutput.TrainerStatus, 0)
+	currentStatus := util.OnNilJustReturnInt(input.Body.TrainerStatus, 0)
+	deviceToken := util.OnNilJustReturnString(trainerOutput.UserOnSafe().DeviceToken, "")
+	if oldStatus == model.Reviewing && currentStatus == model.Activity && len(deviceToken) > 0 {
+		// 準備推播訊息
+		trainerName := util.OnNilJustReturnString(trainerOutput.Nickname, "")
+		body := fmt.Sprintf("%v教練，你申請成為平台教練的審核已經通過囉！點此打開Fitopia.hub APP開始創建你的課表～", trainerName)
+		msgOutput := fcmModel.Output{}
+		msgOutput.Message = fcmModel.Message{
+			Token: deviceToken,
+			Notification: fcmModel.Notification{
+				Title: "教練審核通知",
+				Body:  body,
+			},
+		}
+		// 獲取或更新 API token
+		apiToken, _ := r.redisTool.Get(r.fcmTool.Key())
+		if len(apiToken) == 0 {
+			//產出 auth token
+			oauthToken, _ := r.fcmTool.GenerateGoogleOAuth2Token(time.Hour)
+			//獲取API Token
+			apiToken, _ = r.fcmTool.APIGetGooglePlayToken(oauthToken)
+			//儲存API Token
+			_ = r.redisTool.SetEX(r.fcmTool.Key(), apiToken, r.fcmTool.GetExpire())
+		}
+		message := make(map[string]interface{})
+		if err = util.Parser(msgOutput, &message); err != nil {
+			logger.Shared().Error(ctx, "APIUpdateCMSTrainer Parser："+err.Error())
+		}
+		if err = r.fcmTool.APISendMessage(apiToken, message); err != nil {
+			logger.Shared().Error(ctx, "APIUpdateCMSTrainer SendMessage："+err.Error())
+		}
+	}
+	// 查詢修改後的教練資訊
+	findTrainerInput = model.FindInput{}
+	findTrainerInput.UserID = util.PointerInt64(input.Uri.UserID)
+	findTrainerInput.Preloads = []*preload.Preload{
+		{Field: "Certificates"},
+		{Field: "TrainerStatistic"},
+	}
+	trainerOutput, err = r.trainerService.Find(&findTrainerInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parse Output
+	data := api_update_cms_trainer.Data{}
+	if err := util.Parser(trainerOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }
 

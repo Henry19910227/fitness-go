@@ -16,10 +16,10 @@ type AvatarField struct {
 	Avatar *string `json:"avatar,omitempty" form:"avatar" gorm:"column:avatar" binding:"omitempty" example:"abc.png"` // 教練大頭照
 }
 type TrainerStatusField struct {
-	TrainerStatus *int `json:"trainer_status,omitempty" form:"trainer_status" gorm:"column:trainer_status" binding:"omitempty" example:"1"` // 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+	TrainerStatus *int `json:"trainer_status,omitempty" form:"trainer_status" gorm:"column:trainer_status" binding:"omitempty,oneof=1 2 3" example:"1"` // 教練帳戶狀態 (1:正常/2:審核中/3:停權)
 }
 type TrainerLevelField struct {
-	TrainerLevel *int `json:"trainer_level,omitempty" form:"trainer_level" gorm:"column:trainer_level" binding:"omitempty" example:"1"` // 教練評鑑等級
+	TrainerLevel *int `json:"trainer_level,omitempty" form:"trainer_level" gorm:"column:trainer_level" binding:"omitempty,min=1,max=5" example:"1"` // 教練評鑑等級
 }
 type EmailField struct {
 	Email *string `json:"email,omitempty" form:"email" gorm:"column:email" binding:"omitempty,email,max=255" example:"henry@gmail.com"` // 信箱

@@ -9771,6 +9771,58 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/trainer/{user_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新教練",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS會員管理_v2"
+                ],
+                "summary": "更新教練",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "教練id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_update_cms_trainer.Body"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/api_update_cms_trainer.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/trainer/{user_id}/avatar": {
             "patch": {
                 "security": [
@@ -16861,7 +16913,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 },
@@ -16871,9 +16923,9 @@ var doc = `{
                     "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -16881,9 +16933,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -16944,7 +16996,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 },
@@ -16954,9 +17006,9 @@ var doc = `{
                     "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -16964,9 +17016,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -17082,7 +17134,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17092,9 +17144,9 @@ var doc = `{
                                 "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "銷售名稱",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "銅級課表 "
+                                "example": "划船機"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -17107,9 +17159,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -17199,7 +17251,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17209,9 +17261,9 @@ var doc = `{
                                 "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "銷售名稱",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "銅級課表 "
+                                "example": "划船機"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -17224,9 +17276,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -17280,7 +17332,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "動作id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17290,9 +17342,9 @@ var doc = `{
                     "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "status": {
                     "description": "動作狀態(0:下架/1:上架)",
@@ -17300,9 +17352,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -17386,9 +17438,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "訂單id",
-                    "type": "string",
-                    "example": "202105201300687423"
+                    "description": "收據id",
+                    "type": "integer",
+                    "example": 1
                 },
                 "order_status": {
                     "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
@@ -17461,7 +17513,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 }
@@ -17489,7 +17541,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "動作id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 }
@@ -17572,14 +17624,14 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "銷售id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "name": {
-                                "description": "銷售名稱",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "銅級課表 "
+                                "example": "划船機"
                             },
                             "product_label": {
                                 "type": "object",
@@ -17625,14 +17677,14 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "訂閱項目id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "name": {
-                                "description": "銷售名稱",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "銅級課表 "
+                                "example": "划船機"
                             },
                             "period": {
                                 "description": "週期(1:一個月/2:二個月/3:三個月/6:六個月/12:一年/99:永久)",
@@ -17887,7 +17939,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "動作id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17897,9 +17949,9 @@ var doc = `{
                                 "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
                             },
                             "name": {
-                                "description": "銷售名稱",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "銅級課表 "
+                                "example": "划船機"
                             },
                             "source": {
                                 "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
@@ -17912,9 +17964,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -18171,7 +18223,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "動作id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18330,7 +18382,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -18338,7 +18390,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "log id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18419,7 +18471,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -18427,7 +18479,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練 log id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18668,6 +18720,185 @@ var doc = `{
                     "description": "狀態碼",
                     "type": "integer",
                     "example": 9000
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "api_update_cms_trainer.Body": {
+            "type": "object",
+            "properties": {
+                "trainer_level": {
+                    "description": "教練評鑑等級",
+                    "type": "integer",
+                    "example": 1
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "api_update_cms_trainer.Data": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "certificates": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "image",
+                            "name"
+                        ],
+                        "properties": {
+                            "id": {
+                                "description": "id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "image": {
+                                "description": "圖片",
+                                "type": "string",
+                                "example": "1234.jpg"
+                            },
+                            "name": {
+                                "description": "證照名稱",
+                                "type": "string",
+                                "example": "A級教練證照"
+                            }
+                        }
+                    }
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "henry@gmail.com"
+                },
+                "experience": {
+                    "description": "年資",
+                    "type": "integer",
+                    "example": 5
+                },
+                "facebook_url": {
+                    "description": "臉書連結",
+                    "type": "string",
+                    "example": "www.facebook.com"
+                },
+                "instagram_url": {
+                    "description": "ig連結",
+                    "type": "string",
+                    "example": "www.ig.com"
+                },
+                "intro": {
+                    "description": "動作介紹(1~400字元)",
+                    "type": "string",
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                },
+                "motto": {
+                    "description": "座右銘",
+                    "type": "string",
+                    "example": "勞其筋骨"
+                },
+                "name": {
+                    "description": "動作名稱",
+                    "type": "string",
+                    "example": "划船機"
+                },
+                "nickname": {
+                    "description": "教練暱稱",
+                    "type": "string",
+                    "example": "Henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0955123321"
+                },
+                "skill": {
+                    "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                    "type": "string",
+                    "example": "1,4"
+                },
+                "trainer_album_photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "相片id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "photo": {
+                                "description": "照片",
+                                "type": "string",
+                                "example": "123.jpg"
+                            }
+                        }
+                    }
+                },
+                "trainer_level": {
+                    "description": "教練評鑑等級",
+                    "type": "integer",
+                    "example": 1
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "youtube_url": {
+                    "description": "youtube連結",
+                    "type": "string",
+                    "example": "www.youtube.com"
+                }
+            }
+        },
+        "api_update_cms_trainer.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_update_cms_trainer.Data"
                 },
                 "msg": {
                     "description": "訊息",
@@ -19568,9 +19799,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "金牌課表"
+                    "example": "亨利"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -19615,9 +19846,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "金牌課表"
+                    "example": "亨利"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -22053,9 +22284,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 }
             }
         },
@@ -22428,7 +22659,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "產品標籤id",
+                                                "description": "收據id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -26774,9 +27005,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "訂單id",
-                    "type": "string",
-                    "example": "202105201300687423"
+                    "description": "收據id",
+                    "type": "integer",
+                    "example": 1
                 },
                 "order_course": {
                     "type": "object",
@@ -26859,7 +27090,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 }
@@ -26902,9 +27133,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "訂單id",
-                                "type": "string",
-                                "example": "202105201300687423"
+                                "description": "收據id",
+                                "type": "integer",
+                                "example": 1
                             },
                             "order_course": {
                                 "type": "object",
@@ -27037,7 +27268,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "user_id": {
-                                "description": "關聯的用戶id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -27253,9 +27484,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "金牌課表"
+                    "example": "亨利"
                 }
             }
         },
@@ -27294,9 +27525,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "金牌課表"
+                    "example": "亨利"
                 }
             }
         },
@@ -27638,9 +27869,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "金牌課表"
+                    "example": "亨利"
                 }
             }
         },
@@ -28099,7 +28330,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -28132,9 +28363,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -28215,7 +28446,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -28273,7 +28504,7 @@ var doc = `{
                                 "example": "1,4"
                             },
                             "user_id": {
-                                "description": "關聯的用戶id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -28334,7 +28565,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -28372,9 +28603,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -28455,7 +28686,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -28505,7 +28736,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "nickname": {
                                 "description": "教練暱稱",
@@ -28523,7 +28754,7 @@ var doc = `{
                                 "example": "2022-06-12 00:00:00"
                             },
                             "user_id": {
-                                "description": "關聯的用戶id",
+                                "description": "用戶id",
                                 "type": "integer",
                                 "example": 10001
                             }
@@ -28584,7 +28815,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -28617,9 +28848,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -28700,7 +28931,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -28792,7 +29023,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -28825,9 +29056,9 @@ var doc = `{
                     "example": "勞其筋骨"
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "nickname": {
                     "description": "教練暱稱",
@@ -28908,7 +29139,7 @@ var doc = `{
                     "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
-                    "description": "關聯的用戶id",
+                    "description": "用戶id",
                     "type": "integer",
                     "example": 10001
                 },
@@ -31874,9 +32105,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "金牌課表"
+                    "example": "亨利"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -31889,7 +32120,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 }
@@ -31920,9 +32151,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "教練本名",
                     "type": "string",
-                    "example": "金牌課表"
+                    "example": "亨利"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -31935,7 +32166,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 }
@@ -32078,14 +32309,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "name": {
-                                "description": "銷售名稱",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "銅級課表 "
+                                "example": "划船機"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -32144,14 +32375,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "name": {
-                                "description": "銷售名稱",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "銅級課表 "
+                                "example": "划船機"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -32212,14 +32443,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "name": {
-                                "description": "銷售名稱",
+                                "description": "動作名稱",
                                 "type": "string",
-                                "example": "銅級課表 "
+                                "example": "划船機"
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -32265,14 +32496,14 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -32328,14 +32559,14 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "收據id",
                     "type": "integer",
                     "example": 1
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "動作名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "划船機"
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -32580,7 +32811,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -32588,7 +32819,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 log id",
+                                "description": "收據id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -33009,7 +33240,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33017,9 +33248,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "收據id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -33047,9 +33278,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -33165,7 +33396,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33173,9 +33404,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "收據id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -33203,9 +33434,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -33318,7 +33549,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33326,9 +33557,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "收據id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -33356,9 +33587,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -33471,7 +33702,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33479,9 +33710,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練組 id",
+                                "description": "收據id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -33509,9 +33740,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -33614,7 +33845,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 2.5
+                    "example": 1
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -33622,9 +33853,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練組 id",
+                    "description": "收據id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",
@@ -33652,9 +33883,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -33767,7 +33998,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 2.5
+                    "example": 1
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -33775,9 +34006,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練組 id",
+                    "description": "收據id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",
@@ -33805,9 +34036,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
