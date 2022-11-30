@@ -10,6 +10,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	courseStatusLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/course_status_update_log"
@@ -827,10 +828,10 @@ func (r *resolver) APICreateTrainerSingleWorkoutCourse(tx *gorm.DB, input *model
 	return output
 }
 
-func (r *resolver) APIGetTrainerCourse(input *model.APIGetTrainerCourseInput) (output model.APIGetTrainerCourseOutput) {
+func (r *resolver) APIGetTrainerCourse(input *api_get_trainer_course.Input) (output api_get_trainer_course.Output) {
 	// 獲取課表資訊
 	findInput := model.FindInput{}
-	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.ID = util.PointerInt64(input.Uri.CourseID)
 	findInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "SaleItem.ProductLabel"},
@@ -846,10 +847,28 @@ func (r *resolver) APIGetTrainerCourse(input *model.APIGetTrainerCourseInput) (o
 		return output
 	}
 	// parser output
-	data := model.APIGetTrainerCourseData{}
+	data := api_get_trainer_course.Data{}
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
+	}
+	//查詢退審原因
+	if util.OnNilJustReturnInt(data.CourseStatus, 0) == model.Reject {
+		logListInput := courseStatusLogModel.ListInput{}
+		logListInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+		logListInput.CourseStatus = util.PointerInt(model.Reject)
+		logListInput.Page = 1
+		logListInput.Size = 1
+		logListInput.OrderField = "create_at"
+		logListInput.OrderType = orderByModel.DESC
+		logOutputs, _, err := r.courseStatusLogService.List(&logListInput)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		if len(logOutputs) > 0 {
+			data.RejectReason = logOutputs[0].Comment
+		}
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data

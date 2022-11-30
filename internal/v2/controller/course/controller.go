@@ -6,6 +6,7 @@ import (
 	courseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
@@ -414,11 +415,11 @@ func (c *controller) CreateTrainerCourse(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
-// @Success 200 {object} course.APIGetUserCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Success 200 {object} api_get_trainer_course.Data "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/trainer/course/{course_id} [GET]
 func (c *controller) GetTrainerCourse(ctx *gin.Context) {
-	var input model.APIGetTrainerCourseInput
+	var input api_get_trainer_course.Input
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
