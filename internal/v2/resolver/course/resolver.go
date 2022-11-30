@@ -3,12 +3,17 @@ package course
 import (
 	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/fcm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
+	courseStatusLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/course_status_update_log"
+	fcmModel "github.com/Henry19910227/fitness-go/internal/v2/model/fcm"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -20,6 +25,7 @@ import (
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course_status_update_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer"
@@ -29,24 +35,30 @@ import (
 	"gorm.io/gorm"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type resolver struct {
-	courseService        courseService.Service
-	planService          plan.Service
-	workoutService       workout.Service
-	subscribeInfoService user_subscribe_info.Service
-	saleItemService      sale_item.Service
-	trainerService       trainer.Service
-	uploadTool           uploader.Tool
+	courseService          courseService.Service
+	courseStatusLogService course_status_update_log.Service
+	planService            plan.Service
+	workoutService         workout.Service
+	subscribeInfoService   user_subscribe_info.Service
+	saleItemService        sale_item.Service
+	trainerService         trainer.Service
+	uploadTool             uploader.Tool
+	redisTool              redis.Tool
+	fcmTool                fcm.Tool
 }
 
-func New(courseService courseService.Service, planService plan.Service,
+func New(courseService courseService.Service, courseStatusLogService course_status_update_log.Service, planService plan.Service,
 	workoutService workout.Service, subscribeInfoService user_subscribe_info.Service,
-	saleItemService sale_item.Service, trainerService trainer.Service, uploadTool uploader.Tool) Resolver {
-	return &resolver{courseService: courseService, planService: planService,
+	saleItemService sale_item.Service, trainerService trainer.Service,
+	uploadTool uploader.Tool, redisTool redis.Tool, fcmTool fcm.Tool) Resolver {
+	return &resolver{courseService: courseService, courseStatusLogService: courseStatusLogService, planService: planService,
 		workoutService: workoutService, subscribeInfoService: subscribeInfoService,
-		saleItemService: saleItemService, trainerService: trainerService, uploadTool: uploadTool}
+		saleItemService: saleItemService, trainerService: trainerService,
+		uploadTool: uploadTool, redisTool: redisTool, fcmTool: fcmTool}
 }
 
 func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput) {
@@ -151,17 +163,96 @@ func (r *resolver) APIGetCMSCourse(ctx *gin.Context, input *model.APIGetCMSCours
 	return output
 }
 
-func (r *resolver) APIUpdateCMSCoursesStatus(input *model.APIUpdateCMSCoursesStatusInput) (output base.Output) {
-	tables := make([]*model.Table, 0)
-	for _, courseID := range input.IDs {
-		table := model.Table{}
-		table.ID = util.PointerInt64(courseID)
-		table.CourseStatus = &input.CourseStatus
-		tables = append(tables, &table)
+func (r *resolver) APIUpdateCMSCoursesStatus(ctx *gin.Context, tx *gorm.DB, input *api_update_cms_courses_status.Input) (output api_update_cms_courses_status.Output) {
+	defer tx.Rollback()
+	// 查詢課表資訊
+	courseListInput := model.ListInput{}
+	courseListInput.Wheres = []*whereModel.Where{
+		{Query: "courses.id IN (?)", Args: []interface{}{input.Body.IDs}},
 	}
-	if err := r.courseService.Updates(tables); err != nil {
+	courseListInput.Preloads = []*preloadModel.Preload{
+		{Field: "User.Trainer"},
+	}
+	courseOutputs, _, err := r.courseService.Tx(tx).List(&courseListInput)
+	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
+	}
+	courseTables := make([]*model.Table, 0)
+	logTables := make([]*courseStatusLogModel.Table, 0)
+	msgOutputs := make([]*fcmModel.Output, 0)
+	for _, courseOutput := range courseOutputs {
+		// 準備 course table
+		courseTable := model.Table{}
+		courseTable.ID = courseOutput.ID
+		courseTable.CourseStatus = &input.Body.CourseStatus
+		// 準備 log table
+		logTable := courseStatusLogModel.Table{}
+		logTable.CourseID = courseOutput.ID
+		logTable.CourseStatus = util.PointerInt(input.Body.CourseStatus)
+		logTable.Comment = util.PointerString("")
+		if input.Body.Comment != nil {
+			logTable.Comment = input.Body.Comment
+		}
+		// 準備推播 message
+		deviceToken := util.OnNilJustReturnString(courseOutput.UserOnSafe().DeviceToken, "")
+		if (input.Body.CourseStatus == model.Sale || input.Body.CourseStatus == model.Reject) && len(deviceToken) > 0 {
+			saleTypeMap := map[int]string{
+				model.SaleTypeFree:      "免費",
+				model.SaleTypeSubscribe: "訂閱",
+				model.SaleTypeCharge:    "付費",
+			}
+			statusDesc := "已經通過審核並上架囉"
+			if input.Body.CourseStatus == model.Reject {
+				statusDesc = "尚未通過審核"
+			}
+			trainerName := util.OnNilJustReturnString(courseOutput.UserOnSafe().TrainerOnSafe().Nickname, "")
+			courseName := util.OnNilJustReturnString(courseOutput.Name, "")
+			saleType := util.OnNilJustReturnInt(courseOutput.SaleType, 0)
+			body := fmt.Sprintf("%v教練，你建立的%v課表-%v，%v，請點此打開Fitopia.hub APP確認", trainerName, saleTypeMap[saleType], courseName, statusDesc)
+			msgOutput := fcmModel.Output{}
+			msgOutput.Message = fcmModel.Message{
+				Token: deviceToken,
+				Notification: fcmModel.Notification{
+					Title: "課表審核通知",
+					Body:  body,
+				},
+			}
+			msgOutputs = append(msgOutputs, &msgOutput)
+		}
+		courseTables = append(courseTables, &courseTable)
+		logTables = append(logTables, &logTable)
+	}
+	if err := r.courseService.Tx(tx).Updates(courseTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := r.courseStatusLogService.Tx(tx).Creates(logTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	tx.Commit()
+	// 獲取或更新 api token
+	apiToken, _ := r.redisTool.Get(r.fcmTool.Key())
+	if len(apiToken) == 0 {
+		//產出 auth token
+		oauthToken, _ := r.fcmTool.GenerateGoogleOAuth2Token(time.Hour)
+		//獲取API Token
+		apiToken, _ = r.fcmTool.APIGetGooglePlayToken(oauthToken)
+		//儲存API Token
+		_ = r.redisTool.SetEX(r.fcmTool.Key(), apiToken, r.fcmTool.GetExpire())
+	}
+	// 發出推播
+	for _, msgOutput := range msgOutputs {
+		message := make(map[string]interface{})
+		if err = util.Parser(msgOutput, &message); err != nil {
+			logger.Shared().Error(ctx, "APIUpdateCMSCoursesStatus Parser："+err.Error())
+			continue
+		}
+		if err = r.fcmTool.APISendMessage(apiToken, message); err != nil {
+			logger.Shared().Error(ctx, "APIUpdateCMSCoursesStatus SendMessage："+err.Error())
+			continue
+		}
 	}
 	output.SetStatus(code.Success)
 	return output

@@ -7,6 +7,7 @@ import (
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -129,17 +130,18 @@ func (c *controller) GetCMSCourse(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param json_body body course.APIUpdateCMSCoursesStatusInput true "輸入參數"
-// @Success 200 {object} base.Output "成功!"
+// @Param json_body body api_update_cms_courses_status.Body true "輸入參數"
+// @Success 200 {object} api_update_cms_courses_status.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/courses/course_status [PATCH]
 func (c *controller) UpdateCMSCoursesStatus(ctx *gin.Context) {
-	var input model.APIUpdateCMSCoursesStatusInput
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	var input api_update_cms_courses_status.Input
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIUpdateCMSCoursesStatus(&input)
+	output := c.resolver.APIUpdateCMSCoursesStatus(ctx, ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 

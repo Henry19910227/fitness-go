@@ -99,8 +99,8 @@ FCM:
       ProjectID: fitness-local
       KeyName: fcm-local-821466c48b.json
     Release:
-      ProjectID: fitness-local
-      KeyName: fcm-local-821466c48b.json
+      ProjectID: fitness-84141
+      KeyName: fitness-84141-fcm-dev.json
 FBLogin:
     Host: https://graph.facebook.com/
     Debug:

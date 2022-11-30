@@ -19,12 +19,14 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/review_statistic"
 	saleItem "github.com/Henry19910227/fitness-go/internal/v2/model/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_course_asset"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_course_statistic"
 )
 
 type Output struct {
 	Table
+	User                       *user.Output                          `json:"user,omitempty" gorm:"foreignKey:id;references:user_id"`
 	Trainer                    *trainer.Output                       `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:user_id"`                    // 教練
 	SaleItem                   *saleItem.Output                      `json:"sale_item,omitempty" gorm:"foreignKey:id;references:sale_id"`                       // 銷售項目
 	ReviewStatistic            *review_statistic.Output              `json:"review_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`              // 評分統計
@@ -37,6 +39,13 @@ type Output struct {
 
 func (Output) TableName() string {
 	return "courses"
+}
+
+func (o Output) UserOnSafe() user.Output {
+	if o.User != nil {
+		return *o.User
+	}
+	return user.Output{}
 }
 
 func (o Output) UserCourseAssetOnSafe() user_course_asset.Output {

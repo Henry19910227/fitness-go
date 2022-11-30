@@ -39,7 +39,7 @@ func TestTool_APISendMessage(t *testing.T) {
 	assert.Equal(t, true, len(token) > 0)
 	//parser model
 	deviceToken := "dgVouNzFbUydv8HSF85bDC:APA91bH8AwOU5C2iiSiHwkUMmgUIRSc87Xx2BEngNvuanR1c0BdQDqVGXxCpggEKN7WRHaH_8_inyGkcrVADSNLBrAGxkPbhw_lmkfOoUt_sMNMQ4hmmFi8-b4OJTxhfYUO14fZiKdqV"
-	model := fcmModel.Input{}
+	model := fcmModel.Output{}
 	model.Message = fcmModel.Message{
 		Token: deviceToken,
 		Notification: fcmModel.Notification{

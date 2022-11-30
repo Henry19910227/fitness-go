@@ -19,6 +19,13 @@ func (Output) TableName() string {
 	return "users"
 }
 
+func (o Output) TrainerOnSafe() trainer.Output {
+	if o.Trainer != nil {
+		return *o.Trainer
+	}
+	return trainer.Output{}
+}
+
 // APIUpdatePasswordOutput /v2/password [PATCH]
 type APIUpdatePasswordOutput struct {
 	base.Output

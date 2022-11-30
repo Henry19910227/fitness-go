@@ -1,6 +1,6 @@
 package fcm
 
-type Input struct {
+type Output struct {
 	Message Message `json:"message"`
 }
 type Message struct {

@@ -1,9 +1,9 @@
 package course
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -13,7 +13,7 @@ type Resolver interface {
 
 	APIGetCMSCourses(ctx *gin.Context, input *model.APIGetCMSCoursesInput) interface{}
 	APIGetCMSCourse(ctx *gin.Context, input *model.APIGetCMSCourseInput) interface{}
-	APIUpdateCMSCoursesStatus(input *model.APIUpdateCMSCoursesStatusInput) (output base.Output)
+	APIUpdateCMSCoursesStatus(ctx *gin.Context, tx *gorm.DB, input *api_update_cms_courses_status.Input) (output api_update_cms_courses_status.Output)
 	APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverInput) (output model.APIUpdateCMSCourseCoverOutput)
 
 	APICreateUserCourse(input *model.APICreateUserCourseInput) (output model.APICreateUserCourseOutput)
