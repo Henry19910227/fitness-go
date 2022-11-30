@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS trainer_status_update_logs;
