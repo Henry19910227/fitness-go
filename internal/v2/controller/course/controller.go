@@ -10,6 +10,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_trainer_course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_user_course"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -272,12 +273,12 @@ func (c *controller) DeleteUserCourse(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param course_id path int64 true "課表id"
-// @Param json_body body course.APIUpdateUserCourseBody true "輸入參數"
-// @Success 200 {object} course.APIUpdateUserCourseOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Param json_body body api_update_user_course.Body true "輸入參數"
+// @Success 200 {object} api_update_user_course.Output "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/user/course/{course_id} [PATCH]
 func (c *controller) UpdateUserCourse(ctx *gin.Context) {
-	var input model.APIUpdateUserCourseInput
+	var input api_update_user_course.Input
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))

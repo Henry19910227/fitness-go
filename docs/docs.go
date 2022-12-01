@@ -15376,7 +15376,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/course.APIUpdateUserCourseBody"
+                            "$ref": "#/definitions/api_update_user_course.Body"
                         }
                     }
                 ],
@@ -15384,7 +15384,7 @@ var doc = `{
                     "200": {
                         "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
                         "schema": {
-                            "$ref": "#/definitions/course.APIUpdateUserCourseOutput"
+                            "$ref": "#/definitions/api_update_user_course.Output"
                         }
                     },
                     "400": {
@@ -16913,9 +16913,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "intro": {
                     "description": "課表介紹",
@@ -16933,9 +16933,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -16996,9 +16996,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "intro": {
                     "description": "課表介紹",
@@ -17016,9 +17016,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -17134,9 +17134,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "intro": {
                                 "description": "課表介紹",
@@ -17159,9 +17159,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -17251,9 +17251,9 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "intro": {
                                 "description": "課表介紹",
@@ -17276,9 +17276,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -17332,9 +17332,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "intro": {
                     "description": "課表介紹",
@@ -17352,9 +17352,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -17438,9 +17438,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "order_status": {
                     "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
@@ -17541,9 +17541,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 }
             }
         },
@@ -17624,9 +17624,9 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
                                 "description": "課表名稱",
@@ -17677,9 +17677,9 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
                                 "description": "課表名稱",
@@ -17939,9 +17939,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "intro": {
                                 "description": "課表介紹",
@@ -17964,9 +17964,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -18223,9 +18223,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "max_distance_record": {
                     "type": "object",
@@ -18382,7 +18382,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -18390,9 +18390,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -18400,9 +18400,9 @@ var doc = `{
                                 "example": 10.5
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "weight": {
                                 "description": "體重(公斤)",
@@ -18479,9 +18479,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "intensity": {
                     "description": "訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)",
@@ -19145,6 +19145,144 @@ var doc = `{
                 },
                 "data": {
                     "$ref": "#/definitions/api_update_trainer_course.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "api_update_user_course.Body": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                }
+            }
+        },
+        "api_update_user_course.Data": {
+            "type": "object",
+            "properties": {
+                "body_target": {
+                    "description": "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)",
+                    "type": "string",
+                    "example": "4,5"
+                },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "equipment": {
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
+                },
+                "food": {
+                    "description": "飲食建議",
+                    "type": "string",
+                    "example": "多吃雞胸肉"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "intro": {
+                    "description": "課表介紹",
+                    "type": "string",
+                    "example": "增肌專用課表"
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                },
+                "notice": {
+                    "description": "注意事項",
+                    "type": "string",
+                    "example": "注意關節避免鎖死"
+                },
+                "place": {
+                    "description": "適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)",
+                    "type": "string",
+                    "example": "1,2"
+                },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 10
+                },
+                "sale_id": {
+                    "description": "銷售 id",
+                    "type": "integer",
+                    "example": 3
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "suit": {
+                    "description": "適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)",
+                    "type": "string",
+                    "example": "2,5,7"
+                },
+                "train_target": {
+                    "description": "訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)",
+                    "type": "string",
+                    "example": "2,3,4"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 50
+                }
+            }
+        },
+        "api_update_user_course.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_update_user_course.Data"
                 },
                 "msg": {
                     "description": "訊息",
@@ -19962,9 +20100,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "教練本名",
+                    "description": "證照名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "A級教練證照"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -20009,9 +20147,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "證照名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "A級教練證照"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -22443,31 +22581,6 @@ var doc = `{
                 }
             }
         },
-        "course.APIUpdateUserCourseBody": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "description": "課表名稱",
-                    "type": "string",
-                    "example": "增肌課表"
-                }
-            }
-        },
-        "course.APIUpdateUserCourseOutput": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "狀態碼",
-                    "type": "integer",
-                    "example": 9000
-                },
-                "msg": {
-                    "description": "訊息",
-                    "type": "string",
-                    "example": "message.."
-                }
-            }
-        },
         "course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticData": {
             "type": "object",
             "properties": {
@@ -22822,9 +22935,9 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "課表 id",
+                                                "description": "評論id",
                                                 "type": "integer",
-                                                "example": 2
+                                                "example": 1
                                             },
                                             "product_id": {
                                                 "description": "產品id",
@@ -27168,9 +27281,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "order_course": {
                     "type": "object",
@@ -27296,9 +27409,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "order_course": {
                                 "type": "object",
@@ -27647,9 +27760,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "證照名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "A級教練證照"
                 }
             }
         },
@@ -27688,9 +27801,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "證照名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "A級教練證照"
                 }
             }
         },
@@ -28032,9 +28145,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "證照名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "A級教練證照"
                 }
             }
         },
@@ -32268,9 +32381,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "證照名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "A級教練證照"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -32283,9 +32396,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 }
             }
         },
@@ -32314,9 +32427,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "教練本名",
+                    "description": "證照名稱",
                     "type": "string",
-                    "example": "亨利"
+                    "example": "A級教練證照"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -32329,9 +32442,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 }
             }
         },
@@ -32472,9 +32585,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
                                 "description": "課表名稱",
@@ -32538,9 +32651,9 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
                                 "description": "課表名稱",
@@ -32606,9 +32719,9 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "name": {
                                 "description": "課表名稱",
@@ -32659,9 +32772,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "name": {
                     "description": "課表名稱",
@@ -32722,9 +32835,9 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "name": {
                     "description": "課表名稱",
@@ -32982,9 +33095,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "intensity": {
                                 "description": "訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)",
@@ -33403,7 +33516,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33411,9 +33524,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -33431,9 +33544,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -33441,9 +33554,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -33559,7 +33672,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33567,9 +33680,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -33587,9 +33700,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -33597,9 +33710,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -33712,7 +33825,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33720,9 +33833,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -33740,9 +33853,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -33750,9 +33863,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -33865,7 +33978,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33873,9 +33986,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "課表 id",
+                                "description": "評論id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "incline": {
                                 "description": "坡度",
@@ -33893,9 +34006,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -33903,9 +34016,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "動作類別(1:動作/2:休息)",
+                                "description": "銷售類型(1:免費課表/3:付費課表)",
                                 "type": "integer",
-                                "example": 1
+                                "example": 3
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -34008,7 +34121,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 2.5
+                    "example": 1
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -34016,9 +34129,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",
@@ -34036,9 +34149,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -34046,9 +34159,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -34161,7 +34274,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 2.5
+                    "example": 1
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -34169,9 +34282,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "課表 id",
+                    "description": "評論id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "incline": {
                     "description": "坡度",
@@ -34189,9 +34302,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -34199,9 +34312,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "動作類別(1:動作/2:休息)",
+                    "description": "銷售類型(1:免費課表/3:付費課表)",
                     "type": "integer",
-                    "example": 1
+                    "example": 3
                 },
                 "update_at": {
                     "description": "更新時間",

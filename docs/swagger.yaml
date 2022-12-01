@@ -22,8 +22,8 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       intro:
         description: 課表介紹
@@ -38,8 +38,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -86,8 +86,8 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       intro:
         description: 課表介紹
@@ -102,8 +102,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -190,8 +190,8 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             intro:
               description: 課表介紹
@@ -210,8 +210,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -279,8 +279,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             intro:
               description: 課表介紹
@@ -299,8 +299,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -342,8 +342,8 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       intro:
         description: 課表介紹
@@ -358,8 +358,8 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -421,8 +421,8 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       order_status:
         description: 訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)
@@ -498,8 +498,8 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
     type: object
   api_create_trainer_action.Output:
@@ -558,8 +558,8 @@ definitions:
         items:
           properties:
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             name:
               description: 課表名稱
@@ -597,8 +597,8 @@ definitions:
         items:
           properties:
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             name:
               description: 課表名稱
@@ -799,8 +799,8 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             intro:
               description: 課表介紹
@@ -819,8 +819,8 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -1018,8 +1018,8 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       max_distance_record:
         properties:
@@ -1134,23 +1134,23 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             incline:
               description: 坡度
               example: 10.5
               type: number
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             weight:
               description: 體重(公斤)
@@ -1209,8 +1209,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       intensity:
         description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
@@ -1719,6 +1719,113 @@ definitions:
         type: integer
       data:
         $ref: '#/definitions/api_update_trainer_course.Data'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  api_update_user_course.Body:
+    properties:
+      name:
+        description: 課表名稱
+        example: 增肌課表
+        type: string
+    type: object
+  api_update_user_course.Data:
+    properties:
+      body_target:
+        description: 體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)
+        example: 4,5
+        type: string
+      category:
+        description: 課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)
+        example: 1
+        type: integer
+      course_status:
+        description: 課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)
+        example: 3
+        type: integer
+      cover:
+        description: 課表封面
+        example: abc.png
+        type: string
+      create_at:
+        description: 創建時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      equipment:
+        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 2,3,6
+        type: string
+      food:
+        description: 飲食建議
+        example: 多吃雞胸肉
+        type: string
+      id:
+        description: 課表 id
+        example: 2
+        type: integer
+      intro:
+        description: 課表介紹
+        example: 增肌專用課表
+        type: string
+      level:
+        description: 強度(1:初級/2:中級/3:中高級/4:高級)
+        example: 4
+        type: integer
+      name:
+        description: 課表名稱
+        example: 增肌課表
+        type: string
+      notice:
+        description: 注意事項
+        example: 注意關節避免鎖死
+        type: string
+      place:
+        description: 適合場地(1:健身房/2:居家/3:空地/4:戶外/5:其他)
+        example: 1,2
+        type: string
+      plan_count:
+        description: 計畫總數
+        example: 10
+        type: integer
+      sale_id:
+        description: 銷售 id
+        example: 3
+        type: integer
+      sale_type:
+        description: 銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)
+        example: 3
+        type: integer
+      schedule_type:
+        description: 排課類別(1:單一訓練/2:多項計畫)
+        example: 2
+        type: integer
+      suit:
+        description: 適用對象(1:女性/2:男性/3:初學者/4:進階者/5:專業/6:長輩/7:運動員/8:孕婦/9:產後/10:其他)
+        example: 2,5,7
+        type: string
+      train_target:
+        description: 訓練目的(1:減脂/2:增肌/3:維持健康/4:鐵人三項/5:其他)
+        example: 2,3,4
+        type: string
+      update_at:
+        description: 更新時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      workout_count:
+        description: 訓練總數
+        example: 50
+        type: integer
+    type: object
+  api_update_user_course.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/api_update_user_course.Data'
       msg:
         description: 訊息
         example: message..
@@ -2319,8 +2426,8 @@ definitions:
         example: 4
         type: integer
       name:
-        description: 教練本名
-        example: 亨利
+        description: 證照名稱
+        example: A級教練證照
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -2355,8 +2462,8 @@ definitions:
   course.APICreateUserCourseBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 證照名稱
+        example: A級教練證照
         type: string
       schedule_type:
         description: 排課類別(1:單一訓練/2:多項計畫)
@@ -4215,24 +4322,6 @@ definitions:
         example: message..
         type: string
     type: object
-  course.APIUpdateUserCourseBody:
-    properties:
-      name:
-        description: 課表名稱
-        example: 增肌課表
-        type: string
-    type: object
-  course.APIUpdateUserCourseOutput:
-    properties:
-      code:
-        description: 狀態碼
-        example: 9000
-        type: integer
-      msg:
-        description: 訊息
-        example: message..
-        type: string
-    type: object
   course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticData:
     properties:
       age_13_17:
@@ -4506,8 +4595,8 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 課表 id
-                      example: 2
+                      description: 評論id
+                      example: 1
                       type: integer
                     product_id:
                       description: 產品id
@@ -7803,8 +7892,8 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       order_course:
         properties:
@@ -7898,8 +7987,8 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             order_course:
               properties:
@@ -8155,8 +8244,8 @@ definitions:
   plan.APICreateTrainerPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 證照名稱
+        example: A級教練證照
         type: string
     required:
     - name
@@ -8184,8 +8273,8 @@ definitions:
   plan.APICreateUserPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 證照名稱
+        example: A級教練證照
         type: string
     required:
     - name
@@ -8440,8 +8529,8 @@ definitions:
   plan.APIUpdateUserPlanBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 證照名稱
+        example: A級教練證照
         type: string
     required:
     - name
@@ -11640,8 +11729,8 @@ definitions:
   workout.APICreateTrainerWorkoutBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 證照名稱
+        example: A級教練證照
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -11653,8 +11742,8 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
     type: object
   workout.APICreateTrainerWorkoutOutput:
@@ -11673,8 +11762,8 @@ definitions:
   workout.APICreateUserWorkoutBody:
     properties:
       name:
-        description: 教練本名
-        example: 亨利
+        description: 證照名稱
+        example: A級教練證照
         type: string
       workout_template_id:
         description: 訓練模板ID
@@ -11686,8 +11775,8 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
     type: object
   workout.APICreateUserWorkoutOutput:
@@ -11791,8 +11880,8 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             name:
               description: 課表名稱
@@ -11841,8 +11930,8 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             name:
               description: 課表名稱
@@ -11893,8 +11982,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             name:
               description: 課表名稱
@@ -11934,8 +12023,8 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       name:
         description: 課表名稱
@@ -11982,8 +12071,8 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       name:
         description: 課表名稱
@@ -12180,8 +12269,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             intensity:
               description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
@@ -12491,15 +12580,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -12514,16 +12603,16 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12612,15 +12701,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -12635,16 +12724,16 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12731,15 +12820,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -12754,16 +12843,16 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12850,15 +12939,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 課表 id
-              example: 2
+              description: 評論id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -12873,16 +12962,16 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
-              example: 1
+              description: 銷售類型(1:免費課表/3:付費課表)
+              example: 3
               type: integer
             update_at:
               description: 更新時間
@@ -12962,15 +13051,15 @@ definitions:
         type: string
       distance:
         description: 距離(公里)
-        example: 2.5
+        example: 1
         type: number
       duration:
         description: 時長(秒)
         example: 30
         type: integer
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       incline:
         description: 坡度
@@ -12985,16 +13074,16 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數
-        example: 2
+        description: 次數id
+        example: 1
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -13081,15 +13170,15 @@ definitions:
         type: string
       distance:
         description: 距離(公里)
-        example: 2.5
+        example: 1
         type: number
       duration:
         description: 時長(秒)
         example: 30
         type: integer
       id:
-        description: 課表 id
-        example: 2
+        description: 評論id
+        example: 1
         type: integer
       incline:
         description: 坡度
@@ -13104,16 +13193,16 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數
-        example: 2
+        description: 次數id
+        example: 1
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
-        example: 1
+        description: 銷售類型(1:免費課表/3:付費課表)
+        example: 3
         type: integer
       update_at:
         description: 更新時間
@@ -22849,7 +22938,7 @@ paths:
         name: json_body
         required: true
         schema:
-          $ref: '#/definitions/course.APIUpdateUserCourseBody'
+          $ref: '#/definitions/api_update_user_course.Body'
       produces:
       - application/json
       responses:
@@ -22857,7 +22946,7 @@ paths:
           description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
             denied
           schema:
-            $ref: '#/definitions/course.APIUpdateUserCourseOutput'
+            $ref: '#/definitions/api_update_user_course.Output'
         "400":
           description: 失敗!
           schema:

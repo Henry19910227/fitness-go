@@ -213,11 +213,6 @@ type APIDeleteUserCourseOutput struct {
 	base.Output
 }
 
-// APIUpdateUserCourseOutput /v2/user/course/{course_id} [PATCH]
-type APIUpdateUserCourseOutput struct {
-	base.Output
-}
-
 // APIGetUserCourseOutput /v2/user/course/{course_id} [GET]
 type APIGetUserCourseOutput struct {
 	base.Output

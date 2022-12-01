@@ -14,6 +14,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_trainer_course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_user_course"
 	courseStatusLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/course_status_update_log"
 	fcmModel "github.com/Henry19910227/fitness-go/internal/v2/model/fcm"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
@@ -544,10 +545,10 @@ func (r *resolver) APIDeleteUserCourse(input *model.APIDeleteUserCourseInput) (o
 	return output
 }
 
-func (r *resolver) APIUpdateUserCourse(input *model.APIUpdateUserCourseInput) (output model.APIUpdateUserCourseOutput) {
+func (r *resolver) APIUpdateUserCourse(input *api_update_user_course.Input) (output api_update_user_course.Output) {
 	// 查詢課表資訊
 	findInput := model.FindInput{}
-	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.ID = util.PointerInt64(input.Uri.CourseID)
 	courseOutput, err := r.courseService.Find(&findInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -555,16 +556,16 @@ func (r *resolver) APIUpdateUserCourse(input *model.APIUpdateUserCourseInput) (o
 	}
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.BadRequest, "非課表擁有者，無法刪除資源")
+		output.Set(code.BadRequest, "非課表擁有者，無法修改資源")
 		return output
 	}
 	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != model.SaleTypePersonal {
-		output.Set(code.BadRequest, "非個人課表類型，無法刪除資源")
+		output.Set(code.BadRequest, "非個人課表類型，無法修改資源")
 		return output
 	}
 	// 修改課表
 	table := model.Table{}
-	table.ID = util.PointerInt64(input.Uri.ID)
+	table.ID = util.PointerInt64(input.Uri.CourseID)
 	if err := util.Parser(input.Body, &table); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -573,7 +574,22 @@ func (r *resolver) APIUpdateUserCourse(input *model.APIUpdateUserCourseInput) (o
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	// 查詢課表
+	findCourseInput := model.FindInput{}
+	findCourseInput.ID = util.PointerInt64(input.Uri.CourseID)
+	courseOutput, err = r.courseService.Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parser output
+	data := api_update_user_course.Data{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }
 
