@@ -8,7 +8,6 @@ import (
 	reviewRequired "github.com/Henry19910227/fitness-go/internal/v2/field/review_statistic/required"
 	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
 	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
-	"github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -377,44 +376,6 @@ type APICreateTrainerCourseOutput struct {
 }
 type APICreateTrainerCourseData struct {
 	courseOptional.IDField
-}
-
-// APIUpdateTrainerCourseOutput /v2/trainer/course/{course_id} [PATCH]
-type APIUpdateTrainerCourseOutput struct {
-	base.Output
-	Data *APIUpdateTrainerCourseData `json:"data,omitempty"`
-}
-type APIUpdateTrainerCourseData struct {
-	courseOptional.IDField
-	courseOptional.SaleTypeField
-	courseOptional.SaleIDField
-	courseOptional.CourseStatusField
-	courseOptional.CategoryField
-	courseOptional.ScheduleTypeField
-	courseOptional.NameField
-	courseOptional.CoverField
-	courseOptional.IntroField
-	courseOptional.FoodField
-	courseOptional.LevelField
-	courseOptional.SuitField
-	courseOptional.EquipmentField
-	courseOptional.PlaceField
-	courseOptional.TrainTargetField
-	courseOptional.BodyTargetField
-	courseOptional.NoticeField
-	courseOptional.PlanCountField
-	courseOptional.WorkoutCountField
-	optional.CreateAtField
-	optional.UpdateAtField
-	SaleItem *struct {
-		saleItemOptional.IDField
-		saleItemOptional.NameField
-		ProductLabel *struct {
-			productLabelOptional.IDField
-			productLabelOptional.ProductIDField
-			productLabelOptional.TwdField
-		} `json:"product_label,omitempty"`
-	} `json:"sale_item,omitempty"`
 }
 
 // APIDeleteTrainerCourseOutput /v2/trainer/course/{course_id} [DELETE]

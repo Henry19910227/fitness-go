@@ -9,7 +9,6 @@ import (
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -176,32 +175,6 @@ type APICreateTrainerCourseBody struct {
 	required.CategoryField
 	required.LevelField
 	required.ScheduleTypeField
-}
-
-// APIUpdateTrainerCourseInput /v2/trainer/course/{course_id} [PATCH]
-type APIUpdateTrainerCourseInput struct {
-	required.UserIDField
-	Cover *file.Input
-	Uri   APIUpdateTrainerCourseUri
-	Form  APIUpdateTrainerCourseForm
-}
-type APIUpdateTrainerCourseUri struct {
-	required.IDField
-}
-type APIUpdateTrainerCourseForm struct {
-	optional.SaleTypeField
-	optional.SaleIDField
-	optional.CategoryField
-	optional.NameField
-	optional.IntroField
-	optional.FoodField
-	optional.LevelField
-	optional.SuitField
-	optional.EquipmentField
-	optional.PlaceField
-	optional.TrainTargetField
-	optional.BodyTargetField
-	optional.NoticeField
 }
 
 // APIDeleteTrainerCourseInput /v2/trainer/course/{course_id} [DELETE]

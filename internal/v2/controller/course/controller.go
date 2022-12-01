@@ -9,6 +9,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_trainer_course"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -451,11 +452,11 @@ func (c *controller) GetTrainerCourse(ctx *gin.Context) {
 // @Param body_target formData string false "體態目標(1:比基尼身材/2:翹臀/3:健力/4:健美/5:腹肌/6:馬甲線/7:其他)"
 // @Param notice formData string false "注意事項"
 // @Produce json
-// @Success 200 {object} course.APIUpdateCMSCourseCoverOutput "成功!"
+// @Success 200 {object} api_update_trainer_course.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/trainer/course/{course_id} [PATCH]
 func (c *controller) UpdateTrainerCourse(ctx *gin.Context) {
-	var input model.APIUpdateTrainerCourseInput
+	var input api_update_trainer_course.Input
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))

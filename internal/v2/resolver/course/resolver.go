@@ -13,6 +13,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_trainer_course"
 	courseStatusLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/course_status_update_log"
 	fcmModel "github.com/Henry19910227/fitness-go/internal/v2/model/fcm"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
@@ -875,11 +876,11 @@ func (r *resolver) APIGetTrainerCourse(input *api_get_trainer_course.Input) (out
 	return output
 }
 
-func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTrainerCourseInput) (output model.APIUpdateTrainerCourseOutput) {
+func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *api_update_trainer_course.Input) (output api_update_trainer_course.Output) {
 	defer tx.Rollback()
 	// 查詢關聯課表
 	findCourseInput := model.FindInput{}
-	findCourseInput.ID = util.PointerInt64(input.Uri.ID)
+	findCourseInput.ID = util.PointerInt64(input.Uri.CourseID)
 	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -888,6 +889,10 @@ func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTra
 	// 驗證權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
 		output.Set(code.BadRequest, "非此課表擁有者，無法修改資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.CourseStatus, 0) == model.Sale {
+		output.Set(code.BadRequest, "此課表銷售中，無法修改資源")
 		return output
 	}
 	if util.OnNilJustReturnInt(input.Form.SaleType, 0) == model.SaleTypePersonal {
@@ -914,6 +919,7 @@ func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTra
 	}
 	// 修改課表
 	table := model.Table{}
+	table.ID = util.PointerInt64(input.Uri.CourseID)
 	if err := util.Parser(input.Form, &table); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -924,14 +930,14 @@ func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTra
 	}
 	//當課表類型不為付費課表時，sale_id 保持 nil
 	findCourseInput = model.FindInput{}
-	findCourseInput.ID = util.PointerInt64(input.Uri.ID)
+	findCourseInput.ID = util.PointerInt64(input.Uri.CourseID)
 	courseOutput, err = r.courseService.Tx(tx).Find(&findCourseInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) != model.SaleTypeCharge {
-		if err := r.courseService.Tx(tx).UpdateSaleID(input.Uri.ID, nil); err != nil {
+		if err := r.courseService.Tx(tx).UpdateSaleID(input.Uri.CourseID, nil); err != nil {
 			output.Set(code.BadRequest, err.Error())
 			return output
 		}
@@ -946,7 +952,7 @@ func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTra
 		}
 		// 修改課表
 		table := model.Table{}
-		table.ID = util.PointerInt64(input.Uri.ID)
+		table.ID = util.PointerInt64(input.Uri.CourseID)
 		table.Cover = util.PointerString(newCoverNamed)
 		if err := r.courseService.Tx(tx).Update(&table); err != nil {
 			output.Set(code.BadRequest, err.Error())
@@ -958,7 +964,7 @@ func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTra
 	tx.Commit()
 	// parser output
 	findInput := model.FindInput{}
-	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.ID = util.PointerInt64(input.Uri.CourseID)
 	findInput.Preloads = []*preloadModel.Preload{
 		{Field: "SaleItem.ProductLabel"},
 	}
@@ -967,7 +973,7 @@ func (r *resolver) APIUpdateTrainerCourse(tx *gorm.DB, input *model.APIUpdateTra
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	data := model.APIUpdateTrainerCourseData{}
+	data := api_update_trainer_course.Data{}
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
