@@ -696,6 +696,11 @@ func (r *resolver) APIGetUserCourseStructure(input *model.APIGetUserCourseStruct
 func (r *resolver) APIGetTrainerCourses(input *model.APIGetTrainerCoursesInput) (output model.APIGetTrainerCoursesOutput) {
 	listInput := model.ListInput{}
 	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "courses.sale_type IN (?)", Args: []interface{}{[]int{
+			model.SaleTypeNone, model.SaleTypeFree,
+			model.SaleTypeSubscribe, model.SaleTypeCharge}}},
+	}
 	listInput.CourseStatus = input.Query.CourseStatus
 	listInput.Size = input.Query.Size
 	listInput.Page = input.Query.Page
