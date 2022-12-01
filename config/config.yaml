@@ -82,6 +82,7 @@ IAB:
     TokenURL: https://oauth2.googleapis.com/token
     URL: https://androidpublisher.googleapis.com
     Scope: https://www.googleapis.com/auth/androidpublisher
+    Expire: 30 # Minute
     Debug:
       JsonFilePath: ./config/fitness-iab-test.json
       KeyName: fitness-iab-test.json

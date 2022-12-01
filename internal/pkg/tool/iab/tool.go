@@ -21,6 +21,14 @@ func New(setting iab.Setting) Tool {
 	return &tool{setting: setting}
 }
 
+func (t *tool) Key() string {
+	return "fitness.iab.token"
+}
+
+func (t *tool) GetExpire() time.Duration {
+	return t.setting.GetExpire()
+}
+
 func (t *tool) GenerateGoogleOAuth2Token(duration time.Duration) (string, error) {
 	jsonData, err := ioutil.ReadFile(config.RootPath() + "/" + t.setting.GetKeyName())
 	if err != nil {
@@ -96,5 +104,3 @@ func (t *tool) APIGetSubscription(productID string, purchaseToken string, token 
 	}
 	return model.NewIABSubscriptionAPIResponse(result), nil
 }
-
-

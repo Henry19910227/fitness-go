@@ -3,6 +3,7 @@ package order
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iab"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iap"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/order_course"
@@ -33,11 +34,12 @@ func NewResolver(db *gorm.DB) Resolver {
 	saleItemService := sale_item.NewService(db)
 	iapTool := iap.NewTool()
 	iabTool := iab.NewTool()
+	redisTool := redis.NewTool()
 	return New(orderService, courseService,
 		orderCourseService, courseAssetService,
 		subscribeInfoService, orderSubscribePlanService,
 		receiptService, purchaseLogService,
 		subscribePlanService, userService,
 		subscribeLogService, saleItemService,
-		iapTool, iabTool)
+		iapTool, iabTool, redisTool)
 }

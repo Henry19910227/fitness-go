@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/iap"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/logger"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
+	"github.com/Henry19910227/fitness-go/internal/pkg/tool/redis"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v1/dto"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
@@ -69,6 +70,7 @@ type resolver struct {
 	saleItemService           sale_item.Service
 	iapTool                   iap.Tool
 	iabTool                   iab.Tool
+	redisTool                 redis.Tool
 }
 
 func New(orderService order.Service, courseService course.Service,
@@ -77,14 +79,14 @@ func New(orderService order.Service, courseService course.Service,
 	receiptService receipt.Service, purchaseLogService purchase_log.Service,
 	subscribePlanService subscribe_plan.Service, userService user.Service,
 	subscribeLogService subscribe_log.Service, saleItemService sale_item.Service,
-	iapTool iap.Tool, iabTool iab.Tool) Resolver {
+	iapTool iap.Tool, iabTool iab.Tool, redisTool redis.Tool) Resolver {
 	return &resolver{orderService: orderService, courseService: courseService,
 		orderCourserService: orderCourserService, courseAssetService: courseAssetService,
 		subscribeInfoService: subscribeInfoService, orderSubscribePlanService: orderSubscribePlanService,
 		receiptService: receiptService, purchaseLogService: purchaseLogService,
 		subscribePlanService: subscribePlanService, userService: userService,
 		subscribeLogService: subscribeLogService, saleItemService: saleItemService,
-		iapTool: iapTool, iabTool: iabTool}
+		iapTool: iapTool, iabTool: iabTool, redisTool: redisTool}
 }
 
 func (r *resolver) APICreateCourseOrder(tx *gorm.DB, input *orderModel.APICreateCourseOrderInput) (output orderModel.APICreateCourseOrderOutput) {
@@ -466,20 +468,18 @@ func (r *resolver) APIUploadGoogleChargeReceipt(ctx *gin.Context, tx *gorm.DB, i
 		output.Set(code.BadRequest, "此訂單非購買訂單，訂單類型錯誤")
 		return output
 	}
+	// 獲取 api token cache
+	apiToken, _ := r.redisTool.Get(r.iabTool.Key())
+	if len(apiToken) == 0 {
+		//產出 auth token
+		oauthToken, _ := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+		//獲取API Token
+		apiToken, _ = r.iabTool.APIGetGooglePlayToken(oauthToken)
+		//儲存API Token
+		_ = r.redisTool.SetEX(r.iabTool.Key(), apiToken, r.iabTool.GetExpire())
+	}
 	// 驗證 google 收據
-	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
-	if err != nil {
-		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
-	if err != nil {
-		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	response, err := r.iabTool.APIGetProducts(input.Body.ProductID, input.Body.ReceiptData, token)
+	response, err := r.iabTool.APIGetProducts(input.Body.ProductID, input.Body.ReceiptData, apiToken)
 	if err != nil {
 		logger.Shared().Error(ctx, "APIVerifyGoogleReceipt："+err.Error())
 		output.Set(code.BadRequest, err.Error())
@@ -789,24 +789,20 @@ func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, inpu
 		output.Set(code.BadRequest, "iab notification decode error")
 		return output
 	}
-	//產出 auth token
-	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
-	if err != nil {
-		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	//獲取API Token
-	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
-	if err != nil {
-		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
-		output.Set(code.BadRequest, err.Error())
-		return output
+	// 獲取 api token cache
+	apiToken, _ := r.redisTool.Get(r.iabTool.Key())
+	if len(apiToken) == 0 {
+		//產出 auth token
+		oauthToken, _ := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+		//獲取API Token
+		apiToken, _ = r.iabTool.APIGetGooglePlayToken(oauthToken)
+		//儲存API Token
+		_ = r.redisTool.SetEX(r.iabTool.Key(), apiToken, r.iabTool.GetExpire())
 	}
 	//獲取Log Type
 	subscribeLogType := subscribeLogModel.GetTypeByIABType(notificationResp.SubscriptionNotification.NotificationType)
 	//驗證收據
-	response, err := r.iabTool.APIGetSubscription(notificationResp.SubscriptionNotification.SubscriptionId, notificationResp.SubscriptionNotification.PurchaseToken, token)
+	response, err := r.iabTool.APIGetSubscription(notificationResp.SubscriptionNotification.SubscriptionId, notificationResp.SubscriptionNotification.PurchaseToken, apiToken)
 	if err != nil {
 		logger.Shared().Error(ctx, "APIGooglePlayNotification："+err.Error())
 		output.Set(code.BadRequest, err.Error())
@@ -1530,16 +1526,18 @@ func (r *resolver) uploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, us
 
 func (r *resolver) uploadGoogleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, userID int64, productID string, receiptData string) error {
 	defer tx.Rollback()
+	// 獲取 api token cache
+	apiToken, _ := r.redisTool.Get(r.iabTool.Key())
+	if len(apiToken) == 0 {
+		//產出 auth token
+		oauthToken, _ := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
+		//獲取API Token
+		apiToken, _ = r.iabTool.APIGetGooglePlayToken(oauthToken)
+		//儲存API Token
+		_ = r.redisTool.SetEX(r.iabTool.Key(), apiToken, r.iabTool.GetExpire())
+	}
 	// 驗證 google 收據
-	oauthToken, err := r.iabTool.GenerateGoogleOAuth2Token(time.Hour)
-	if err != nil {
-		return err
-	}
-	token, err := r.iabTool.APIGetGooglePlayToken(oauthToken)
-	if err != nil {
-		return err
-	}
-	response, err := r.iabTool.APIGetSubscription(productID, receiptData, token)
+	response, err := r.iabTool.APIGetSubscription(productID, receiptData, apiToken)
 	if err != nil {
 		return err
 	}

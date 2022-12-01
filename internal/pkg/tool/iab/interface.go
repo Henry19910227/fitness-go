@@ -6,6 +6,8 @@ import (
 )
 
 type Tool interface {
+	Key() string
+	GetExpire() time.Duration
 	GenerateGoogleOAuth2Token(duration time.Duration) (string, error)
 	APIGetGooglePlayToken(oauthToken string) (string, error)
 	APIGetProducts(productID string, purchaseToken string, token string) (*model.IABProductAPIResponse, error)
