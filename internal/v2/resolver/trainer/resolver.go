@@ -578,13 +578,9 @@ func (r *resolver) APIUpdateCMSTrainer(ctx *gin.Context, tx *gorm.DB, input *api
 		trainerName := util.OnNilJustReturnString(trainerOutput.Nickname, "")
 		body := fmt.Sprintf("%v教練，你申請成為平台教練的審核已經通過囉！點此打開Fitopia.hub APP開始創建你的課表～", trainerName)
 		msgOutput := fcmModel.Output{}
-		msgOutput.Message = fcmModel.Message{
-			Token: deviceToken,
-			Notification: fcmModel.Notification{
-				Title: "教練審核通知",
-				Body:  body,
-			},
-		}
+		msgOutput.Message.Token = deviceToken
+		msgOutput.Message.Notification.Title = "教練審核通知"
+		msgOutput.Message.Notification.Body = body
 		// 獲取或更新 API token
 		apiToken, _ := r.redisTool.Get(r.fcmTool.Key())
 		if len(apiToken) == 0 {
