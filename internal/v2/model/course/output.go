@@ -182,6 +182,7 @@ type APIGetUserCoursesData []*struct {
 	courseOptional.CategoryField
 	courseOptional.ScheduleTypeField
 	courseOptional.NameField
+	courseOptional.LevelField
 	courseOptional.CoverField
 	courseOptional.PlanCountField
 	courseOptional.WorkoutCountField
@@ -225,6 +226,7 @@ type APIGetUserCourseData struct {
 	courseOptional.CategoryField
 	courseOptional.ScheduleTypeField
 	courseOptional.NameField
+	courseOptional.LevelField
 	courseOptional.CoverField
 	courseOptional.PlanCountField
 	courseOptional.WorkoutCountField
