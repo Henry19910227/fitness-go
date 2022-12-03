@@ -16,6 +16,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/bank_account"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/banner"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/banner_order"
 	bodyImage "github.com/Henry19910227/fitness-go/internal/v2/router/body_image"
 	body "github.com/Henry19910227/fitness-go/internal/v2/router/body_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course"
@@ -251,6 +252,7 @@ func main() {
 	workout_set_log.SetRoute(v2)
 	sale_item.SetRoute(v2)
 	subscribe_plan.SetRoute(v2)
+	banner_order.SetRoute(v2)
 	scheduler.Shared().Cron().Start()
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }

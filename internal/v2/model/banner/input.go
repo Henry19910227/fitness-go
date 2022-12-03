@@ -1,28 +1,38 @@
 package banner
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/banner/required"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 )
 
 type PagingInput = paging.Input
 type PreloadInput = preload.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
 type OrderByInput = orderBy.Input
+type CustomOrderByInput = orderBy.CustomInput
 
 type FindInput struct {
-	IDOptional
+	optional.IDField
 }
 
 type DeleteInput struct {
-	IDOptional
+	optional.IDField
 }
 
 type ListInput struct {
+	JoinInput
+	WhereInput
 	PagingInput
-	OrderByInput
 	PreloadInput
+	OrderByInput
+	CustomOrderByInput
 }
 
 // APIGetBannersInput /v2/banners [GET]
@@ -39,9 +49,9 @@ type APICreateCMSBannerInput struct {
 	Form      APICreateCMSBannerForm
 }
 type APICreateCMSBannerForm struct {
-	CourseIDOptional
-	UserIDOptional
-	TypeRequired
+	optional.CourseIDField
+	optional.UserIDField
+	required.TypeField
 }
 
 // APIDeleteCMSBannerInput /v2/cms/banner/{banner_id} [DELETE]
@@ -49,7 +59,7 @@ type APIDeleteCMSBannerInput struct {
 	Uri APIDeleteCMSBannerUri
 }
 type APIDeleteCMSBannerUri struct {
-	IDRequired
+	required.IDField
 }
 
 // APIGetCMSBannersInput /v2/cms/banners [GET]

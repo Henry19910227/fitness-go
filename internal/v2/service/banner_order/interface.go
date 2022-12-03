@@ -1,15 +1,15 @@
-package banner
+package banner_order
 
 import (
-	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner_order"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"gorm.io/gorm"
 )
 
 type Service interface {
 	Tx(tx *gorm.DB) Service
-	Create(item *model.Table) (output *model.Output, err error)
+	Creates(items []*model.Table) (err error)
 	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
 	Delete(input *model.DeleteInput) (err error)
-	Find(input *model.FindInput) (output *model.Output, err error)
+	DeleteAll() (err error)
 }

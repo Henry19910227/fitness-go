@@ -82,7 +82,7 @@ func (c *controller) CreateCMSBanner(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security fitness_token
-// @Param order_field query string true "排序欄位 (create_at:創建時間)"
+// @Param order_field query string true "排序欄位 (create_at:創建時間, seq:手動排序順序)"
 // @Param order_type query string true "排序類型 (ASC:由低到高/DESC:由高到低)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"

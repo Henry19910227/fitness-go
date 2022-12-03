@@ -1,10 +1,13 @@
 package banner
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
+	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
+	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	bannerService "github.com/Henry19910227/fitness-go/internal/v2/service/banner"
 )
@@ -21,6 +24,12 @@ func New(bannerService bannerService.Service, uploadTool uploader.Tool) Resolver
 func (r *resolver) APIGetBanners(input *model.APIGetBannersInput) (output model.APIGetBannersOutput) {
 	// parser input
 	listInput := model.ListInput{}
+	listInput.Joins = []*joinModel.Join{
+		{Query: "LEFT JOIN banner_orders ON banners.id = banner_orders.banner_id"},
+	}
+	listInput.Orders = []*orderByModel.Order{
+		{Value: fmt.Sprintf("banner_orders.seq IS NULL ASC, banner_orders.seq ASC, banners.create_at ASC")},
+	}
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "Course"},
@@ -82,17 +91,26 @@ func (r *resolver) APICreateCMSBanner(input *model.APICreateCMSBannerInput) (out
 }
 
 func (r *resolver) APIGetCMSBanners(input *model.APIGetCMSBannersInput) (output model.APIGetCMSBannersOutput) {
-	// parser input
+	// 查詢 banner
 	listInput := model.ListInput{}
+	listInput.Joins = []*joinModel.Join{
+		{Query: "LEFT JOIN banner_orders ON banners.id = banner_orders.banner_id"},
+	}
+	if input.Form.OrderField == "create_at" {
+		listInput.OrderField = input.Form.OrderField
+		listInput.OrderType = input.Form.OrderType
+	}
+	if input.Form.OrderField == "seq" {
+		listInput.Orders = []*orderByModel.Order{
+			{Value: fmt.Sprintf("banner_orders.seq IS NULL %v, banner_orders.seq %v, banners.create_at %v", input.Form.OrderType, input.Form.OrderType, input.Form.OrderType)},
+		}
+	}
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "Course"},
 	}
-	if err := util.Parser(input.Form, &listInput); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	// List
+	listInput.Page = input.Form.Page
+	listInput.Size = input.Form.Size
 	datas, page, err := r.bannerService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())

@@ -5,6 +5,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/banner"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -14,6 +15,10 @@ type service struct {
 
 func New(repository banner.Repository) Service {
 	return &service{repository: repository}
+}
+
+func (s *service) Tx(tx *gorm.DB) Service {
+	return NewService(tx)
 }
 
 func (s *service) Create(item *model.Table) (output *model.Output, err error) {

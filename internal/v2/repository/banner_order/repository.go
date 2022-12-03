@@ -1,8 +1,8 @@
-package banner
+package banner_order
 
 import (
 	"fmt"
-	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner_order"
 	"gorm.io/gorm"
 )
 
@@ -18,22 +18,9 @@ func (r *repository) WithTrx(tx *gorm.DB) Repository {
 	return New(tx)
 }
 
-func (r *repository) Create(item *model.Table) (id int64, err error) {
-	err = r.db.Model(&model.Table{}).Create(&item).Error
-	if err != nil {
-		return 0, err
-	}
-	return *item.ID, err
-}
-
-func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
-	db := r.db.Model(&model.Output{})
-	if input.ID != nil {
-		db = db.Where("id = ?", *input.ID)
-	}
-	//查詢數據
-	err = db.First(&output).Error
-	return output, err
+func (r *repository) Creates(items []*model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Create(items).Error
+	return err
 }
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
@@ -59,14 +46,14 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Count
 	db = db.Count(&amount)
 	// Select
-	db = db.Select("banners.*")
+	db = db.Select("banner_orders.*")
 	// Paging
 	if input.Page > 0 && input.Size > 0 {
 		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("banners.%s %s", input.OrderField, input.OrderType))
+		db = db.Order(fmt.Sprintf("banner_orders.%s %s", input.OrderField, input.OrderType))
 	}
 	// Custom Order
 	if input.Orders != nil {
@@ -79,11 +66,13 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	return outputs, amount, err
 }
 
+
 func (r *repository) Delete(input *model.DeleteInput) (err error) {
-	db := r.db
-	if input.ID != nil {
-		db = db.Where("id = ?", *input.ID)
-	}
-	err = db.Delete(&model.Table{}).Error
+	err = r.db.Where("banner_orders.banner_id = ?", input.BannerID).Delete(&model.Table{}).Error
+	return err
+}
+
+func (r *repository) DeleteAll() (err error) {
+	err = r.db.Where("banner_orders.banner_id > 0").Delete(&model.Table{}).Error
 	return err
 }

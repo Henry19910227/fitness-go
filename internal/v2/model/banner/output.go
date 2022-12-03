@@ -1,6 +1,7 @@
 package banner
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/banner/optional"
 	courseOptional "github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -26,11 +27,11 @@ type APIGetBannersOutput struct {
 	Paging *paging.Output    `json:"paging,omitempty"`
 }
 type APIGetBannersData []*struct {
-	IDField
-	ImageField
-	TypeField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.ImageField
+	optional.TypeField
+	optional.CreateAtField
+	optional.UpdateAtField
 	Trainer *struct {
 		trainerOptional.UserIDField
 		trainerOptional.NicknameField
@@ -47,11 +48,11 @@ type APICreateCMSBannerOutput struct {
 	Data *APICreateCMSBannerData `json:"data,omitempty"`
 }
 type APICreateCMSBannerData struct {
-	IDField
-	ImageField
-	TypeField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.ImageField
+	optional.TypeField
+	optional.CreateAtField
+	optional.UpdateAtField
 }
 
 // APIDeleteCMSBannerOutput /v2/cms/banner [DELETE]
@@ -66,11 +67,11 @@ type APIGetCMSBannersOutput struct {
 	Paging *paging.Output       `json:"paging,omitempty"`
 }
 type APIGetCMSBannersData []*struct {
-	IDField
-	ImageField
-	TypeField
-	CreateAtField
-	UpdateAtField
+	optional.IDField
+	optional.ImageField
+	optional.TypeField
+	optional.CreateAtField
+	optional.UpdateAtField
 	Trainer *struct {
 		trainerOptional.UserIDField
 		trainerOptional.NicknameField
