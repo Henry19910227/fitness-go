@@ -11,7 +11,7 @@ migrate_down:
 migrate_force:
 	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20221117111948
 migrate_create:
-	migrate create -ext sql -dir migrations create_trainer_status_update_logs_table_v_2_0_19
+	migrate create -ext sql -dir migrations create_banner_orders_table_v_2_0_20
 
 test-mysql:
 	docker-compose up --build -d test-mysql
