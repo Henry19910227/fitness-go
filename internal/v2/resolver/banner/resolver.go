@@ -6,6 +6,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_get_cms_banners"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -90,34 +91,34 @@ func (r *resolver) APICreateCMSBanner(input *model.APICreateCMSBannerInput) (out
 	return output
 }
 
-func (r *resolver) APIGetCMSBanners(input *model.APIGetCMSBannersInput) (output model.APIGetCMSBannersOutput) {
+func (r *resolver) APIGetCMSBanners(input *api_get_cms_banners.Input) (output api_get_cms_banners.Output) {
 	// 查詢 banner
 	listInput := model.ListInput{}
 	listInput.Joins = []*joinModel.Join{
 		{Query: "LEFT JOIN banner_orders ON banners.id = banner_orders.banner_id"},
 	}
-	if input.Form.OrderField == "create_at" {
-		listInput.OrderField = input.Form.OrderField
-		listInput.OrderType = input.Form.OrderType
+	if input.Query.OrderField == "create_at" {
+		listInput.OrderField = input.Query.OrderField
+		listInput.OrderType = input.Query.OrderType
 	}
-	if input.Form.OrderField == "seq" {
+	if input.Query.OrderField == "seq" {
 		listInput.Orders = []*orderByModel.Order{
-			{Value: fmt.Sprintf("banner_orders.seq IS NULL %v, banner_orders.seq %v, banners.create_at %v", input.Form.OrderType, input.Form.OrderType, input.Form.OrderType)},
+			{Value: fmt.Sprintf("banner_orders.seq IS NULL %v, banner_orders.seq %v, banners.create_at %v", input.Query.OrderType, input.Query.OrderType, input.Query.OrderType)},
 		}
 	}
 	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "Course"},
 	}
-	listInput.Page = input.Form.Page
-	listInput.Size = input.Form.Size
+	listInput.Page = input.Query.Page
+	listInput.Size = input.Query.Size
 	datas, page, err := r.bannerService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	// parser output
-	data := model.APIGetCMSBannersData{}
+	data := api_get_cms_banners.Data{}
 	if err := util.Parser(datas, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

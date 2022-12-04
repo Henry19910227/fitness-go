@@ -49,9 +49,9 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 	}
 	page = &paging.Output{}
 	page.TotalCount = int(amount)
-	page.TotalPage = util.Pagination(int(amount), input.Size)
-	page.Page = input.Page
-	page.Size = input.Size
+	page.TotalPage = util.PointerInt(util.Pagination(int(amount), input.Size))
+	page.Page = util.PointerInt(input.Page)
+	page.Size = util.PointerInt(input.Size)
 	return output, page, err
 }
 

@@ -59,25 +59,3 @@ type APICreateCMSBannerData struct {
 type APIDeleteCMSBannerOutput struct {
 	base.Output
 }
-
-// APIGetCMSBannersOutput /v2/cms/banners [GET]
-type APIGetCMSBannersOutput struct {
-	base.Output
-	Data   APIGetCMSBannersData `json:"data"`
-	Paging *paging.Output       `json:"paging,omitempty"`
-}
-type APIGetCMSBannersData []*struct {
-	optional.IDField
-	optional.ImageField
-	optional.TypeField
-	optional.CreateAtField
-	optional.UpdateAtField
-	Trainer *struct {
-		trainerOptional.UserIDField
-		trainerOptional.NicknameField
-	} `json:"trainer,omitempty"`
-	Course *struct {
-		courseOptional.IDField
-		courseOptional.NameField
-	} `json:"course,omitempty"`
-}

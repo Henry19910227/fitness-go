@@ -3,6 +3,7 @@ package banner
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/banner/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
+	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -27,9 +28,10 @@ type DeleteInput struct {
 }
 
 type ListInput struct {
+	pagingOptional.PageField
+	pagingOptional.SizeField
 	JoinInput
 	WhereInput
-	PagingInput
 	PreloadInput
 	OrderByInput
 	CustomOrderByInput
@@ -60,13 +62,4 @@ type APIDeleteCMSBannerInput struct {
 }
 type APIDeleteCMSBannerUri struct {
 	required.IDField
-}
-
-// APIGetCMSBannersInput /v2/cms/banners [GET]
-type APIGetCMSBannersInput struct {
-	Form APIGetCMSBannersForm
-}
-type APIGetCMSBannersForm struct {
-	PagingInput
-	OrderByInput
 }
