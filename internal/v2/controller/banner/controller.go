@@ -3,6 +3,7 @@ package banner
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_create_cms_banner"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_get_cms_banners"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
@@ -50,13 +51,14 @@ func (c *controller) GetBanners(ctx *gin.Context) {
 // @Security fitness_token
 // @Param course_id formData int64 false "課表id"
 // @Param user_id formData int64 false "教練id"
-// @Param type formData int true "類型(1:課表/2:教練/3:訂閱)"
+// @Param url formData string false "url"
+// @Param type formData int true "類型(1:課表/2:教練/3:訂閱/4:連結)"
 // @Param image formData file true "圖片"
-// @Success 200 {object} banner.APICreateCMSBannerOutput "成功!"
+// @Success 200 {object} api_create_cms_banner.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/banner [POST]
 func (c *controller) CreateCMSBanner(ctx *gin.Context) {
-	input := model.APICreateCMSBannerInput{}
+	input := api_create_cms_banner.Input{}
 	if err := ctx.ShouldBind(&input.Form); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return

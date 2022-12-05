@@ -9,11 +9,14 @@ type CourseIDField struct {
 type UserIDField struct {
 	UserID *int64 `json:"user_id,omitempty" form:"user_id" binding:"omitempty" example:"10001"` //用戶id
 }
+type UrlField struct {
+	Url *string `json:"url,omitempty" form:"url" binding:"omitempty" example:"www.google.com"` //url
+}
 type ImageField struct {
 	Image *string `json:"image,omitempty" form:"image" binding:"omitempty" example:"1234.jpg"` //圖片
 }
 type TypeField struct {
-	Type *int `json:"type,omitempty" form:"type" binding:"omitempty,oneof=1 2 3" example:"1"` //類型(1:課表/2:教練/3:訂閱)
+	Type *int `json:"type,omitempty" form:"type" binding:"omitempty,oneof=1 2 3 4" example:"1"` //類型(1:課表/2:教練/3:訂閱/4:連結)
 }
 type CreateAtField struct {
 	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at" binding:"omitempty" example:"2022-06-14 00:00:00"` //創建時間

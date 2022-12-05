@@ -4,7 +4,6 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/banner/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -43,17 +42,6 @@ type APIGetBannersInput struct {
 }
 type APIGetBannersQuery struct {
 	PagingInput
-}
-
-// APICreateCMSBannerInput /v2/cms/banner [POST]
-type APICreateCMSBannerInput struct {
-	ImageFile *file.Input
-	Form      APICreateCMSBannerForm
-}
-type APICreateCMSBannerForm struct {
-	optional.CourseIDField
-	optional.UserIDField
-	required.TypeField
 }
 
 // APIDeleteCMSBannerInput /v2/cms/banner/{banner_id} [DELETE]

@@ -16,6 +16,7 @@ type Output struct {
 }
 type Data []*struct {
 	bannerOptional.IDField
+	bannerOptional.UrlField
 	bannerOptional.ImageField
 	bannerOptional.TypeField
 	bannerOptional.CreateAtField

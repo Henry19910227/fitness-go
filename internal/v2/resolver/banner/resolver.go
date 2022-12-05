@@ -6,6 +6,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_create_cms_banner"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_get_cms_banners"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -57,7 +58,21 @@ func (r *resolver) APIGetBanners(input *model.APIGetBannersInput) (output model.
 	return output
 }
 
-func (r *resolver) APICreateCMSBanner(input *model.APICreateCMSBannerInput) (output model.APICreateCMSBannerOutput) {
+func (r *resolver) APICreateCMSBanner(input *api_create_cms_banner.Input) (output api_create_cms_banner.Output) {
+	// 驗證格式
+	if input.Form.Type == model.CourseType && input.Form.CourseID == nil {
+		output.Set(code.BadRequest, "新增課表類型banner, course_id 欄位不得為空")
+		return output
+	}
+	if input.Form.Type == model.TrainerType && input.Form.UserID == nil {
+		output.Set(code.BadRequest, "新增教練類型banner, user_id 欄位不得為空")
+		return output
+	}
+	if input.Form.Type == model.UrlType && input.Form.Url == nil {
+		output.Set(code.BadRequest, "新增URL類型banner, url 欄位不得為空")
+		return output
+	}
+	// parser table
 	table := model.Table{}
 	if err := util.Parser(input.Form, &table); err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -81,7 +96,7 @@ func (r *resolver) APICreateCMSBanner(input *model.APICreateCMSBannerInput) (out
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	data := model.APICreateCMSBannerData{}
+	data := api_create_cms_banner.Data{}
 	if err := util.Parser(result, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

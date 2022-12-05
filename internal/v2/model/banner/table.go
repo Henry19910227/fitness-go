@@ -6,6 +6,7 @@ type Table struct {
 	optional.IDField
 	optional.CourseIDField
 	optional.UserIDField
+	optional.UrlField
 	optional.ImageField
 	optional.TypeField
 	optional.CreateAtField

@@ -28,6 +28,7 @@ type APIGetBannersOutput struct {
 }
 type APIGetBannersData []*struct {
 	optional.IDField
+	optional.UrlField
 	optional.ImageField
 	optional.TypeField
 	optional.CreateAtField
@@ -40,19 +41,6 @@ type APIGetBannersData []*struct {
 		courseOptional.IDField
 		courseOptional.NameField
 	} `json:"course,omitempty"`
-}
-
-// APICreateCMSBannerOutput /v2/cms/banner [POST]
-type APICreateCMSBannerOutput struct {
-	base.Output
-	Data *APICreateCMSBannerData `json:"data,omitempty"`
-}
-type APICreateCMSBannerData struct {
-	optional.IDField
-	optional.ImageField
-	optional.TypeField
-	optional.CreateAtField
-	optional.UpdateAtField
 }
 
 // APIDeleteCMSBannerOutput /v2/cms/banner [DELETE]
