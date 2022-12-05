@@ -624,6 +624,7 @@ func (r *resolver) APIOrderRedeem(tx *gorm.DB, input *api_order_redeem.Input) (o
 	assetTable.UserID = orderOutput.UserID
 	assetTable.CourseID = orderOutput.OrderCourseOnSafe().CourseID
 	assetTable.Available = util.PointerInt(1)
+	assetTable.Source = util.PointerInt(courseAssetModel.Purchase)
 	_, err = r.courseAssetService.Tx(tx).Create(&assetTable)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -1108,6 +1109,7 @@ func (r *resolver) handleBuyCourseTradeForApple(tx *gorm.DB, order *orderModel.O
 	assetTable.UserID = order.UserID
 	assetTable.CourseID = order.OrderCourse.CourseID
 	assetTable.Available = util.PointerInt(1)
+	assetTable.Source = util.PointerInt(courseAssetModel.Purchase)
 	_, err = r.courseAssetService.Tx(tx).Create(&assetTable)
 	if err != nil {
 		return err
@@ -1166,6 +1168,7 @@ func (r *resolver) handleBuyCourseTradeForGoogle(tx *gorm.DB, order *orderModel.
 	assetTable.UserID = order.UserID
 	assetTable.CourseID = order.OrderCourse.CourseID
 	assetTable.Available = util.PointerInt(1)
+	assetTable.Source = util.PointerInt(courseAssetModel.Purchase)
 	_, err = r.courseAssetService.Tx(tx).Create(&assetTable)
 	if err != nil {
 		return err

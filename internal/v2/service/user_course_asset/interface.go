@@ -10,4 +10,5 @@ type Service interface {
 	Tx(tx *gorm.DB) Service
 	List(input *model.ListInput) (outputs []*model.Output, page *paging.Output, err error)
 	Create(item *model.Table) (id int64, err error)
+	Creates(items []*model.Table) (err error)
 }

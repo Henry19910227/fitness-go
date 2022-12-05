@@ -84,3 +84,8 @@ func (r *repository) Create(item *model.Table) (id int64, err error) {
 	}
 	return *item.ID, err
 }
+
+func (r *repository) Creates(items []*model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Create(&items).Error
+	return err
+}

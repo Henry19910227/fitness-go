@@ -41,6 +41,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/user_course_asset"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_promote_monthly_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_register_monthly_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_subscribe_info"
@@ -253,6 +254,7 @@ func main() {
 	sale_item.SetRoute(v2)
 	subscribe_plan.SetRoute(v2)
 	banner_order.SetRoute(v2)
+	user_course_asset.SetRoute(v2)
 	scheduler.Shared().Cron().Start()
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }
