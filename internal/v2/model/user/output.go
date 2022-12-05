@@ -6,6 +6,7 @@ import (
 	UserSubscribeInfoOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user_subscribe_info/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_course_asset"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 )
 
@@ -13,6 +14,7 @@ type Output struct {
 	Table
 	Trainer           *trainer.Output             `json:"trainer,omitempty" gorm:"foreignKey:user_id;references:id"`             // 教練
 	UserSubscribeInfo *user_subscribe_info.Output `json:"user_subscribe_info,omitempty" gorm:"foreignKey:user_id;references:id"` // 訂閱資訊
+	UserCourseAsset   *user_course_asset.Output   `json:"user_course_asset,omitempty" gorm:"foreignKey:user_id;references:id"`   // 課表資產資訊
 }
 
 func (Output) TableName() string {
@@ -24,6 +26,13 @@ func (o Output) TrainerOnSafe() trainer.Output {
 		return *o.Trainer
 	}
 	return trainer.Output{}
+}
+
+func (o Output) UserCourseAssetOnSafe() user_course_asset.Output {
+	if o.Trainer != nil {
+		return *o.UserCourseAsset
+	}
+	return user_course_asset.Output{}
 }
 
 // APIUpdatePasswordOutput /v2/password [PATCH]

@@ -8578,6 +8578,75 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/course/{course_id}/users": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取課表使用者列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS課表管理_v2"
+                ],
+                "summary": "獲取課表使用者列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表 id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/api_get_cms_course_users.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/courses": {
             "get": {
                 "security": [
@@ -16967,9 +17036,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "訓練名稱",
@@ -17050,9 +17119,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "訓練名稱",
@@ -17188,9 +17257,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "訓練名稱",
@@ -17305,9 +17374,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "訓練名稱",
@@ -17386,9 +17455,9 @@ var doc = `{
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "訓練名稱",
@@ -17808,6 +17877,62 @@ var doc = `{
                 }
             }
         },
+        "api_get_cms_course_users.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "description": "帳戶id",
+                                "type": "integer",
+                                "example": 10001
+                            },
+                            "nickname": {
+                                "description": "暱稱",
+                                "type": "string",
+                                "example": "henry"
+                            },
+                            "user_course_asset": {
+                                "type": "object",
+                                "properties": {
+                                    "create_at": {
+                                        "description": "創建時間",
+                                        "type": "string",
+                                        "example": "2022-06-12 00:00:00"
+                                    },
+                                    "source": {
+                                        "description": "來源(0:未知/1:購買/2:贈送)",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "update_at": {
+                                        "description": "更新時間",
+                                        "type": "string",
+                                        "example": "2022-06-12 00:00:00"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
+                }
+            }
+        },
         "api_get_sale_items.Output": {
             "type": "object",
             "properties": {
@@ -18142,9 +18267,9 @@ var doc = `{
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "訓練名稱",
@@ -18598,9 +18723,9 @@ var doc = `{
                                 "example": 10.5
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "weight": {
                                 "description": "體重(公斤)",
@@ -19050,9 +19175,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -20216,9 +20341,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "動作名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "金卡會員(月)"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -20263,9 +20388,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "金卡會員(月)"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -27883,9 +28008,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -27924,9 +28049,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -28268,9 +28393,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -28752,9 +28877,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -28987,9 +29112,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -29237,9 +29362,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -29445,9 +29570,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -32504,9 +32629,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "金卡會員(月)"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -32550,9 +32675,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "動作名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "划船機"
+                    "example": "金卡會員(月)"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -33667,9 +33792,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -33823,9 +33948,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -33976,9 +34101,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -34129,9 +34254,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -34272,9 +34397,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -34425,9 +34550,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",

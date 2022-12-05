@@ -7,9 +7,11 @@ type Table struct {
 	optional.UserIDField
 	optional.CourseIDField
 	optional.AvailableField
+	optional.SourceField
 	optional.CreateAtField
 	optional.UpdateAtField
 }
+
 func (Table) TableName() string {
 	return "user_course_assets"
 }

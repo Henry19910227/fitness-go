@@ -15,6 +15,8 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := user.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.StaticFS("/resource/user/avatar", http.Dir("./volumes/storage/user/avatar"))
+	v2.GET("/cms/course/:course_id/users", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourseUsers)
+
 	v2.PATCH("/password", midd.Verify([]global.Role{global.UserRole}), controller.UpdatePassword)
 	v2.PATCH("/user/profile", midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserProfile)
 	v2.PATCH("/user/avatar", midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserAvatar)

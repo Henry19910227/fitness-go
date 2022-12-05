@@ -2,11 +2,14 @@ package user
 
 import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 type Resolver interface {
+	APIGetCMSCourseUsers(input *api_get_cms_course_users.Input) (output api_get_cms_course_users.Output)
+
 	APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput)
 	APIUpdateUserProfile(input *model.APIUpdateUserProfileInput) (output model.APIUpdateUserProfileOutput)
 	APIUpdateUserAvatar(input *model.APIUpdateUserAvatarInput) (output model.APIUpdateUserAvatarOutput)

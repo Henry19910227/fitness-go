@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -16,6 +17,35 @@ type controller struct {
 
 func New(resolver user.Resolver) Controller {
 	return &controller{resolver: resolver}
+}
+
+// GetCMSCourseUsers 獲取課表使用者列表
+// @Summary 獲取課表使用者列表
+// @Description 獲取課表使用者列表
+// @Tags CMS課表管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param course_id path int64 true "課表 id"
+// @Param order_field query string true "排序欄位 (create_at:創建時間)"
+// @Param order_type query string true "排序類型 (ASC:由低到高/DESC:由高到低)"
+// @Param page query int false "頁數(從第一頁開始)"
+// @Param size query int false "筆數"
+// @Success 200 {object} api_get_cms_course_users.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/course/{course_id}/users [GET]
+func (c *controller) GetCMSCourseUsers(ctx *gin.Context) {
+	input := api_get_cms_course_users.Input{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSCourseUsers(&input)
+	ctx.JSON(http.StatusOK, output)
 }
 
 // UpdatePassword 修改密碼

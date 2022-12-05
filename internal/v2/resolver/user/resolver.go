@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/apple_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
@@ -18,10 +19,12 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/uploader"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	receiptModel "github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
@@ -38,7 +41,7 @@ type resolver struct {
 	userService          user.Service
 	receiptService       receipt.Service
 	subscribeInfoService user_subscribe_info.Service
-	courseService 		 course.Service
+	courseService        course.Service
 	otpTool              otp.Tool
 	cryptoTool           crypto.Tool
 	redisTool            redis.Tool
@@ -50,7 +53,7 @@ type resolver struct {
 	uploadTool           uploader.Tool
 	iapTool              iap.Tool
 	iabTool              iab.Tool
-	mailTool 			 mail.Tool
+	mailTool             mail.Tool
 }
 
 func New(userService user.Service, receiptService receipt.Service,
@@ -67,6 +70,40 @@ func New(userService user.Service, receiptService receipt.Service,
 		googleLoginTool: googleLoginTool, appleLoginTool: appleLoginTool,
 		lineLoginTool: lineLoginTool, uploadTool: uploadTool,
 		iapTool: iapTool, iabTool: iabTool, mailTool: mailTool}
+}
+
+func (r *resolver) APIGetCMSCourseUsers(input *api_get_cms_course_users.Input) (output api_get_cms_course_users.Output) {
+	// 查詢課表使用者
+	userListInput := model.ListInput{}
+	userListInput.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN user_course_assets ON users.id = user_course_assets.user_id"},
+	}
+	userListInput.Wheres = []*whereModel.Where{
+		{Query: "user_course_assets.course_id = ?", Args: []interface{}{input.Uri.CourseID}},
+	}
+	userListInput.Preloads = []*preloadModel.Preload{
+		{Field: "UserCourseAsset", Conditions: []interface{}{"course_id = ?", input.Uri.CourseID}},
+	}
+	userListInput.Orders = []*orderBy.Order{
+		{Value: fmt.Sprintf("user_course_assets.%s %s", input.Query.OrderField, input.Query.OrderType)},
+	}
+	userListInput.Size = input.Query.Size
+	userListInput.Page = input.Query.Page
+	userOutputs, page, err := r.userService.List(&userListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parse output
+	data := api_get_cms_course_users.Data{}
+	if err := util.Parser(userOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = &data
+	return output
 }
 
 func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput) {
@@ -945,8 +982,8 @@ func (r *resolver) APICreateResetOTP(input *model.APICreateResetOTPInput) (outpu
 	//驗證權限
 	listInput := model.ListInput{}
 	listInput.Email = util.PointerString(input.Body.Email)
-	listInput.Page = 1
-	listInput.Size = 1
+	listInput.Page = util.PointerInt(1)
+	listInput.Size = util.PointerInt(1)
 	listInput.OrderField = "create_at"
 	listInput.OrderType = orderBy.DESC
 	userOutputs, _, err := r.userService.List(&listInput)
@@ -990,8 +1027,8 @@ func (r *resolver) APIUpdateResetPassword(input *model.APIUpdateResetPasswordInp
 	listInput := model.ListInput{}
 	listInput.Email = util.PointerString(input.Body.Email)
 	listInput.IsDeleted = util.PointerInt(0)
-	listInput.Page = 1
-	listInput.Size = 1
+	listInput.Page = util.PointerInt(1)
+	listInput.Size = util.PointerInt(1)
 	listInput.OrderField = "create_at"
 	listInput.OrderType = orderBy.DESC
 	userOutputs, _, err := r.userService.List(&listInput)
@@ -1030,8 +1067,8 @@ func (r *resolver) APIDeleteUser(ctx *gin.Context, tx *gorm.DB, input *model.API
 	listInput := model.ListInput{}
 	listInput.ID = util.PointerInt64(input.UserID)
 	listInput.IsDeleted = util.PointerInt(0)
-	listInput.Page = 1
-	listInput.Size = 1
+	listInput.Page = util.PointerInt(1)
+	listInput.Size = util.PointerInt(1)
 	listInput.OrderField = "create_at"
 	listInput.OrderType = orderBy.DESC
 	userOutputs, _, err := r.userService.Tx(tx).List(&listInput)

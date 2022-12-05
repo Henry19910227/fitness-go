@@ -12,10 +12,12 @@ type CourseIDField struct {
 type AvailableField struct {
 	Available *int `json:"available,omitempty" gorm:"column:available" binding:"omitempty" example:"1"` // 是否可用(0:不可用/1:可用)
 }
+type SourceField struct {
+	Source *int `json:"source,omitempty" gorm:"column:source" binding:"omitempty" example:"1"` // 來源(0:未知/1:購買/2:贈送)
+}
 type CreateAtField struct {
 	CreateAt *string `json:"create_at,omitempty" gorm:"column:create_at" binding:"omitempty" example:"2022-06-12 00:00:00"` // 創建時間
 }
 type UpdateAtField struct {
 	UpdateAt *string `json:"update_at,omitempty" gorm:"column:update_at" binding:"omitempty" example:"2022-06-12 00:00:00"` // 更新時間
 }
-
