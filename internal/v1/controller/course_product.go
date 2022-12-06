@@ -42,7 +42,7 @@ func NewCourseProduct(baseGroup *gin.RouterGroup, courseService service.Course, 
 }
 
 // GetCourseProduct 獲取課表產品詳細
-// @Summary 獲取課表產品詳細 (API已過時，更新為 /v2/product/course/{course_id} [GET])
+// @Summary 獲取課表產品詳細 (API已過時，更新為 /v2/store/course/{course_id} [GET])
 // @Description 獲取課表產品詳細
 // @Tags Explore_v1
 // @Accept json
@@ -72,7 +72,7 @@ func (p *CourseProduct) GetCourseProduct(c *gin.Context) {
 }
 
 // GetCourseProductStructure 獲取課表結構(只限單一訓練課表)
-// @Summary 獲取課表結構(只限單一訓練課表) (API已過時，更新為 /v2/product/course/{course_id}/structure [GET])
+// @Summary 獲取課表結構(只限單一訓練課表) (API已過時，更新為 /v2/store/course/{course_id}/structure [GET])
 // @Description 只限單一訓練的課表使用
 // @Tags Explore_v1
 // @Accept json
@@ -102,7 +102,7 @@ func (p *CourseProduct) GetCourseProductStructure(c *gin.Context) {
 }
 
 // SearchCourseProducts 搜尋課表產品列表
-// @Summary 搜尋課表產品列表 (API已過時，更新為 /v2/product/courses [GET])
+// @Summary 搜尋課表產品列表 (API已過時，更新為 /v2/store/courses [GET])
 // @Description 搜尋課表產品列表
 // @Tags Explore_v1
 // @Accept json
@@ -155,7 +155,7 @@ func (p *CourseProduct) SearchCourseProducts(c *gin.Context) {
 }
 
 // GetPlanProducts 獲取課表產品計畫列表
-// @Summary 獲取課表產品計畫列表 (API已經過時，更新為 /v2/product/course/{course_id}/plans [GET])
+// @Summary 獲取課表產品計畫列表 (API已經過時，更新為 /v2/store/course/{course_id}/plans [GET])
 // @Description 獲取課表產品計畫列表
 // @Tags Explore_v1
 // @Accept json
