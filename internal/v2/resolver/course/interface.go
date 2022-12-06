@@ -2,6 +2,7 @@ package course
 
 import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
@@ -12,6 +13,8 @@ import (
 )
 
 type Resolver interface {
+	APIFcmTest(input *api_fcm_test.Input) (output api_fcm_test.Output)
+
 	APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput)
 
 	APIGetCMSCourses(ctx *gin.Context, input *model.APIGetCMSCoursesInput) interface{}

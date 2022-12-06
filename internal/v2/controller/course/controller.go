@@ -6,6 +6,7 @@ import (
 	courseRequired "github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
@@ -26,6 +27,26 @@ type controller struct {
 
 func New(resolver course.Resolver) Controller {
 	return &controller{resolver: resolver}
+}
+
+// FcmTest 測試fcm推播
+// @Summary 測試fcm推播
+// @Description 測試fcm推播
+// @Tags FCM_v2
+// @Accept json
+// @Produce json
+// @Param json_body body api_fcm_test.Body true "輸入參數"
+// @Success 200 {object} api_fcm_test.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/fcm_test [POST]
+func (c *controller) FcmTest(ctx *gin.Context) {
+	var input api_fcm_test.Input
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIFcmTest(&input)
+	ctx.JSON(http.StatusOK, output)
 }
 
 // GetFavoriteCourses 獲取課表收藏列表

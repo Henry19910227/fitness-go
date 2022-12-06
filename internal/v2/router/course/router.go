@@ -16,6 +16,8 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.StaticFS("/resource/course/cover", http.Dir("./volumes/storage/course/cover"))
 
+	v2.POST("/fcm_test", controller.FcmTest)
+
 	v2.GET("/favorite/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetFavoriteCourses)
 
 	v2.GET("/cms/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourses)

@@ -10,6 +10,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
@@ -62,6 +63,42 @@ func New(courseService courseService.Service, courseStatusLogService course_stat
 		workoutService: workoutService, subscribeInfoService: subscribeInfoService,
 		saleItemService: saleItemService, trainerService: trainerService,
 		uploadTool: uploadTool, redisTool: redisTool, fcmTool: fcmTool}
+}
+
+func (r *resolver) APIFcmTest(input *api_fcm_test.Input) (output api_fcm_test.Output) {
+	// 獲取或更新 api token
+	apiToken, _ := r.redisTool.Get(r.fcmTool.Key())
+	if len(apiToken) == 0 {
+		//產出 auth token
+		oauthToken, err := r.fcmTool.GenerateGoogleOAuth2Token(time.Hour)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		//獲取API Token
+		apiToken, err = r.fcmTool.APIGetGooglePlayToken(oauthToken)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		//儲存API Token
+		if err := r.redisTool.SetEX(r.fcmTool.Key(), apiToken, r.fcmTool.GetExpire()); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
+	// 發出推播
+	message := make(map[string]interface{})
+	if err := util.Parser(input.Body.Payload, &message); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if err := r.fcmTool.APISendMessage(apiToken, message); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	return output
 }
 
 func (r *resolver) APIGetFavoriteCourses(input *model.APIGetFavoriteCoursesInput) (output model.APIGetFavoriteCoursesOutput) {
