@@ -58,7 +58,7 @@ func NewPlan(baseGroup *gin.RouterGroup,
 }
 
 // UpdatePlan 修改計畫
-// @Summary 修改計畫 (API已經過時，更新為 /v2/trainer/plan/{plan_id}/workout [POST])
+// @Summary 修改計畫 (API已經過時，更新為 /v2/trainer/plan/{plan_id} [PATCH])
 // @Description 修改計畫
 // @Tags Plan_v1
 // @Accept json

@@ -15,6 +15,7 @@ type Controller interface {
 	CreateTrainerPlan(ctx *gin.Context)
 	GetTrainerPlans(ctx *gin.Context)
 	DeleteTrainerPlan(ctx *gin.Context)
+	UpdateTrainerPlan(ctx *gin.Context)
 
 	GetStorePlans(ctx *gin.Context)
 }

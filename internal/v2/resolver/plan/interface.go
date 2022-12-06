@@ -2,6 +2,7 @@ package plan
 
 import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/plan/api_update_trainer_plan"
 	"gorm.io/gorm"
 )
 
@@ -16,6 +17,7 @@ type Resolver interface {
 	APICreateTrainerPlan(tx *gorm.DB, input *model.APICreateTrainerPlanInput) (output model.APICreateTrainerPlanOutput)
 	APIGetTrainerPlans(input *model.APIGetTrainerPlansInput) (output model.APIGetTrainerPlansOutput)
 	APIDeleteTrainerPlan(tx *gorm.DB, input *model.APIDeleteTrainerPlanInput) (output model.APIDeleteTrainerPlanOutput)
+	APIUpdateTrainerPlan(input *api_update_trainer_plan.Input) (output api_update_trainer_plan.Output)
 
 	APIGetStorePlans(input *model.APIGetStorePlansInput) (output model.APIGetStorePlansOutput)
 }

@@ -7,6 +7,7 @@ import (
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/plan/api_update_trainer_plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
@@ -220,7 +221,7 @@ func (r *resolver) APIUpdateUserPlan(input *model.APIUpdateUserPlanInput) (outpu
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	// 驗證計畫刪除權限
+	// 驗證計畫修改權限
 	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
 		output.Set(code.BadRequest, "非課表擁有者，無法修改資源")
 		return output
@@ -353,6 +354,51 @@ func (r *resolver) APIDeleteTrainerPlan(tx *gorm.DB, input *model.APIDeleteTrain
 	}
 	tx.Commit()
 	output.SetStatus(code.Success)
+	return output
+}
+
+func (r *resolver) APIUpdateTrainerPlan(input *api_update_trainer_plan.Input) (output api_update_trainer_plan.Output) {
+	// 查詢關聯課表
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.PlanID = util.PointerInt64(input.Uri.ID)
+	courseOutput, err := r.courseService.Find(&findCourseInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證計畫修改權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非課表擁有者，無法修改資源")
+		return output
+	}
+	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) == courseModel.SaleTypePersonal {
+		output.Set(code.BadRequest, "此課表為個人課表類型，無法修改資源")
+		return output
+	}
+	// 修改計畫
+	planTable := model.Table{}
+	planTable.ID = util.PointerInt64(input.Uri.ID)
+	planTable.Name = util.PointerString(input.Body.Name)
+	if err := r.planService.Update(&planTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查詢修改後 plan
+	findPlanInput := model.FindInput{}
+	findPlanInput.ID = util.PointerInt64(input.Uri.ID)
+	planOutput, err := r.planService.Find(&findPlanInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parse output
+	data := api_update_trainer_plan.Data{}
+	if err := util.Parser(planOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
 	return output
 }
 

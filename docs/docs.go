@@ -4333,7 +4333,7 @@ var doc = `{
                 "tags": [
                     "Plan_v1"
                 ],
-                "summary": "修改計畫 (API已經過時，更新為 /v2/trainer/plan/{plan_id}/workout [POST])",
+                "summary": "修改計畫 (API已經過時，更新為 /v2/trainer/plan/{plan_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -14031,6 +14031,56 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "更新教練計畫",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表_v2"
+                ],
+                "summary": "更新教練計畫",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "計畫id",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_update_trainer_plan.Body"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/api_update_trainer_plan.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
             }
         },
         "/v2/trainer/plan/{plan_id}/workout": {
@@ -19598,6 +19648,67 @@ var doc = `{
                 }
             }
         },
+        "api_update_trainer_plan.Body": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "description": "計畫名稱",
+                    "type": "string",
+                    "example": "第一週增肌計畫"
+                }
+            }
+        },
+        "api_update_trainer_plan.Data": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "計畫id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "計畫名稱",
+                    "type": "string",
+                    "example": "第一週增肌計畫"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "workout_count": {
+                    "description": "訓練數量",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "api_update_trainer_plan.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_update_trainer_plan.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "api_update_user_course.Body": {
             "type": "object",
             "properties": {
@@ -20421,9 +20532,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -20468,9 +20579,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -28088,9 +28199,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 }
             }
         },
@@ -28129,9 +28240,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 }
             }
         },
@@ -28473,9 +28584,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 }
             }
         },
@@ -32709,9 +32820,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -32755,9 +32866,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "銷售名稱",
+                    "description": "課表名稱",
                     "type": "string",
-                    "example": "銅級課表 "
+                    "example": "增肌課表"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
