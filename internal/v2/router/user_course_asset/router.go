@@ -13,4 +13,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := user_course_asset.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.POST("/cms/course/:course_id/users", midd.Verify([]global.Role{global.AdminRole}), controller.CreateCMSCourseUsers)
+	v2.DELETE("/cms/course/:course_id/user/:user_id", midd.Verify([]global.Role{global.AdminRole}), controller.DeleteCMSCourseUser)
 }
