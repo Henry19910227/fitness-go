@@ -7,6 +7,7 @@ import (
 	userModel "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_course_asset"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user_course_asset/api_create_cms_course_users"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_course_asset/api_delete_cms_course_user"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user_course_asset"
@@ -82,6 +83,36 @@ func (r *resolver) APICreateCMSCourseUsers(input *api_create_cms_course_users.In
 		assetTables = append(assetTables, &assetTable)
 	}
 	if err := r.userCourseAssetService.Creates(assetTables); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	return output
+}
+
+func (r *resolver) APIDeleteCMSCourseUser(input *api_delete_cms_course_user.Input) (output api_delete_cms_course_user.Output) {
+	// 查詢 asset
+	assetListInput := model.ListInput{}
+	assetListInput.UserID = util.PointerInt64(input.Uri.UserID)
+	assetListInput.CourseID = util.PointerInt64(input.Uri.CourseID)
+	assetListInput.Available = util.PointerInt(1)
+	assetOutputs, _, err := r.userCourseAssetService.List(&assetListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if len(assetOutputs) == 0 {
+		output.Set(code.BadRequest, "查無此課表使用者")
+		return output
+	}
+	if util.OnNilJustReturnInt(assetOutputs[0].Source, 0) != model.Gift {
+		output.Set(code.BadRequest, "無法刪除非贈送的課表使用者")
+		return output
+	}
+	// 刪除 asset
+	deleteAssetInput := model.DeleteInput{}
+	deleteAssetInput.ID = util.OnNilJustReturnInt64(assetOutputs[0].ID, 0)
+	if err := r.userCourseAssetService.Delete(&deleteAssetInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}

@@ -22,6 +22,11 @@ func (s *service) Tx(tx *gorm.DB) Service {
 	return NewService(tx)
 }
 
+func (s *service) Find(input *model.FindInput) (output *model.Output, err error) {
+	output, err = s.repository.Find(input)
+	return output, err
+}
+
 func (s *service) List(input *model.ListInput) (outputs []*model.Output, page *paging.Output, err error) {
 	output, amount, err := s.repository.List(input)
 	if err != nil {
@@ -53,5 +58,10 @@ func (s *service) Creates(items []*model.Table) (err error) {
 		item.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
 	}
 	err = s.repository.Creates(items)
+	return err
+}
+
+func (s *service) Delete(input *model.DeleteInput) (err error) {
+	err = s.repository.Delete(input)
 	return err
 }

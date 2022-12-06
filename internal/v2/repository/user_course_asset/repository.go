@@ -18,6 +18,19 @@ func (r *repository) WithTrx(tx *gorm.DB) Repository {
 	return New(tx)
 }
 
+func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
+	db := r.db.Model(&model.Output{})
+	if input.UserID != nil {
+		db = db.Where("user_id = ?", *input.UserID)
+	}
+	if input.CourseID != nil {
+		db = db.Where("course_id = ?", *input.CourseID)
+	}
+	//查詢數據
+	err = db.First(&output).Error
+	return output, err
+}
+
 func (r repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
 	db := r.db.Model(&model.Output{})
 	// Join
@@ -37,6 +50,10 @@ func (r repository) List(input *model.ListInput) (outputs []*model.Output, amoun
 	// 加入 available 篩選條件
 	if input.Available != nil {
 		db = db.Where("user_course_assets.available = ?", *input.Available)
+	}
+	// 加入 source 篩選條件
+	if input.Source != nil {
+		db = db.Where("user_course_assets.source = ?", *input.Source)
 	}
 	// Custom Where
 	if len(input.Wheres) > 0 {
@@ -87,5 +104,12 @@ func (r *repository) Create(item *model.Table) (id int64, err error) {
 
 func (r *repository) Creates(items []*model.Table) (err error) {
 	err = r.db.Model(&model.Table{}).Create(&items).Error
+	return err
+}
+
+func (r *repository) Delete(input *model.DeleteInput) (err error) {
+	db := r.db
+	db = db.Where("id = ?", input.ID)
+	err = db.Delete(&model.Table{}).Error
 	return err
 }
