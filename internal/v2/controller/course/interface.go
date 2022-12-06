@@ -5,6 +5,8 @@ import (
 )
 
 type Controller interface {
+	FcmTest(ctx *gin.Context)
+
 	GetFavoriteCourses(ctx *gin.Context)
 	GetCMSCourses(ctx *gin.Context)
 	GetCMSCourse(ctx *gin.Context)
