@@ -15881,7 +15881,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/plan.APIUpdateUserPlanBody"
+                            "$ref": "#/definitions/api_update_user_plan.Body"
                         }
                     }
                 ],
@@ -15889,7 +15889,7 @@ var doc = `{
                     "200": {
                         "description": "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied",
                         "schema": {
-                            "$ref": "#/definitions/plan.APIUpdateUserPlanOutput"
+                            "$ref": "#/definitions/api_update_user_plan.Output"
                         }
                     },
                     "400": {
@@ -17123,7 +17123,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
                     "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
@@ -17146,7 +17146,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "動作狀態(0:下架/1:上架)",
+                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
                     "type": "integer",
                     "example": 1
                 },
@@ -17206,7 +17206,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
                     "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
@@ -17229,7 +17229,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "動作狀態(0:下架/1:上架)",
+                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
                     "type": "integer",
                     "example": 1
                 },
@@ -17344,7 +17344,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
                                 "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
@@ -17372,7 +17372,7 @@ var doc = `{
                                 "example": 1
                             },
                             "status": {
-                                "description": "動作狀態(0:下架/1:上架)",
+                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17456,7 +17456,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
                                 "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
@@ -17489,7 +17489,7 @@ var doc = `{
                                 "example": 1
                             },
                             "status": {
-                                "description": "動作狀態(0:下架/1:上架)",
+                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17542,7 +17542,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
                     "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
@@ -17565,7 +17565,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "動作狀態(0:下架/1:上架)",
+                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
                     "type": "integer",
                     "example": 1
                 },
@@ -17615,7 +17615,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
                     "description": "id",
@@ -17746,7 +17746,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
                     "description": "訂單id",
@@ -18384,7 +18384,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
                                 "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
@@ -18412,7 +18412,7 @@ var doc = `{
                                 "example": 1
                             },
                             "status": {
-                                "description": "動作狀態(0:下架/1:上架)",
+                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18830,7 +18830,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -18924,7 +18924,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -19282,7 +19282,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -19847,6 +19847,67 @@ var doc = `{
                 }
             }
         },
+        "api_update_user_plan.Body": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "description": "計畫名稱",
+                    "type": "string",
+                    "example": "第一週增肌計畫"
+                }
+            }
+        },
+        "api_update_user_plan.Data": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "id": {
+                    "description": "計畫id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "計畫名稱",
+                    "type": "string",
+                    "example": "第一週增肌計畫"
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "workout_count": {
+                    "description": "訓練數量",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "api_update_user_plan.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_update_user_plan.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "api_upload_apple_charge_receipt.Body": {
             "type": "object",
             "required": [
@@ -20089,7 +20150,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -20162,7 +20223,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "id": {
                                 "description": "id",
@@ -20532,9 +20593,9 @@ var doc = `{
                     "example": 4
                 },
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -20579,9 +20640,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "schedule_type": {
                     "description": "排課類別(1:單一訓練/2:多項計畫)",
@@ -27720,7 +27781,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
                     "description": "訂單id",
@@ -27848,7 +27909,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "id": {
                                 "description": "訂單id",
@@ -28199,9 +28260,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -28240,9 +28301,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 }
             }
         },
@@ -28569,34 +28630,6 @@ var doc = `{
                             }
                         }
                     }
-                },
-                "msg": {
-                    "description": "訊息",
-                    "type": "string",
-                    "example": "message.."
-                }
-            }
-        },
-        "plan.APIUpdateUserPlanBody": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "description": "課表名稱",
-                    "type": "string",
-                    "example": "增肌課表"
-                }
-            }
-        },
-        "plan.APIUpdateUserPlanOutput": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "狀態碼",
-                    "type": "integer",
-                    "example": 9000
                 },
                 "msg": {
                     "description": "訊息",
@@ -29045,7 +29078,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -29280,7 +29313,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -29451,7 +29484,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "nickname": {
                                 "description": "教練暱稱",
@@ -29530,7 +29563,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -29738,7 +29771,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -31828,7 +31861,7 @@ var doc = `{
                     "example": "2022-07-11 11:00:00"
                 },
                 "status": {
-                    "description": "動作狀態(0:下架/1:上架)",
+                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
                     "type": "integer",
                     "example": 1
                 },
@@ -32820,9 +32853,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -32866,9 +32899,9 @@ var doc = `{
             ],
             "properties": {
                 "name": {
-                    "description": "課表名稱",
+                    "description": "產品名稱",
                     "type": "string",
-                    "example": "增肌課表"
+                    "example": "金卡會員(月)"
                 },
                 "workout_template_id": {
                     "description": "訓練模板ID",
@@ -33011,7 +33044,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -33077,7 +33110,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -33140,7 +33173,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -33198,7 +33231,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "end_audio": {
                     "description": "結束語音",
@@ -33261,7 +33294,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "end_audio": {
                     "description": "結束語音",
@@ -33526,7 +33559,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -33950,7 +33983,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -34106,7 +34139,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -34259,7 +34292,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -34412,7 +34445,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -34555,7 +34588,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "distance": {
                     "description": "距離(公里)",
@@ -34708,7 +34741,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "distance": {
                     "description": "距離(公里)",

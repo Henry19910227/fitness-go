@@ -5,6 +5,7 @@ import (
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/plan/api_update_trainer_plan"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/plan/api_update_user_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/plan"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -127,12 +128,12 @@ func (c *controller) GetUserPlans(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param plan_id path int64 true "計畫id"
-// @Param json_body body plan.APIUpdateUserPlanBody true "輸入參數"
-// @Success 200 {object} plan.APIUpdateUserPlanOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Param json_body body api_update_user_plan.Body true "輸入參數"
+// @Success 200 {object} api_update_user_plan.Output "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/user/plan/{plan_id} [PATCH]
 func (c *controller) UpdateUserPlan(ctx *gin.Context) {
-	input := model.APIUpdateUserPlanInput{}
+	input := api_update_user_plan.Input{}
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
