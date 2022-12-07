@@ -34,6 +34,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/meal"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/plan"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/rda"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/review"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/review_image"
@@ -255,6 +256,7 @@ func main() {
 	subscribe_plan.SetRoute(v2)
 	banner_order.SetRoute(v2)
 	user_course_asset.SetRoute(v2)
+	rda.SetRoute(v2)
 	scheduler.Shared().Cron().Start()
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }

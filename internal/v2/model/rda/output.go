@@ -1,22 +1,9 @@
 package rda
 
-type Table struct {
-	IDField
-	UserIDField
-	TDEEField
-	CalorieField
-	ProteinField
-	FatField
-	CarbsField
-	GrainField
-	VegetableField
-	FruitField
-	MeatField
-	DairyField
-	NutField
-	CreateAtField
+type Output struct {
+	Table
 }
 
-func (Table) TableName() string {
+func (Output) TableName() string {
 	return "rdas"
 }
