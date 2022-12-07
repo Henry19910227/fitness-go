@@ -40,13 +40,11 @@ func TestTool_APISendMessage(t *testing.T) {
 	//parser model
 	deviceToken := "dgVouNzFbUydv8HSF85bDC:APA91bH8AwOU5C2iiSiHwkUMmgUIRSc87Xx2BEngNvuanR1c0BdQDqVGXxCpggEKN7WRHaH_8_inyGkcrVADSNLBrAGxkPbhw_lmkfOoUt_sMNMQ4hmmFi8-b4OJTxhfYUO14fZiKdqV"
 	model := fcmModel.Output{}
-	model.Message = fcmModel.Message{
-		Token: deviceToken,
-		Notification: fcmModel.Notification{
-			Title: "Hello World",
-			Body:  "說你好!~~~~",
-		},
-	}
+	model.Message.Token = deviceToken
+	model.Message.Notification.Title = "課表審核通知"
+	model.Message.Notification.Body = "說你好!~~~~"
+	model.Message.Data.Title = "課表審核通知"
+	model.Message.Data.Body = "說你好!~~~~"
 	message := make(map[string]interface{})
 	err = util.Parser(model, &message)
 	assert.NoError(t, err)

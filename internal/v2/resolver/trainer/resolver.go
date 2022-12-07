@@ -576,11 +576,14 @@ func (r *resolver) APIUpdateCMSTrainer(ctx *gin.Context, tx *gorm.DB, input *api
 	if oldStatus == model.Reviewing && currentStatus == model.Activity && len(deviceToken) > 0 {
 		// 準備推播訊息
 		trainerName := util.OnNilJustReturnString(trainerOutput.Nickname, "")
+		title := "教練審核通知"
 		body := fmt.Sprintf("%v教練，你申請成為平台教練的審核已經通過囉！點此打開Fitopia.hub APP開始創建你的課表～", trainerName)
 		msgOutput := fcmModel.Output{}
 		msgOutput.Message.Token = deviceToken
-		msgOutput.Message.Notification.Title = "教練審核通知"
+		msgOutput.Message.Notification.Title = title
 		msgOutput.Message.Notification.Body = body
+		msgOutput.Message.Data.Title = title
+		msgOutput.Message.Data.Body = body
 		// 獲取或更新 API token
 		apiToken, _ := r.redisTool.Get(r.fcmTool.Key())
 		if len(apiToken) == 0 {

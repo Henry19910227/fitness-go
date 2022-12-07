@@ -249,11 +249,14 @@ func (r *resolver) APIUpdateCMSCoursesStatus(ctx *gin.Context, tx *gorm.DB, inpu
 			trainerName := util.OnNilJustReturnString(courseOutput.UserOnSafe().TrainerOnSafe().Nickname, "")
 			courseName := util.OnNilJustReturnString(courseOutput.Name, "")
 			saleType := util.OnNilJustReturnInt(courseOutput.SaleType, 0)
+			title := "課表審核通知"
 			body := fmt.Sprintf("%v教練，你建立的%v課表-%v，%v，請點此打開Fitopia.hub APP確認", trainerName, saleTypeMap[saleType], courseName, statusDesc)
 			msgOutput := fcmModel.Output{}
 			msgOutput.Message.Token = deviceToken
-			msgOutput.Message.Notification.Title = "課表審核通知"
+			msgOutput.Message.Notification.Title = title
 			msgOutput.Message.Notification.Body = body
+			msgOutput.Message.Data.Title = title
+			msgOutput.Message.Data.Body = body
 			msgOutputs = append(msgOutputs, &msgOutput)
 		}
 		courseTables = append(courseTables, &courseTable)
