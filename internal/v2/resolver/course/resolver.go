@@ -11,6 +11,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
@@ -1106,7 +1107,7 @@ func (r *resolver) APISubmitTrainerCourse(input *model.APISubmitTrainerCourseInp
 	return output
 }
 
-func (r *resolver) APIGetStoreCourse(input *model.APIGetStoreCourseInput) (output model.APIGetStoreCourseOutput) {
+func (r *resolver) APIGetStoreCourse(input *api_get_store_course.Input) (output api_get_store_course.Output) {
 	// 查詢資料
 	findInput := model.FindInput{}
 	findInput.ID = util.PointerInt64(input.Uri.ID)
@@ -1123,7 +1124,7 @@ func (r *resolver) APIGetStoreCourse(input *model.APIGetStoreCourseInput) (outpu
 		return output
 	}
 	// parser output
-	data := model.APIGetStoreCourseData{}
+	data := api_get_store_course.Data{}
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
