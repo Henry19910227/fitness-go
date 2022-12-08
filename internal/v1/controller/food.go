@@ -67,7 +67,7 @@ func (f *Food) CreateFood(c *gin.Context) {
 }
 
 // GetFoods 獲取食物列表
-// @Summary 獲取食物列表 (由 /v2/foods [GET] 取代)
+// @Summary 獲取食物列表 (API已經過時，更新為  /v2/foods [GET])
 // @Description 獲取食物列表
 // @Tags Diet_v1
 // @Accept json
@@ -97,8 +97,8 @@ func (f *Food) GetFoods(c *gin.Context) {
 }
 
 // GetRecentFoods 獲取食物歷程列表
-// @Summary 獲取食物歷程列表 ((由 /v2/meals [GET] 取代))
-// @Description 獲取食物歷程列表 ((由 /v2/meals [GET] 取代))
+// @Summary 獲取食物歷程列表 (API已經過時，更新為 /v2/meals [GET])
+// @Description 獲取食物歷程列表
 // @Tags Diet_v1
 // @Accept json
 // @Produce json

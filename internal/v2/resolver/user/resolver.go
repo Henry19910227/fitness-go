@@ -824,7 +824,16 @@ func (r *resolver) APILoginForApple(input *model.APILoginForAppleInput) (output 
 }
 
 func (r *resolver) APILogout(input *model.APILogoutInput) (output model.APILogoutOutput) {
+	// 移除登入狀態
 	if err := r.redisTool.Del(jwt.UserTokenPrefix + "." + strconv.Itoa(int(input.ID))); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 移除 device token
+	userTable := model.Table{}
+	userTable.ID = util.PointerInt64(input.ID)
+	userTable.DeviceToken = util.PointerString("")
+	if err := r.userService.Update(&userTable); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}

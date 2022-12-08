@@ -56,7 +56,7 @@ func (r *RDA) CalculateRDA(c *gin.Context) {
 }
 
 // UpdateRDA 更新建議飲食攝取量
-// @Summary 更新建議飲食攝取量
+// @Summary 更新建議飲食攝取量 (API已經過時，更新為 /v2/rda [PUT])
 // @Description 更新建議飲食攝取量
 // @Tags Diet_v1
 // @Accept json
