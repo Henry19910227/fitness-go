@@ -558,14 +558,16 @@ func (cc *Course) SearchActions(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗"
 // @Router /v1/course/{course_id}/submit [POST]
 func (cc *Course) CourseSubmit(c *gin.Context) {
-	var uri validator.CourseIDUri
-	if err := c.ShouldBindUri(&uri); err != nil {
-		cc.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	if err := cc.courseService.CourseSubmit(c, uri.CourseID); err != nil {
-		cc.JSONErrorResponse(c, err)
-		return
-	}
-	cc.JSONSuccessResponse(c, nil, "success!")
+	cc.JSONSuccessResponse(c, nil, "API版本已經過時，請立即更新!")
+	return
+	//var uri validator.CourseIDUri
+	//if err := c.ShouldBindUri(&uri); err != nil {
+	//	cc.JSONValidatorErrorResponse(c, err.Error())
+	//	return
+	//}
+	//if err := cc.courseService.CourseSubmit(c, uri.CourseID); err != nil {
+	//	cc.JSONErrorResponse(c, err)
+	//	return
+	//}
+	//cc.JSONSuccessResponse(c, nil, "success!")
 }

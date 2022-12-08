@@ -125,25 +125,27 @@ func (t *CMSTrainer) GetTrainer(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResult "失敗!"
 // @Router /v1/cms/trainer/{user_id} [PATCH]
 func (t *CMSTrainer) UpdateTrainer(c *gin.Context) {
-	var uri validator.TrainerIDUri
-	if err := c.ShouldBindUri(&uri); err != nil {
-		t.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	var body validator.UpdateTrainerBody
-	if err := c.ShouldBindJSON(&body); err != nil {
-		t.JSONValidatorErrorResponse(c, err.Error())
-		return
-	}
-	trainer, err := t.trainerService.UpdateTrainer(c, uri.TrainerID, &dto.UpdateTrainerParam{
-		TrainerStatus: body.TrainerStatus,
-		TrainerLevel:  body.TrainerLevel,
-	})
-	if err != nil {
-		t.JSONErrorResponse(c, err)
-		return
-	}
-	t.JSONSuccessResponse(c, trainer, "success!")
+	t.JSONSuccessResponse(c, nil, "API版本已經過時，請立即更新!")
+	return
+	//var uri validator.TrainerIDUri
+	//if err := c.ShouldBindUri(&uri); err != nil {
+	//	t.JSONValidatorErrorResponse(c, err.Error())
+	//	return
+	//}
+	//var body validator.UpdateTrainerBody
+	//if err := c.ShouldBindJSON(&body); err != nil {
+	//	t.JSONValidatorErrorResponse(c, err.Error())
+	//	return
+	//}
+	//trainer, err := t.trainerService.UpdateTrainer(c, uri.TrainerID, &dto.UpdateTrainerParam{
+	//	TrainerStatus: body.TrainerStatus,
+	//	TrainerLevel:  body.TrainerLevel,
+	//})
+	//if err != nil {
+	//	t.JSONErrorResponse(c, err)
+	//	return
+	//}
+	//t.JSONSuccessResponse(c, trainer, "success!")
 }
 
 // GetTrainerCourses 取得教練所屬的課表
