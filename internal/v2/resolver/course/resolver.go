@@ -516,7 +516,6 @@ func (r *resolver) APIGetUserProgressCourses(input *model.APIGetUserCoursesInput
 func (r *resolver) APIGetUserChargeCourses(input *model.APIGetUserCoursesInput) (output model.APIGetUserCoursesOutput) {
 	// 查詢付費課表
 	listInput := model.ListInput{}
-	listInput.UserID = util.PointerInt64(input.UserID)
 	listInput.SaleType = util.PointerInt(model.SaleTypeCharge)
 	listInput.OrderField = "create_at"
 	listInput.OrderType = order_by.DESC
