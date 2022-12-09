@@ -1,9 +1,9 @@
 package api_put_meals
 
 import (
+	foodOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food/optional"
 	mealOptional "github.com/Henry19910227/fitness-go/internal/v2/field/meal/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	foodCategory "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
 )
 
@@ -17,11 +17,11 @@ type Data struct {
 	mealOptional.AmountField
 	mealOptional.CreateAtField
 	Food *struct {
-		food.IDField
-		food.SourceField
-		food.NameField
-		food.CalorieField
-		food.AmountDescField
+		foodOptional.IDField
+		foodOptional.SourceField
+		foodOptional.NameField
+		foodOptional.CalorieField
+		foodOptional.AmountDescField
 		FoodCategory *struct {
 			foodCategory.IDField
 			foodCategory.TagField

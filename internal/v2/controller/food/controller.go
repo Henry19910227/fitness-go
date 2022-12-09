@@ -2,6 +2,7 @@ package food
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
+	foodOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food/optional"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	foodCategoryModel "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
@@ -37,7 +38,7 @@ func (c *controller) GetFoods(ctx *gin.Context) {
 		return
 	}
 	var query struct {
-		model.NameField
+		foodOptional.NameField
 		foodCategoryModel.TagField
 	}
 	if err := ctx.ShouldBindQuery(&query); err != nil {

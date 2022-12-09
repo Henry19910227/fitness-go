@@ -1,6 +1,8 @@
 package food
 
 import (
+	foodOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food/optional"
+	foodRequired "github.com/Henry19910227/fitness-go/internal/v2/field/food/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	foodCategory "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -21,16 +23,16 @@ type GenerateInput struct {
 }
 
 type FindInput struct {
-	IDOptional
+	foodOptional.IDField
 }
 
 type ListInput struct {
 	foodCategory.TagField
-	UserIDOptional
-	NameOptional
-	SourceOptional
-	StatusOptional
-	IsDeletedOptional
+	foodOptional.UserIDField
+	foodOptional.NameField
+	foodOptional.SourceField
+	foodOptional.StatusField
+	foodOptional.IsDeletedField
 	PagingInput
 	PreloadInput
 	OrderByInput
@@ -38,8 +40,8 @@ type ListInput struct {
 
 type APIGetFoodsInput struct {
 	foodCategory.TagField
-	UserIDField
-	NameField
+	foodOptional.UserIDField
+	foodOptional.NameField
 }
 
 // APICreateCMSFoodInput /v2/cms/food [POST]
@@ -47,9 +49,9 @@ type APICreateCMSFoodInput struct {
 	Body APICreateCMSFoodBody
 }
 type APICreateCMSFoodBody struct {
-	FoodCategoryIDRequired
-	NameRequired
-	AmountDescRequired
+	foodRequired.FoodCategoryIDField
+	foodRequired.NameField
+	foodRequired.AmountDescField
 }
 
 // APIUpdateCMSFoodInput /v2/cms/food/{food_id} [PATCH]
@@ -58,12 +60,12 @@ type APIUpdateCMSFoodInput struct {
 	Body APIUpdateCMSFoodBody
 }
 type APIUpdateCMSFoodURI struct {
-	IDRequired
+	foodRequired.IDField
 }
 type APIUpdateCMSFoodBody struct {
-	NameOptional
-	AmountDescOptional
-	StatusOptional
+	foodOptional.NameField
+	foodOptional.AmountDescField
+	foodOptional.StatusField
 }
 
 // APIGetCMSFoodsInput /v2/cms/foods [GET]

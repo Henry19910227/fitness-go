@@ -1,6 +1,7 @@
 package food
 
 import (
+	foodOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	foodCategory "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -20,14 +21,14 @@ type APIGetFoodsOutput struct {
 	Data APIGetFoodsData `json:"data"`
 }
 type APIGetFoodsData []*struct {
-	IDField
-	UserIDField
-	SourceField
-	NameField
-	CalorieField
-	AmountDescField
-	CreateAtField
-	UpdateAtField
+	foodOptional.IDField
+	foodOptional.UserIDField
+	foodOptional.SourceField
+	foodOptional.NameField
+	foodOptional.CalorieField
+	foodOptional.AmountDescField
+	foodOptional.CreateAtField
+	foodOptional.UpdateAtField
 	FoodCategory *struct {
 		foodCategory.IDField
 		foodCategory.TagField
@@ -38,17 +39,17 @@ type APIGetFoodsData []*struct {
 // APIGetCMSFoodsOutput /v2/cms/foods [GET] 獲取食物列表 API
 type APIGetCMSFoodsOutput struct {
 	base.Output
-	Data APIGetCMSFoodsData `json:"data"`
-	Paging *paging.Output   `json:"paging,omitempty"`
+	Data   APIGetCMSFoodsData `json:"data"`
+	Paging *paging.Output     `json:"paging,omitempty"`
 }
 type APIGetCMSFoodsData []*struct {
-	IDField
-	NameField
-	SourceField
-	StatusField
-	AmountDescField
-	CreateAtField
-	UpdateAtField
+	foodOptional.IDField
+	foodOptional.NameField
+	foodOptional.SourceField
+	foodOptional.StatusField
+	foodOptional.AmountDescField
+	foodOptional.CreateAtField
+	foodOptional.UpdateAtField
 	FoodCategory *struct {
 		foodCategory.IDField
 		foodCategory.TagField
@@ -62,14 +63,14 @@ type APICreateCMSFoodOutput struct {
 	Data *APICreateCMSFoodData `json:"data,omitempty"`
 }
 type APICreateCMSFoodData struct {
-	IDField
-	UserIDField
-	SourceField
-	NameField
-	CalorieField
-	AmountDescField
-	CreateAtField
-	UpdateAtField
+	foodOptional.IDField
+	foodOptional.UserIDField
+	foodOptional.SourceField
+	foodOptional.NameField
+	foodOptional.CalorieField
+	foodOptional.AmountDescField
+	foodOptional.CreateAtField
+	foodOptional.UpdateAtField
 	FoodCategory *struct {
 		foodCategory.IDField
 		foodCategory.TagField
