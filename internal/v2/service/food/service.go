@@ -1,11 +1,11 @@
 package food
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/pkg/tool/orm"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/repository/food"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -17,9 +17,8 @@ func New(repository food.Repository) Service {
 	return &service{repository: repository}
 }
 
-func (s *service) WithTrx(gormTool orm.Tool) {
-	//TODO implement me
-	panic("implement me")
+func (s *service) Tx(tx *gorm.DB) Service {
+	return NewService(tx)
 }
 
 func (s *service) List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error) {
@@ -30,9 +29,11 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 	}
 	page = &paging.Output{}
 	page.TotalCount = int(amount)
-	page.TotalPage = util.PointerInt(util.Pagination(int(amount), input.Size))
-	page.Page = util.PointerInt(input.Page)
-	page.Size = util.PointerInt(input.Size)
+	page.Page = input.Page
+	page.Size = input.Size
+	if input.Size != nil {
+		page.TotalPage = util.PointerInt(util.Pagination(int(amount), *input.Size))
+	}
 	return output, page, err
 }
 

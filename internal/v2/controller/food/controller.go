@@ -2,10 +2,9 @@ package food
 
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
-	foodOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food/optional"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
-	foodCategoryModel "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_get_foods"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/food"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -28,26 +27,13 @@ func New(resolver food.Resolver) Controller {
 // @Security fitness_token
 // @Param name query string false "食物名稱"
 // @Param tag query int false "食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)"
-// @Success 200 {object} food.APIGetFoodsOutput "成功!"
+// @Success 200 {object} api_get_foods.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/foods [GET]
 func (c *controller) GetFoods(ctx *gin.Context) {
-	uid, exists := ctx.Get("uid")
-	if !exists {
-		ctx.JSON(http.StatusBadRequest, baseModel.InvalidToken())
-		return
-	}
-	var query struct {
-		foodOptional.NameField
-		foodCategoryModel.TagField
-	}
-	if err := ctx.ShouldBindQuery(&query); err != nil {
-		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
-		return
-	}
-	input := model.APIGetFoodsInput{}
-	input.UserID = util.PointerInt64(uid.(int64))
-	if err := util.Parser(query, &input); err != nil {
+	input := api_get_foods.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}

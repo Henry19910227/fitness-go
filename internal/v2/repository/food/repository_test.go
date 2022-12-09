@@ -55,8 +55,8 @@ func TestRepository_List(t *testing.T) {
 	input.UserID = users[0].ID
 	input.Tag = util.PointerInt(1)
 	input.Preloads = []*preload.Preload{{Field: "FoodCategory"}}
-	input.Page = 3
-	input.Size = 2
+	input.Page = util.PointerInt(3)
+	input.Size = util.PointerInt(2)
 	input.OrderField = "create_at"
 	input.OrderType = "DESC"
 	input.Status = util.PointerInt(0)

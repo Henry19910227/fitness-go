@@ -6,9 +6,12 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_get_foods"
 	categoryModel "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
+	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	foodService "github.com/Henry19910227/fitness-go/internal/v2/service/food"
 	foodCategoryService "github.com/Henry19910227/fitness-go/internal/v2/service/food_category"
 )
@@ -23,33 +26,39 @@ func New(foodService foodService.Service, foodCategoryService foodCategoryServic
 	return &resolver{foodService: foodService, foodCategoryService: foodCategoryService, calorieTool: calorieTool}
 }
 
-func (r *resolver) APIGetFoods(input *model.APIGetFoodsInput) (output model.APIGetFoodsOutput) {
+func (r *resolver) APIGetFoods(input *api_get_foods.Input) (output api_get_foods.Output) {
 	// parser input
-	param := model.ListInput{}
-	param.Status = util.PointerInt(1)
-	param.OrderField = "create_at"
-	param.OrderType = order_by.DESC
-	if err := util.Parser(input, &param); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
-	param.Preloads = []*preloadModel.Preload{
+	listInput := model.ListInput{}
+	listInput.Name = input.Query.Name
+	listInput.Status = util.PointerInt(1)
+	listInput.OrderField = "create_at"
+	listInput.OrderType = order_by.DESC
+	listInput.Preloads = []*preloadModel.Preload{
 		{Field: "FoodCategory"},
 	}
+	wheres := make([]*whereModel.Where, 0)
+	joins := make([]*joinModel.Join, 0)
+	wheres = append(wheres, &whereModel.Where{Query: "(foods.user_id = ? OR foods.user_id IS NULL)", Args: []interface{}{input.UserID}})
+	if input.Query.Tag != nil {
+		joins = append(joins, &joinModel.Join{Query: "INNER JOIN food_categories ON foods.food_category_id = food_categories.id"})
+		wheres = append(wheres, &whereModel.Where{Query: "food_categories.tag = ?", Args: []interface{}{*input.Query.Tag}})
+	}
+	listInput.Wheres = wheres
+	listInput.Joins = joins
 	// 調用 service
-	result, _, err := r.foodService.List(&param)
+	result, _, err := r.foodService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	// parser output
-	data := model.APIGetFoodsData{}
+	data := api_get_foods.Data{}
 	if err := util.Parser(result, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	output.Set(code.Success, "success")
-	output.Data = data
+	output.Data = &data
 	return output
 }
 

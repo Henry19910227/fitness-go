@@ -1,6 +1,7 @@
 package food_category
 
 import (
+	foodCategoryOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food_category/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -17,11 +18,11 @@ type GenerateInput struct {
 }
 
 type FindInput struct {
-	IDOptional
+	foodCategoryOptional.IDField
 }
 
 type ListInput struct {
-	IsDeletedOptional
+	foodCategoryOptional.IsDeletedField
 	PagingInput
 	OrderByInput
 }

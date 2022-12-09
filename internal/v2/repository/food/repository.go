@@ -2,7 +2,6 @@ package food
 
 import (
 	"fmt"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	"gorm.io/gorm"
 )
@@ -15,15 +14,13 @@ func New(db *gorm.DB) Repository {
 	return &repository{db: db}
 }
 
-func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount int64, err error) {
-	db := r.db.Model(&model.Output{}).
-		Select("foods.id AS id", "foods.user_id AS user_id", "foods.food_category_id AS food_category_id",
-			"foods.source AS source", "foods.status AS status", "foods.name AS name", "foods.calorie AS calorie",
-			"foods.amount_desc AS amount_desc", "foods.create_at AS create_at", "foods.update_at AS update_at")
-	//加入 tag 篩選條件
-	if input.Tag != nil {
-		db = db.Joins("INNER JOIN food_categories ON foods.food_category_id = food_categories.id")
-		db = db.Where("food_categories.tag = ?", *input.Tag)
+func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
+	db := r.db.Model(&model.Output{})
+	// 1.Join
+	if len(input.Joins) > 0 {
+		for _, join := range input.Joins {
+			db = db.Joins(join.Query, join.Args...)
+		}
 	}
 	//加入 name 篩選條件
 	if input.Name != nil {
@@ -31,7 +28,7 @@ func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount
 	}
 	//加入 user_id 篩選條件
 	if input.UserID != nil {
-		db = db.Where("(foods.user_id = ? OR foods.user_id IS NULL)", *input.UserID)
+		db = db.Where("foods.user_id = ?", *input.UserID)
 	}
 	//加入 source 篩選條件
 	if input.Source != nil {
@@ -45,29 +42,41 @@ func (r *repository) List(input *food.ListInput) (outputs []*food.Output, amount
 	if input.IsDeleted != nil {
 		db = db.Where("foods.is_deleted = ?", *input.IsDeleted)
 	}
-	//Preload
-	if len(input.Preloads) > 0 {
-		for _, preload := range input.Preloads {
-			if preload.OrderBy != nil {
-				db = db.Preload(preload.Field, func(db *gorm.DB) *gorm.DB {
-					return db.Order(fmt.Sprintf("%s %s", preload.OrderBy.OrderField, preload.OrderBy.OrderType))
-				})
-				continue
-			}
-			db = db.Preload(preload.Field)
+	// 2.Custom Where
+	if len(input.Wheres) > 0 {
+		for _, where := range input.Wheres {
+			db = db.Where(where.Query, where.Args...)
 		}
 	}
-	// Count
-	db = db.Count(&amount)
-	// Paging
-	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
+	// 4.Preload
+	if len(input.Preloads) > 0 {
+		for _, preload := range input.Preloads {
+			db = db.Preload(preload.Field, preload.Conditions...)
+		}
 	}
-	// Order
+	// 5.Count
+	db = db.Count(&amount)
+	// 6.Select
+	db = db.Select("foods.*")
+	// 7.Paging
+	if input.Page != nil && input.Size != nil {
+		db = db.Offset((*input.Page - 1) * *input.Size).Limit(*input.Size)
+	} else if input.Page != nil {
+		db = db.Offset(0)
+	} else if input.Size != nil {
+		db = db.Limit(*input.Size)
+	}
+	// 8.Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
 		db = db.Order(fmt.Sprintf("foods.%s %s", input.OrderField, input.OrderType))
 	}
-	//查詢數據
+	// 9.Custom Order
+	if input.Orders != nil {
+		for _, orderBy := range input.Orders {
+			db = db.Order(orderBy.Value)
+		}
+	}
+	// 查詢數據
 	err = db.Find(&outputs).Error
 	return outputs, amount, err
 }

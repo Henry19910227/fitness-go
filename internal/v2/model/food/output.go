@@ -2,6 +2,7 @@ package food
 
 import (
 	foodOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food/optional"
+	foodCategoryOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food_category/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	foodCategory "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -16,25 +17,7 @@ func (Output) TableName() string {
 	return "foods"
 }
 
-type APIGetFoodsOutput struct {
-	base.Output
-	Data APIGetFoodsData `json:"data"`
-}
-type APIGetFoodsData []*struct {
-	foodOptional.IDField
-	foodOptional.UserIDField
-	foodOptional.SourceField
-	foodOptional.NameField
-	foodOptional.CalorieField
-	foodOptional.AmountDescField
-	foodOptional.CreateAtField
-	foodOptional.UpdateAtField
-	FoodCategory *struct {
-		foodCategory.IDField
-		foodCategory.TagField
-		foodCategory.TitleField
-	} `json:"food_category,omitempty"`
-}
+
 
 // APIGetCMSFoodsOutput /v2/cms/foods [GET] 獲取食物列表 API
 type APIGetCMSFoodsOutput struct {
@@ -51,9 +34,9 @@ type APIGetCMSFoodsData []*struct {
 	foodOptional.CreateAtField
 	foodOptional.UpdateAtField
 	FoodCategory *struct {
-		foodCategory.IDField
-		foodCategory.TagField
-		foodCategory.TitleField
+		foodCategoryOptional.IDField
+		foodCategoryOptional.TagField
+		foodCategoryOptional.TitleField
 	} `json:"food_category,omitempty"`
 }
 
@@ -72,8 +55,8 @@ type APICreateCMSFoodData struct {
 	foodOptional.CreateAtField
 	foodOptional.UpdateAtField
 	FoodCategory *struct {
-		foodCategory.IDField
-		foodCategory.TagField
-		foodCategory.TitleField
+		foodCategoryOptional.IDField
+		foodCategoryOptional.TagField
+		foodCategoryOptional.TitleField
 	} `json:"food_category,omitempty"`
 }

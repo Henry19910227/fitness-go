@@ -1,6 +1,9 @@
 package food_category
 
-import "github.com/Henry19910227/fitness-go/internal/v2/model/base"
+import (
+	foodCategoryOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food_category/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+)
 
 type Output struct {
 	Table
@@ -16,9 +19,9 @@ type APIGetCMSFoodCategoriesOutput struct {
 	Data APIGetCMSFoodCategoriesData `json:"data"`
 }
 type APIGetCMSFoodCategoriesData []*struct {
-	IDField
-	TagField
-	TitleField
-	CreateAtField
-	UpdateAtField
+	foodCategoryOptional.IDField
+	foodCategoryOptional.TagField
+	foodCategoryOptional.TitleField
+	foodCategoryOptional.CreateAtField
+	foodCategoryOptional.UpdateAtField
 }

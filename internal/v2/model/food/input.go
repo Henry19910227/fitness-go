@@ -3,16 +3,23 @@ package food
 import (
 	foodOptional "github.com/Henry19910227/fitness-go/internal/v2/field/food/optional"
 	foodRequired "github.com/Henry19910227/fitness-go/internal/v2/field/food/required"
+	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	foodCategory "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 )
 
-type PagingInput = paging.Input
+type PagingInput = struct {
+	pagingOptional.PageField
+	pagingOptional.SizeField
+}
 type PreloadInput = preload.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
 type OrderByInput = orderBy.Input
+type CustomOrderByInput = orderBy.CustomInput
 
 type GenerateInput struct {
 	DataAmount     int
@@ -27,21 +34,17 @@ type FindInput struct {
 }
 
 type ListInput struct {
-	foodCategory.TagField
 	foodOptional.UserIDField
 	foodOptional.NameField
 	foodOptional.SourceField
 	foodOptional.StatusField
 	foodOptional.IsDeletedField
 	PagingInput
+	JoinInput
+	WhereInput
 	PreloadInput
 	OrderByInput
-}
-
-type APIGetFoodsInput struct {
-	foodCategory.TagField
-	foodOptional.UserIDField
-	foodOptional.NameField
+	CustomOrderByInput
 }
 
 // APICreateCMSFoodInput /v2/cms/food [POST]
