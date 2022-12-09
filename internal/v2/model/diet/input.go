@@ -27,8 +27,8 @@ type GenerateInput struct {
 }
 
 type FindInput struct {
-	IDField
-	preload.Input
+	dietOptional.IDField
+	PreloadInput
 }
 
 type ListInput struct {

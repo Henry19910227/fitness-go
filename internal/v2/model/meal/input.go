@@ -1,6 +1,7 @@
 package meal
 
 import (
+	mealOptional "github.com/Henry19910227/fitness-go/internal/v2/field/meal/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -26,7 +27,7 @@ type UserIDInput struct {
 
 // ListInput Service Input
 type ListInput struct {
-	DietIDField
+	mealOptional.DietIDField
 	UserIDInput
 	PagingInput
 	PreloadInput
@@ -35,21 +36,21 @@ type ListInput struct {
 
 // DeleteInput Service Input
 type DeleteInput struct {
-	IDField
-	DietIDField
+	mealOptional.IDField
+	mealOptional.DietIDField
 }
 
-// APIPutMealsInput /v2/diet/{diet_id}/meals [PUT] 修改並覆蓋餐食 API
-type APIPutMealsInput struct {
-	DietIDField
-	UserIDInput
-	Meals []*APIPutMealsInputItem
-}
-type APIPutMealsInputItem struct {
-	FoodIDField
-	TypeField
-	AmountField
-}
+//// APIPutMealsInput /v2/diet/{diet_id}/meals [PUT] 修改並覆蓋餐食 API
+//type APIPutMealsInput struct {
+//	mealOptional.DietIDField
+//	UserIDInput
+//	Meals []*APIPutMealsInputItem
+//}
+//type APIPutMealsInputItem struct {
+//	mealOptional.FoodIDField
+//	mealOptional.TypeField
+//	mealOptional.AmountField
+//}
 
 // APIGetMealsInput /v2/meals [GET] 獲取餐食列表 API
 type APIGetMealsInput struct {

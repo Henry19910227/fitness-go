@@ -3,8 +3,8 @@ package meal
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	dietModel "github.com/Henry19910227/fitness-go/internal/v2/model/diet"
 	mealModel "github.com/Henry19910227/fitness-go/internal/v2/model/meal"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/meal/api_put_meals"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/meal"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -27,27 +27,21 @@ func New(resolver meal.Resolver) Controller {
 // @Produce json
 // @Security fitness_token
 // @Param diet_id path int64 true "飲食id"
-// @Param json_body body []meal.APIPutMealsInputItem true "輸入參數"
+// @Param json_body body api_put_meals.Body true "輸入參數"
 // @Success 200 {object} base.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/diet/{diet_id}/meals [PUT]
 func (c *controller) UpdateMeals(ctx *gin.Context) {
-	var uri struct {
-		dietModel.IDField
-	}
-	if err := ctx.ShouldBindUri(&uri); err != nil {
+	input := api_put_meals.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusOK, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	meals := make([]*mealModel.APIPutMealsInputItem, 0)
-	if err := ctx.ShouldBindJSON(&meals); err != nil {
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
 		ctx.JSON(http.StatusOK, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	input := mealModel.APIPutMealsInput{}
-	input.UserID = util.PointerInt64(ctx.MustGet("uid").(int64))
-	input.DietID = uri.ID
-	input.Meals = meals
 	output := c.resolver.APIPutMeals(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }

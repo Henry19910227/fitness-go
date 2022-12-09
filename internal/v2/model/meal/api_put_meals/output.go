@@ -1,4 +1,4 @@
-package meal
+package api_put_meals
 
 import (
 	mealOptional "github.com/Henry19910227/fitness-go/internal/v2/field/meal/optional"
@@ -8,25 +8,10 @@ import (
 )
 
 type Output struct {
-	Table
-	Food *food.Output `json:"food,omitempty" gorm:"foreignKey:id;references:food_id"` // 食物
-}
-
-func (Output) TableName() string {
-	return "meals"
-}
-
-// APIPutMealsOutput /v2/diet/{diet_id}/meals [PUT] 修改並覆蓋餐食
-type APIPutMealsOutput struct {
 	base.Output
+	Data *Data `json:"data,omitempty"`
 }
-
-// APIGetMealsOutput /v2/diet/{diet_id}/meals [Get]
-type APIGetMealsOutput struct {
-	base.Output
-	Data APIGetMealsData `json:"data"`
-}
-type APIGetMealsData []*struct {
+type Data struct {
 	mealOptional.IDField
 	mealOptional.TypeField
 	mealOptional.AmountField

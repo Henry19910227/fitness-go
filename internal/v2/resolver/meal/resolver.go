@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	dietModel "github.com/Henry19910227/fitness-go/internal/v2/model/diet"
 	mealModel "github.com/Henry19910227/fitness-go/internal/v2/model/meal"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/meal/api_put_meals"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/diet"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/meal"
@@ -20,37 +21,38 @@ func New(mealService meal.Service, dietService diet.Service) Resolver {
 	return &resolver{mealService: mealService, dietService: dietService}
 }
 
-func (r *resolver) APIPutMeals(tx *gorm.DB, input *mealModel.APIPutMealsInput) (output mealModel.APIPutMealsOutput) {
+func (r *resolver) APIPutMeals(tx *gorm.DB, input *api_put_meals.Input) (output api_put_meals.Output) {
 	defer tx.Rollback()
+	// 查詢diet資訊
 	findInput := dietModel.FindInput{}
-	findInput.ID = input.DietID
-	dietOutput, err := r.dietService.Find(&findInput)
+	findInput.ID = input.Uri.DietID
+	dietOutput, err := r.dietService.Tx(tx).Find(&findInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	if *input.UserID != *dietOutput.UserID {
-		output.SetStatus(code.PermissionDenied)
+	if util.OnNilJustReturnInt64(dietOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此diet創建者，無法修改meals")
 		return output
 	}
-	//刪除meal
+	// 刪除舊的meal
 	delInput := mealModel.DeleteInput{}
-	delInput.DietID = input.DietID
+	delInput.DietID = input.Uri.DietID
 	if err := r.mealService.Tx(tx).Delete(&delInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	// parser input
-	items := make([]*mealModel.Table, 0)
-	if err := util.Parser(input.Meals, &items); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
+	// 新增meal
+	mealTables := make([]*mealModel.Table, 0)
+	for _, mealItem := range input.Body {
+		mealTable := mealModel.Table{}
+		mealTable.DietID = input.Uri.DietID
+		mealTable.FoodID = mealItem.FoodID
+		mealTable.Type = mealItem.Type
+		mealTable.Amount = mealItem.Amount
+		mealTables = append(mealTables, &mealTable)
 	}
-	for _, item := range items {
-		item.DietID = input.DietID
-	}
-	//新增meal
-	if err := r.mealService.Tx(tx).Create(items); err != nil {
+	if err := r.mealService.Tx(tx).Create(mealTables); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
