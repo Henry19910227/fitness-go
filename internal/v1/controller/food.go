@@ -121,7 +121,7 @@ func (f *Food) GetRecentFoods(c *gin.Context) {
 }
 
 // DeleteFood 刪除食物
-// @Summary 刪除食物
+// @Summary 刪除食物 (API已過時，更新為 /v2/food/{food_id} [DELETE])
 // @Description 刪除食物
 // @Tags Diet_v1
 // @Accept json

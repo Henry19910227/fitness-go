@@ -5,6 +5,7 @@ import (
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_create_food"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_delete_food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_get_foods"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/food"
 	"github.com/gin-gonic/gin"
@@ -60,6 +61,28 @@ func (c *controller) GetFoods(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetFoods(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// DeleteFood 刪除食物
+// @Summary 刪除食物
+// @Description 刪除食物
+// @Tags 飲食_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param food_id path int64 true "食物id"
+// @Success 200 {object} api_delete_food.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/food/{food_id} [DELETE]
+func (c *controller) DeleteFood(ctx *gin.Context) {
+	input := api_delete_food.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIDeleteFood(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

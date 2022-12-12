@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_create_food"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_delete_food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_get_foods"
 	categoryModel "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
@@ -61,6 +62,7 @@ func (r *resolver) APIGetFoods(input *api_get_foods.Input) (output api_get_foods
 	listInput := model.ListInput{}
 	listInput.Name = input.Query.Name
 	listInput.Status = util.PointerInt(1)
+	listInput.IsDeleted = util.PointerInt(0)
 	listInput.OrderField = "create_at"
 	listInput.OrderType = order_by.DESC
 	listInput.Preloads = []*preloadModel.Preload{
@@ -89,6 +91,31 @@ func (r *resolver) APIGetFoods(input *api_get_foods.Input) (output api_get_foods
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIDeleteFood(input *api_delete_food.Input) (output api_delete_food.Output) {
+	// 查詢 food 資訊
+	findFoodInput := model.FindInput{}
+	findFoodInput.ID = util.PointerInt64(input.Uri.FoodID)
+	foodOutput, err := r.foodService.Find(&findFoodInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	if util.OnNilJustReturnInt64(foodOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非此食物創建者，刪除失敗")
+		return output
+	}
+	// 軟刪除 food
+	foodTable := model.Table{}
+	foodTable.ID = util.PointerInt64(input.Uri.FoodID)
+	foodTable.IsDeleted = util.PointerInt(1)
+	if err := r.foodService.Update(&foodTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
 	return output
 }
 
