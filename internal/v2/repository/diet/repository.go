@@ -86,6 +86,14 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	return outputs, amount, err
 }
 
+func (r *repository) Create(item *model.Table) (id int64, err error) {
+	err = r.db.Model(&model.Table{}).Create(&item).Error
+	if err != nil {
+		return 0, err
+	}
+	return *item.ID, err
+}
+
 func (r *repository) Updates(items []*model.Table) (err error) {
 	err = r.db.Model(&model.Table{}).Save(&items).Error
 	return err

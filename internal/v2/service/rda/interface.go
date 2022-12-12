@@ -1,6 +1,7 @@
 package rda
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/rda"
 	"gorm.io/gorm"
 )
@@ -8,4 +9,5 @@ import (
 type Service interface {
 	Tx(tx *gorm.DB) Service
 	Create(item *model.Table) (id int64, err error)
+	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
 }

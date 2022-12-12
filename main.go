@@ -25,6 +25,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course_release_monthly_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course_training_avg_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course_training_monthly_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/diet"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/favorite_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/favorite_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/favorite_trainer"
@@ -257,6 +258,7 @@ func main() {
 	banner_order.SetRoute(v2)
 	user_course_asset.SetRoute(v2)
 	rda.SetRoute(v2)
+	diet.SetRoute(v2)
 	scheduler.Shared().Cron().Start()
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }

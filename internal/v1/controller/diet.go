@@ -25,7 +25,7 @@ func NewDiet(baseGroup *gin.RouterGroup, dietService service.Diet, userMiddlewar
 }
 
 // CreateDiet 創建飲食紀錄
-// @Summary 創建飲食紀錄
+// @Summary 創建飲食紀錄 (API已經過時，更新為 /v2/diet [POST])
 // @Description 創建飲食紀錄
 // @Tags Diet_v1
 // @Accept json

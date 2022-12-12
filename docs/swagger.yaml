@@ -22,12 +22,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       name:
         description: 動作名稱
@@ -38,12 +38,12 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -86,12 +86,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       name:
         description: 動作名稱
@@ -102,12 +102,12 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -190,19 +190,19 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             intro:
-              description: 課表介紹
-              example: 增肌專用課表
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
               description: 動作名稱
               example: 划船機
               type: string
             source:
-              description: 來源(1:系統創建食物/2:用戶創建食物)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
@@ -210,12 +210,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -279,19 +279,19 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             intro:
-              description: 課表介紹
-              example: 增肌專用課表
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
               description: 動作名稱
               example: 划船機
               type: string
             source:
-              description: 來源(1:系統創建食物/2:用戶創建食物)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
@@ -299,12 +299,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -342,12 +342,12 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       name:
         description: 動作名稱
@@ -358,12 +358,12 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -394,20 +394,20 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       image:
         description: 圖片
         example: 1234.jpg
         type: string
       type:
-        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       url:
         description: url
@@ -452,6 +452,97 @@ definitions:
         example: message..
         type: string
     type: object
+  api_create_diet.Body:
+    properties:
+      schedule_at:
+        example: "2022-05-25"
+        type: string
+    required:
+    - schedule_at
+    type: object
+  api_create_diet.Data:
+    properties:
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      id:
+        description: id
+        example: 1
+        type: integer
+      rda:
+        description: "Meals []*struct{\n\tmealOptional.IDField\n\tmealOptional.TypeField\n\tmealOptional.AmountField\n\tFood
+          *struct{\n\t\tfoodOptional.IDField\n\t\tfoodOptional.UserIDField\n\t\tfoodOptional.SourceField\n\t\tfoodOptional.NameField\n\t\tfoodOptional.CalorieField\n\t\tfoodOptional.AmountDescField\n\t\tFoodCategory
+          *struct{\n\t\t\tfoodCategoryOptional.IDField\n\t\t\tfoodCategoryOptional.TagField\n\t\t\tfoodCategoryOptional.TitleField\n\t\t}
+          `json:\"food_category,omitempty\"`\n\t} `json:\"food,omitempty\"`\n} `json:\"meals,omitempty\"`"
+        properties:
+          calorie:
+            description: 目標熱量
+            example: 2913
+            type: integer
+          carbs:
+            description: 碳水化合物(克)
+            example: 437
+            type: integer
+          dairy:
+            description: 乳製品類(份)
+            example: 1
+            type: integer
+          fat:
+            description: 脂肪(克)
+            example: 65
+            type: integer
+          fruit:
+            description: 水果類(份)
+            example: 2
+            type: integer
+          grain:
+            description: 穀物類(份)
+            example: 25
+            type: integer
+          meat:
+            description: 蛋豆魚肉類(份)
+            example: 12
+            type: integer
+          nut:
+            description: 堅果類(份)
+            example: 5
+            type: integer
+          protein:
+            description: 蛋白質(克)
+            example: 146
+            type: integer
+          tdee:
+            description: TDEE
+            example: 2533
+            type: integer
+          vegetable:
+            description: 蔬菜類(份)
+            example: 5
+            type: integer
+        type: object
+      schedule_at:
+        description: 排程時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+    type: object
+  api_create_diet.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/api_create_diet.Data'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   api_create_favorite_course.Output:
     properties:
       code:
@@ -490,8 +581,8 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       order_status:
         description: 訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)
@@ -544,7 +635,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -567,8 +658,8 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
     type: object
   api_create_trainer_action.Output:
@@ -824,8 +915,8 @@ definitions:
         items:
           properties:
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             name:
               description: 銷售名稱
@@ -1047,8 +1138,8 @@ definitions:
         items:
           properties:
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             name:
               description: 銷售名稱
@@ -1249,19 +1340,19 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             intro:
-              description: 課表介紹
-              example: 增肌專用課表
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
               description: 動作名稱
               example: 划船機
               type: string
             source:
-              description: 來源(1:系統創建食物/2:用戶創建食物)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
@@ -1269,12 +1360,12 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -1468,8 +1559,8 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       max_distance_record:
         properties:
@@ -1584,15 +1675,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 1
+              example: 2.5
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -1659,8 +1750,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       intensity:
         description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
@@ -1940,8 +2031,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
@@ -1990,7 +2081,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -2652,7 +2743,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
     type: object
   bank_account.APIGetTrainerBankAccountOutput:
@@ -2704,8 +2795,8 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             image:
               description: 圖片
@@ -2723,12 +2814,12 @@ definitions:
                   type: integer
               type: object
             type:
-              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             url:
               description: url
@@ -5151,8 +5242,8 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 主鍵id
-                      example: 1
+                      description: rda id
+                      example: 2
                       type: integer
                     product_id:
                       description: 產品id
@@ -6626,7 +6717,8 @@ definitions:
       orderId:
         type: string
       paymentState:
-        description: 0. Payment pending 1. Payment received 2. Free trial 3. Pending deferred upgrade/downgrade
+        description: 0. Payment pending 1. Payment received 2. Free trial 3. Pending
+          deferred upgrade/downgrade
         type: integer
       priceAmountMicros:
         type: string
@@ -7070,7 +7162,8 @@ definitions:
         description: App Store 退還交易或從家庭共享中撤銷交易的 UNIX 時間（以毫秒為單位）
         type: integer
       revocationReason:
-        description: App Store 退還交易或從家庭共享中撤銷交易的原因(0:Apple Support 因其他原因代表客戶退還交易；例如，意外購買/1:由於您的應用程序中存在實際或感知的問題，Apple 支持代表客戶退還了交易)
+        description: App Store 退還交易或從家庭共享中撤銷交易的原因(0:Apple Support 因其他原因代表客戶退還交易；例如，意外購買/1:由於您的應用程序中存在實際或感知的問題，Apple
+          支持代表客戶退還了交易)
         type: string
       signedDate:
         description: App Store 對 JSON Web 簽名 (JWS) 數據進行簽名的 UNIX 時間（以毫秒為單位)
@@ -7082,7 +7175,8 @@ definitions:
         description: 交易的唯一標識符
         type: string
       type:
-        description: 應用內購買的產品類型(Auto-Renewable Subscription/Non-Consumable/Consumable/Non-Renewing Subscription)
+        description: 應用內購買的產品類型(Auto-Renewable Subscription/Non-Consumable/Consumable/Non-Renewing
+          Subscription)
         type: string
       webOrderLineItemId:
         description: 跨設備訂閱購買事件的唯一標識符，包括訂閱續訂
@@ -8335,7 +8429,8 @@ definitions:
   order.APIAppStoreNotificationBody:
     properties:
       signedPayload:
-        description: The payload in JSON Web Signature (JWS) format, signed by the App Store
+        description: The payload in JSON Web Signature (JWS) format, signed by the
+          App Store
         example: MIJOlgYJKoZIhvcN...
         type: string
     type: object
@@ -8366,8 +8461,8 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       order_course:
         properties:
@@ -8427,7 +8522,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -8461,8 +8556,8 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             order_course:
               properties:
@@ -8559,7 +8654,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -9342,8 +9437,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
@@ -9411,7 +9506,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -9521,8 +9616,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       is_deleted:
         description: 是否刪除
@@ -9594,7 +9689,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -9645,7 +9740,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -9712,8 +9807,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
@@ -9781,7 +9876,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -9871,8 +9966,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
@@ -9940,7 +10035,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -11440,7 +11535,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
     type: object
   user_subscribe_info.APIGetUserSubscribeInfoOutput:
@@ -12191,8 +12286,8 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
     type: object
   workout.APICreateTrainerWorkoutOutput:
@@ -12222,8 +12317,8 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
     type: object
   workout.APICreateUserWorkoutOutput:
@@ -12327,8 +12422,8 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             name:
               description: 訓練名稱
@@ -12340,7 +12435,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -12377,8 +12472,8 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             name:
               description: 訓練名稱
@@ -12390,7 +12485,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -12429,8 +12524,8 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             name:
               description: 訓練名稱
@@ -12442,7 +12537,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -12470,8 +12565,8 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       name:
         description: 訓練名稱
@@ -12483,7 +12578,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -12518,8 +12613,8 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       name:
         description: 訓練名稱
@@ -12531,7 +12626,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -12716,8 +12811,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             intensity:
               description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
@@ -13027,15 +13122,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 1
+              example: 2.5
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -13058,12 +13153,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -13148,15 +13243,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 1
+              example: 2.5
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -13179,12 +13274,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -13267,15 +13362,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 1
+              example: 2.5
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -13298,12 +13393,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -13386,15 +13481,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 1
+              example: 2.5
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: 主鍵id
-              example: 1
+              description: rda id
+              example: 2
               type: integer
             incline:
               description: 坡度
@@ -13417,12 +13512,12 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-14 00:00:00"
+              example: "2022-06-12 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -13498,15 +13593,15 @@ definitions:
         type: string
       distance:
         description: 距離(公里)
-        example: 1
+        example: 2.5
         type: number
       duration:
         description: 時長(秒)
         example: 30
         type: integer
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       incline:
         description: 坡度
@@ -13529,12 +13624,12 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -13617,15 +13712,15 @@ definitions:
         type: string
       distance:
         description: 距離(公里)
-        example: 1
+        example: 2.5
         type: number
       duration:
         description: 時長(秒)
         example: 30
         type: integer
       id:
-        description: 主鍵id
-        example: 1
+        description: rda id
+        example: 2
         type: integer
       incline:
         description: 坡度
@@ -13648,12 +13743,12 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-12 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -13773,7 +13868,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名} 查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}'
+      description: '查看封面照 : https://www.fitopia-hub.tk/api/v1/resource/action/cover/{圖片名}
+        查看影片 : https://www.fitopia-hub.tk/api/v1/resource/action/video/{影片名}'
       parameters:
       - description: 動作id
         in: path
@@ -13858,7 +13954,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取動作個人最佳紀錄 (API已過時，更新為 /v2/user/action/{action_id}/best_personal_record [GET])
+      summary: 獲取動作個人最佳紀錄 (API已過時，更新為 /v2/user/action/{action_id}/best_personal_record
+        [GET])
       tags:
       - Action_v1
   /v1/action/{action_id}/video:
@@ -13929,7 +14026,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 以日期獲取動作訓練組紀錄 (API已過時，更新為 /v2/user/action/{action_id}/workout_set_logs [GET])
+      summary: 以日期獲取動作訓練組紀錄 (API已過時，更新為 /v2/user/action/{action_id}/workout_set_logs
+        [GET])
       tags:
       - Action_v1
   /v1/actions:
@@ -15340,7 +15438,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取課表結構(只限單一訓練課表) (API已過時，更新為 /v2/store/course/{course_id}/structure [GET])
+      summary: 獲取課表結構(只限單一訓練課表) (API已過時，更新為 /v2/store/course/{course_id}/structure
+        [GET])
       tags:
       - Explore_v1
   /v1/course_products:
@@ -15625,7 +15724,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 創建飲食紀錄
+      summary: 創建飲食紀錄 (API已經過時，更新為 /v2/diet [POST])
       tags:
       - Diet_v1
   /v1/favorite/action/{action_id}:
@@ -16682,7 +16781,8 @@ paths:
           description: 該資料已存在
           schema:
             $ref: '#/definitions/model.ErrorResult'
-      summary: 驗證信箱是否可使用 (/v2/register/email/validate [POST] 和 /v2/register/email_account/validate [POST] 替代)
+      summary: 驗證信箱是否可使用 (/v2/register/email/validate [POST] 和 /v2/register/email_account/validate
+        [POST] 替代)
       tags:
       - Register_v1
   /v1/register/nickname/validate:
@@ -16913,7 +17013,12 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -17019,7 +17124,12 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v1/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v1/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -17585,7 +17695,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 修改訓練組的順序 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_set_orders [API])
+      summary: 修改訓練組的順序 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_set_orders
+        [API])
       tags:
       - Workout_v1
   /v1/workout/{workout_id}/rest_set:
@@ -17644,7 +17755,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 刪除訓練前導語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/start_audio [DELETE])
+      summary: 刪除訓練前導語音 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/start_audio
+        [DELETE])
       tags:
       - Workout_v1
     post:
@@ -17754,7 +17866,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 取得訓練內的訓練組列表 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_sets [GET])
+      summary: 取得訓練內的訓練組列表 (API已經過時，更新為 /v2/trainer/workout/{workout_id}/workout_sets
+        [GET])
       tags:
       - Workout_v1
   /v1/workout_asset/{workout_id}/workout_log:
@@ -17959,7 +18072,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取訓練組列表(探索區課表) (API已經過時，更新為 /v2/store/workout/{workout_id}/workout_sets [GET])
+      summary: 獲取訓練組列表(探索區課表) (API已經過時，更新為 /v2/store/workout/{workout_id}/workout_sets
+        [GET])
       tags:
       - Explore_v1
   /v1/workout_set/{workout_set_id}:
@@ -18068,7 +18182,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 複製訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/duplicate [POST])
+      summary: 複製訓練組 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/duplicate
+        [POST])
       tags:
       - WorkoutSet_v1
   /v1/workout_set/{workout_set_id}/progress_audio:
@@ -18095,7 +18210,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 刪除訓練組進行中語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/progress_audio [DELETE])
+      summary: 刪除訓練組進行中語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/progress_audio
+        [DELETE])
       tags:
       - WorkoutSet_v1
     post:
@@ -18158,7 +18274,8 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 刪除訓練組前導語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/start_audio [DELETE])
+      summary: 刪除訓練組前導語音 (API已經過時，更新為 /v2/trainer/workout_set/{workout_set_id}/start_audio
+        [DELETE])
       tags:
       - WorkoutSet_v1
     post:
@@ -18634,7 +18751,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}'
+      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 :
+        {Base URL}/v2/resource/action/video/{Filename}'
       parameters:
       - description: 動作id
         in: path
@@ -19993,6 +20111,34 @@ paths:
       summary: 創建課表訂單
       tags:
       - 支付_v2
+  /v2/diet:
+    post:
+      consumes:
+      - application/json
+      description: 創建飲食紀錄
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/api_create_diet.Body'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/api_create_diet.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 創建飲食紀錄
+      tags:
+      - 飲食_v2
   /v2/diet/{diet_id}/meals:
     put:
       consumes:
@@ -20056,7 +20202,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/favorite_action.APIDeleteFavoriteActionOutput'
         "400":
@@ -20082,7 +20229,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/favorite_action.APICreateFavoriteActionOutput'
         "400":
@@ -21184,7 +21332,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_get_store_course.Output'
         "400":
@@ -21700,7 +21849,12 @@ paths:
     patch:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練暱稱
         in: formData
@@ -21799,7 +21953,12 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/avatar/{圖片名} | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_front_image/{圖片名} | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_back_image/{圖片名} | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/album/{圖片名} |  查看證照照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/certificate/{圖片名} |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/account_image/{圖片名}'
+      description: '查看教練大頭照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/avatar/{圖片名}
+        | 查看身分證正面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_front_image/{圖片名}
+        | 查看身分證背面照 : https://www.fitopia-hub.tk/api/v2/resource/trainer/card_back_image/{圖片名}
+        | 查看教練相簿照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/album/{圖片名}
+        |  查看證照照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/certificate/{圖片名}
+        |  查看銀行帳戶照片 : https://www.fitopia-hub.tk/api/v2/resource/trainer/account_image/{圖片名}'
       parameters:
       - description: 教練本名
         in: formData
@@ -21942,7 +22101,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIDeleteTrainerActionOutput'
         "400":
@@ -21996,7 +22156,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_update_trainer_action.Output'
         "400":
@@ -22023,7 +22184,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIDeleteTrainerActionOutput'
         "400":
@@ -22113,7 +22275,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied(需訂閱權限)
           schema:
             $ref: '#/definitions/course.APICreateTrainerCourseOutput'
         "400":
@@ -22140,7 +22303,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIDeleteTrainerCourseOutput'
         "400":
@@ -22166,7 +22330,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_get_trainer_course.Data'
         "400":
@@ -22264,7 +22429,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}'
+      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 :
+        {Base URL}/v2/resource/action/video/{Filename}'
       parameters:
       - description: 課表ID
         in: path
@@ -22314,7 +22480,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_create_trainer_action.Output'
         "400":
@@ -22371,7 +22538,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_get_trainer_course_actions.Output'
         "400":
@@ -22431,7 +22599,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APICreateTrainerPlanOutput'
         "400":
@@ -22485,7 +22654,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APISubmitTrainerCourseOutput'
         "400":
@@ -22548,7 +22718,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APIDeleteTrainerPlanOutput'
         "400":
@@ -22580,7 +22751,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_update_trainer_plan.Output'
         "400":
@@ -22613,7 +22785,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APICreateTrainerWorkoutOutput'
         "400":
@@ -22688,7 +22861,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteTrainerWorkoutOutput'
         "400":
@@ -22703,7 +22877,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔 : {Base URL}/v2/resource/workout/end_audio/{Filename}'
+      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔
+        : {Base URL}/v2/resource/workout/end_audio/{Filename}'
       parameters:
       - description: 訓練id
         in: path
@@ -22730,7 +22905,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIUpdateTrainerWorkoutOutput'
         "400":
@@ -22757,7 +22933,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteTrainerWorkoutEndAudioOutput'
         "400":
@@ -22784,7 +22961,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateTrainerRestSetOutput'
         "400":
@@ -22811,7 +22989,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteTrainerWorkoutStartAudioOutput'
         "400":
@@ -22903,7 +23082,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateTrainerWorkoutSetsOutput'
         "400":
@@ -22930,7 +23110,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteTrainerWorkoutSetOutput'
         "400":
@@ -22945,7 +23126,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3 進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
+      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3
+        進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
       parameters:
       - description: 訓練組id
         in: path
@@ -22992,7 +23174,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIUpdateTrainerWorkoutSetOutput'
         "400":
@@ -23025,7 +23208,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateTrainerWorkoutSetByDuplicateOutput'
         "400":
@@ -23052,7 +23236,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteTrainerWorkoutSetProgressAudioOutput'
         "400":
@@ -23079,7 +23264,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteTrainerWorkoutSetStartAudioOutput'
         "400":
@@ -23116,7 +23302,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 : {Base URL}/v2/resource/action/video/{Filename}'
+      description: '查看封面照 : {Base URL}/v2/resource/action/cover/{Filename} 查看影片 :
+        {Base URL}/v2/resource/action/video/{Filename}'
       parameters:
       - description: 動作名稱(1~20字元)
         in: formData
@@ -23161,7 +23348,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APICreateUserActionOutput'
         "400":
@@ -23188,7 +23376,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIDeleteUserActionOutput'
         "400":
@@ -23242,7 +23431,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIUpdateUserActionOutput'
         "400":
@@ -23296,7 +23486,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIDeleteUserActionVideoOutput'
         "400":
@@ -23364,7 +23555,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIGetUserActionSystemImagesOutput'
         "400":
@@ -23416,7 +23608,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/action.APIGetUserActionsOutput'
         "400":
@@ -23471,7 +23664,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied(需訂閱權限)
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied(需訂閱權限)
           schema:
             $ref: '#/definitions/course.APICreateUserCourseOutput'
         "400":
@@ -23498,7 +23692,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIDeleteUserCourseOutput'
         "400":
@@ -23524,7 +23719,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/course.APIGetUserCourseOutput'
         "400":
@@ -23556,7 +23752,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_update_user_course.Output'
         "400":
@@ -23589,7 +23786,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APICreateUserPlanOutput'
         "400":
@@ -23706,7 +23904,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/plan.APIDeleteUserPlanOutput'
         "400":
@@ -23738,7 +23937,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_update_user_plan.Output'
         "400":
@@ -23771,7 +23971,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APICreateUserWorkoutOutput'
         "400":
@@ -23894,7 +24095,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteUserWorkoutOutput'
         "400":
@@ -23909,7 +24111,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔 : {Base URL}/v2/resource/workout/end_audio/{Filename}'
+      description: '前導音檔 : {Base URL}/v2/resource/workout/start_audio/{Filename} 結束音檔
+        : {Base URL}/v2/resource/workout/end_audio/{Filename}'
       parameters:
       - description: 訓練id
         in: path
@@ -23936,7 +24139,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIUpdateUserWorkoutOutput'
         "400":
@@ -23963,7 +24167,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteUserWorkoutEndAudioOutput'
         "400":
@@ -23990,7 +24195,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateUserRestSetOutput'
         "400":
@@ -24017,7 +24223,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout.APIDeleteUserWorkoutStartAudioOutput'
         "400":
@@ -24050,7 +24257,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_log.APICreateUserWorkoutLogOutput'
         "400":
@@ -24142,7 +24350,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateUserWorkoutSetsOutput'
         "400":
@@ -24195,7 +24404,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/api_get_user_workout_log.Output'
         "400":
@@ -24237,7 +24447,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_log.APIGetUserWorkoutLogsOutput'
         "400":
@@ -24264,7 +24475,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteUserWorkoutSetOutput'
         "400":
@@ -24279,7 +24491,8 @@ paths:
     patch:
       consumes:
       - application/json
-      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3 進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
+      description: '前導音檔 : {Base URL}/v2/resource/workout_set/start_audio/{Filename}.mp3
+        進行中音檔 : {Base URL}/v2/resource/workout_set/progress_audio/{Filename}.mp3'
       parameters:
       - description: 訓練組id
         in: path
@@ -24326,7 +24539,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIUpdateUserWorkoutSetOutput'
         "400":
@@ -24359,7 +24573,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APICreateUserWorkoutSetByDuplicateOutput'
         "400":
@@ -24386,7 +24601,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteUserWorkoutSetProgressAudioOutput'
         "400":
@@ -24413,7 +24629,8 @@ paths:
       - application/json
       responses:
         "200":
-          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied
+          description: 0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission
+            denied
           schema:
             $ref: '#/definitions/workout_set.APIDeleteUserWorkoutSetStartAudioOutput'
         "400":
