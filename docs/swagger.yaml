@@ -18,16 +18,16 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       name:
         description: 動作名稱
@@ -38,7 +38,7 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
         example: 1
         type: integer
       update_at:
@@ -82,16 +82,16 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       name:
         description: 動作名稱
@@ -102,7 +102,7 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
         example: 1
         type: integer
       update_at:
@@ -186,16 +186,16 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 動作介紹(1~400字元)
+              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
               type: string
             name:
               description: 動作名稱
@@ -210,7 +210,7 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
               example: 1
               type: integer
             update_at:
@@ -271,20 +271,20 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             favorite:
               description: 是否收藏(0:否/1:是)
               example: 1
               type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 動作介紹(1~400字元)
+              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
               type: string
             name:
               description: 動作名稱
@@ -299,7 +299,7 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
               example: 1
               type: integer
             update_at:
@@ -338,16 +338,16 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       name:
         description: 動作名稱
@@ -358,7 +358,7 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
         example: 1
         type: integer
       update_at:
@@ -394,15 +394,15 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       image:
         description: 圖片
         example: 1234.jpg
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
         example: 1
         type: integer
       update_at:
@@ -455,7 +455,8 @@ definitions:
   api_create_diet.Body:
     properties:
       schedule_at:
-        example: "2022-05-25"
+        description: 排程時間
+        example: "2022-06-14"
         type: string
     required:
     - schedule_at
@@ -471,10 +472,6 @@ definitions:
         example: 1
         type: integer
       rda:
-        description: "Meals []*struct{\n\tmealOptional.IDField\n\tmealOptional.TypeField\n\tmealOptional.AmountField\n\tFood
-          *struct{\n\t\tfoodOptional.IDField\n\t\tfoodOptional.UserIDField\n\t\tfoodOptional.SourceField\n\t\tfoodOptional.NameField\n\t\tfoodOptional.CalorieField\n\t\tfoodOptional.AmountDescField\n\t\tFoodCategory
-          *struct{\n\t\t\tfoodCategoryOptional.IDField\n\t\t\tfoodCategoryOptional.TagField\n\t\t\tfoodCategoryOptional.TitleField\n\t\t}
-          `json:\"food_category,omitempty\"`\n\t} `json:\"food,omitempty\"`\n} `json:\"meals,omitempty\"`"
         properties:
           calorie:
             description: 目標熱量
@@ -523,7 +520,7 @@ definitions:
         type: object
       schedule_at:
         description: 排程時間
-        example: "2022-06-14 00:00:00"
+        example: "2022-06-14"
         type: string
       update_at:
         description: 更新時間
@@ -581,8 +578,8 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       order_status:
         description: 訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)
@@ -658,8 +655,8 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
     type: object
   api_create_trainer_action.Output:
@@ -842,6 +839,144 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  api_get_diet.Data:
+    properties:
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      id:
+        description: id
+        example: 1
+        type: integer
+      meals:
+        items:
+          properties:
+            amount:
+              description: 數量
+              example: 1
+              type: number
+            food:
+              properties:
+                amount_desc:
+                  description: 份量描述
+                  example: 一份三百卡
+                  type: string
+                calorie:
+                  description: 食物熱量
+                  example: 300
+                  type: integer
+                food_category:
+                  properties:
+                    id:
+                      description: 主鍵id
+                      example: 1
+                      type: integer
+                    tag:
+                      description: 食物六大類Tag(1:全穀雜糧/2:蛋豆魚肉/3:水果/4:蔬菜/5:乳製品/6:油脂堅果)
+                      example: 2
+                      type: integer
+                    title:
+                      description: 類別名稱
+                      example: 米麥類
+                      type: string
+                  type: object
+                id:
+                  description: 主鍵id
+                  example: 1
+                  type: integer
+                name:
+                  description: 食物名稱
+                  example: 蕃薯
+                  type: string
+                source:
+                  description: 來源(1:系統創建食物/2:用戶創建食物)
+                  example: 1
+                  type: integer
+                user_id:
+                  description: 用戶id
+                  example: 10001
+                  type: integer
+              type: object
+            id:
+              description: 餐食id
+              example: 1
+              type: integer
+            type:
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
+              example: 1
+              type: integer
+          type: object
+        type: array
+      rda:
+        properties:
+          calorie:
+            description: 目標熱量
+            example: 2913
+            type: integer
+          carbs:
+            description: 碳水化合物(克)
+            example: 437
+            type: integer
+          dairy:
+            description: 乳製品類(份)
+            example: 1
+            type: integer
+          fat:
+            description: 脂肪(克)
+            example: 65
+            type: integer
+          fruit:
+            description: 水果類(份)
+            example: 2
+            type: integer
+          grain:
+            description: 穀物類(份)
+            example: 25
+            type: integer
+          meat:
+            description: 蛋豆魚肉類(份)
+            example: 12
+            type: integer
+          nut:
+            description: 堅果類(份)
+            example: 5
+            type: integer
+          protein:
+            description: 蛋白質(克)
+            example: 146
+            type: integer
+          tdee:
+            description: TDEE
+            example: 2533
+            type: integer
+          vegetable:
+            description: 蔬菜類(份)
+            example: 5
+            type: integer
+        type: object
+      schedule_at:
+        description: 排程時間
+        example: "2022-06-14"
+        type: string
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+    type: object
+  api_get_diet.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/api_get_diet.Data'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   api_get_foods.Output:
     properties:
       code:
@@ -915,8 +1050,8 @@ definitions:
         items:
           properties:
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             name:
               description: 銷售名稱
@@ -1138,8 +1273,8 @@ definitions:
         items:
           properties:
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             name:
               description: 銷售名稱
@@ -1336,16 +1471,16 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 動作介紹(1~400字元)
+              example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
               type: string
             name:
               description: 動作名稱
@@ -1360,7 +1495,7 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
               example: 1
               type: integer
             update_at:
@@ -1559,8 +1694,8 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       max_distance_record:
         properties:
@@ -1675,23 +1810,23 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             incline:
               description: 坡度
               example: 10.5
               type: number
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             weight:
               description: 體重(公斤)
@@ -1750,8 +1885,8 @@ definitions:
         example: 30
         type: integer
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       intensity:
         description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
@@ -2031,8 +2166,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       motto:
         description: 座右銘
@@ -2795,8 +2930,8 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             image:
               description: 圖片
@@ -2814,7 +2949,7 @@ definitions:
                   type: integer
               type: object
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
               example: 1
               type: integer
             update_at:
@@ -5242,8 +5377,8 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: rda id
-                      example: 2
+                      description: id
+                      example: 1
                       type: integer
                     product_id:
                       description: 產品id
@@ -8461,8 +8596,8 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       order_course:
         properties:
@@ -8556,8 +8691,8 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             order_course:
               properties:
@@ -9437,8 +9572,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       motto:
         description: 座右銘
@@ -9616,8 +9751,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       is_deleted:
         description: 是否刪除
@@ -9807,8 +9942,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       motto:
         description: 座右銘
@@ -9966,8 +10101,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
         type: string
       motto:
         description: 座右銘
@@ -12286,8 +12421,8 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
     type: object
   workout.APICreateTrainerWorkoutOutput:
@@ -12317,8 +12452,8 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
     type: object
   workout.APICreateUserWorkoutOutput:
@@ -12418,12 +12553,12 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             name:
               description: 訓練名稱
@@ -12468,12 +12603,12 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             name:
               description: 訓練名稱
@@ -12516,16 +12651,16 @@ definitions:
               example: 123.mp3
               type: string
             equipment:
-              description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-              example: 2,3,6
-              type: string
+              description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+              example: 1
+              type: integer
             finish:
               description: 是否完成(0:未完成/1:已完成)
               example: 1
               type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             name:
               description: 訓練名稱
@@ -12561,12 +12696,12 @@ definitions:
         example: 123.mp3
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       name:
         description: 訓練名稱
@@ -12609,12 +12744,12 @@ definitions:
         example: 123.mp3
         type: string
       equipment:
-        description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
-        example: 2,3,6
-        type: string
+        description: 器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
+        example: 1
+        type: integer
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       name:
         description: 訓練名稱
@@ -12811,8 +12946,8 @@ definitions:
               example: 30
               type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             intensity:
               description: 訓練強度(0:未指定/1:輕鬆/2:適中/3:稍難/4:很累)
@@ -13122,15 +13257,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -13145,15 +13280,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
               example: 1
               type: integer
             update_at:
@@ -13243,15 +13378,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -13266,15 +13401,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
               example: 1
               type: integer
             update_at:
@@ -13362,15 +13497,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -13385,15 +13520,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
               example: 1
               type: integer
             update_at:
@@ -13481,15 +13616,15 @@ definitions:
               type: string
             distance:
               description: 距離(公里)
-              example: 2.5
+              example: 1
               type: number
             duration:
               description: 時長(秒)
               example: 30
               type: integer
             id:
-              description: rda id
-              example: 2
+              description: id
+              example: 1
               type: integer
             incline:
               description: 坡度
@@ -13504,15 +13639,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
               example: 1
               type: integer
             update_at:
@@ -13593,15 +13728,15 @@ definitions:
         type: string
       distance:
         description: 距離(公里)
-        example: 2.5
+        example: 1
         type: number
       duration:
         description: 時長(秒)
         example: 30
         type: integer
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       incline:
         description: 坡度
@@ -13616,15 +13751,15 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數
-        example: 2
+        description: 次數id
+        example: 1
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
         example: 1
         type: integer
       update_at:
@@ -13712,15 +13847,15 @@ definitions:
         type: string
       distance:
         description: 距離(公里)
-        example: 2.5
+        example: 1
         type: number
       duration:
         description: 時長(秒)
         example: 30
         type: integer
       id:
-        description: rda id
-        example: 2
+        description: id
+        example: 1
         type: integer
       incline:
         description: 坡度
@@ -13735,15 +13870,15 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數
-        example: 2
+        description: 次數id
+        example: 1
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)
         example: 1
         type: integer
       update_at:
@@ -15692,7 +15827,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 以日期獲取飲食紀錄
+      summary: 以日期獲取飲食紀錄 (API已經過時，更新為 /v2/diet [GET])
       tags:
       - Diet_v1
     post:
@@ -20112,6 +20247,32 @@ paths:
       tags:
       - 支付_v2
   /v2/diet:
+    get:
+      consumes:
+      - application/json
+      description: 以日期獲取飲食紀錄
+      parameters:
+      - description: 排程日
+        in: query
+        name: schedule_at
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/api_get_diet.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 以日期獲取飲食紀錄
+      tags:
+      - 飲食_v2
     post:
       consumes:
       - application/json

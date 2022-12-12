@@ -47,6 +47,14 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 			db = db.Joins(join.Query, join.Args...)
 		}
 	}
+	// user_id 篩選條件
+	if input.UserID != nil {
+		db = db.Where("diets.user_id = ?", *input.UserID)
+	}
+	// schedule_at 篩選條件
+	if input.ScheduleAt != nil {
+		db = db.Where("diets.schedule_at = ?", *input.ScheduleAt)
+	}
 	// Custom Where
 	if len(input.Wheres) > 0 {
 		for _, where := range input.Wheres {

@@ -10,7 +10,7 @@ type RdaIDField struct {
 	RdaID int64 `json:"rda_id" gorm:"column:rda_id" binding:"required" example:"1"` //建議營養id
 }
 type ScheduleAtField struct {
-	ScheduleAt string `json:"schedule_at" gorm:"column:schedule_at;default:2022-06-14 00:00:00" binding:"required" example:"2022-06-14 00:00:00"` //排程時間
+	ScheduleAt string `json:"schedule_at" form:"schedule_at" gorm:"column:schedule_at;default:2022-06-14 00:00:00" binding:"required,datetime=2006-01-02" example:"2022-06-14"` //排程時間
 }
 type CreateAtField struct {
 	CreateAt string `json:"create_at" gorm:"column:create_at;default:2022-06-14 00:00:00" binding:"required" example:"2022-06-14 00:00:00"` //創建時間

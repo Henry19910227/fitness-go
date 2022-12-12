@@ -15,24 +15,6 @@ type Data struct {
 	dietOptional.ScheduleAtField
 	dietOptional.CreateAtField
 	dietOptional.UpdateAtField
-	//Meals []*struct{
-	//	mealOptional.IDField
-	//	mealOptional.TypeField
-	//	mealOptional.AmountField
-	//	Food *struct{
-	//		foodOptional.IDField
-	//		foodOptional.UserIDField
-	//		foodOptional.SourceField
-	//		foodOptional.NameField
-	//		foodOptional.CalorieField
-	//		foodOptional.AmountDescField
-	//		FoodCategory *struct{
-	//			foodCategoryOptional.IDField
-	//			foodCategoryOptional.TagField
-	//			foodCategoryOptional.TitleField
-	//		} `json:"food_category,omitempty"`
-	//	} `json:"food,omitempty"`
-	//} `json:"meals,omitempty"`
 	RDA *struct {
 		rdaOptional.TDEEField
 		rdaOptional.CalorieField

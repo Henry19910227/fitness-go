@@ -13,4 +13,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	controller := diet.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.POST("/diet", midd.Verify([]global.Role{global.UserRole}), controller.CreateDiet)
+	v2.GET("/diet", midd.Verify([]global.Role{global.UserRole}), controller.GetDiet)
 }

@@ -1,4 +1,4 @@
-package api_create_diet
+package api_get_diet
 
 import (
 	dietRequired "github.com/Henry19910227/fitness-go/internal/v2/field/diet/required"
@@ -7,8 +7,9 @@ import (
 
 type Input struct {
 	userRequired.UserIDField
-	Body Body
+	Query Query
 }
-type Body struct {
+
+type Query struct {
 	dietRequired.ScheduleAtField
 }

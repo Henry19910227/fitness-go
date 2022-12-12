@@ -7,8 +7,8 @@ import (
 
 type Output struct {
 	Table
-	RDA   *rda.Output  `json:"rda,omitempty" gorm:"foreignKey:rda_id;references:id"`    // rda
-	Meals *meal.Output `json:"meals,omitempty" gorm:"foreignKey:diet_id;references:id"` // 餐食
+	RDA   *rda.Output    `json:"rda,omitempty" gorm:"foreignKey:rda_id;references:id"`    // rda
+	Meals []*meal.Output `json:"meals,omitempty" gorm:"foreignKey:diet_id;references:id"` // 餐食
 }
 
 func (Output) TableName() string {

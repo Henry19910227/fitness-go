@@ -55,7 +55,7 @@ func (d *Diet) CreateDiet(c *gin.Context) {
 }
 
 // GetDiet 以日期獲取飲食紀錄
-// @Summary 以日期獲取飲食紀錄
+// @Summary 以日期獲取飲食紀錄 (API已經過時，更新為 /v2/diet [GET])
 // @Description 以日期獲取飲食紀錄
 // @Tags Diet_v1
 // @Accept json

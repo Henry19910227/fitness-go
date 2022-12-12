@@ -33,6 +33,7 @@ type FindInput struct {
 
 type ListInput struct {
 	dietOptional.UserIDField
+	dietOptional.ScheduleAtField
 	PagingInput
 	JoinInput
 	WhereInput
