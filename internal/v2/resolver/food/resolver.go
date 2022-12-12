@@ -6,6 +6,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_create_food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_get_foods"
 	categoryModel "github.com/Henry19910227/fitness-go/internal/v2/model/food_category"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
@@ -17,13 +18,42 @@ import (
 )
 
 type resolver struct {
-	foodService foodService.Service
+	foodService         foodService.Service
 	foodCategoryService foodCategoryService.Service
-	calorieTool foodCalorie.Tool
+	calorieTool         foodCalorie.Tool
 }
 
 func New(foodService foodService.Service, foodCategoryService foodCategoryService.Service, calorieTool foodCalorie.Tool) Resolver {
 	return &resolver{foodService: foodService, foodCategoryService: foodCategoryService, calorieTool: calorieTool}
+}
+
+func (r *resolver) APICreateFood(input *api_create_food.Input) (output api_create_food.Output) {
+	// 查詢 food category
+	findInput := categoryModel.FindInput{}
+	findInput.ID = util.PointerInt64(input.Body.FoodCategoryID)
+	foodCategoryOutput, err := r.foodCategoryService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 計算卡路里
+	cal := r.calorieTool.Calorie(util.OnNilJustReturnInt(foodCategoryOutput.Tag, 0))
+	// 創建 Food
+	table := model.Table{}
+	table.Source = util.PointerInt(model.Custom)
+	table.Calorie = util.PointerInt(cal)
+	if err := util.Parser(input.Body, &table); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	_, err = r.foodService.Create(&table)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parse Output
+	output.Set(code.Success, "success")
+	return output
 }
 
 func (r *resolver) APIGetFoods(input *api_get_foods.Input) (output api_get_foods.Output) {

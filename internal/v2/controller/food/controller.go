@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/food"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_create_food"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/food/api_get_foods"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/food"
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,27 @@ type controller struct {
 
 func New(resolver food.Resolver) Controller {
 	return &controller{resolver: resolver}
+}
+
+// CreateFood 創建食物
+// @Summary 創建食物
+// @Description 創建食物
+// @Tags 飲食_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param json_body body api_create_food.Body true "輸入參數"
+// @Success 200 {object} api_create_food.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/food [POST]
+func (c *controller) CreateFood(ctx *gin.Context) {
+	input := api_create_food.Input{}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APICreateFood(&input)
+	ctx.JSON(http.StatusOK, output)
 }
 
 // GetFoods 獲取食物列表

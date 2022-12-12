@@ -22,7 +22,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       intro:
@@ -43,7 +43,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -86,7 +86,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       intro:
@@ -107,7 +107,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -190,7 +190,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             intro:
@@ -202,7 +202,7 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 來源(0:未知/1:購買/2:贈送)
+              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
@@ -215,7 +215,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -279,7 +279,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             intro:
@@ -291,7 +291,7 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 來源(0:未知/1:購買/2:贈送)
+              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
@@ -304,7 +304,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -342,7 +342,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       intro:
@@ -363,7 +363,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -394,7 +394,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       image:
@@ -407,7 +407,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       url:
         description: url
@@ -562,6 +562,36 @@ definitions:
         example: message..
         type: string
     type: object
+  api_create_food.Body:
+    properties:
+      amount_desc:
+        description: 份量描述
+        example: 一份三百卡
+        type: string
+      food_category_id:
+        description: 食物類別id
+        example: 1
+        type: integer
+      name:
+        description: 食物名稱
+        example: 蕃薯
+        type: string
+    required:
+    - amount_desc
+    - food_category_id
+    - name
+    type: object
+  api_create_food.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   api_create_subscribe_order.Body:
     properties:
       subscribe_plan_id:
@@ -578,7 +608,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       order_status:
@@ -632,7 +662,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -655,7 +685,7 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
     type: object
@@ -1050,7 +1080,7 @@ definitions:
         items:
           properties:
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             name:
@@ -1273,7 +1303,7 @@ definitions:
         items:
           properties:
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             name:
@@ -1475,7 +1505,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             intro:
@@ -1487,7 +1517,7 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 來源(0:未知/1:購買/2:贈送)
+              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
@@ -1500,7 +1530,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -1694,7 +1724,7 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       max_distance_record:
@@ -1817,7 +1847,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             incline:
@@ -1825,8 +1855,8 @@ definitions:
               example: 10.5
               type: number
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             weight:
               description: 體重(公斤)
@@ -1885,7 +1915,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       intensity:
@@ -2216,7 +2246,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -2878,7 +2908,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
     type: object
   bank_account.APIGetTrainerBankAccountOutput:
@@ -2930,7 +2960,7 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             image:
@@ -2954,7 +2984,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             url:
               description: url
@@ -5377,7 +5407,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: id
+                      description: 訓練 id
                       example: 1
                       type: integer
                     product_id:
@@ -8596,7 +8626,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       order_course:
@@ -8657,7 +8687,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -8691,7 +8721,7 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             order_course:
@@ -8789,7 +8819,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -9641,7 +9671,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -9824,7 +9854,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -9875,7 +9905,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -10011,7 +10041,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -10170,7 +10200,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -11670,7 +11700,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
     type: object
   user_subscribe_info.APIGetUserSubscribeInfoOutput:
@@ -12421,7 +12451,7 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
     type: object
@@ -12452,7 +12482,7 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
     type: object
@@ -12557,7 +12587,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             name:
@@ -12570,7 +12600,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -12607,7 +12637,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             name:
@@ -12620,7 +12650,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -12659,7 +12689,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             name:
@@ -12672,7 +12702,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -12700,7 +12730,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       name:
@@ -12713,7 +12743,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -12748,7 +12778,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       name:
@@ -12761,7 +12791,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -12946,7 +12976,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             intensity:
@@ -13264,7 +13294,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             incline:
@@ -13280,8 +13310,8 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
@@ -13293,7 +13323,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -13385,7 +13415,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             incline:
@@ -13401,8 +13431,8 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
@@ -13414,7 +13444,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -13504,7 +13534,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             incline:
@@ -13520,8 +13550,8 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
@@ -13533,7 +13563,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -13623,7 +13653,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: id
+              description: 訓練 id
               example: 1
               type: integer
             incline:
@@ -13639,8 +13669,8 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
@@ -13652,7 +13682,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -13735,7 +13765,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       incline:
@@ -13751,8 +13781,8 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數id
-        example: 1
+        description: 次數
+        example: 2
         type: integer
       start_audio:
         description: 前導語音
@@ -13764,7 +13794,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -13854,7 +13884,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: id
+        description: 訓練 id
         example: 1
         type: integer
       incline:
@@ -13870,8 +13900,8 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數id
-        example: 1
+        description: 次數
+        example: 2
         type: integer
       start_audio:
         description: 前導語音
@@ -13883,7 +13913,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -16051,7 +16081,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 創建食物
+      summary: 創建食物 (API已經過時，更新為  /v2/food [POST])
       tags:
       - Diet_v1
   /v1/food/{food_id}:
@@ -20646,6 +20676,34 @@ paths:
       summary: 創建反饋
       tags:
       - 意見反饋_v2
+  /v2/food:
+    post:
+      consumes:
+      - application/json
+      description: 創建食物
+      parameters:
+      - description: 輸入參數
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/api_create_food.Body'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/api_create_food.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 創建食物
+      tags:
+      - 飲食_v2
   /v2/foods:
     get:
       consumes:

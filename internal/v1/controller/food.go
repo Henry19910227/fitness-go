@@ -31,7 +31,7 @@ func NewFood(baseGroup *gin.RouterGroup, foodService service.Food, userMiddlewar
 }
 
 // CreateFood 創建食物
-// @Summary 創建食物
+// @Summary 創建食物 (API已經過時，更新為  /v2/food [POST])
 // @Description 創建食物
 // @Tags Diet_v1
 // @Accept json
