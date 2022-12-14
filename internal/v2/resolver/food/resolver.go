@@ -38,7 +38,7 @@ func (r *resolver) APICreateFood(input *api_create_food.Input) (output api_creat
 		return output
 	}
 	// 計算卡路里
-	cal := r.calorieTool.Calorie(util.OnNilJustReturnInt(foodCategoryOutput.Tag, 0))
+	cal := r.calorieTool.FoodCalorie(util.OnNilJustReturnInt(foodCategoryOutput.Tag, 0))
 	// 創建 Food
 	table := model.Table{}
 	table.Source = util.PointerInt(model.Custom)
@@ -157,7 +157,7 @@ func (r *resolver) APICreateCMSFood(input *model.APICreateCMSFoodInput) (output 
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	cal := r.calorieTool.Calorie(util.OnNilJustReturnInt(foodCategoryOutput.Tag, 0))
+	cal := r.calorieTool.FoodCalorie(util.OnNilJustReturnInt(foodCategoryOutput.Tag, 0))
 	//parser input
 	table := model.Table{}
 	table.Source = util.PointerInt(model.System)

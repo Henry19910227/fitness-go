@@ -1,5 +1,6 @@
 package food_calorie
 
 type Tool interface {
-	Calorie(tag int) int
+	FoodCalorie(tag int) int
+	TargetCalorie(tdee int, target int) float64
 }

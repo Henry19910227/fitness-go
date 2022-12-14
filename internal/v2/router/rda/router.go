@@ -13,5 +13,6 @@ import (
 func SetRoute(v2 *gin.RouterGroup) {
 	controller := rda.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
+	v2.POST("/calculate_rda", midd.Verify([]global.Role{global.UserRole}), controller.CalculateRDA)
 	v2.PUT("/rda", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateRDA)
 }

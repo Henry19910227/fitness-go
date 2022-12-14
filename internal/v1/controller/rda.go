@@ -25,7 +25,7 @@ func NewRDA(baseGroup *gin.RouterGroup, rdaService service.RDA, userMiddleware m
 }
 
 // CalculateRDA 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
-// @Summary 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
+// @Summary 飲食計算機獲取建議飲食攝取量 (API已過時，更新為 /v2/calculate_rda [POST])
 // @Description 飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)
 // @Tags Diet_v1
 // @Accept json

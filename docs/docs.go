@@ -565,7 +565,7 @@ var doc = `{
                 "tags": [
                     "Diet_v1"
                 ],
-                "summary": "飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)",
+                "summary": "飲食計算機獲取建議飲食攝取量 (API已過時，更新為 /v2/calculate_rda [POST])",
                 "parameters": [
                     {
                         "description": "輸入參數",
@@ -7971,6 +7971,51 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/body_record.APIGetBodyRecordsLatestOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/calculate_rda": {
+            "post": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "飲食_v2"
+                ],
+                "summary": "飲食計算機獲取建議飲食攝取量(Recommended Dietary Allowances)",
+                "parameters": [
+                    {
+                        "description": "輸入參數",
+                        "name": "json_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_calculate_rda.Body"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/api_calculate_rda.Output"
                         }
                     },
                     "400": {
@@ -17486,19 +17531,19 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -17569,19 +17614,19 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -17707,19 +17752,19 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -17727,7 +17772,7 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                                "description": "來源(0:未知/1:購買/2:贈送)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17819,9 +17864,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "favorite": {
                                 "description": "是否收藏(0:否/1:是)",
@@ -17829,14 +17874,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -17844,7 +17889,7 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                                "description": "來源(0:未知/1:購買/2:贈送)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -17905,19 +17950,19 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -17964,6 +18009,144 @@ var doc = `{
                 }
             }
         },
+        "api_calculate_rda.Body": {
+            "type": "object",
+            "required": [
+                "activity_level",
+                "birthday",
+                "diet_target",
+                "diet_type",
+                "exercise_feq_level",
+                "height",
+                "sex",
+                "weight"
+            ],
+            "properties": {
+                "activity_level": {
+                    "description": "活動量 (1:麻痺、昏迷、無法活動/2:臥床不動，僅手臂移動/3:幾乎坐著或躺著/4:大部分坐著，少許步行/5:久坐、辦公室性質工作/6:每週輕度步行3-4天/7:每週輕度步行5-7天/8:體力勞動工作性質/9:沉重的體力勞動工作性質/10:極重度的勞動或職業運動員)",
+                    "type": "integer",
+                    "example": 6
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string",
+                    "example": "1992-02-02"
+                },
+                "body_fat": {
+                    "description": "體脂肪率 (最大99)",
+                    "type": "integer",
+                    "example": 20
+                },
+                "diet_target": {
+                    "description": "飲食目標 (1:減脂/2:增肌/3:維持健康生活/4:提升體能與力量/5:哺乳者/6:懷孕者)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "diet_type": {
+                    "description": "飲食型態 (1:標準飲食/2:全素食/3:蛋奶素食/4:蛋素食/5:奶素食)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "exercise_feq_level": {
+                    "description": "運動頻率 (1:無運動/2:一週2-3次，一次30-45分鐘/3:一週3-5次，一次45-60分鐘/4:一週5次以上，一次60分鐘)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "height": {
+                    "description": "身高 (最大999)",
+                    "type": "number",
+                    "example": 178
+                },
+                "sex": {
+                    "description": "性別 (f:女/m:男)",
+                    "type": "string",
+                    "example": "m"
+                },
+                "weight": {
+                    "description": "體重 (最大999)",
+                    "type": "number",
+                    "example": 70
+                }
+            }
+        },
+        "api_calculate_rda.Data": {
+            "type": "object",
+            "properties": {
+                "calorie": {
+                    "description": "目標熱量",
+                    "type": "integer",
+                    "example": 2913
+                },
+                "carbs": {
+                    "description": "碳水化合物(克)",
+                    "type": "integer",
+                    "example": 437
+                },
+                "dairy": {
+                    "description": "乳製品類(份)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "fat": {
+                    "description": "脂肪(克)",
+                    "type": "integer",
+                    "example": 65
+                },
+                "fruit": {
+                    "description": "水果類(份)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "grain": {
+                    "description": "穀物類(份)",
+                    "type": "integer",
+                    "example": 25
+                },
+                "meat": {
+                    "description": "蛋豆魚肉類(份)",
+                    "type": "integer",
+                    "example": 12
+                },
+                "nut": {
+                    "description": "堅果類(份)",
+                    "type": "integer",
+                    "example": 5
+                },
+                "protein": {
+                    "description": "蛋白質(克)",
+                    "type": "integer",
+                    "example": 146
+                },
+                "tdee": {
+                    "description": "TDEE",
+                    "type": "integer",
+                    "example": 2533
+                },
+                "vegetable": {
+                    "description": "蔬菜類(份)",
+                    "type": "integer",
+                    "example": 5
+                }
+            }
+        },
+        "api_calculate_rda.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_calculate_rda.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "api_create_cms_banner.Data": {
             "type": "object",
             "properties": {
@@ -17978,7 +18161,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18265,7 +18448,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18368,7 +18551,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 }
@@ -18964,7 +19147,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -19255,7 +19438,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -19512,19 +19695,19 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -19532,7 +19715,7 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "來源(1:系統創建食物/2:用戶創建食物)",
+                                "description": "來源(0:未知/1:購買/2:贈送)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -19801,7 +19984,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -19960,7 +20143,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -19968,7 +20151,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -19978,9 +20161,9 @@ var doc = `{
                                 "example": 10.5
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "weight": {
                                 "description": "體重(公斤)",
@@ -20057,7 +20240,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -20430,9 +20613,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -21439,7 +21622,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -24651,7 +24834,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "圖片id",
+                                                "description": "餐食id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -28894,7 +29077,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -29022,7 +29205,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -30211,9 +30394,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -30446,9 +30629,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -30696,9 +30879,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -30904,9 +31087,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -33975,7 +34158,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 }
@@ -34018,7 +34201,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 }
@@ -34156,12 +34339,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -34222,12 +34405,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -34285,9 +34468,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "finish": {
                                 "description": "是否完成(0:未完成/1:已完成)",
@@ -34295,7 +34478,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -34343,12 +34526,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -34406,12 +34589,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -34671,7 +34854,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35092,7 +35275,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -35100,7 +35283,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35120,9 +35303,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -35248,7 +35431,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -35256,7 +35439,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35276,9 +35459,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -35401,7 +35584,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -35409,7 +35592,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35429,9 +35612,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -35554,7 +35737,7 @@ var doc = `{
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 2.5
+                                "example": 1
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -35562,7 +35745,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "圖片id",
+                                "description": "餐食id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35582,9 +35765,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -35697,7 +35880,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 2.5
+                    "example": 1
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -35705,7 +35888,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -35725,9 +35908,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -35850,7 +36033,7 @@ var doc = `{
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 2.5
+                    "example": 1
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -35858,7 +36041,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "圖片id",
+                    "description": "餐食id",
                     "type": "integer",
                     "example": 1
                 },
@@ -35878,9 +36061,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
