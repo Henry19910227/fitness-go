@@ -20,7 +20,7 @@ func NewFoodCategory(baseGroup *gin.RouterGroup, foodCategoryService service.Foo
 }
 
 // GetFoodCategories 獲取食物分類
-// @Summary 獲取食物分類
+// @Summary 獲取食物分類 (API已經過時，更新為  /v2/food_categories [GET])
 // @Description 獲取食物分類
 // @Tags Diet_v1
 // @Accept json

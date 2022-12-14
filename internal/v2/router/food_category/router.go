@@ -12,5 +12,6 @@ import (
 func SetRoute(v2 *gin.RouterGroup) {
 	controller := food_category.NewController(orm.Shared().DB())
 	midd := middleware.NewTokenMiddleware(redis.Shared())
+	v2.GET("/food_categories", midd.Verify([]global.Role{global.UserRole}), controller.GetFoodCategories)
 	v2.GET("/cms/food_categories", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSFoodCategories)
 }
