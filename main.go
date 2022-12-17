@@ -14,6 +14,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v1/repository"
 	"github.com/Henry19910227/fitness-go/internal/v1/service"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/action"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/android_version"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/bank_account"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/banner"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/banner_order"
@@ -261,6 +262,7 @@ func main() {
 	rda.SetRoute(v2)
 	diet.SetRoute(v2)
 	ios_version.SetRoute(v2)
+	android_version.SetRoute(v2)
 	scheduler.Shared().Cron().Start()
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }

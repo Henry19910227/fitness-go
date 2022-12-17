@@ -9,5 +9,5 @@ type Table struct {
 }
 
 func (Table) TableName() string {
-	return "versions"
+	return "ios_versions"
 }
