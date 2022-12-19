@@ -15,6 +15,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_statistics"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_user_course"
@@ -854,6 +855,37 @@ func (r *resolver) APIGetTrainerCourseStatistic(input *api_get_trainer_course_st
 	return output
 }
 
+func (r *resolver) APIGetTrainerCourseStatistics(input *api_get_trainer_course_statistics.Input) (output api_get_trainer_course_statistics.Output) {
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	listInput.CourseStatus = util.PointerInt(model.Sale)
+	listInput.Page = input.Query.Page
+	listInput.Size = input.Query.Size
+	listInput.OrderField = "create_at"
+	listInput.OrderType = order_by.ASC
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "courses.sale_type <> ?", Args: []interface{}{model.SaleTypePersonal}}, // not equal
+	}
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "CourseUsageStatistic"},
+	}
+	courseOutputs, page, err := r.courseService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parse output
+	data := api_get_trainer_course_statistics.Data{}
+	if err := util.Parser(courseOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = data
+	return output
+}
+
 func (r *resolver) APICreateTrainerSingleWorkoutCourse(tx *gorm.DB, input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput) {
 	defer tx.Rollback()
 	//創建單一訓練課表
@@ -1394,8 +1426,8 @@ func (r *resolver) APIGetStoreHomePage(input *model.APIGetStoreHomePageInput) (o
 	latestCourseListInput.CourseStatus = util.PointerInt(model.Sale)
 	latestCourseListInput.OrderField = "create_at"
 	latestCourseListInput.OrderType = order_by.DESC
-	latestCourseListInput.Page = 1
-	latestCourseListInput.Size = 5
+	latestCourseListInput.Page = util.PointerInt(1)
+	latestCourseListInput.Size = util.PointerInt(5)
 	latestCourseListInput.Preloads = []*preloadModel.Preload{
 		{Field: "Trainer"},
 		{Field: "SaleItem.ProductLabel"},
@@ -1409,8 +1441,8 @@ func (r *resolver) APIGetStoreHomePage(input *model.APIGetStoreHomePageInput) (o
 	// 查詢熱門課表列表
 	popularCourseListInput := model.ListInput{}
 	popularCourseListInput.CourseStatus = util.PointerInt(model.Sale)
-	popularCourseListInput.Page = 1
-	popularCourseListInput.Size = 5
+	popularCourseListInput.Page = util.PointerInt(1)
+	popularCourseListInput.Size = util.PointerInt(5)
 	popularCourseListInput.Joins = []*joinModel.Join{
 		{Query: "LEFT JOIN course_usage_statistics ON courses.id = course_usage_statistics.course_id"},
 	}

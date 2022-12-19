@@ -129,8 +129,12 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Select
 	db = db.Select("courses.*")
 	// Paging
-	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
+	if input.Page != nil && input.Size != nil {
+		db = db.Offset((*input.Page - 1) * *input.Size).Limit(*input.Size)
+	} else if input.Page != nil {
+		db = db.Offset(0)
+	} else if input.Size != nil {
+		db = db.Limit(*input.Size)
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {

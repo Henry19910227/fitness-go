@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_statistics"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_user_course"
@@ -37,6 +38,7 @@ type Resolver interface {
 	APIGetTrainerCourses(input *model.APIGetTrainerCoursesInput) (output model.APIGetTrainerCoursesOutput)
 	APIGetTrainerCourseOverview(input *api_get_trainer_course_overview.Input) (output api_get_trainer_course_overview.Output)
 	APIGetTrainerCourseStatistic(input *api_get_trainer_course_statistic.Input) (output api_get_trainer_course_statistic.Output)
+	APIGetTrainerCourseStatistics(input *api_get_trainer_course_statistics.Input) (output api_get_trainer_course_statistics.Output)
 	APICreateTrainerCourse(input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput)
 	APICreateTrainerSingleWorkoutCourse(tx *gorm.DB, input *model.APICreateTrainerCourseInput) (output model.APICreateTrainerCourseOutput)
 	APIGetTrainerCourse(input *api_get_trainer_course.Input) (output api_get_trainer_course.Output)

@@ -3,6 +3,7 @@ package course
 import (
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/required"
+	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
 	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
 	reviewOptional "github.com/Henry19910227/fitness-go/internal/v2/field/review/optional"
 	userRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
@@ -11,13 +12,15 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"mime/multipart"
 )
 
-type PagingInput = paging.Input
+type PagingInput = struct {
+	pagingOptional.PageField
+	pagingOptional.SizeField
+}
 type PreloadInput = preload.Input
 type WhereInput = where.Input
 type JoinInput = join.Input
