@@ -14364,6 +14364,49 @@ var doc = `{
                 }
             }
         },
+        "/v2/trainer/course/{course_id}/statistic": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練課表數據",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表數據_v2"
+                ],
+                "summary": "獲取教練課表數據",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "課表id",
+                        "name": "course_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success!",
+                        "schema": {
+                            "$ref": "#/definitions/api_get_trainer_course_statistic.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/trainer/course/{course_id}/submit": {
             "post": {
                 "security": [
@@ -17596,22 +17639,22 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -17624,9 +17667,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -17679,22 +17722,22 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -17707,9 +17750,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -17817,22 +17860,22 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -17850,9 +17893,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -17929,12 +17972,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "favorite": {
                                 "description": "是否收藏(0:否/1:是)",
@@ -17942,14 +17985,14 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -17967,9 +18010,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -18015,22 +18058,22 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "name": {
                     "description": "動作名稱",
@@ -18043,9 +18086,9 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -18226,10 +18269,10 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18239,9 +18282,9 @@ var doc = `{
                     "example": "1234.jpg"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -18513,12 +18556,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
-                    "description": "產品標籤id",
-                    "type": "integer",
-                    "example": 1
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "order_status": {
                     "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
@@ -18619,7 +18662,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 }
@@ -19271,7 +19314,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "銷售id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -19562,7 +19605,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -19816,22 +19859,22 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
                             "intro": {
-                                "description": "動作介紹(1~400字元)",
+                                "description": "課表介紹",
                                 "type": "string",
-                                "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                                "example": "增肌專用課表"
                             },
                             "name": {
                                 "description": "動作名稱",
@@ -19849,9 +19892,9 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -20104,11 +20147,189 @@ var doc = `{
                 }
             }
         },
+        "api_get_trainer_course_statistic.Data": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "course_status": {
+                    "description": "課表狀態 (1:準備中/2:審核中/3:銷售中/4:退審/5:下架)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "course_usage_statistic": {
+                    "type": "object",
+                    "properties": {
+                        "age_13_17_count": {
+                            "description": "13-17歲使用人數",
+                            "type": "integer",
+                            "example": 500
+                        },
+                        "age_18_24_count": {
+                            "description": "18-24歲使用人數",
+                            "type": "integer",
+                            "example": 100
+                        },
+                        "age_25_34_count": {
+                            "description": "25-34歲使用人數",
+                            "type": "integer",
+                            "example": 300
+                        },
+                        "age_35_44_count": {
+                            "description": "35-44歲使用人數",
+                            "type": "integer",
+                            "example": 200
+                        },
+                        "age_45_54_count": {
+                            "description": "45-54歲使用人數",
+                            "type": "integer",
+                            "example": 600
+                        },
+                        "age_55_64_count": {
+                            "description": "55-64歲使用人數",
+                            "type": "integer",
+                            "example": 700
+                        },
+                        "age_65_up_count": {
+                            "description": "65+歲使用人數",
+                            "type": "integer",
+                            "example": 550
+                        },
+                        "create_at": {
+                            "description": "創建時間",
+                            "type": "string",
+                            "example": "2022-06-14 00:00:00"
+                        },
+                        "female_finish_count": {
+                            "description": "女生使用人數",
+                            "type": "integer",
+                            "example": 1000
+                        },
+                        "finish_count_avg": {
+                            "description": "平均完成訓練次數(同一訓練不重複)",
+                            "type": "integer",
+                            "example": 25
+                        },
+                        "male_finish_count": {
+                            "description": "男生使用人數",
+                            "type": "integer",
+                            "example": 1000
+                        },
+                        "total_finish_workout_count": {
+                            "description": "歷史訓練總量(完成一次該課表的訓練，重複計算)",
+                            "type": "integer",
+                            "example": 5500
+                        },
+                        "update_at": {
+                            "description": "更新時間",
+                            "type": "string",
+                            "example": "2022-06-14 00:00:00"
+                        },
+                        "user_finish_count": {
+                            "description": "用戶使用人數(完成一次該課表的訓練，不重複計算)",
+                            "type": "integer",
+                            "example": 3000
+                        }
+                    }
+                },
+                "cover": {
+                    "description": "課表封面",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "id": {
+                    "description": "課表 id",
+                    "type": "integer",
+                    "example": 2
+                },
+                "level": {
+                    "description": "強度(1:初級/2:中級/3:中高級/4:高級)",
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "description": "課表名稱",
+                    "type": "string",
+                    "example": "增肌課表"
+                },
+                "plan_count": {
+                    "description": "計畫總數",
+                    "type": "integer",
+                    "example": 10
+                },
+                "review_statistic": {
+                    "type": "object",
+                    "properties": {
+                        "amount": {
+                            "description": "評分筆數",
+                            "type": "integer",
+                            "example": 10
+                        },
+                        "score_total": {
+                            "description": "評分累積",
+                            "type": "integer",
+                            "example": 100
+                        }
+                    }
+                },
+                "sale_id": {
+                    "description": "銷售 id",
+                    "type": "integer",
+                    "example": 3
+                },
+                "sale_type": {
+                    "description": "銷售類型(1:免費課表/2:訂閱課表/3:付費課表/4:個人課表)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "schedule_type": {
+                    "description": "排課類別(1:單一訓練/2:多項計畫)",
+                    "type": "integer",
+                    "example": 2
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "workout_count": {
+                    "description": "訓練總數",
+                    "type": "integer",
+                    "example": 50
+                }
+            }
+        },
+        "api_get_trainer_course_statistic.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_get_trainer_course_statistic.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "api_get_user_action_best_pr.Data": {
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -20262,7 +20483,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -20275,7 +20496,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20364,7 +20585,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -20737,9 +20958,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -20802,7 +21023,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -21670,7 +21891,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -21743,10 +21964,10 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21771,9 +21992,9 @@ var doc = `{
                                 }
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -29198,12 +29419,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
-                    "description": "產品標籤id",
-                    "type": "integer",
-                    "example": 1
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "order_course": {
                     "type": "object",
@@ -29326,12 +29547,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "id": {
-                                "description": "產品標籤id",
-                                "type": "integer",
-                                "example": 1
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "order_course": {
                                 "type": "object",
@@ -30518,9 +30739,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -30608,7 +30829,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -30753,9 +30974,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "is_deleted": {
                     "description": "是否刪除",
@@ -30848,7 +31069,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -30916,7 +31137,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "user_id": {
                                 "description": "用戶id",
@@ -31003,9 +31224,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -31093,7 +31314,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -31211,9 +31432,9 @@ var doc = `{
                     "example": "www.ig.com"
                 },
                 "intro": {
-                    "description": "動作介紹(1~400字元)",
+                    "description": "課表介紹",
                     "type": "string",
-                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                    "example": "增肌專用課表"
                 },
                 "motto": {
                     "description": "座右銘",
@@ -31301,7 +31522,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -34282,7 +34503,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 }
@@ -34325,7 +34546,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 }
@@ -34455,7 +34676,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -34463,12 +34684,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -34521,7 +34742,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -34529,12 +34750,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -34584,7 +34805,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -34592,9 +34813,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "finish": {
                                 "description": "是否完成(0:未完成/1:已完成)",
@@ -34602,7 +34823,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -34642,7 +34863,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "end_audio": {
                     "description": "結束語音",
@@ -34650,12 +34871,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -34705,7 +34926,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "end_audio": {
                     "description": "結束語音",
@@ -34713,12 +34934,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -34978,7 +35199,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35394,7 +35615,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -35407,9 +35628,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訓練組 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "incline": {
                                 "description": "坡度",
@@ -35437,9 +35658,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -35550,7 +35771,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -35563,9 +35784,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訓練組 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "incline": {
                                 "description": "坡度",
@@ -35593,9 +35814,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -35703,7 +35924,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -35716,9 +35937,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訓練組 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "incline": {
                                 "description": "坡度",
@@ -35746,9 +35967,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -35856,7 +36077,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
@@ -35869,9 +36090,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訓練組 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "incline": {
                                 "description": "坡度",
@@ -35899,9 +36120,9 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "銷售類型(1:免費課表/3:付費課表)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
-                                "example": 3
+                                "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
@@ -35999,7 +36220,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "distance": {
                     "description": "距離(公里)",
@@ -36012,9 +36233,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訓練組 id",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 },
                 "incline": {
                     "description": "坡度",
@@ -36042,9 +36263,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -36152,7 +36373,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "distance": {
                     "description": "距離(公里)",
@@ -36165,9 +36386,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訓練組 id",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 },
                 "incline": {
                     "description": "坡度",
@@ -36195,9 +36416,9 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "銷售類型(1:免費課表/3:付費課表)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",

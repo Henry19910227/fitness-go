@@ -14,6 +14,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_cms_courses_status"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_update_user_course"
@@ -815,6 +816,35 @@ func (r *resolver) APIGetTrainerCourseOverview(input *api_get_trainer_course_ove
 	}
 	// parser output
 	data := api_get_trainer_course_overview.Data{}
+	if err := util.Parser(courseOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetTrainerCourseStatistic(input *api_get_trainer_course_statistic.Input) (output api_get_trainer_course_statistic.Output) {
+	// 查詢資料
+	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.CourseID)
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "CourseUsageStatistic"},
+		{Field: "ReviewStatistic"},
+	}
+	courseOutput, err := r.courseService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證查詢權限
+	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
+		output.Set(code.BadRequest, "非該課表創建者，無法查看課表")
+		return output
+	}
+	// parser output
+	data := api_get_trainer_course_statistic.Data{}
 	if err := util.Parser(courseOutput, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output

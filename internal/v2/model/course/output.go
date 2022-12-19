@@ -12,6 +12,7 @@ import (
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course_usage_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/favorite_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/plan"
@@ -32,6 +33,7 @@ type Output struct {
 	UserCourseStatistic        *user_course_statistic.Output         `json:"user_course_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`         // 用戶課表統計
 	UserCourseAsset            *user_course_asset.Output             `json:"user_course_asset,omitempty" gorm:"foreignKey:course_id;references:id"`             // 課表購買紀錄
 	CourseTrainingAvgStatistic *course_training_avg_statistic.Output `json:"course_training_avg_statistic,omitempty" gorm:"foreignKey:course_id;references:id"` // 課表完成度統計
+	CourseUsageStatistic       *course_usage_statistic.Output        `json:"course_usage_statistic,omitempty" gorm:"foreignKey:course_id;references:id"`        // 課表使用率統計
 	FavoriteCourse             *favorite_course.Output               `json:"favorite_course,omitempty" gorm:"foreignKey:course_id;references:id"`               // 課表收藏
 	Plans                      []*plan.Output                        `json:"plans,omitempty" gorm:"foreignKey:course_id;references:id"`                         // 計畫
 }
@@ -52,6 +54,13 @@ func (o Output) UserCourseAssetOnSafe() user_course_asset.Output {
 		return *o.UserCourseAsset
 	}
 	return user_course_asset.Output{}
+}
+
+func (o Output) CourseUsageStatisticOnSafe() course_usage_statistic.Output {
+	if o.CourseUsageStatistic != nil {
+		return *o.CourseUsageStatistic
+	}
+	return course_usage_statistic.Output{}
 }
 
 func (o Output) FavoriteCourseOnSafe() favorite_course.Output {
