@@ -28,7 +28,7 @@ func NewCourseStatistic(baseGroup *gin.RouterGroup, courseService service.Course
 }
 
 // GetCourseStatistics 獲取個人課表數據統計列表
-// @Summary 獲取個人課表數據統計列表
+// @Summary 獲取個人課表數據統計列表 (API已過時，更新為 /v2/trainer/course/statistics [GET])
 // @Description 獲取個人課表數據統計列表
 // @Tags Statistic_v1
 // @Accept json
@@ -62,7 +62,7 @@ func (a *CourseStatistic) GetCourseStatistics(c *gin.Context) {
 }
 
 // GetCourseStatistic 獲取個人課表數據詳細
-// @Summary 獲取個人課表數據詳細
+// @Summary 獲取個人課表數據詳細 (API已過時，更新為 /v2/trainer/course/{course_id}/statistic [GET])
 // @Description 獲取個人課表數據詳細
 // @Tags Statistic_v1
 // @Accept json

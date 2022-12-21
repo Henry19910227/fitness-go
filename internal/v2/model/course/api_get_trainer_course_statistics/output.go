@@ -8,7 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 )
 
-// Output /v2/trainer/course/{course_id}/statistics [GET]
+// Output /v2/trainer/course/statistics [GET]
 type Output struct {
 	base.Output
 	Data   Data           `json:"data,omitempty"`

@@ -25,7 +25,7 @@ func NewStatistic(baseGroup *gin.RouterGroup, incomeStatisticService service.Use
 }
 
 // GetIncomeMonthlyStatistic 取得當月收益分析
-// @Summary 取得當月收益分析
+// @Summary 取得當月收益分析 (API已過時，更新為 /v2/trainer/income_monthly_statistic [GET])
 // @Description 取得當月收益分析
 // @Tags Statistic_v1
 // @Accept json
@@ -49,7 +49,7 @@ func (s *Statistic) GetIncomeMonthlyStatistic(c *gin.Context) {
 }
 
 // GetCourseUsageMonthlyStatistic 取得當月課表使用人數分析
-// @Summary 取得當月課表使用人數分析
+// @Summary 取得當月課表使用人數分析 (API已過時，更新為 /v2/trainer/course/usage_monthly_statistic [GET])
 // @Description 取得當月課表使用人數分析
 // @Tags Statistic_v1
 // @Accept json

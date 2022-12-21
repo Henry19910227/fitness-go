@@ -2848,7 +2848,7 @@ var doc = `{
                 "tags": [
                     "Statistic_v1"
                 ],
-                "summary": "獲取個人課表數據詳細",
+                "summary": "獲取個人課表數據詳細 (API已過時，更新為 /v2/trainer/course/{course_id}/statistic [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2903,7 +2903,7 @@ var doc = `{
                 "tags": [
                     "Statistic_v1"
                 ],
-                "summary": "獲取個人課表數據統計列表",
+                "summary": "獲取個人課表數據統計列表 (API已過時，更新為 /v2/trainer/course/statistics [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2968,7 +2968,7 @@ var doc = `{
                 "tags": [
                     "Statistic_v1"
                 ],
-                "summary": "取得當月課表使用人數分析",
+                "summary": "取得當月課表使用人數分析 (API已過時，更新為 /v2/trainer/course/usage_monthly_statistic [GET])",
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -3783,7 +3783,7 @@ var doc = `{
                 "tags": [
                     "Statistic_v1"
                 ],
-                "summary": "取得當月收益分析",
+                "summary": "取得當月收益分析 (API已過時，更新為 /v2/trainer/income_monthly_statistic [GET])",
                 "responses": {
                     "200": {
                         "description": "成功!",
@@ -13889,7 +13889,7 @@ var doc = `{
                         "fitness_token": []
                     }
                 ],
-                "description": "獲取教練課表用戶使用率月數據",
+                "description": "獲取教練課表類別使用人數月數據",
                 "consumes": [
                     "application/json"
                 ],
@@ -13899,16 +13899,7 @@ var doc = `{
                 "tags": [
                     "教練課表數據_v2"
                 ],
-                "summary": "獲取教練課表用戶使用率月數據",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "課表id",
-                        "name": "course_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "獲取教練課表類別使用人數月數據",
                 "responses": {
                     "200": {
                         "description": "Success!",
@@ -14588,6 +14579,40 @@ var doc = `{
                         "description": "成功!",
                         "schema": {
                             "$ref": "#/definitions/course.APIGetTrainerCoursesOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/trainer/income_monthly_statistic": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練收益月數據",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "教練課表數據_v2"
+                ],
+                "summary": "獲取教練收益月數據",
+                "responses": {
+                    "200": {
+                        "description": "Success!",
+                        "schema": {
+                            "$ref": "#/definitions/api_get_trainer_income_monthly_statistic.Output"
                         }
                     },
                     "400": {
@@ -17740,7 +17765,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17823,7 +17848,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17961,7 +17986,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18078,7 +18103,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18159,7 +18184,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18365,7 +18390,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18652,9 +18677,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "報表id",
-                    "type": "integer",
-                    "example": 1
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "order_status": {
                     "description": "訂單狀態(1:等待付款/2:已付款/3:錯誤/4:取消)",
@@ -18755,7 +18780,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "報表id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 }
@@ -19407,7 +19432,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "報表id",
+                                "description": "銷售id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -19698,7 +19723,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "報表id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -19960,7 +19985,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "動作id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20542,12 +20567,8 @@ var doc = `{
             "type": "object",
             "required": [
                 "charge_usage_count",
-                "create_at",
                 "free_usage_count",
-                "month",
-                "subscribe_usage_count",
-                "update_at",
-                "year"
+                "subscribe_usage_count"
             ],
             "properties": {
                 "charge_usage_count": {
@@ -20578,7 +20599,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -20605,11 +20626,62 @@ var doc = `{
                 }
             }
         },
+        "api_get_trainer_income_monthly_statistic.Data": {
+            "type": "object",
+            "required": [
+                "income"
+            ],
+            "properties": {
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "income": {
+                    "description": "收益",
+                    "type": "integer",
+                    "example": 12000
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer",
+                    "example": 5
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer",
+                    "example": 2022
+                }
+            }
+        },
+        "api_get_trainer_income_monthly_statistic.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_get_trainer_income_monthly_statistic.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "api_get_user_action_best_pr.Data": {
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "報表id",
+                    "description": "動作id",
                     "type": "integer",
                     "example": 1
                 },
@@ -20776,7 +20848,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20786,9 +20858,9 @@ var doc = `{
                                 "example": 10.5
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "weight": {
                                 "description": "體重(公斤)",
@@ -20857,7 +20929,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -20865,7 +20937,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -21215,7 +21287,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -21303,7 +21375,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -22247,7 +22319,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -25459,7 +25531,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "報表id",
+                                                "description": "產品標籤id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -29702,9 +29774,9 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "報表id",
-                    "type": "integer",
-                    "example": 1
+                    "description": "訂單id",
+                    "type": "string",
+                    "example": "202105201300687423"
                 },
                 "order_course": {
                     "type": "object",
@@ -29830,9 +29902,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "報表id",
-                                "type": "integer",
-                                "example": 1
+                                "description": "訂單id",
+                                "type": "string",
+                                "example": "202105201300687423"
                             },
                             "order_course": {
                                 "type": "object",
@@ -30996,7 +31068,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -31109,7 +31181,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -31231,7 +31303,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -31349,7 +31421,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -31402,7 +31474,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "nickname": {
                                 "description": "教練暱稱",
@@ -31417,7 +31489,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "user_id": {
                                 "description": "用戶id",
@@ -31481,7 +31553,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -31594,7 +31666,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -31689,7 +31761,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
@@ -31802,7 +31874,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -34783,7 +34855,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "報表id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 }
@@ -34826,7 +34898,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "報表id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 }
@@ -34969,7 +35041,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35035,7 +35107,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35103,7 +35175,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35156,7 +35228,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -35219,7 +35291,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -35471,7 +35543,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -35479,7 +35551,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35908,9 +35980,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "訓練組 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "incline": {
                                 "description": "坡度",
@@ -35928,9 +36000,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -36064,9 +36136,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "訓練組 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "incline": {
                                 "description": "坡度",
@@ -36084,9 +36156,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -36217,9 +36289,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "訓練組 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "incline": {
                                 "description": "坡度",
@@ -36237,9 +36309,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -36370,9 +36442,9 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "報表id",
+                                "description": "訓練組 id",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "incline": {
                                 "description": "坡度",
@@ -36390,9 +36462,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數",
+                                "description": "次數id",
                                 "type": "integer",
-                                "example": 2
+                                "example": 1
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -36513,9 +36585,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "訓練組 id",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 },
                 "incline": {
                     "description": "坡度",
@@ -36533,9 +36605,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -36666,9 +36738,9 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "報表id",
+                    "description": "訓練組 id",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 },
                 "incline": {
                     "description": "坡度",
@@ -36686,9 +36758,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數",
+                    "description": "次數id",
                     "type": "integer",
-                    "example": 2
+                    "example": 1
                 },
                 "start_audio": {
                     "description": "前導語音",
