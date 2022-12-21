@@ -355,10 +355,10 @@ func (r *resolver) APIGetUserActions(input *model.APIGetUserActionsInput) (outpu
 	if len(categoryList) > 0 {
 		wheres = append(wheres, &whereModel.Where{Query: "actions.category IN (?)", Args: []interface{}{categoryList}})
 	}
-	if len(bodyList) > 0 {
+	if len(equipmentList) > 0 {
 		wheres = append(wheres, &whereModel.Where{Query: "actions.equipment IN (?)", Args: []interface{}{equipmentList}})
 	}
-	if len(equipmentList) > 0 {
+	if len(bodyList) > 0 {
 		wheres = append(wheres, &whereModel.Where{Query: "actions.body IN (?)", Args: []interface{}{bodyList}})
 	}
 	// 查詢動作
