@@ -7,6 +7,8 @@ import (
 
 type Repository interface {
 	WithTrx(tx *gorm.DB) Repository
-	CreateOrUpdate(item *model.Table) (id *int64, err error)
+	Find(input *model.FindInput) (output *model.Output, err error)
+	List(input *model.ListInput) (outputs []*model.Output, amount int64, err error)
+	Create(item *model.Table) (id int64, err error)
+	Update(item *model.Table) (err error)
 }
-
