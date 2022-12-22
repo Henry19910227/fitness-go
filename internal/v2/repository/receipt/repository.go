@@ -2,10 +2,8 @@ package receipt
 
 import (
 	"fmt"
-	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type repository struct {
@@ -18,6 +16,49 @@ func New(db *gorm.DB) Repository {
 
 func (r *repository) WithTrx(tx *gorm.DB) Repository {
 	return New(tx)
+}
+
+func (r *repository) Find(input *model.FindInput) (output *model.Output, err error) {
+	db := r.db.Model(&model.Output{})
+	// Join
+	if len(input.Joins) > 0 {
+		for _, join := range input.Joins {
+			db = db.Joins(join.Query, join.Args...)
+		}
+	}
+	//加入 id 篩選條件
+	if input.ID != nil {
+		db = db.Where("receipts.id = ?", *input.ID)
+	}
+	//加入 order_id 篩選條件
+	if input.OrderID != nil {
+		db = db.Where("receipts.order_id = ?", *input.OrderID)
+	}
+	//加入 original_transaction_id 篩選條件
+	if input.OriginalTransactionID != nil {
+		db = db.Where("receipts.original_transaction_id = ?", *input.OriginalTransactionID)
+	}
+	//加入 transaction_id 篩選條件
+	if input.TransactionID != nil {
+		db = db.Where("receipts.transaction_id = ?", *input.TransactionID)
+	}
+	// Custom Where
+	if len(input.Wheres) > 0 {
+		for _, where := range input.Wheres {
+			db = db.Where(where.Query, where.Args...)
+		}
+	}
+	//Preload
+	if len(input.Preloads) > 0 {
+		for _, preload := range input.Preloads {
+			db = db.Preload(preload.Field, preload.Conditions...)
+		}
+	}
+	// Select
+	db = db.Select("receipts.*")
+	//查詢數據
+	err = db.First(&output).Error
+	return output, err
 }
 
 func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amount int64, err error) {
@@ -61,8 +102,12 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Select
 	db = db.Select("receipts.*")
 	// Paging
-	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
+	if input.Page != nil && input.Size != nil {
+		db = db.Offset((*input.Page - 1) * *input.Size).Limit(*input.Size)
+	} else if input.Page != nil {
+		db = db.Offset(0)
+	} else if input.Size != nil {
+		db = db.Limit(*input.Size)
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
@@ -79,17 +124,15 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	return outputs, amount, err
 }
 
-func (r *repository) CreateOrUpdate(item *model.Table) (id *int64, err error) {
-	values := make([]string, 0)
-	if len(util.OnNilJustReturnString(item.ReceiptToken, "")) > 0 {
-		values = append(values, "receipt_token")
-	}
-	err = r.db.Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "order_id"}, {Name: "original_transaction_id"}, {Name: "transaction_id"}},
-		DoUpdates: clause.AssignmentColumns(values),
-	}).Create(&item).Error
+func (r *repository) Create(item *model.Table) (id int64, err error) {
+	err = r.db.Model(&model.Table{}).Create(&item).Error
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return item.ID, err
+	return *item.ID, err
+}
+
+func (r *repository) Update(item *model.Table) (err error) {
+	err = r.db.Model(&model.Table{}).Where("id = ?", *item.ID).Save(item).Error
+	return err
 }

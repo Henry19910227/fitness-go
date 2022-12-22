@@ -53,7 +53,6 @@ func TestRepository_List(t *testing.T) {
 	repo := New(orm.Mock().DB())
 	input := food.ListInput{}
 	input.UserID = users[0].ID
-	input.Tag = util.PointerInt(1)
 	input.Preloads = []*preload.Preload{{Field: "FoodCategory"}}
 	input.Page = util.PointerInt(3)
 	input.Size = util.PointerInt(2)

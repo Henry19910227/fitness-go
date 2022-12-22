@@ -9,5 +9,7 @@ import (
 type Service interface {
 	Tx(tx *gorm.DB) Service
 	List(input *model.ListInput) (outputs []*model.Output, page *paging.Output, err error)
+	Create(item *model.Table) (id int64, err error)
+	Update(item *model.Table) (err error)
 	CreateOrUpdate(item *model.Table) (id *int64, err error)
 }

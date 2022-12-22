@@ -1213,8 +1213,8 @@ func (r *resolver) updateUserSubscribeInfoForIAP(subscribeInfo *subscribeInfoMod
 	receiptListInput := receiptModel.ListInput{}
 	receiptListInput.OrderID = subscribeInfo.OrderID
 	receiptListInput.PaymentType = util.PointerInt(receiptModel.IAP)
-	receiptListInput.Page = 1
-	receiptListInput.Size = 1
+	receiptListInput.Page = util.PointerInt(1)
+	receiptListInput.Size = util.PointerInt(1)
 	receiptListInput.OrderType = orderBy.DESC
 	receiptListInput.OrderField = "create_at"
 	receiptOutputs, _, err := r.receiptService.List(&receiptListInput)
@@ -1262,8 +1262,8 @@ func (r *resolver) updateUserSubscribeInfoForIAB(subscribeInfo *subscribeInfoMod
 	}
 	receiptListInput.OrderID = subscribeInfo.OrderID
 	receiptListInput.PaymentType = util.PointerInt(receiptModel.IAB)
-	receiptListInput.Page = 1
-	receiptListInput.Size = 1
+	receiptListInput.Page = util.PointerInt(1)
+	receiptListInput.Size = util.PointerInt(1)
 	receiptListInput.OrderType = orderBy.DESC
 	receiptListInput.OrderField = "create_at"
 	receiptOutputs, _, err := r.receiptService.List(&receiptListInput)
