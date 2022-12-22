@@ -333,8 +333,8 @@ func (r *resolver) APICreateUserCourse(input *model.APICreateUserCourseInput) (o
 	// 2. 檢查目前是否已訂閱
 	subscribeListInput := subscribeInfoModel.ListInput{}
 	subscribeListInput.UserID = util.PointerInt64(input.UserID)
-	subscribeListInput.Page = 1
-	subscribeListInput.Size = 1
+	subscribeListInput.Page = util.PointerInt(1)
+	subscribeListInput.Size = util.PointerInt(1)
 	subscribeListOutput, _, err := r.subscribeInfoService.List(&subscribeListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -1528,8 +1528,8 @@ func (r *resolver) getAllowAccessStatus(userID int64, courseOutput *model.Output
 	if util.OnNilJustReturnInt(courseOutput.SaleType, 0) == model.SaleTypeSubscribe {
 		infoList := subscribeInfoModel.ListInput{}
 		infoList.UserID = util.PointerInt64(userID)
-		infoList.Page = 1
-		infoList.Size = 1
+		infoList.Page = util.PointerInt(1)
+		infoList.Size = util.PointerInt(1)
 		infoList.OrderType = order_by.DESC
 		infoList.OrderField = "update_at"
 		infoOutputs, _, err := r.subscribeInfoService.List(&infoList)

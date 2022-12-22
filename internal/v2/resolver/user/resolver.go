@@ -1170,8 +1170,8 @@ func (r *resolver) updateUserSubscribeInfo(userID int64) error {
 	//查詢該用戶訂閱資訊
 	subscribeInfoList := subscribeInfoModel.ListInput{}
 	subscribeInfoList.UserID = util.PointerInt64(userID)
-	subscribeInfoList.Page = 1
-	subscribeInfoList.Size = 1
+	subscribeInfoList.Page = util.PointerInt(1)
+	subscribeInfoList.Size = util.PointerInt(1)
 	subscribeInfoList.OrderType = orderBy.DESC
 	subscribeInfoList.OrderField = "update_at"
 	infoOutputs, _, err := r.subscribeInfoService.List(&subscribeInfoList)

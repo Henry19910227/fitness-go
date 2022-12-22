@@ -201,8 +201,8 @@ func (r *resolver) APICreateSubscribeOrder(tx *gorm.DB, input *api_create_subscr
 	// 檢查目前是否已訂閱
 	subscribeListInput := subscribeInfoModel.ListInput{}
 	subscribeListInput.UserID = util.PointerInt64(input.UserID)
-	subscribeListInput.Page = 1
-	subscribeListInput.Size = 1
+	subscribeListInput.Page = util.PointerInt(1)
+	subscribeListInput.Size = util.PointerInt(1)
 	subscribeListOutput, _, err := r.subscribeInfoService.List(&subscribeListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -689,8 +689,8 @@ func (r *resolver) APIAppStoreNotification(ctx *gin.Context, tx *gorm.DB, input 
 	// 查詢當前綁定 OriginalTransactionId 的用戶
 	subscribeInfoListInput := subscribeInfoModel.ListInput{}
 	subscribeInfoListInput.OriginalTransactionID = util.PointerString(response.Data.SignedTransactionInfo.OriginalTransactionId)
-	subscribeInfoListInput.Size = 1
-	subscribeInfoListInput.Page = 1
+	subscribeInfoListInput.Size = util.PointerInt(1)
+	subscribeInfoListInput.Page = util.PointerInt(1)
 	subscribeInfoListInput.OrderField = "update_at"
 	subscribeInfoListInput.OrderType = order_by.DESC
 	subscribeInfoOutputs, _, err := r.subscribeInfoService.List(&subscribeInfoListInput)
@@ -854,8 +854,8 @@ func (r *resolver) APIGooglePlayNotification(ctx *gin.Context, tx *gorm.DB, inpu
 	// 查詢當前綁定 OriginalTransactionId 的用戶
 	subscribeInfoListInput := subscribeInfoModel.ListInput{}
 	subscribeInfoListInput.OriginalTransactionID = util.PointerString(originalTransactionID)
-	subscribeInfoListInput.Size = 1
-	subscribeInfoListInput.Page = 1
+	subscribeInfoListInput.Size = util.PointerInt(1)
+	subscribeInfoListInput.Page = util.PointerInt(1)
 	subscribeInfoListInput.OrderField = "update_at"
 	subscribeInfoListInput.OrderType = order_by.DESC
 	subscribeInfoOutputs, _, err := r.subscribeInfoService.List(&subscribeInfoListInput)

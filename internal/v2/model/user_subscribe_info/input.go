@@ -1,18 +1,21 @@
 package user_subscribe_info
 
 import (
+	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
 	userSubscribeInfoOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user_subscribe_info/optional"
 	userSubscribeInfoRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user_subscribe_info/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/group"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/select_field"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 )
 
-type PagingInput = paging.Input
+type PagingInput = struct {
+	pagingOptional.PageField
+	pagingOptional.SizeField
+}
 type PreloadInput = preload.Input
 type WhereInput = where.Input
 type JoinInput = join.Input
