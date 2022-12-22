@@ -68,8 +68,10 @@ func (r *resolver) APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUs
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	if util.OnNilJustReturnInt64(courseOutput.UserID, 0) != input.UserID {
-		output.Set(code.BadRequest, "非課表擁有者，無法創建資源")
+	saleType := util.OnNilJustReturnInt(courseOutput.SaleType, 0)
+	ownerID := util.OnNilJustReturnInt64(courseOutput.UserID, 0)
+	if saleType == courseModel.SaleTypePersonal && ownerID != input.UserID {
+		output.Set(code.BadRequest, "個人課表類型，非課表擁有者，無法創建資源")
 		return output
 	}
 	// 驗證添加的訓練組ID是否合法
