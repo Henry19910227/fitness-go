@@ -21,13 +21,11 @@ func New(resolver ios_version.Resolver) Controller {
 // @Tags 版本管理_v2
 // @Accept json
 // @Produce json
-// @Security fitness_token
 // @Success 200 {object} api_get_ios_version.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/ios_version [GET]
 func (c *controller) GetIOSVersion(ctx *gin.Context) {
 	input := api_get_ios_version.Input{}
-	input.UserID = ctx.MustGet("uid").(int64)
 	output := c.resolver.APIGetIOSVersion(&input)
 	ctx.JSON(http.StatusOK, output)
 }
