@@ -26,8 +26,8 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       name:
         description: 動作名稱
@@ -38,7 +38,7 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
@@ -90,8 +90,8 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       name:
         description: 動作名稱
@@ -102,7 +102,7 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
@@ -194,8 +194,8 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 課表介紹
-              example: 增肌專用課表
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
               description: 動作名稱
@@ -210,7 +210,7 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
@@ -283,8 +283,8 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 課表介紹
-              example: 增肌專用課表
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
               description: 動作名稱
@@ -299,7 +299,7 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
@@ -346,8 +346,8 @@ definitions:
         example: 1
         type: integer
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       name:
         description: 動作名稱
@@ -358,7 +358,7 @@ definitions:
         example: 1
         type: integer
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
@@ -510,7 +510,7 @@ definitions:
         example: 1234.jpg
         type: string
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
@@ -1706,8 +1706,8 @@ definitions:
               example: 1
               type: integer
             intro:
-              description: 課表介紹
-              example: 增肌專用課表
+              description: 個人介紹
+              example: Henry教練
               type: string
             name:
               description: 動作名稱
@@ -1722,7 +1722,7 @@ definitions:
               example: 1
               type: integer
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
@@ -2370,8 +2370,8 @@ definitions:
               example: 10.5
               type: number
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             weight:
               description: 體重(公斤)
@@ -2711,8 +2711,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
@@ -3494,7 +3494,7 @@ definitions:
                   type: integer
               type: object
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
@@ -10117,8 +10117,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
@@ -10296,8 +10296,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       is_deleted:
         description: 是否刪除
@@ -10487,8 +10487,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
@@ -10646,8 +10646,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 課表介紹
-        example: 增肌專用課表
+        description: 個人介紹
+        example: Henry教練
         type: string
       motto:
         description: 座右銘
@@ -13825,15 +13825,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
@@ -13946,15 +13946,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
@@ -14065,15 +14065,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
@@ -14184,15 +14184,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數id
-              example: 1
+              description: 次數
+              example: 2
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 動作類別(1:動作/2:休息)
               example: 1
               type: integer
             update_at:
@@ -14296,15 +14296,15 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數id
-        example: 1
+        description: 次數
+        example: 2
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
@@ -14415,15 +14415,15 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數id
-        example: 1
+        description: 次數
+        example: 2
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 動作類別(1:動作/2:休息)
         example: 1
         type: integer
       update_at:
@@ -19011,8 +19011,6 @@ paths:
           description: 失敗!
           schema:
             $ref: '#/definitions/base.Output'
-      security:
-      - fitness_token: []
       summary: 獲取 android 版本號
       tags:
       - 版本管理_v2
@@ -21473,8 +21471,6 @@ paths:
           description: 失敗!
           schema:
             $ref: '#/definitions/base.Output'
-      security:
-      - fitness_token: []
       summary: 獲取 ios 版本號
       tags:
       - 版本管理_v2

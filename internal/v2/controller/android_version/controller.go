@@ -21,13 +21,11 @@ func New(resolver android_version.Resolver) Controller {
 // @Tags 版本管理_v2
 // @Accept json
 // @Produce json
-// @Security fitness_token
 // @Success 200 {object} api_get_android_version.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/android_version [GET]
 func (c *controller) GetAndroidVersion(ctx *gin.Context) {
 	input := api_get_android_version.Input{}
-	input.UserID = ctx.MustGet("uid").(int64)
 	output := c.resolver.APIGetAndroidVersion(&input)
 	ctx.JSON(http.StatusOK, output)
 }
