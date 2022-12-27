@@ -167,5 +167,5 @@ Swagger:
       BasePath: /api
     Release:
       Protocol: https
-      Host: www.fitopia-hub.tk
+      Host: www.fitopia-hub.life
       BasePath: /api
