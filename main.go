@@ -26,6 +26,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course_release_monthly_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course_training_avg_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/course_training_monthly_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/course_usage_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/diet"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/favorite_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/favorite_course"
@@ -218,7 +219,7 @@ func main() {
 	controller.NewScheduler(schedulerTool, courseUsageStatisticService, userCourseUsageMonthlyStatisticService, userIncomeMonthlyStatisticService)
 	controller.NewSwagger(router, swagService)
 	controller.NewHealthy(router)
-	schedulerTool.Start()
+	//schedulerTool.Start()
 
 	// v2
 	v2 := baseGroup.Group("/v2")
@@ -255,6 +256,7 @@ func main() {
 	course_training_monthly_statistic.SetRoute(v2)
 	course_category_training_monthly_statistic.SetRoute(v2)
 	course_training_avg_statistic.SetRoute(v2)
+	course_usage_statistic.SetRoute(v2)
 	favorite_action.SetRoute(v2)
 	favorite_course.SetRoute(v2)
 	favorite_trainer.SetRoute(v2)

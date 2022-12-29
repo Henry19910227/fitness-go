@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/Henry19910227/fitness-go/internal/v1/service"
 	"github.com/robfig/cron/v3"
+	"time"
 )
 
 type Scheduler struct {
@@ -25,8 +27,8 @@ func NewScheduler(schedulerTool *cron.Cron,
 }
 
 func (s *Scheduler) MinuteTask() {
-	//fmt.Println(time.Now().Format("2006-01-02 15:04:05") + " 執行每分鐘輪詢任務")
-	//s.courseUsageStatisticService.Update()
-	//s.userCourseUsageMonthlyStatisticService.Update()
-	//s.userIncomeMonthlyStatisticService.Update()
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05") + " 執行每分鐘輪詢任務")
+	s.courseUsageStatisticService.Update()
+	s.userCourseUsageMonthlyStatisticService.Update()
+	s.userIncomeMonthlyStatisticService.Update()
 }
