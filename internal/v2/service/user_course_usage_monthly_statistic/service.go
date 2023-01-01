@@ -34,3 +34,8 @@ func (s *service) List(input *model.ListInput) (output []*model.Output, page *pa
 	}
 	return output, page, err
 }
+
+func (s *service) Statistic() (err error) {
+	err = s.repository.Statistic()
+	return err
+}

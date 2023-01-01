@@ -58,3 +58,7 @@ func (r *resolver) APIGetTrainerCourseUsageMonthlyStatistic(input *api_get_train
 	output.Data = &data
 	return output
 }
+
+func (r *resolver) Statistic() {
+	_ = r.statisticService.Statistic()
+}

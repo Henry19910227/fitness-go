@@ -4,6 +4,7 @@ import (
 	"fmt"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_course_usage_monthly_statistic"
 	"gorm.io/gorm"
+	"time"
 )
 
 type repository struct {
@@ -106,4 +107,105 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	//查詢數據
 	err = db.Find(&outputs).Error
 	return outputs, amount, err
+}
+
+// Statistic https://kind-bass-788.notion.site/user_course_usage_monthly_statistic-ce495e1933c3483faef17f5fa8c3d2e8
+func (r *repository) Statistic() (err error) {
+	timeStr := time.Now().Format("2006-01-02 15:04:05")
+	err = r.db.Exec("INSERT INTO user_course_usage_monthly_statistics " +
+		"( " +
+		"user_id, " +
+		"free_usage_count, " +
+		"subscribe_usage_count, " +
+		"charge_usage_count, " +
+		"year, " +
+		"month " +
+		") " +
+		"SELECT " +
+		"IFNULL(base.user_id, 0) AS user_id, " +
+		"IFNULL(a.free_usage_count, 0) AS free_usage_count, " +
+		"IFNULL(b.subscribe_usage_count, 0) AS subscribe_usage_count, " +
+		"IFNULL(c.charge_usage_count, 0) AS charge_usage_count, " +
+		"IFNULL(base.year, 0) AS year, " +
+		"IFNULL(base.month, 0) AS month " +
+		"FROM " +
+		"( " + tableBase() + " ) AS base " +
+		"LEFT JOIN " +
+		"( " + tableA() + " ) AS a ON base.user_id = a.user_id " +
+		"LEFT JOIN " +
+		"( " + tableB() +" ) AS b on base.user_id = b.user_id " +
+		"LEFT JOIN " +
+		"( " + tableC() + " ) AS c on base.user_id = c.user_id " +
+		"ON DUPLICATE KEY UPDATE " +
+		"free_usage_count = IFNULL(a.free_usage_count, 0), " +
+		"subscribe_usage_count = IFNULL(b.subscribe_usage_count, 0), " +
+		"charge_usage_count = IFNULL(c.charge_usage_count, 0)", timeStr, timeStr, timeStr, timeStr, timeStr, timeStr).Error
+	return err
+}
+
+func tableBase() string {
+	t :=  "SELECT MAX(courses.user_id) AS trainer_id, courses.id AS course_id, workout_logs.user_id AS user_id " +
+		"FROM `courses` " +
+		"INNER JOIN plans ON courses.id = plans.course_id " +
+		"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+		"INNER JOIN workout_logs ON workouts.id = workout_logs.workout_id " +
+		"WHERE courses.sale_type != 4 " +
+		"AND DATE_FORMAT(workout_logs.create_at, '%Y-%m') = DATE_FORMAT(?, '%Y-%m') " +
+		"GROUP BY courses.id, workout_logs.user_id"
+	return "SELECT " +
+		"t.trainer_id AS user_id, " +
+		"COUNT(*) AS total_count, " +
+		"MAX(DATE_FORMAT(?, '%Y')) AS year, " +
+		"MAX(DATE_FORMAT(?, '%m')) AS month " +
+		"FROM " +
+		"( " + t + " ) AS t " +
+		"GROUP BY `t`.`trainer_id` "
+}
+
+func tableA() string {
+	t := "SELECT MAX(courses.user_id) AS trainer_id, courses.id AS course_id, workout_logs.user_id AS user_id " +
+		"FROM `courses` " +
+		"INNER JOIN plans ON courses.id = plans.course_id " +
+		"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+		"INNER JOIN workout_logs ON workouts.id = workout_logs.workout_id " +
+		"WHERE courses.sale_type = 1 " +
+		"AND DATE_FORMAT(workout_logs.create_at, '%Y-%m') = DATE_FORMAT(?, '%Y-%m') " +
+		"GROUP BY courses.id, workout_logs.user_id "
+	return "SELECT " +
+		"t.trainer_id AS user_id, " +
+		"COUNT(*) AS free_usage_count " +
+		"FROM ( " + t + " ) AS t " +
+		"GROUP BY `t`.`trainer_id` "
+}
+
+func tableB() string {
+	t := "SELECT MAX(courses.user_id) AS trainer_id, courses.id AS course_id, workout_logs.user_id AS user_id " +
+		"FROM `courses` " +
+		"INNER JOIN plans ON courses.id = plans.course_id " +
+		"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+		"INNER JOIN workout_logs ON workouts.id = workout_logs.workout_id " +
+		"WHERE courses.sale_type = 2 " +
+		"AND DATE_FORMAT(workout_logs.create_at, '%Y-%m') = DATE_FORMAT(?, '%Y-%m') " +
+		"GROUP BY courses.id, workout_logs.user_id "
+	return "SELECT " +
+		"t.trainer_id AS user_id, " +
+		"COUNT(*) AS subscribe_usage_count " +
+		"FROM ( " + t + " ) AS t " +
+		"GROUP BY `t`.`trainer_id` "
+}
+
+func tableC() string {
+	t := "SELECT MAX(courses.user_id) AS trainer_id, courses.id AS course_id, workout_logs.user_id AS user_id " +
+		"FROM `courses` " +
+		"INNER JOIN plans ON courses.id = plans.course_id " +
+		"INNER JOIN workouts ON plans.id = workouts.plan_id " +
+		"INNER JOIN workout_logs ON workouts.id = workout_logs.workout_id " +
+		"WHERE courses.sale_type = 3 " +
+		"AND DATE_FORMAT(workout_logs.create_at, '%Y-%m') = DATE_FORMAT(?, '%Y-%m') " +
+		"GROUP BY courses.id, workout_logs.user_id "
+	return "SELECT " +
+		"t.trainer_id AS user_id, " +
+		"COUNT(*) AS charge_usage_count " +
+		"FROM ( " + t + " ) AS t " +
+		"GROUP BY `t`.`trainer_id` "
 }
