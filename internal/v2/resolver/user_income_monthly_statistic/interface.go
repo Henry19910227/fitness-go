@@ -6,4 +6,5 @@ import (
 
 type Resolver interface {
 	APIGetTrainerIncomeMonthlyStatistic(input *api_get_trainer_income_monthly_statistic.Input) (output api_get_trainer_income_monthly_statistic.Output)
+	Statistic()
 }

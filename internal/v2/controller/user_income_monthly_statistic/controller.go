@@ -31,3 +31,7 @@ func (c *controller) GetTrainerIncomeMonthlyStatistic(ctx *gin.Context) {
 	output := c.resolver.APIGetTrainerIncomeMonthlyStatistic(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+func (c *controller) Statistic() {
+	c.resolver.Statistic()
+}

@@ -8,4 +8,5 @@ import (
 type Repository interface {
 	WithTrx(tx *gorm.DB) Repository
 	List(input *model.ListInput) (outputs []*model.Output, amount int64, err error)
+	Statistic() (err error)
 }

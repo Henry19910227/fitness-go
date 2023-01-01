@@ -58,3 +58,7 @@ func (r *resolver) APIGetTrainerIncomeMonthlyStatistic(input *api_get_trainer_in
 	output.Data = &data
 	return output
 }
+
+func (r *resolver) Statistic() {
+	_ = r.statisticService.Statistic()
+}

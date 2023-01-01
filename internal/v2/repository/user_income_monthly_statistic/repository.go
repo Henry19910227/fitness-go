@@ -4,6 +4,7 @@ import (
 	"fmt"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_income_monthly_statistic"
 	"gorm.io/gorm"
+	"time"
 )
 
 type repository struct {
@@ -76,3 +77,41 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	err = db.Find(&outputs).Error
 	return outputs, amount, err
 }
+
+// Statistic https://kind-bass-788.notion.site/user_income_monthly_statistic-067c3292ca294027aea1f73abcdd95e4
+func (r *repository) Statistic() (err error) {
+	timeStr := time.Now().Format("2006-01-02 15:04:05")
+	err = r.db.Exec("INSERT INTO user_income_monthly_statistics " +
+		"( " +
+		"user_id, " +
+		"income, " +
+		"year, " +
+		"month " +
+		") " +
+		"SELECT " +
+		"a.user_id AS user_id, " +
+		"a.income AS income, " +
+		"a.year AS year, " +
+		"a.month AS month " +
+		"FROM " +
+		"( " + tableA() + " ) AS a " +
+		"ON DUPLICATE KEY UPDATE " +
+		"income = a.income", timeStr).Error
+	return err
+}
+
+func tableA() string {
+	return 	"SELECT " +
+		"courses.user_id AS user_id, " +
+		"SUM(product_labels.twd) AS income, " +
+		"MAX(DATE_FORMAT(orders.create_at, '%Y')) AS `year`, " +
+		"MAX(DATE_FORMAT(orders.create_at, '%c')) AS `month` " +
+		"FROM orders " +
+		"INNER JOIN order_courses ON orders.id = order_courses.order_id " +
+		"INNER JOIN sale_items ON order_courses.sale_item_id = sale_items.id " +
+		"INNER JOIN product_labels ON sale_items.product_label_id = product_labels.id " +
+		"INNER JOIN courses ON order_courses.course_id = courses.id " +
+		"WHERE DATE_FORMAT(orders.create_at, '%Y-%m') = DATE_FORMAT(?, '%Y-%m') AND orders.order_status = 2 AND orders.order_type = 1 " +
+		"GROUP BY courses.user_id"
+}
+

@@ -15,5 +15,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.GET("/trainer/course/usage_monthly_statistic", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerCourseUsageMonthlyStatistic)
 
-	_, _ = scheduler.Shared().Cron().AddFunc("0 0 * * * *", controller.Statistic)
+	_, _ = scheduler.Shared().Cron().AddFunc("5 0 * * * *", controller.Statistic)
 }

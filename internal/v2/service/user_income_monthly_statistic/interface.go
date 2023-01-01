@@ -9,4 +9,5 @@ import (
 type Service interface {
 	Tx(tx *gorm.DB) Service
 	List(input *model.ListInput) (output []*model.Output, page *paging.Output, err error)
+	Statistic() (err error)
 }
