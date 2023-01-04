@@ -14,6 +14,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v1/repository"
 	"github.com/Henry19910227/fitness-go/internal/v1/service"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/action"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/admin"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/android_version"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/bank_account"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/banner"
@@ -223,6 +224,7 @@ func main() {
 
 	// v2
 	v2 := baseGroup.Group("/v2")
+	admin.SetRoute(v2)
 	course.SetRoute(v2)
 	plan.SetRoute(v2)
 	workout.SetRoute(v2)
