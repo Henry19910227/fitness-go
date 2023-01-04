@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/admin"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/admin/api_cms_login"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/admin/api_cms_logout"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/admin"
 	"gorm.io/gorm"
 	"strconv"
@@ -72,5 +73,15 @@ func (r *resolver) APICMSLogin(tx *gorm.DB, input *api_cms_login.Input) (output 
 	output.SetStatus(code.Success)
 	output.Data = &data
 	output.Token = util.PointerString(token)
+	return output
+}
+
+func (r *resolver) APICMSLogout(input *api_cms_logout.Input) (output api_cms_logout.Output) {
+	// 移除登入狀態
+	if err := r.redisTool.Del(jwt.AdminTokenPrefix + "." + strconv.Itoa(int(input.ID))); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
 	return output
 }

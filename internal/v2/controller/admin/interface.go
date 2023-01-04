@@ -4,4 +4,5 @@ import "github.com/gin-gonic/gin"
 
 type Controller interface {
 	CMSLogin(ctx *gin.Context)
+	CMSLogout(ctx *gin.Context)
 }

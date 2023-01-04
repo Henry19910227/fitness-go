@@ -3,6 +3,7 @@ package admin
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/admin/api_cms_login"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/admin/api_cms_logout"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/admin"
 	"github.com/gin-gonic/gin"
@@ -35,5 +36,22 @@ func (c *controller) CMSLogin(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APICMSLogin(ctx.MustGet("tx").(*gorm.DB), &input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// CMSLogout 管理者登出
+// @Summary 管理者登出
+// @Description 管理者登出
+// @Tags CMS登入_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Success 200 {object} api_cms_logout.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/logout [POST]
+func (c *controller) CMSLogout(ctx *gin.Context) {
+	input := api_cms_logout.Input{}
+	input.ID = ctx.MustGet("uid").(int64)
+	output := c.resolver.APICMSLogout(&input)
 	ctx.JSON(http.StatusOK, output)
 }

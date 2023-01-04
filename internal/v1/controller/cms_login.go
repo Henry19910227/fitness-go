@@ -23,7 +23,7 @@ func NewCMSLogin(baseGroup *gin.RouterGroup, loginService service.Login, userMid
 }
 
 // Login 管理者登入
-// @Summary 管理者登入
+// @Summary 管理者登入 (API已過時，更新為 /v2/cms/login [POST])
 // @Description 管理者登入
 // @Tags CMS/Login_v1
 // @Accept json
@@ -47,7 +47,7 @@ func (l *CMSLogin) Login(c *gin.Context) {
 }
 
 // Logout 管理者登出
-// @Summary 管理者登出
+// @Summary 管理者登出 (API已過時，更新為 /v2/cms/logout [POST])
 // @Description 管理者登出
 // @Tags CMS/Login_v1
 // @Accept json
