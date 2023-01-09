@@ -12,6 +12,7 @@ type Controller interface {
 	GetCMSCourse(ctx *gin.Context)
 	UpdateCMSCoursesStatus(ctx *gin.Context)
 	UpdateCMSCoursesCover(ctx *gin.Context)
+	GetCMSTrainerCourses(ctx *gin.Context)
 
 	CreateUserCourse(ctx *gin.Context)
 	GetUserCourses(ctx *gin.Context)

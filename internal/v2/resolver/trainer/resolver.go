@@ -544,9 +544,16 @@ func (r *resolver) APIGetCMSTrainers(input *api_get_cms_trainers.Input) (output 
 	listInput.UserID = input.Query.UserID
 	listInput.Nickname = input.Query.Nickname
 	listInput.TrainerStatus = input.Query.TrainerStatus
-
 	listInput.Page = input.Query.Page
 	listInput.Size = input.Query.Size
+	listInput.OrderType = orderByModel.DESC
+	listInput.OrderField = "create_at"
+	if input.Query.OrderType != nil {
+		listInput.OrderType = *input.Query.OrderType
+	}
+	if input.Query.OrderField != nil {
+		listInput.OrderField = *input.Query.OrderField
+	}
 	trainerOutputs, page, err := r.trainerService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())

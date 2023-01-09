@@ -7,6 +7,7 @@ import (
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_cms_trainer_courses"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
@@ -202,6 +203,35 @@ func (c *controller) UpdateCMSCoursesCover(ctx *gin.Context) {
 	input.CoverNamed = fileHeader.Filename
 	input.File = file
 	output := c.resolver.APIUpdateCMSCourseCover(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetCMSTrainerCourses 獲取教練所屬課表
+// @Summary 獲取教練所屬課表
+// @Description 獲取教練所屬課表
+// @Tags CMS會員管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "用戶ID"
+// @Param order_field query string false "排序欄位 (update_at:更新時間)"
+// @Param order_type query string false "排序類型 (ASC:由低到高/DESC:由高到低)"
+// @Param page query int false "頁數(從第一頁開始)"
+// @Param size query int false "筆數"
+// @Success 200 {object} api_get_cms_trainer_courses.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/trainer/{user_id}/courses [GET]
+func (c *controller) GetCMSTrainerCourses(ctx *gin.Context) {
+	var input api_get_cms_trainer_courses.Input
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSTrainerCourses(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

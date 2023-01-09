@@ -24,6 +24,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/cms/course/:course_id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourse)
 	v2.PATCH("/cms/courses/course_status", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesStatus)
 	v2.PATCH("/cms/course/:course_id/cover", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSCoursesCover)
+	v2.GET("/cms/trainer/:user_id/courses", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSTrainerCourses)
 
 	v2.GET("/user/courses", midd.Verify([]global.Role{global.UserRole}), controller.GetUserCourses)
 	v2.POST("/user/course", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateUserCourse)

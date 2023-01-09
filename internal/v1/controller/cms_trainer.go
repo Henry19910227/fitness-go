@@ -149,7 +149,7 @@ func (t *CMSTrainer) UpdateTrainer(c *gin.Context) {
 }
 
 // GetTrainerCourses 取得教練所屬的課表
-// @Summary 取得教練所屬的課表
+// @Summary 取得教練所屬的課表 (API已過時，更新為 /v2/cms/trainer/{user_id}/courses [GET])
 // @Description 取得教練所屬的課表
 // @Tags CMS/Trainer_v1
 // @Accept json

@@ -11,6 +11,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_cms_trainer_courses"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
@@ -315,6 +316,44 @@ func (r *resolver) APIUpdateCMSCourseCover(input *model.APIUpdateCMSCourseCoverI
 	}
 	output.SetStatus(code.Success)
 	output.Data = util.PointerString(fileNamed)
+	return output
+}
+
+func (r *resolver) APIGetCMSTrainerCourses(input *api_get_cms_trainer_courses.Input) (output api_get_cms_trainer_courses.Output) {
+	// 查詢課表資訊
+	listInput := model.ListInput{}
+	listInput.Preloads = []*preloadModel.Preload{
+		{Field: "SaleItem.ProductLabel"},
+	}
+	courseStatusList := []interface{}{model.Reviewing, model.Sale, model.Reject, model.Remove}
+	listInput.Wheres = []*whereModel.Where{
+		{Query: "courses.course_status IN (?)", Args: []interface{}{courseStatusList}},
+	}
+	listInput.UserID = util.PointerInt64(input.Uri.UserID)
+	listInput.Page = input.Query.Page
+	listInput.Size = input.Query.Size
+	listInput.OrderType = orderByModel.DESC
+	listInput.OrderField = "update_at"
+	if input.Query.OrderType != nil {
+		listInput.OrderType = *input.Query.OrderType
+	}
+	if input.Query.OrderField != nil {
+		listInput.OrderField = *input.Query.OrderField
+	}
+	courseOutputs, page, err := r.courseService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parse Output
+	data := api_get_cms_trainer_courses.Data{}
+	if err := util.Parser(courseOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.SetStatus(code.Success)
+	output.Data = &data
+	output.Paging = page
 	return output
 }
 
