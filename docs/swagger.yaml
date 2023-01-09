@@ -22,7 +22,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       intro:
@@ -34,7 +34,7 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+        description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
@@ -86,7 +86,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       intro:
@@ -98,7 +98,7 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+        description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
@@ -190,7 +190,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             intro:
@@ -202,11 +202,11 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 來源(0:未知/1:購買/2:贈送)
+              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
-              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+              description: 動作狀態(0:下架/1:上架)
               example: 1
               type: integer
             type:
@@ -279,7 +279,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             intro:
@@ -291,11 +291,11 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 來源(0:未知/1:購買/2:贈送)
+              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
-              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+              description: 動作狀態(0:下架/1:上架)
               example: 1
               type: integer
             type:
@@ -342,7 +342,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       intro:
@@ -354,7 +354,7 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+        description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
@@ -495,7 +495,7 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       password:
         description: 密碼
@@ -509,10 +509,10 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       lv:
@@ -521,7 +521,7 @@ definitions:
         type: integer
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
     type: object
   api_cms_login.Output:
@@ -563,7 +563,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       image:
@@ -777,7 +777,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       order_status:
@@ -854,7 +854,7 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
     type: object
@@ -1069,6 +1069,162 @@ definitions:
       paging:
         $ref: '#/definitions/paging.Output'
     type: object
+  api_get_cms_trainer.Data:
+    properties:
+      address:
+        description: 住址
+        example: 台北市信義區五段五號
+        type: string
+      avatar:
+        description: 教練大頭照
+        example: abc.png
+        type: string
+      bank_account:
+        properties:
+          account:
+            description: 帳戶
+            example: "123456789"
+            type: string
+          account_image:
+            description: 帳戶照片
+            example: 123.png
+            type: string
+          account_name:
+            description: 戶名
+            example: 王小明
+            type: string
+          bank_code:
+            description: 銀行代號
+            example: "009"
+            type: string
+          branch:
+            description: 分行
+            example: 南京分行
+            type: string
+        type: object
+      card:
+        properties:
+          back_image:
+            description: 身分證背面照
+            example: 123.jpg
+            type: string
+          front_image:
+            description: 身分證正面照
+            example: 123.jpg
+            type: string
+        type: object
+      certificates:
+        items:
+          properties:
+            id:
+              description: id
+              example: 1
+              type: integer
+            image:
+              description: 圖片
+              example: 1234.jpg
+              type: string
+            name:
+              description: 證照名稱
+              example: A級教練證照
+              type: string
+          type: object
+        type: array
+      create_at:
+        description: 創建時間
+        example: "2022-06-12 00:00:00"
+        type: string
+      email:
+        description: 信箱
+        example: test@gmail.com
+        type: string
+      experience:
+        description: 年資
+        example: 5
+        type: integer
+      facebook_url:
+        description: 臉書連結
+        example: www.facebook.com
+        type: string
+      instagram_url:
+        description: ig連結
+        example: www.ig.com
+        type: string
+      intro:
+        description: 動作介紹(1~400字元)
+        example: 槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作
+        type: string
+      motto:
+        description: 座右銘
+        example: 勞其筋骨
+        type: string
+      name:
+        description: 教練本名
+        example: 亨利
+        type: string
+      nickname:
+        description: 暱稱
+        example: henry
+        type: string
+      phone:
+        description: 電話
+        example: "0955123321"
+        type: string
+      skill:
+        description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
+        example: 1,4
+        type: string
+      trainer_album_photos:
+        items:
+          properties:
+            create_at:
+              description: 創建時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            id:
+              description: 相片id
+              example: 1
+              type: integer
+            photo:
+              description: 照片
+              example: 123.jpg
+              type: string
+          type: object
+        type: array
+      trainer_level:
+        description: 教練評鑑等級
+        example: 1
+        type: integer
+      trainer_status:
+        description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+        example: 1
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      user_id:
+        description: 用戶id
+        example: 10001
+        type: integer
+      youtube_url:
+        description: youtube連結
+        example: www.youtube.com
+        type: string
+    type: object
+  api_get_cms_trainer.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/api_get_cms_trainer.Data'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
   api_get_cms_trainers.Output:
     properties:
       code:
@@ -1080,11 +1236,11 @@ definitions:
           properties:
             email:
               description: 信箱
-              example: henry@gmail.com
+              example: test@gmail.com
               type: string
             nickname:
               description: 暱稱
-              example: Henry
+              example: henry
               type: string
             trainer_status:
               description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
@@ -1380,7 +1536,7 @@ definitions:
         items:
           properties:
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             name:
@@ -1603,7 +1759,7 @@ definitions:
         items:
           properties:
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             name:
@@ -1805,7 +1961,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             intro:
@@ -1817,11 +1973,11 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 來源(0:未知/1:購買/2:贈送)
+              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
               example: 1
               type: integer
             status:
-              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+              description: 動作狀態(0:下架/1:上架)
               example: 1
               type: integer
             type:
@@ -2342,7 +2498,7 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       max_distance_record:
@@ -2465,7 +2621,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             incline:
@@ -2533,7 +2689,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       intensity:
@@ -2799,7 +2955,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -2827,7 +2983,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       phone:
         description: 電話
@@ -3578,7 +3734,7 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             image:
@@ -6025,7 +6181,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 收據id
+                      description: 主鍵id
                       example: 1
                       type: integer
                     product_id:
@@ -9244,7 +9400,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       order_course:
@@ -9339,7 +9495,7 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             order_course:
@@ -10205,7 +10361,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -10233,7 +10389,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       phone:
         description: 電話
@@ -10328,7 +10484,7 @@ definitions:
               type: string
             nickname:
               description: 暱稱
-              example: Henry
+              example: henry
               type: string
             skill:
               description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
@@ -10384,7 +10540,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -10416,7 +10572,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       phone:
         description: 電話
@@ -10515,7 +10671,7 @@ definitions:
               type: string
             nickname:
               description: 暱稱
-              example: Henry
+              example: henry
               type: string
             skill:
               description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
@@ -10575,7 +10731,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -10603,7 +10759,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       phone:
         description: 電話
@@ -10734,7 +10890,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -10762,7 +10918,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       phone:
         description: 電話
@@ -10846,7 +11002,7 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
     required:
     - email
@@ -11151,7 +11307,7 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       password:
         description: 密碼
@@ -11679,7 +11835,7 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
     required:
     - email
@@ -11699,7 +11855,7 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
     required:
     - email
@@ -11739,11 +11895,11 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       otp_code:
         description: 信箱驗證碼
@@ -11774,11 +11930,11 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       otp_code:
         description: 信箱驗證碼
@@ -11813,11 +11969,11 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       otp_code:
         description: 信箱驗證碼
@@ -11848,11 +12004,11 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       otp_code:
         description: 信箱驗證碼
@@ -11883,11 +12039,11 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       otp_code:
         description: 信箱驗證碼
@@ -11954,7 +12110,7 @@ definitions:
     properties:
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
     required:
     - nickname
@@ -12084,7 +12240,7 @@ definitions:
         type: number
       nickname:
         description: 暱稱
-        example: Henry
+        example: henry
         type: string
       sex:
         description: 性別 (m:男/f:女)
@@ -12313,7 +12469,7 @@ definitions:
         example: "2022-07-11 11:00:00"
         type: string
       status:
-        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
+        description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       update_at:
@@ -13069,7 +13225,7 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
     type: object
@@ -13100,7 +13256,7 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
     type: object
@@ -13205,7 +13361,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             name:
@@ -13255,7 +13411,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             name:
@@ -13307,7 +13463,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             name:
@@ -13348,7 +13504,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       name:
@@ -13396,7 +13552,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       name:
@@ -13594,7 +13750,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             intensity:
@@ -13912,7 +14068,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             incline:
@@ -14033,7 +14189,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             incline:
@@ -14152,7 +14308,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             incline:
@@ -14271,7 +14427,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 收據id
+              description: 主鍵id
               example: 1
               type: integer
             incline:
@@ -14383,7 +14539,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       incline:
@@ -14502,7 +14658,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 收據id
+        description: 主鍵id
         example: 1
         type: integer
       incline:
@@ -15051,7 +15207,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 取得教練詳細資訊
+      summary: 取得教練詳細資訊 (API已過時，更新為 /v2/cms/trainer/{user_id} [GET])
       tags:
       - CMS/Trainer_v1
     patch:
@@ -20860,6 +21016,32 @@ paths:
       tags:
       - CMS數據管理_v2
   /v2/cms/trainer/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 獲取教練詳細
+      parameters:
+      - description: 用戶ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/api_get_cms_trainer.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取教練詳細
+      tags:
+      - CMS會員管理_v2
     patch:
       consumes:
       - application/json

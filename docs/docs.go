@@ -708,7 +708,7 @@ var doc = `{
                 "tags": [
                     "CMS/Trainer_v1"
                 ],
-                "summary": "取得教練詳細資訊",
+                "summary": "取得教練詳細資訊 (API已過時，更新為 /v2/cms/trainer/{user_id} [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -10138,6 +10138,47 @@ var doc = `{
             }
         },
         "/v2/cms/trainer/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取教練詳細",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS會員管理_v2"
+                ],
+                "summary": "獲取教練詳細",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用戶ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/api_get_cms_trainer.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "security": [
                     {
@@ -17913,7 +17954,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -17928,7 +17969,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "description": "動作狀態(0:下架/1:上架)",
                     "type": "integer",
                     "example": 1
                 },
@@ -17996,7 +18037,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18011,7 +18052,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "description": "動作狀態(0:下架/1:上架)",
                     "type": "integer",
                     "example": 1
                 },
@@ -18134,7 +18175,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18149,12 +18190,12 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "來源(0:未知/1:購買/2:贈送)",
+                                "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "status": {
-                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                                "description": "動作狀態(0:下架/1:上架)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18251,7 +18292,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18266,12 +18307,12 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "來源(0:未知/1:購買/2:贈送)",
+                                "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "status": {
-                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                                "description": "動作狀態(0:下架/1:上架)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18332,7 +18373,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18347,7 +18388,7 @@ var doc = `{
                     "example": "划船機"
                 },
                 "status": {
-                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "description": "動作狀態(0:下架/1:上架)",
                     "type": "integer",
                     "example": 1
                 },
@@ -18534,7 +18575,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "password": {
                     "description": "密碼",
@@ -18549,10 +18590,10 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18564,7 +18605,7 @@ var doc = `{
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 }
             }
         },
@@ -18620,7 +18661,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18907,7 +18948,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -19010,7 +19051,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 }
@@ -19305,6 +19346,210 @@ var doc = `{
                 }
             }
         },
+        "api_get_cms_trainer.Data": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "住址",
+                    "type": "string",
+                    "example": "台北市信義區五段五號"
+                },
+                "avatar": {
+                    "description": "教練大頭照",
+                    "type": "string",
+                    "example": "abc.png"
+                },
+                "bank_account": {
+                    "type": "object",
+                    "properties": {
+                        "account": {
+                            "description": "帳戶",
+                            "type": "string",
+                            "example": "123456789"
+                        },
+                        "account_image": {
+                            "description": "帳戶照片",
+                            "type": "string",
+                            "example": "123.png"
+                        },
+                        "account_name": {
+                            "description": "戶名",
+                            "type": "string",
+                            "example": "王小明"
+                        },
+                        "bank_code": {
+                            "description": "銀行代號",
+                            "type": "string",
+                            "example": "009"
+                        },
+                        "branch": {
+                            "description": "分行",
+                            "type": "string",
+                            "example": "南京分行"
+                        }
+                    }
+                },
+                "card": {
+                    "type": "object",
+                    "properties": {
+                        "back_image": {
+                            "description": "身分證背面照",
+                            "type": "string",
+                            "example": "123.jpg"
+                        },
+                        "front_image": {
+                            "description": "身分證正面照",
+                            "type": "string",
+                            "example": "123.jpg"
+                        }
+                    }
+                },
+                "certificates": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "description": "id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "image": {
+                                "description": "圖片",
+                                "type": "string",
+                                "example": "1234.jpg"
+                            },
+                            "name": {
+                                "description": "證照名稱",
+                                "type": "string",
+                                "example": "A級教練證照"
+                            }
+                        }
+                    }
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "email": {
+                    "description": "信箱",
+                    "type": "string",
+                    "example": "test@gmail.com"
+                },
+                "experience": {
+                    "description": "年資",
+                    "type": "integer",
+                    "example": 5
+                },
+                "facebook_url": {
+                    "description": "臉書連結",
+                    "type": "string",
+                    "example": "www.facebook.com"
+                },
+                "instagram_url": {
+                    "description": "ig連結",
+                    "type": "string",
+                    "example": "www.ig.com"
+                },
+                "intro": {
+                    "description": "動作介紹(1~400字元)",
+                    "type": "string",
+                    "example": "槓鈴胸推是很多人在健身房都會訓練的動作，是胸大肌強化最常見的訓練動作"
+                },
+                "motto": {
+                    "description": "座右銘",
+                    "type": "string",
+                    "example": "勞其筋骨"
+                },
+                "name": {
+                    "description": "教練本名",
+                    "type": "string",
+                    "example": "亨利"
+                },
+                "nickname": {
+                    "description": "暱稱",
+                    "type": "string",
+                    "example": "henry"
+                },
+                "phone": {
+                    "description": "電話",
+                    "type": "string",
+                    "example": "0955123321"
+                },
+                "skill": {
+                    "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
+                    "type": "string",
+                    "example": "1,4"
+                },
+                "trainer_album_photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "相片id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "photo": {
+                                "description": "照片",
+                                "type": "string",
+                                "example": "123.jpg"
+                            }
+                        }
+                    }
+                },
+                "trainer_level": {
+                    "description": "教練評鑑等級",
+                    "type": "integer",
+                    "example": 1
+                },
+                "trainer_status": {
+                    "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "user_id": {
+                    "description": "用戶id",
+                    "type": "integer",
+                    "example": 10001
+                },
+                "youtube_url": {
+                    "description": "youtube連結",
+                    "type": "string",
+                    "example": "www.youtube.com"
+                }
+            }
+        },
+        "api_get_cms_trainer.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_get_cms_trainer.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "api_get_cms_trainers.Output": {
             "type": "object",
             "properties": {
@@ -19321,12 +19566,12 @@ var doc = `{
                             "email": {
                                 "description": "信箱",
                                 "type": "string",
-                                "example": "henry@gmail.com"
+                                "example": "test@gmail.com"
                             },
                             "nickname": {
                                 "description": "暱稱",
                                 "type": "string",
-                                "example": "Henry"
+                                "example": "henry"
                             },
                             "trainer_status": {
                                 "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
@@ -19718,7 +19963,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20009,7 +20254,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20271,7 +20516,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20286,12 +20531,12 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "來源(0:未知/1:購買/2:贈送)",
+                                "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "status": {
-                                "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                                "description": "動作狀態(0:下架/1:上架)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20967,7 +21212,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -21134,7 +21379,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21223,7 +21468,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -21578,7 +21823,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -21613,7 +21858,7 @@ var doc = `{
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -22605,7 +22850,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -25817,7 +26062,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "收據id",
+                                                "description": "主鍵id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -30060,7 +30305,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -30188,7 +30433,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31359,7 +31604,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -31394,7 +31639,7 @@ var doc = `{
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -31520,7 +31765,7 @@ var doc = `{
                             "nickname": {
                                 "description": "暱稱",
                                 "type": "string",
-                                "example": "Henry"
+                                "example": "henry"
                             },
                             "skill": {
                                 "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
@@ -31594,7 +31839,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -31634,7 +31879,7 @@ var doc = `{
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -31765,7 +32010,7 @@ var doc = `{
                             "nickname": {
                                 "description": "暱稱",
                                 "type": "string",
-                                "example": "Henry"
+                                "example": "henry"
                             },
                             "skill": {
                                 "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
@@ -31844,7 +32089,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -31879,7 +32124,7 @@ var doc = `{
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -32052,7 +32297,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -32087,7 +32332,7 @@ var doc = `{
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -32201,7 +32446,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 }
             }
         },
@@ -32609,7 +32854,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "password": {
                     "description": "密碼",
@@ -33301,7 +33546,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 }
             }
         },
@@ -33329,7 +33574,7 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 }
             }
         },
@@ -33388,12 +33633,12 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "otp_code": {
                     "description": "信箱驗證碼",
@@ -33434,12 +33679,12 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "otp_code": {
                     "description": "信箱驗證碼",
@@ -33485,12 +33730,12 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "otp_code": {
                     "description": "信箱驗證碼",
@@ -33531,12 +33776,12 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "otp_code": {
                     "description": "信箱驗證碼",
@@ -33577,12 +33822,12 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "henry@gmail.com"
+                    "example": "test@gmail.com"
                 },
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "otp_code": {
                     "description": "信箱驗證碼",
@@ -33671,7 +33916,7 @@ var doc = `{
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 }
             }
         },
@@ -33843,7 +34088,7 @@ var doc = `{
                 "nickname": {
                     "description": "暱稱",
                     "type": "string",
-                    "example": "Henry"
+                    "example": "henry"
                 },
                 "sex": {
                     "description": "性別 (m:男/f:女)",
@@ -34137,7 +34382,7 @@ var doc = `{
                     "example": "2022-07-11 11:00:00"
                 },
                 "status": {
-                    "description": "會員狀態(0:無會員狀態/1:付費會員狀態)",
+                    "description": "動作狀態(0:下架/1:上架)",
                     "type": "integer",
                     "example": 1
                 },
@@ -35141,7 +35386,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 }
@@ -35184,7 +35429,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 }
@@ -35327,7 +35572,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35393,7 +35638,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35461,7 +35706,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -35514,7 +35759,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -35577,7 +35822,7 @@ var doc = `{
                     "example": 1
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -35837,7 +36082,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36266,7 +36511,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36422,7 +36667,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36575,7 +36820,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36728,7 +36973,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "收據id",
+                                "description": "主鍵id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36871,7 +37116,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },
@@ -37024,7 +37269,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "收據id",
+                    "description": "主鍵id",
                     "type": "integer",
                     "example": 1
                 },

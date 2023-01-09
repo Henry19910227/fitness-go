@@ -16,7 +16,9 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_get_cms_trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_get_cms_trainers"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_update_cms_trainer"
 	albumModel "github.com/Henry19910227/fitness-go/internal/v2/model/trainer_album"
@@ -558,6 +560,32 @@ func (r *resolver) APIGetCMSTrainers(input *api_get_cms_trainers.Input) (output 
 	}
 	output.Set(code.Success, "success")
 	output.Paging = page
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetCMSTrainer(input *api_get_cms_trainer.Input) (output api_get_cms_trainer.Output) {
+	// 查詢列表教練資訊
+	findInput := model.FindInput{}
+	findInput.UserID = input.Uri.UserID
+	findInput.Preloads = []*preloadModel.Preload{
+		{Field: "Certificates"},
+		{Field: "Card"},
+		{Field: "BankAccount"},
+		{Field: "TrainerAlbums"},
+	}
+	trainerOutput, err := r.trainerService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parse Output
+	data := api_get_cms_trainer.Data{}
+	if err := util.Parser(trainerOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
 	output.Data = &data
 	return output
 }

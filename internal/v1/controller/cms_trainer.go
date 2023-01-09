@@ -88,7 +88,7 @@ func (t *CMSTrainer) GetTrainers(c *gin.Context) {
 }
 
 // GetTrainer 取得教練詳細資訊
-// @Summary 取得教練詳細資訊
+// @Summary 取得教練詳細資訊 (API已過時，更新為 /v2/cms/trainer/{user_id} [GET])
 // @Description 取得教練詳細資訊
 // @Tags CMS/Trainer_v1
 // @Accept json

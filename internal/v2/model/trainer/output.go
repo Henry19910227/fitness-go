@@ -6,7 +6,9 @@ import (
 	trainerAlbumOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer_album/optional"
 	trainerStatisticRequired "github.com/Henry19910227/fitness-go/internal/v2/field/trainer_statistic/required"
 	userOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/bank_account"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/card"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/certificate"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer_album"
@@ -18,6 +20,8 @@ type Output struct {
 	User             *UserOutput               `json:"user,omitempty" gorm:"foreignKey:id;references:user_id"`
 	TrainerAlbums    []*trainer_album.Output   `json:"trainer_album_photos,omitempty" gorm:"foreignKey:user_id;references:user_id"`
 	Certificates     []*certificate.Output     `json:"certificates,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	Card             *card.Output              `json:"card,omitempty" gorm:"foreignKey:user_id;references:user_id"`
+	BankAccount      *bank_account.Output      `json:"bank_account,omitempty" gorm:"foreignKey:user_id;references:user_id"`
 	TrainerStatistic *trainer_statistic.Output `json:"trainer_statistic,omitempty" gorm:"foreignKey:user_id;references:user_id"`
 }
 
@@ -45,6 +49,20 @@ func (o Output) TrainerStatisticOnSafe() trainer_statistic.Output {
 		return *o.TrainerStatistic
 	}
 	return trainer_statistic.Output{}
+}
+
+func (o Output) CardOnSafe() card.Output {
+	if o.Card != nil {
+		return *o.Card
+	}
+	return card.Output{}
+}
+
+func (o Output) BankAccountSafe() bank_account.Output {
+	if o.BankAccount != nil {
+		return *o.BankAccount
+	}
+	return bank_account.Output{}
 }
 
 // APIGetTrainerProfileOutput /v2/trainer/profile [PATCH]

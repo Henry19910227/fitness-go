@@ -11,6 +11,7 @@ type Controller interface {
 	GetFavoriteTrainers(ctx *gin.Context)
 
 	GetCMSTrainers(ctx *gin.Context)
+	GetCMSTrainer(ctx *gin.Context)
 	UpdateCMSTrainer(ctx *gin.Context)
 	UpdateCMSTrainerAvatar(ctx *gin.Context)
 }

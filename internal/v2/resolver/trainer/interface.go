@@ -2,6 +2,7 @@ package trainer
 
 import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_get_cms_trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_get_cms_trainers"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_update_cms_trainer"
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ type Resolver interface {
 	APIGetFavoriteTrainers(input *model.APIGetFavoriteTrainersInput) (output model.APIGetFavoriteTrainersOutput)
 
 	APIGetCMSTrainers(input *api_get_cms_trainers.Input) (output api_get_cms_trainers.Output)
+	APIGetCMSTrainer(input *api_get_cms_trainer.Input) (output api_get_cms_trainer.Output)
 	APIUpdateCMSTrainer(ctx *gin.Context, tx *gorm.DB, input *api_update_cms_trainer.Input) (output api_update_cms_trainer.Output)
 	APIUpdateCMSTrainerAvatar(input *model.APIUpdateCMSTrainerAvatarInput) (output model.APIUpdateCMSTrainerAvatarOutput)
 }
