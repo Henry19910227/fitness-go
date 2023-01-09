@@ -52,6 +52,14 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.UserID != nil {
 		db = db.Where("trainers.user_id = ?", *input.UserID)
 	}
+	//加入 nickname 篩選條件
+	if input.Nickname != nil {
+		db = db.Where("trainers.nickname LIKE ?", "%"+*input.Nickname+"%")
+	}
+	//加入 trainer_status 篩選條件
+	if input.TrainerStatus != nil {
+		db = db.Where("trainers.trainer_status = ?", *input.TrainerStatus)
+	}
 	// Custom Where
 	if len(input.Wheres) > 0 {
 		for _, where := range input.Wheres {
@@ -69,8 +77,12 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Select
 	db = db.Select("trainers.*")
 	// Paging
-	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
+	if input.Page != nil && input.Size != nil {
+		db = db.Offset((*input.Page - 1) * *input.Size).Limit(*input.Size)
+	} else if input.Page != nil {
+		db = db.Offset(0)
+	} else if input.Size != nil {
+		db = db.Limit(*input.Size)
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
@@ -81,29 +93,6 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 		for _, orderBy := range input.Orders {
 			db = db.Order(orderBy.Value)
 		}
-	}
-	//查詢數據
-	err = db.Find(&outputs).Error
-	return outputs, amount, err
-}
-
-func (r *repository) FavoriteList(input *model.FavoriteListInput) (outputs []*model.Output, amount int64, err error) {
-	db := r.db.Model(&model.Output{}).Joins("INNER JOIN favorite_trainers ON trainers.user_id = favorite_trainers.trainer_id")
-	// id 篩選條件
-	if input.UserID != nil {
-		db = db.Where("favorite_trainers.user_id = ?", *input.UserID)
-	}
-	// Count
-	db = db.Count(&amount)
-	// Select
-	db = db.Select("trainers.*")
-	// Paging
-	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
-	}
-	// Order
-	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("favorite_trainers.%s %s", input.OrderField, input.OrderType))
 	}
 	//查詢數據
 	err = db.Find(&outputs).Error

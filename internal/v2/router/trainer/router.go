@@ -27,6 +27,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/store/trainers", midd.Verify([]global.Role{global.UserRole}), controller.GetStoreTrainers)
 	v2.GET("/favorite/trainers", midd.Verify([]global.Role{global.UserRole}), controller.GetFavoriteTrainers)
 
+	v2.GET("/cms/trainers", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSTrainers)
 	v2.PATCH("/cms/trainer/:user_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSTrainer)
 	v2.PATCH("/cms/trainer/:user_id/avatar", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSTrainerAvatar)
 }

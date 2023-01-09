@@ -35,7 +35,7 @@ func NewCMSTrainer(baseGroup *gin.RouterGroup, trainerService service.Trainer, c
 }
 
 // GetTrainers 獲取教練列表
-// @Summary 獲取教練列表
+// @Summary 獲取教練列表 (API已過時，更新為 /v2/cms/trainers [GET])
 // @Description 獲取教練列表
 // @Tags CMS/Trainer_v1
 // @Accept json
@@ -113,7 +113,7 @@ func (t *CMSTrainer) GetTrainer(c *gin.Context) {
 }
 
 // UpdateTrainer 更新教練資訊
-// @Summary 更新教練資訊
+// @Summary 更新教練資訊 (API已過時，更新為 /v2/cms/trainer/{user_id} [PATCH])
 // @Description 更新教練資訊
 // @Tags CMS/Trainer_v1
 // @Accept json

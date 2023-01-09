@@ -22,7 +22,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       intro:
@@ -34,11 +34,11 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -86,7 +86,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       intro:
@@ -98,11 +98,11 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -190,7 +190,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             intro:
@@ -202,15 +202,15 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -279,7 +279,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             intro:
@@ -291,15 +291,15 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -342,7 +342,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       intro:
@@ -354,11 +354,11 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -512,7 +512,7 @@ definitions:
         example: henry@gmail.com
         type: string
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       lv:
@@ -563,7 +563,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       image:
@@ -571,7 +571,7 @@ definitions:
         example: 1234.jpg
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -777,7 +777,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       order_status:
@@ -854,7 +854,7 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
     type: object
@@ -1060,6 +1060,48 @@ definitions:
                   example: "2022-06-12 00:00:00"
                   type: string
               type: object
+          type: object
+        type: array
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+      paging:
+        $ref: '#/definitions/paging.Output'
+    type: object
+  api_get_cms_trainers.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        items:
+          properties:
+            email:
+              description: 信箱
+              example: henry@gmail.com
+              type: string
+            nickname:
+              description: 暱稱
+              example: Henry
+              type: string
+            trainer_status:
+              description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
+              example: 1
+              type: integer
+            update_at:
+              description: 更新時間
+              example: "2022-06-14 00:00:00"
+              type: string
+            user_id:
+              description: 用戶id
+              example: 10001
+              type: integer
+            youtube_url:
+              description: youtube連結
+              example: www.youtube.com
+              type: string
           type: object
         type: array
       msg:
@@ -1338,7 +1380,7 @@ definitions:
         items:
           properties:
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             name:
@@ -1561,7 +1603,7 @@ definitions:
         items:
           properties:
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             name:
@@ -1763,7 +1805,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             intro:
@@ -1775,15 +1817,15 @@ definitions:
               example: 划船機
               type: string
             source:
-              description: 動作來源(1:系統動作/2:教練動作/2:學員動作)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 會員狀態(0:無會員狀態/1:付費會員狀態)
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -2300,7 +2342,7 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       max_distance_record:
@@ -2423,7 +2465,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             incline:
@@ -2491,7 +2533,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       intensity:
@@ -3536,7 +3578,7 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             image:
@@ -3555,7 +3597,7 @@ definitions:
                   type: integer
               type: object
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -5983,7 +6025,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 圖片id
+                      description: 收據id
                       example: 1
                       type: integer
                     product_id:
@@ -9202,7 +9244,7 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       order_course:
@@ -9297,7 +9339,7 @@ definitions:
               example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             order_course:
@@ -11700,7 +11742,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -11735,7 +11777,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -11774,7 +11816,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -11809,7 +11851,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -11844,7 +11886,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -11911,7 +11953,7 @@ definitions:
   user.APIRegisterNicknameValidateBody:
     properties:
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
     required:
@@ -12271,7 +12313,7 @@ definitions:
         example: "2022-07-11 11:00:00"
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 會員狀態(0:無會員狀態/1:付費會員狀態)
         example: 1
         type: integer
       update_at:
@@ -13027,7 +13069,7 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
     type: object
@@ -13058,7 +13100,7 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
     type: object
@@ -13163,7 +13205,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             name:
@@ -13213,7 +13255,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             name:
@@ -13265,7 +13307,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             name:
@@ -13306,7 +13348,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       name:
@@ -13354,7 +13396,7 @@ definitions:
         example: 1
         type: integer
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       name:
@@ -13552,7 +13594,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             intensity:
@@ -13870,7 +13912,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             incline:
@@ -13894,7 +13936,7 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -13991,7 +14033,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             incline:
@@ -14015,7 +14057,7 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -14110,7 +14152,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             incline:
@@ -14134,7 +14176,7 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -14229,7 +14271,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 圖片id
+              description: 收據id
               example: 1
               type: integer
             incline:
@@ -14253,7 +14295,7 @@ definitions:
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -14341,7 +14383,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       incline:
@@ -14365,7 +14407,7 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -14460,7 +14502,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 圖片id
+        description: 收據id
         example: 1
         type: integer
       incline:
@@ -14484,7 +14526,7 @@ definitions:
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -15046,7 +15088,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 更新教練資訊
+      summary: 更新教練資訊 (API已過時，更新為 /v2/cms/trainer/{user_id} [PATCH])
       tags:
       - CMS/Trainer_v1
   /v1/cms/trainer/{user_id}/courses:
@@ -15159,7 +15201,7 @@ paths:
             $ref: '#/definitions/model.ErrorResult'
       security:
       - fitness_token: []
-      summary: 獲取教練列表
+      summary: 獲取教練列表 (API已過時，更新為 /v2/cms/trainers [GET])
       tags:
       - CMS/Trainer_v1
   /v1/cms/user/{user_id}:
@@ -20880,6 +20922,60 @@ paths:
       security:
       - fitness_token: []
       summary: 更新教練大頭照
+      tags:
+      - CMS會員管理_v2
+  /v2/cms/trainers:
+    get:
+      consumes:
+      - application/json
+      description: 獲取教練列表
+      parameters:
+      - description: 用戶ID
+        in: query
+        name: user_id
+        type: integer
+      - description: 教練名稱(1~40字元)
+        in: query
+        name: nickname
+        type: string
+      - description: 教練Email
+        in: query
+        name: email
+        type: string
+      - description: 教練狀態(1:正常/2:審核中/3:停權/4:未啟用)
+        in: query
+        name: trainer_status
+        type: string
+      - description: 排序欄位 (create_at:創建時間)
+        in: query
+        name: order_field
+        type: string
+      - description: 排序類型 (ASC:由低到高/DESC:由高到低)
+        in: query
+        name: order_type
+        type: string
+      - description: 頁數(從第一頁開始)
+        in: query
+        name: page
+        type: integer
+      - description: 筆數
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功!
+          schema:
+            $ref: '#/definitions/api_get_cms_trainers.Output'
+        "400":
+          description: 失敗!
+          schema:
+            $ref: '#/definitions/base.Output'
+      security:
+      - fitness_token: []
+      summary: 獲取教練列表
       tags:
       - CMS會員管理_v2
   /v2/cms/workout/{workout_id}/workout_sets:

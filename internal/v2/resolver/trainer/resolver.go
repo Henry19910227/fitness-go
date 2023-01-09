@@ -17,6 +17,7 @@ import (
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_get_cms_trainers"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/trainer/api_update_cms_trainer"
 	albumModel "github.com/Henry19910227/fitness-go/internal/v2/model/trainer_album"
 	trainerStatusLogModel "github.com/Henry19910227/fitness-go/internal/v2/model/trainer_status_update_log"
@@ -411,8 +412,8 @@ func (r *resolver) APIGetTrainerProfile(input *model.APIGetTrainerProfileInput) 
 	listInput := model.ListInput{}
 	listInput.UserID = util.PointerInt64(input.UserID)
 	listInput.Preloads = []*preload.Preload{{Field: "TrainerStatistic"}, {Field: "Certificates"}, {Field: "TrainerAlbums"}}
-	listInput.Size = 1
-	listInput.Page = 1
+	listInput.Size = util.PointerInt(1)
+	listInput.Page = util.PointerInt(1)
 	listInput.OrderField = "create_at"
 	listInput.OrderType = order_by.DESC
 	trainerOutputs, _, err := r.trainerService.List(&listInput)
@@ -532,6 +533,32 @@ func (r *resolver) APIGetFavoriteTrainers(input *model.APIGetFavoriteTrainersInp
 	output.Set(code.Success, "success")
 	output.Paging = page
 	output.Data = data
+	return output
+}
+
+func (r *resolver) APIGetCMSTrainers(input *api_get_cms_trainers.Input) (output api_get_cms_trainers.Output) {
+	// 查詢列表教練資訊
+	listInput := model.ListInput{}
+	listInput.UserID = input.Query.UserID
+	listInput.Nickname = input.Query.Nickname
+	listInput.TrainerStatus = input.Query.TrainerStatus
+
+	listInput.Page = input.Query.Page
+	listInput.Size = input.Query.Size
+	trainerOutputs, page, err := r.trainerService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parse Output
+	data := api_get_cms_trainers.Data{}
+	if err := util.Parser(trainerOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
+	output.Data = &data
 	return output
 }
 

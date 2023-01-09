@@ -2,18 +2,21 @@ package trainer
 
 import (
 	bankAccountRequired "github.com/Henry19910227/fitness-go/internal/v2/field/bank_account/required"
+	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/trainer/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"mime/multipart"
 )
 
-type PagingInput = paging.Input
+type PagingInput = struct {
+	pagingOptional.PageField
+	pagingOptional.SizeField
+}
 type PreloadInput = preload.Input
 type OrderByInput = orderBy.Input
 type WhereInput = where.Input
@@ -27,19 +30,14 @@ type FindInput struct {
 
 type ListInput struct {
 	optional.UserIDField
+	optional.NicknameField
+	optional.TrainerStatusField
 	JoinInput
 	WhereInput
 	PagingInput
 	PreloadInput
 	OrderByInput
 	CustomOrderByInput
-}
-
-type FavoriteListInput struct {
-	optional.UserIDField
-	PagingInput
-	PreloadInput
-	OrderByInput
 }
 
 // APIGetTrainerProfileInput /v2/trainer/profile [PATCH]

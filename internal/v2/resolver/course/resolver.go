@@ -1469,8 +1469,8 @@ func (r *resolver) APIGetStoreHomePage(input *model.APIGetStoreHomePageInput) (o
 	}
 	latestTrainerListInput.OrderField = "create_at"
 	latestTrainerListInput.OrderType = order_by.DESC
-	latestTrainerListInput.Page = 1
-	latestTrainerListInput.Size = 5
+	latestTrainerListInput.Page = util.PointerInt(1)
+	latestTrainerListInput.Size = util.PointerInt(5)
 	latestTrainerOutputs, _, err := r.trainerService.List(&latestTrainerListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -1488,8 +1488,8 @@ func (r *resolver) APIGetStoreHomePage(input *model.APIGetStoreHomePageInput) (o
 	popularTrainerListInput.Orders = []*orderByModel.Order{
 		{Value: fmt.Sprintf("trainer_statistics.%s %s", "student_count", order_by.DESC)},
 	}
-	popularTrainerListInput.Page = 1
-	popularTrainerListInput.Size = 5
+	popularTrainerListInput.Page = util.PointerInt(1)
+	popularTrainerListInput.Size = util.PointerInt(5)
 	popularTrainerOutputs, _, err := r.trainerService.List(&popularTrainerListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
