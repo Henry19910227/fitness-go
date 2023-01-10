@@ -13,6 +13,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_cms_trainer_courses"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_trainer_courses"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_statistic"
@@ -1429,11 +1430,17 @@ func (r *resolver) APIGetStoreCourseStructure(input *model.APIGetStoreCourseStru
 	return output
 }
 
-func (r *resolver) APIGetStoreTrainerCourses(input *model.APIGetStoreTrainerCoursesInput) (output model.APIGetStoreTrainerCoursesOutput) {
+func (r *resolver) APIGetStoreTrainerCourses(input *api_get_store_trainer_courses.Input) (output api_get_store_trainer_courses.Output) {
+	if util.OnNilJustReturnInt(input.Query.SaleType, 0) == model.SaleTypePersonal {
+		output.Set(code.BadRequest, "商店課表篩選不包含個人課表類型")
+		return output
+	}
 	listInput := model.ListInput{}
 	listInput.UserID = util.PointerInt64(input.Uri.UserID)
 	listInput.CourseStatus = util.PointerInt(model.Sale)
 	listInput.SaleType = input.Query.SaleType
+	listInput.Page = input.Query.Page
+	listInput.Size = input.Query.Size
 	listInput.Wheres = []*whereModel.Where{
 		{Query: "courses.sale_type <> ?", Args: []interface{}{model.SaleTypePersonal}}, // not equal
 	}
@@ -1448,7 +1455,7 @@ func (r *resolver) APIGetStoreTrainerCourses(input *model.APIGetStoreTrainerCour
 		return output
 	}
 	// parse output
-	data := model.APIGetStoreTrainerCoursesData{}
+	data := api_get_store_trainer_courses.Data{}
 	if err := util.Parser(courseOutputs, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
