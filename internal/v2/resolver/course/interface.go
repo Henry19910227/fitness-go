@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_cms_trainer_courses"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_trainer_courses"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_statistic"
@@ -51,6 +52,6 @@ type Resolver interface {
 	APIGetStoreCourse(input *api_get_store_course.Input) (output api_get_store_course.Output)
 	APIGetStoreCourses(input *model.APIGetStoreCoursesInput) (output model.APIGetStoreCoursesOutput)
 	APIGetStoreCourseStructure(input *model.APIGetStoreCourseStructureInput) (output model.APIGetStoreCourseStructureOutput)
-	APIGetStoreTrainerCourses(input *model.APIGetStoreTrainerCoursesInput) (output model.APIGetStoreTrainerCoursesOutput)
+	APIGetStoreTrainerCourses(input *api_get_store_trainer_courses.Input) (output api_get_store_trainer_courses.Output)
 	APIGetStoreHomePage(input *model.APIGetStoreHomePageInput) (output model.APIGetStoreHomePageOutput)
 }

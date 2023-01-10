@@ -216,19 +216,6 @@ type APIGetStoreCoursesQuery struct {
 	PagingInput
 }
 
-// APIGetStoreTrainerCoursesInput /v2/store/trainer/{user_id}/courses [GET]
-type APIGetStoreTrainerCoursesInput struct {
-	userRequired.UserIDField
-	Uri   APIGetStoreTrainerCoursesUri
-	Query APIGetStoreTrainerCoursesQuery
-}
-type APIGetStoreTrainerCoursesUri struct {
-	userRequired.UserIDField
-}
-type APIGetStoreTrainerCoursesQuery struct {
-	SaleType *int `json:"sale_type,omitempty" form:"sale_type" binding:"omitempty,oneof=1 2 3" example:"1"` // 銷售類型(1:免費課表/2:訂閱課表/3:付費課表)
-}
-
 // APIGetStoreHomePageInput /v2/store/home_page [GET]
 type APIGetStoreHomePageInput struct {
 	userRequired.UserIDField

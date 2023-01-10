@@ -9,6 +9,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_fcm_test"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_cms_trainer_courses"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_course"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_store_trainer_courses"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_overview"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/course/api_get_trainer_course_statistic"
@@ -710,13 +711,13 @@ func (c *controller) GetStoreCourseStructure(ctx *gin.Context) {
 // @Security fitness_token
 // @Param user_id path int64 true "教練id"
 // @Param sale_type query int false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)"
-// @Param page query int true "頁數(從第一頁開始)"
-// @Param size query int true "筆數"
-// @Success 200 {object} course.APIGetStoreTrainerCoursesOutput "成功!"
+// @Param page query int false "頁數(從第一頁開始)"
+// @Param size query int false "筆數"
+// @Success 200 {object} api_get_store_trainer_courses.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/store/trainer/{user_id}/courses [GET]
 func (c *controller) GetStoreTrainerCourses(ctx *gin.Context) {
-	var input model.APIGetStoreTrainerCoursesInput
+	var input api_get_store_trainer_courses.Input
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
