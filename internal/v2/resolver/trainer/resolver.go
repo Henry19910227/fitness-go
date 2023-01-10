@@ -318,6 +318,7 @@ func (r *resolver) APIUpdateTrainer(tx *gorm.DB, input *model.APIUpdateTrainerIn
 	}
 	// 更新教練資訊
 	trainerTable := model.Table{}
+	trainerTable.UserID = util.PointerInt64(input.UserID)
 	trainerTable.Nickname = input.Form.Nickname
 	trainerTable.Skill = input.Form.Skill
 	trainerTable.Intro = input.Form.Intro
