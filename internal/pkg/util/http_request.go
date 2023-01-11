@@ -36,7 +36,7 @@ func SendRequest(method string, url string, header map[string]string, body map[s
 	return dict, nil
 }
 
-func NewRequest(method string, url string, body interface{}, param map[string]interface{}) (*http.Request, error) {
+func NewRequest(method string, url string, body map[string]interface{}, param map[string]interface{}) (*http.Request, error) {
 	if len(param) > 0 {
 		var paramStr string
 		for k, v := range param {
