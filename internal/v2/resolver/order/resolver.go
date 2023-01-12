@@ -1419,20 +1419,22 @@ func (r *resolver) uploadAppleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, us
 	// 獲取最新資訊收據
 	latestReceipt := response.LatestReceiptInfo[0]
 	// 驗證該用戶訂閱狀態
-	findSubscribeInfoInput := subscribeInfoModel.FindInput{}
-	findSubscribeInfoInput.UserID = util.PointerInt64(userID)
-	subscribeInfoOutput, err := r.subscribeInfoService.Tx(tx).Find(&findSubscribeInfoInput)
+	subscribeInfoListInput := subscribeInfoModel.ListInput{}
+	subscribeInfoListInput.UserID = util.PointerInt64(userID)
+	subscribeInfoOutputs, _, err := r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
 	if err != nil {
 		return err
 	}
-	if util.OnNilJustReturnInt(subscribeInfoOutput.Status, 0) == 1 {
-		fmt.Println("該用戶為訂閱狀態")
-		return errors.New("該用戶為訂閱狀態")
+	if len(subscribeInfoOutputs) > 0 {
+		if util.OnNilJustReturnInt(subscribeInfoOutputs[0].Status, 0) == 1 {
+			fmt.Println("該用戶為訂閱狀態")
+			return errors.New("該用戶為訂閱狀態")
+		}
 	}
 	// 驗證是否有正在綁定此 OriginalTransactionID 的用戶
-	subscribeInfoListInput := subscribeInfoModel.ListInput{}
+	subscribeInfoListInput = subscribeInfoModel.ListInput{}
 	subscribeInfoListInput.OriginalTransactionID = util.PointerString(latestReceipt.OriginalTransactionID)
-	subscribeInfoOutputs, _, err := r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
+	subscribeInfoOutputs, _, err = r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
 	if err != nil {
 		return err
 	}
@@ -1563,20 +1565,22 @@ func (r *resolver) uploadGoogleSubscribeReceipt(ctx *gin.Context, tx *gorm.DB, u
 		originalTransactionID = transactionIDs[0]
 	}
 	// 驗證該用戶訂閱狀態
-	findSubscribeInfoInput := subscribeInfoModel.FindInput{}
-	findSubscribeInfoInput.UserID = util.PointerInt64(userID)
-	subscribeInfoOutput, err := r.subscribeInfoService.Tx(tx).Find(&findSubscribeInfoInput)
+	subscribeInfoListInput := subscribeInfoModel.ListInput{}
+	subscribeInfoListInput.UserID = util.PointerInt64(userID)
+	subscribeInfoOutputs, _, err := r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
 	if err != nil {
 		return err
 	}
-	if util.OnNilJustReturnInt(subscribeInfoOutput.Status, 0) == 1 {
-		fmt.Println("該用戶為訂閱狀態")
-		return errors.New("該用戶為訂閱狀態")
+	if len(subscribeInfoOutputs) > 0 {
+		if util.OnNilJustReturnInt(subscribeInfoOutputs[0].Status, 0) == 1 {
+			fmt.Println("該用戶為訂閱狀態")
+			return errors.New("該用戶為訂閱狀態")
+		}
 	}
 	// 驗證是否有正在綁定此 OriginalTransactionID 的用戶
-	subscribeInfoListInput := subscribeInfoModel.ListInput{}
+	subscribeInfoListInput = subscribeInfoModel.ListInput{}
 	subscribeInfoListInput.OriginalTransactionID = util.PointerString(originalTransactionID)
-	subscribeInfoOutputs, _, err := r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
+	subscribeInfoOutputs, _, err = r.subscribeInfoService.Tx(tx).List(&subscribeInfoListInput)
 	if err != nil {
 		return err
 	}
