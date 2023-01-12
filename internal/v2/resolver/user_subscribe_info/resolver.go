@@ -16,17 +16,20 @@ func New(subscribeInfoService user_subscribe_info.Service) Resolver {
 }
 
 func (r *resolver) APIGetUserSubscribeInfo(input *model.APIGetUserSubscribeInfoInput) (output model.APIGetUserSubscribeInfoOutput) {
-	findInput := model.FindInput{}
-	findInput.UserID = util.PointerInt64(input.UserID)
-	outputData, err := r.subscribeInfoService.Find(&findInput)
+	listInput := model.ListInput{}
+	listInput.UserID = util.PointerInt64(input.UserID)
+	subscribeInfoOutputs, _, err := r.subscribeInfoService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
 	data := model.APIGetUserSubscribeInfoData{}
-	if err := util.Parser(outputData, &data); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
+	data.Status = util.PointerInt(0)
+	if len(subscribeInfoOutputs) > 0 {
+		if err := util.Parser(subscribeInfoOutputs[0], &data); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
 	}
 	output.Set(code.Success, "success")
 	output.Data = &data
