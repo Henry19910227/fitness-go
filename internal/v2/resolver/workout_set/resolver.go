@@ -567,8 +567,10 @@ func (r *resolver) APICreateTrainerWorkoutSets(tx *gorm.DB, input *model.APICrea
 	}
 	// 驗證動作權限
 	actionListInput := actionModel.ListInput{}
-	actionListInput.IDs = input.Body.ActionIDs
-	actionListInput.Source = util.PointerInt(1)
+	actionListInput.Wheres = []*whereModel.Where{
+		{Query: "actions.id IN (?)", Args: []interface{}{input.Body.ActionIDs}},
+		{Query: "actions.Source IN (?)", Args: []interface{}{[]int{actionModel.SourceSystem, actionModel.SourceTrainer}}},
+	}
 	actionOutputs, _, err := r.actionService.Tx(tx).List(&actionListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
