@@ -15,7 +15,7 @@ import (
 
 type Output struct {
 	Table
-	Course *CourseOutput `json:"course" gorm:"foreignKey:id;references:course_id"` // 課表
+	Course            *CourseOutput               `json:"course" gorm:"foreignKey:id;references:course_id"`              // 課表
 	MaxDistanceRecord *max_distance_record.Output `json:"max_distance_record" gorm:"foreignKey:action_id;references:id"` // 最長距離紀錄
 	MaxRepsRecord     *max_reps_record.Output     `json:"max_reps_record" gorm:"foreignKey:action_id;references:id"`     // 最多次數紀錄
 	MaxRMRecord       *max_rm_record.Output       `json:"max_rm_record" gorm:"foreignKey:action_id;references:id"`       // 最大RM紀錄
@@ -237,11 +237,6 @@ type APIGetTrainerActionsData []*struct {
 	optional.StatusField
 	optional.CreateAtField
 	optional.UpdateAtField
-}
-
-// APIDeleteTrainerActionOutput /v2/trainer/action/{action_id} [DELETE]
-type APIDeleteTrainerActionOutput struct {
-	base.Output
 }
 
 // APIDeleteTrainerActionVideoOutput /v2/trainer/action/{action_id}/video [DELETE]

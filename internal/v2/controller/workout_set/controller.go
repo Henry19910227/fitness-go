@@ -52,8 +52,8 @@ func (c *controller) GetCMSWorkoutSets(ctx *gin.Context) {
 	}
 	input := model.APIGetCMSWorkoutSetsInput{}
 	input.WorkoutID = uri.WorkoutID
-	input.Page = query.Page
-	input.Size = query.Size
+	input.Page = util.PointerInt(query.Page)
+	input.Size = util.PointerInt(query.Size)
 	output := c.resolver.APIGetCMSWorkoutSets(&input)
 	ctx.JSON(http.StatusOK, output)
 }

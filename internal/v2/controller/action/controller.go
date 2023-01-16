@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_delete_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_trainer_course_actions"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_user_action_best_pr"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_update_trainer_action"
@@ -486,17 +487,17 @@ func (c *controller) GetTrainerCourseActions(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
-// @Success 200 {object} action.APIDeleteTrainerActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Success 200 {object} api_delete_trainer_action.Output "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/trainer/action/{action_id} [DELETE]
 func (c *controller) DeleteTrainerAction(ctx *gin.Context) {
-	var input model.APIDeleteTrainerActionInput
+	var input api_delete_trainer_action.Input
 	input.UserID = ctx.MustGet("uid").(int64)
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
-	output := c.resolver.APIDeleteTrainerAction(&input)
+	output := c.resolver.APIDeleteTrainerAction(ctx.MustGet("tx").(*gorm.DB), &input)
 	ctx.JSON(http.StatusOK, output)
 }
 
@@ -508,7 +509,7 @@ func (c *controller) DeleteTrainerAction(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param action_id path int64 true "動作id"
-// @Success 200 {object} action.APIDeleteTrainerActionOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
+// @Success 200 {object} action.APIDeleteTrainerActionVideoOutput "0:Success/ 9000:Bad Request/ 9005:Invalid Token/ 9006:Permission denied"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/trainer/action/{action_id}/video [DELETE]
 func (c *controller) DeleteTrainerActionVideo(ctx *gin.Context) {

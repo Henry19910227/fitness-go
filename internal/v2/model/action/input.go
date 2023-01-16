@@ -174,15 +174,6 @@ type APIGetTrainerActionsQuery struct {
 	PagingInput
 }
 
-// APIDeleteTrainerActionInput /v2/trainer/action/{action_id} [DELETE]
-type APIDeleteTrainerActionInput struct {
-	userRequired.UserIDField
-	Uri APIDeleteTrainerActionUri
-}
-type APIDeleteTrainerActionUri struct {
-	required.IDField
-}
-
 // APIDeleteTrainerActionVideoInput /v2/trainer/action/{action_id}/video [DELETE]
 type APIDeleteTrainerActionVideoInput struct {
 	userRequired.UserIDField

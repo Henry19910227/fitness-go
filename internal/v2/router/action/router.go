@@ -33,6 +33,6 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.POST("/trainer/course/:course_id/action", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.CreateTrainerAction)
 	v2.PATCH("/trainer/action/:action_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.UpdateTrainerAction)
 	v2.GET("/trainer/course/:course_id/actions", midd.Verify([]global.Role{global.UserRole}), controller.GetTrainerCourseActions)
-	v2.DELETE("/trainer/action/:action_id", midd.Verify([]global.Role{global.UserRole}), controller.DeleteTrainerAction)
+	v2.DELETE("/trainer/action/:action_id", middleware.Transaction(orm.Shared().DB()), midd.Verify([]global.Role{global.UserRole}), controller.DeleteTrainerAction)
 	v2.DELETE("/trainer/action/:action_id/video", midd.Verify([]global.Role{global.UserRole}), controller.DeleteTrainerActionVideo)
 }

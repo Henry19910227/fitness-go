@@ -1,19 +1,27 @@
 package workout_set
 
 import (
+	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
 	userRequired "github.com/Henry19910227/fitness-go/internal/v2/field/user/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/file"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
-	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
 )
 
-type PagingInput = paging.Input
+type PagingInput = struct {
+	pagingOptional.PageField
+	pagingOptional.SizeField
+}
 type PreloadInput = preload.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
 type OrderByInput = orderBy.Input
+type CustomOrderByInput = orderBy.CustomInput
 
 // GenerateInput Test Input
 type GenerateInput struct {
@@ -28,9 +36,14 @@ type FindInput struct {
 
 type ListInput struct {
 	optional.WorkoutIDField
+	optional.ActionIDField
 	optional.TypeField
+	JoinInput
+	WhereInput
 	PagingInput
 	PreloadInput
+	OrderByInput
+	CustomOrderByInput
 }
 
 type DeleteInput struct {

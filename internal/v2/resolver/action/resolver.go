@@ -6,16 +6,22 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_create_trainer_action"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_delete_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_trainer_course_actions"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_get_user_action_best_pr"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/action/api_update_trainer_action"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
+	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
+	workoutModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout"
+	workoutSetModel "github.com/Henry19910227/fitness-go/internal/v2/model/workout_set"
 	actionService "github.com/Henry19910227/fitness-go/internal/v2/service/action"
 	courseService "github.com/Henry19910227/fitness-go/internal/v2/service/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/workout"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set"
 	"gorm.io/gorm"
 	"io/ioutil"
 	"strconv"
@@ -23,14 +29,20 @@ import (
 )
 
 type resolver struct {
-	actionService   actionService.Service
-	courseService   courseService.Service
-	coverUploadTool uploader.Tool
-	videoUploadTool uploader.Tool
+	actionService     actionService.Service
+	courseService     courseService.Service
+	workoutService    workout.Service
+	workoutSetService workout_set.Service
+	coverUploadTool   uploader.Tool
+	videoUploadTool   uploader.Tool
 }
 
-func New(actionService actionService.Service, courseService courseService.Service, coverUploadTool uploader.Tool, videoUploadTool uploader.Tool) Resolver {
-	return &resolver{actionService: actionService, courseService: courseService, coverUploadTool: coverUploadTool, videoUploadTool: videoUploadTool}
+func New(actionService actionService.Service, courseService courseService.Service,
+	workoutService workout.Service, workoutSetService workout_set.Service,
+	coverUploadTool uploader.Tool, videoUploadTool uploader.Tool) Resolver {
+	return &resolver{actionService: actionService, courseService: courseService,
+		workoutService: workoutService, workoutSetService: workoutSetService,
+		coverUploadTool: coverUploadTool, videoUploadTool: videoUploadTool}
 }
 
 func (r *resolver) APIGetCMSActions(input *model.APIGetCMSActionsInput) (output model.APIGetCMSActionsOutput) {
@@ -759,10 +771,10 @@ func (r *resolver) APIUpdateTrainerAction(tx *gorm.DB, input *api_update_trainer
 	return output
 }
 
-func (r *resolver) APIDeleteTrainerAction(input *model.APIDeleteTrainerActionInput) (output model.APIDeleteTrainerActionOutput) {
+func (r *resolver) APIDeleteTrainerAction(tx *gorm.DB, input *api_delete_trainer_action.Input) (output api_delete_trainer_action.Output) {
 	// 查詢動作資訊
 	findInput := model.FindInput{}
-	findInput.ID = util.PointerInt64(input.Uri.ID)
+	findInput.ID = util.PointerInt64(input.Uri.ActionID)
 	actionOutput, err := r.actionService.Find(&findInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -777,13 +789,60 @@ func (r *resolver) APIDeleteTrainerAction(input *model.APIDeleteTrainerActionInp
 		output.Set(code.BadRequest, "非此動作擁有者，無法刪除資源")
 		return output
 	}
-	// 刪除動作
-	deleteInput := model.DeleteInput{}
-	deleteInput.ID = input.Uri.ID
-	if err := r.actionService.Delete(&deleteInput); err != nil {
+	findCourseInput := courseModel.FindInput{}
+	findCourseInput.ID = actionOutput.CourseID
+	courseOutput, err := r.courseService.Find(&findCourseInput)
+	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	courseStatus := util.OnNilJustReturnInt(courseOutput.CourseStatus, 0)
+	if courseStatus != courseModel.Preparing && courseStatus != courseModel.Reject {
+		output.Set(code.BadRequest, "該課表不是準備或退審狀態，無法刪除動作")
+		return output
+	}
+	// 查詢此動作關聯的訓練
+	workoutList := workoutModel.ListInput{}
+	workoutList.Joins = []*joinModel.Join{
+		{Query: "INNER JOIN workout_sets ON workouts.id = workout_sets.workout_id"},
+		{Query: "INNER JOIN actions ON actions.id = workout_sets.action_id"},
+	}
+	workoutList.Wheres = []*whereModel.Where{
+		{Query: "actions.id = ?", Args: []interface{}{input.Uri.ActionID}},
+	}
+	workoutOutputs, _, err := r.workoutService.List(&workoutList)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	defer tx.Rollback()
+	// 刪除動作
+	deleteInput := model.DeleteInput{}
+	deleteInput.ID = input.Uri.ActionID
+	if err := r.actionService.Tx(tx).Delete(&deleteInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	for _, workoutOutput := range workoutOutputs {
+		// 查詢此動作關聯的訓練內剩餘的訓練組數量
+		setListInput := workoutSetModel.ListInput{}
+		setListInput.WorkoutID = workoutOutput.ID
+		setListInput.Type = util.PointerInt(1)
+		setOutputs, _, err := r.workoutSetService.Tx(tx).List(&setListInput)
+		if err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		// 更新此訓練的訓練組數量
+		workoutTable := workoutModel.Table{}
+		workoutTable.ID = workoutOutput.ID
+		workoutTable.WorkoutSetCount = util.PointerInt(len(setOutputs))
+		if err := r.workoutService.Tx(tx).Update(&workoutTable); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
+	tx.Commit()
 	// 刪除相關封面
 	_ = r.coverUploadTool.Delete(util.OnNilJustReturnString(actionOutput.Cover, ""))
 	// 刪除相關影片
