@@ -43,6 +43,7 @@ type Data struct {
 		trainerOptional.AvatarField
 		trainerOptional.NicknameField
 		trainerOptional.SkillField
+		trainerOptional.TrainerLevelField
 	} `json:"trainer,omitempty"`
 	SaleItem *struct {
 		saleItemOptional.IDField
