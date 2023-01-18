@@ -18,6 +18,7 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.GET("/cms/course/:course_id/users", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSCourseUsers)
 	v2.GET("/cms/user/:user_id", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSUser)
 	v2.GET("/cms/users", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSUsers)
+	v2.PATCH("/cms/user/:user_id", midd.Verify([]global.Role{global.AdminRole}), controller.UpdateCMSUser)
 
 	v2.PATCH("/password", midd.Verify([]global.Role{global.UserRole}), controller.UpdatePassword)
 	v2.PATCH("/user/profile", midd.Verify([]global.Role{global.UserRole}), controller.UpdateUserProfile)

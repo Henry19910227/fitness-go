@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_user"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_users"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_update_cms_user"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -97,6 +98,32 @@ func (c *controller) GetCMSUsers(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetCMSUsers(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// UpdateCMSUser 更新用戶資訊
+// @Summary 更新用戶資訊
+// @Description 更新用戶資訊
+// @Tags CMS會員管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "用戶id"
+// @Param json_body body api_update_cms_user.Body true "更新欄位"
+// @Success 200 {object} api_update_cms_user.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/user/{user_id} [PATCH]
+func (c *controller) UpdateCMSUser(ctx *gin.Context) {
+	input := api_update_cms_user.Input{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&input.Body); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIUpdateCMSUser(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 
