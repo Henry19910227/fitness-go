@@ -7,6 +7,7 @@ import (
 type Controller interface {
 	GetCMSCourseUsers(ctx *gin.Context)
 	GetCMSUser(ctx *gin.Context)
+	GetCMSUsers(ctx *gin.Context)
 
 	UpdatePassword(ctx *gin.Context)
 	UpdateUserProfile(ctx *gin.Context)

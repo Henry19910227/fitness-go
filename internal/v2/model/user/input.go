@@ -29,6 +29,8 @@ type ListInput struct {
 	optional.IDField
 	optional.AccountField
 	optional.PasswordField
+	optional.UserStatusField
+	optional.UserTypeField
 	optional.NicknameField
 	optional.EmailField
 	optional.IsDeletedField

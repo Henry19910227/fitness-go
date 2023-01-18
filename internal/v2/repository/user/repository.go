@@ -72,6 +72,14 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.Password != nil {
 		db = db.Where("users.password = ?", *input.Password)
 	}
+	//加入 user_status 篩選條件
+	if input.UserStatus != nil {
+		db = db.Where("users.user_status = ?", *input.UserStatus)
+	}
+	//加入 user_type 篩選條件
+	if input.UserType != nil {
+		db = db.Where("users.user_type = ?", *input.UserType)
+	}
 	//加入 email 篩選條件
 	if input.Email != nil {
 		db = db.Where("users.email = ?", *input.Email)

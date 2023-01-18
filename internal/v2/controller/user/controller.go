@@ -6,6 +6,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_user"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_users"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -67,6 +68,35 @@ func (c *controller) GetCMSUser(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetCMSUser(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetCMSUsers 獲取用戶列表
+// @Summary 獲取用戶列表
+// @Description 獲取用戶列表
+// @Tags CMS會員管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id query int64 false "用戶ID"
+// @Param nickname query string false "用戶名稱(1~40字元)"
+// @Param email query string false "用戶Email"
+// @Param user_status query string false "用戶狀態 (1:正常/2:違規/3:刪除)"
+// @Param user_type query string false "用戶類型 (1:一般用戶/2:訂閱用戶)"
+// @Param order_field query string false "排序欄位 (create_at:創建時間)"
+// @Param order_type query string false "排序類型 (ASC:由低到高/DESC:由高到低)"
+// @Param page query int false "頁數(從第一頁開始)"
+// @Param size query int false "筆數"
+// @Success 200 {object} api_get_cms_users.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/users [GET]
+func (c *controller) GetCMSUsers(ctx *gin.Context) {
+	input := api_get_cms_users.Input{}
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSUsers(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 

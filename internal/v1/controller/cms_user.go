@@ -30,7 +30,7 @@ func NewCMSUser(baseGroup *gin.RouterGroup, userService service.User, userMiddle
 }
 
 // GetUsers 獲取用戶列表
-// @Summary 獲取用戶列表
+// @Summary 獲取用戶列表 (API已過時，更新為 /v2/cms/users [GET])
 // @Description 獲取用戶列表
 // @Tags CMS/User_v1
 // @Accept json
