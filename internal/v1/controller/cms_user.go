@@ -85,7 +85,7 @@ func (u *CMSUser) GetUsers(c *gin.Context) {
 }
 
 // GetUser 取得用戶詳細資訊
-// @Summary 取得用戶詳細資訊
+// @Summary 取得用戶詳細資訊 (API已過時，更新為 /v2/cms/user/{user_id} [GET])
 // @Description 取得用戶詳細資訊
 // @Tags CMS/User_v1
 // @Accept json

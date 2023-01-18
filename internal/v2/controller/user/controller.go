@@ -5,6 +5,7 @@ import (
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_user"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -45,6 +46,27 @@ func (c *controller) GetCMSCourseUsers(ctx *gin.Context) {
 		return
 	}
 	output := c.resolver.APIGetCMSCourseUsers(&input)
+	ctx.JSON(http.StatusOK, output)
+}
+
+// GetCMSUser 取得用戶詳細資訊
+// @Summary 取得用戶詳細資訊
+// @Description 取得用戶詳細資訊
+// @Tags CMS會員管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "用戶 id"
+// @Success 200 {object} api_get_cms_user.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/user/{user_id} [GET]
+func (c *controller) GetCMSUser(ctx *gin.Context) {
+	input := api_get_cms_user.Input{}
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSUser(&input)
 	ctx.JSON(http.StatusOK, output)
 }
 
