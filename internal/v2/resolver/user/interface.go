@@ -5,6 +5,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_user"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_users"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_update_cms_user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -13,6 +14,7 @@ type Resolver interface {
 	APIGetCMSCourseUsers(input *api_get_cms_course_users.Input) (output api_get_cms_course_users.Output)
 	APIGetCMSUser(input *api_get_cms_user.Input) (output api_get_cms_user.Output)
 	APIGetCMSUsers(input *api_get_cms_users.Input) (output api_get_cms_users.Output)
+	APIUpdateCMSUser(input *api_update_cms_user.Input) (output api_update_cms_user.Output)
 
 	APIUpdatePassword(input *model.APIUpdatePasswordInput) (output model.APIUpdatePasswordOutput)
 	APIUpdateUserProfile(input *model.APIUpdateUserProfileInput) (output model.APIUpdateUserProfileOutput)

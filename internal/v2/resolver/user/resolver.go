@@ -27,6 +27,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_user"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_users"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_update_cms_user"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
@@ -168,6 +169,19 @@ func (r *resolver) APIGetCMSUsers(input *api_get_cms_users.Input) (output api_ge
 	output.Set(code.Success, "success")
 	output.Paging = page
 	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIUpdateCMSUser(input *api_update_cms_user.Input) (output api_update_cms_user.Output) {
+	userTable := model.Table{}
+	userTable.ID = util.PointerInt64(input.Uri.UserID)
+	userTable.Password = input.Body.Password
+	userTable.UserStatus = input.Body.UserStatus
+	if err := r.userService.Update(&userTable); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
 	return output
 }
 
