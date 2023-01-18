@@ -26,6 +26,7 @@ import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_user"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_users"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
@@ -123,6 +124,49 @@ func (r *resolver) APIGetCMSUser(input *api_get_cms_user.Input) (output api_get_
 		return output
 	}
 	output.Set(code.Success, "success")
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetCMSUsers(input *api_get_cms_users.Input) (output api_get_cms_users.Output) {
+	if input.Query.OrderField == nil {
+		input.Query.OrderField = util.PointerString("create_at")
+	}
+	if input.Query.OrderType == nil {
+		input.Query.OrderType = util.PointerString(orderBy.DESC)
+	}
+	wheres := make([]*whereModel.Where, 0)
+	if input.Query.Nickname != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "users.nickname LIKE ?", Args: []interface{}{"%" + *input.Query.Nickname + "%"}})
+	}
+	if input.Query.Email != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "users.email = ?", Args: []interface{}{"%" + *input.Query.Email + "%"}})
+	}
+	// 查詢用戶
+	userListInput := model.ListInput{}
+	userListInput.ID = input.Query.UserID
+	userListInput.UserStatus = input.Query.UserStatus
+	userListInput.UserType = input.Query.UserType
+	userListInput.Wheres = wheres
+	userListInput.Size = input.Query.Size
+	userListInput.Page = input.Query.Page
+	userListInput.OrderField = *input.Query.OrderField
+	userListInput.OrderType = *input.Query.OrderType
+	userListInput.Size = input.Query.Size
+	userListInput.Page = input.Query.Page
+	userOutputs, page, err := r.userService.List(&userListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parse output
+	data := api_get_cms_users.Data{}
+	if err := util.Parser(userOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Paging = page
 	output.Data = &data
 	return output
 }
