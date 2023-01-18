@@ -25,6 +25,7 @@ import (
 	receiptModel "github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_course_users"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user/api_get_cms_user"
 	subscribeInfoModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_info"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
@@ -102,6 +103,26 @@ func (r *resolver) APIGetCMSCourseUsers(input *api_get_cms_course_users.Input) (
 	}
 	output.Set(code.Success, "success")
 	output.Paging = page
+	output.Data = &data
+	return output
+}
+
+func (r *resolver) APIGetCMSUser(input *api_get_cms_user.Input) (output api_get_cms_user.Output) {
+	// 查詢課表使用者
+	findUserInput := model.FindInput{}
+	findUserInput.ID = util.PointerInt64(input.Uri.UserID)
+	userOutput, err := r.userService.Find(&findUserInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parse output
+	data := api_get_cms_user.Data{}
+	if err := util.Parser(userOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
 	output.Data = &data
 	return output
 }
