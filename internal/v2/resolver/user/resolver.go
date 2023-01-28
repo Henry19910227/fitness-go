@@ -175,7 +175,9 @@ func (r *resolver) APIGetCMSUsers(input *api_get_cms_users.Input) (output api_ge
 func (r *resolver) APIUpdateCMSUser(input *api_update_cms_user.Input) (output api_update_cms_user.Output) {
 	userTable := model.Table{}
 	userTable.ID = util.PointerInt64(input.Uri.UserID)
-	userTable.Password = input.Body.Password
+	if input.Body.Password != nil {
+		userTable.Password = util.PointerString(r.cryptoTool.MD5Encode(*input.Body.Password))
+	}
 	userTable.UserStatus = input.Body.UserStatus
 	if err := r.userService.Update(&userTable); err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -190,19 +192,20 @@ func (r *resolver) APIUpdatePassword(input *model.APIUpdatePasswordInput) (outpu
 	findInput := model.FindInput{}
 	findInput.ID = util.PointerInt64(input.ID)
 	findInput.IsDeleted = util.PointerInt(0)
-	data, err := r.userService.Find(&findInput)
+	userOutput, err := r.userService.Find(&findInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	if util.OnNilJustReturnString(data.Password, "") != input.Body.OldPassword {
+	oldPassword := r.cryptoTool.MD5Encode(input.Body.OldPassword)
+	if util.OnNilJustReturnString(userOutput.Password, "") != oldPassword {
 		output.Set(code.PermissionDenied, errors.New("與舊密碼不一致").Error())
 		return output
 	}
 	//修改密碼
 	table := model.Table{}
 	table.ID = util.PointerInt64(input.ID)
-	table.Password = util.PointerString(input.Body.Password)
+	table.Password = util.PointerString(r.cryptoTool.MD5Encode(input.Body.Password))
 	if err := r.userService.Update(&table); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -339,7 +342,7 @@ func (r *resolver) APIRegisterForEmail(input *model.APIRegisterForEmailInput) (o
 	table.Account = util.PointerString(input.Body.Email)
 	table.Nickname = util.PointerString(input.Body.Nickname)
 	table.Email = util.PointerString(input.Body.Email)
-	table.Password = util.PointerString(input.Body.Password)
+	table.Password = util.PointerString(r.cryptoTool.MD5Encode(input.Body.Password))
 	_, err = r.userService.Create(&table)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -591,7 +594,7 @@ func (r *resolver) APILoginForEmail(input *model.APILoginForEmailInput) (output 
 	//獲取user資訊
 	listInput := model.ListInput{}
 	listInput.Account = util.PointerString(input.Body.Email)
-	listInput.Password = util.PointerString(input.Body.Password)
+	listInput.Password = util.PointerString(r.cryptoTool.MD5Encode(input.Body.Password))
 	listInput.IsDeleted = util.PointerInt(0)
 	userOutputs, _, err := r.userService.List(&listInput)
 	if err != nil {
@@ -1140,7 +1143,7 @@ func (r *resolver) APIUpdateResetPassword(input *model.APIUpdateResetPasswordInp
 	//修改密碼
 	userTable := model.Table{}
 	userTable.ID = userOutputs[0].ID
-	userTable.Password = util.PointerString(input.Body.Password)
+	userTable.Password = util.PointerString(r.cryptoTool.MD5Encode(input.Body.Password))
 	if err := r.userService.Update(&userTable); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
