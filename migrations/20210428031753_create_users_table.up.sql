@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
      `account_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '帳號類型 (1:Email註冊/2:FB註冊/3:Google註冊/4:Line註冊)',
      `account` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '帳號',
      `password` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '密碼',
-     `device_token` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '推播token',
+     `device_token` VARCHAR(500) NOT NULL DEFAULT '' COMMENT '推播token',
      `user_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '用戶狀態 (1:正常/2:違規/3:刪除)',
      `user_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '用戶類型 (1:一般用戶/2:訂閱用戶)',
      `email` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '信箱',
