@@ -27,47 +27,89 @@ func (s *setting) GetAppServerAPIURL() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAP.Debug.AppStoreServer")
 	}
-	return s.vp.GetString("IAP.Release.AppStoreServer")
+	if s.mode == "release" {
+		return s.vp.GetString("IAP.Release.AppStoreServer")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAP.Production.AppStoreServer")
+	}
+	return ""
 }
 
 func (s *setting) GetPassword() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAP.Debug.Password")
 	}
-	return s.vp.GetString("IAP.Release.Password")
+	if s.mode == "release" {
+		return s.vp.GetString("IAP.Release.Password")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAP.Production.Password")
+	}
+	return ""
 }
 
 func (s *setting) GetKeyPath() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAP.Debug.KeyPath")
 	}
-	return s.vp.GetString("IAP.Release.KeyPath")
+	if s.mode == "release" {
+		return s.vp.GetString("IAP.Release.KeyPath")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAP.Production.KeyPath")
+	}
+	return ""
 }
 
 func (s *setting) GetKeyName() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAP.Debug.KeyName")
 	}
-	return s.vp.GetString("IAP.Release.KeyName")
+	if s.mode == "release" {
+		return s.vp.GetString("IAP.Release.KeyName")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAP.Production.KeyName")
+	}
+	return ""
 }
 
 func (s *setting) GetKeyID() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAP.Debug.KeyID")
 	}
-	return s.vp.GetString("IAP.Release.KeyID")
+	if s.mode == "release" {
+		return s.vp.GetString("IAP.Release.KeyID")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAP.Production.KeyID")
+	}
+	return ""
 }
 
 func (s *setting) GetBundleID() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAP.Debug.BundleID")
 	}
-	return s.vp.GetString("IAP.Release.BundleID")
+	if s.mode == "release" {
+		return s.vp.GetString("IAP.Release.BundleID")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAP.Production.BundleID")
+	}
+	return ""
 }
 
 func (s *setting) GetIssuer() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAP.Debug.Issuer")
 	}
-	return s.vp.GetString("IAP.Release.Issuer")
+	if s.mode == "release" {
+		return s.vp.GetString("IAP.Release.Issuer")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAP.Production.Issuer")
+	}
+	return ""
 }

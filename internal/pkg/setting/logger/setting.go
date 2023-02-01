@@ -27,7 +27,13 @@ func (s *setting) GetLogFilePath() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("Log.Debug.Path")
 	}
-	return s.vp.GetString("Log.Release.Path")
+	if s.mode == "release" {
+		return s.vp.GetString("Log.Release.Path")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("Log.Production.Path")
+	}
+	return ""
 }
 
 func (s *setting) GetLogFileName() string {
@@ -42,14 +48,26 @@ func (s *setting) GetLogMaxAge() time.Duration {
 	if s.mode == "debug" {
 		return s.vp.GetDuration("Log.Debug.MaxAge") * time.Minute
 	}
-	return s.vp.GetDuration("Log.Release.MaxAge") * time.Hour * 24
+	if s.mode == "release" {
+		return s.vp.GetDuration("Log.Release.MaxAge") * time.Hour * 24
+	}
+	if s.mode == "production" {
+		return s.vp.GetDuration("Log.Production.MaxAge") * time.Hour * 24
+	}
+	return 7 * time.Hour * 24
 }
 
 func (s *setting) GetLogRotationTime() time.Duration {
 	if s.mode == "debug" {
 		return s.vp.GetDuration("Log.Debug.RotationTime") * time.Minute
 	}
-	return s.vp.GetDuration("Log.Release.RotationTime") * time.Hour * 24
+	if s.mode == "release" {
+		return s.vp.GetDuration("Log.Release.RotationTime") * time.Hour * 24
+	}
+	if s.mode == "production" {
+		return s.vp.GetDuration("Log.Production.RotationTime") * time.Hour * 24
+	}
+	return 7 * time.Hour * 24
 }
 
 func (s *setting) GetRunMode() string {

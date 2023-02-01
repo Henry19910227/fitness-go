@@ -36,12 +36,24 @@ func (s *setting) GetPackageName() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAB.Debug.PackageName")
 	}
-	return s.vp.GetString("IAB.Release.PackageName")
+	if s.mode == "release" {
+		return s.vp.GetString("IAB.Release.PackageName")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAB.Production.PackageName")
+	}
+	return ""
 }
 
 func (s *setting) GetKeyName() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("IAB.Debug.KeyName")
 	}
-	return s.vp.GetString("IAB.Release.KeyName")
+	if s.mode == "release" {
+		return s.vp.GetString("IAB.Release.KeyName")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("IAB.Production.KeyName")
+	}
+	return ""
 }

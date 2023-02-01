@@ -8,6 +8,8 @@ App:
       Version: 2.0.25
     Release:
       Version: 2.0.25
+    Production:
+      Version: 2.0.25
 Resource:
     RootPath: ./volumes/storage
 Upload:
@@ -36,6 +38,10 @@ Log:
       Path: ./volumes/log
       MaxAge: 7 # Day
       RotationTime: 1 # Day
+    Production:
+      Path: ./volumes/log
+      MaxAge: 7 # Day
+      RotationTime: 1 # Day
 Database:
     DBType: mysql
     Debug:
@@ -48,11 +54,19 @@ Database:
       DBName: fitness
       UserName: henry
       Password: aaaa8027
+    Production:
+      Host: 35.189.179.168:3306 # google cloud sql
+      DBName: fitness
+      UserName: henry
+      Password: aaaa8027
 Redis:
     Debug:
       Host: 127.0.0.1:6379
       Password: ""
     Release:
+      Host: fitness-redis-master:6379
+      Password: aaaa8027
+    Product:
       Host: fitness-redis-master:6379
       Password: aaaa8027
 JWT:
@@ -78,6 +92,14 @@ IAP:
       KeyPath: ./config/SubscriptionKey_Q7648PT9MF.p8
       KeyName: SubscriptionKey_Q7648PT9MF.p8 # 密鑰-用於產生查詢訂閱API Token
       BundleID: com.fitopia.hub
+    Production:
+      AppStoreServer: https://api.storekit-sandbox.itunes.apple.com
+      Password: f7e5fb26e7cf4de3b8eff69950b6d747
+      Issuer: 18f6ec13-f472-4dbc-8620-9a790c5d48e2
+      KeyID: Q7648PT9MF
+      KeyPath: ./config/SubscriptionKey_Q7648PT9MF.p8
+      KeyName: SubscriptionKey_Q7648PT9MF.p8 # 密鑰-用於產生查詢訂閱API Token
+      BundleID: com.fitopia.hub
 IAB:
     TokenURL: https://oauth2.googleapis.com/token
     URL: https://androidpublisher.googleapis.com
@@ -88,6 +110,10 @@ IAB:
       KeyName: fitness-iab-test.json
       PackageName: com.henry.fitness.dev
     Release:
+      JsonFilePath: ./config/fitness-84141-15033019d22e.json
+      KeyName: fitness-84141-15033019d22e.json
+      PackageName: com.alan.fitness.dev
+    Production:
       JsonFilePath: ./config/fitness-84141-15033019d22e.json
       KeyName: fitness-84141-15033019d22e.json
       PackageName: com.alan.fitness.dev
@@ -102,6 +128,9 @@ FCM:
     Release:
       ProjectID: fitness-84141
       KeyName: fitness-84141-fcm-dev.json
+    Production:
+      ProjectID: fitness-84141
+      KeyName: fitness-84141-fcm-dev.json
 FBLogin:
     Host: https://graph.facebook.com/
     Debug:
@@ -109,6 +138,10 @@ FBLogin:
       AppSecret: 9e81d8aea97dae4b4d47e2e58f1535e9
       DebugTokenURL: https://graph.facebook.com/debug_token
     Release:
+      AppID: 3268303936749363
+      AppSecret: 9e81d8aea97dae4b4d47e2e58f1535e9
+      DebugTokenURL: https://graph.facebook.com/debug_token
+    Production:
       AppID: 3268303936749363
       AppSecret: 9e81d8aea97dae4b4d47e2e58f1535e9
       DebugTokenURL: https://graph.facebook.com/debug_token
@@ -121,6 +154,11 @@ GoogleLogin:
       Android:
         ClientID: 376527343165-tu7fr7epqgqc1c1mf2gbqppsn056alf8.apps.googleusercontent.com
     Release:
+      iOS:
+        ClientID: 376527343165-dsk9555ua5ku7i3nf1g7jqf3olfqgh2q.apps.googleusercontent.com
+      Android:
+        ClientID: 376527343165-j5ncprbdbunqevfqq21nulgirs74nqlb.apps.googleusercontent.com
+    Production:
       iOS:
         ClientID: 376527343165-dsk9555ua5ku7i3nf1g7jqf3olfqgh2q.apps.googleusercontent.com
       Android:
@@ -138,12 +176,20 @@ AppleLogin:
       KeyID: 278SQ8L8UK
       BundleID: com.fitopia.hub
       DebugTokenURL: https://appleid.apple.com/auth/token
+    Production:
+      KeyName: AuthKey_278SQ8L8UK.p8
+      TeamID: WDC8UY2P7F
+      KeyID: 278SQ8L8UK
+      BundleID: com.fitopia.hub
+      DebugTokenURL: https://appleid.apple.com/auth/token
 LineLogin:
     VerifyTokenURL: https://api.line.me/oauth2/v2.1/verify
     ProfileURL: https://api.line.me/v2/profile
     Debug:
       ClientID: 1657378278
     Release:
+      ClientID: 1657326779
+    Production:
       ClientID: 1657326779
 Mail:
     SMTPHostName: smtp.gmail.com
@@ -155,10 +201,16 @@ Mail:
       Port: 587
       Sender: toyokoyo199@gmail.com
       Password: qedvgrldwmeivfqw
+    Production:
+      Port: 587
+      Sender: toyokoyo199@gmail.com
+      Password: qedvgrldwmeivfqw
 OTP:
     Debug:
       Period: 300
     Release:
+      Period: 300
+    Production:
       Period: 300
 Swagger:
     Debug:
@@ -168,4 +220,8 @@ Swagger:
     Release:
       Protocol: https
       Host: www.fitopia-hub.life
+      BasePath: /api
+    Production:
+      Protocol: https
+      Host: www.fitopiahubapi.com
       BasePath: /api

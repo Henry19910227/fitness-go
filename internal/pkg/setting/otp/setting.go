@@ -19,5 +19,11 @@ func (s *setting) GetPeriod() int {
 	if s.mode == "debug" {
 		return s.vp.GetInt("OTP.Debug.Period")
 	}
-	return s.vp.GetInt("OTP.Release.Period")
+	if s.mode == "release" {
+		return s.vp.GetInt("OTP.Release.Period")
+	}
+	if s.mode == "production" {
+		return s.vp.GetInt("OTP.Production.Period")
+	}
+	return 300
 }
