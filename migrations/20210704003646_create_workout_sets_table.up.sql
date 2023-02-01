@@ -15,5 +15,5 @@ CREATE TABLE IF NOT EXISTS workout_sets (
    `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建時間',
    `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新時間',
    CONSTRAINT fk_workout_sets_workout_id_to_workouts_id FOREIGN KEY (workout_id) REFERENCES workouts(id) ON DELETE CASCADE,
-   CONSTRAINT fk_workout_sets_action_id_to_actions_id FOREIGN KEY (action_id) REFERENCES actions(id) ON DELETE SET NULL
+   CONSTRAINT fk_workout_sets_action_id_to_actions_id FOREIGN KEY (action_id) REFERENCES actions(id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8mb4 AUTO_INCREMENT = 1;
