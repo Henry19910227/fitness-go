@@ -8,7 +8,7 @@ func NewMock() Setting {
 }
 
 func (s *settingMock) GetUserName() string {
-	return "root"
+	return "henry"
 }
 
 func (s *settingMock) GetPassword() string {
@@ -16,7 +16,7 @@ func (s *settingMock) GetPassword() string {
 }
 
 func (s *settingMock) GetHost() string {
-	return "127.0.0.1:3306"
+	return "35.189.179.168:3306"
 }
 
 func (s *settingMock) GetDatabase() string {

@@ -26,12 +26,24 @@ func (s *setting) GetHost() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("Redis.Debug.Host")
 	}
-	return s.vp.GetString("Redis.Release.Host")
+	if s.mode == "release" {
+		return s.vp.GetString("Redis.Release.Host")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("Redis.Production.Host")
+	}
+	return ""
 }
 
 func (s *setting) GetPwd() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("Redis.Debug.Password")
 	}
-	return s.vp.GetString("Redis.Release.Password")
+	if s.mode == "release" {
+		return s.vp.GetString("Redis.Release.Password")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("Redis.Production.Password")
+	}
+	return ""
 }

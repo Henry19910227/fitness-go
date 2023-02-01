@@ -19,19 +19,37 @@ func (s *setting) GetAppID() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("FBLogin.Debug.AppID")
 	}
-	return s.vp.GetString("FBLogin.Release.AppID")
+	if s.mode == "release" {
+		return s.vp.GetString("FBLogin.Release.AppID")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("FBLogin.Production.AppID")
+	}
+	return ""
 }
 
 func (s *setting) GetAppSecret() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("FBLogin.Debug.AppSecret")
 	}
-	return s.vp.GetString("FBLogin.Release.AppSecret")
+	if s.mode == "release" {
+		return s.vp.GetString("FBLogin.Release.AppSecret")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("FBLogin.Production.AppSecret")
+	}
+	return ""
 }
 
 func (s *setting) GetDebugTokenURL() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("FBLogin.Debug.DebugTokenURL")
 	}
-	return s.vp.GetString("FBLogin.Release.DebugTokenURL")
+	if s.mode == "release" {
+		return s.vp.GetString("FBLogin.Release.DebugTokenURL")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("FBLogin.Production.DebugTokenURL")
+	}
+	return ""
 }

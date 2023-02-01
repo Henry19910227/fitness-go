@@ -23,19 +23,37 @@ func (s *setting) Port() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("Mail.Debug.Port")
 	}
-	return s.vp.GetString("Mail.Release.Port")
+	if s.mode == "release" {
+		return s.vp.GetString("Mail.Release.Port")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("Mail.Production.Port")
+	}
+	return ""
 }
 
 func (s *setting) Sender() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("Mail.Debug.Sender")
 	}
-	return s.vp.GetString("Mail.Release.Sender")
+	if s.mode == "release" {
+		return s.vp.GetString("Mail.Release.Sender")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("Mail.Production.Sender")
+	}
+	return ""
 }
 
 func (s *setting) Password() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("Mail.Debug.Password")
 	}
-	return s.vp.GetString("Mail.Release.Password")
+	if s.mode == "release" {
+		return s.vp.GetString("Mail.Release.Password")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("Mail.Production.Password")
+	}
+	return ""
 }

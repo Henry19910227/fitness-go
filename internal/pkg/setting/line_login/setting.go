@@ -27,5 +27,11 @@ func (s *setting) GetClientID() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("LineLogin.Debug.ClientID")
 	}
-	return s.vp.GetString("LineLogin.Release.ClientID")
+	if s.mode == "release" {
+		return s.vp.GetString("LineLogin.Release.ClientID")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("LineLogin.Production.ClientID")
+	}
+	return ""
 }

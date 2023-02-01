@@ -36,12 +36,24 @@ func (s *setting) GetProjectID() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("FCM.Debug.ProjectID")
 	}
-	return s.vp.GetString("FCM.Release.ProjectID")
+	if s.mode == "release" {
+		return s.vp.GetString("FCM.Release.ProjectID")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("FCM.Production.ProjectID")
+	}
+	return ""
 }
 
 func (s *setting) GetKeyName() string {
 	if s.mode == "debug" {
 		return s.vp.GetString("FCM.Debug.KeyName")
 	}
-	return s.vp.GetString("FCM.Release.KeyName")
+	if s.mode == "release" {
+		return s.vp.GetString("FCM.Release.KeyName")
+	}
+	if s.mode == "production" {
+		return s.vp.GetString("FCM.Production.KeyName")
+	}
+	return ""
 }
