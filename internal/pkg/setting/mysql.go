@@ -17,26 +17,50 @@ func (setting *mysql) GetUserName() string {
 	if setting.mode == "debug" {
 		return setting.vp.GetString("Database.Debug.UserName")
 	}
-	return setting.vp.GetString("Database.Release.UserName")
+	if setting.mode == "release" {
+		return setting.vp.GetString("Database.Release.UserName")
+	}
+	if setting.mode == "production" {
+		return setting.vp.GetString("Database.Production.UserName")
+	}
+	return ""
 }
 
 func (setting *mysql) GetPassword() string {
 	if setting.mode == "debug" {
 		return setting.vp.GetString("Database.Debug.Password")
 	}
-	return setting.vp.GetString("Database.Release.Password")
+	if setting.mode == "release" {
+		return setting.vp.GetString("Database.Release.Password")
+	}
+	if setting.mode == "production" {
+		return setting.vp.GetString("Database.Production.Password")
+	}
+	return ""
 }
 
 func (setting *mysql) GetHost() string {
 	if setting.mode == "debug" {
 		return setting.vp.GetString("Database.Debug.Host")
 	}
-	return setting.vp.GetString("Database.Release.Host")
+	if setting.mode == "release" {
+		return setting.vp.GetString("Database.Release.Host")
+	}
+	if setting.mode == "production" {
+		return setting.vp.GetString("Database.Production.Host")
+	}
+	return ""
 }
 
 func (setting *mysql) GetDatabase() string {
 	if setting.mode == "debug" {
 		return setting.vp.GetString("Database.Debug.DBName")
 	}
-	return setting.vp.GetString("Database.Release.DBName")
+	if setting.mode == "release" {
+		return setting.vp.GetString("Database.Release.DBName")
+	}
+	if setting.mode == "production" {
+		return setting.vp.GetString("Database.Production.DBName")
+	}
+	return ""
 }

@@ -23,12 +23,24 @@ func (i *iab) GetJsonFilePath() string {
 	if i.mode == "debug" {
 		return i.vp.GetString("IAB.Debug.JsonFilePath")
 	}
-	return i.vp.GetString("IAB.Release.JsonFilePath")
+	if i.mode == "release" {
+		return i.vp.GetString("IAB.Release.JsonFilePath")
+	}
+	if i.mode == "production" {
+		return i.vp.GetString("IAB.Production.JsonFilePath")
+	}
+	return ""
 }
 
 func (i *iab) GetPackageName() string {
 	if i.mode == "debug" {
 		return i.vp.GetString("IAB.Debug.PackageName")
 	}
-	return i.vp.GetString("IAB.Release.PackageName")
+	if i.mode == "release" {
+		return i.vp.GetString("IAB.Release.PackageName")
+	}
+	if i.mode == "production" {
+		return i.vp.GetString("IAB.Production.PackageName")
+	}
+	return ""
 }
