@@ -223,5 +223,5 @@ Swagger:
       BasePath: /api
     Production:
       Protocol: https
-      Host: www.fitopiahubapi.com
+      Host: www.fitopiahubapp.com
       BasePath: /api
