@@ -37,6 +37,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/food_category"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/ios_version"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/meal"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/migrate"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/rda"
@@ -271,6 +272,7 @@ func main() {
 	diet.SetRoute(v2)
 	ios_version.SetRoute(v2)
 	android_version.SetRoute(v2)
+	migrate.SetRoute(v2)
 	scheduler.Shared().Cron().Start()
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))
 }
