@@ -16,7 +16,7 @@ type tool struct {
 
 func New(setting setting.Logger) Tool {
 	logger := Logger()
-	if setting.GetRunMode() == "release" {
+	if setting.GetRunMode() != "debug" {
 		logger = WriterLogger(setting)
 	}
 	return &tool{logger: logger}

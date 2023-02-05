@@ -3,6 +3,7 @@ package user
 import (
 	"errors"
 	"fmt"
+	"github.com/Henry19910227/fitness-go/internal/pkg/build"
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/apple_login"
 	"github.com/Henry19910227/fitness-go/internal/pkg/tool/crypto"
@@ -1096,10 +1097,18 @@ func (r *resolver) APICreateResetOTP(input *model.APICreateResetOTPInput) (outpu
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	output.SetStatus(code.Success)
+	// parser output
 	data := model.APICreateResetOTPData{}
 	data.Code = otp
+	output.SetStatus(code.Success)
 	output.Data = &data
+	if build.RunMode() == "production" {
+		data.Code = ""
+		if err := r.mailTool.Send(input.Body.Email, "驗證碼", otp); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
 	return output
 }
 
