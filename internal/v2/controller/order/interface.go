@@ -5,6 +5,8 @@ import (
 )
 
 type Controller interface {
+	GetCMSUserOrders(ctx *gin.Context)
+
 	CreateCourseOrder(ctx *gin.Context)
 	CreateSubscribeOrder(ctx *gin.Context)
 	UploadAppleSubscribeReceipt(ctx *gin.Context)

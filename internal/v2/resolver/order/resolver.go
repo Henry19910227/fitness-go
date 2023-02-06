@@ -17,6 +17,7 @@ import (
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderModel "github.com/Henry19910227/fitness-go/internal/v2/model/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_create_subscribe_order"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_get_cms_user_orders"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_order_redeem"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
@@ -87,6 +88,41 @@ func New(orderService order.Service, courseService course.Service,
 		subscribePlanService: subscribePlanService, userService: userService,
 		subscribeLogService: subscribeLogService, saleItemService: saleItemService,
 		iapTool: iapTool, iabTool: iabTool, redisTool: redisTool}
+}
+
+func (r *resolver) APIGetCMSUserOrders(input *api_get_cms_user_orders.Input) (output api_get_cms_user_orders.Output) {
+	orderListInput := orderModel.ListInput{}
+	orderListInput.UserID = util.PointerInt64(input.Uri.UserID)
+	orderListInput.Type = util.PointerInt(orderModel.BuyCourse)
+	orderListInput.Page = input.Query.Page
+	orderListInput.Size = input.Query.Size
+	orderListInput.OrderType = order_by.DESC
+	orderListInput.OrderField = "create_at"
+	if input.Query.OrderType != nil {
+		orderListInput.OrderType = *input.Query.OrderType
+	}
+	if input.Query.OrderField != nil {
+		orderListInput.OrderField = *input.Query.OrderField
+	}
+	orderListInput.Preloads = []*preloadModel.Preload{
+		{Field: "OrderCourse"},
+		{Field: "OrderCourse.Course"},
+	}
+	orderOutputs, page, err := r.orderService.List(&orderListInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// parse output
+	data := api_get_cms_user_orders.Data{}
+	if err := util.Parser(orderOutputs, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	output.Set(code.Success, "success")
+	output.Data = &data
+	output.Paging = page
+	return output
 }
 
 func (r *resolver) APICreateCourseOrder(tx *gorm.DB, input *orderModel.APICreateCourseOrderInput) (output orderModel.APICreateCourseOrderOutput) {
@@ -938,8 +974,8 @@ func (r *resolver) APIVerifyAppleSubscribe(input *orderModel.APIVerifyAppleSubsc
 	orderListInput.OriginalTransactionID = util.PointerString(input.Body.OriginalTransactionID)
 	orderListInput.OrderField = "create_at"
 	orderListInput.OrderType = order_by.DESC
-	orderListInput.Size = 1
-	orderListInput.Page = 1
+	orderListInput.Size = util.PointerInt(1)
+	orderListInput.Page = util.PointerInt(1)
 	orderOutputs, _, err := r.orderService.List(&orderListInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
@@ -1306,8 +1342,8 @@ func (r *resolver) handleSubscribeTradeForGoogle(tx *gorm.DB, productID string, 
 	orderListInput.OriginalTransactionID = util.PointerString(originalTransactionID)
 	orderListInput.OrderField = "create_at"
 	orderListInput.OrderType = order_by.DESC
-	orderListInput.Size = 1
-	orderListInput.Page = 1
+	orderListInput.Size = util.PointerInt(1)
+	orderListInput.Page = util.PointerInt(1)
 	orderOutputs, _, err := r.orderService.List(&orderListInput)
 	if err != nil {
 		return err

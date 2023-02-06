@@ -24,7 +24,7 @@ func NewOrder(baseGroup *gin.RouterGroup, orderService service.Order, userMiddle
 }
 
 // GetCMSUserOrders 獲取用戶購買歷史訂單
-// @Summary 獲取用戶購買歷史訂單
+// @Summary 獲取用戶購買歷史訂單 (API已過時，更新為 /v2/cms/user/{user_id}/orders [GET])
 // @Description 獲取用戶購買歷史訂單
 // @Tags CMS/User_v1
 // @Accept json

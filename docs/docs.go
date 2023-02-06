@@ -1060,7 +1060,7 @@ var doc = `{
                 "tags": [
                     "CMS/User_v1"
                 ],
-                "summary": "更新用戶資訊",
+                "summary": "更新用戶資訊 (API已過時，更新為 /v2/cms/user/{user_id} [PATCH])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1124,7 +1124,7 @@ var doc = `{
                 "tags": [
                     "CMS/User_v1"
                 ],
-                "summary": "獲取用戶購買歷史訂單",
+                "summary": "獲取用戶購買歷史訂單 (API已過時，更新為 /v2/cms/user/{user_id}/orders [GET])",
                 "parameters": [
                     {
                         "type": "integer",
@@ -10524,6 +10524,73 @@ var doc = `{
                 }
             }
         },
+        "/v2/cms/user/{user_id}/orders": {
+            "get": {
+                "security": [
+                    {
+                        "fitness_token": []
+                    }
+                ],
+                "description": "獲取用戶購買歷史訂單",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CMS會員管理_v2"
+                ],
+                "summary": "獲取用戶購買歷史訂單",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用戶ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序欄位 (create_at:創建時間)",
+                        "name": "order_field",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序類型 (ASC:由低到高/DESC:由高到低)",
+                        "name": "order_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "頁數(從第一頁開始)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "筆數",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功!",
+                        "schema": {
+                            "$ref": "#/definitions/api_get_cms_user_orders.Output"
+                        }
+                    },
+                    "400": {
+                        "description": "失敗!",
+                        "schema": {
+                            "$ref": "#/definitions/base.Output"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/cms/users": {
             "get": {
                 "security": [
@@ -18226,12 +18293,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18251,14 +18318,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -18309,12 +18376,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18334,14 +18401,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -18447,12 +18514,12 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18477,14 +18544,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -18559,9 +18626,9 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "favorite": {
                                 "description": "是否收藏(0:否/1:是)",
@@ -18569,7 +18636,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18594,14 +18661,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -18645,12 +18712,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18670,14 +18737,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -18870,7 +18937,7 @@ var doc = `{
                     "example": "test@gmail.com"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18938,7 +19005,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18948,14 +19015,14 @@ var doc = `{
                     "example": "1234.jpg"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "url": {
                     "description": "url",
@@ -19225,7 +19292,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -19297,7 +19364,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -19328,7 +19395,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 }
@@ -19810,7 +19877,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -19964,7 +20031,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "user_id": {
                                 "description": "用戶id",
@@ -20084,6 +20151,77 @@ var doc = `{
                     "description": "訊息",
                     "type": "string",
                     "example": "message.."
+                }
+            }
+        },
+        "api_get_cms_user_orders.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "create_at": {
+                                "description": "創建時間",
+                                "type": "string",
+                                "example": "2022-06-14 00:00:00"
+                            },
+                            "id": {
+                                "description": "訂閱項目id",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "order_course": {
+                                "type": "object",
+                                "properties": {
+                                    "course": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "description": "課表 id",
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "name": {
+                                                "description": "課表名稱",
+                                                "type": "string",
+                                                "example": "增肌課表"
+                                            },
+                                            "trainer": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "nickname": {
+                                                        "description": "教練暱稱",
+                                                        "type": "string",
+                                                        "example": "Henry"
+                                                    },
+                                                    "user_id": {
+                                                        "description": "用戶id",
+                                                        "type": "integer",
+                                                        "example": 10001
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                },
+                "paging": {
+                    "$ref": "#/definitions/paging.Output"
                 }
             }
         },
@@ -20510,7 +20648,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20967,7 +21105,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21224,12 +21362,12 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21254,14 +21392,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -21843,7 +21981,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -21894,7 +22032,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -21925,7 +22063,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -22092,7 +22230,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -22181,7 +22319,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -22652,7 +22790,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -23555,7 +23693,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 }
             }
         },
@@ -23626,7 +23764,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -23651,14 +23789,14 @@ var doc = `{
                                 }
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "url": {
                                 "description": "url",
@@ -26677,7 +26815,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "產品標籤id",
+                                                "description": "訂閱項目id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -30920,7 +31058,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -31002,7 +31140,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -31048,7 +31186,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31180,7 +31318,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "user_id": {
                                 "description": "用戶id",
@@ -32327,7 +32465,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -32567,7 +32705,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -32635,7 +32773,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "user_id": {
                                 "description": "用戶id",
@@ -32812,7 +32950,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -33020,7 +33158,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -35004,7 +35142,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 }
             }
         },
@@ -36001,7 +36139,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 }
@@ -36044,7 +36182,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 }
@@ -36182,12 +36320,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36204,7 +36342,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -36248,12 +36386,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36270,7 +36408,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -36311,9 +36449,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "finish": {
                                 "description": "是否完成(0:未完成/1:已完成)",
@@ -36321,7 +36459,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36338,7 +36476,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -36369,12 +36507,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -36391,7 +36529,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -36432,12 +36570,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -36454,7 +36592,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -36697,7 +36835,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37126,7 +37264,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37156,14 +37294,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -37282,7 +37420,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37312,14 +37450,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -37435,7 +37573,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37465,14 +37603,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -37588,7 +37726,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "產品標籤id",
+                                "description": "訂閱項目id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37618,14 +37756,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -37731,7 +37869,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -37761,14 +37899,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",
@@ -37884,7 +38022,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "產品標籤id",
+                    "description": "訂閱項目id",
                     "type": "integer",
                     "example": 1
                 },
@@ -37914,14 +38052,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",

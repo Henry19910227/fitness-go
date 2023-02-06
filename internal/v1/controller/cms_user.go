@@ -110,7 +110,7 @@ func (u *CMSUser) GetUser(c *gin.Context) {
 }
 
 // UpdateUser 更新用戶資訊
-// @Summary 更新用戶資訊
+// @Summary 更新用戶資訊 (API已過時，更新為 /v2/cms/user/{user_id} [PATCH])
 // @Description 更新用戶資訊
 // @Tags CMS/User_v1
 // @Accept json

@@ -3,6 +3,7 @@ package order
 import (
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_create_subscribe_order"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_get_cms_user_orders"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_order_redeem"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
@@ -15,6 +16,8 @@ import (
 )
 
 type Resolver interface {
+	APIGetCMSUserOrders(input *api_get_cms_user_orders.Input) (output api_get_cms_user_orders.Output)
+
 	APICreateCourseOrder(tx *gorm.DB, input *model.APICreateCourseOrderInput) (output model.APICreateCourseOrderOutput)
 	APICreateSubscribeOrder(tx *gorm.DB, input *api_create_subscribe_order.Input) (output api_create_subscribe_order.Output)
 	APIGetCMSOrders(input *model.APIGetCMSOrdersInput) (output model.APIGetCMSOrdersOutput)

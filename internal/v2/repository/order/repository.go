@@ -95,6 +95,8 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 			db = db.Preload(preload.Field)
 		}
 	}
+	// Count
+	db = db.Count(&amount)
 	// Select
 	if len(input.Selects) > 0 {
 		db = db.Select(input.Selects[0].Query, input.Selects[0].Args...)
@@ -106,8 +108,12 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 		db = db.Group(input.Groups[0].Name)
 	}
 	// Paging
-	if input.Page > 0 && input.Size > 0 {
-		db = db.Offset((input.Page - 1) * input.Size).Limit(input.Size)
+	if input.Page != nil && input.Size != nil {
+		db = db.Offset((*input.Page - 1) * *input.Size).Limit(*input.Size)
+	} else if input.Page != nil {
+		db = db.Offset(0)
+	} else if input.Size != nil {
+		db = db.Limit(*input.Size)
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {

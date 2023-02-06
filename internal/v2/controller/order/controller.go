@@ -6,6 +6,7 @@ import (
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/order"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_create_subscribe_order"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_get_cms_user_orders"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_order_redeem"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_charge_receipt"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order/api_upload_apple_subscribe_receipt"
@@ -25,6 +26,36 @@ type controller struct {
 
 func New(resolver order.Resolver) Controller {
 	return &controller{resolver: resolver}
+}
+
+// GetCMSUserOrders 獲取用戶購買歷史訂單
+// @Summary 獲取用戶購買歷史訂單
+// @Description 獲取用戶購買歷史訂單
+// @Tags CMS會員管理_v2
+// @Accept json
+// @Produce json
+// @Security fitness_token
+// @Param user_id path int64 true "用戶ID"
+// @Param order_field query string false "排序欄位 (create_at:創建時間)"
+// @Param order_type query string false "排序類型 (ASC:由低到高/DESC:由高到低)"
+// @Param page query int false "頁數(從第一頁開始)"
+// @Param size query int false "筆數"
+// @Success 200 {object} api_get_cms_user_orders.Output "成功!"
+// @Failure 400 {object} base.Output "失敗!"
+// @Router /v2/cms/user/{user_id}/orders [GET]
+func (c *controller) GetCMSUserOrders(ctx *gin.Context) {
+	input := api_get_cms_user_orders.Input{}
+	input.UserID = ctx.MustGet("uid").(int64)
+	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
+		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
+		return
+	}
+	output := c.resolver.APIGetCMSUserOrders(&input)
+	ctx.JSON(http.StatusOK, output)
 }
 
 // CreateCourseOrder 創建課表訂單
