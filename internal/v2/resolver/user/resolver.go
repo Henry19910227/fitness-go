@@ -934,6 +934,13 @@ func (r *resolver) APICreateRegisterOTP(input *model.APICreateOTPInput) (output 
 	output.SetStatus(code.Success)
 	data := model.APICreateRegisterOTPData{}
 	data.Code = otp
+	if build.RunMode() == "production" {
+		data.Code = ""
+		if err := r.mailTool.Send(input.Body.Email, "驗證碼", otp); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
 	output.Data = &data
 	return output
 }
