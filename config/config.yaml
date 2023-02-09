@@ -203,8 +203,8 @@ Mail:
       Password: qedvgrldwmeivfqw
     Production:
       Port: 587
-      Sender: toyokoyo199@gmail.com
-      Password: qedvgrldwmeivfqw
+      Sender: fitopia.hub@gmail.com
+      Password: Tomotofit35_devgqe
 OTP:
     Debug:
       Period: 300
