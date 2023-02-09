@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/service/bank_account"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/card"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/certificate"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer_album"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer_status_update_log"
@@ -20,6 +21,7 @@ func NewResolver(db *gorm.DB) Resolver {
 	cardService := card.NewService(db)
 	certService := certificate.NewService(db)
 	bankAccountService := bank_account.NewService(db)
+	courseService := course.NewService(db)
 	avatarUploadTool := uploader.NewTrainerAvatarTool()
 	albumUploadTool := uploader.NewTrainerAlbumTool()
 	cardFrontUploadTool := uploader.NewCartFrontImageTool()
@@ -28,7 +30,7 @@ func NewResolver(db *gorm.DB) Resolver {
 	accountUploadTool := uploader.NewAccountImageTool()
 	redisTool := redis.NewTool()
 	fcmTool := fcm.NewTool()
-	return New(trainerService, trainerAlbumService, trainerStatusLogService, cardService, certService, bankAccountService,
+	return New(trainerService, trainerAlbumService, trainerStatusLogService, cardService, certService, bankAccountService, courseService,
 		avatarUploadTool, albumUploadTool, cardFrontUploadTool, cardBackUploadTool,
 		certUploadTool, accountUploadTool, redisTool, fcmTool)
 }

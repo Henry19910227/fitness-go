@@ -11,6 +11,7 @@ import (
 	accountModel "github.com/Henry19910227/fitness-go/internal/v2/model/bank_account"
 	cardModel "github.com/Henry19910227/fitness-go/internal/v2/model/card"
 	certModel "github.com/Henry19910227/fitness-go/internal/v2/model/certificate"
+	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
 	fcmModel "github.com/Henry19910227/fitness-go/internal/v2/model/fcm"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -27,6 +28,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/service/bank_account"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/card"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/certificate"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer_album"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/trainer_status_update_log"
@@ -42,6 +44,7 @@ type resolver struct {
 	cardService             card.Service
 	certService             certificate.Service
 	bankAccountService      bank_account.Service
+	courseService           course.Service
 	avatarUploadTool        uploader.Tool
 	albumUploadTool         uploader.Tool
 	cardFrontUploadTool     uploader.Tool
@@ -55,7 +58,7 @@ type resolver struct {
 func New(trainerService trainer.Service, trainerAlbumService trainer_album.Service,
 	trainerStatusLogService trainer_status_update_log.Service,
 	cardService card.Service, certService certificate.Service,
-	bankAccountService bank_account.Service,
+	bankAccountService bank_account.Service, courseService course.Service,
 	avatarUploadTool uploader.Tool, albumUploadTool uploader.Tool,
 	cardFrontUploadTool uploader.Tool, cardBackUploadTool uploader.Tool,
 	certUploadTool uploader.Tool, accountUploadTool uploader.Tool,
@@ -63,8 +66,8 @@ func New(trainerService trainer.Service, trainerAlbumService trainer_album.Servi
 	return &resolver{trainerService: trainerService, trainerAlbumService: trainerAlbumService,
 		trainerStatusLogService: trainerStatusLogService,
 		cardService:             cardService, certService: certService,
-		bankAccountService: bankAccountService,
-		avatarUploadTool:   avatarUploadTool, albumUploadTool: albumUploadTool,
+		bankAccountService: bankAccountService, courseService: courseService,
+		avatarUploadTool: avatarUploadTool, albumUploadTool: albumUploadTool,
 		cardFrontUploadTool: cardFrontUploadTool, cardBackUploadTool: cardBackUploadTool,
 		certUploadTool: certUploadTool, accountUploadTool: accountUploadTool,
 		redisTool: redisTool, fcmTool: fcmTool}
@@ -620,8 +623,9 @@ func (r *resolver) APIUpdateCMSTrainer(ctx *gin.Context, tx *gorm.DB, input *api
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	// 添加log紀錄
+	// 修改教練狀態後續流程
 	if input.Body.TrainerStatus != nil {
+		// 添加log紀錄
 		logTable := trainerStatusLogModel.Table{}
 		logTable.UserID = util.PointerInt64(input.Uri.UserID)
 		logTable.TrainerStatus = input.Body.TrainerStatus
@@ -629,6 +633,31 @@ func (r *resolver) APIUpdateCMSTrainer(ctx *gin.Context, tx *gorm.DB, input *api
 		if _, err := r.trainerStatusLogService.Tx(tx).Create(&logTable); err != nil {
 			output.Set(code.BadRequest, err.Error())
 			return output
+		}
+		// 下架課表
+		if util.OnNilJustReturnInt(input.Body.TrainerStatus, 0) == model.Suspend {
+			// 查詢該用戶上架的付費課表
+			courseListInput := courseModel.ListInput{}
+			courseListInput.UserID = util.PointerInt64(input.Uri.UserID)
+			courseListInput.SaleType = util.PointerInt(courseModel.SaleTypeCharge)
+			courseListInput.CourseStatus = util.PointerInt(courseModel.Sale)
+			courseOutputs, _, err := r.courseService.Tx(tx).List(&courseListInput)
+			if err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
+			// 將付費課表改為下架狀態
+			courseTables := make([]*courseModel.Table, 0)
+			for _, courseOutput := range courseOutputs {
+				courseTable := courseModel.Table{}
+				courseTable.ID = courseOutput.ID
+				courseTable.CourseStatus = util.PointerInt(courseModel.Remove)
+				courseTables = append(courseTables, &courseTable)
+			}
+			if err := r.courseService.Tx(tx).Updates(courseTables); err != nil {
+				output.Set(code.BadRequest, err.Error())
+				return output
+			}
 		}
 	}
 	tx.Commit()
