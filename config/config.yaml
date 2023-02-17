@@ -86,12 +86,12 @@ IAP:
       BundleID: com.henry.PurchaseDemo
     Release:
       AppStoreServer: https://api.storekit-sandbox.itunes.apple.com
-      Password: f7e5fb26e7cf4de3b8eff69950b6d747
+      Password: edea7e33a9974058bcfddad35456f2a0
       Issuer: 18f6ec13-f472-4dbc-8620-9a790c5d48e2
       KeyID: Q7648PT9MF
       KeyPath: ./config/SubscriptionKey_Q7648PT9MF.p8
       KeyName: SubscriptionKey_Q7648PT9MF.p8 # 密鑰-用於產生查詢訂閱API Token
-      BundleID: com.fitopia.hub
+      BundleID: com.fitopia.hub.dev
     Production:
       AppStoreServer: https://api.storekit-sandbox.itunes.apple.com
       Password: f7e5fb26e7cf4de3b8eff69950b6d747
