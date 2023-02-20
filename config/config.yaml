@@ -129,8 +129,8 @@ FCM:
       ProjectID: fitness-84141
       KeyName: fitness-84141-fcm-dev.json
     Production:
-      ProjectID: fitness-84141
-      KeyName: fitness-84141-fcm-dev.json
+      ProjectID: fitopia-hub-console
+      KeyName: fitopia-hub-console-fcm.json
 FBLogin:
     Host: https://graph.facebook.com/
     Debug:
