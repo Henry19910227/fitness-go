@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "fitopia-hub-console",
+  "private_key_id": "1f71e3b3de7d4c79ead3bc386674882b9c0918d1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQC+7RwBOOLCRS4x\nlulAaPnlT+U55YpVX8KPt+GP5BJUKb7KqYyBm8zS64Sr0fg6AF/y8StBvOwCthAR\njt+mPeHwbn7gdpe5yG7Y/3JZdc88dT8+U7v+OQleUspQhvN359oR6aGjxxfjw2LQ\nMM5C50g7NoIOPWQkGTdbD4kU/2TUcX8T81xYSI17hJMAOtHVqffvWIBx7wK0xF4J\nEMZqlnVRlJthhNsYKX1dmDOApd97divrQ5l752IEFr9xqP0qJNfhZ8raKzcOAUDV\nT93sZjcafDMzRBqBbvODGvDKyKyqcItuJLGH2oiMjAfHjZA9CyawkQegQR4Q9DSD\n4kXmoDyBAgMBAAECggEAHrONJcsqd5fdSj8cqe1Xhd7XmvxExt67sBWfEV7Y7ay6\nz+b8v5i4kpApyOFeO6F0zGGolY0WHId/RPuHDjn0O4/hGiIn2smWvZEyJ52QogWu\nkkyvtb0hOwgwHUveGcFwKSI7ClWJC2iPWrAGcu6zCEaHGlgX4tAlPSDd58D7y0df\nTaDiWe6HcJ+LvZPzr9U+jsKzfQSN2UeW7hIl9n9L1+TlgWBmSe3a0iTwVvvhKycL\n6IzTpISNyHDDm0ZBx1q7GCDKbnn2+gJelzASL17tQ9QOpbjPj0Iu+IlZ8JFeVeQE\nwRX1L7WB57is3aV434vO+DfhXhKziaQhVdorDSW9ywKBgQD5NYa/JAQ69cXoS58/\n57Uw6zV+2issfVaSdWM3YQg868zb8ttGt7n3moGLeCOaK4I2XmmPewD5GYGedO31\nG7wFbyu0qrBFriB9bv+ZsFLTciXTZFWvGJHutd68TS9Dv8P85t5hVtlKE2n/zh9o\nJYg34b/ij310Cv+LnPahZyJt5wKBgQDEIQD3EHarnxHFzNJwYCEyoQs7BpJFvp1d\no9q9pmCtSRXyH2/POlrIh0BUWX4gEnPtZd6jQKxxLPu2W2lZRgNqtg95Icg6h7hs\nl1rcY2bN53CcLdQd5H2xHF7MGSUUDxEcBq4w3O0K5V0L0Rj6BZd+26vII1Vy/mvP\n4PgIpVGlVwKBgFIfxojkuJQpfA+iJBeuJvK5AEcOZF3j7AyVrJ2KV2mkFz2AWayD\nTUCAZSJt8+WRYvbBxC2pTlfIhQOP6v70JdDwosmF2lMMH97WHlsqVREjM73m+amb\nAjRVMNKC6Ql9f3uvJSeUtESKA0tuRMFQZQRtW4uw15nPKgl7L3dfAmSPAoGAQGhe\nOsSLVBzu5zg2O3U2Mbw1RfMIgiLw5tlycil7QizoKhUs0K7nNUdFVu30v2+P5nw3\nuwD4IEqXdvFaDVkysg6L0knHyYDcjby+t/Vkw2Wn04IxUIfCxzD76KaxSH8SLVP8\nTEuhBJ0CC2llfGXttFlLdnQ0EYl/ukq06ZHw2A0Cf0eLvHm0pIxWtJEK2+NwYYfs\nj+IYSYM+Hdasm1B5MjTIFEcySCZioT65ODVcyBqNeFDlbLMazb1F8ksuFbngL02r\nG1horp+wPHWq1p+rZWMh5LcVF6uck+wyprpO5jWjnD/obTf3UFgXSkX2+NFoPdB+\nPgGGjYjMZQJyIYN52FI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-k6c6c@fitopia-hub-console.iam.gserviceaccount.com",
+  "client_id": "102681913006259463122",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-k6c6c%40fitopia-hub-console.iam.gserviceaccount.com"
+}
