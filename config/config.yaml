@@ -160,9 +160,9 @@ GoogleLogin:
         ClientID: 376527343165-j5ncprbdbunqevfqq21nulgirs74nqlb.apps.googleusercontent.com
     Production:
       iOS:
-        ClientID: 376527343165-dsk9555ua5ku7i3nf1g7jqf3olfqgh2q.apps.googleusercontent.com
+        ClientID: 657523385443-a3gqahkhou80evmcfbgeulc6srnd4ica.apps.googleusercontent.com
       Android:
-        ClientID: 376527343165-j5ncprbdbunqevfqq21nulgirs74nqlb.apps.googleusercontent.com
+        ClientID: 657523385443-ici5h48k9j76mbpd9p3vdduem5alh4ao.apps.googleusercontent.com
 AppleLogin:
     Debug:
       KeyName: AuthKey_ZN742MYSF4.p8 # Account/Certificates,IDs & Profiles/Keys
