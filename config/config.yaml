@@ -142,8 +142,8 @@ FBLogin:
       AppSecret: 9e81d8aea97dae4b4d47e2e58f1535e9
       DebugTokenURL: https://graph.facebook.com/debug_token
     Production:
-      AppID: 3268303936749363
-      AppSecret: 9e81d8aea97dae4b4d47e2e58f1535e9
+      AppID: 2179211948910676
+      AppSecret: 28c553f706b72368a010852f82bc64e4
       DebugTokenURL: https://graph.facebook.com/debug_token
 GoogleLogin:
     Iss: https://accounts.google.com
