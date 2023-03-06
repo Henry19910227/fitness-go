@@ -124,6 +124,12 @@ func (r *resolver) APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUs
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	//計算課表統計
+	//userCourseStatisticModel, err := w.workoutLogRepo.CalculateUserCourseStatistic(tx, userID, workoutID)
+	//計算計畫統計
+	//userPlanStatisticModel, err := w.workoutLogRepo.CalculateUserPlanStatistic(tx, userID, workoutID)
+	//計算並更新教練學員數量
+	//studentCount, err := w.trainerStatisticRepo.CalculateTrainerStudentCount(tx, course.UserID)
 	// 查詢
 	workoutSetLogListInput := workoutSetLogModel.ListInput{}
 	workoutSetLogListInput.WorkoutLogID = util.PointerInt64(workoutLogID)

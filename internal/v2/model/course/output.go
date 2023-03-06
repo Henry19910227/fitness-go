@@ -8,6 +8,7 @@ import (
 	reviewRequired "github.com/Henry19910227/fitness-go/internal/v2/field/review_statistic/required"
 	saleItemOptional "github.com/Henry19910227/fitness-go/internal/v2/field/sale_item/optional"
 	trainerOptional "github.com/Henry19910227/fitness-go/internal/v2/field/trainer/optional"
+	userCourseStatisticOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user_course_statistic/optional"
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	workoutSetOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout_set/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
@@ -259,8 +260,8 @@ type APIGetUserCourseData struct {
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 	UserCourseStatistic *struct {
-		user_course_statistic.FinishWorkoutCountField
-		user_course_statistic.DurationField
+		userCourseStatisticOptional.FinishWorkoutCountField
+		userCourseStatisticOptional.DurationField
 	} `json:"user_course_statistic,omitempty"`
 }
 
@@ -349,8 +350,8 @@ type APIGetUserCourseStructureData struct {
 		} `json:"product_label,omitempty"`
 	} `json:"sale_item,omitempty"`
 	UserCourseStatistic *struct {
-		user_course_statistic.FinishWorkoutCountField
-		user_course_statistic.DurationField
+		userCourseStatisticOptional.FinishWorkoutCountField
+		userCourseStatisticOptional.DurationField
 	} `json:"user_course_statistic,omitempty"`
 }
 
