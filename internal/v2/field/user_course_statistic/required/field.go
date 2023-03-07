@@ -1,8 +1,5 @@
 package required
 
-type IDField struct {
-	ID int64 `json:"id" gorm:"column:id" binding:"required" example:"1"` //id
-}
 type UserIDField struct {
 	UserID int64 `json:"user_id" gorm:"column:user_id" binding:"required" example:"10001"` // 用戶id
 }

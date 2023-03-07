@@ -20,7 +20,6 @@ type OrderByInput = orderBy.Input
 type CustomOrderByInput = orderBy.CustomInput
 
 type ListInput struct {
-	optional.IDField
 	optional.UserIDField
 	optional.CourseIDField
 	optional.FinishWorkoutCountField
@@ -36,6 +35,7 @@ type ListInput struct {
 }
 
 type FindInput struct {
-	optional.IDField
+	optional.UserIDField
+	optional.CourseIDField
 	PreloadInput
 }
