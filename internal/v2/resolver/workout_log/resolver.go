@@ -13,6 +13,7 @@ import (
 	maxWeightModel "github.com/Henry19910227/fitness-go/internal/v2/model/max_weight_record"
 	minDurationModel "github.com/Henry19910227/fitness-go/internal/v2/model/min_duration_record"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	userCourseStatisticModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_course_statistic"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log/api_delete_user_workout_log"
@@ -26,6 +27,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/service/max_speed_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/max_weight_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/min_duration_record"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/user_course_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set_log"
@@ -34,28 +36,31 @@ import (
 )
 
 type resolver struct {
-	workoutLogService    workout_log.Service
-	workoutSetLogService workout_set_log.Service
-	workoutSetService    workout_set.Service
-	courseService        course.Service
-	maxDistanceService   max_distance_record.Service
-	maxRepsService       max_reps_record.Service
-	maxRMService         max_rm_record.Service
-	maxSpeedService      max_speed_record.Service
-	maxWeightService     max_weight_record.Service
-	minDurationService   min_duration_record.Service
+	workoutLogService          workout_log.Service
+	workoutSetLogService       workout_set_log.Service
+	workoutSetService          workout_set.Service
+	courseService              course.Service
+	maxDistanceService         max_distance_record.Service
+	maxRepsService             max_reps_record.Service
+	maxRMService               max_rm_record.Service
+	maxSpeedService            max_speed_record.Service
+	maxWeightService           max_weight_record.Service
+	minDurationService         min_duration_record.Service
+	userCourseStatisticService user_course_statistic.Service
 }
 
 func New(workoutLogService workout_log.Service, workoutSetLogService workout_set_log.Service,
 	workoutSetService workout_set.Service, courseService course.Service,
 	maxDistanceService max_distance_record.Service, maxRepsService max_reps_record.Service,
 	maxRMService max_rm_record.Service, maxSpeedService max_speed_record.Service,
-	maxWeightService max_weight_record.Service, minDurationService min_duration_record.Service) Resolver {
+	maxWeightService max_weight_record.Service, minDurationService min_duration_record.Service,
+	userCourseStatisticService user_course_statistic.Service) Resolver {
 	return &resolver{workoutLogService: workoutLogService, workoutSetLogService: workoutSetLogService,
 		workoutSetService: workoutSetService, courseService: courseService,
 		maxDistanceService: maxDistanceService, maxRepsService: maxRepsService,
 		maxRMService: maxRMService, maxSpeedService: maxSpeedService,
-		maxWeightService: maxWeightService, minDurationService: minDurationService}
+		maxWeightService: maxWeightService, minDurationService: minDurationService,
+		userCourseStatisticService: userCourseStatisticService}
 }
 
 func (r *resolver) APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUserWorkoutLogInput) (output model.APICreateUserWorkoutLogOutput) {
@@ -124,8 +129,14 @@ func (r *resolver) APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUs
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	//計算課表統計
-	//userCourseStatisticModel, err := w.workoutLogRepo.CalculateUserCourseStatistic(tx, userID, workoutID)
+	//更新用戶課表統計
+	userCourseStatInput := userCourseStatisticModel.Statistic{}
+	userCourseStatInput.CourseID = courseOutput.ID
+	userCourseStatInput.UserID = util.PointerInt64(input.UserID)
+	if err := r.userCourseStatisticService.Tx(tx).Statistic(&userCourseStatInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	//計算計畫統計
 	//userPlanStatisticModel, err := w.workoutLogRepo.CalculateUserPlanStatistic(tx, userID, workoutID)
 	//計算並更新教練學員數量

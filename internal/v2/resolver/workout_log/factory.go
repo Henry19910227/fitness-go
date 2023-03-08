@@ -8,6 +8,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/service/max_speed_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/max_weight_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/min_duration_record"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/user_course_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set_log"
@@ -25,7 +26,9 @@ func NewResolver(db *gorm.DB) Resolver {
 	maxSpeedService := max_speed_record.NewService(db)
 	maxWeightService := max_weight_record.NewService(db)
 	minDurationService := min_duration_record.NewService(db)
+	userCourseStatisticService := user_course_statistic.NewService(db)
 	return New(workoutLogService, workoutSetLogService, workoutSetService,
 		courseService, maxDistanceService, maxRepsService,
-		maxRMService, maxSpeedService, maxWeightService, minDurationService)
+		maxRMService, maxSpeedService, maxWeightService,
+		minDurationService, userCourseStatisticService)
 }

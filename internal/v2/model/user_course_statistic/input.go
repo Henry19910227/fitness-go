@@ -39,3 +39,8 @@ type FindInput struct {
 	optional.CourseIDField
 	PreloadInput
 }
+
+type Statistic struct {
+	optional.UserIDField
+	optional.CourseIDField
+}
