@@ -12,8 +12,10 @@ import (
 	maxSpeedModel "github.com/Henry19910227/fitness-go/internal/v2/model/max_speed_record"
 	maxWeightModel "github.com/Henry19910227/fitness-go/internal/v2/model/max_weight_record"
 	minDurationModel "github.com/Henry19910227/fitness-go/internal/v2/model/min_duration_record"
+	planModel "github.com/Henry19910227/fitness-go/internal/v2/model/plan"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	userCourseStatisticModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_course_statistic"
+	userPlanStatisticModel "github.com/Henry19910227/fitness-go/internal/v2/model/user_plan_statistic"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/workout_log/api_delete_user_workout_log"
@@ -27,7 +29,9 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/service/max_speed_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/max_weight_record"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/min_duration_record"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/user_course_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/user_plan_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_log"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/workout_set_log"
@@ -40,6 +44,7 @@ type resolver struct {
 	workoutSetLogService       workout_set_log.Service
 	workoutSetService          workout_set.Service
 	courseService              course.Service
+	planService                plan.Service
 	maxDistanceService         max_distance_record.Service
 	maxRepsService             max_reps_record.Service
 	maxRMService               max_rm_record.Service
@@ -47,25 +52,26 @@ type resolver struct {
 	maxWeightService           max_weight_record.Service
 	minDurationService         min_duration_record.Service
 	userCourseStatisticService user_course_statistic.Service
+	userPlanStatisticService   user_plan_statistic.Service
 }
 
 func New(workoutLogService workout_log.Service, workoutSetLogService workout_set_log.Service,
-	workoutSetService workout_set.Service, courseService course.Service,
+	workoutSetService workout_set.Service, courseService course.Service, planService plan.Service,
 	maxDistanceService max_distance_record.Service, maxRepsService max_reps_record.Service,
 	maxRMService max_rm_record.Service, maxSpeedService max_speed_record.Service,
 	maxWeightService max_weight_record.Service, minDurationService min_duration_record.Service,
-	userCourseStatisticService user_course_statistic.Service) Resolver {
+	userCourseStatisticService user_course_statistic.Service, userPlanStatisticService user_plan_statistic.Service) Resolver {
 	return &resolver{workoutLogService: workoutLogService, workoutSetLogService: workoutSetLogService,
-		workoutSetService: workoutSetService, courseService: courseService,
+		workoutSetService: workoutSetService, courseService: courseService, planService: planService,
 		maxDistanceService: maxDistanceService, maxRepsService: maxRepsService,
 		maxRMService: maxRMService, maxSpeedService: maxSpeedService,
 		maxWeightService: maxWeightService, minDurationService: minDurationService,
-		userCourseStatisticService: userCourseStatisticService}
+		userCourseStatisticService: userCourseStatisticService, userPlanStatisticService: userPlanStatisticService}
 }
 
 func (r *resolver) APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUserWorkoutLogInput) (output model.APICreateUserWorkoutLogOutput) {
 	defer tx.Rollback()
-	// 驗證權限
+	// 查詢 workoutID 關聯的課表資訊
 	findCourseInput := courseModel.FindInput{}
 	findCourseInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
 	courseOutput, err := r.courseService.Tx(tx).Find(&findCourseInput)
@@ -73,6 +79,15 @@ func (r *resolver) APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUs
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
+	// 查詢 workoutID 關聯的計畫資訊
+	findPlanInput := planModel.FindInput{}
+	findPlanInput.WorkoutID = util.PointerInt64(input.Uri.WorkoutID)
+	planOutput, err := r.planService.Tx(tx).Find(&findPlanInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 驗證權限
 	saleType := util.OnNilJustReturnInt(courseOutput.SaleType, 0)
 	ownerID := util.OnNilJustReturnInt64(courseOutput.UserID, 0)
 	if saleType == courseModel.SaleTypePersonal && ownerID != input.UserID {
@@ -137,8 +152,14 @@ func (r *resolver) APICreateUserWorkoutLog(tx *gorm.DB, input *model.APICreateUs
 		output.Set(code.BadRequest, err.Error())
 		return output
 	}
-	//計算計畫統計
-	//userPlanStatisticModel, err := w.workoutLogRepo.CalculateUserPlanStatistic(tx, userID, workoutID)
+	//更新用戶計畫統計
+	userPlanStatInput := userPlanStatisticModel.Statistic{}
+	userPlanStatInput.PlanID = planOutput.ID
+	userPlanStatInput.UserID = util.PointerInt64(input.UserID)
+	if err := r.userPlanStatisticService.Tx(tx).Statistic(&userPlanStatInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	//計算並更新教練學員數量
 	//studentCount, err := w.trainerStatisticRepo.CalculateTrainerStudentCount(tx, course.UserID)
 	// 查詢

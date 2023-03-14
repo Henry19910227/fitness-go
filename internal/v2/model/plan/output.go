@@ -2,6 +2,7 @@ package plan
 
 import (
 	planOptional "github.com/Henry19910227/fitness-go/internal/v2/field/plan/optional"
+	userPlanStatisticOptional "github.com/Henry19910227/fitness-go/internal/v2/field/user_plan_statistic/optional"
 	workoutOptional "github.com/Henry19910227/fitness-go/internal/v2/field/workout/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/paging"
@@ -69,8 +70,8 @@ type APIGetUserPlansData []*struct {
 	planOptional.CreateAtField
 	planOptional.UpdateAtField
 	UserPlanStatistic *struct {
-		user_plan_statistic.DurationField
-		user_plan_statistic.FinishWorkoutCountField
+		userPlanStatisticOptional.DurationField
+		userPlanStatisticOptional.FinishWorkoutCountField
 	} `json:"user_plan_statistic,omitempty"`
 }
 
@@ -100,8 +101,8 @@ type APIGetTrainerPlansData []*struct {
 	planOptional.CreateAtField
 	planOptional.UpdateAtField
 	UserPlanStatistic *struct {
-		user_plan_statistic.DurationField
-		user_plan_statistic.FinishWorkoutCountField
+		userPlanStatisticOptional.DurationField
+		userPlanStatisticOptional.FinishWorkoutCountField
 	} `json:"user_plan_statistic,omitempty"`
 }
 
