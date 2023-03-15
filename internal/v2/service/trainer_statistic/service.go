@@ -23,3 +23,8 @@ func (s *service) StatisticReviewScore(input *model.StatisticReviewScoreInput) (
 	err = s.repository.StatisticReviewScore(input)
 	return err
 }
+
+func (s *service) StatisticStudentCount() (err error) {
+	err = s.repository.StatisticStudentCount()
+	return err
+}

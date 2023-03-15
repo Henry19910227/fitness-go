@@ -47,6 +47,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/v2/router/sale_item"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/subscribe_plan"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/trainer"
+	"github.com/Henry19910227/fitness-go/internal/v2/router/trainer_statistic"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_course_asset"
 	"github.com/Henry19910227/fitness-go/internal/v2/router/user_course_usage_monthly_statistic"
@@ -272,6 +273,7 @@ func main() {
 	diet.SetRoute(v2)
 	ios_version.SetRoute(v2)
 	android_version.SetRoute(v2)
+	trainer_statistic.SetRoute(v2)
 	migrate.SetRoute(v2)
 	scheduler.Shared().Cron().Start()
 	router.Run(":" + vp.Shared().GetString("Server.HttpPort"))

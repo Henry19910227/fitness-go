@@ -8,4 +8,5 @@ import (
 type Service interface {
 	Tx(tx *gorm.DB) Service
 	StatisticReviewScore(input *model.StatisticReviewScoreInput) (err error)
+	StatisticStudentCount() (err error)
 }

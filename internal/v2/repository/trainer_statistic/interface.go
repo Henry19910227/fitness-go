@@ -8,4 +8,5 @@ import (
 type Repository interface {
 	WithTrx(tx *gorm.DB) Repository
 	StatisticReviewScore(input *model.StatisticReviewScoreInput) (err error)
+	StatisticStudentCount() (err error)
 }
