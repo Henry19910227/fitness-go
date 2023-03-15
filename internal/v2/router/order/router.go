@@ -31,5 +31,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	v2.POST("/google_play_notification", middleware.Transaction(orm.Shared().DB()), controller.GooglePlayNotification)
 	v2.GET("/cms/orders", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSOrders)
 
-	_, _ = scheduler.Shared().Cron().AddFunc("0 * * * * *", controller.SyncAppleSubscribeStatusSchedule)
+	_, _ = scheduler.Shared().Cron().AddFunc("0 0/5 * * * *", controller.SyncAppleSubscribeStatusSchedule)
 }
