@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestName(t *testing.T) {
@@ -53,12 +54,19 @@ func Test(t *testing.T) {
 
 	// 將 input1 ~ input3 用 handler 函數正規化並將結果放入 dataList 資料集中，方便進行後續分析
 	dataList := make([][][]float64, 0)
-	for _, input := range inputs{
+	for _, input := range inputs {
 		outputs := handler(input)
 		dataList = append(dataList, outputs)
 	}
 	// 正規化後的資料集
 	fmt.Println(dataList)
+}
+
+func Test1(t *testing.T) {
+	year, _ := strconv.Atoi(time.Now().Format("2006"))
+	month, _ := strconv.Atoi(time.Now().Format("01"))
+	fmt.Println(year)
+	fmt.Println(month)
 }
 
 // 正規化函數
