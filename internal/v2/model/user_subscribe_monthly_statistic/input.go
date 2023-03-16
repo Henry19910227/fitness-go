@@ -1,10 +1,10 @@
 package user_subscribe_monthly_statistic
 
-// APIGetCMSUserSubscribeStatisticInput /v2/cms/statistic_monthly/user/subscribe [GET]
-type APIGetCMSUserSubscribeStatisticInput struct {
-	Query APIGetCMSUserSubscribeStatisticQuery
-}
-type APIGetCMSUserSubscribeStatisticQuery struct {
-	YearRequired
-	MonthRequired
+import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/user_subscribe_monthly_statistic/required"
+)
+
+type StatisticInput struct {
+	required.YearField
+	required.MonthField
 }
