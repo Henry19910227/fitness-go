@@ -1,9 +1,11 @@
 package user_subscribe_monthly_statistic
 
 import (
+	"github.com/Henry19910227/fitness-go/internal/v2/service/user_subscribe_monthly_statistic"
 	"gorm.io/gorm"
 )
 
 func NewResolver(db *gorm.DB) Resolver {
-	return New()
+	statisticService := user_subscribe_monthly_statistic.NewService(db)
+	return New(statisticService)
 }

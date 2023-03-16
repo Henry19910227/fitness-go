@@ -4,19 +4,22 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_monthly_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_subscribe_monthly_statistic/api_get_cms_user_subscribe_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/user_subscribe_monthly_statistic"
+	"strconv"
 	"time"
 )
 
 type resolver struct {
+	statisticService user_subscribe_monthly_statistic.Service
 }
 
-func New() Resolver {
-	return &resolver{}
+func New(statisticService user_subscribe_monthly_statistic.Service) Resolver {
+	return &resolver{statisticService: statisticService}
 }
 
-func (r *resolver) APIGetCMSUserSubscribeStatistic(input *model.APIGetCMSUserSubscribeStatisticInput) (output model.APIGetCMSUserSubscribeStatisticOutput) {
-	data := model.APIGetCMSUserSubscribeStatisticData{}
-	data.ID = util.PointerInt64(1)
+func (r *resolver) APIGetCMSUserSubscribeStatistic(input *api_get_cms_user_subscribe_statistic.Input) (output api_get_cms_user_subscribe_statistic.Output) {
+	data := api_get_cms_user_subscribe_statistic.Data{}
 	data.Year = util.PointerInt(input.Query.Year)
 	data.Month = util.PointerInt(input.Query.Month)
 	data.Total = util.PointerInt(1000)
@@ -34,4 +37,13 @@ func (r *resolver) APIGetCMSUserSubscribeStatistic(input *model.APIGetCMSUserSub
 	output.Set(code.Success, "success")
 	output.Data = &data
 	return output
+}
+
+func (r *resolver) Statistic() {
+	year, _ := strconv.Atoi(time.Now().Format("2006"))
+	month, _ := strconv.Atoi(time.Now().Format("01"))
+	statisticInput := model.StatisticInput{}
+	statisticInput.Year = year
+	statisticInput.Month = month
+	_ = r.statisticService.Statistic(&statisticInput)
 }

@@ -4,4 +4,6 @@ import "github.com/gin-gonic/gin"
 
 type Controller interface {
 	GetCMSUserSubscribeMonthlyStatistic(ctx *gin.Context)
+
+	Statistic()
 }
