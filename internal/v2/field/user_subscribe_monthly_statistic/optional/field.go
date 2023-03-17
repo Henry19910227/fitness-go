@@ -1,10 +1,10 @@
 package optional
 
 type YearField struct {
-	Year *int `json:"year,omitempty" gorm:"column:year" binding:"omitempty" example:"2022"` //年份
+	Year *int `json:"year,omitempty" form:"year" gorm:"column:year" binding:"omitempty" example:"2022"` //年份
 }
 type MonthField struct {
-	Month *int `json:"month,omitempty" gorm:"column:month" binding:"omitempty" example:"12"` //月份
+	Month *int `json:"month,omitempty" form:"month" gorm:"column:month" binding:"omitempty" example:"12"` //月份
 }
 type TotalField struct {
 	Total *int `json:"total,omitempty" gorm:"column:total" binding:"omitempty" example:"1000"` //當月總訂閱人數
