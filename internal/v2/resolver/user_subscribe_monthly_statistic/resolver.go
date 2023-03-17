@@ -19,21 +19,33 @@ func New(statisticService user_subscribe_monthly_statistic.Service) Resolver {
 }
 
 func (r *resolver) APIGetCMSUserSubscribeStatistic(input *api_get_cms_user_subscribe_statistic.Input) (output api_get_cms_user_subscribe_statistic.Output) {
+	listInput := model.ListInput{}
+	listInput.Month = util.PointerInt(input.Query.Month)
+	listInput.Year = util.PointerInt(input.Query.Year)
+	statisticOutputs, _, err := r.statisticService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	data := api_get_cms_user_subscribe_statistic.Data{}
 	data.Year = util.PointerInt(input.Query.Year)
 	data.Month = util.PointerInt(input.Query.Month)
-	data.Total = util.PointerInt(1000)
-	data.Male = util.PointerInt(600)
-	data.Female = util.PointerInt(400)
-	data.Age13to17 = util.PointerInt(100)
-	data.Age18to24 = util.PointerInt(150)
-	data.Age25to34 = util.PointerInt(250)
-	data.Age35to44 = util.PointerInt(200)
-	data.Age45to54 = util.PointerInt(150)
-	data.Age55to64 = util.PointerInt(100)
-	data.Age65Up = util.PointerInt(50)
-	data.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
-	data.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+	data.Total = util.PointerInt(0)
+	data.Male = util.PointerInt(0)
+	data.Female = util.PointerInt(0)
+	data.Age13to17 = util.PointerInt(0)
+	data.Age18to24 = util.PointerInt(0)
+	data.Age25to34 = util.PointerInt(0)
+	data.Age35to44 = util.PointerInt(0)
+	data.Age45to54 = util.PointerInt(0)
+	data.Age55to64 = util.PointerInt(0)
+	data.Age65Up = util.PointerInt(0)
+	if len(statisticOutputs) > 0 {
+		if err := util.Parser(statisticOutputs[0], &data); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+	}
 	output.Set(code.Success, "success")
 	output.Data = &data
 	return output
