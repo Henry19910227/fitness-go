@@ -26,7 +26,7 @@ func New(resolver user_subscribe_monthly_statistic.Resolver) Controller {
 // @Security fitness_token
 // @Param year query int true "年份"
 // @Param month query int true "月份"
-// @Success 200 {object} user_subscribe_monthly_statistic.APIGetCMSUserSubscribeStatisticOutput "成功!"
+// @Success 200 {object} api_get_cms_user_subscribe_statistic.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/statistic_monthly/user/subscribe [GET]
 func (c *controller) GetCMSUserSubscribeMonthlyStatistic(ctx *gin.Context) {
