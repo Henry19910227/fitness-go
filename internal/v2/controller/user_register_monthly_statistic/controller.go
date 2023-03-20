@@ -3,7 +3,7 @@ package user_register_monthly_statistic
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_register_monthly_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_register_monthly_statistic/api_get_cms_statistic_monthly_user_register"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/user_register_monthly_statistic"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -26,15 +26,19 @@ func New(resolver user_register_monthly_statistic.Resolver) Controller {
 // @Security fitness_token
 // @Param year query int true "年份"
 // @Param month query int true "月份"
-// @Success 200 {object} user_register_monthly_statistic.APIGetCMSUserRegisterStatisticOutput "成功!"
+// @Success 200 {object} api_get_cms_statistic_monthly_user_register.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/statistic_monthly/user/register [GET]
 func (c *controller) GetCMSUserRegisterMonthlyStatistic(ctx *gin.Context) {
-	var input model.APIGetCMSUserRegisterStatisticInput
+	var input api_get_cms_statistic_monthly_user_register.Input
 	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
 	output := c.resolver.APIGetCMSUserRegisterStatistic(&input)
 	ctx.JSON(http.StatusOK, output)
+}
+
+func (c *controller) Statistic() {
+	c.resolver.Statistic()
 }

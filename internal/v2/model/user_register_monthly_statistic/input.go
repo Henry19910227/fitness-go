@@ -1,10 +1,43 @@
 package user_register_monthly_statistic
 
-// APIGetCMSUserRegisterStatisticInput /v2/cms/statistic_monthly/user/register [GET]
-type APIGetCMSUserRegisterStatisticInput struct {
-	Query APIGetCMSUserRegisterStatisticQuery
+import (
+	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/user_register_monthly_statistic/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/user_register_monthly_statistic/required"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
+	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
+)
+
+type PagingInput = struct {
+	pagingOptional.PageField
+	pagingOptional.SizeField
 }
-type APIGetCMSUserRegisterStatisticQuery struct {
-	YearRequired
-	MonthRequired
+type PreloadInput = preload.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
+type OrderByInput = orderBy.Input
+type CustomOrderByInput = orderBy.CustomInput
+
+type FindInput struct {
+	optional.YearField
+	optional.MonthField
+	PreloadInput
+}
+
+type ListInput struct {
+	optional.YearField
+	optional.MonthField
+	JoinInput
+	WhereInput
+	PagingInput
+	PreloadInput
+	OrderByInput
+	CustomOrderByInput
+}
+
+type StatisticInput struct {
+	required.YearField
+	required.MonthField
 }
