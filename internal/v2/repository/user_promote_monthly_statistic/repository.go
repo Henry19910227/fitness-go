@@ -1,8 +1,8 @@
-package user_register_monthly_statistic
+package user_promote_monthly_statistic
 
 import (
 	"fmt"
-	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_register_monthly_statistic"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_promote_monthly_statistic"
 	"gorm.io/gorm"
 )
 
@@ -49,11 +49,11 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	}
 	//加入 year 篩選條件
 	if input.Year != nil {
-		db = db.Where("user_register_monthly_statistics.year = ?", *input.Year)
+		db = db.Where("user_promote_monthly_statistics.year = ?", *input.Year)
 	}
 	//加入 month 篩選條件
 	if input.Month != nil {
-		db = db.Where("user_register_monthly_statistics.month = ?", *input.Month)
+		db = db.Where("user_promote_monthly_statistics.month = ?", *input.Month)
 	}
 	// Custom Where
 	if len(input.Wheres) > 0 {
@@ -70,7 +70,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Count
 	db = db.Count(&amount)
 	// Select
-	db = db.Select("user_register_monthly_statistics.*")
+	db = db.Select("user_promote_monthly_statistics.*")
 	// Paging
 	if input.Page != nil && input.Size != nil {
 		db = db.Offset((*input.Page - 1) * *input.Size).Limit(*input.Size)
@@ -81,7 +81,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("user_register_monthly_statistics.%s %s", input.OrderField, input.OrderType))
+		db = db.Order(fmt.Sprintf("user_promote_monthly_statistics.%s %s", input.OrderField, input.OrderType))
 	}
 	// Custom Order
 	if input.Orders != nil {
@@ -96,30 +96,39 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 
 // Statistic SQL
 /*
-INSERT INTO user_register_monthly_statistics (year, month, total, male, female, beginner, intermediate, advanced, expert, age_13_17, age_18_24, age_25_34, age_35_44, age_45_54, age_55_64, age_65_up)
+INSERT INTO user_promote_monthly_statistics (year, month, total, male, female, exp_1_3, exp_4_6, exp_7_10, exp_11_15, exp_16_19, exp_20_up, age_13_17, age_18_24, age_25_34, age_35_44, age_45_54, age_55_64, age_65_up)
 SELECT
-  2021 AS year,
-  9 AS month,
+  2022 AS year,
+  6 AS month,
   COUNT(DISTINCT users.id) AS total,
   COUNT(DISTINCT CASE WHEN users.sex = 'm' THEN users.id END) AS male,
   COUNT(DISTINCT CASE WHEN users.sex = 'f' THEN users.id END) AS female,
-  COUNT(DISTINCT CASE WHEN users.experience = 1 THEN users.id END) AS beginner,
-  COUNT(DISTINCT CASE WHEN users.experience = 2 THEN users.id END) AS intermediate,
-  COUNT(DISTINCT CASE WHEN users.experience = 3 THEN users.id END) AS advanced,
-  COUNT(DISTINCT CASE WHEN users.experience = 4 THEN users.id END) AS expert,
-  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2021, '-', 9, '-01'))) BETWEEN 13 AND 17 THEN users.id END) AS age_13_17,
-  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2021, '-', 9, '-01'))) BETWEEN 18 AND 24 THEN users.id END) AS age_18_24,
-  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2021, '-', 9, '-01'))) BETWEEN 25 AND 34 THEN users.id END) AS age_25_34,
-  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2021, '-', 9, '-01'))) BETWEEN 35 AND 44 THEN users.id END) AS age_35_44,
-  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2021, '-', 9, '-01'))) BETWEEN 45 AND 54 THEN users.id END) AS age_45_54,
-  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2021, '-', 9, '-01'))) BETWEEN 55 AND 64 THEN users.id END) AS age_55_64,
-  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2021, '-', 9, '-01'))) >= 65 THEN users.id END) AS age_65_up
+  COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 1 AND 3 THEN users.id END) AS exp_1_3,
+  COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 4 AND 6 THEN users.id END) AS exp_4_6,
+  COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 7 AND 10 THEN users.id END) AS exp_7_10,
+  COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 11 AND 15 THEN users.id END) AS exp_11_15,
+  COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 16 AND 19 THEN users.id END) AS exp_16_19,
+  COUNT(DISTINCT CASE WHEN trainers.experience >= 20 THEN users.id END) AS exp_20_up,
+  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2022, '-', 6, '-01'))) BETWEEN 13 AND 17 THEN users.id END) AS age_13_17,
+  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2022, '-', 6, '-01'))) BETWEEN 18 AND 24 THEN users.id END) AS age_18_24,
+  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2022, '-', 6, '-01'))) BETWEEN 25 AND 34 THEN users.id END) AS age_25_34,
+  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2022, '-', 6, '-01'))) BETWEEN 35 AND 44 THEN users.id END) AS age_35_44,
+  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2022, '-', 6, '-01'))) BETWEEN 45 AND 54 THEN users.id END) AS age_45_54,
+  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2022, '-', 6, '-01'))) BETWEEN 55 AND 64 THEN users.id END) AS age_55_64,
+  COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(2022, '-', 6, '-01'))) >= 65 THEN users.id END) AS age_65_up
 FROM users
-WHERE YEAR(users.create_at) = 2021 AND MONTH(users.create_at) = 09
+INNER JOIN trainers ON users.id = trainers.user_id
+WHERE YEAR(trainers.create_at) = 2022 AND MONTH(trainers.create_at) = 6
 ON DUPLICATE KEY UPDATE
   total = VALUES(total),
   male = VALUES(male),
   female = VALUES(female),
+  exp_1_3 = VALUES(exp_1_3),
+  exp_4_6 = VALUES(exp_4_6),
+  exp_7_10 = VALUES(exp_7_10),
+  exp_11_15 = VALUES(exp_11_15),
+  exp_16_19 = VALUES(exp_16_19),
+  exp_20_up = VALUES(exp_20_up),
   age_13_17 = VALUES(age_13_17),
   age_18_24 = VALUES(age_18_24),
   age_25_34 = VALUES(age_25_34),
@@ -130,17 +139,19 @@ ON DUPLICATE KEY UPDATE
   update_at = CURRENT_TIMESTAMP;
 */
 func (r *repository) Statistic(input *model.StatisticInput) (err error) {
-	err = r.db.Exec("INSERT INTO user_register_monthly_statistics (year, month, total, male, female, beginner, intermediate, advanced, expert, age_13_17, age_18_24, age_25_34, age_35_44, age_45_54, age_55_64, age_65_up) "+
+	err = r.db.Exec("INSERT INTO user_promote_monthly_statistics (year, month, total, male, female, exp_1_3, exp_4_6, exp_7_10, exp_11_15, exp_16_19, exp_20_up, age_13_17, age_18_24, age_25_34, age_35_44, age_45_54, age_55_64, age_65_up) "+
 		"SELECT "+
 		"? AS year, "+
 		"? AS month, "+
 		"COUNT(DISTINCT users.id) AS total, "+
 		"COUNT(DISTINCT CASE WHEN users.sex = 'm' THEN users.id END) AS male, "+
 		"COUNT(DISTINCT CASE WHEN users.sex = 'f' THEN users.id END) AS female, "+
-		"COUNT(DISTINCT CASE WHEN users.experience = 1 THEN users.id END) AS beginner, "+
-		"COUNT(DISTINCT CASE WHEN users.experience = 2 THEN users.id END) AS intermediate, "+
-		"COUNT(DISTINCT CASE WHEN users.experience = 3 THEN users.id END) AS advanced, "+
-		"COUNT(DISTINCT CASE WHEN users.experience = 4 THEN users.id END) AS expert, "+
+		"COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 1 AND 3 THEN users.id END) AS exp_1_3, "+
+		"COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 4 AND 6 THEN users.id END) AS exp_4_6, "+
+		"COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 7 AND 10 THEN users.id END) AS exp_7_10, "+
+		"COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 11 AND 15 THEN users.id END) AS exp_11_15, "+
+		"COUNT(DISTINCT CASE WHEN trainers.experience BETWEEN 16 AND 19 THEN users.id END) AS exp_16_19, "+
+		"COUNT(DISTINCT CASE WHEN trainers.experience >= 20 THEN users.id END) AS exp_20_up, "+
 		"COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(?, '-', ?, '-01'))) BETWEEN 13 AND 17 THEN users.id END) AS age_13_17, "+
 		"COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(?, '-', ?, '-01'))) BETWEEN 18 AND 24 THEN users.id END) AS age_18_24, "+
 		"COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(?, '-', ?, '-01'))) BETWEEN 25 AND 34 THEN users.id END) AS age_25_34, "+
@@ -149,11 +160,18 @@ func (r *repository) Statistic(input *model.StatisticInput) (err error) {
 		"COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(?, '-', ?, '-01'))) BETWEEN 55 AND 64 THEN users.id END) AS age_55_64, "+
 		"COUNT(DISTINCT CASE WHEN TIMESTAMPDIFF(YEAR, users.birthday, LAST_DAY(CONCAT(?, '-', ?, '-01'))) >= 65 THEN users.id END) AS age_65_up "+
 		"FROM users "+
-		"WHERE YEAR(users.create_at) = ? AND MONTH(users.create_at) = ? "+
+		"INNER JOIN trainers ON users.id = trainers.user_id "+
+		"WHERE YEAR(trainers.create_at) = ? AND MONTH(trainers.create_at) = ? "+
 		"ON DUPLICATE KEY UPDATE "+
 		"total = VALUES(total), "+
 		"male = VALUES(male), "+
 		"female = VALUES(female), "+
+		"exp_1_3 = VALUES(exp_1_3), "+
+		"exp_4_6 = VALUES(exp_4_6), "+
+		"exp_7_10 = VALUES(exp_7_10), "+
+		"exp_11_15 = VALUES(exp_11_15), "+
+		"exp_16_19 = VALUES(exp_16_19), "+
+		"exp_20_up = VALUES(exp_20_up), "+
 		"age_13_17 = VALUES(age_13_17), "+
 		"age_18_24 = VALUES(age_18_24), "+
 		"age_25_34 = VALUES(age_25_34), "+
