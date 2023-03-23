@@ -15,5 +15,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.GET("/cms/statistic_monthly/user/promote", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSUserPromoteMonthlyStatistic)
 
-	_, _ = scheduler.Shared().Cron().AddFunc("0 * * * * *", controller.Statistic) // 每小時統計一次
+	_, _ = scheduler.Shared().Cron().AddFunc("0 0 * * * *", controller.Statistic) // 每小時統計一次
 }
