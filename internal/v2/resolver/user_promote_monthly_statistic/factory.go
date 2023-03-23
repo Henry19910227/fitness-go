@@ -1,7 +1,11 @@
 package user_promote_monthly_statistic
 
-import "gorm.io/gorm"
+import (
+	"github.com/Henry19910227/fitness-go/internal/v2/service/user_promote_monthly_statistic"
+	"gorm.io/gorm"
+)
 
 func NewResolver(db *gorm.DB) Resolver {
-	return New()
+	statisticService := user_promote_monthly_statistic.NewService(db)
+	return New(statisticService)
 }
