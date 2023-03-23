@@ -4,19 +4,22 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_promote_monthly_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_promote_monthly_statistic/api_get_cms_statistic_monthly_user_promote"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/user_promote_monthly_statistic"
+	"strconv"
 	"time"
 )
 
 type resolver struct {
+	statisticService user_promote_monthly_statistic.Service
 }
 
-func New() Resolver {
-	return &resolver{}
+func New(statisticService user_promote_monthly_statistic.Service) Resolver {
+	return &resolver{statisticService: statisticService}
 }
 
-func (r *resolver) APIGetCMSUserPromoteStatistic(input *model.APIGetCMSUserPromoteStatisticInput) (output model.APIGetCMSUserPromoteStatisticOutput) {
-	data := model.APIGetCMSUserPromoteStatisticData{}
-	data.ID = util.PointerInt64(1)
+func (r *resolver) APIGetCMSUserPromoteStatistic(input *api_get_cms_statistic_monthly_user_promote.Input) (output api_get_cms_statistic_monthly_user_promote.Output) {
+	data := api_get_cms_statistic_monthly_user_promote.Data{}
 	data.Year = util.PointerInt(input.Query.Year)
 	data.Month = util.PointerInt(input.Query.Month)
 	data.Total = util.PointerInt(1000)
@@ -40,4 +43,13 @@ func (r *resolver) APIGetCMSUserPromoteStatistic(input *model.APIGetCMSUserPromo
 	output.Set(code.Success, "success")
 	output.Data = &data
 	return output
+}
+
+func (r *resolver) Statistic() {
+	year, _ := strconv.Atoi(time.Now().Format("2006"))
+	month, _ := strconv.Atoi(time.Now().Format("01"))
+	statisticInput := model.StatisticInput{}
+	statisticInput.Year = year
+	statisticInput.Month = month
+	_ = r.statisticService.Statistic(&statisticInput)
 }

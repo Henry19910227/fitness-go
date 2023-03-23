@@ -4,4 +4,5 @@ import "github.com/gin-gonic/gin"
 
 type Controller interface {
 	GetCMSUserPromoteMonthlyStatistic(ctx *gin.Context)
+	Statistic()
 }
