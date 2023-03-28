@@ -1,5 +1,4 @@
 CREATE TABLE IF NOT EXISTS user_unsubscribe_monthly_statistics (
-    `id`        INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '報表id',
     `year`      INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '年份',
     `month`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '月份',
     `total`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '當月總退訂人數',
@@ -14,5 +13,5 @@ CREATE TABLE IF NOT EXISTS user_unsubscribe_monthly_statistics (
     `age_65_up` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '65+歲退訂人數',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新日期',
-    UNIQUE KEY `unique_user_unsubscribe_monthly_statistics` (`year`, `month`)
+    PRIMARY KEY (`year`,`month`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;
