@@ -3,7 +3,7 @@ package user_unsubscribe_monthly_statistic
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
-	model "github.com/Henry19910227/fitness-go/internal/v2/model/user_unsubscribe_monthly_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/user_unsubscribe_monthly_statistic/api_get_cms_statistic_monthly_user_unsubscribe"
 	"time"
 )
 
@@ -14,11 +14,10 @@ func New() Resolver {
 	return &resolver{}
 }
 
-func (r *resolver) APIGetCMSUserSubscribeStatistic(input *model.APIGetCMSUserUnsubscribeStatisticInput) (output model.APIGetCMSUserUnsubscribeStatisticOutput) {
-	data := model.APIGetCMSUserUnsubscribeStatisticData{}
-	data.ID = util.PointerInt64(1)
-	data.Year = util.PointerInt(input.Query.Year)
-	data.Month = util.PointerInt(input.Query.Month)
+func (r *resolver) APIGetCMSStatisticMonthlyUserUnsubscribe(input *api_get_cms_statistic_monthly_user_unsubscribe.Input) (output api_get_cms_statistic_monthly_user_unsubscribe.Output) {
+	data := api_get_cms_statistic_monthly_user_unsubscribe.Data{}
+	data.Year = input.Query.Year
+	data.Month = input.Query.Month
 	data.Total = util.PointerInt(1000)
 	data.Male = util.PointerInt(600)
 	data.Female = util.PointerInt(400)

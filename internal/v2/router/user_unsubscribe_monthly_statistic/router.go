@@ -12,5 +12,5 @@ import (
 func SetRoute(v2 *gin.RouterGroup) {
 	controller := user_unsubscribe_monthly_statistic.NewController(orm.Shared().DB())
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
-	v2.GET("/cms/statistic_monthly/user/unsubscribe", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSUserUnsubscribeMonthlyStatistic)
+	v2.GET("/cms/statistic_monthly/user/unsubscribe", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSStatisticMonthlyUserUnsubscribe)
 }

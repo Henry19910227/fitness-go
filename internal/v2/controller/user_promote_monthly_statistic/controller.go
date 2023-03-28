@@ -26,7 +26,7 @@ func New(resolver user_promote_monthly_statistic.Resolver) Controller {
 // @Security fitness_token
 // @Param year query int true "年份"
 // @Param month query int true "月份"
-// @Success 200 {object} user_promote_monthly_statistic.APIGetCMSUserPromoteStatisticOutput "成功!"
+// @Success 200 {object} api_get_cms_statistic_monthly_user_promote.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/statistic_monthly/user/promote [GET]
 func (c *controller) GetCMSUserPromoteMonthlyStatistic(ctx *gin.Context) {
