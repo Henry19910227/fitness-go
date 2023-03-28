@@ -38,3 +38,7 @@ func (c controller) GetCMSStatisticMonthlyUserUnsubscribe(ctx *gin.Context) {
 	output := c.resolver.APIGetCMSStatisticMonthlyUserUnsubscribe(&input)
 	ctx.JSON(http.StatusOK, output)
 }
+
+func (c *controller) Statistic() {
+	c.resolver.Statistic()
+}

@@ -6,4 +6,5 @@ import (
 
 type Resolver interface {
 	APIGetCMSStatisticMonthlyUserUnsubscribe(input *api_get_cms_statistic_monthly_user_unsubscribe.Input) (output api_get_cms_statistic_monthly_user_unsubscribe.Output)
+	Statistic()
 }

@@ -41,4 +41,5 @@ func (c *controller) GetCMSUserSubscribeMonthlyStatistic(ctx *gin.Context) {
 
 func (c *controller) Statistic() {
 	c.resolver.Statistic()
+	
 }
