@@ -9694,7 +9694,7 @@ var doc = `{
                     "200": {
                         "description": "成功!",
                         "schema": {
-                            "$ref": "#/definitions/course_create_monthly_statistic.APIGetCMSCourseCreateStatisticOutput"
+                            "$ref": "#/definitions/api_get_cms_statistic_monthly_course_create.Output"
                         }
                     },
                     "400": {
@@ -18290,15 +18290,15 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18318,14 +18318,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -18373,15 +18373,15 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18401,14 +18401,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -18511,15 +18511,15 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18534,7 +18534,7 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
+                                "description": "來源(1:系統創建食物/2:用戶創建食物)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18544,14 +18544,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -18623,12 +18623,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "favorite": {
                                 "description": "是否收藏(0:否/1:是)",
@@ -18636,7 +18636,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18651,7 +18651,7 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
+                                "description": "來源(1:系統創建食物/2:用戶創建食物)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18661,14 +18661,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -18709,15 +18709,15 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18737,14 +18737,14 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "video": {
                     "description": "動作影片",
@@ -18937,7 +18937,7 @@ var doc = `{
                     "example": "henry@gmail.com"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18947,7 +18947,7 @@ var doc = `{
                     "example": 2
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
                     "example": "Henry"
                 }
@@ -19002,10 +19002,10 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -19015,14 +19015,14 @@ var doc = `{
                     "example": "1234.jpg"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "url": {
                     "description": "url",
@@ -19289,10 +19289,10 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -19364,7 +19364,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -19395,7 +19395,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 }
@@ -19705,6 +19705,99 @@ var doc = `{
                 }
             }
         },
+        "api_get_cms_statistic_monthly_course_create.Data": {
+            "type": "object",
+            "properties": {
+                "aerobic": {
+                    "description": "有氧課表創建數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "bodyweight_training": {
+                    "description": "徒手訓練課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "charge": {
+                    "description": "付費課表創建數",
+                    "type": "integer",
+                    "example": 400
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-12 00:00:00"
+                },
+                "free": {
+                    "description": "免費課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "interval_training": {
+                    "description": "間歇肌力訓練課表創建數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer",
+                    "example": 5
+                },
+                "other_training": {
+                    "description": "付費課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "resistance_training": {
+                    "description": "阻力訓練課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "subscribe": {
+                    "description": "訂閱課表創建數",
+                    "type": "integer",
+                    "example": 400
+                },
+                "total": {
+                    "description": "當月總退訂人數",
+                    "type": "integer",
+                    "example": 1000
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "weight_training": {
+                    "description": "重量訓練課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer",
+                    "example": 2022
+                }
+            }
+        },
+        "api_get_cms_statistic_monthly_course_create.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_get_cms_statistic_monthly_course_create.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
         "api_get_cms_statistic_monthly_user_promote.Data": {
             "type": "object",
             "properties": {
@@ -19746,7 +19839,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "exp_11_15": {
                     "description": "11-15年經驗晉升教練人數",
@@ -19791,17 +19884,17 @@ var doc = `{
                 "month": {
                     "description": "月份",
                     "type": "integer",
-                    "example": 12
+                    "example": 5
                 },
                 "total": {
-                    "description": "當月總晉升教練人數",
+                    "description": "當月總退訂人數",
                     "type": "integer",
                     "example": 1000
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -19879,7 +19972,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "expert": {
                     "description": "專業用戶註冊人數",
@@ -19904,17 +19997,17 @@ var doc = `{
                 "month": {
                     "description": "月份",
                     "type": "integer",
-                    "example": 12
+                    "example": 5
                 },
                 "total": {
-                    "description": "當月總註冊人數",
+                    "description": "當月總退訂人數",
                     "type": "integer",
                     "example": 1000
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -19982,7 +20075,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "female": {
                     "description": "女性退訂人數",
@@ -19997,7 +20090,7 @@ var doc = `{
                 "month": {
                     "description": "月份",
                     "type": "integer",
-                    "example": 12
+                    "example": 5
                 },
                 "total": {
                     "description": "當月總退訂人數",
@@ -20007,7 +20100,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -20156,7 +20249,7 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
                     "example": "Henry"
                 },
@@ -20348,7 +20441,7 @@ var doc = `{
                                 "example": "henry@gmail.com"
                             },
                             "nickname": {
-                                "description": "暱稱",
+                                "description": "教練暱稱",
                                 "type": "string",
                                 "example": "Henry"
                             },
@@ -20499,10 +20592,10 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -20595,7 +20688,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "female": {
                     "description": "女性訂閱人數",
@@ -20610,17 +20703,17 @@ var doc = `{
                 "month": {
                     "description": "月份",
                     "type": "integer",
-                    "example": 12
+                    "example": 5
                 },
                 "total": {
-                    "description": "當月總訂閱人數",
+                    "description": "當月總退訂人數",
                     "type": "integer",
                     "example": 1000
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -21070,7 +21163,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21527,7 +21620,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21781,15 +21874,15 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21804,7 +21897,7 @@ var doc = `{
                                 "example": "划船機"
                             },
                             "source": {
-                                "description": "動作來源(1:系統動作/2:教練動作/2:學員動作)",
+                                "description": "來源(1:系統創建食物/2:用戶創建食物)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21814,14 +21907,14 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "video": {
                                 "description": "動作影片",
@@ -22383,7 +22476,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "free_usage_count": {
                     "description": "免費課表使用人數",
@@ -22403,7 +22496,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -22439,7 +22532,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "income": {
                     "description": "收益",
@@ -22454,7 +22547,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "year": {
                     "description": "年份",
@@ -22485,7 +22578,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -22639,12 +22732,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -22652,7 +22745,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -22662,9 +22755,9 @@ var doc = `{
                                 "example": 10.5
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "weight": {
                                 "description": "體重(公斤)",
@@ -22741,7 +22834,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -23162,7 +23255,7 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
                     "example": "Henry"
                 },
@@ -24110,12 +24203,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 }
             }
         },
@@ -24183,10 +24276,10 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -24211,14 +24304,14 @@ var doc = `{
                                 }
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "url": {
                                 "description": "url",
@@ -26986,104 +27079,6 @@ var doc = `{
                 }
             }
         },
-        "course_create_monthly_statistic.APIGetCMSCourseCreateStatisticData": {
-            "type": "object",
-            "properties": {
-                "aerobic": {
-                    "description": "有氧課表創建數",
-                    "type": "integer",
-                    "example": 100
-                },
-                "bodyweight_training": {
-                    "description": "徒手訓練課表創建數",
-                    "type": "integer",
-                    "example": 200
-                },
-                "charge": {
-                    "description": "付費課表創建數",
-                    "type": "integer",
-                    "example": 400
-                },
-                "create_at": {
-                    "description": "創建時間",
-                    "type": "string",
-                    "example": "2022-06-14 00:00:00"
-                },
-                "free": {
-                    "description": "免費課表創建數",
-                    "type": "integer",
-                    "example": 200
-                },
-                "id": {
-                    "description": "報表id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "interval_training": {
-                    "description": "間歇肌力訓練課表創建數",
-                    "type": "integer",
-                    "example": 100
-                },
-                "month": {
-                    "description": "月份",
-                    "type": "integer",
-                    "example": 12
-                },
-                "other_training": {
-                    "description": "付費課表創建數",
-                    "type": "integer",
-                    "example": 200
-                },
-                "resistance_training": {
-                    "description": "阻力訓練課表創建數",
-                    "type": "integer",
-                    "example": 200
-                },
-                "subscribe": {
-                    "description": "訂閱課表創建數",
-                    "type": "integer",
-                    "example": 400
-                },
-                "total": {
-                    "description": "當月總創建數",
-                    "type": "integer",
-                    "example": 1000
-                },
-                "update_at": {
-                    "description": "更新時間",
-                    "type": "string",
-                    "example": "2022-06-14 00:00:00"
-                },
-                "weight_training": {
-                    "description": "重量訓練課表創建數",
-                    "type": "integer",
-                    "example": 200
-                },
-                "year": {
-                    "description": "年份",
-                    "type": "integer",
-                    "example": 2022
-                }
-            }
-        },
-        "course_create_monthly_statistic.APIGetCMSCourseCreateStatisticOutput": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "狀態碼",
-                    "type": "integer",
-                    "example": 9000
-                },
-                "data": {
-                    "$ref": "#/definitions/course_create_monthly_statistic.APIGetCMSCourseCreateStatisticData"
-                },
-                "msg": {
-                    "description": "訊息",
-                    "type": "string",
-                    "example": "message.."
-                }
-            }
-        },
         "course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticData": {
             "type": "object",
             "properties": {
@@ -27237,7 +27232,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "評論id",
+                                                "description": "訓練 id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -31477,10 +31472,10 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -31562,7 +31557,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -31605,10 +31600,10 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -31740,7 +31735,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "user_id": {
                                 "description": "用戶id",
@@ -32812,7 +32807,7 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
                     "example": "Henry"
                 },
@@ -32938,7 +32933,7 @@ var doc = `{
                                 "example": "abc.png"
                             },
                             "nickname": {
-                                "description": "暱稱",
+                                "description": "教練暱稱",
                                 "type": "string",
                                 "example": "Henry"
                             },
@@ -33052,7 +33047,7 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
                     "example": "Henry"
                 },
@@ -33183,7 +33178,7 @@ var doc = `{
                                 "example": "2022-06-12 00:00:00"
                             },
                             "nickname": {
-                                "description": "暱稱",
+                                "description": "教練暱稱",
                                 "type": "string",
                                 "example": "Henry"
                             },
@@ -33297,7 +33292,7 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
                     "example": "Henry"
                 },
@@ -33505,7 +33500,7 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
                     "example": "Henry"
                 },
@@ -35261,7 +35256,7 @@ var doc = `{
                     "example": 165.5
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
                     "example": "Henry"
                 },
@@ -35318,7 +35313,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 }
             }
         },
@@ -36119,7 +36114,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 }
@@ -36162,7 +36157,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 }
@@ -36292,7 +36287,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -36300,12 +36295,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36322,7 +36317,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -36358,7 +36353,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -36366,12 +36361,12 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36388,7 +36383,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -36421,7 +36416,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "end_audio": {
                                 "description": "結束語音",
@@ -36429,9 +36424,9 @@ var doc = `{
                                 "example": "123.mp3"
                             },
                             "equipment": {
-                                "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                                "type": "integer",
-                                "example": 1
+                                "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                                "type": "string",
+                                "example": "2,3,6"
                             },
                             "finish": {
                                 "description": "是否完成(0:未完成/1:已完成)",
@@ -36439,7 +36434,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36456,7 +36451,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "workout_set_count": {
                                 "description": "動作組數",
@@ -36479,7 +36474,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "end_audio": {
                     "description": "結束語音",
@@ -36487,12 +36482,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -36509,7 +36504,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -36542,7 +36537,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "end_audio": {
                     "description": "結束語音",
@@ -36550,12 +36545,12 @@ var doc = `{
                     "example": "123.mp3"
                 },
                 "equipment": {
-                    "description": "器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
-                    "type": "integer",
-                    "example": 1
+                    "description": "所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)",
+                    "type": "string",
+                    "example": "2,3,6"
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -36572,7 +36567,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "workout_set_count": {
                     "description": "動作組數",
@@ -36815,7 +36810,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37231,12 +37226,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -37244,7 +37239,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37264,9 +37259,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -37274,14 +37269,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -37387,12 +37382,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -37400,7 +37395,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37420,9 +37415,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -37430,14 +37425,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -37540,12 +37535,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -37553,7 +37548,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37573,9 +37568,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -37583,14 +37578,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -37693,12 +37688,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "distance": {
                                 "description": "距離(公里)",
                                 "type": "number",
-                                "example": 1
+                                "example": 2.5
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -37706,7 +37701,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "評論id",
+                                "description": "訓練 id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37726,9 +37721,9 @@ var doc = `{
                                 "example": "注意呼吸不可憋氣"
                             },
                             "reps": {
-                                "description": "次數id",
+                                "description": "次數",
                                 "type": "integer",
-                                "example": 1
+                                "example": 2
                             },
                             "start_audio": {
                                 "description": "前導語音",
@@ -37736,14 +37731,14 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                                "description": "動作類別(1:動作/2:休息)",
                                 "type": "integer",
                                 "example": 1
                             },
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "weight": {
                                 "description": "重量(公斤)",
@@ -37836,12 +37831,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 1
+                    "example": 2.5
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -37849,7 +37844,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -37869,9 +37864,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數id",
+                    "description": "次數",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -37879,14 +37874,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",
@@ -37989,12 +37984,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "distance": {
                     "description": "距離(公里)",
                     "type": "number",
-                    "example": 1
+                    "example": 2.5
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -38002,7 +37997,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "評論id",
+                    "description": "訓練 id",
                     "type": "integer",
                     "example": 1
                 },
@@ -38022,9 +38017,9 @@ var doc = `{
                     "example": "注意呼吸不可憋氣"
                 },
                 "reps": {
-                    "description": "次數id",
+                    "description": "次數",
                     "type": "integer",
-                    "example": 1
+                    "example": 2
                 },
                 "start_audio": {
                     "description": "前導語音",
@@ -38032,14 +38027,14 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
+                    "description": "動作類別(1:動作/2:休息)",
                     "type": "integer",
                     "example": 1
                 },
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "weight": {
                     "description": "重量(公斤)",
