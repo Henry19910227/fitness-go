@@ -12,9 +12,9 @@ migrate_up:
 migrate_down:
 	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ down 1
 migrate_force:
-	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20210625212821
+	migrate -database mysql://henry:aaaa8027@tcp\(localhost:8889\)/fitness -path migrations/ force 20230329111350
 migrate_create:
-	migrate create -ext sql -dir migrations drop_course_create_monthly_statistics_table_unique_key_v_2_0_29
+	migrate create -ext sql -dir migrations drop_course_release_monthly_statistics_table_unique_key_v_2_0_29
 
 test-mysql:
 	docker-compose up --build -d test-mysql
