@@ -15,30 +15,30 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
         example: 划船機
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 訂閱狀態(0:無訂閱/1:訂閱中)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -79,30 +79,30 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
         example: 划船機
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 訂閱狀態(0:無訂閱/1:訂閱中)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -183,34 +183,34 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
               example: 2,3,6
               type: string
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
               example: 划船機
               type: string
             source:
-              description: 來源(1:系統創建食物/2:用戶創建食物)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 訂閱狀態(0:無訂閱/1:訂閱中)
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -268,7 +268,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
@@ -279,27 +279,27 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
               example: 划船機
               type: string
             source:
-              description: 來源(1:系統創建食物/2:用戶創建食物)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 訂閱狀態(0:無訂閱/1:訂閱中)
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -335,30 +335,30 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       equipment:
         description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
         example: 2,3,6
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       name:
         description: 動作名稱
         example: 划船機
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 訂閱狀態(0:無訂閱/1:訂閱中)
         example: 1
         type: integer
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -509,10 +509,10 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       lv:
@@ -520,8 +520,8 @@ definitions:
         example: 2
         type: integer
       nickname:
-        description: 教練暱稱
-        example: Henry
+        description: 暱稱
+        example: henry
         type: string
     type: object
   api_cms_login.Output:
@@ -560,10 +560,10 @@ definitions:
         type: integer
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       image:
@@ -571,7 +571,7 @@ definitions:
         example: 1234.jpg
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -774,10 +774,10 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       order_status:
@@ -854,7 +854,7 @@ definitions:
   api_create_trainer_action.Data:
     properties:
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
     type: object
@@ -1096,7 +1096,7 @@ definitions:
         type: integer
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       free:
         description: 免費課表創建數
@@ -1108,7 +1108,7 @@ definitions:
         type: integer
       month:
         description: 月份
-        example: 5
+        example: 12
         type: integer
       other_training:
         description: 付費課表創建數
@@ -1123,7 +1123,7 @@ definitions:
         example: 400
         type: integer
       total:
-        description: 當月總退訂人數
+        description: 當月總創建數
         example: 1000
         type: integer
       update_at:
@@ -1147,6 +1147,78 @@ definitions:
         type: integer
       data:
         $ref: '#/definitions/api_get_cms_statistic_monthly_course_create.Data'
+      msg:
+        description: 訊息
+        example: message..
+        type: string
+    type: object
+  api_get_cms_statistic_monthly_course_release.Data:
+    properties:
+      aerobic:
+        description: 有氧課表上架數
+        example: 100
+        type: integer
+      bodyweight_training:
+        description: 徒手訓練課表上架數
+        example: 200
+        type: integer
+      charge:
+        description: 付費課表上架數
+        example: 400
+        type: integer
+      create_at:
+        description: 創建時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      free:
+        description: 免費課表上架數
+        example: 200
+        type: integer
+      interval_training:
+        description: 間歇肌力訓練課表上架數
+        example: 100
+        type: integer
+      month:
+        description: 月份
+        example: 12
+        type: integer
+      other_training:
+        description: 付費課表上架數
+        example: 200
+        type: integer
+      resistance_training:
+        description: 阻力訓練課表上架數
+        example: 200
+        type: integer
+      subscribe:
+        description: 訂閱課表上架數
+        example: 400
+        type: integer
+      total:
+        description: 當月總上架數
+        example: 1000
+        type: integer
+      update_at:
+        description: 更新時間
+        example: "2022-06-14 00:00:00"
+        type: string
+      weight_training:
+        description: 重量訓練課表上架數
+        example: 200
+        type: integer
+      year:
+        description: 年份
+        example: 2022
+        type: integer
+    type: object
+  api_get_cms_statistic_monthly_course_release.Output:
+    properties:
+      code:
+        description: 狀態碼
+        example: 9000
+        type: integer
+      data:
+        $ref: '#/definitions/api_get_cms_statistic_monthly_course_release.Data'
       msg:
         description: 訊息
         example: message..
@@ -1184,7 +1256,7 @@ definitions:
         type: integer
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       exp_1_3:
         description: 1-3年經驗晉升教練人數
@@ -1220,10 +1292,10 @@ definitions:
         type: integer
       month:
         description: 月份
-        example: 5
+        example: 12
         type: integer
       total:
-        description: 當月總退訂人數
+        description: 當月總晉升教練人數
         example: 1000
         type: integer
       update_at:
@@ -1288,7 +1360,7 @@ definitions:
         type: integer
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       expert:
         description: 專業用戶註冊人數
@@ -1308,10 +1380,10 @@ definitions:
         type: integer
       month:
         description: 月份
-        example: 5
+        example: 12
         type: integer
       total:
-        description: 當月總退訂人數
+        description: 當月總註冊人數
         example: 1000
         type: integer
       update_at:
@@ -1368,7 +1440,7 @@ definitions:
         type: integer
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       female:
         description: 女性退訂人數
@@ -1380,7 +1452,7 @@ definitions:
         type: integer
       month:
         description: 月份
-        example: 5
+        example: 12
         type: integer
       total:
         description: 當月總退訂人數
@@ -1475,7 +1547,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -1490,8 +1562,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -1502,8 +1574,8 @@ definitions:
         example: 亨利
         type: string
       nickname:
-        description: 教練暱稱
-        example: Henry
+        description: 暱稱
+        example: henry
         type: string
       phone:
         description: 電話
@@ -1540,7 +1612,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -1643,11 +1715,11 @@ definitions:
           properties:
             email:
               description: 信箱
-              example: henry@gmail.com
+              example: test@gmail.com
               type: string
             nickname:
-              description: 教練暱稱
-              example: Henry
+              description: 暱稱
+              example: henry
               type: string
             trainer_status:
               description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
@@ -1655,7 +1727,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -1761,10 +1833,10 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             order_course:
@@ -1833,7 +1905,7 @@ definitions:
         type: integer
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       female:
         description: 女性訂閱人數
@@ -1845,10 +1917,10 @@ definitions:
         type: integer
       month:
         description: 月份
-        example: 5
+        example: 12
         type: integer
       total:
-        description: 當月總退訂人數
+        description: 當月總訂閱人數
         example: 1000
         type: integer
       update_at:
@@ -2192,7 +2264,7 @@ definitions:
         items:
           properties:
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             name:
@@ -2541,7 +2613,7 @@ definitions:
         items:
           properties:
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             name:
@@ -2736,34 +2808,34 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             equipment:
               description: 所需器材(1:無需任何器材/2:啞鈴/3:槓鈴/4:固定式器材/5:彈力繩/6:壺鈴/7:訓練椅/8:瑜珈墊/9:其他)
               example: 2,3,6
               type: string
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             intro:
-              description: 個人介紹
-              example: Henry教練
+              description: 課表介紹
+              example: 增肌專用課表
               type: string
             name:
               description: 動作名稱
               example: 划船機
               type: string
             source:
-              description: 來源(1:系統創建食物/2:用戶創建食物)
+              description: 來源(0:未知/1:購買/2:贈送)
               example: 1
               type: integer
             status:
-              description: 動作狀態(0:下架/1:上架)
+              description: 訂閱狀態(0:無訂閱/1:訂閱中)
               example: 1
               type: integer
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -3199,7 +3271,7 @@ definitions:
         type: integer
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       free_usage_count:
         description: 免費課表使用人數
@@ -3243,7 +3315,7 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       income:
         description: 收益
@@ -3280,7 +3352,7 @@ definitions:
   api_get_user_action_best_pr.Data:
     properties:
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       max_distance_record:
@@ -3392,7 +3464,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -3403,7 +3475,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             incline:
@@ -3411,8 +3483,8 @@ definitions:
               example: 10.5
               type: number
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             weight:
               description: 體重(公斤)
@@ -3471,7 +3543,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       intensity:
@@ -3761,7 +3833,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -3776,8 +3848,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -3788,8 +3860,8 @@ definitions:
         example: 亨利
         type: string
       nickname:
-        description: 教練暱稱
-        example: Henry
+        description: 暱稱
+        example: henry
         type: string
       phone:
         description: 電話
@@ -3826,7 +3898,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -4506,7 +4578,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       update_at:
         description: 更新時間
@@ -4559,10 +4631,10 @@ definitions:
               type: object
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             image:
@@ -4581,7 +4653,7 @@ definitions:
                   type: integer
               type: object
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -6694,82 +6766,6 @@ definitions:
         example: message..
         type: string
     type: object
-  course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticData:
-    properties:
-      aerobic:
-        description: 有氧課表上架數
-        example: 100
-        type: integer
-      bodyweight_training:
-        description: 徒手訓練課表上架數
-        example: 200
-        type: integer
-      charge:
-        description: 付費課表上架數
-        example: 400
-        type: integer
-      create_at:
-        description: 創建時間
-        example: "2022-06-14 00:00:00"
-        type: string
-      free:
-        description: 免費課表上架數
-        example: 200
-        type: integer
-      id:
-        description: 報表id
-        example: 1
-        type: integer
-      interval_training:
-        description: 間歇肌力訓練課表上架數
-        example: 100
-        type: integer
-      month:
-        description: 月份
-        example: 12
-        type: integer
-      other_training:
-        description: 付費課表上架數
-        example: 200
-        type: integer
-      resistance_training:
-        description: 阻力訓練課表上架數
-        example: 200
-        type: integer
-      subscribe:
-        description: 訂閱課表上架數
-        example: 400
-        type: integer
-      total:
-        description: 當月總上架數
-        example: 1000
-        type: integer
-      update_at:
-        description: 更新時間
-        example: "2022-06-14 00:00:00"
-        type: string
-      weight_training:
-        description: 重量訓練課表上架數
-        example: 200
-        type: integer
-      year:
-        description: 年份
-        example: 2022
-        type: integer
-    type: object
-  course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticOutput:
-    properties:
-      code:
-        description: 狀態碼
-        example: 9000
-        type: integer
-      data:
-        $ref: '#/definitions/course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticData'
-      msg:
-        description: 訊息
-        example: message..
-        type: string
-    type: object
   course_training_avg_statistic.APIGetCMSCourseTrainingAvgStatisticOutput:
     properties:
       code:
@@ -6811,7 +6807,7 @@ definitions:
                 product_label:
                   properties:
                     id:
-                      description: 訓練 id
+                      description: 評論id
                       example: 1
                       type: integer
                     product_id:
@@ -10027,10 +10023,10 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       order_course:
@@ -10122,10 +10118,10 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             order_course:
@@ -10991,7 +10987,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -11006,8 +11002,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -11018,8 +11014,8 @@ definitions:
         example: 亨利
         type: string
       nickname:
-        description: 教練暱稱
-        example: Henry
+        description: 暱稱
+        example: henry
         type: string
       phone:
         description: 電話
@@ -11075,7 +11071,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -11113,8 +11109,8 @@ definitions:
               example: abc.png
               type: string
             nickname:
-              description: 教練暱稱
-              example: Henry
+              description: 暱稱
+              example: henry
               type: string
             skill:
               description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
@@ -11170,7 +11166,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -11185,8 +11181,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       is_deleted:
         description: 是否刪除
@@ -11201,8 +11197,8 @@ definitions:
         example: 亨利
         type: string
       nickname:
-        description: 教練暱稱
-        example: Henry
+        description: 暱稱
+        example: henry
         type: string
       phone:
         description: 電話
@@ -11258,7 +11254,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -11300,8 +11296,8 @@ definitions:
               example: "2022-06-12 00:00:00"
               type: string
             nickname:
-              description: 教練暱稱
-              example: Henry
+              description: 暱稱
+              example: henry
               type: string
             skill:
               description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
@@ -11309,7 +11305,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -11361,7 +11357,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -11376,8 +11372,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -11388,8 +11384,8 @@ definitions:
         example: 亨利
         type: string
       nickname:
-        description: 教練暱稱
-        example: Henry
+        description: 暱稱
+        example: henry
         type: string
       phone:
         description: 電話
@@ -11445,7 +11441,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -11520,7 +11516,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: henry@gmail.com
+        example: test@gmail.com
         type: string
       experience:
         description: 年資
@@ -11535,8 +11531,8 @@ definitions:
         example: www.ig.com
         type: string
       intro:
-        description: 個人介紹
-        example: Henry教練
+        description: 課表介紹
+        example: 增肌專用課表
         type: string
       motto:
         description: 座右銘
@@ -11547,8 +11543,8 @@ definitions:
         example: 亨利
         type: string
       nickname:
-        description: 教練暱稱
-        example: Henry
+        description: 暱稱
+        example: henry
         type: string
       phone:
         description: 電話
@@ -11604,7 +11600,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -12528,7 +12524,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -12563,7 +12559,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -12602,7 +12598,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -12637,7 +12633,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -12672,7 +12668,7 @@ definitions:
         example: henry@gmail.com
         type: string
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
       otp_code:
@@ -12739,7 +12735,7 @@ definitions:
   user.APIRegisterNicknameValidateBody:
     properties:
       nickname:
-        description: 教練暱稱
+        description: 暱稱
         example: Henry
         type: string
     required:
@@ -12869,8 +12865,8 @@ definitions:
         example: 165.5
         type: number
       nickname:
-        description: 教練暱稱
-        example: Henry
+        description: 暱稱
+        example: henry
         type: string
       sex:
         description: 性別 (m:男/f:女)
@@ -12907,7 +12903,7 @@ definitions:
         example: "2022-07-11 11:00:00"
         type: string
       status:
-        description: 動作狀態(0:下架/1:上架)
+        description: 訂閱狀態(0:無訂閱/1:訂閱中)
         example: 1
         type: integer
       update_at:
@@ -13511,7 +13507,7 @@ definitions:
   workout.APICreateTrainerWorkoutData:
     properties:
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
     type: object
@@ -13542,7 +13538,7 @@ definitions:
   workout.APICreateUserWorkoutData:
     properties:
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
     type: object
@@ -13636,7 +13632,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -13647,7 +13643,7 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             name:
@@ -13686,7 +13682,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -13697,7 +13693,7 @@ definitions:
               example: 2,3,6
               type: string
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             name:
@@ -13734,7 +13730,7 @@ definitions:
           properties:
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             end_audio:
               description: 結束語音
@@ -13749,7 +13745,7 @@ definitions:
               example: 1
               type: integer
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             name:
@@ -13779,7 +13775,7 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       end_audio:
         description: 結束語音
@@ -13790,7 +13786,7 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       name:
@@ -13827,7 +13823,7 @@ definitions:
     properties:
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       end_audio:
         description: 結束語音
@@ -13838,7 +13834,7 @@ definitions:
         example: 2,3,6
         type: string
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       name:
@@ -14036,7 +14032,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             intensity:
@@ -14343,7 +14339,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -14354,7 +14350,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             incline:
@@ -14370,15 +14366,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -14464,7 +14460,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -14475,7 +14471,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             incline:
@@ -14491,15 +14487,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -14583,7 +14579,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -14594,7 +14590,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             incline:
@@ -14610,15 +14606,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -14702,7 +14698,7 @@ definitions:
               type: string
             create_at:
               description: 創建時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             distance:
               description: 距離(公里)
@@ -14713,7 +14709,7 @@ definitions:
               example: 30
               type: integer
             id:
-              description: 訓練 id
+              description: 評論id
               example: 1
               type: integer
             incline:
@@ -14729,15 +14725,15 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 動作類別(1:動作/2:休息)
+              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
               example: 1
               type: integer
             update_at:
@@ -14814,7 +14810,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       distance:
         description: 距離(公里)
@@ -14825,7 +14821,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       incline:
@@ -14841,15 +14837,15 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數
-        example: 2
+        description: 次數id
+        example: 1
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -14933,7 +14929,7 @@ definitions:
         type: string
       create_at:
         description: 創建時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       distance:
         description: 距離(公里)
@@ -14944,7 +14940,7 @@ definitions:
         example: 30
         type: integer
       id:
-        description: 訓練 id
+        description: 評論id
         example: 1
         type: integer
       incline:
@@ -14960,15 +14956,15 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數
-        example: 2
+        description: 次數id
+        example: 1
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 動作類別(1:動作/2:休息)
+        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
         example: 1
         type: integer
       update_at:
@@ -21046,7 +21042,7 @@ paths:
         "200":
           description: 成功!
           schema:
-            $ref: '#/definitions/course_release_monthly_statistic.APIGetCMSCourseReleaseStatisticOutput'
+            $ref: '#/definitions/api_get_cms_statistic_monthly_course_release.Output'
         "400":
           description: 失敗!
           schema:

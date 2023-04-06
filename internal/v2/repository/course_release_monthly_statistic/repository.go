@@ -1,8 +1,8 @@
-package course_create_monthly_statistic
+package course_release_monthly_statistic
 
 import (
 	"fmt"
-	model "github.com/Henry19910227/fitness-go/internal/v2/model/course_create_monthly_statistic"
+	model "github.com/Henry19910227/fitness-go/internal/v2/model/course_release_monthly_statistic"
 	"gorm.io/gorm"
 )
 
@@ -49,11 +49,11 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	}
 	//加入 year 篩選條件
 	if input.Year != nil {
-		db = db.Where("course_create_monthly_statistics.year = ?", *input.Year)
+		db = db.Where("course_release_monthly_statistics.year = ?", *input.Year)
 	}
 	//加入 month 篩選條件
 	if input.Month != nil {
-		db = db.Where("course_create_monthly_statistics.month = ?", *input.Month)
+		db = db.Where("course_release_monthly_statistics.month = ?", *input.Month)
 	}
 	// Custom Where
 	if len(input.Wheres) > 0 {
@@ -70,7 +70,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	// Count
 	db = db.Count(&amount)
 	// Select
-	db = db.Select("course_create_monthly_statistics.*")
+	db = db.Select("course_release_monthly_statistics.*")
 	// Paging
 	if input.Page != nil && input.Size != nil {
 		db = db.Offset((*input.Page - 1) * *input.Size).Limit(*input.Size)
@@ -81,7 +81,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	}
 	// Order
 	if len(input.OrderField) > 0 && len(input.OrderType) > 0 {
-		db = db.Order(fmt.Sprintf("course_create_monthly_statistics.%s %s", input.OrderField, input.OrderType))
+		db = db.Order(fmt.Sprintf("course_release_monthly_statistics.%s %s", input.OrderField, input.OrderType))
 	}
 	// Custom Order
 	if input.Orders != nil {
@@ -96,7 +96,7 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 
 // Statistic SQL
 /*
-INSERT INTO course_create_monthly_statistics (year, month, total, free, subscribe, charge, aerobic, interval_training, weight_training, resistance_training, bodyweight_training, other_training)
+INSERT INTO course_release_monthly_statistics (year, month, total, free, subscribe, charge, aerobic, interval_training, weight_training, resistance_training, bodyweight_training, other_training)
 SELECT
   2021 AS year,
   6 AS month,
@@ -111,8 +111,7 @@ SELECT
   COUNT(CASE WHEN courses.category = 5 THEN 0 END) AS bodyweight_training,
   COUNT(CASE WHEN courses.category = 6 THEN 0 END) AS other_training
 FROM courses
-WHERE YEAR(courses.create_at) = 2021 AND MONTH(courses.create_at) = 6
-AND (courses.sale_type = 1 OR courses.sale_type = 2 OR courses.sale_type = 3)
+WHERE YEAR(courses.create_at) = 2021 AND MONTH(courses.create_at) = 6 AND courses.course_status = 3
 ON DUPLICATE KEY UPDATE
   total = VALUES(total),
   free = VALUES(free),
@@ -127,7 +126,7 @@ ON DUPLICATE KEY UPDATE
   update_at = CURRENT_TIMESTAMP;
 */
 func (r *repository) Statistic(input *model.StatisticInput) (err error) {
-	err = r.db.Exec("INSERT INTO course_create_monthly_statistics (year, month, total, free, subscribe, charge, aerobic, interval_training, weight_training, resistance_training, bodyweight_training, other_training)\n "+
+	err = r.db.Exec("INSERT INTO course_release_monthly_statistics (year, month, total, free, subscribe, charge, aerobic, interval_training, weight_training, resistance_training, bodyweight_training, other_training)\n "+
 		"SELECT\n  "+
 		"? AS year,\n  "+
 		"? AS month,\n  "+
@@ -142,8 +141,7 @@ func (r *repository) Statistic(input *model.StatisticInput) (err error) {
 		"COUNT(CASE WHEN courses.category = 5 THEN 0 END) AS bodyweight_training,\n  "+
 		"COUNT(CASE WHEN courses.category = 6 THEN 0 END) AS other_training\n "+
 		"FROM courses\n "+
-		"WHERE YEAR(courses.create_at) = ? AND MONTH(courses.create_at) = ?\n "+
-		"AND (courses.sale_type = 1 OR courses.sale_type = 2 OR courses.sale_type = 3)\n "+
+		"WHERE YEAR(courses.create_at) = ? AND MONTH(courses.create_at) = ? AND courses.course_status = 3\n "+
 		"ON DUPLICATE KEY UPDATE\n  "+
 		"total = VALUES(total),\n  "+
 		"free = VALUES(free),\n  "+

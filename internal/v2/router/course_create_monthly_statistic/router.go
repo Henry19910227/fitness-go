@@ -15,5 +15,5 @@ func SetRoute(v2 *gin.RouterGroup) {
 	midd := tokenMiddleware.NewTokenMiddleware(redis.Shared())
 	v2.GET("/cms/statistic_monthly/course/create", midd.Verify([]global.Role{global.AdminRole}), controller.GetCMSStatisticMonthlyCourseCreate)
 
-	_, _ = scheduler.Shared().Cron().AddFunc("0 * * * * *", controller.Statistic)
+	_, _ = scheduler.Shared().Cron().AddFunc("0 0 * * * *", controller.Statistic)
 }
