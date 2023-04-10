@@ -4,5 +4,6 @@ import "github.com/gin-gonic/gin"
 
 type Controller interface {
 	GetCMSCourseTrainingMonthlyStatistic(ctx *gin.Context)
-}
 
+	Statistic()
+}
