@@ -1,5 +1,4 @@
 CREATE TABLE IF NOT EXISTS course_category_training_monthly_statistics (
-    `id`        INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '報表id',
     `category`  TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)',
     `year`      INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '年份',
     `month`     INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '月份',
@@ -15,5 +14,5 @@ CREATE TABLE IF NOT EXISTS course_category_training_monthly_statistics (
     `age_65_up` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '65+歲訓練數',
     `create_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     `update_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '更新日期',
-    UNIQUE KEY `unique_course_category_training_monthly_statistics` (`category`, `year`, `month`)
+    PRIMARY KEY (`category`, `year`, `month`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT = 1;
