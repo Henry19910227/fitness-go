@@ -1,7 +1,11 @@
 package course_category_training_monthly_statistic
 
-import "gorm.io/gorm"
+import (
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course_category_training_monthly_statistic"
+	"gorm.io/gorm"
+)
 
 func NewResolver(db *gorm.DB) Resolver {
-	return New()
+	statisticService := course_category_training_monthly_statistic.NewService(db)
+	return New(statisticService)
 }

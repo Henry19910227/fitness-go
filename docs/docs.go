@@ -9925,7 +9925,7 @@ var doc = `{
                     "200": {
                         "description": "成功!",
                         "schema": {
-                            "$ref": "#/definitions/course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticOutput"
+                            "$ref": "#/definitions/api_get_cms_statistic_monthly_course_category_training.Output"
                         }
                     },
                     "400": {
@@ -18278,7 +18278,7 @@ var doc = `{
                     "example": 8
                 },
                 "category": {
-                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -18298,7 +18298,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18318,7 +18318,7 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
@@ -18361,7 +18361,7 @@ var doc = `{
                     "example": 8
                 },
                 "category": {
-                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -18381,7 +18381,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18401,7 +18401,7 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
@@ -18499,7 +18499,7 @@ var doc = `{
                                 "example": 8
                             },
                             "category": {
-                                "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                                "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18519,7 +18519,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18544,7 +18544,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18611,7 +18611,7 @@ var doc = `{
                                 "example": 8
                             },
                             "category": {
-                                "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                                "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18636,7 +18636,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18661,7 +18661,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -18697,7 +18697,7 @@ var doc = `{
                     "example": 8
                 },
                 "category": {
-                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -18717,7 +18717,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18737,7 +18737,7 @@ var doc = `{
                     "example": 1
                 },
                 "type": {
-                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
@@ -18934,10 +18934,10 @@ var doc = `{
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "test@gmail.com"
+                    "example": "henry@gmail.com"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -18947,9 +18947,9 @@ var doc = `{
                     "example": 2
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
-                    "example": "henry"
+                    "example": "Henry"
                 }
             }
         },
@@ -19005,7 +19005,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -19015,7 +19015,7 @@ var doc = `{
                     "example": "1234.jpg"
                 },
                 "type": {
-                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
@@ -19292,7 +19292,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -19395,7 +19395,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -19705,58 +19705,68 @@ var doc = `{
                 }
             }
         },
-        "api_get_cms_statistic_monthly_course_create.Data": {
+        "api_get_cms_statistic_monthly_course_category_training.Data": {
             "type": "object",
             "properties": {
-                "aerobic": {
-                    "description": "有氧課表訓練數",
+                "age_13_17": {
+                    "description": "13-17歲訂閱人數",
                     "type": "integer",
                     "example": 100
                 },
-                "bodyweight_training": {
-                    "description": "徒手訓練課表訓練數",
+                "age_18_24": {
+                    "description": "18-24歲訂閱人數",
+                    "type": "integer",
+                    "example": 150
+                },
+                "age_25_34": {
+                    "description": "25-34歲訂閱人數",
+                    "type": "integer",
+                    "example": 250
+                },
+                "age_35_44": {
+                    "description": "35_44歲訂閱人數",
                     "type": "integer",
                     "example": 200
                 },
-                "charge": {
-                    "description": "付費課表訓練數",
+                "age_45_54": {
+                    "description": "45_54歲訂閱人數",
                     "type": "integer",
-                    "example": 400
+                    "example": 150
+                },
+                "age_55_64": {
+                    "description": "55_64歲訂閱人數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "age_65_up": {
+                    "description": "65+歲訂閱人數",
+                    "type": "integer",
+                    "example": 50
+                },
+                "category": {
+                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "type": "integer",
+                    "example": 1
                 },
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
                     "example": "2022-06-14 00:00:00"
                 },
-                "free": {
-                    "description": "免費課表訓練數",
+                "female": {
+                    "description": "女性訂閱人數",
                     "type": "integer",
-                    "example": 200
+                    "example": 400
                 },
-                "interval_training": {
-                    "description": "間歇肌力訓練課表訓練數",
+                "male": {
+                    "description": "男性訂閱人數",
                     "type": "integer",
-                    "example": 100
+                    "example": 600
                 },
                 "month": {
                     "description": "月份",
                     "type": "integer",
                     "example": 12
-                },
-                "other_training": {
-                    "description": "付費課表訓練數",
-                    "type": "integer",
-                    "example": 200
-                },
-                "resistance_training": {
-                    "description": "阻力訓練課表訓練數",
-                    "type": "integer",
-                    "example": 200
-                },
-                "subscribe": {
-                    "description": "訂閱課表訓練數",
-                    "type": "integer",
-                    "example": 400
                 },
                 "total": {
                     "description": "當月總訂閱人數",
@@ -19768,8 +19778,96 @@ var doc = `{
                     "type": "string",
                     "example": "2022-06-14 00:00:00"
                 },
+                "year": {
+                    "description": "年份",
+                    "type": "integer",
+                    "example": 2022
+                }
+            }
+        },
+        "api_get_cms_statistic_monthly_course_category_training.Output": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "狀態碼",
+                    "type": "integer",
+                    "example": 9000
+                },
+                "data": {
+                    "$ref": "#/definitions/api_get_cms_statistic_monthly_course_category_training.Data"
+                },
+                "msg": {
+                    "description": "訊息",
+                    "type": "string",
+                    "example": "message.."
+                }
+            }
+        },
+        "api_get_cms_statistic_monthly_course_create.Data": {
+            "type": "object",
+            "properties": {
+                "aerobic": {
+                    "description": "有氧課表創建數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "bodyweight_training": {
+                    "description": "徒手訓練課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "charge": {
+                    "description": "付費課表創建數",
+                    "type": "integer",
+                    "example": 400
+                },
+                "create_at": {
+                    "description": "創建時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
+                "free": {
+                    "description": "免費課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "interval_training": {
+                    "description": "間歇肌力訓練課表創建數",
+                    "type": "integer",
+                    "example": 100
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer",
+                    "example": 12
+                },
+                "other_training": {
+                    "description": "付費課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "resistance_training": {
+                    "description": "阻力訓練課表創建數",
+                    "type": "integer",
+                    "example": 200
+                },
+                "subscribe": {
+                    "description": "訂閱課表創建數",
+                    "type": "integer",
+                    "example": 400
+                },
+                "total": {
+                    "description": "當月總創建數",
+                    "type": "integer",
+                    "example": 1000
+                },
+                "update_at": {
+                    "description": "更新時間",
+                    "type": "string",
+                    "example": "2022-06-14 00:00:00"
+                },
                 "weight_training": {
-                    "description": "重量訓練課表訓練數",
+                    "description": "重量訓練課表創建數",
                     "type": "integer",
                     "example": 200
                 },
@@ -19802,17 +19900,17 @@ var doc = `{
             "type": "object",
             "properties": {
                 "aerobic": {
-                    "description": "有氧課表訓練數",
+                    "description": "有氧課表創建數",
                     "type": "integer",
                     "example": 100
                 },
                 "bodyweight_training": {
-                    "description": "徒手訓練課表訓練數",
+                    "description": "徒手訓練課表創建數",
                     "type": "integer",
                     "example": 200
                 },
                 "charge": {
-                    "description": "付費課表訓練數",
+                    "description": "付費課表創建數",
                     "type": "integer",
                     "example": 400
                 },
@@ -19822,12 +19920,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "free": {
-                    "description": "免費課表訓練數",
+                    "description": "免費課表創建數",
                     "type": "integer",
                     "example": 200
                 },
                 "interval_training": {
-                    "description": "間歇肌力訓練課表訓練數",
+                    "description": "間歇肌力訓練課表創建數",
                     "type": "integer",
                     "example": 100
                 },
@@ -19837,22 +19935,22 @@ var doc = `{
                     "example": 12
                 },
                 "other_training": {
-                    "description": "付費課表訓練數",
+                    "description": "付費課表創建數",
                     "type": "integer",
                     "example": 200
                 },
                 "resistance_training": {
-                    "description": "阻力訓練課表訓練數",
+                    "description": "阻力訓練課表創建數",
                     "type": "integer",
                     "example": 200
                 },
                 "subscribe": {
-                    "description": "訂閱課表訓練數",
+                    "description": "訂閱課表創建數",
                     "type": "integer",
                     "example": 400
                 },
                 "total": {
-                    "description": "當月總訂閱人數",
+                    "description": "當月總上架數",
                     "type": "integer",
                     "example": 1000
                 },
@@ -19862,7 +19960,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "weight_training": {
-                    "description": "重量訓練課表訓練數",
+                    "description": "重量訓練課表創建數",
                     "type": "integer",
                     "example": 200
                 },
@@ -19895,17 +19993,17 @@ var doc = `{
             "type": "object",
             "properties": {
                 "aerobic": {
-                    "description": "有氧課表訓練數",
+                    "description": "有氧課表創建數",
                     "type": "integer",
                     "example": 100
                 },
                 "bodyweight_training": {
-                    "description": "徒手訓練課表訓練數",
+                    "description": "徒手訓練課表創建數",
                     "type": "integer",
                     "example": 200
                 },
                 "charge": {
-                    "description": "付費課表訓練數",
+                    "description": "付費課表創建數",
                     "type": "integer",
                     "example": 400
                 },
@@ -19915,12 +20013,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "free": {
-                    "description": "免費課表訓練數",
+                    "description": "免費課表創建數",
                     "type": "integer",
                     "example": 200
                 },
                 "interval_training": {
-                    "description": "間歇肌力訓練課表訓練數",
+                    "description": "間歇肌力訓練課表創建數",
                     "type": "integer",
                     "example": 100
                 },
@@ -19930,22 +20028,22 @@ var doc = `{
                     "example": 12
                 },
                 "other_training": {
-                    "description": "付費課表訓練數",
+                    "description": "付費課表創建數",
                     "type": "integer",
                     "example": 200
                 },
                 "resistance_training": {
-                    "description": "阻力訓練課表訓練數",
+                    "description": "阻力訓練課表創建數",
                     "type": "integer",
                     "example": 200
                 },
                 "subscribe": {
-                    "description": "訂閱課表訓練數",
+                    "description": "訂閱課表創建數",
                     "type": "integer",
                     "example": 400
                 },
                 "total": {
-                    "description": "當月總訂閱人數",
+                    "description": "當月總訓練數",
                     "type": "integer",
                     "example": 1000
                 },
@@ -19955,7 +20053,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "weight_training": {
-                    "description": "重量訓練課表訓練數",
+                    "description": "重量訓練課表創建數",
                     "type": "integer",
                     "example": 200
                 },
@@ -19988,37 +20086,37 @@ var doc = `{
             "type": "object",
             "properties": {
                 "age_13_17": {
-                    "description": "13-17歲晉升教練人數",
+                    "description": "13-17歲訂閱人數",
                     "type": "integer",
                     "example": 100
                 },
                 "age_18_24": {
-                    "description": "18-24歲晉升教練人數",
+                    "description": "18-24歲訂閱人數",
                     "type": "integer",
                     "example": 150
                 },
                 "age_25_34": {
-                    "description": "25-34歲晉升教練人數",
+                    "description": "25-34歲訂閱人數",
                     "type": "integer",
                     "example": 250
                 },
                 "age_35_44": {
-                    "description": "35_44歲晉升教練人數",
+                    "description": "35_44歲訂閱人數",
                     "type": "integer",
                     "example": 200
                 },
                 "age_45_54": {
-                    "description": "45_54歲晉升教練人數",
+                    "description": "45_54歲訂閱人數",
                     "type": "integer",
                     "example": 150
                 },
                 "age_55_64": {
-                    "description": "55_64歲晉升教練人數",
+                    "description": "55_64歲訂閱人數",
                     "type": "integer",
                     "example": 100
                 },
                 "age_65_up": {
-                    "description": "65+歲晉升教練人數",
+                    "description": "65+歲訂閱人數",
                     "type": "integer",
                     "example": 50
                 },
@@ -20058,12 +20156,12 @@ var doc = `{
                     "example": 200
                 },
                 "female": {
-                    "description": "女性晉升教練人數",
+                    "description": "女性訂閱人數",
                     "type": "integer",
                     "example": 400
                 },
                 "male": {
-                    "description": "男性晉升教練人數",
+                    "description": "男性訂閱人數",
                     "type": "integer",
                     "example": 600
                 },
@@ -20073,7 +20171,7 @@ var doc = `{
                     "example": 12
                 },
                 "total": {
-                    "description": "當月總訂閱人數",
+                    "description": "當月總晉升教練人數",
                     "type": "integer",
                     "example": 1000
                 },
@@ -20116,37 +20214,37 @@ var doc = `{
                     "example": 250
                 },
                 "age_13_17": {
-                    "description": "13-17歲註冊人數",
+                    "description": "13-17歲訂閱人數",
                     "type": "integer",
                     "example": 100
                 },
                 "age_18_24": {
-                    "description": "18-24歲註冊人數",
+                    "description": "18-24歲訂閱人數",
                     "type": "integer",
                     "example": 150
                 },
                 "age_25_34": {
-                    "description": "25-34歲註冊人數",
+                    "description": "25-34歲訂閱人數",
                     "type": "integer",
                     "example": 250
                 },
                 "age_35_44": {
-                    "description": "35_44歲註冊人數",
+                    "description": "35_44歲訂閱人數",
                     "type": "integer",
                     "example": 200
                 },
                 "age_45_54": {
-                    "description": "45_54歲註冊人數",
+                    "description": "45_54歲訂閱人數",
                     "type": "integer",
                     "example": 150
                 },
                 "age_55_64": {
-                    "description": "55_64歲註冊人數",
+                    "description": "55_64歲訂閱人數",
                     "type": "integer",
                     "example": 100
                 },
                 "age_65_up": {
-                    "description": "65+歲註冊人數",
+                    "description": "65+歲訂閱人數",
                     "type": "integer",
                     "example": 50
                 },
@@ -20166,7 +20264,7 @@ var doc = `{
                     "example": 250
                 },
                 "female": {
-                    "description": "女性註冊人數",
+                    "description": "女性訂閱人數",
                     "type": "integer",
                     "example": 400
                 },
@@ -20176,7 +20274,7 @@ var doc = `{
                     "example": 250
                 },
                 "male": {
-                    "description": "男性註冊人數",
+                    "description": "男性訂閱人數",
                     "type": "integer",
                     "example": 600
                 },
@@ -20186,7 +20284,7 @@ var doc = `{
                     "example": 12
                 },
                 "total": {
-                    "description": "當月總訂閱人數",
+                    "description": "當月總註冊人數",
                     "type": "integer",
                     "example": 1000
                 },
@@ -20224,37 +20322,37 @@ var doc = `{
             "type": "object",
             "properties": {
                 "age_13_17": {
-                    "description": "13-17歲退訂人數",
+                    "description": "13-17歲訂閱人數",
                     "type": "integer",
                     "example": 100
                 },
                 "age_18_24": {
-                    "description": "18-24歲退訂人數",
+                    "description": "18-24歲訂閱人數",
                     "type": "integer",
                     "example": 150
                 },
                 "age_25_34": {
-                    "description": "25-34歲退訂人數",
+                    "description": "25-34歲訂閱人數",
                     "type": "integer",
                     "example": 250
                 },
                 "age_35_44": {
-                    "description": "35_44歲退訂人數",
+                    "description": "35_44歲訂閱人數",
                     "type": "integer",
                     "example": 200
                 },
                 "age_45_54": {
-                    "description": "45_54歲退訂人數",
+                    "description": "45_54歲訂閱人數",
                     "type": "integer",
                     "example": 150
                 },
                 "age_55_64": {
-                    "description": "55_64歲退訂人數",
+                    "description": "55_64歲訂閱人數",
                     "type": "integer",
                     "example": 100
                 },
                 "age_65_up": {
-                    "description": "65+歲退訂人數",
+                    "description": "65+歲訂閱人數",
                     "type": "integer",
                     "example": 50
                 },
@@ -20264,12 +20362,12 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "female": {
-                    "description": "女性退訂人數",
+                    "description": "女性訂閱人數",
                     "type": "integer",
                     "example": 400
                 },
                 "male": {
-                    "description": "男性退訂人數",
+                    "description": "男性訂閱人數",
                     "type": "integer",
                     "example": 600
                 },
@@ -20279,7 +20377,7 @@ var doc = `{
                     "example": 12
                 },
                 "total": {
-                    "description": "當月總訂閱人數",
+                    "description": "當月總退訂人數",
                     "type": "integer",
                     "example": 1000
                 },
@@ -20397,12 +20495,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "test@gmail.com"
+                    "example": "henry@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -20435,9 +20533,9 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
-                    "example": "henry"
+                    "example": "Henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -20485,7 +20583,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -20624,12 +20722,12 @@ var doc = `{
                             "email": {
                                 "description": "信箱",
                                 "type": "string",
-                                "example": "test@gmail.com"
+                                "example": "henry@gmail.com"
                             },
                             "nickname": {
-                                "description": "暱稱",
+                                "description": "教練暱稱",
                                 "type": "string",
-                                "example": "henry"
+                                "example": "Henry"
                             },
                             "trainer_status": {
                                 "description": "教練帳戶狀態 (1:正常/2:審核中/3:停權)",
@@ -20639,7 +20737,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "user_id": {
                                 "description": "用戶id",
@@ -20781,7 +20879,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21349,7 +21447,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -21806,7 +21904,7 @@ var doc = `{
                         "type": "object",
                         "properties": {
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -22048,7 +22146,7 @@ var doc = `{
                                 "example": 8
                             },
                             "category": {
-                                "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
+                                "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -22068,7 +22166,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -22093,7 +22191,7 @@ var doc = `{
                                 "example": 1
                             },
                             "type": {
-                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -22672,7 +22770,7 @@ var doc = `{
                 "month": {
                     "description": "月份",
                     "type": "integer",
-                    "example": 12
+                    "example": 5
                 },
                 "subscribe_usage_count": {
                     "description": "訂閱課表使用人數",
@@ -22728,7 +22826,7 @@ var doc = `{
                 "month": {
                     "description": "月份",
                     "type": "integer",
-                    "example": 12
+                    "example": 5
                 },
                 "update_at": {
                     "description": "更新時間",
@@ -22764,7 +22862,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -22931,7 +23029,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -23012,7 +23110,7 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "duration": {
                     "description": "時長(秒)",
@@ -23020,7 +23118,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -23403,12 +23501,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "test@gmail.com"
+                    "example": "henry@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -23441,9 +23539,9 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
-                    "example": "henry"
+                    "example": "Henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -23491,7 +23589,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -24465,7 +24563,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -24490,7 +24588,7 @@ var doc = `{
                                 }
                             },
                             "type": {
-                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -24822,7 +24920,7 @@ var doc = `{
             ],
             "properties": {
                 "category": {
-                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
+                    "description": "分類(1:重量訓練/2:有氧/3:HIIT/4:徒手訓練/5:其他)",
                     "type": "integer",
                     "example": 1
                 },
@@ -27162,109 +27260,6 @@ var doc = `{
                 }
             }
         },
-        "course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticData": {
-            "type": "object",
-            "properties": {
-                "age_13_17": {
-                    "description": "13-17歲訂閱人數",
-                    "type": "integer",
-                    "example": 100
-                },
-                "age_18_24": {
-                    "description": "18-24歲訂閱人數",
-                    "type": "integer",
-                    "example": 150
-                },
-                "age_25_34": {
-                    "description": "25-34歲訂閱人數",
-                    "type": "integer",
-                    "example": 250
-                },
-                "age_35_44": {
-                    "description": "35_44歲訂閱人數",
-                    "type": "integer",
-                    "example": 200
-                },
-                "age_45_54": {
-                    "description": "45_54歲訂閱人數",
-                    "type": "integer",
-                    "example": 150
-                },
-                "age_55_64": {
-                    "description": "55_64歲訂閱人數",
-                    "type": "integer",
-                    "example": 100
-                },
-                "age_65_up": {
-                    "description": "65+歲訂閱人數",
-                    "type": "integer",
-                    "example": 50
-                },
-                "category": {
-                    "description": "課表類別(1:有氧心肺訓練/2:間歇肌力訓練/3:重量訓練/4:阻力訓練/5:徒手訓練/6:其他)",
-                    "type": "integer",
-                    "example": 1
-                },
-                "create_at": {
-                    "description": "創建時間",
-                    "type": "string",
-                    "example": "2022-06-14 00:00:00"
-                },
-                "female": {
-                    "description": "女性訂閱人數",
-                    "type": "integer",
-                    "example": 400
-                },
-                "id": {
-                    "description": "報表id",
-                    "type": "integer",
-                    "example": 1
-                },
-                "male": {
-                    "description": "男性訂閱人數",
-                    "type": "integer",
-                    "example": 600
-                },
-                "month": {
-                    "description": "月份",
-                    "type": "integer",
-                    "example": 12
-                },
-                "total": {
-                    "description": "當月總訂閱人數",
-                    "type": "integer",
-                    "example": 1000
-                },
-                "update_at": {
-                    "description": "更新時間",
-                    "type": "string",
-                    "example": "2022-06-14 00:00:00"
-                },
-                "year": {
-                    "description": "年份",
-                    "type": "integer",
-                    "example": 2022
-                }
-            }
-        },
-        "course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticOutput": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "狀態碼",
-                    "type": "integer",
-                    "example": 9000
-                },
-                "data": {
-                    "$ref": "#/definitions/course_category_training_monthly_statistic.APIGetCMSCategoryTrainingStatisticData"
-                },
-                "msg": {
-                    "description": "訊息",
-                    "type": "string",
-                    "example": "message.."
-                }
-            }
-        },
         "course_training_avg_statistic.APIGetCMSCourseTrainingAvgStatisticOutput": {
             "type": "object",
             "properties": {
@@ -27320,7 +27315,7 @@ var doc = `{
                                         "type": "object",
                                         "properties": {
                                             "id": {
-                                                "description": "訓練 id",
+                                                "description": "訓練 log id",
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -31465,7 +31460,7 @@ var doc = `{
                     "example": "2022-06-14 00:00:00"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -31593,7 +31588,7 @@ var doc = `{
                                 "example": "2022-06-14 00:00:00"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -32759,12 +32754,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "test@gmail.com"
+                    "example": "henry@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -32797,9 +32792,9 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
-                    "example": "henry"
+                    "example": "Henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -32872,7 +32867,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -32923,9 +32918,9 @@ var doc = `{
                                 "example": "abc.png"
                             },
                             "nickname": {
-                                "description": "暱稱",
+                                "description": "教練暱稱",
                                 "type": "string",
-                                "example": "henry"
+                                "example": "Henry"
                             },
                             "skill": {
                                 "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
@@ -32994,12 +32989,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "test@gmail.com"
+                    "example": "henry@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -33037,9 +33032,9 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
-                    "example": "henry"
+                    "example": "Henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -33112,7 +33107,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -33165,12 +33160,12 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "nickname": {
-                                "description": "暱稱",
+                                "description": "教練暱稱",
                                 "type": "string",
-                                "example": "henry"
+                                "example": "Henry"
                             },
                             "skill": {
                                 "description": "專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)",
@@ -33180,7 +33175,7 @@ var doc = `{
                             "update_at": {
                                 "description": "更新時間",
                                 "type": "string",
-                                "example": "2022-06-12 00:00:00"
+                                "example": "2022-06-14 00:00:00"
                             },
                             "user_id": {
                                 "description": "用戶id",
@@ -33244,12 +33239,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "test@gmail.com"
+                    "example": "henry@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -33282,9 +33277,9 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
-                    "example": "henry"
+                    "example": "Henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -33357,7 +33352,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -33452,12 +33447,12 @@ var doc = `{
                 "create_at": {
                     "description": "創建時間",
                     "type": "string",
-                    "example": "2022-06-14 00:00:00"
+                    "example": "2022-06-12 00:00:00"
                 },
                 "email": {
                     "description": "信箱",
                     "type": "string",
-                    "example": "test@gmail.com"
+                    "example": "henry@gmail.com"
                 },
                 "experience": {
                     "description": "年資",
@@ -33490,9 +33485,9 @@ var doc = `{
                     "example": "亨利"
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
-                    "example": "henry"
+                    "example": "Henry"
                 },
                 "phone": {
                     "description": "電話",
@@ -33565,7 +33560,7 @@ var doc = `{
                 "update_at": {
                     "description": "更新時間",
                     "type": "string",
-                    "example": "2022-06-12 00:00:00"
+                    "example": "2022-06-14 00:00:00"
                 },
                 "user_id": {
                     "description": "用戶id",
@@ -35246,9 +35241,9 @@ var doc = `{
                     "example": 165.5
                 },
                 "nickname": {
-                    "description": "暱稱",
+                    "description": "教練暱稱",
                     "type": "string",
-                    "example": "henry"
+                    "example": "Henry"
                 },
                 "sex": {
                     "description": "性別 (m:男/f:女)",
@@ -36104,7 +36099,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -36147,7 +36142,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 }
@@ -36290,7 +36285,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36356,7 +36351,7 @@ var doc = `{
                                 "example": "2,3,6"
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36424,7 +36419,7 @@ var doc = `{
                                 "example": 1
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -36477,7 +36472,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -36540,7 +36535,7 @@ var doc = `{
                     "example": "2,3,6"
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -36792,7 +36787,7 @@ var doc = `{
                             "create_at": {
                                 "description": "創建時間",
                                 "type": "string",
-                                "example": "2022-06-14 00:00:00"
+                                "example": "2022-06-12 00:00:00"
                             },
                             "duration": {
                                 "description": "時長(秒)",
@@ -36800,7 +36795,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37229,7 +37224,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37259,7 +37254,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37385,7 +37380,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37415,7 +37410,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37538,7 +37533,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37568,7 +37563,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37691,7 +37686,7 @@ var doc = `{
                                 "example": 30
                             },
                             "id": {
-                                "description": "訓練 id",
+                                "description": "訓練 log id",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37721,7 +37716,7 @@ var doc = `{
                                 "example": "1234.mp3"
                             },
                             "type": {
-                                "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                                "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                                 "type": "integer",
                                 "example": 1
                             },
@@ -37834,7 +37829,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -37864,7 +37859,7 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },
@@ -37987,7 +37982,7 @@ var doc = `{
                     "example": 30
                 },
                 "id": {
-                    "description": "訓練 id",
+                    "description": "訓練 log id",
                     "type": "integer",
                     "example": 1
                 },
@@ -38017,7 +38012,7 @@ var doc = `{
                     "example": "1234.mp3"
                 },
                 "type": {
-                    "description": "類型(1:課表/2:教練/3:訂閱/4:連結)",
+                    "description": "紀錄類型(1:重訓/2:時間長度/3:次數/4:次數與時間/5:有氧)",
                     "type": "integer",
                     "example": 1
                 },

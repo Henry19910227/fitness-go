@@ -4,35 +4,89 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/course_category_training_monthly_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course_category_training_monthly_statistic/api_get_cms_statistic_monthly_course_category_training"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course_category_training_monthly_statistic"
+	"strconv"
 	"time"
 )
 
 type resolver struct {
+	statisticService course_category_training_monthly_statistic.Service
 }
 
-func New() Resolver {
-	return &resolver{}
+func New(statisticService course_category_training_monthly_statistic.Service) Resolver {
+	return &resolver{statisticService: statisticService}
 }
 
-func (r *resolver) APIGetCMSCategoryTrainingStatistic(input *model.APIGetCMSCategoryTrainingStatisticInput) (output model.APIGetCMSCategoryTrainingStatisticOutput) {
-	data := model.APIGetCMSCategoryTrainingStatisticData{}
-	data.ID = util.PointerInt64(1)
-	data.Category = util.PointerInt(input.Query.Category)
-	data.Year = util.PointerInt(input.Query.Year)
-	data.Month = util.PointerInt(input.Query.Month)
-	data.Total = util.PointerInt(1000)
-	data.Male = util.PointerInt(600)
-	data.Female = util.PointerInt(400)
-	data.Age13to17 = util.PointerInt(100)
-	data.Age18to24 = util.PointerInt(150)
-	data.Age25to34 = util.PointerInt(250)
-	data.Age35to44 = util.PointerInt(200)
-	data.Age45to54 = util.PointerInt(150)
-	data.Age55to64 = util.PointerInt(100)
-	data.Age65Up = util.PointerInt(50)
-	data.CreateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
-	data.UpdateAt = util.PointerString(time.Now().Format("2006-01-02 15:04:05"))
+func (r *resolver) APIGetCMSCategoryTrainingStatistic(input *api_get_cms_statistic_monthly_course_category_training.Input) (output api_get_cms_statistic_monthly_course_category_training.Output) {
+	currentYear, _ := strconv.Atoi(time.Now().Format("2006"))
+	currentMonth, _ := strconv.Atoi(time.Now().Format("01"))
+	if input.Query.Year > currentYear {
+		output.Set(code.BadRequest, "不可大於當前時間")
+		return output
+	}
+	if input.Query.Year == currentYear && input.Query.Month > currentMonth {
+		output.Set(code.BadRequest, "不可大於當前時間")
+		return output
+	}
+	// 查找是否有統計資料
+	listInput := model.ListInput{}
+	listInput.Category = util.PointerInt(input.Query.Category)
+	listInput.Month = util.PointerInt(input.Query.Month)
+	listInput.Year = util.PointerInt(input.Query.Year)
+	statisticOutputs, _, err := r.statisticService.List(&listInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	data := api_get_cms_statistic_monthly_course_category_training.Data{}
+	// 存在統計資料就 parser
+	if len(statisticOutputs) > 0 {
+		if err := util.Parser(statisticOutputs[0], &data); err != nil {
+			output.Set(code.BadRequest, err.Error())
+			return output
+		}
+		output.Set(code.Success, "success")
+		output.Data = &data
+		return output
+	}
+	// 不存在統計資料就統計一次
+	statisticInput := model.StatisticInput{}
+	statisticInput.Category = input.Query.Category
+	statisticInput.Year = input.Query.Year
+	statisticInput.Month = input.Query.Month
+	if err := r.statisticService.Statistic(&statisticInput); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// 查找
+	findInput := model.FindInput{}
+	findInput.Category = util.PointerInt(input.Query.Category)
+	findInput.Month = util.PointerInt(input.Query.Month)
+	findInput.Year = util.PointerInt(input.Query.Year)
+	statisticOutput, err := r.statisticService.Find(&findInput)
+	if err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
+	// Parser
+	if err := util.Parser(statisticOutput, &data); err != nil {
+		output.Set(code.BadRequest, err.Error())
+		return output
+	}
 	output.Set(code.Success, "success")
 	output.Data = &data
 	return output
+}
+
+func (r *resolver) Statistic() {
+	year, _ := strconv.Atoi(time.Now().Format("2006"))
+	month, _ := strconv.Atoi(time.Now().Format("01"))
+	for i := 1; i <= 6; i++ {
+		statisticInput := model.StatisticInput{}
+		statisticInput.Category = i
+		statisticInput.Year = year
+		statisticInput.Month = month
+		_ = r.statisticService.Statistic(&statisticInput)
+	}
 }

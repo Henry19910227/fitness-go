@@ -1,11 +1,46 @@
 package course_category_training_monthly_statistic
 
-// APIGetCMSCategoryTrainingStatisticInput /v2/cms/statistic_monthly/course_category/training [GET]
-type APIGetCMSCategoryTrainingStatisticInput struct {
-	Query APIGetCMSCategoryTrainingStatisticQuery
+import (
+	"github.com/Henry19910227/fitness-go/internal/v2/field/course_category_training_monthly_statistic/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/field/course_category_training_monthly_statistic/required"
+	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
+	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/where"
+)
+
+type PagingInput = struct {
+	pagingOptional.PageField
+	pagingOptional.SizeField
 }
-type APIGetCMSCategoryTrainingStatisticQuery struct {
-	CategoryRequired
-	YearRequired
-	MonthRequired
+type PreloadInput = preload.Input
+type WhereInput = where.Input
+type JoinInput = join.Input
+type OrderByInput = orderBy.Input
+type CustomOrderByInput = orderBy.CustomInput
+
+type FindInput struct {
+	optional.CategoryField
+	optional.YearField
+	optional.MonthField
+	PreloadInput
+}
+
+type ListInput struct {
+	optional.CategoryField
+	optional.YearField
+	optional.MonthField
+	JoinInput
+	WhereInput
+	PagingInput
+	PreloadInput
+	OrderByInput
+	CustomOrderByInput
+}
+
+type StatisticInput struct {
+	required.CategoryField
+	required.YearField
+	required.MonthField
 }
