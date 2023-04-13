@@ -3,7 +3,7 @@ package course_training_avg_statistic
 import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
-	model "github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic/api_get_cms_statistic_monthly_course_training_avg"
 	"github.com/Henry19910227/fitness-go/internal/v2/resolver/course_training_avg_statistic"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -30,15 +30,19 @@ func New(resolver course_training_avg_statistic.Resolver) Controller {
 // @Param sale_type query int false "銷售類型(1:免費課表/2:訂閱課表/3:付費課表)"
 // @Param page query int true "頁數(從第一頁開始)"
 // @Param size query int true "筆數"
-// @Success 200 {object} course_training_avg_statistic.APIGetCMSCourseTrainingAvgStatisticOutput "成功!"
+// @Success 200 {object} api_get_cms_statistic_monthly_course_training_avg.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/statistic_monthly/course/training_avg [GET]
 func (c *controller) GetCMSCourseTrainingAvgStatistic(ctx *gin.Context) {
-	var input model.APIGetCMSCourseTrainingAvgStatisticInput
+	var input api_get_cms_statistic_monthly_course_training_avg.Input
 	if err := ctx.ShouldBindQuery(&input.Query); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return
 	}
 	output := c.resolver.APIGetCMSCourseTrainingAvgStatistic(&input)
 	ctx.JSON(http.StatusOK, output)
+}
+
+func (c *controller) Statistic() {
+	c.resolver.Statistic()
 }

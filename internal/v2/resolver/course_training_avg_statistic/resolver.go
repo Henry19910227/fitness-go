@@ -4,23 +4,28 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/code"
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	courseModel "github.com/Henry19910227/fitness-go/internal/v2/model/course"
-	model "github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/course_training_avg_statistic/api_get_cms_statistic_monthly_course_training_avg"
 	preloadModel "github.com/Henry19910227/fitness-go/internal/v2/model/preload"
 	whereModel "github.com/Henry19910227/fitness-go/internal/v2/model/where"
 	"github.com/Henry19910227/fitness-go/internal/v2/service/course"
+	"github.com/Henry19910227/fitness-go/internal/v2/service/course_training_avg_statistic"
 )
 
 type resolver struct {
-	courseService course.Service
+	courseService    course.Service
+	statisticService course_training_avg_statistic.Service
 }
 
-func New(courseService course.Service) Resolver {
-	return &resolver{courseService: courseService}
+func New(courseService course.Service, statisticService course_training_avg_statistic.Service) Resolver {
+	return &resolver{courseService: courseService, statisticService: statisticService}
 }
 
-func (r *resolver) APIGetCMSCourseTrainingAvgStatistic(input *model.APIGetCMSCourseTrainingAvgStatisticInput) (output model.APIGetCMSCourseTrainingAvgStatisticOutput) {
+func (r *resolver) APIGetCMSCourseTrainingAvgStatistic(input *api_get_cms_statistic_monthly_course_training_avg.Input) (output api_get_cms_statistic_monthly_course_training_avg.Output) {
 	listInput := courseModel.ListInput{}
 	listInput.ID = input.Query.CourseID
+	listInput.CourseStatus = input.Query.CourseStatus
+	listInput.Name = input.Query.Name
+	listInput.SaleType = input.Query.SaleType
 	if err := util.Parser(input.Query, &listInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -40,7 +45,7 @@ func (r *resolver) APIGetCMSCourseTrainingAvgStatistic(input *model.APIGetCMSCou
 		return output
 	}
 	// parser output
-	data := model.APIGetCMSCourseTrainingAvgStatisticData{}
+	data := api_get_cms_statistic_monthly_course_training_avg.Data{}
 	if err := util.Parser(courseOutputs, &data); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -49,4 +54,8 @@ func (r *resolver) APIGetCMSCourseTrainingAvgStatistic(input *model.APIGetCMSCou
 	output.Paging = page
 	output.Data = &data
 	return output
+}
+
+func (r *resolver) Statistic() {
+	_ = r.statisticService.Statistic()
 }

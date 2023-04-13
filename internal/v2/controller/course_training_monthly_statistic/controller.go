@@ -41,5 +41,4 @@ func (c *controller) GetCMSCourseTrainingMonthlyStatistic(ctx *gin.Context) {
 
 func (c *controller) Statistic() {
 	c.resolver.Statistic()
-	
 }

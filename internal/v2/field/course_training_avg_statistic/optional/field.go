@@ -1,8 +1,5 @@
 package optional
 
-type IDField struct {
-	ID *int64 `json:"id,omitempty" gorm:"column:id" binding:"omitempty" example:"1"` //報表id
-}
 type CourseIDField struct {
 	CourseID *int64 `json:"course_id,omitempty"  form:"course_id" gorm:"column:course_id" binding:"omitempty" example:"10"` //課表id
 }
