@@ -142,7 +142,7 @@ func (r *resolver) APIGetCMSUsers(input *api_get_cms_users.Input) (output api_ge
 		wheres = append(wheres, &whereModel.Where{Query: "users.nickname LIKE ?", Args: []interface{}{"%" + *input.Query.Nickname + "%"}})
 	}
 	if input.Query.Email != nil {
-		wheres = append(wheres, &whereModel.Where{Query: "users.email = ?", Args: []interface{}{"%" + *input.Query.Email + "%"}})
+		wheres = append(wheres, &whereModel.Where{Query: "users.email LIKE ?", Args: []interface{}{"%" + *input.Query.Email + "%"}})
 	}
 	// 查詢用戶
 	userListInput := model.ListInput{}
