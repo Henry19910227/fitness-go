@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "fitopia-hub-console",
+  "private_key_id": "9fec38062ede24d63a421c1f6167d6d9950285bb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDJua8fm4pzbji2\n2H5V90qT6pfZC1HztQbKLLJ3yQ5djwG5x8tnUaTs9R79yeRW+pMmOaVn9txfv27F\nBJEEmmMVJnN3O/2UNyhYGLSYidw9UFxhoc5oqxBGjhObtvCJoSlIB6IXKG3B9Yh0\na6zyEjDEQzJJJ32hE34TsrFIhoFXMyWrMEoUu5JX87SkbaLJ4sRAa1CXTfRaul+v\nhDmRSiTTAMKegUWpMeVAmdvTZXozpegDZLRecpyksY05tHpTKLkQqqCRSMjSEoiw\nGDW859BYnXW+tHSLd2coxJ1T2X6hiQCdn6p7rjSr/4IFPBNpa2qSPeUyJCSMhehd\nXEiLgFgzAgMBAAECggEAAeuXybZwZ1zl6VA2iyGe2IYoG6BsoH2uqrsYVBgeisF1\nWUfLWRiSRPLsrDNnrB71uYGyLP7Id1SaQPDO2rspxghNZ8B/6REne/ar+fhKQm3T\n8SuV0KD+HbzCGbGBl+EBzQ+78L5clJUG+gsjSv5czYwmvf53cbBtribbUXIXaE8U\nYicNkDh0omEjJ+0zjZa/BuVYIftxjakUNVB2vBRrvXeAckZVCtj5UudXGYbP6LYW\nY8UB8fDrtgocmWuEBPAOZ03S0NMsxL6XiCMisYOFR224U7PUhHDG2J+JQ6EM+Jom\n1HGIUU8DFqbITR25RdMXCMWP4twIlXnUuUWjskafQQKBgQD9YWbN3XGPLAQYspwN\nEGWpuEnFTRZDaQYXMyvDLeEIB858jnvsQjpHX6TjbwbLwNXDEPbRBQiW3LwHVw5k\nVLGH27hSZOlnG9daVoL1GsyWcnTr1fcMDjlEWke7GtrBhN2GaN0IghIkscqKFcii\n8HwIW0msuG7i0OyQH5iuWJdPUQKBgQDLz5JXlUcJEPJtDp1wQB905k2acrbsnsYs\nXcJPpcuPPmdhZrHBT0Ug9yvYd5ww6iR/OgWPFe0zrILpYXrfzoGjmYZA8L1haql6\nQ+qla75hxyoBv2wR4KvokKt9gtZVWvbiroLalezDvJlNqCZ2nxXEiP84r3f8/w2w\n6lex3pO2QwKBgQC0rRuteFZdjTlukw4LksGrgCm6cvmJH/6j1G1ERBbOryJiVweu\ntJryAhWFx8nEyMCk1Bfre/df/A5n/X/ZszrUcazBtAtq5sNtO3suY+m27e7JrEz5\nX7seLnIvzTpn++Iq0eOrCXT+jXirdlUXOvx2yQGEFA+d1PSa4KzyxWE/wQKBgQCR\ng27hl1PzViUv1fp0NWQAK5oGhpax1B57eKmOAjqW2CApe4+4C+e4RKEKWUOr7NAI\nAh4L7cTAWw/QnueCuUb3zln7LaaY0fWUtL7oQkfYOcF1I/19uiIi1n+KCgsLP/n7\nGEuW0uoLSjFOL5reoHCDNKi8CROrD1LwGDBqbxaZTwKBgQCkawE8cJJNJfHg8uvW\nFU0ODizYCH0SvVqEme8Rl55GtVv80xLUFmKMbK+R5k9GU7QvCHeGYwp+EEWOiZB7\nr28p9eTgzAWXVJmN8nm6JvDS/pTtY6wW7NjNP3nIqxEF15fy22H/GpFSMg+xY7Yw\nFJLVtbu1diPIh0e+CdZHE/G9ow==\n-----END PRIVATE KEY-----\n",
+  "client_email": "fitopia-hub@fitopia-hub-console.iam.gserviceaccount.com",
+  "client_id": "118034303508042986122",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/fitopia-hub%40fitopia-hub-console.iam.gserviceaccount.com"
+}
