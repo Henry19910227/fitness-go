@@ -34,16 +34,16 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 訂閱狀態(0:無訂閱/1:訂閱中)
+        description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -98,16 +98,16 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 訂閱狀態(0:無訂閱/1:訂閱中)
+        description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -206,16 +206,16 @@ definitions:
               example: 1
               type: integer
             status:
-              description: 訂閱狀態(0:無訂閱/1:訂閱中)
+              description: 動作狀態(0:下架/1:上架)
               example: 1
               type: integer
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -295,16 +295,16 @@ definitions:
               example: 1
               type: integer
             status:
-              description: 訂閱狀態(0:無訂閱/1:訂閱中)
+              description: 動作狀態(0:下架/1:上架)
               example: 1
               type: integer
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -354,16 +354,16 @@ definitions:
         example: 划船機
         type: string
       status:
-        description: 訂閱狀態(0:無訂閱/1:訂閱中)
+        description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       video:
         description: 動作影片
@@ -509,7 +509,7 @@ definitions:
     properties:
       email:
         description: 信箱
-        example: test@gmail.com
+        example: henry@gmail.com
         type: string
       id:
         description: 管理員 id
@@ -521,7 +521,7 @@ definitions:
         type: integer
       nickname:
         description: 暱稱
-        example: henry
+        example: Henry
         type: string
     type: object
   api_cms_login.Output:
@@ -571,12 +571,12 @@ definitions:
         example: 1234.jpg
         type: string
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       url:
         description: url
@@ -831,7 +831,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -1083,31 +1083,31 @@ definitions:
   api_get_cms_statistic_monthly_course_category_training.Data:
     properties:
       age_13_17:
-        description: 13-17歲訂閱人數
+        description: 13-17歲註冊人數
         example: 100
         type: integer
       age_18_24:
-        description: 18-24歲訂閱人數
+        description: 18-24歲註冊人數
         example: 150
         type: integer
       age_25_34:
-        description: 25-34歲訂閱人數
+        description: 25-34歲註冊人數
         example: 250
         type: integer
       age_35_44:
-        description: 35_44歲訂閱人數
+        description: 35_44歲註冊人數
         example: 200
         type: integer
       age_45_54:
-        description: 45_54歲訂閱人數
+        description: 45_54歲註冊人數
         example: 150
         type: integer
       age_55_64:
-        description: 55_64歲訂閱人數
+        description: 55_64歲註冊人數
         example: 100
         type: integer
       age_65_up:
-        description: 65+歲訂閱人數
+        description: 65+歲註冊人數
         example: 50
         type: integer
       category:
@@ -1119,11 +1119,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       female:
-        description: 女性訂閱人數
+        description: 女性註冊人數
         example: 400
         type: integer
       male:
-        description: 男性訂閱人數
+        description: 男性註冊人數
         example: 600
         type: integer
       month:
@@ -1136,7 +1136,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       year:
         description: 年份
@@ -1159,15 +1159,15 @@ definitions:
   api_get_cms_statistic_monthly_course_create.Data:
     properties:
       aerobic:
-        description: 有氧課表創建數
+        description: 有氧課表訓練數
         example: 100
         type: integer
       bodyweight_training:
-        description: 徒手訓練課表創建數
+        description: 徒手訓練課表訓練數
         example: 200
         type: integer
       charge:
-        description: 付費課表創建數
+        description: 付費課表訓練數
         example: 400
         type: integer
       create_at:
@@ -1175,11 +1175,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       free:
-        description: 免費課表創建數
+        description: 免費課表訓練數
         example: 200
         type: integer
       interval_training:
-        description: 間歇肌力訓練課表創建數
+        description: 間歇肌力訓練課表訓練數
         example: 100
         type: integer
       month:
@@ -1187,15 +1187,15 @@ definitions:
         example: 12
         type: integer
       other_training:
-        description: 付費課表創建數
+        description: 付費課表訓練數
         example: 200
         type: integer
       resistance_training:
-        description: 阻力訓練課表創建數
+        description: 阻力訓練課表訓練數
         example: 200
         type: integer
       subscribe:
-        description: 訂閱課表創建數
+        description: 訂閱課表訓練數
         example: 400
         type: integer
       total:
@@ -1204,10 +1204,10 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       weight_training:
-        description: 重量訓練課表創建數
+        description: 重量訓練課表訓練數
         example: 200
         type: integer
       year:
@@ -1231,15 +1231,15 @@ definitions:
   api_get_cms_statistic_monthly_course_release.Data:
     properties:
       aerobic:
-        description: 有氧課表創建數
+        description: 有氧課表訓練數
         example: 100
         type: integer
       bodyweight_training:
-        description: 徒手訓練課表創建數
+        description: 徒手訓練課表訓練數
         example: 200
         type: integer
       charge:
-        description: 付費課表創建數
+        description: 付費課表訓練數
         example: 400
         type: integer
       create_at:
@@ -1247,11 +1247,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       free:
-        description: 免費課表創建數
+        description: 免費課表訓練數
         example: 200
         type: integer
       interval_training:
-        description: 間歇肌力訓練課表創建數
+        description: 間歇肌力訓練課表訓練數
         example: 100
         type: integer
       month:
@@ -1259,15 +1259,15 @@ definitions:
         example: 12
         type: integer
       other_training:
-        description: 付費課表創建數
+        description: 付費課表訓練數
         example: 200
         type: integer
       resistance_training:
-        description: 阻力訓練課表創建數
+        description: 阻力訓練課表訓練數
         example: 200
         type: integer
       subscribe:
-        description: 訂閱課表創建數
+        description: 訂閱課表訓練數
         example: 400
         type: integer
       total:
@@ -1276,10 +1276,10 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       weight_training:
-        description: 重量訓練課表創建數
+        description: 重量訓練課表訓練數
         example: 200
         type: integer
       year:
@@ -1303,15 +1303,15 @@ definitions:
   api_get_cms_statistic_monthly_course_training.Data:
     properties:
       aerobic:
-        description: 有氧課表創建數
+        description: 有氧課表訓練數
         example: 100
         type: integer
       bodyweight_training:
-        description: 徒手訓練課表創建數
+        description: 徒手訓練課表訓練數
         example: 200
         type: integer
       charge:
-        description: 付費課表創建數
+        description: 付費課表訓練數
         example: 400
         type: integer
       create_at:
@@ -1319,11 +1319,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       free:
-        description: 免費課表創建數
+        description: 免費課表訓練數
         example: 200
         type: integer
       interval_training:
-        description: 間歇肌力訓練課表創建數
+        description: 間歇肌力訓練課表訓練數
         example: 100
         type: integer
       month:
@@ -1331,15 +1331,15 @@ definitions:
         example: 12
         type: integer
       other_training:
-        description: 付費課表創建數
+        description: 付費課表訓練數
         example: 200
         type: integer
       resistance_training:
-        description: 阻力訓練課表創建數
+        description: 阻力訓練課表訓練數
         example: 200
         type: integer
       subscribe:
-        description: 訂閱課表創建數
+        description: 訂閱課表訓練數
         example: 400
         type: integer
       total:
@@ -1348,10 +1348,10 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       weight_training:
-        description: 重量訓練課表創建數
+        description: 重量訓練課表訓練數
         example: 200
         type: integer
       year:
@@ -1391,6 +1391,8 @@ definitions:
                   description: 平均訓練率
                   example: 100
                   type: integer
+              required:
+              - rate
               type: object
             id:
               description: 課表 id
@@ -1446,31 +1448,31 @@ definitions:
   api_get_cms_statistic_monthly_user_promote.Data:
     properties:
       age_13_17:
-        description: 13-17歲訂閱人數
+        description: 13-17歲註冊人數
         example: 100
         type: integer
       age_18_24:
-        description: 18-24歲訂閱人數
+        description: 18-24歲註冊人數
         example: 150
         type: integer
       age_25_34:
-        description: 25-34歲訂閱人數
+        description: 25-34歲註冊人數
         example: 250
         type: integer
       age_35_44:
-        description: 35_44歲訂閱人數
+        description: 35_44歲註冊人數
         example: 200
         type: integer
       age_45_54:
-        description: 45_54歲訂閱人數
+        description: 45_54歲註冊人數
         example: 150
         type: integer
       age_55_64:
-        description: 55_64歲訂閱人數
+        description: 55_64歲註冊人數
         example: 100
         type: integer
       age_65_up:
-        description: 65+歲訂閱人數
+        description: 65+歲註冊人數
         example: 50
         type: integer
       create_at:
@@ -1502,11 +1504,11 @@ definitions:
         example: 200
         type: integer
       female:
-        description: 女性訂閱人數
+        description: 女性註冊人數
         example: 400
         type: integer
       male:
-        description: 男性訂閱人數
+        description: 男性註冊人數
         example: 600
         type: integer
       month:
@@ -1519,7 +1521,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       year:
         description: 年份
@@ -1546,31 +1548,31 @@ definitions:
         example: 250
         type: integer
       age_13_17:
-        description: 13-17歲訂閱人數
+        description: 13-17歲註冊人數
         example: 100
         type: integer
       age_18_24:
-        description: 18-24歲訂閱人數
+        description: 18-24歲註冊人數
         example: 150
         type: integer
       age_25_34:
-        description: 25-34歲訂閱人數
+        description: 25-34歲註冊人數
         example: 250
         type: integer
       age_35_44:
-        description: 35_44歲訂閱人數
+        description: 35_44歲註冊人數
         example: 200
         type: integer
       age_45_54:
-        description: 45_54歲訂閱人數
+        description: 45_54歲註冊人數
         example: 150
         type: integer
       age_55_64:
-        description: 55_64歲訂閱人數
+        description: 55_64歲註冊人數
         example: 100
         type: integer
       age_65_up:
-        description: 65+歲訂閱人數
+        description: 65+歲註冊人數
         example: 50
         type: integer
       beginner:
@@ -1586,7 +1588,7 @@ definitions:
         example: 250
         type: integer
       female:
-        description: 女性訂閱人數
+        description: 女性註冊人數
         example: 400
         type: integer
       intermediate:
@@ -1594,7 +1596,7 @@ definitions:
         example: 250
         type: integer
       male:
-        description: 男性訂閱人數
+        description: 男性註冊人數
         example: 600
         type: integer
       month:
@@ -1607,7 +1609,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       year:
         description: 年份
@@ -1630,31 +1632,31 @@ definitions:
   api_get_cms_statistic_monthly_user_unsubscribe.Data:
     properties:
       age_13_17:
-        description: 13-17歲訂閱人數
+        description: 13-17歲註冊人數
         example: 100
         type: integer
       age_18_24:
-        description: 18-24歲訂閱人數
+        description: 18-24歲註冊人數
         example: 150
         type: integer
       age_25_34:
-        description: 25-34歲訂閱人數
+        description: 25-34歲註冊人數
         example: 250
         type: integer
       age_35_44:
-        description: 35_44歲訂閱人數
+        description: 35_44歲註冊人數
         example: 200
         type: integer
       age_45_54:
-        description: 45_54歲訂閱人數
+        description: 45_54歲註冊人數
         example: 150
         type: integer
       age_55_64:
-        description: 55_64歲訂閱人數
+        description: 55_64歲註冊人數
         example: 100
         type: integer
       age_65_up:
-        description: 65+歲訂閱人數
+        description: 65+歲註冊人數
         example: 50
         type: integer
       create_at:
@@ -1662,11 +1664,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       female:
-        description: 女性訂閱人數
+        description: 女性註冊人數
         example: 400
         type: integer
       male:
-        description: 男性訂閱人數
+        description: 男性註冊人數
         example: 600
         type: integer
       month:
@@ -1679,7 +1681,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       year:
         description: 年份
@@ -1766,7 +1768,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: test@gmail.com
+        example: henry@gmail.com
         type: string
       experience:
         description: 年資
@@ -1794,7 +1796,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: henry
+        example: Henry
         type: string
       phone:
         description: 電話
@@ -1831,7 +1833,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -1934,11 +1936,11 @@ definitions:
           properties:
             email:
               description: 信箱
-              example: test@gmail.com
+              example: henry@gmail.com
               type: string
             nickname:
               description: 暱稱
-              example: henry
+              example: Henry
               type: string
             trainer_status:
               description: 教練帳戶狀態 (1:正常/2:審核中/3:停權)
@@ -1946,7 +1948,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -2095,31 +2097,31 @@ definitions:
   api_get_cms_user_subscribe_statistic.Data:
     properties:
       age_13_17:
-        description: 13-17歲訂閱人數
+        description: 13-17歲註冊人數
         example: 100
         type: integer
       age_18_24:
-        description: 18-24歲訂閱人數
+        description: 18-24歲註冊人數
         example: 150
         type: integer
       age_25_34:
-        description: 25-34歲訂閱人數
+        description: 25-34歲註冊人數
         example: 250
         type: integer
       age_35_44:
-        description: 35_44歲訂閱人數
+        description: 35_44歲註冊人數
         example: 200
         type: integer
       age_45_54:
-        description: 45_54歲訂閱人數
+        description: 45_54歲註冊人數
         example: 150
         type: integer
       age_55_64:
-        description: 55_64歲訂閱人數
+        description: 55_64歲註冊人數
         example: 100
         type: integer
       age_65_up:
-        description: 65+歲訂閱人數
+        description: 65+歲註冊人數
         example: 50
         type: integer
       create_at:
@@ -2127,11 +2129,11 @@ definitions:
         example: "2022-06-14 00:00:00"
         type: string
       female:
-        description: 女性訂閱人數
+        description: 女性註冊人數
         example: 400
         type: integer
       male:
-        description: 男性訂閱人數
+        description: 男性註冊人數
         example: 600
         type: integer
       month:
@@ -2144,7 +2146,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       year:
         description: 年份
@@ -3050,16 +3052,16 @@ definitions:
               example: 1
               type: integer
             status:
-              description: 訂閱狀態(0:無訂閱/1:訂閱中)
+              description: 動作狀態(0:下架/1:上架)
               example: 1
               type: integer
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             video:
               description: 動作影片
@@ -3506,7 +3508,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       year:
         description: 年份
@@ -3546,7 +3548,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       year:
         description: 年份
@@ -3702,8 +3704,8 @@ definitions:
               example: 10.5
               type: number
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             weight:
               description: 體重(公斤)
@@ -4052,7 +4054,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: test@gmail.com
+        example: henry@gmail.com
         type: string
       experience:
         description: 年資
@@ -4080,7 +4082,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: henry
+        example: Henry
         type: string
       phone:
         description: 電話
@@ -4117,7 +4119,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -4801,7 +4803,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
     type: object
   bank_account.APIGetTrainerBankAccountOutput:
@@ -4872,12 +4874,12 @@ definitions:
                   type: integer
               type: object
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             url:
               description: url
@@ -10079,7 +10081,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -10211,7 +10213,7 @@ definitions:
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -10979,7 +10981,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: test@gmail.com
+        example: henry@gmail.com
         type: string
       experience:
         description: 年資
@@ -11007,7 +11009,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: henry
+        example: Henry
         type: string
       phone:
         description: 電話
@@ -11063,7 +11065,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -11102,7 +11104,7 @@ definitions:
               type: string
             nickname:
               description: 暱稱
-              example: henry
+              example: Henry
               type: string
             skill:
               description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
@@ -11158,7 +11160,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: test@gmail.com
+        example: henry@gmail.com
         type: string
       experience:
         description: 年資
@@ -11190,7 +11192,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: henry
+        example: Henry
         type: string
       phone:
         description: 電話
@@ -11246,7 +11248,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -11289,7 +11291,7 @@ definitions:
               type: string
             nickname:
               description: 暱稱
-              example: henry
+              example: Henry
               type: string
             skill:
               description: 專長(1:功能性訓練/2:減脂/3:增肌/4:健美規劃/5:運動項目訓練/6:TRX/7:重量訓練/8:筋膜放鬆/9:瑜珈/10:體態雕塑/11:減重/12:心肺訓練/13:肌力訓練/14:其他)
@@ -11297,7 +11299,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             user_id:
               description: 用戶id
@@ -11349,7 +11351,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: test@gmail.com
+        example: henry@gmail.com
         type: string
       experience:
         description: 年資
@@ -11377,7 +11379,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: henry
+        example: Henry
         type: string
       phone:
         description: 電話
@@ -11433,7 +11435,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -11508,7 +11510,7 @@ definitions:
         type: string
       email:
         description: 信箱
-        example: test@gmail.com
+        example: henry@gmail.com
         type: string
       experience:
         description: 年資
@@ -11536,7 +11538,7 @@ definitions:
         type: string
       nickname:
         description: 暱稱
-        example: henry
+        example: Henry
         type: string
       phone:
         description: 電話
@@ -11592,7 +11594,7 @@ definitions:
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       user_id:
         description: 用戶id
@@ -12858,7 +12860,7 @@ definitions:
         type: number
       nickname:
         description: 暱稱
-        example: henry
+        example: Henry
         type: string
       sex:
         description: 性別 (m:男/f:女)
@@ -12895,12 +12897,12 @@ definitions:
         example: "2022-07-11 11:00:00"
         type: string
       status:
-        description: 訂閱狀態(0:無訂閱/1:訂閱中)
+        description: 動作狀態(0:下架/1:上架)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
     type: object
   user_subscribe_info.APIGetUserSubscribeInfoOutput:
@@ -13648,7 +13650,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -13698,7 +13700,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -13750,7 +13752,7 @@ definitions:
               type: string
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             workout_set_count:
               description: 動作組數
@@ -13791,7 +13793,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -13839,7 +13841,7 @@ definitions:
         type: string
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       workout_set_count:
         description: 動作組數
@@ -14358,20 +14360,20 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -14479,20 +14481,20 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -14598,20 +14600,20 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -14717,20 +14719,20 @@ definitions:
               example: 注意呼吸不可憋氣
               type: string
             reps:
-              description: 次數
-              example: 2
+              description: 次數id
+              example: 1
               type: integer
             start_audio:
               description: 前導語音
               example: 1234.mp3
               type: string
             type:
-              description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+              description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
               example: 1
               type: integer
             update_at:
               description: 更新時間
-              example: "2022-06-12 00:00:00"
+              example: "2022-06-14 00:00:00"
               type: string
             weight:
               description: 重量(公斤)
@@ -14829,20 +14831,20 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數
-        example: 2
+        description: 次數id
+        example: 1
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
@@ -14948,20 +14950,20 @@ definitions:
         example: 注意呼吸不可憋氣
         type: string
       reps:
-        description: 次數
-        example: 2
+        description: 次數id
+        example: 1
         type: integer
       start_audio:
         description: 前導語音
         example: 1234.mp3
         type: string
       type:
-        description: 類型(1:課表/2:教練/3:訂閱/4:連結)
+        description: 類型(1:/早餐/2:午餐/3:晚餐/4:點心)
         example: 1
         type: integer
       update_at:
         description: 更新時間
-        example: "2022-06-12 00:00:00"
+        example: "2022-06-14 00:00:00"
         type: string
       weight:
         description: 重量(公斤)
