@@ -13,7 +13,7 @@ type Input struct {
 type Query struct {
 	userOptional.UserIDField
 	userOptional.NicknameField
-	userOptional.EmailField
+	Email *string `json:"email,omitempty" form:"email" gorm:"column:email;default:''" binding:"omitempty,max=255" example:"test@gmail.com"` // 信箱
 	userOptional.UserStatusField
 	userOptional.UserTypeField
 	orderByOptional.OrderFieldField
