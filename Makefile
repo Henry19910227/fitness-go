@@ -1,8 +1,8 @@
 release:
-	docker build -t toyokoyo199/fitness-backend:2.0.30 --build-arg mode=release .
+	docker build --platform linux/amd64 -t toyokoyo199/fitness-backend:2.0.30 --build-arg mode=release .
 	docker push toyokoyo199/fitness-backend:2.0.30
 production:
-	docker build -t toyokoyo199/fitness-production-backend:2.0.30 --build-arg mode=production .
+	docker build --platform linux/amd64 -t toyokoyo199/fitness-production-backend:2.0.30 --build-arg mode=production .
 	docker push toyokoyo199/fitness-production-backend:2.0.30
 
 migrate_up_latest:
