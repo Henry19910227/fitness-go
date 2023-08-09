@@ -45,7 +45,7 @@ Log:
 Database:
     DBType: mysql
     Debug:
-      Host: 127.0.0.1:8889
+      Host: 127.0.0.1:3306
       DBName: fitness
       UserName: henry
       Password: aaaa8027
