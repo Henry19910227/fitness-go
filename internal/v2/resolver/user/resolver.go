@@ -154,6 +154,7 @@ func (r *resolver) APIGetCMSUsers(input *api_get_cms_users.Input) (output api_ge
 	userListInput.Page = input.Query.Page
 	userListInput.OrderField = *input.Query.OrderField
 	userListInput.OrderType = *input.Query.OrderType
+	userListInput.IsDeleted = util.PointerInt(0)
 	userListInput.Size = input.Query.Size
 	userListInput.Page = input.Query.Page
 	userOutputs, page, err := r.userService.List(&userListInput)
