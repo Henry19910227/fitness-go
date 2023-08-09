@@ -147,7 +147,7 @@ func (r *resolver) APICreateTrainer(tx *gorm.DB, input *model.APICreateTrainerIn
 	trainerTable.Skill = util.PointerString(input.Form.Skill)
 	trainerTable.Avatar = util.PointerString(avatar)
 	trainerTable.TrainerStatus = util.PointerInt(model.Reviewing)
-	trainerTable.TrainerLevel = util.PointerInt(0)
+	trainerTable.TrainerLevel = util.PointerInt(1)
 	trainerTable.Email = util.PointerString(input.Form.Email)
 	trainerTable.Phone = util.PointerString(input.Form.Phone)
 	trainerTable.Address = util.PointerString(input.Form.Address)
