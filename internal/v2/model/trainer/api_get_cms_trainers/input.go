@@ -13,10 +13,10 @@ type Input struct {
 type Query struct {
 	optional.UserIDField
 	optional.NicknameField
+	Email *string `json:"email,omitempty" form:"email" gorm:"column:email" binding:"omitempty,max=255" example:"henry@gmail.com"` // 信箱
 	optional.TrainerStatusField
 	orderByOptional.OrderFieldField
 	orderByOptional.OrderTypeField
 	pagingOptional.PageField
 	pagingOptional.SizeField
 }
-

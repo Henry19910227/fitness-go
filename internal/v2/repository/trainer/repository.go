@@ -56,6 +56,10 @@ func (r *repository) List(input *model.ListInput) (outputs []*model.Output, amou
 	if input.Nickname != nil {
 		db = db.Where("trainers.nickname LIKE ?", "%"+*input.Nickname+"%")
 	}
+	//加入 email 篩選條件
+	if input.Email != nil {
+		db = db.Where("users.email = ?", *input.Email)
+	}
 	//加入 trainer_status 篩選條件
 	if input.TrainerStatus != nil {
 		db = db.Where("trainers.trainer_status = ?", *input.TrainerStatus)

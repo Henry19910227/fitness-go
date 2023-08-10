@@ -547,7 +547,6 @@ func (r *resolver) APIGetCMSTrainers(input *api_get_cms_trainers.Input) (output 
 	// 查詢列表教練資訊
 	listInput := model.ListInput{}
 	listInput.UserID = input.Query.UserID
-	listInput.Nickname = input.Query.Nickname
 	listInput.TrainerStatus = input.Query.TrainerStatus
 	listInput.Page = input.Query.Page
 	listInput.Size = input.Query.Size
@@ -559,6 +558,14 @@ func (r *resolver) APIGetCMSTrainers(input *api_get_cms_trainers.Input) (output 
 	if input.Query.OrderField != nil {
 		listInput.OrderField = *input.Query.OrderField
 	}
+	wheres := make([]*whereModel.Where, 0)
+	if input.Query.Nickname != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "trainers.nickname LIKE ?", Args: []interface{}{"%" + *input.Query.Nickname + "%"}})
+	}
+	if input.Query.Email != nil {
+		wheres = append(wheres, &whereModel.Where{Query: "trainers.email LIKE ?", Args: []interface{}{"%" + *input.Query.Email + "%"}})
+	}
+	listInput.Wheres = wheres
 	trainerOutputs, page, err := r.trainerService.List(&listInput)
 	if err != nil {
 		output.Set(code.BadRequest, err.Error())
