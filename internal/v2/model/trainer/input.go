@@ -31,6 +31,7 @@ type FindInput struct {
 type ListInput struct {
 	optional.UserIDField
 	optional.NicknameField
+	optional.EmailField
 	optional.TrainerStatusField
 	JoinInput
 	WhereInput
