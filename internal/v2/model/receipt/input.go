@@ -3,7 +3,6 @@ package receipt
 import (
 	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
 	receiptOptional "github.com/Henry19910227/fitness-go/internal/v2/field/receipt/optional"
-	receiptRequired "github.com/Henry19910227/fitness-go/internal/v2/field/receipt/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderBy "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/preload"
@@ -41,17 +40,4 @@ type ListInput struct {
 	PreloadInput
 	OrderByInput
 	CustomOrderByInput
-}
-
-// APIGetCMSOrderReceiptsInput /v2/cms/order/{order_id}/receipts [GET]
-type APIGetCMSOrderReceiptsInput struct {
-	Uri  APIGetCMSOrderReceiptsUri
-	Form APIGetCMSOrderReceiptsForm
-}
-type APIGetCMSOrderReceiptsUri struct {
-	receiptRequired.OrderIDField
-}
-type APIGetCMSOrderReceiptsForm struct {
-	OrderByInput
-	PagingInput
 }
