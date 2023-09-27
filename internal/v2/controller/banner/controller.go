@@ -4,6 +4,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_create_cms_banner"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_delete_cms_banner"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_get_cms_banners"
 	baseModel "github.com/Henry19910227/fitness-go/internal/v2/model/base"
 	fileModel "github.com/Henry19910227/fitness-go/internal/v2/model/file"
@@ -110,11 +111,11 @@ func (c *controller) GetCMSBanners(ctx *gin.Context) {
 // @Produce json
 // @Security fitness_token
 // @Param banner_id path int64 true "banner id"
-// @Success 200 {object} banner.APIDeleteCMSBannerOutput "成功!"
+// @Success 200 {object} api_delete_cms_banner.Output "成功!"
 // @Failure 400 {object} base.Output "失敗!"
 // @Router /v2/cms/banner/{banner_id} [DELETE]
 func (c *controller) DeleteCMSBanner(ctx *gin.Context) {
-	input := model.APIDeleteCMSBannerInput{}
+	input := api_delete_cms_banner.Input{}
 	if err := ctx.ShouldBindUri(&input.Uri); err != nil {
 		ctx.JSON(http.StatusBadRequest, baseModel.BadRequest(util.PointerString(err.Error())))
 		return

@@ -42,8 +42,3 @@ type APIGetBannersData []*struct {
 		courseOptional.NameField
 	} `json:"course,omitempty"`
 }
-
-// APIDeleteCMSBannerOutput /v2/cms/banner [DELETE]
-type APIDeleteCMSBannerOutput struct {
-	base.Output
-}
