@@ -7,6 +7,7 @@ import (
 	"github.com/Henry19910227/fitness-go/internal/pkg/util"
 	model "github.com/Henry19910227/fitness-go/internal/v2/model/banner"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_create_cms_banner"
+	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_delete_cms_banner"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/banner/api_get_cms_banners"
 	joinModel "github.com/Henry19910227/fitness-go/internal/v2/model/join"
 	orderByModel "github.com/Henry19910227/fitness-go/internal/v2/model/order_by"
@@ -144,9 +145,10 @@ func (r *resolver) APIGetCMSBanners(input *api_get_cms_banners.Input) (output ap
 	return output
 }
 
-func (r *resolver) APIDeleteCMSBanner(input *model.APIDeleteCMSBannerInput) (output model.APIDeleteCMSBannerOutput) {
+func (r *resolver) APIDeleteCMSBanner(input *api_delete_cms_banner.Input) (output api_delete_cms_banner.Output) {
 	//查找banner
 	findInput := model.FindInput{}
+	findInput.ID = util.PointerInt64(input.Uri.BannerID)
 	if err := util.Parser(input.Uri, &findInput); err != nil {
 		output.Set(code.BadRequest, err.Error())
 		return output
@@ -158,10 +160,7 @@ func (r *resolver) APIDeleteCMSBanner(input *model.APIDeleteCMSBannerInput) (out
 	}
 	//parser delete input
 	deleteInput := model.DeleteInput{}
-	if err := util.Parser(input.Uri, &deleteInput); err != nil {
-		output.Set(code.BadRequest, err.Error())
-		return output
-	}
+	deleteInput.ID = util.PointerInt64(input.Uri.BannerID)
 	//刪除banner
 	if err := r.bannerService.Delete(&deleteInput); err != nil {
 		output.Set(code.BadRequest, err.Error())

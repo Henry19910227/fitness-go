@@ -1,7 +1,6 @@
 package banner
 
 import (
-	"github.com/Henry19910227/fitness-go/internal/v2/field/banner/required"
 	"github.com/Henry19910227/fitness-go/internal/v2/field/course/optional"
 	pagingOptional "github.com/Henry19910227/fitness-go/internal/v2/field/paging/optional"
 	"github.com/Henry19910227/fitness-go/internal/v2/model/join"
@@ -43,12 +42,4 @@ type APIGetBannersInput struct {
 }
 type APIGetBannersQuery struct {
 	PagingInput
-}
-
-// APIDeleteCMSBannerInput /v2/cms/banner/{banner_id} [DELETE]
-type APIDeleteCMSBannerInput struct {
-	Uri APIDeleteCMSBannerUri
-}
-type APIDeleteCMSBannerUri struct {
-	required.IDField
 }
