@@ -4,7 +4,7 @@ type IDField struct {
 	ID int64 ` json:"id" gorm:"column:id" binding:"required" example:"1"` // 收據id
 }
 type OrderIDField struct {
-	OrderID string `json:"order_id" gorm:"column:order_id" binding:"required" example:"20220215104747115283"` //訂單id
+	OrderID string `json:"order_id" uri:"order_id" gorm:"column:order_id" binding:"required" example:"20220215104747115283"` //訂單id
 }
 type PaymentTypeField struct {
 	PaymentType int `json:"payment_type" gorm:"column:payment_type" binding:"required" example:"1"` //支付方式(0:尚未指定/1:apple內購/2:google內購)

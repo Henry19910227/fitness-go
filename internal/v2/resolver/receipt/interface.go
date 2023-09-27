@@ -1,7 +1,9 @@
 package receipt
 
-import model "github.com/Henry19910227/fitness-go/internal/v2/model/receipt"
+import (
+	"github.com/Henry19910227/fitness-go/internal/v2/model/receipt/api_get_cms_order_receipts"
+)
 
 type Resolver interface {
-	APIGetCMSOrderReceipts(input *model.APIGetCMSOrderReceiptsInput) (output model.APIGetCMSOrderReceiptsOutput)
+	APIGetCMSOrderReceipts(input *api_get_cms_order_receipts.Input) (output api_get_cms_order_receipts.Output)
 }
