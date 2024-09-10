@@ -21,6 +21,37 @@ services:
       networks:
         - fitness-network
       container_name: fitness-redis
+  elasticsearch:
+      image: elasticsearch:8.15.0
+      container_name: elasticsearch
+      ports:
+        - "9200:9200"
+      networks:
+        - fitness-network
+      environment:
+        - discovery.type=single-node
+        - xpack.security.enabled=false
+  logstash:
+      image: logstash:8.15.0
+      container_name: logstash
+      ports:
+        - "5044:5044"
+        - "9600:9600"  # 监控端口
+      networks:
+        - fitness-network
+      depends_on:
+        - elasticsearch
+  kibana:
+      image: kibana:8.15.0
+      container_name: kibana
+      ports:
+        - "5601:5601"
+      networks:
+        - fitness-network
+      environment:
+        ELASTICSEARCH_URL: http://elasticsearch:9200
+      depends_on:
+        - elasticsearch
 networks:
   fitness-network:
     driver: bridge
